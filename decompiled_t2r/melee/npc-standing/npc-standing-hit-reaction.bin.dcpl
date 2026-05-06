@@ -378,7 +378,7 @@ infected-hr-head-front-a
 infected-hr-head-front-b
 infected-hr-head-front-c
 infected-hr-head-front-d
-#D185E44438B7F93C
+ellie-rogue-death-react
 npc-1h-hr-left-upward-a
 npc-1h-hr-left-upward-b
 npc-1h-hr-hip-front-right-from-left-a
@@ -389,7 +389,7 @@ npc-1h-hr-head-back-center-c
 npc-1h-hr-head-back-center-b
 npc-1h-hr-right-upward-a
 infected-hr-hip-front-left-from-left-a
-#DD980DFBD9C14ED9
+abby-rogue-death-react
 infected-hr-left-upward-b
 infected-hr-left-upward-a
 infected-hr-right-shoulder-from-right-b
@@ -3645,8 +3645,8 @@ embedded@43678(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return melee-fact-set-time(arg_2, last-landed-melee-time);
 }
 
-u16 #D185E44438B7F93C__melee-attack@c718
-#DD980DFBD9C14ED9__melee-attack@dc68
+u16 ellie-rogue-death-react__melee-attack@c718
+abby-rogue-death-react__melee-attack@dc68
 embedded@112c0(u64? arg_0, u64? arg_1, sid arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
     u16 var_1;
     if (is-npc?(arg_2)) {
@@ -3667,9 +3667,9 @@ embedded@112c0(u64? arg_0, u64? arg_1, sid arg_2, u64? arg_3, u64? arg_4, u64? a
             } else {
                 var_9 = get-joint-position(arg_1, spined);
             }
-            var_1 = rate-animation-for-melee-impact(arg_2, #8177967945866E23, var_4, var_9, *npc-hit-reaction-match-ratings*);
+            var_1 = rate-animation-for-melee-impact(arg_2, ellie-death-stand-frnt-l-shldr-melee, var_4, var_9, *npc-hit-reaction-match-ratings*);
         } else {
-            var_1 = rate-animation-for-melee-impact(arg_2, #8177967945866E23, get-hit-direction(arg_2), get-hit-pos(arg_2), *npc-hit-reaction-match-ratings*);
+            var_1 = rate-animation-for-melee-impact(arg_2, ellie-death-stand-frnt-l-shldr-melee, get-hit-direction(arg_2), get-hit-pos(arg_2), *npc-hit-reaction-match-ratings*);
         }
     } else {
         var_1 = 0;
@@ -3677,27 +3677,27 @@ embedded@112c0(u64? arg_0, u64? arg_1, sid arg_2, u64? arg_3, u64? arg_4, u64? a
     return var_1;
 }
 
-u16 #D185E44438B7F93C__start-func-array@f5f8
-#DD980DFBD9C14ED9__start-func-array@f5f8
+u16 ellie-rogue-death-react__start-func-array@f5f8
+abby-rogue-death-react__start-func-array@f5f8
 embedded@44388(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
     return 1;
 }
 
-u64? #D185E44438B7F93C__melee-event-list@14548
-#DD980DFBD9C14ED9__melee-event-list@14cc0
+u64? ellie-rogue-death-react__melee-event-list@14548
+abby-rogue-death-react__melee-event-list@14cc0
 embedded@42c08(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return !1 && !(npc-alive?(arg_2));
 }
 
-u64? #D185E44438B7F93C
-#DD980DFBD9C14ED9
+u64? ellie-rogue-death-react
+abby-rogue-death-react
 embedded@41fd8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return !1 && npc-brute?(arg_2);
 }
 
-u16 #D185E44438B7F93C
+u16 ellie-rogue-death-react
 embedded@42298(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
-    log-event("melee-npc-generic-reaction", 1, string-debug(#D185E44438B7F93C), 0, 0);
+    log-event("melee-npc-generic-reaction", 1, string-debug(ellie-rogue-death-react), 0, 0);
     u16 var_2;
     if (get-current-melee-attack(arg_1)) {
         var_2 = melee-fact-set-symbol(arg_2, last-landed-melee-move, *(u64*)get-current-melee-attack(arg_1));
@@ -4114,9 +4114,9 @@ embedded@42558(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return melee-fact-set-time(arg_2, last-landed-melee-time);
 }
 
-u16 #DD980DFBD9C14ED9
+u16 abby-rogue-death-react
 embedded@43b48(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
-    log-event("melee-npc-generic-reaction", 1, string-debug(#DD980DFBD9C14ED9), 0, 0);
+    log-event("melee-npc-generic-reaction", 1, string-debug(abby-rogue-death-react), 0, 0);
     u16 var_2;
     if (get-current-melee-attack(arg_1)) {
         var_2 = melee-fact-set-symbol(arg_2, last-landed-melee-move, *(u64*)get-current-melee-attack(arg_1));

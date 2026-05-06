@@ -13,7 +13,7 @@
 
 bool tsk-fob-aquarium-flashback-swim-into-stadium__level-set@bb0__level-scripted-set@1d60__
 embedded@c470() {
-    return get-boolean(#D3F10801ADE7DA2E, ss-fob-aquarium-gate-to-stadium-igc-1);
+    return get-boolean(gate-lift-success-reached?, ss-fob-aquarium-gate-to-stadium-igc-1);
 }
 
 u16 tsk-fob-aquarium-flashback-swim-into-stadium__level-scripted-set@3fb0
@@ -29,7 +29,7 @@ embedded@a108() {
 
 u64? tsk-amp-post-surgery__level-set@ca0__level-scripted-set@29f0__
 tsk-afm-aquarium-find-corpses__level-set@de0__level-scripted-set@26a8__
-#BA9216EB02B210DE__level-set@1400__level-scripted-set@2ca8__
+tsk-ski-aquarium-flashback-atrium-preload-pc__level-set@1400__level-scripted-set@2ca8__
 tsk-faq-seeing-mel-b__level-set@1490__level-scripted-set@36b0__
 tsk-ski-aquarium-flashback-intro__level-set@1588__level-scripted-set@2318__
 embedded@7860() {
@@ -38,7 +38,7 @@ embedded@7860() {
 
 u64? tsk-amp-post-surgery__level-scripted-set@2c00
 tsk-afm-aquarium-find-corpses__level-scripted-set@39f8
-#BA9216EB02B210DE__level-scripted-set@4058
+tsk-ski-aquarium-flashback-atrium-preload-pc__level-scripted-set@4058
 tsk-faq-seeing-mel-b__level-scripted-set@2300
 embedded@d5a8() {
     return is-chronological-mode-enabled?();
@@ -71,7 +71,7 @@ embedded@98a8() {
 
 bool tsk-ski-aquarium-flashback-atrium__level-scripted-set@4448
 embedded@bb38() {
-    return get-boolean(#A6A6C626DE9E5F9B, ss-ski-aquarium-flashback-target-practice-1);
+    return get-boolean(game-done?, ss-ski-aquarium-flashback-target-practice-1);
 }
 
 bool tsk-amp-yara-walk-balcony__level-set@1248__level-scripted-set@2618__
@@ -111,12 +111,12 @@ embedded@a1e0() {
 
 u64? tsk-med-aquarium-preload-chronological__level-set@1548__level-scripted-set@36c8__
 embedded@b318() {
-    return !(get-boolean(#A5D588E81B36BF14, ss-res-escape-post-crash-1));
+    return !(get-boolean(flip-level-set, ss-res-escape-post-crash-1));
 }
 
 bool tsk-amp-levs-missing-preroll-scripted-set__level-set@1600__level-scripted-set@3398__
 embedded@aa10() {
-    return get-boolean(#5EDAD9DF99156DFB, ss-sle-marina-boats-physicalize-1);
+    return get-boolean(preroll-boats, ss-sle-marina-boats-physicalize-1);
 }
 
 u64? tsk-ski-aquarium-flashback-cafe__level-set@1798__level-scripted-set@1b50__

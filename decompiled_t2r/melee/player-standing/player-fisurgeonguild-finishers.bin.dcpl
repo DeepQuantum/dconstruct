@@ -65,10 +65,10 @@ embedded@d370(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
         }
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 3)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("DEFENDER FRAME TIL HIT: %i PLAYER FRAME TIL HIT: %i", var_0, var_3), 19);
+                display(dc:format("DEFENDER FRAME TIL HIT: %i PLAYER FRAME TIL HIT: %i", var_0, var_3), 19);
             }
             if (!is-final-build?()) {
-                display(#5445173390656D6D("NPC SWING VS PLAYER FINISHER CLASH DETECTED- INTRO DURATION: %i RANKING APPLIED: %i", var_9, var_12), 19);
+                display(dc:format("NPC SWING VS PLAYER FINISHER CLASH DETECTED- INTRO DURATION: %i RANKING APPLIED: %i", var_9, var_12), 19);
             }
         }
         var_7 = var_12 * 100000.00;
@@ -133,7 +133,7 @@ embedded@d370(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
     log-event("melee-finisher-duration", 20, string-debug(fist-knee-state-neck-break-kill), 0, 0);
     if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 3)) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D(
+            display(dc:format(
                 "FINISHER SECONDARY RANKING - MOVE: %s CLASH RANKING: %f DURATION RANKING: %f POSE RANKING: %f MOMENTUM RANKING: %f   --- FINAL: %i",
                 string-debug(fist-knee-state-neck-break-kill),
                 var_7,
@@ -2010,7 +2010,7 @@ embedded@96090(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
         var_0 = 1 && valid-contextual-dodge?(melee-fact-get-symbol(var_1, contextual-dodge-npc), 18, 63);
     } else {
         if (dc-assert-enabled?() && !1) {
-            display-error(#5445173390656D6D("allow-contextual-dodge-abort: invalid character to abort, provided '%s' please provide 'attacker or 'defender", string-debug(attacker)));
+            display-error(dc:format("allow-contextual-dodge-abort: invalid character to abort, provided '%s' please provide 'attacker or 'defender", string-debug(attacker)));
         }
         var_0 = 0;
     }
@@ -2480,7 +2480,7 @@ embedded@9a2f0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     if (is-player?(arg_1) || !0 && character-is-dead?(arg_2)) {
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("Melee deadened for %f seconds", 0.89), 19);
+                display(dc:format("Melee deadened for %f seconds", 0.89), 19);
             }
         }
         disable-untargeted-melee-attack-timed(0.89);
@@ -3225,7 +3225,7 @@ embedded@901c8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     if (is-player?(arg_1) || !0 && character-is-dead?(arg_2)) {
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("Melee deadened for %f seconds", 0.78), 19);
+                display(dc:format("Melee deadened for %f seconds", 0.78), 19);
             }
         }
         disable-untargeted-melee-attack-timed(0.78);
@@ -3587,7 +3587,7 @@ embedded@920e0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     if (is-player?(arg_1) || !0 && character-is-dead?(arg_2)) {
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("Melee deadened for %f seconds", 0.71), 19);
+                display(dc:format("Melee deadened for %f seconds", 0.71), 19);
             }
         }
         disable-untargeted-melee-attack-timed(0.71);
@@ -4036,7 +4036,7 @@ embedded@98308(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     if (is-player?(arg_1) || !0 && character-is-dead?(arg_2)) {
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("Melee deadened for %f seconds", 0.50), 19);
+                display(dc:format("Melee deadened for %f seconds", 0.50), 19);
             }
         }
         disable-untargeted-melee-attack-timed(0.50);
@@ -4109,7 +4109,7 @@ embedded@92d88(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     u16 var_1;
     if (melee-character-bit-check(arg_2, #0000000004000000) && (#0000000004000000 & 537919488) == 0) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D("ragdoll happening for shambler"), 19);
+            display(dc:format("ragdoll happening for shambler"), 19);
         }
         var_1 = set-melee-ragdoll-power-off-params(arg_2, sha-ground-shake-death, *shambler-shake-ragdoll-control-settings*);
     } else {
@@ -4343,7 +4343,7 @@ embedded@95618(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     u16 var_1;
     if (melee-character-bit-check(arg_2, #0000000004000000) && (#0000000004000000 & 2097152) == 0) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D("ragdoll happening for shambler"), 19);
+            display(dc:format("ragdoll happening for shambler"), 19);
         }
         var_1 = set-melee-ragdoll-power-off-params(arg_2, sha-ground-shake-death, *shambler-shake-ragdoll-control-settings*);
     } else {
@@ -4521,7 +4521,7 @@ embedded@8fb60(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     if (is-player?(arg_1) || !0 && character-is-dead?(arg_2)) {
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("Melee deadened for %f seconds", 1.06), 19);
+                display(dc:format("Melee deadened for %f seconds", 1.06), 19);
             }
         }
         disable-untargeted-melee-attack-timed(1.06);
@@ -4644,10 +4644,10 @@ embedded@13510(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
         }
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 3)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("DEFENDER FRAME TIL HIT: %i PLAYER FRAME TIL HIT: %i", var_0, var_3), 19);
+                display(dc:format("DEFENDER FRAME TIL HIT: %i PLAYER FRAME TIL HIT: %i", var_0, var_3), 19);
             }
             if (!is-final-build?()) {
-                display(#5445173390656D6D("NPC SWING VS PLAYER FINISHER CLASH DETECTED- INTRO DURATION: %i RANKING APPLIED: %i", var_9, var_12), 19);
+                display(dc:format("NPC SWING VS PLAYER FINISHER CLASH DETECTED- INTRO DURATION: %i RANKING APPLIED: %i", var_9, var_12), 19);
             }
         }
         var_7 = var_12 * 100000.00;
@@ -4712,7 +4712,7 @@ embedded@13510(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     log-event("melee-finisher-duration", 40, string-debug(fist-nose-break-kill), 0, 0);
     if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 3)) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D(
+            display(dc:format(
                 "FINISHER SECONDARY RANKING - MOVE: %s CLASH RANKING: %f DURATION RANKING: %f POSE RANKING: %f MOMENTUM RANKING: %f   --- FINAL: %i",
                 string-debug(fist-nose-break-kill),
                 var_7,
@@ -4828,7 +4828,7 @@ embedded@92950(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     if (is-player?(arg_1) || !0 && character-is-dead?(arg_2)) {
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("Melee deadened for %f seconds", 0.95), 19);
+                display(dc:format("Melee deadened for %f seconds", 0.95), 19);
             }
         }
         disable-untargeted-melee-attack-timed(0.95);
@@ -4849,7 +4849,7 @@ embedded@94bb8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     u16 var_1;
     if (melee-character-bit-check(arg_2, #0000000004000000) && (#0000000004000000 & 184549376) == 0) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D("ragdoll happening for shambler"), 19);
+            display(dc:format("ragdoll happening for shambler"), 19);
         }
         var_1 = set-melee-ragdoll-power-off-params(arg_2, sha-ground-shake-death, *shambler-shake-ragdoll-control-settings*);
     } else {
@@ -4992,7 +4992,7 @@ embedded@993e0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     if (is-player?(arg_1) || !0 && character-is-dead?(arg_2)) {
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("Melee deadened for %f seconds", 1.20), 19);
+                display(dc:format("Melee deadened for %f seconds", 1.20), 19);
             }
         }
         disable-untargeted-melee-attack-timed(1.20);
@@ -5047,10 +5047,10 @@ embedded@11910(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
         }
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 3)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("DEFENDER FRAME TIL HIT: %i PLAYER FRAME TIL HIT: %i", var_0, var_3), 19);
+                display(dc:format("DEFENDER FRAME TIL HIT: %i PLAYER FRAME TIL HIT: %i", var_0, var_3), 19);
             }
             if (!is-final-build?()) {
-                display(#5445173390656D6D("NPC SWING VS PLAYER FINISHER CLASH DETECTED- INTRO DURATION: %i RANKING APPLIED: %i", var_9, var_12), 19);
+                display(dc:format("NPC SWING VS PLAYER FINISHER CLASH DETECTED- INTRO DURATION: %i RANKING APPLIED: %i", var_9, var_12), 19);
             }
         }
         var_7 = var_12 * 100000.00;
@@ -5115,7 +5115,7 @@ embedded@11910(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     log-event("melee-finisher-duration", 110, string-debug(operation-ground-and-pound-finisher), 0, 0);
     if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 3)) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D(
+            display(dc:format(
                 "FINISHER SECONDARY RANKING - MOVE: %s CLASH RANKING: %f DURATION RANKING: %f POSE RANKING: %f MOMENTUM RANKING: %f   --- FINAL: %i",
                 string-debug(operation-ground-and-pound-finisher),
                 var_7,
@@ -5220,10 +5220,10 @@ embedded@160b8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
         }
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 3)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("DEFENDER FRAME TIL HIT: %i PLAYER FRAME TIL HIT: %i", var_0, var_3), 19);
+                display(dc:format("DEFENDER FRAME TIL HIT: %i PLAYER FRAME TIL HIT: %i", var_0, var_3), 19);
             }
             if (!is-final-build?()) {
-                display(#5445173390656D6D("NPC SWING VS PLAYER FINISHER CLASH DETECTED- INTRO DURATION: %i RANKING APPLIED: %i", var_9, var_12), 19);
+                display(dc:format("NPC SWING VS PLAYER FINISHER CLASH DETECTED- INTRO DURATION: %i RANKING APPLIED: %i", var_9, var_12), 19);
             }
         }
         var_7 = var_12 * 100000.00;
@@ -5288,7 +5288,7 @@ embedded@160b8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     log-event("melee-finisher-duration", 51, string-debug(fist-back-kill-inf-fist-to-punch-finisher), 0, 0);
     if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 3)) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D(
+            display(dc:format(
                 "FINISHER SECONDARY RANKING - MOVE: %s CLASH RANKING: %f DURATION RANKING: %f POSE RANKING: %f MOMENTUM RANKING: %f   --- FINAL: %i",
                 string-debug(fist-back-kill-inf-fist-to-punch-finisher),
                 var_7,
@@ -5439,7 +5439,7 @@ embedded@97af0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     if (is-player?(arg_1) || !0 && character-is-dead?(arg_2)) {
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("Melee deadened for %f seconds", 1.43), 19);
+                display(dc:format("Melee deadened for %f seconds", 1.43), 19);
             }
         }
         disable-untargeted-melee-attack-timed(1.43);
@@ -5597,7 +5597,7 @@ embedded@95090(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     if (is-player?(arg_1) || !0 && character-is-dead?(arg_2)) {
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("Melee deadened for %f seconds", 0.87), 19);
+                display(dc:format("Melee deadened for %f seconds", 0.87), 19);
             }
         }
         disable-untargeted-melee-attack-timed(0.87);
@@ -5636,7 +5636,7 @@ embedded@909a0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     if (is-player?(arg_1) || !0 && character-is-dead?(arg_2)) {
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("Melee deadened for %f seconds", 1.31), 19);
+                display(dc:format("Melee deadened for %f seconds", 1.31), 19);
             }
         }
         disable-untargeted-melee-attack-timed(1.31);
@@ -5684,10 +5684,10 @@ embedded@e578(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
         }
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 3)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("DEFENDER FRAME TIL HIT: %i PLAYER FRAME TIL HIT: %i", var_0, var_3), 19);
+                display(dc:format("DEFENDER FRAME TIL HIT: %i PLAYER FRAME TIL HIT: %i", var_0, var_3), 19);
             }
             if (!is-final-build?()) {
-                display(#5445173390656D6D("NPC SWING VS PLAYER FINISHER CLASH DETECTED- INTRO DURATION: %i RANKING APPLIED: %i", var_9, var_12), 19);
+                display(dc:format("NPC SWING VS PLAYER FINISHER CLASH DETECTED- INTRO DURATION: %i RANKING APPLIED: %i", var_9, var_12), 19);
             }
         }
         var_7 = var_12 * 100000.00;
@@ -5752,7 +5752,7 @@ embedded@e578(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
     log-event("melee-finisher-duration", 82, string-debug(abby-fist-front-dog-jawbreak-kill), 0, 0);
     if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 3)) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D(
+            display(dc:format(
                 "FINISHER SECONDARY RANKING - MOVE: %s CLASH RANKING: %f DURATION RANKING: %f POSE RANKING: %f MOMENTUM RANKING: %f   --- FINAL: %i",
                 string-debug(abby-fist-front-dog-jawbreak-kill),
                 var_7,
@@ -5863,10 +5863,10 @@ embedded@104f8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
         }
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 3)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("DEFENDER FRAME TIL HIT: %i PLAYER FRAME TIL HIT: %i", var_0, var_3), 19);
+                display(dc:format("DEFENDER FRAME TIL HIT: %i PLAYER FRAME TIL HIT: %i", var_0, var_3), 19);
             }
             if (!is-final-build?()) {
-                display(#5445173390656D6D("NPC SWING VS PLAYER FINISHER CLASH DETECTED- INTRO DURATION: %i RANKING APPLIED: %i", var_9, var_12), 19);
+                display(dc:format("NPC SWING VS PLAYER FINISHER CLASH DETECTED- INTRO DURATION: %i RANKING APPLIED: %i", var_9, var_12), 19);
             }
         }
         var_7 = var_12 * 100000.00;
@@ -5931,7 +5931,7 @@ embedded@104f8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     log-event("melee-finisher-duration", 15, string-debug(fist-knee-state-knee-kill), 0, 0);
     if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 3)) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D(
+            display(dc:format(
                 "FINISHER SECONDARY RANKING - MOVE: %s CLASH RANKING: %f DURATION RANKING: %f POSE RANKING: %f MOMENTUM RANKING: %f   --- FINAL: %i",
                 string-debug(fist-knee-state-knee-kill),
                 var_7,
@@ -6064,10 +6064,10 @@ embedded@11438(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
         }
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 3)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("DEFENDER FRAME TIL HIT: %i PLAYER FRAME TIL HIT: %i", var_0, var_3), 19);
+                display(dc:format("DEFENDER FRAME TIL HIT: %i PLAYER FRAME TIL HIT: %i", var_0, var_3), 19);
             }
             if (!is-final-build?()) {
-                display(#5445173390656D6D("NPC SWING VS PLAYER FINISHER CLASH DETECTED- INTRO DURATION: %i RANKING APPLIED: %i", var_9, var_12), 19);
+                display(dc:format("NPC SWING VS PLAYER FINISHER CLASH DETECTED- INTRO DURATION: %i RANKING APPLIED: %i", var_9, var_12), 19);
             }
         }
         var_7 = var_12 * 100000.00;
@@ -6132,7 +6132,7 @@ embedded@11438(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     log-event("melee-finisher-duration", 44, string-debug(fist-back-inf-shambler-knee-kick-finisher), 0, 0);
     if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 3)) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D(
+            display(dc:format(
                 "FINISHER SECONDARY RANKING - MOVE: %s CLASH RANKING: %f DURATION RANKING: %f POSE RANKING: %f MOMENTUM RANKING: %f   --- FINAL: %i",
                 string-debug(fist-back-inf-shambler-knee-kick-finisher),
                 var_7,
@@ -6253,10 +6253,10 @@ embedded@13eb8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
         }
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 3)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("DEFENDER FRAME TIL HIT: %i PLAYER FRAME TIL HIT: %i", var_0, var_3), 19);
+                display(dc:format("DEFENDER FRAME TIL HIT: %i PLAYER FRAME TIL HIT: %i", var_0, var_3), 19);
             }
             if (!is-final-build?()) {
-                display(#5445173390656D6D("NPC SWING VS PLAYER FINISHER CLASH DETECTED- INTRO DURATION: %i RANKING APPLIED: %i", var_9, var_12), 19);
+                display(dc:format("NPC SWING VS PLAYER FINISHER CLASH DETECTED- INTRO DURATION: %i RANKING APPLIED: %i", var_9, var_12), 19);
             }
         }
         var_7 = var_12 * 100000.00;
@@ -6321,7 +6321,7 @@ embedded@13eb8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     log-event("melee-finisher-duration", 70, string-debug(abby-fist-front-dog-kill), 0, 0);
     if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 3)) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D(
+            display(dc:format(
                 "FINISHER SECONDARY RANKING - MOVE: %s CLASH RANKING: %f DURATION RANKING: %f POSE RANKING: %f MOMENTUM RANKING: %f   --- FINAL: %i",
                 string-debug(abby-fist-front-dog-kill),
                 var_7,
@@ -6431,7 +6431,7 @@ embedded@935a8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     if (is-player?(arg_1) || !0 && character-is-dead?(arg_2)) {
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("Melee deadened for %f seconds", 0.76), 19);
+                display(dc:format("Melee deadened for %f seconds", 0.76), 19);
             }
         }
         disable-untargeted-melee-attack-timed(0.76);
@@ -6502,10 +6502,10 @@ embedded@10610(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
         }
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 3)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("DEFENDER FRAME TIL HIT: %i PLAYER FRAME TIL HIT: %i", var_0, var_3), 19);
+                display(dc:format("DEFENDER FRAME TIL HIT: %i PLAYER FRAME TIL HIT: %i", var_0, var_3), 19);
             }
             if (!is-final-build?()) {
-                display(#5445173390656D6D("NPC SWING VS PLAYER FINISHER CLASH DETECTED- INTRO DURATION: %i RANKING APPLIED: %i", var_9, var_12), 19);
+                display(dc:format("NPC SWING VS PLAYER FINISHER CLASH DETECTED- INTRO DURATION: %i RANKING APPLIED: %i", var_9, var_12), 19);
             }
         }
         var_7 = var_12 * 100000.00;
@@ -6570,7 +6570,7 @@ embedded@10610(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     log-event("melee-finisher-duration", 84, string-debug(fist-brute-back-execute), 0, 0);
     if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 3)) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D(
+            display(dc:format(
                 "FINISHER SECONDARY RANKING - MOVE: %s CLASH RANKING: %f DURATION RANKING: %f POSE RANKING: %f MOMENTUM RANKING: %f   --- FINAL: %i",
                 string-debug(fist-brute-back-execute),
                 var_7,
@@ -6710,7 +6710,7 @@ embedded@99060(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     if (is-player?(arg_1) || !0 && character-is-dead?(arg_2)) {
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("Melee deadened for %f seconds", 1.04), 19);
+                display(dc:format("Melee deadened for %f seconds", 1.04), 19);
             }
         }
         disable-untargeted-melee-attack-timed(1.04);
@@ -6811,10 +6811,10 @@ embedded@113e0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
         }
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 3)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("DEFENDER FRAME TIL HIT: %i PLAYER FRAME TIL HIT: %i", var_0, var_3), 19);
+                display(dc:format("DEFENDER FRAME TIL HIT: %i PLAYER FRAME TIL HIT: %i", var_0, var_3), 19);
             }
             if (!is-final-build?()) {
-                display(#5445173390656D6D("NPC SWING VS PLAYER FINISHER CLASH DETECTED- INTRO DURATION: %i RANKING APPLIED: %i", var_9, var_12), 19);
+                display(dc:format("NPC SWING VS PLAYER FINISHER CLASH DETECTED- INTRO DURATION: %i RANKING APPLIED: %i", var_9, var_12), 19);
             }
         }
         var_7 = var_12 * 100000.00;
@@ -6879,7 +6879,7 @@ embedded@113e0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     log-event("melee-finisher-duration", 11, string-debug(fist-kick-face-kill), 0, 0);
     if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 3)) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D(
+            display(dc:format(
                 "FINISHER SECONDARY RANKING - MOVE: %s CLASH RANKING: %f DURATION RANKING: %f POSE RANKING: %f MOMENTUM RANKING: %f   --- FINAL: %i",
                 string-debug(fist-kick-face-kill),
                 var_7,
@@ -6984,10 +6984,10 @@ embedded@14730(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
         }
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 3)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("DEFENDER FRAME TIL HIT: %i PLAYER FRAME TIL HIT: %i", var_0, var_3), 19);
+                display(dc:format("DEFENDER FRAME TIL HIT: %i PLAYER FRAME TIL HIT: %i", var_0, var_3), 19);
             }
             if (!is-final-build?()) {
-                display(#5445173390656D6D("NPC SWING VS PLAYER FINISHER CLASH DETECTED- INTRO DURATION: %i RANKING APPLIED: %i", var_9, var_12), 19);
+                display(dc:format("NPC SWING VS PLAYER FINISHER CLASH DETECTED- INTRO DURATION: %i RANKING APPLIED: %i", var_9, var_12), 19);
             }
         }
         var_7 = var_12 * 100000.00;
@@ -7052,7 +7052,7 @@ embedded@14730(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     log-event("melee-finisher-duration", 20, string-debug(fist-left-hook-kill), 0, 0);
     if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 3)) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D(
+            display(dc:format(
                 "FINISHER SECONDARY RANKING - MOVE: %s CLASH RANKING: %f DURATION RANKING: %f POSE RANKING: %f MOMENTUM RANKING: %f   --- FINAL: %i",
                 string-debug(fist-left-hook-kill),
                 var_7,
@@ -7200,7 +7200,7 @@ embedded@98618(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     if (is-player?(arg_1) || !0 && character-is-dead?(arg_2)) {
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("Melee deadened for %f seconds", 1.25), 19);
+                display(dc:format("Melee deadened for %f seconds", 1.25), 19);
             }
         }
         disable-untargeted-melee-attack-timed(1.25);
@@ -7249,7 +7249,7 @@ embedded@99c68(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     if (is-player?(arg_1) || !0 && character-is-dead?(arg_2)) {
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("Melee deadened for %f seconds", 1.03), 19);
+                display(dc:format("Melee deadened for %f seconds", 1.03), 19);
             }
         }
         disable-untargeted-melee-attack-timed(1.03);
@@ -7298,7 +7298,7 @@ embedded@985c0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     if (is-player?(arg_1) || !0 && character-is-dead?(arg_2)) {
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("Melee deadened for %f seconds", 0.57), 19);
+                display(dc:format("Melee deadened for %f seconds", 0.57), 19);
             }
         }
         disable-untargeted-melee-attack-timed(0.57);
@@ -7353,10 +7353,10 @@ embedded@12878(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
         }
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 3)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("DEFENDER FRAME TIL HIT: %i PLAYER FRAME TIL HIT: %i", var_0, var_3), 19);
+                display(dc:format("DEFENDER FRAME TIL HIT: %i PLAYER FRAME TIL HIT: %i", var_0, var_3), 19);
             }
             if (!is-final-build?()) {
-                display(#5445173390656D6D("NPC SWING VS PLAYER FINISHER CLASH DETECTED- INTRO DURATION: %i RANKING APPLIED: %i", var_9, var_12), 19);
+                display(dc:format("NPC SWING VS PLAYER FINISHER CLASH DETECTED- INTRO DURATION: %i RANKING APPLIED: %i", var_9, var_12), 19);
             }
         }
         var_7 = var_12 * 100000.00;
@@ -7421,7 +7421,7 @@ embedded@12878(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     log-event("melee-finisher-duration", 62, string-debug(fist-inf-right-hammer-fist-stomp), 0, 0);
     if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 3)) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D(
+            display(dc:format(
                 "FINISHER SECONDARY RANKING - MOVE: %s CLASH RANKING: %f DURATION RANKING: %f POSE RANKING: %f MOMENTUM RANKING: %f   --- FINAL: %i",
                 string-debug(fist-inf-right-hammer-fist-stomp),
                 var_7,
@@ -7574,10 +7574,10 @@ embedded@ca08(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
         }
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 3)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("DEFENDER FRAME TIL HIT: %i PLAYER FRAME TIL HIT: %i", var_0, var_3), 19);
+                display(dc:format("DEFENDER FRAME TIL HIT: %i PLAYER FRAME TIL HIT: %i", var_0, var_3), 19);
             }
             if (!is-final-build?()) {
-                display(#5445173390656D6D("NPC SWING VS PLAYER FINISHER CLASH DETECTED- INTRO DURATION: %i RANKING APPLIED: %i", var_9, var_12), 19);
+                display(dc:format("NPC SWING VS PLAYER FINISHER CLASH DETECTED- INTRO DURATION: %i RANKING APPLIED: %i", var_9, var_12), 19);
             }
         }
         var_7 = var_12 * 100000.00;
@@ -7642,7 +7642,7 @@ embedded@ca08(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
     log-event("melee-finisher-duration", 27, string-debug(fist-front-ledge-kill), 0, 0);
     if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 3)) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D(
+            display(dc:format(
                 "FINISHER SECONDARY RANKING - MOVE: %s CLASH RANKING: %f DURATION RANKING: %f POSE RANKING: %f MOMENTUM RANKING: %f   --- FINAL: %i",
                 string-debug(fist-front-ledge-kill),
                 var_7,
@@ -7747,10 +7747,10 @@ embedded@12688(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
         }
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 3)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("DEFENDER FRAME TIL HIT: %i PLAYER FRAME TIL HIT: %i", var_0, var_3), 19);
+                display(dc:format("DEFENDER FRAME TIL HIT: %i PLAYER FRAME TIL HIT: %i", var_0, var_3), 19);
             }
             if (!is-final-build?()) {
-                display(#5445173390656D6D("NPC SWING VS PLAYER FINISHER CLASH DETECTED- INTRO DURATION: %i RANKING APPLIED: %i", var_9, var_12), 19);
+                display(dc:format("NPC SWING VS PLAYER FINISHER CLASH DETECTED- INTRO DURATION: %i RANKING APPLIED: %i", var_9, var_12), 19);
             }
         }
         var_7 = var_12 * 100000.00;
@@ -7815,7 +7815,7 @@ embedded@12688(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     log-event("melee-finisher-duration", 75, string-debug(fist-back-kill-flip-kick), 0, 0);
     if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 3)) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D(
+            display(dc:format(
                 "FINISHER SECONDARY RANKING - MOVE: %s CLASH RANKING: %f DURATION RANKING: %f POSE RANKING: %f MOMENTUM RANKING: %f   --- FINAL: %i",
                 string-debug(fist-back-kill-flip-kick),
                 var_7,
@@ -7931,7 +7931,7 @@ embedded@949a8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     u16 var_1;
     if (melee-character-bit-check(arg_2, #0000000004000000) && (#0000000004000000 & 67108864) == 0) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D("ragdoll happening for shambler"), 19);
+            display(dc:format("ragdoll happening for shambler"), 19);
         }
         var_1 = set-melee-ragdoll-power-off-params(arg_2, sha-ground-shake-death, *shambler-shake-ragdoll-control-settings*);
     } else {
@@ -7992,7 +7992,7 @@ embedded@99130(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     if (is-player?(arg_1) || !0 && character-is-dead?(arg_2)) {
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("Melee deadened for %f seconds", 1.18), 19);
+                display(dc:format("Melee deadened for %f seconds", 1.18), 19);
             }
         }
         disable-untargeted-melee-attack-timed(1.18);
@@ -8014,7 +8014,7 @@ embedded@91d00(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     u16 var_1;
     if (melee-character-bit-check(arg_2, #0000000004000000) && (#0000000004000000 & 540016640) == 0) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D("ragdoll happening for shambler"), 19);
+            display(dc:format("ragdoll happening for shambler"), 19);
         }
         var_1 = set-melee-ragdoll-power-off-params(arg_2, sha-ground-shake-death, *shambler-shake-ragdoll-control-settings*);
     } else {
@@ -8066,10 +8066,10 @@ embedded@14360(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
         }
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 3)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("DEFENDER FRAME TIL HIT: %i PLAYER FRAME TIL HIT: %i", var_0, var_3), 19);
+                display(dc:format("DEFENDER FRAME TIL HIT: %i PLAYER FRAME TIL HIT: %i", var_0, var_3), 19);
             }
             if (!is-final-build?()) {
-                display(#5445173390656D6D("NPC SWING VS PLAYER FINISHER CLASH DETECTED- INTRO DURATION: %i RANKING APPLIED: %i", var_9, var_12), 19);
+                display(dc:format("NPC SWING VS PLAYER FINISHER CLASH DETECTED- INTRO DURATION: %i RANKING APPLIED: %i", var_9, var_12), 19);
             }
         }
         var_7 = var_12 * 100000.00;
@@ -8134,7 +8134,7 @@ embedded@14360(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     log-event("melee-finisher-duration", 30, string-debug(fist-throat-punch-kill), 0, 0);
     if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 3)) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D(
+            display(dc:format(
                 "FINISHER SECONDARY RANKING - MOVE: %s CLASH RANKING: %f DURATION RANKING: %f POSE RANKING: %f MOMENTUM RANKING: %f   --- FINAL: %i",
                 string-debug(fist-throat-punch-kill),
                 var_7,
@@ -8243,7 +8243,7 @@ embedded@96db0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     if (is-player?(arg_1) || !0 && character-is-dead?(arg_2)) {
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("Melee deadened for %f seconds", 0.73), 19);
+                display(dc:format("Melee deadened for %f seconds", 0.73), 19);
             }
         }
         disable-untargeted-melee-attack-timed(0.73);
@@ -8267,7 +8267,7 @@ embedded@98910(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
         if (!(0 == 0)) {
             var_3 = spawn-gore-piece(0, arg_2, gore-finisher-blunt-head-l, arg_6, 1, 1);
         } else if (!(gore-finisher-blunt-head-l == 0)) {
-            u64? var_8 = %alloc-array(single-frame, 16, 2, 1);
+            u64? var_8 = #%alloc-array(single-frame, 16, 2, 1);
             *(i32*)*var_8[0] = 40;
             *(u64*)(*var_8[0] + 8) = 0;
             *(i32*)(*var_8[0] + 8) = 1;
@@ -8275,19 +8275,19 @@ embedded@98910(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
             *(u64*)(*var_8[1] + 8) = 0;
             *(u8*)(*var_8[1] + 8) = 1;
             animate_(arg_2, gore-finisher-blunt-head-bind, var_8);
-            u64? var_9 = %alloc-array(single-frame, 16, 1, 1);
+            u64? var_9 = #%alloc-array(single-frame, 16, 1, 1);
             *(i32*)*var_9[0] = 40;
             *(u64*)(*var_9[0] + 8) = 0;
             *(i32*)(*var_9[0] + 8) = 1;
             var_3 = animate_(arg_2, gore-finisher-blunt-head-l, var_9);
         } else if (!is-final-build?()) {
-            var_3 = display(#5445173390656D6D("MELEE GORE SPAWN FAILURE"), 19);
+            var_3 = display(dc:format("MELEE GORE SPAWN FAILURE"), 19);
         } else {
             var_3 = 0;
         }
     } else if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 5)) {
         if (!is-final-build?()) {
-            var_3 = display(#5445173390656D6D("INVALID CHARACTERS FOR %s", string-debug(0)), 19);
+            var_3 = display(dc:format("INVALID CHARACTERS FOR %s", string-debug(0)), 19);
         } else {
             var_3 = 0;
         }
@@ -8319,7 +8319,7 @@ embedded@94348(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     if (is-player?(arg_1) || !0 && character-is-dead?(arg_2)) {
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("Melee deadened for %f seconds", 0.81), 19);
+                display(dc:format("Melee deadened for %f seconds", 0.81), 19);
             }
         }
         disable-untargeted-melee-attack-timed(0.81);
@@ -8380,10 +8380,10 @@ embedded@16928(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
         }
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 3)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("DEFENDER FRAME TIL HIT: %i PLAYER FRAME TIL HIT: %i", var_0, var_3), 19);
+                display(dc:format("DEFENDER FRAME TIL HIT: %i PLAYER FRAME TIL HIT: %i", var_0, var_3), 19);
             }
             if (!is-final-build?()) {
-                display(#5445173390656D6D("NPC SWING VS PLAYER FINISHER CLASH DETECTED- INTRO DURATION: %i RANKING APPLIED: %i", var_9, var_12), 19);
+                display(dc:format("NPC SWING VS PLAYER FINISHER CLASH DETECTED- INTRO DURATION: %i RANKING APPLIED: %i", var_9, var_12), 19);
             }
         }
         var_7 = var_12 * 100000.00;
@@ -8448,7 +8448,7 @@ embedded@16928(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     log-event("melee-finisher-duration", 35, string-debug(fist-inf-leg-kick-punch), 0, 0);
     if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 3)) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D(
+            display(dc:format(
                 "FINISHER SECONDARY RANKING - MOVE: %s CLASH RANKING: %f DURATION RANKING: %f POSE RANKING: %f MOMENTUM RANKING: %f   --- FINAL: %i",
                 string-debug(fist-inf-leg-kick-punch),
                 var_7,
@@ -8771,7 +8771,7 @@ embedded@93100(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     if (is-player?(arg_1) || !0 && character-is-dead?(arg_2)) {
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("Melee deadened for %f seconds", 0.96), 19);
+                display(dc:format("Melee deadened for %f seconds", 0.96), 19);
             }
         }
         disable-untargeted-melee-attack-timed(0.96);
@@ -8852,7 +8852,7 @@ embedded@90858(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
         if (!(gore-clicker-gun-head-center == 0)) {
             var_3 = spawn-gore-piece(gore-clicker-gun-head-center, arg_2, 0, arg_6, 1, 1);
         } else if (!(0 == 0)) {
-            u64? var_8 = %alloc-array(single-frame, 16, 2, 1);
+            u64? var_8 = #%alloc-array(single-frame, 16, 2, 1);
             *(i32*)*var_8[0] = 40;
             *(u64*)(*var_8[0] + 8) = 0;
             *(i32*)(*var_8[0] + 8) = 1;
@@ -8860,19 +8860,19 @@ embedded@90858(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
             *(u64*)(*var_8[1] + 8) = 0;
             *(u8*)(*var_8[1] + 8) = 1;
             animate_(arg_2, gore-finisher-blunt-head-bind, var_8);
-            u64? var_9 = %alloc-array(single-frame, 16, 1, 1);
+            u64? var_9 = #%alloc-array(single-frame, 16, 1, 1);
             *(i32*)*var_9[0] = 40;
             *(u64*)(*var_9[0] + 8) = 0;
             *(i32*)(*var_9[0] + 8) = 1;
             var_3 = animate_(arg_2, 0, var_9);
         } else if (!is-final-build?()) {
-            var_3 = display(#5445173390656D6D("MELEE GORE SPAWN FAILURE"), 19);
+            var_3 = display(dc:format("MELEE GORE SPAWN FAILURE"), 19);
         } else {
             var_3 = 0;
         }
     } else if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 5)) {
         if (!is-final-build?()) {
-            var_3 = display(#5445173390656D6D("INVALID CHARACTERS FOR %s", string-debug(gore-clicker-gun-head-center)), 19);
+            var_3 = display(dc:format("INVALID CHARACTERS FOR %s", string-debug(gore-clicker-gun-head-center)), 19);
         } else {
             var_3 = 0;
         }
@@ -8902,7 +8902,7 @@ embedded@96350(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
         if (!(gore-clicker-gun-head-l == 0)) {
             var_3 = spawn-gore-piece(gore-clicker-gun-head-l, arg_2, 0, arg_6, 1, 1);
         } else if (!(0 == 0)) {
-            u64? var_8 = %alloc-array(single-frame, 16, 2, 1);
+            u64? var_8 = #%alloc-array(single-frame, 16, 2, 1);
             *(i32*)*var_8[0] = 40;
             *(u64*)(*var_8[0] + 8) = 0;
             *(i32*)(*var_8[0] + 8) = 1;
@@ -8910,19 +8910,19 @@ embedded@96350(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
             *(u64*)(*var_8[1] + 8) = 0;
             *(u8*)(*var_8[1] + 8) = 1;
             animate_(arg_2, gore-finisher-blunt-head-bind, var_8);
-            u64? var_9 = %alloc-array(single-frame, 16, 1, 1);
+            u64? var_9 = #%alloc-array(single-frame, 16, 1, 1);
             *(i32*)*var_9[0] = 40;
             *(u64*)(*var_9[0] + 8) = 0;
             *(i32*)(*var_9[0] + 8) = 1;
             var_3 = animate_(arg_2, 0, var_9);
         } else if (!is-final-build?()) {
-            var_3 = display(#5445173390656D6D("MELEE GORE SPAWN FAILURE"), 19);
+            var_3 = display(dc:format("MELEE GORE SPAWN FAILURE"), 19);
         } else {
             var_3 = 0;
         }
     } else if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 5)) {
         if (!is-final-build?()) {
-            var_3 = display(#5445173390656D6D("INVALID CHARACTERS FOR %s", string-debug(gore-clicker-gun-head-l)), 19);
+            var_3 = display(dc:format("INVALID CHARACTERS FOR %s", string-debug(gore-clicker-gun-head-l)), 19);
         } else {
             var_3 = 0;
         }
@@ -8953,7 +8953,7 @@ embedded@954d0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
         if (!(gore-clicker-gun-head-r == 0)) {
             var_3 = spawn-gore-piece(gore-clicker-gun-head-r, arg_2, 0, arg_6, 1, 1);
         } else if (!(0 == 0)) {
-            u64? var_8 = %alloc-array(single-frame, 16, 2, 1);
+            u64? var_8 = #%alloc-array(single-frame, 16, 2, 1);
             *(i32*)*var_8[0] = 40;
             *(u64*)(*var_8[0] + 8) = 0;
             *(i32*)(*var_8[0] + 8) = 1;
@@ -8961,19 +8961,19 @@ embedded@954d0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
             *(u64*)(*var_8[1] + 8) = 0;
             *(u8*)(*var_8[1] + 8) = 1;
             animate_(arg_2, gore-finisher-blunt-head-bind, var_8);
-            u64? var_9 = %alloc-array(single-frame, 16, 1, 1);
+            u64? var_9 = #%alloc-array(single-frame, 16, 1, 1);
             *(i32*)*var_9[0] = 40;
             *(u64*)(*var_9[0] + 8) = 0;
             *(i32*)(*var_9[0] + 8) = 1;
             var_3 = animate_(arg_2, 0, var_9);
         } else if (!is-final-build?()) {
-            var_3 = display(#5445173390656D6D("MELEE GORE SPAWN FAILURE"), 19);
+            var_3 = display(dc:format("MELEE GORE SPAWN FAILURE"), 19);
         } else {
             var_3 = 0;
         }
     } else if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 5)) {
         if (!is-final-build?()) {
-            var_3 = display(#5445173390656D6D("INVALID CHARACTERS FOR %s", string-debug(gore-clicker-gun-head-r)), 19);
+            var_3 = display(dc:format("INVALID CHARACTERS FOR %s", string-debug(gore-clicker-gun-head-r)), 19);
         } else {
             var_3 = 0;
         }
@@ -9004,7 +9004,7 @@ embedded@90378(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
         if (!(gore-gun-head-eliminated == 0)) {
             var_3 = spawn-gore-piece(gore-gun-head-eliminated, arg_2, 0, arg_6, 1, 1);
         } else if (!(0 == 0)) {
-            u64? var_8 = %alloc-array(single-frame, 16, 2, 1);
+            u64? var_8 = #%alloc-array(single-frame, 16, 2, 1);
             *(i32*)*var_8[0] = 40;
             *(u64*)(*var_8[0] + 8) = 0;
             *(i32*)(*var_8[0] + 8) = 1;
@@ -9012,19 +9012,19 @@ embedded@90378(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
             *(u64*)(*var_8[1] + 8) = 0;
             *(u8*)(*var_8[1] + 8) = 1;
             animate_(arg_2, gore-finisher-blunt-head-bind, var_8);
-            u64? var_9 = %alloc-array(single-frame, 16, 1, 1);
+            u64? var_9 = #%alloc-array(single-frame, 16, 1, 1);
             *(i32*)*var_9[0] = 40;
             *(u64*)(*var_9[0] + 8) = 0;
             *(i32*)(*var_9[0] + 8) = 1;
             var_3 = animate_(arg_2, 0, var_9);
         } else if (!is-final-build?()) {
-            var_3 = display(#5445173390656D6D("MELEE GORE SPAWN FAILURE"), 19);
+            var_3 = display(dc:format("MELEE GORE SPAWN FAILURE"), 19);
         } else {
             var_3 = 0;
         }
     } else if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 5)) {
         if (!is-final-build?()) {
-            var_3 = display(#5445173390656D6D("INVALID CHARACTERS FOR %s", string-debug(gore-gun-head-eliminated)), 19);
+            var_3 = display(dc:format("INVALID CHARACTERS FOR %s", string-debug(gore-gun-head-eliminated)), 19);
         } else {
             var_3 = 0;
         }
@@ -9073,7 +9073,7 @@ embedded@8f740(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     if (is-player?(arg_1) || !0 && character-is-dead?(arg_2)) {
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("Melee deadened for %f seconds", 1.12), 19);
+                display(dc:format("Melee deadened for %f seconds", 1.12), 19);
             }
         }
         disable-untargeted-melee-attack-timed(1.12);
@@ -9091,7 +9091,7 @@ embedded@93bc8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     u16 var_1;
     if (melee-character-bit-check(arg_2, #0000000004000000) && (#0000000004000000 & 1048576) == 0) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D("ragdoll happening for shambler"), 19);
+            display(dc:format("ragdoll happening for shambler"), 19);
         }
         var_1 = set-melee-ragdoll-power-off-params(arg_2, sha-ground-shake-death, *shambler-shake-ragdoll-control-settings*);
     } else {
@@ -9155,10 +9155,10 @@ embedded@eee8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
         }
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 3)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("DEFENDER FRAME TIL HIT: %i PLAYER FRAME TIL HIT: %i", var_0, var_3), 19);
+                display(dc:format("DEFENDER FRAME TIL HIT: %i PLAYER FRAME TIL HIT: %i", var_0, var_3), 19);
             }
             if (!is-final-build?()) {
-                display(#5445173390656D6D("NPC SWING VS PLAYER FINISHER CLASH DETECTED- INTRO DURATION: %i RANKING APPLIED: %i", var_9, var_12), 19);
+                display(dc:format("NPC SWING VS PLAYER FINISHER CLASH DETECTED- INTRO DURATION: %i RANKING APPLIED: %i", var_9, var_12), 19);
             }
         }
         var_7 = var_12 * 100000.00;
@@ -9223,7 +9223,7 @@ embedded@eee8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
     log-event("melee-finisher-duration", 174, string-debug(fist-brute-front-execute), 0, 0);
     if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 3)) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D(
+            display(dc:format(
                 "FINISHER SECONDARY RANKING - MOVE: %s CLASH RANKING: %f DURATION RANKING: %f POSE RANKING: %f MOMENTUM RANKING: %f   --- FINAL: %i",
                 string-debug(fist-brute-front-execute),
                 var_7,
@@ -9434,7 +9434,7 @@ embedded@99d68(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     if (is-player?(arg_1) || !0 && character-is-dead?(arg_2)) {
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("Melee deadened for %f seconds", 0.68), 19);
+                display(dc:format("Melee deadened for %f seconds", 0.68), 19);
             }
         }
         disable-untargeted-melee-attack-timed(0.68);
@@ -9507,10 +9507,10 @@ embedded@13fe8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
         }
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 3)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("DEFENDER FRAME TIL HIT: %i PLAYER FRAME TIL HIT: %i", var_0, var_3), 19);
+                display(dc:format("DEFENDER FRAME TIL HIT: %i PLAYER FRAME TIL HIT: %i", var_0, var_3), 19);
             }
             if (!is-final-build?()) {
-                display(#5445173390656D6D("NPC SWING VS PLAYER FINISHER CLASH DETECTED- INTRO DURATION: %i RANKING APPLIED: %i", var_9, var_12), 19);
+                display(dc:format("NPC SWING VS PLAYER FINISHER CLASH DETECTED- INTRO DURATION: %i RANKING APPLIED: %i", var_9, var_12), 19);
             }
         }
         var_7 = var_12 * 100000.00;
@@ -9575,7 +9575,7 @@ embedded@13fe8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     log-event("melee-finisher-duration", 91, string-debug(abby-fist-back-dog-kill), 0, 0);
     if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 3)) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D(
+            display(dc:format(
                 "FINISHER SECONDARY RANKING - MOVE: %s CLASH RANKING: %f DURATION RANKING: %f POSE RANKING: %f MOMENTUM RANKING: %f   --- FINAL: %i",
                 string-debug(abby-fist-back-dog-kill),
                 var_7,
@@ -9685,7 +9685,7 @@ embedded@97110(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     if (is-player?(arg_1) || !0 && character-is-dead?(arg_2)) {
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("Melee deadened for %f seconds", 1.57), 19);
+                display(dc:format("Melee deadened for %f seconds", 1.57), 19);
             }
         }
         disable-untargeted-melee-attack-timed(1.57);
@@ -9768,10 +9768,10 @@ embedded@11178(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
         }
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 3)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("DEFENDER FRAME TIL HIT: %i PLAYER FRAME TIL HIT: %i", var_0, var_3), 19);
+                display(dc:format("DEFENDER FRAME TIL HIT: %i PLAYER FRAME TIL HIT: %i", var_0, var_3), 19);
             }
             if (!is-final-build?()) {
-                display(#5445173390656D6D("NPC SWING VS PLAYER FINISHER CLASH DETECTED- INTRO DURATION: %i RANKING APPLIED: %i", var_9, var_12), 19);
+                display(dc:format("NPC SWING VS PLAYER FINISHER CLASH DETECTED- INTRO DURATION: %i RANKING APPLIED: %i", var_9, var_12), 19);
             }
         }
         var_7 = var_12 * 100000.00;
@@ -9836,7 +9836,7 @@ embedded@11178(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     log-event("melee-finisher-duration", 55, string-debug(fist-knee-neck-break-kill), 0, 0);
     if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 3)) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D(
+            display(dc:format(
                 "FINISHER SECONDARY RANKING - MOVE: %s CLASH RANKING: %f DURATION RANKING: %f POSE RANKING: %f MOMENTUM RANKING: %f   --- FINAL: %i",
                 string-debug(fist-knee-neck-break-kill),
                 var_7,
@@ -9976,7 +9976,7 @@ embedded@941b0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     if (is-player?(arg_1) || !0 && character-is-dead?(arg_2)) {
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("Melee deadened for %f seconds", 0.65), 19);
+                display(dc:format("Melee deadened for %f seconds", 0.65), 19);
             }
         }
         disable-untargeted-melee-attack-timed(0.65);
@@ -10025,10 +10025,10 @@ embedded@13580(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
         }
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 3)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("DEFENDER FRAME TIL HIT: %i PLAYER FRAME TIL HIT: %i", var_0, var_3), 19);
+                display(dc:format("DEFENDER FRAME TIL HIT: %i PLAYER FRAME TIL HIT: %i", var_0, var_3), 19);
             }
             if (!is-final-build?()) {
-                display(#5445173390656D6D("NPC SWING VS PLAYER FINISHER CLASH DETECTED- INTRO DURATION: %i RANKING APPLIED: %i", var_9, var_12), 19);
+                display(dc:format("NPC SWING VS PLAYER FINISHER CLASH DETECTED- INTRO DURATION: %i RANKING APPLIED: %i", var_9, var_12), 19);
             }
         }
         var_7 = var_12 * 100000.00;
@@ -10093,7 +10093,7 @@ embedded@13580(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     log-event("melee-finisher-duration", 44, string-debug(fist-back-knee-kick-finisher), 0, 0);
     if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 3)) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D(
+            display(dc:format(
                 "FINISHER SECONDARY RANKING - MOVE: %s CLASH RANKING: %f DURATION RANKING: %f POSE RANKING: %f MOMENTUM RANKING: %f   --- FINAL: %i",
                 string-debug(fist-back-knee-kick-finisher),
                 var_7,
@@ -10198,10 +10198,10 @@ embedded@14690(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
         }
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 3)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("DEFENDER FRAME TIL HIT: %i PLAYER FRAME TIL HIT: %i", var_0, var_3), 19);
+                display(dc:format("DEFENDER FRAME TIL HIT: %i PLAYER FRAME TIL HIT: %i", var_0, var_3), 19);
             }
             if (!is-final-build?()) {
-                display(#5445173390656D6D("NPC SWING VS PLAYER FINISHER CLASH DETECTED- INTRO DURATION: %i RANKING APPLIED: %i", var_9, var_12), 19);
+                display(dc:format("NPC SWING VS PLAYER FINISHER CLASH DETECTED- INTRO DURATION: %i RANKING APPLIED: %i", var_9, var_12), 19);
             }
         }
         var_7 = var_12 * 100000.00;
@@ -10266,7 +10266,7 @@ embedded@14690(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     log-event("melee-finisher-duration", 36, string-debug(fist-knee-kick-knee-kill), 0, 0);
     if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 3)) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D(
+            display(dc:format(
                 "FINISHER SECONDARY RANKING - MOVE: %s CLASH RANKING: %f DURATION RANKING: %f POSE RANKING: %f MOMENTUM RANKING: %f   --- FINAL: %i",
                 string-debug(fist-knee-kick-knee-kill),
                 var_7,
@@ -10371,10 +10371,10 @@ embedded@e970(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
         }
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 3)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("DEFENDER FRAME TIL HIT: %i PLAYER FRAME TIL HIT: %i", var_0, var_3), 19);
+                display(dc:format("DEFENDER FRAME TIL HIT: %i PLAYER FRAME TIL HIT: %i", var_0, var_3), 19);
             }
             if (!is-final-build?()) {
-                display(#5445173390656D6D("NPC SWING VS PLAYER FINISHER CLASH DETECTED- INTRO DURATION: %i RANKING APPLIED: %i", var_9, var_12), 19);
+                display(dc:format("NPC SWING VS PLAYER FINISHER CLASH DETECTED- INTRO DURATION: %i RANKING APPLIED: %i", var_9, var_12), 19);
             }
         }
         var_7 = var_12 * 100000.00;
@@ -10439,7 +10439,7 @@ embedded@e970(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
     log-event("melee-finisher-duration", 45, string-debug(fist-back-ledge-kill), 0, 0);
     if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 3)) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D(
+            display(dc:format(
                 "FINISHER SECONDARY RANKING - MOVE: %s CLASH RANKING: %f DURATION RANKING: %f POSE RANKING: %f MOMENTUM RANKING: %f   --- FINAL: %i",
                 string-debug(fist-back-ledge-kill),
                 var_7,
@@ -10551,7 +10551,7 @@ embedded@92cf8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
         if (!(0 == 0)) {
             var_3 = spawn-gore-piece(0, arg_2, gore-finisher-blunt-head-r, arg_6, 1, 1);
         } else if (!(gore-finisher-blunt-head-r == 0)) {
-            u64? var_8 = %alloc-array(single-frame, 16, 2, 1);
+            u64? var_8 = #%alloc-array(single-frame, 16, 2, 1);
             *(i32*)*var_8[0] = 40;
             *(u64*)(*var_8[0] + 8) = 0;
             *(i32*)(*var_8[0] + 8) = 1;
@@ -10559,19 +10559,19 @@ embedded@92cf8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
             *(u64*)(*var_8[1] + 8) = 0;
             *(u8*)(*var_8[1] + 8) = 1;
             animate_(arg_2, gore-finisher-blunt-head-bind, var_8);
-            u64? var_9 = %alloc-array(single-frame, 16, 1, 1);
+            u64? var_9 = #%alloc-array(single-frame, 16, 1, 1);
             *(i32*)*var_9[0] = 40;
             *(u64*)(*var_9[0] + 8) = 0;
             *(i32*)(*var_9[0] + 8) = 1;
             var_3 = animate_(arg_2, gore-finisher-blunt-head-r, var_9);
         } else if (!is-final-build?()) {
-            var_3 = display(#5445173390656D6D("MELEE GORE SPAWN FAILURE"), 19);
+            var_3 = display(dc:format("MELEE GORE SPAWN FAILURE"), 19);
         } else {
             var_3 = 0;
         }
     } else if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 5)) {
         if (!is-final-build?()) {
-            var_3 = display(#5445173390656D6D("INVALID CHARACTERS FOR %s", string-debug(0)), 19);
+            var_3 = display(dc:format("INVALID CHARACTERS FOR %s", string-debug(0)), 19);
         } else {
             var_3 = 0;
         }
@@ -10651,10 +10651,10 @@ embedded@107b8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
         }
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 3)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("DEFENDER FRAME TIL HIT: %i PLAYER FRAME TIL HIT: %i", var_0, var_3), 19);
+                display(dc:format("DEFENDER FRAME TIL HIT: %i PLAYER FRAME TIL HIT: %i", var_0, var_3), 19);
             }
             if (!is-final-build?()) {
-                display(#5445173390656D6D("NPC SWING VS PLAYER FINISHER CLASH DETECTED- INTRO DURATION: %i RANKING APPLIED: %i", var_9, var_12), 19);
+                display(dc:format("NPC SWING VS PLAYER FINISHER CLASH DETECTED- INTRO DURATION: %i RANKING APPLIED: %i", var_9, var_12), 19);
             }
         }
         var_7 = var_12 * 100000.00;
@@ -10719,7 +10719,7 @@ embedded@107b8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     log-event("melee-finisher-duration", 218, string-debug(bespoke-saving-kids-brute-finisher), 0, 0);
     if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 3)) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D(
+            display(dc:format(
                 "FINISHER SECONDARY RANKING - MOVE: %s CLASH RANKING: %f DURATION RANKING: %f POSE RANKING: %f MOMENTUM RANKING: %f   --- FINAL: %i",
                 string-debug(bespoke-saving-kids-brute-finisher),
                 var_7,
@@ -10845,10 +10845,10 @@ embedded@11d00(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
         }
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 3)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("DEFENDER FRAME TIL HIT: %i PLAYER FRAME TIL HIT: %i", var_0, var_3), 19);
+                display(dc:format("DEFENDER FRAME TIL HIT: %i PLAYER FRAME TIL HIT: %i", var_0, var_3), 19);
             }
             if (!is-final-build?()) {
-                display(#5445173390656D6D("NPC SWING VS PLAYER FINISHER CLASH DETECTED- INTRO DURATION: %i RANKING APPLIED: %i", var_9, var_12), 19);
+                display(dc:format("NPC SWING VS PLAYER FINISHER CLASH DETECTED- INTRO DURATION: %i RANKING APPLIED: %i", var_9, var_12), 19);
             }
         }
         var_7 = var_12 * 100000.00;
@@ -10913,7 +10913,7 @@ embedded@11d00(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     log-event("melee-finisher-duration", 50, string-debug(fist-inf-left-hammer-fist), 0, 0);
     if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 3)) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D(
+            display(dc:format(
                 "FINISHER SECONDARY RANKING - MOVE: %s CLASH RANKING: %f DURATION RANKING: %f POSE RANKING: %f MOMENTUM RANKING: %f   --- FINAL: %i",
                 string-debug(fist-inf-left-hammer-fist),
                 var_7,
@@ -11043,7 +11043,7 @@ embedded@99a20(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     if (is-player?(arg_1) || !0 && character-is-dead?(arg_2)) {
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("Melee deadened for %f seconds", 1.17), 19);
+                display(dc:format("Melee deadened for %f seconds", 1.17), 19);
             }
         }
         disable-untargeted-melee-attack-timed(1.17);
@@ -11077,7 +11077,7 @@ embedded@96f08(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     if (is-player?(arg_1) || !0 && character-is-dead?(arg_2)) {
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("Melee deadened for %f seconds", 1.15), 19);
+                display(dc:format("Melee deadened for %f seconds", 1.15), 19);
             }
         }
         disable-untargeted-melee-attack-timed(1.15);
@@ -11125,10 +11125,10 @@ embedded@15e08(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
         }
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 3)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("DEFENDER FRAME TIL HIT: %i PLAYER FRAME TIL HIT: %i", var_0, var_3), 19);
+                display(dc:format("DEFENDER FRAME TIL HIT: %i PLAYER FRAME TIL HIT: %i", var_0, var_3), 19);
             }
             if (!is-final-build?()) {
-                display(#5445173390656D6D("NPC SWING VS PLAYER FINISHER CLASH DETECTED- INTRO DURATION: %i RANKING APPLIED: %i", var_9, var_12), 19);
+                display(dc:format("NPC SWING VS PLAYER FINISHER CLASH DETECTED- INTRO DURATION: %i RANKING APPLIED: %i", var_9, var_12), 19);
             }
         }
         var_7 = var_12 * 100000.00;
@@ -11193,7 +11193,7 @@ embedded@15e08(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     log-event("melee-finisher-duration", 20, string-debug(fist-right-haymaker-kill), 0, 0);
     if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 3)) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D(
+            display(dc:format(
                 "FINISHER SECONDARY RANKING - MOVE: %s CLASH RANKING: %f DURATION RANKING: %f POSE RANKING: %f MOMENTUM RANKING: %f   --- FINAL: %i",
                 string-debug(fist-right-haymaker-kill),
                 var_7,
@@ -11394,7 +11394,7 @@ embedded@93550(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     u16 var_1;
     if (melee-character-bit-check(arg_2, #0000000004000000) && (#0000000004000000 & 8589934592) == 0) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D("ragdoll happening for shambler"), 19);
+            display(dc:format("ragdoll happening for shambler"), 19);
         }
         var_1 = set-melee-ragdoll-power-off-params(arg_2, sha-ground-shake-death, *shambler-shake-ragdoll-control-settings*);
     } else {
@@ -11435,7 +11435,7 @@ embedded@90da8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     if (is-player?(arg_1) || !0 && character-is-dead?(arg_2)) {
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("Melee deadened for %f seconds", 1.51), 19);
+                display(dc:format("Melee deadened for %f seconds", 1.51), 19);
             }
         }
         disable-untargeted-melee-attack-timed(1.51);
@@ -11490,10 +11490,10 @@ embedded@e9e0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
         }
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 3)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("DEFENDER FRAME TIL HIT: %i PLAYER FRAME TIL HIT: %i", var_0, var_3), 19);
+                display(dc:format("DEFENDER FRAME TIL HIT: %i PLAYER FRAME TIL HIT: %i", var_0, var_3), 19);
             }
             if (!is-final-build?()) {
-                display(#5445173390656D6D("NPC SWING VS PLAYER FINISHER CLASH DETECTED- INTRO DURATION: %i RANKING APPLIED: %i", var_9, var_12), 19);
+                display(dc:format("NPC SWING VS PLAYER FINISHER CLASH DETECTED- INTRO DURATION: %i RANKING APPLIED: %i", var_9, var_12), 19);
             }
         }
         var_7 = var_12 * 100000.00;
@@ -11558,7 +11558,7 @@ embedded@e9e0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
     log-event("melee-finisher-duration", 86, string-debug(fist-back-kill-choke-finisher), 0, 0);
     if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 3)) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D(
+            display(dc:format(
                 "FINISHER SECONDARY RANKING - MOVE: %s CLASH RANKING: %f DURATION RANKING: %f POSE RANKING: %f MOMENTUM RANKING: %f   --- FINAL: %i",
                 string-debug(fist-back-kill-choke-finisher),
                 var_7,
@@ -11732,10 +11732,10 @@ embedded@f6a8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
         }
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 3)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("DEFENDER FRAME TIL HIT: %i PLAYER FRAME TIL HIT: %i", var_0, var_3), 19);
+                display(dc:format("DEFENDER FRAME TIL HIT: %i PLAYER FRAME TIL HIT: %i", var_0, var_3), 19);
             }
             if (!is-final-build?()) {
-                display(#5445173390656D6D("NPC SWING VS PLAYER FINISHER CLASH DETECTED- INTRO DURATION: %i RANKING APPLIED: %i", var_9, var_12), 19);
+                display(dc:format("NPC SWING VS PLAYER FINISHER CLASH DETECTED- INTRO DURATION: %i RANKING APPLIED: %i", var_9, var_12), 19);
             }
         }
         var_7 = var_12 * 100000.00;
@@ -11800,7 +11800,7 @@ embedded@f6a8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
     log-event("melee-finisher-duration", 55, string-debug(fist-inf-shambler-front-kick), 0, 0);
     if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 3)) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D(
+            display(dc:format(
                 "FINISHER SECONDARY RANKING - MOVE: %s CLASH RANKING: %f DURATION RANKING: %f POSE RANKING: %f MOMENTUM RANKING: %f   --- FINAL: %i",
                 string-debug(fist-inf-shambler-front-kick),
                 var_7,
@@ -11899,7 +11899,7 @@ embedded@95758(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     if (is-player?(arg_1) || !0 && character-is-dead?(arg_2)) {
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("Melee deadened for %f seconds", 1.28), 19);
+                display(dc:format("Melee deadened for %f seconds", 1.28), 19);
             }
         }
         disable-untargeted-melee-attack-timed(1.28);
@@ -11954,10 +11954,10 @@ embedded@10760(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
         }
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 3)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("DEFENDER FRAME TIL HIT: %i PLAYER FRAME TIL HIT: %i", var_0, var_3), 19);
+                display(dc:format("DEFENDER FRAME TIL HIT: %i PLAYER FRAME TIL HIT: %i", var_0, var_3), 19);
             }
             if (!is-final-build?()) {
-                display(#5445173390656D6D("NPC SWING VS PLAYER FINISHER CLASH DETECTED- INTRO DURATION: %i RANKING APPLIED: %i", var_9, var_12), 19);
+                display(dc:format("NPC SWING VS PLAYER FINISHER CLASH DETECTED- INTRO DURATION: %i RANKING APPLIED: %i", var_9, var_12), 19);
             }
         }
         var_7 = var_12 * 100000.00;
@@ -12022,7 +12022,7 @@ embedded@10760(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     log-event("melee-finisher-duration", 149, string-debug(lunchlady-finale-igc-finisher), 0, 0);
     if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 3)) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D(
+            display(dc:format(
                 "FINISHER SECONDARY RANKING - MOVE: %s CLASH RANKING: %f DURATION RANKING: %f POSE RANKING: %f MOMENTUM RANKING: %f   --- FINAL: %i",
                 string-debug(lunchlady-finale-igc-finisher),
                 var_7,
@@ -12132,10 +12132,10 @@ embedded@d8a0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
         }
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 3)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("DEFENDER FRAME TIL HIT: %i PLAYER FRAME TIL HIT: %i", var_0, var_3), 19);
+                display(dc:format("DEFENDER FRAME TIL HIT: %i PLAYER FRAME TIL HIT: %i", var_0, var_3), 19);
             }
             if (!is-final-build?()) {
-                display(#5445173390656D6D("NPC SWING VS PLAYER FINISHER CLASH DETECTED- INTRO DURATION: %i RANKING APPLIED: %i", var_9, var_12), 19);
+                display(dc:format("NPC SWING VS PLAYER FINISHER CLASH DETECTED- INTRO DURATION: %i RANKING APPLIED: %i", var_9, var_12), 19);
             }
         }
         var_7 = var_12 * 100000.00;
@@ -12200,7 +12200,7 @@ embedded@d8a0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
     log-event("melee-finisher-duration", 46, string-debug(fist-inf-face-grab-finisher), 0, 0);
     if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 3)) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D(
+            display(dc:format(
                 "FINISHER SECONDARY RANKING - MOVE: %s CLASH RANKING: %f DURATION RANKING: %f POSE RANKING: %f MOMENTUM RANKING: %f   --- FINAL: %i",
                 string-debug(fist-inf-face-grab-finisher),
                 var_7,
@@ -12375,7 +12375,7 @@ embedded@928a0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     if (is-player?(arg_1) || !0 && character-is-dead?(arg_2)) {
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("Melee deadened for %f seconds", 1.09), 19);
+                display(dc:format("Melee deadened for %f seconds", 1.09), 19);
             }
         }
         disable-untargeted-melee-attack-timed(1.09);
@@ -12418,10 +12418,10 @@ embedded@115b0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
         }
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 3)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("DEFENDER FRAME TIL HIT: %i PLAYER FRAME TIL HIT: %i", var_0, var_3), 19);
+                display(dc:format("DEFENDER FRAME TIL HIT: %i PLAYER FRAME TIL HIT: %i", var_0, var_3), 19);
             }
             if (!is-final-build?()) {
-                display(#5445173390656D6D("NPC SWING VS PLAYER FINISHER CLASH DETECTED- INTRO DURATION: %i RANKING APPLIED: %i", var_9, var_12), 19);
+                display(dc:format("NPC SWING VS PLAYER FINISHER CLASH DETECTED- INTRO DURATION: %i RANKING APPLIED: %i", var_9, var_12), 19);
             }
         }
         var_7 = var_12 * 100000.00;
@@ -12486,7 +12486,7 @@ embedded@115b0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     log-event("melee-finisher-duration", 32, string-debug(fist-grab-back-head-knee-kill), 0, 0);
     if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 3)) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D(
+            display(dc:format(
                 "FINISHER SECONDARY RANKING - MOVE: %s CLASH RANKING: %f DURATION RANKING: %f POSE RANKING: %f MOMENTUM RANKING: %f   --- FINAL: %i",
                 string-debug(fist-grab-back-head-knee-kill),
                 var_7,
@@ -12585,7 +12585,7 @@ embedded@92838(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     if (is-player?(arg_1) || !0 && character-is-dead?(arg_2)) {
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("Melee deadened for %f seconds", 1.32), 19);
+                display(dc:format("Melee deadened for %f seconds", 1.32), 19);
             }
         }
         disable-untargeted-melee-attack-timed(1.32);
@@ -12667,10 +12667,10 @@ embedded@15b30(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
         }
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 3)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("DEFENDER FRAME TIL HIT: %i PLAYER FRAME TIL HIT: %i", var_0, var_3), 19);
+                display(dc:format("DEFENDER FRAME TIL HIT: %i PLAYER FRAME TIL HIT: %i", var_0, var_3), 19);
             }
             if (!is-final-build?()) {
-                display(#5445173390656D6D("NPC SWING VS PLAYER FINISHER CLASH DETECTED- INTRO DURATION: %i RANKING APPLIED: %i", var_9, var_12), 19);
+                display(dc:format("NPC SWING VS PLAYER FINISHER CLASH DETECTED- INTRO DURATION: %i RANKING APPLIED: %i", var_9, var_12), 19);
             }
         }
         var_7 = var_12 * 100000.00;
@@ -12735,7 +12735,7 @@ embedded@15b30(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     log-event("melee-finisher-duration", 68, string-debug(fist-stun-throw-finisher), 0, 0);
     if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 3)) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D(
+            display(dc:format(
                 "FINISHER SECONDARY RANKING - MOVE: %s CLASH RANKING: %f DURATION RANKING: %f POSE RANKING: %f MOMENTUM RANKING: %f   --- FINAL: %i",
                 string-debug(fist-stun-throw-finisher),
                 var_7,
@@ -12845,10 +12845,10 @@ embedded@15d80(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
         }
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 3)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("DEFENDER FRAME TIL HIT: %i PLAYER FRAME TIL HIT: %i", var_0, var_3), 19);
+                display(dc:format("DEFENDER FRAME TIL HIT: %i PLAYER FRAME TIL HIT: %i", var_0, var_3), 19);
             }
             if (!is-final-build?()) {
-                display(#5445173390656D6D("NPC SWING VS PLAYER FINISHER CLASH DETECTED- INTRO DURATION: %i RANKING APPLIED: %i", var_9, var_12), 19);
+                display(dc:format("NPC SWING VS PLAYER FINISHER CLASH DETECTED- INTRO DURATION: %i RANKING APPLIED: %i", var_9, var_12), 19);
             }
         }
         var_7 = var_12 * 100000.00;
@@ -12913,7 +12913,7 @@ embedded@15d80(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     log-event("melee-finisher-duration", 124, string-debug(fist-back-kill-brute-choke-out-finisher), 0, 0);
     if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 3)) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D(
+            display(dc:format(
                 "FINISHER SECONDARY RANKING - MOVE: %s CLASH RANKING: %f DURATION RANKING: %f POSE RANKING: %f MOMENTUM RANKING: %f   --- FINAL: %i",
                 string-debug(fist-back-kill-brute-choke-out-finisher),
                 var_7,

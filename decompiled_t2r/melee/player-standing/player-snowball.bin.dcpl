@@ -227,7 +227,7 @@ embedded@4e70(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
         var_0 = 1 && valid-contextual-dodge?(melee-fact-get-symbol(var_1, contextual-dodge-npc), 18, 63);
     } else {
         if (dc-assert-enabled?() && !1) {
-            display-error(#5445173390656D6D("allow-contextual-dodge-abort: invalid character to abort, provided '%s' please provide 'attacker or 'defender", string-debug(attacker)));
+            display-error(dc:format("allow-contextual-dodge-abort: invalid character to abort, provided '%s' please provide 'attacker or 'defender", string-debug(attacker)));
         }
         var_0 = 0;
     }
@@ -385,7 +385,7 @@ embedded@3e48(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
     if (is-player?(arg_1) || !0 && character-is-dead?(arg_2)) {
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("Melee deadened for %f seconds", 0.62), 19);
+                display(dc:format("Melee deadened for %f seconds", 0.62), 19);
             }
         }
         disable-untargeted-melee-attack-timed(0.62);
@@ -576,7 +576,7 @@ embedded@41f8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
     if (is-player?(arg_1) || !0 && character-is-dead?(arg_2)) {
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("Melee deadened for %f seconds", 0.89), 19);
+                display(dc:format("Melee deadened for %f seconds", 0.89), 19);
             }
         }
         disable-untargeted-melee-attack-timed(0.89);

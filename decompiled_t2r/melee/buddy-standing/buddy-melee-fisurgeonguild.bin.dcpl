@@ -310,7 +310,7 @@ embedded@f3e8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
             var_0 = 0;
         }
     } else if (dc-assert-enabled?() && !1) {
-        var_0 = display-error(#5445173390656D6D("melee-simple-damage-event: incorrect character '%s'", string-debug(defender)));
+        var_0 = display-error(dc:format("melee-simple-damage-event: incorrect character '%s'", string-debug(defender)));
     } else {
         var_0 = 0;
     }
@@ -428,7 +428,7 @@ buddy-m-fist-vs-inf-beat-down-finisher__start-func-array@4688
 buddy-m-fist-vs-inf-back-knee-stomp-head-punch-finisher__start-func-array@3fd8
 buddy-m-fist-vs-inf-elbow-finisher__start-func-array@2f58
 embedded@f4d0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
-    return !melee-weapon-bit-check(arg_1, #0000000000100000, 1, 1) || !is-rogue-mode?() && is-rogue-mode?() && !melee-fact-get-bool(arg_2, #C5AC6809F76060D9);
+    return !melee-weapon-bit-check(arg_1, #0000000000100000, 1, 1) || !is-rogue-mode?() && is-rogue-mode?() && !melee-fact-get-bool(arg_2, is-boss);
 }
 
 u64? buddy-m-fist-vs-inf-left-hook-finisher

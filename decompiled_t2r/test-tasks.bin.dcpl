@@ -4,12 +4,24 @@
 // #   listing for file: game_dumps/t2r/dc1/test-tasks.bin                                            #
 // #   filesize: 1911086 bytes                                                                        #
 // #   total entries: 2                                                                               #
-// #   functions: 1                                                                                   #
+// #   functions: 2                                                                                   #
 // #   has state script: false                                                                        #
 // #   game type: t2r                                                                                 #
 // #   optimizations enabled: true                                                                    #
 // #                                                                                                  #
 // ####################################################################################################
+
+u16 *test-task-graph*__game-task-graph@60__map@108____game-task-node@5bb0____map@93f8____game-task-subnode@10e7b8__
+embedded@13d610() {
+    u16 var_1;
+    if (task-played-from-dev-menu?()) {
+        set-svar-bit(sea-horse-load-levels, 14, 1);
+        var_1 = set-svar-bit(sea-horse-load-levels, 5, 1);
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
 
 u64? top-level() {
     return update-task-menu();

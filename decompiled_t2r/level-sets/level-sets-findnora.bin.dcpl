@@ -81,15 +81,15 @@ embedded@5990() {
     return stat-value?(nor-alone-unload-military-checkpoint) == 0;
 }
 
-u64? #78C87FE4D38925F1__level-set@820__level-scripted-set@1e00__
-#96161EC007D6E606__level-set@958__level-scripted-set@1ad0__
+u64? tsk-nor-hospital-basement-follow-coughing-pc__level-set@820__level-scripted-set@1e00__
+tsk-nor-torture-nora-preload__level-set@958__level-scripted-set@1ad0__
 tsk-nor-hospital-basement__level-set@ce0__level-scripted-set@1c68__
 embedded@5a08() {
     return !(is-chronological-mode-enabled?());
 }
 
-u64? #78C87FE4D38925F1__level-scripted-set@1f20
-#96161EC007D6E606__level-scripted-set@1c50
+u64? tsk-nor-hospital-basement-follow-coughing-pc__level-scripted-set@1f20
+tsk-nor-torture-nora-preload__level-scripted-set@1c50
 embedded@9320() {
     return is-chronological-mode-enabled?();
 }

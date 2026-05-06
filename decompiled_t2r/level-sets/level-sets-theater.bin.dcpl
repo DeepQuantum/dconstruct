@@ -34,7 +34,7 @@ embedded@2c50() {
 u64? tsk-res-bringing-him-home-preload-chronological__level-set@410__level-scripted-set@e50__
 tsk-res-bringing-him-home-preload__level-set@458__level-scripted-set@e50__
 embedded@2ab8() {
-    return !(get-boolean(#A5D588E81B36BF14, ss-res-escape-post-crash-1));
+    return !(get-boolean(flip-level-set, ss-res-escape-post-crash-1));
 }
 
 u16 tsk-res-bringing-him-home-preload-chronological__level-scripted-set@8f8

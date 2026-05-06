@@ -27,17 +27,17 @@ embedded@5130() {
 
 bool tsk-afm-capitol-window-lift__level-set@4c8__level-scripted-set@1860__
 embedded@7300() {
-    return get-boolean(#6E6134CA72189CC7, ss-afm-burning-village-window-lift-1);
+    return get-boolean(load-workshop-district?, ss-afm-burning-village-window-lift-1);
 }
 
 u64? tsk-afm-capitol-arrive__level-set@540__level-scripted-set@1a70__
 embedded@3ff0() {
-    return player-in-region?(#948A9B5F75FAD88B, 2);
+    return player-in-region?(rgn-afm-approach-window-1, 2);
 }
 
 u64? tsk-afm-capitol-arrive__level-scripted-set@18f0
 embedded@53f0() {
-    return player-in-region?(#351EF377C571750F, 2);
+    return player-in-region?(rgn-afm-approach-greathall-1, 2);
 }
 
 u64? tsk-afm-capitol-arrive__level-scripted-set@ea0
@@ -98,6 +98,6 @@ embedded@4ae8() {
 
 u64? tsk-afm-cavalry-highway-combat__level-set@aa0__level-scripted-set@1338__
 embedded@4b60() {
-    return !(player-in-region?(#AC7A04EF24700691, 2));
+    return !(player-in-region?(rgn-afm-highway-combat-load-1, 2));
 }
 

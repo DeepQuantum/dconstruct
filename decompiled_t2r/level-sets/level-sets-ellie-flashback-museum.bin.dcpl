@@ -13,17 +13,17 @@
 
 u64? tsk-efm-museum-flashback-building-a-space__level-set@f0__level-scripted-set@640__
 embedded@22e8() {
-    return player-in-region?(#5517B796644A45B7, 2);
+    return player-in-region?(rgn-nat-cafe-balcony-1, 2);
 }
 
 u64? tsk-efm-museum-flashback-building-a-space__level-scripted-set@448
 embedded@2290() {
-    return !player-in-region?(#5517B796644A45B7, 2) && player-in-region?(#65BD6E87F1603651, 2);
+    return !player-in-region?(rgn-nat-cafe-balcony-1, 2) && player-in-region?(ss-rgn-near-rover-1, 2);
 }
 
 u64? tsk-efm-museum-flashback-building-a-space__level-scripted-set@3a0
 embedded@1fc8() {
-    return !player-in-region?(#5517B796644A45B7, 2);
+    return !player-in-region?(rgn-nat-cafe-balcony-1, 2);
 }
 
 u64? tsk-efm-museum-flashback-end__level-set@178__level-scripted-set@7c0__
@@ -41,21 +41,21 @@ embedded@1ee0() {
 
 bool tsk-efm-museum-flashback-building-a__level-set@208__level-scripted-set@7a8__
 embedded@2410() {
-    return get-boolean(#FD636630EEAB53A9, ss-efm-joel-controller-1);
+    return get-boolean(entered-big-room, ss-efm-joel-controller-1);
 }
 
 u64? tsk-efm-museum-flashback-building-a__level-scripted-set@778
 embedded@1a78() {
-    return !(get-boolean(#FD636630EEAB53A9, ss-efm-joel-controller-1));
+    return !(get-boolean(entered-big-room, ss-efm-joel-controller-1));
 }
 
 bool tsk-efm-discover-museum-river__level-set@290__level-scripted-set@3b8__
 embedded@1c98() {
-    return get-boolean(#A628599EA8C17E3D, ss-efm-proggress-controller-1);
+    return get-boolean(past-cave, ss-efm-proggress-controller-1);
 }
 
 u64? tsk-efm-discover-museum-river__level-scripted-set@790
 embedded@1478() {
-    return !get-boolean(#A628599EA8C17E3D, ss-efm-proggress-controller-1);
+    return !get-boolean(past-cave, ss-efm-proggress-controller-1);
 }
 

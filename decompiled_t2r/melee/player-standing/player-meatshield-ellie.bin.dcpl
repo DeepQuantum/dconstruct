@@ -395,7 +395,7 @@ embedded@1c2b0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     if (is-player?(arg_1) || !0 && character-is-dead?(arg_2)) {
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("Melee deadened for %f seconds", 0.50), 19);
+                display(dc:format("Melee deadened for %f seconds", 0.50), 19);
             }
         }
         disable-untargeted-melee-attack-timed(0.50);
@@ -665,7 +665,7 @@ meatshield-switchblade-human-stealth-neck-jab-finisher
 meatshield-switchblade-human-stealth-neck-n-chest-upgraded-finisher
 embedded@19d78(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     holster-player-weapon-instantly(0.00, 0);
-    return #DAD0704471AE382A();
+    return rogue-draw-melee-weapon();
 }
 
 u64? meatshield-switchblade-infected-stealth-head-stab-upgraded-finisher
@@ -794,7 +794,7 @@ embedded@1ac38(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
         var_0 = arg_2;
     } else {
         if (dc-assert-enabled?() && !1) {
-            display-error(#5445173390656D6D("melee-vox-request-frames: invalid speaker character '%s'", string-debug(attacker)));
+            display-error(dc:format("melee-vox-request-frames: invalid speaker character '%s'", string-debug(attacker)));
         }
         var_0 = 0;
     }
@@ -805,7 +805,7 @@ embedded@1ac38(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
         var_4 = arg_2;
     } else {
         if (dc-assert-enabled?() && !1) {
-            display-error(#5445173390656D6D("melee-vox-request-frames: invalid listener character '%s'", string-debug(defender)));
+            display-error(dc:format("melee-vox-request-frames: invalid listener character '%s'", string-debug(defender)));
         }
         var_4 = 0;
     }
@@ -818,7 +818,7 @@ embedded@1acb0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     if (is-player?(arg_1) || !0 && character-is-dead?(arg_2)) {
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("Melee deadened for %f seconds", 1.35), 19);
+                display(dc:format("Melee deadened for %f seconds", 1.35), 19);
             }
         }
         disable-untargeted-melee-attack-timed(1.35);
@@ -1184,7 +1184,7 @@ embedded@197d0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     if (is-player?(arg_1) || !0 && character-is-dead?(arg_2)) {
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("Melee deadened for %f seconds", 1.28), 19);
+                display(dc:format("Melee deadened for %f seconds", 1.28), 19);
             }
         }
         disable-untargeted-melee-attack-timed(1.28);
@@ -1205,7 +1205,7 @@ u64? meatshield-switchblade-inf-stealth-abort-early
 meatshield-switchblade-stealth-abort-early
 embedded@1b5d8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return broadcast-event(
-        #1944C9F2721A9275,
+        npc-died-from-melee,
         boxed_symbol(arg_2),
         boxed_symbol(arg_1),
         boxed_symbol(switchblade)
@@ -1548,7 +1548,7 @@ embedded@1b090(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     if (is-player?(arg_1) || !0 && character-is-dead?(arg_2)) {
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("Melee deadened for %f seconds", 1.31), 19);
+                display(dc:format("Melee deadened for %f seconds", 1.31), 19);
             }
         }
         disable-untargeted-melee-attack-timed(1.31);
@@ -1813,7 +1813,7 @@ embedded@1ae88(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     if (is-player?(arg_1) || !0 && character-is-dead?(arg_2)) {
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("Melee deadened for %f seconds", 0.73), 19);
+                display(dc:format("Melee deadened for %f seconds", 0.73), 19);
             }
         }
         disable-untargeted-melee-attack-timed(0.73);
@@ -1834,7 +1834,7 @@ u64? meatshield-ellie-back-stab-finisher
 meatshield-ellie-neck-slit-finisher
 meatshield-ellie-inf-jab-to-ground-kill
 embedded@1de10(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
-    return #DAD0704471AE382A();
+    return rogue-draw-melee-weapon();
 }
 
 u64? meatshield-ellie-back-stab-finisher
@@ -2051,7 +2051,7 @@ embedded@1ddb8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     if (is-player?(arg_1) || !0 && character-is-dead?(arg_2)) {
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("Melee deadened for %f seconds", 1.29), 19);
+                display(dc:format("Melee deadened for %f seconds", 1.29), 19);
             }
         }
         disable-untargeted-melee-attack-timed(1.29);
@@ -2085,7 +2085,7 @@ embedded@1c458(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     if (is-player?(arg_1) || !0 && character-is-dead?(arg_2)) {
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("Melee deadened for %f seconds", 0.81), 19);
+                display(dc:format("Melee deadened for %f seconds", 0.81), 19);
             }
         }
         disable-untargeted-melee-attack-timed(0.81);
@@ -2151,7 +2151,7 @@ embedded@1de68(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     if (is-player?(arg_1) || !0 && character-is-dead?(arg_2)) {
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("Melee deadened for %f seconds", 0.84), 19);
+                display(dc:format("Melee deadened for %f seconds", 0.84), 19);
             }
         }
         disable-untargeted-melee-attack-timed(0.84);
@@ -2185,7 +2185,7 @@ embedded@191c8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     if (is-player?(arg_1) || !0 && character-is-dead?(arg_2)) {
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("Melee deadened for %f seconds", 0.87), 19);
+                display(dc:format("Melee deadened for %f seconds", 0.87), 19);
             }
         }
         disable-untargeted-melee-attack-timed(0.87);
@@ -2219,7 +2219,7 @@ embedded@1b038(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     if (is-player?(arg_1) || !0 && character-is-dead?(arg_2)) {
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("Melee deadened for %f seconds", 1.21), 19);
+                display(dc:format("Melee deadened for %f seconds", 1.21), 19);
             }
         }
         disable-untargeted-melee-attack-timed(1.21);
@@ -2250,7 +2250,7 @@ embedded@5ff8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
         u64? var_5 = round-float(100.00 * (1.00 / var_3));
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D(
+                display(dc:format(
                     "%s - projected sync: %s - sync pose rating: %f - relative priority func rating: %i",
                     string-debug(ellie-meatshield-infected-grab-back-intro),
                     string-debug(*(u64*)(*(lookup-symbol(ellie-meatshield-infected-grab-back-enter, melee-attack) + 112) + 32)),
@@ -2395,7 +2395,7 @@ embedded@1e3d8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     if (is-player?(arg_1) || !0 && character-is-dead?(arg_2)) {
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("Melee deadened for %f seconds", 1.39), 19);
+                display(dc:format("Melee deadened for %f seconds", 1.39), 19);
             }
         }
         disable-untargeted-melee-attack-timed(1.39);
@@ -2513,7 +2513,7 @@ embedded@4458(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
         u64? var_5 = round-float(100.00 * (1.00 / var_3));
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D(
+                display(dc:format(
                     "%s - projected sync: %s - sync pose rating: %f - relative priority func rating: %i",
                     string-debug(ellie-meatshield-infected-grab-right-intro),
                     string-debug(*(u64*)(*(lookup-symbol(ellie-meatshield-infected-grab-left-enter, melee-attack) + 112) + 32)),
@@ -2570,7 +2570,7 @@ embedded@3ce8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
         u64? var_5 = round-float(100.00 * (1.00 / var_3));
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D(
+                display(dc:format(
                     "%s - projected sync: %s - sync pose rating: %f - relative priority func rating: %i",
                     string-debug(ellie-meatshield-infected-grab-front-intro),
                     string-debug(*(u64*)(*(lookup-symbol(ellie-meatshield-infected-grab-front-enter, melee-attack) + 112) + 32)),
@@ -2627,7 +2627,7 @@ embedded@5728(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
         u64? var_5 = round-float(100.00 * (1.00 / var_3));
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D(
+                display(dc:format(
                     "%s - projected sync: %s - sync pose rating: %f - relative priority func rating: %i",
                     string-debug(ellie-meatshield-infected-grab-left-intro),
                     string-debug(*(u64*)(*(lookup-symbol(ellie-meatshield-infected-grab-left-enter, melee-attack) + 112) + 32)),
@@ -2702,7 +2702,7 @@ embedded@1be38(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
         if (!(gore-meatshield-head-backexit-l == 0)) {
             var_3 = spawn-gore-piece(gore-meatshield-head-backexit-l, arg_2, 0, arg_6, 1, 1);
         } else if (!(0 == 0)) {
-            u64? var_8 = %alloc-array(single-frame, 16, 2, 1);
+            u64? var_8 = #%alloc-array(single-frame, 16, 2, 1);
             *(i32*)*var_8[0] = 40;
             *(u64*)(*var_8[0] + 8) = 0;
             *(i32*)(*var_8[0] + 8) = 1;
@@ -2710,19 +2710,19 @@ embedded@1be38(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
             *(u64*)(*var_8[1] + 8) = 0;
             *(u8*)(*var_8[1] + 8) = 1;
             animate_(arg_2, gore-finisher-blunt-head-bind, var_8);
-            u64? var_9 = %alloc-array(single-frame, 16, 1, 1);
+            u64? var_9 = #%alloc-array(single-frame, 16, 1, 1);
             *(i32*)*var_9[0] = 40;
             *(u64*)(*var_9[0] + 8) = 0;
             *(i32*)(*var_9[0] + 8) = 1;
             var_3 = animate_(arg_2, 0, var_9);
         } else if (!is-final-build?()) {
-            var_3 = display(#5445173390656D6D("MELEE GORE SPAWN FAILURE"), 19);
+            var_3 = display(dc:format("MELEE GORE SPAWN FAILURE"), 19);
         } else {
             var_3 = 0;
         }
     } else if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 5)) {
         if (!is-final-build?()) {
-            var_3 = display(#5445173390656D6D("INVALID CHARACTERS FOR %s", string-debug(gore-meatshield-head-backexit-l)), 19);
+            var_3 = display(dc:format("INVALID CHARACTERS FOR %s", string-debug(gore-meatshield-head-backexit-l)), 19);
         } else {
             var_3 = 0;
         }
@@ -2738,7 +2738,7 @@ embedded@1c5a8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     if (is-player?(arg_1) || !0 && character-is-dead?(arg_2)) {
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("Melee deadened for %f seconds", 1.25), 19);
+                display(dc:format("Melee deadened for %f seconds", 1.25), 19);
             }
         }
         disable-untargeted-melee-attack-timed(1.25);
@@ -2762,7 +2762,7 @@ embedded@1e038(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 
 u64? ellie-grab-pistol-shoot-finisher
 embedded@1eba0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
-    broadcast-event(#5AD7493B7C2097AD);
+    broadcast-event(player-grab-gun-finisher);
     fire-weapon-at-target(arg_1, arg_2, 0, 1, targHead, 0);
     hud2-mark-weapon-cross-item-dirty(get-player-weapon-id());
     return hud2-mark-health-ammo-dirty(0);

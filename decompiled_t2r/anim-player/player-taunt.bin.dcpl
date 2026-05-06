@@ -4,7 +4,7 @@
 // #   listing for file: game_dumps/t2r/dc1/anim-player\player-taunt.bin                              #
 // #   filesize: 2824 bytes                                                                           #
 // #   total entries: 1                                                                               #
-// #   functions: 3                                                                                   #
+// #   functions: 4                                                                                   #
 // #   has state script: false                                                                        #
 // #   game type: t2r                                                                                 #
 // #   optimizations enabled: true                                                                    #
@@ -33,5 +33,10 @@ anim-player-taunt-states
 anim-player-taunt-states
 embedded@348(u64? arg_0, u64 arg_1, u64? arg_2) {
     return *(u64*)(*(arg_1 + 16) + 2568);
+}
+
+u64? anim-player-taunt-states__anim-transition-group@400__anim-transition-condition-lambda@950__
+embedded@9b8(u8 arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return player-animation-abort-active?(arg_2, arg_1) && *(u8*)(*arg_0 + 208);
 }
 

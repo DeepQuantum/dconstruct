@@ -23,32 +23,32 @@ embedded@6268() {
 
 u64? tsk-ski-coastal-explore-ferry__level-set@570__level-scripted-set@10a8__
 embedded@4e78() {
-    return player-in-region?(#F1A53F955D6D37ED, 2);
+    return player-in-region?(rgn-mid-deck-windows-on-1, 2);
 }
 
 u64? tsk-ski-coastal-explore-ferry__level-scripted-set@1708
 embedded@6cd0() {
-    return !player-in-region?(#F1A53F955D6D37ED, 2);
+    return !player-in-region?(rgn-mid-deck-windows-on-1, 2);
 }
 
 bool tsk-ski-forest-escape-exit__level-set@7e8__level-scripted-set@19c0__
 embedded@5ea8() {
-    return get-boolean(#D5EBED1A948887BC, ss-ski-escape-infected-1);
+    return get-boolean(ski-escape-swap-sets, ss-ski-escape-infected-1);
 }
 
 u64? tsk-ski-forest-escape-exit__level-scripted-set@10c0
 embedded@4688() {
-    return !get-boolean(#D5EBED1A948887BC, ss-ski-escape-infected-1);
+    return !get-boolean(ski-escape-swap-sets, ss-ski-escape-infected-1);
 }
 
 u64? tsk-ski-safe-house-outro__level-set@a28__level-scripted-set@1720__
 embedded@58e8() {
-    return get-boolean(#69995E36C852D061, ss-cin-ski-safe-house-outro-1) && !(is-chronological-mode-enabled?());
+    return get-boolean(safe-house-outro-fade?, ss-cin-ski-safe-house-outro-1) && !(is-chronological-mode-enabled?());
 }
 
 u64? tsk-ski-safe-house-outro__level-scripted-set@1600
 embedded@4ca8() {
-    return !(get-boolean(#69995E36C852D061, ss-cin-ski-safe-house-outro-1)) && !(is-chronological-mode-enabled?());
+    return !(get-boolean(safe-house-outro-fade?, ss-cin-ski-safe-house-outro-1)) && !(is-chronological-mode-enabled?());
 }
 
 u64? tsk-ski-safe-house-outro__level-scripted-set@1738

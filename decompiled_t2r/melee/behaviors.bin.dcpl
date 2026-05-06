@@ -4,22 +4,1750 @@
 // #   listing for file: game_dumps/t2r/dc1/melee\behaviors.bin                                       #
 // #   filesize: 248439 bytes                                                                         #
 // #   total entries: 134                                                                             #
-// #   functions: 3                                                                                   #
+// #   functions: 160                                                                                 #
 // #   has state script: false                                                                        #
 // #   game type: t2r                                                                                 #
 // #   optimizations enabled: true                                                                    #
 // #                                                                                                  #
 // ####################################################################################################
 
+u64? *dog-melee-behaviors*__melee-attack-behavior-list@cc0
+embedded@28380(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return !character-in-struggle?(arg_3, 8) && melee-fact-get-time-since(arg_3, last-time-in-prone-struggle) > 5.00;
+}
+
+u64? *dog-melee-behaviors*
+embedded@24f30(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return character-in-struggle?(arg_3, 8) && melee-fact-get-time-since(arg_3, last-time-in-prone-struggle) < 5.00;
+}
+
+u64? *dog-melee-behaviors*
+embedded@25828(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return melee-fact-get-time-since(arg_2, vulnerable-to-kill) < 2.00 && melee-fact-get-bool(arg_2, dog-valid-to-post-whiff-hangout);
+}
+
+u64? *dog-melee-behaviors*
+embedded@269d0(u64? arg_0, u64? arg_1, bool arg_2, bool arg_3) {
+    if (player-is-aiming-firearm-at-npc?(arg_2)) {
+        melee-fact-set-float(arg_2, time-being-aimed-at, melee-fact-get-float(arg_2, time-being-aimed-at) + get-delta-time());
+    } else {
+        melee-fact-set-float(arg_2, time-being-aimed-at, minmax(melee-fact-get-float(arg_2, time-being-aimed-at) - (get-delta-time() * 5.00), 0.00, 999.00));
+    }
+    u64? var_8 = get-object-distance(arg_2, arg_3);
+    boxed_f32(var_8);
+    boxed_f32(0.00);
+    boxed_f32(3.00);
+    boxed_symbol(true);
+    return melee-fact-get-time-since(arg_2, vulnerable-to-kill) > 2.00 && var_8 && var_8 && var_8 && var_8 && var_8 && var_8;
+}
+
+u64? *dog-melee-behaviors*
+embedded@28430(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    melee-fact-set-float(arg_2, time-player-too-close, 0.00);
+    return melee-fact-set-bool(arg_2, dog-valid-to-post-whiff-hangout, 0);
+}
+
+u64? *dog-melee-behaviors*
+embedded@27cf0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return melee-fact-get-bool(arg_2, dog-valid-to-strafe-outer-wait);
+}
+
+u64? *dog-melee-behaviors*
+embedded@25e18(u64? arg_0, u64? arg_1, bool arg_2, bool arg_3) {
+    if (player-is-aiming-firearm-at-npc?(arg_2)) {
+        melee-fact-set-float(arg_2, time-being-aimed-at, melee-fact-get-float(arg_2, time-being-aimed-at) + get-delta-time());
+    } else {
+        melee-fact-set-float(arg_2, time-being-aimed-at, minmax(melee-fact-get-float(arg_2, time-being-aimed-at) - (get-delta-time() * 5.00), 0.00, 999.00));
+    }
+    u64? var_7 = get-object-distance(arg_2, arg_3);
+    bool var_8 = !(arg_2 == 0) && !(arg_3 == 0) && var_7 < 4.00 && var_7 > 0.00;
+    u64? var_12;
+    if (var_8) {
+        var_12 = boxed_symbol(true);
+    } else {
+        var_12 = boxed_symbol(false);
+    }
+    do-melee-log(
+        "characters-in-range? [[f]] [[f]] [[f]] [[s]]",
+        boxed_f32(var_7),
+        boxed_f32(0.00),
+        boxed_f32(4.00),
+        var_12
+    );
+    if (var_8) {
+        melee-fact-set-float(arg_2, time-player-too-close, melee-fact-get-float(arg_2, time-player-too-close) + get-delta-time());
+    } else {
+        melee-fact-set-float(arg_2, time-player-too-close, minmax(melee-fact-get-float(arg_2, time-player-too-close) - get-delta-time(), 0.00, 999.00));
+    }
+    return !(melee-fact-get-bool(player, dog-in-attack-behavior)) && fact-exists?(arg_2, dog-last-hit) || melee-fact-get-time-since(arg_2, dog-last-hit) > 4.00 && fact-exists?(arg_2, vulnerable-to-kill) || melee-fact-get-time-since(arg_2, vulnerable-to-kill) > 4.00 && fact-exists?(arg_2, dog-last-hit) || melee-fact-get-time-since(arg_2, dog-last-hit) > 2.00 && fact-exists?(arg_2, vulnerable-to-kill) && melee-fact-get-time-since(arg_2, vulnerable-to-kill) > 2.00 || melee-fact-get-float(arg_2, time-being-aimed-at) > 1.00 && !fact-exists?(arg_2, dog-last-hit) && !fact-exists?(arg_2, vulnerable-to-kill) || melee-fact-get-time-since(arg_2, dog-strafe-start-timer) > melee-fact-get-float(arg_2, dog-strafe-end-time) || melee-fact-get-float(arg_2, time-being-aimed-at) > 0.75 || melee-fact-get-float(arg_2, time-player-too-close) > 1.00 && distance-between-points(get-locator-position(get-predicted-player-bound-frame(0.75)), get-object-position(arg_2)) < 5.00 && get-object-relative-speed(arg_3) > 2.00 || angle-in-between-vectors(get-object-linear-velocity(arg_3), get-z-vec-from-object(arg_2)) > 135.00 && player-in-state?(Inventory);
+}
+
+u64? *dog-melee-behaviors*
+embedded@24c98(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    melee-fact-set-int(arg_2, dog-attack-rep-count, 0);
+    melee-fact-set-float(arg_2, time-being-aimed-at, 0.00);
+    melee-fact-set-float(arg_2, time-player-too-close, 0.00);
+    melee-fact-set-time(arg_2, dog-strafe-start-timer);
+    u64? var_1;
+    if (!group-any-npc-has-awareness?(all-enemy-npcs, player, 2, arg_2)) {
+        var_1 = melee-fact-set-float(arg_2, dog-strafe-end-time, random-float-range(2.00, 3.00, 0));
+    } else if (!fact-exists?(arg_2, dog-last-hit) && !fact-exists?(arg_2, vulnerable-to-kill)) {
+        var_1 = melee-fact-set-float(arg_2, dog-strafe-end-time, random-float-range(2.00, 3.00, 0));
+    } else {
+        var_1 = melee-fact-set-float(arg_2, dog-strafe-end-time, random-float-range(8.00, 10.00, 0));
+    }
+    return var_1;
+}
+
+u64? *dog-melee-behaviors*
+embedded@256f0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    melee-fact-set-bool(arg_2, dog-valid-to-strafe-outer-wait, 0);
+    fact-remove(arg_2, vulnerable-to-kill);
+    return fact-remove(arg_2, dog-last-hit);
+}
+
+u64? *dog-melee-behaviors*
+*dog-buddy-melee-npc-behaviors*__melee-attack-behavior-list@1868
+embedded@27888(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return !character-in-struggle?(arg_3, 16) && is-player?(arg_3) && !player-in-prone-hiding-region?();
+}
+
+u64? *dog-melee-behaviors*
+*dog-buddy-melee-npc-behaviors*
+*npc-brute-pickaxe-melee-behaviors*
+*npc-brute-pickaxe-melee-behaviors*
+*npc-brute-pickaxe-melee-behaviors*
+embedded@27d48(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return is-player?(arg_3) && player-in-prone-hiding-region?();
+}
+
+u64? *dog-melee-behaviors*
+*dog-melee-behaviors*
+*dog-buddy-melee-npc-behaviors*
+*dog-buddy-melee-npc-behaviors*
+embedded@27630(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return melee-fact-set-bool(arg_2, dog-valid-to-strafe-outer-wait, 0);
+}
+
+u16 *dog-melee-behaviors*
+*dog-buddy-melee-npc-behaviors*
+embedded@276e0(u64? arg_0, u64? arg_1, bool arg_2, bool arg_3) {
+    u64? var_0 = get-object-distance(arg_2, arg_3);
+    bool var_1 = !(arg_2 == 0) && !(arg_3 == 0) && var_0 < 6.00 && var_0 > 0.00;
+    u64? var_5;
+    if (var_1) {
+        var_5 = boxed_symbol(true);
+    } else {
+        var_5 = boxed_symbol(false);
+    }
+    do-melee-log(
+        "characters-in-range? [[f]] [[f]] [[f]] [[s]]",
+        boxed_f32(var_0),
+        boxed_f32(0.00),
+        boxed_f32(6.00),
+        var_5
+    );
+    u16 var_8;
+    if (var_1) {
+        if (!fact-exists?(arg_2, bark-timer)) {
+            melee-fact-set-time(arg_2, bark-timer);
+        }
+        if (!fact-exists?(arg_2, bark-cooldown)) {
+            melee-fact-set-float(arg_2, bark-cooldown, random-float-range(0.50, 2.50, 0));
+        }
+        if (melee-fact-get-time-since(arg_2, bark-timer) > melee-fact-get-float(arg_2, bark-cooldown)) {
+            gesture_(arg_2, group-random(barky-boi-gestures), alloc-gesture-play-params());
+            melee-fact-set-time(arg_2, bark-timer);
+            var_8 = melee-fact-set-float(arg_2, bark-cooldown, random-float-range(0.50, 2.50, 0));
+        } else {
+            var_8 = 0;
+        }
+    } else {
+        var_8 = 0;
+    }
+    return var_8;
+}
+
+u64? *dog-melee-behaviors*
+*dog-buddy-melee-npc-behaviors*
+embedded@25b30(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return is-player?(arg_3) || player-in-prone-hiding-region?() && character-in-struggle?(arg_3, 16);
+}
+
+u64? *dog-melee-behaviors*
+*dog-buddy-melee-npc-behaviors*
+embedded@288a0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return is-player?(arg_3) && !player-in-prone-hiding-region?() && !character-in-struggle?(arg_3, 16);
+}
+
+u16 *dog-melee-behaviors*
+*dog-buddy-melee-npc-behaviors*
+embedded@263f0(u64? arg_0, u64? arg_1, bool arg_2, bool arg_3) {
+    u64? var_0 = get-object-distance(arg_2, arg_3);
+    bool var_1 = !(arg_2 == 0) && !(arg_3 == 0) && var_0 < 14.00 && var_0 > 0.00;
+    u64? var_5;
+    if (var_1) {
+        var_5 = boxed_symbol(true);
+    } else {
+        var_5 = boxed_symbol(false);
+    }
+    do-melee-log(
+        "characters-in-range? [[f]] [[f]] [[f]] [[s]]",
+        boxed_f32(var_0),
+        boxed_f32(0.00),
+        boxed_f32(14.00),
+        var_5
+    );
+    u16 var_8;
+    if (var_1) {
+        if (!fact-exists?(arg_2, bark-timer)) {
+            melee-fact-set-time(arg_2, bark-timer);
+        }
+        if (!fact-exists?(arg_2, bark-cooldown)) {
+            melee-fact-set-float(arg_2, bark-cooldown, random-float-range(0.50, 2.50, 0));
+        }
+        if (melee-fact-get-time-since(arg_2, bark-timer) > melee-fact-get-float(arg_2, bark-cooldown)) {
+            gesture_(arg_2, group-random(barky-boi-gestures), alloc-gesture-play-params());
+            melee-fact-set-time(arg_2, bark-timer);
+            var_8 = melee-fact-set-float(arg_2, bark-cooldown, random-float-range(0.50, 2.50, 0));
+        } else {
+            var_8 = 0;
+        }
+    } else {
+        var_8 = 0;
+    }
+    return var_8;
+}
+
+u64? *dog-melee-behaviors*
+embedded@267d8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_6 = dog-in-melee-with-character?(arg_3);
+    return !character-in-struggle?(arg_3, 16) && melee-fact-get-time-since(arg_3, last-time-in-prone-struggle) > 5.00 && character-in-melee-attack-as-attacker?(arg_3) && character-in-melee-attack-of-other-character?(arg_2, arg_3) && get-current-melee-attack(arg_3) && *(u64*)(get-current-melee-attack(arg_3) + 16) == melee-player-swing-free && !var_6 && !!var_6;
+}
+
+u64? *dog-melee-behaviors*
+embedded@26920(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return melee-fact-get-time-since(arg_3, last-time-in-prone-struggle) < 5.00 && character-in-struggle?(arg_3, 8);
+}
+
+u64? *dog-melee-behaviors*
+*dog-buddy-melee-npc-behaviors*
+embedded@24e50(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    melee-fact-set-int(arg_2, dog-attack-rep-count, melee-fact-get-int(arg_2, dog-attack-rep-count) + 1);
+    return melee-fact-set-bool(player, dog-in-attack-behavior, 1);
+}
+
+u64? *dog-melee-behaviors*
+*dog-buddy-melee-npc-behaviors*
+embedded@24ec0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    melee-fact-set-bool(player, dog-in-attack-behavior, 0);
+    u64? var_3;
+    if (!npc-has-strict-line-of-motion-to-target?(arg_2, 0) && !melee-corner-line-of-motion?(arg_2, get-current-melee-target(arg_2), 1.20)) {
+        var_3 = melee-fact-set-bool(arg_2, dog-valid-to-strafe-outer-wait, 0);
+    } else {
+        var_3 = melee-fact-set-bool(arg_2, dog-valid-to-strafe-outer-wait, 1);
+    }
+    return var_3;
+}
+
+u64? *melee-behavior-buddy-swings*__melee-attack-behavior@12bd8
+embedded@27db8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return buddy-attack-behavior-start-func(arg_2, arg_3) && !melee-fact-get-bool(arg_3, is-boss) && !target-is-stunned?(arg_3) && !npc-in-meatshield?(arg_3) && !melee-character-bit-check(arg_3, #0000000046200000) && !any-character-in-struggle-with-player?();
+}
+
+u64? *melee-behavior-buddy-swings*
+embedded@28528(u64? arg_0, u64? arg_1, u64? arg_2, i64 arg_3) {
+    return buddy-attack-behavior-end-func(arg_2, arg_3) || target-is-stunned?(arg_3) || any-character-in-struggle-with-player?() || !(melee-fact-get-symbol(arg_2, buddy-desired-melee-target) == arg_3) && character-melee-event-active?(arg_3, 188, 0);
+}
+
+u64? *npc-infected-thrower-vs-player-melee-behaviors*__melee-attack-behavior-list@d18
+*default-infected-legless-attack-behavior*__melee-attack-behavior@9f28
+*npc-infected-stalker-melee-behaviors*
+*npc-infected-stalker-vs-buddy-melee-behaviors*
+*npc-infected-runner-vs-human-melee-behaviors*__melee-attack-behavior-list@2130
+*npc-infected-clicker-vs-player-melee-behaviors*__melee-attack-behavior-list@2150
+*npc-infected-stunner-melee-behaviors*__melee-attack-behavior-list@23a0
+*npc-infected-crawler-melee-behaviors*__melee-attack-behavior-list@2a30
+*npc-infected-runner-vs-player-melee-behaviors*
+*npc-infected-clicker-vs-human-melee-behaviors*__melee-attack-behavior-list@2ab0
+*npc-infected-runner-horde-vs-player-melee-behaviors*
+embedded@25c60(u64? arg_0, u64? arg_1, bool arg_2, bool arg_3) {
+    u64? var_0 = get-object-distance(arg_2, arg_3);
+    bool var_1 = !(arg_2 == 0) && !(arg_3 == 0) && var_0 < 3.00 && var_0 > 0.00;
+    u64? var_5;
+    if (var_1) {
+        var_5 = boxed_symbol(true);
+    } else {
+        var_5 = boxed_symbol(false);
+    }
+    do-melee-log(
+        "characters-in-range? [[f]] [[f]] [[f]] [[s]]",
+        boxed_f32(var_0),
+        boxed_f32(0.00),
+        boxed_f32(3.00),
+        var_5
+    );
+    if (var_1) {
+        melee-fact-set-float(arg_2, player-close, melee-fact-get-float(arg_2, player-close) + get-delta-time());
+    } else {
+        melee-fact-set-float(arg_2, player-close, 0.00);
+    }
+    u64? var_11;
+    if (character-is-prone?(arg_3)) {
+        var_11 = melee-fact-get-time-since(arg_2, legless-attack-cooldown) > 1.00 && melee-fact-get-float(arg_2, player-close) > 0.30;
+    } else {
+        var_11 = melee-fact-get-time-since(arg_2, legless-attack-cooldown) > 1.50 && melee-fact-get-float(arg_2, player-close) > 0.50;
+    }
+    return var_11;
+}
+
+u64? *npc-infected-thrower-vs-player-melee-behaviors*
+*default-infected-legless-attack-behavior*
+*npc-infected-stalker-melee-behaviors*
+*npc-infected-stalker-vs-buddy-melee-behaviors*
+*npc-infected-runner-vs-human-melee-behaviors*
+*npc-infected-clicker-vs-player-melee-behaviors*
+*npc-infected-stunner-melee-behaviors*
+*npc-infected-crawler-melee-behaviors*
+*npc-infected-runner-vs-player-melee-behaviors*
+*npc-infected-clicker-vs-human-melee-behaviors*
+*npc-infected-runner-horde-vs-player-melee-behaviors*
+embedded@24f88(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    melee-fact-set-time(arg_2, legless-attack-cooldown);
+    return fact-remove(arg_2, player-close);
+}
+
+u64? *default-contextual-grapple-attack-behavior*__melee-attack-behavior@1ad00
+*npc-infected-stalker-melee-behaviors*
+*npc-vs-player-1h-hybrid-behaviors*__melee-attack-behavior-list@1768
+*npc-vs-player-2h-blunt-melee-behaviors*__melee-attack-behavior-list@1788
+*npc-rifle-melee-behaviors*__melee-attack-behavior-list@1888
+*npc-vs-player-1h-behaviors*__melee-attack-behavior-list@1e00
+*npc-vs-player-2h-blade-melee-behaviors*__melee-attack-behavior-list@1e78
+*npc-pistol-melee-behaviors*__melee-attack-behavior-list@27e0
+*npc-vs-player-grab-only-behaviors*__melee-attack-behavior-list@2a10
+*npc-infected-runner-vs-player-melee-behaviors*
+*npc-infected-runner-vs-player-grab-only-behaviors*__melee-attack-behavior-list@2a90
+*npc-infected-runner-horde-vs-player-melee-behaviors*
+embedded@27ab0(u64? arg_0, u64? arg_1, u64? arg_2, sid arg_3) {
+    return is-player-base?(arg_3) && !npc-super-stalker?(arg_2) && !melee-fact-get-bool(arg_2, disable-grabs) && !melee-fact-get-bool(arg_2, disable-contextual-grabs) && npc-struggle-cooldown-func(arg_2, arg_3, 10.00, 20.00, 0) && !character-in-struggle?(arg_3, 16) && !character-in-finisher?(arg_3) && !character-in-brute-throw?(arg_3) && melee-fact-get-time-since(arg_3, last-time-in-prone-struggle) > 5.00 && arg_3 == player && melee-fact-get-time-since(player, time-since-buddy-grabbed) > 20.00;
+}
+
+u64? *default-contextual-grapple-attack-behavior*
+*npc-infected-stalker-melee-behaviors*
+*npc-vs-player-1h-hybrid-behaviors*
+*npc-vs-player-2h-blunt-melee-behaviors*
+*npc-vs-player-1h-test-grab-behaviors*
+*npc-rifle-melee-behaviors*
+*npc-infected-runner-vs-player-grab-only-behaviors-test*
+*npc-vs-player-1h-behaviors*
+*npc-vs-player-2h-blade-melee-behaviors*
+*npc-infected-stunner-melee-behaviors*
+*npc-pistol-melee-behaviors*
+*npc-vs-player-grab-only-behaviors*
+*npc-infected-runner-vs-player-melee-behaviors*
+*npc-infected-runner-vs-player-grab-only-behaviors*
+*npc-infected-runner-horde-vs-player-melee-behaviors*
+embedded@25880(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return melee-fact-get-bool(arg_2, disable-grabs) || npc-struggle-cooldown-func(arg_2, arg_3, 10.00, 20.00, 1) || character-in-struggle?(arg_3, 16) && melee-fact-get-time-since(arg_3, last-time-in-prone-struggle) < 5.00;
+}
+
+u64? *default-contextual-combo-grapple-attack-behavior*__melee-attack-behavior@ade0
+*npc-infected-stalker-melee-behaviors*
+*npc-vs-player-1h-hybrid-behaviors*
+*npc-vs-player-2h-blunt-melee-behaviors*
+*npc-rifle-melee-behaviors*
+*npc-vs-player-1h-behaviors*
+*npc-vs-player-2h-blade-melee-behaviors*
+*npc-infected-stunner-melee-behaviors*
+*npc-pistol-melee-behaviors*
+*npc-infected-runner-vs-player-melee-behaviors*
+*npc-infected-runner-horde-vs-player-melee-behaviors*
+embedded@25510(u64? arg_0, u64? arg_1, u64? arg_2, sid arg_3) {
+    return is-player-base?(arg_3) && !(melee-fact-get-bool(arg_3, near-ratking?)) && !melee-fact-get-bool(arg_2, disable-grabs) && npc-struggle-cooldown-func(arg_2, arg_3, 8.00, 16.00, 0) && !character-in-struggle?(arg_3, 16) && !character-in-finisher?(arg_3) && !character-in-brute-throw?(arg_3) && melee-fact-get-time-since(arg_3, last-time-in-prone-struggle) > 5.00 && arg_3 == player && melee-fact-get-time-since(player, time-since-buddy-grabbed) > 20.00;
+}
+
+u64? *default-contextual-combo-grapple-attack-behavior*
+*npc-infected-stalker-melee-behaviors*
+*npc-vs-player-1h-hybrid-behaviors*
+*npc-vs-player-2h-blunt-melee-behaviors*
+*npc-rifle-melee-behaviors*
+*npc-vs-player-1h-behaviors*
+*npc-vs-player-2h-blade-melee-behaviors*
+*npc-infected-stunner-melee-behaviors*
+*npc-pistol-melee-behaviors*
+*npc-infected-runner-vs-player-melee-behaviors*
+*npc-infected-runner-horde-vs-player-melee-behaviors*
+embedded@28288(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return melee-fact-get-bool(arg_2, disable-grabs) || npc-struggle-cooldown-func(arg_2, arg_3, 8.00, 16.00, 1) || character-in-struggle?(arg_3, 16) && melee-fact-get-time-since(arg_3, last-time-in-prone-struggle) < 5.00;
+}
+
+u16 *shambler-default-inner-idle*__melee-attack-behavior@cf20
+*npc-infected-shambler-vs-buddy-melee-behaviors*
+*npc-infected-shambler-melee-behaviors*
+*npc-infected-shambler-melee-behaviors*
+embedded@28768(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    u16 var_2;
+    if (is-gesture-playing?(arg_2, sha-aggr-idle-pustule-1-explode-gesture, 1) && is-gesture-playing?(arg_2, sha-aggr-idle-pustule-2-explode-gesture, 1)) {
+        var_2 = 1;
+    } else {
+        var_2 = clear-gesture(arg_2, -1, -1.00, 0);
+    }
+    return var_2;
+}
+
+u64? *infected-solo-attacker*__melee-attack-behavior@f20
+embedded@10ab0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return npc-last-alive?(arg_2);
+}
+
 u64? buddy-attack-behavior-start-func(u64? arg_0, i64 arg_1) {
     return !character-melee-event-active?(arg_1, 188, 0) && melee-fact-get-symbol(arg_0, buddy-desired-melee-target) == arg_1 && !characters-in-melee?(player, arg_1, 1) && !in-knee-stun?(arg_1) && !npc-in-tap?(arg_1) && melee-fact-get-time-since(arg_0, last-counter) > melee-fact-get-float(arg_0, buddy-rebuttal-cooldown);
+}
+
+u64? *joel-vs-npc-melee-behaviors*__melee-attack-behavior-list@1ace0
+*dina-vs-npc-melee-behaviors*__melee-attack-behavior-list@1ace0
+*mel-vs-npc-melee-behaviors*__melee-attack-behavior-list@1ace0
+*manny-vs-npc-melee-behaviors*__melee-attack-behavior-list@1ace0
+*tommy-vs-npc-melee-behaviors*__melee-attack-behavior-list@1ace0
+*jesse-vs-npc-melee-behaviors*__melee-attack-behavior-list@1ace0
+*lev-vs-npc-melee-behaviors*__melee-attack-behavior-list@1ace0
+*yara-vs-npc-melee-behaviors*__melee-attack-behavior-list@1ace0
+embedded@3a1c0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return npc-buddy-should-perform-quiet-stealth-kill?(arg_2) && !melee-character-bit-check(arg_3, #0000000046200000) && !melee-fact-get-bool(arg_3, is-boss);
+}
+
+u64? *joel-vs-npc-melee-behaviors*
+*dina-vs-npc-melee-behaviors*
+*mel-vs-npc-melee-behaviors*
+*manny-vs-npc-melee-behaviors*
+*tommy-vs-npc-melee-behaviors*
+*jesse-vs-npc-melee-behaviors*
+*lev-vs-npc-melee-behaviors*
+*yara-vs-npc-melee-behaviors*
+embedded@39eb0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return characters-in-melee?(player, arg_3, 1) && any-character-in-struggle-with-player?();
+}
+
+u64? *joel-vs-npc-melee-behaviors*
+*dina-vs-npc-melee-behaviors*
+*mel-vs-npc-melee-behaviors*
+*manny-vs-npc-melee-behaviors*
+*tommy-vs-npc-melee-behaviors*
+*jesse-vs-npc-melee-behaviors*
+*lev-vs-npc-melee-behaviors*
+*yara-vs-npc-melee-behaviors*
+embedded@39fb0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return !melee-fact-get-bool(arg_3, is-boss) && !melee-character-bit-check(arg_3, #0000000044200000) && !npc-in-meatshield?(arg_3) && character-in-struggle-with-player?(arg_3);
+}
+
+u64? *joel-vs-npc-melee-behaviors*
+*dina-vs-npc-melee-behaviors*
+*mel-vs-npc-melee-behaviors*
+*manny-vs-npc-melee-behaviors*
+*tommy-vs-npc-melee-behaviors*
+*jesse-vs-npc-melee-behaviors*
+*lev-vs-npc-melee-behaviors*
+*yara-vs-npc-melee-behaviors*
+embedded@3a410(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return !character-in-struggle-with-player?(arg_3);
+}
+
+u64? *joel-vs-npc-melee-behaviors*
+*dina-vs-npc-melee-behaviors*
+*mel-vs-npc-melee-behaviors*
+*manny-vs-npc-melee-behaviors*
+*tommy-vs-npc-melee-behaviors*
+*jesse-vs-npc-melee-behaviors*
+*lev-vs-npc-melee-behaviors*
+*yara-vs-npc-melee-behaviors*
+embedded@39f08(u64? arg_0, u64? arg_1, f32 arg_2, u64? arg_3) {
+    u64? var_4 = get-current-melee-attack(arg_3);
+    return health-requirements-met-for-buddy-finisher(arg_2, arg_3, 1) && buddy-attack-behavior-start-func(arg_2, arg_3) && get-current-melee-attack(arg_3) && !(*(u64*)(get-current-melee-attack(arg_3) + 16) == melee-npc-swing-free) && !(*(u64*)(var_4 + 16) == melee-npc-swing-tell) && !(*(u64*)(var_4 + 16) == melee-npc-swing-tell);
+}
+
+u64? *joel-vs-npc-melee-behaviors*
+*dina-vs-npc-melee-behaviors*
+*mel-vs-npc-melee-behaviors*
+*manny-vs-npc-melee-behaviors*
+*tommy-vs-npc-melee-behaviors*
+*jesse-vs-npc-melee-behaviors*
+*lev-vs-npc-melee-behaviors*
+*yara-vs-npc-melee-behaviors*
+embedded@3a468(u64? arg_0, u64? arg_1, u64? arg_2, i64 arg_3) {
+    u64? var_0 = health-requirements-met-for-buddy-finisher(arg_2, arg_3, 1);
+    if (!!var_0) {
+        melee-debug-text-file-line-fail("(not (health-requirements-met-for-buddy-finisher attacker defender #t))", "t2r/src/game/scriptx/melee/behaviors/behaviors-buddy.dcx", 200);
+    }
+    u64? var_3 = get-current-melee-attack(arg_3);
+    return !var_0 && get-current-melee-attack(arg_3) || *(u64*)(get-current-melee-attack(arg_3) + 16) == melee-npc-swing-free && *(u64*)(var_3 + 16) == melee-npc-swing-tell && *(u64*)(var_3 + 16) == melee-npc-swing-tell;
+}
+
+u64? *joel-vs-npc-melee-behaviors*
+*dina-vs-npc-melee-behaviors*
+*mel-vs-npc-melee-behaviors*
+*manny-vs-npc-melee-behaviors*
+*tommy-vs-npc-melee-behaviors*
+*jesse-vs-npc-melee-behaviors*
+*lev-vs-npc-melee-behaviors*
+*yara-vs-npc-melee-behaviors*
+embedded@39d38(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return buddy-attack-behavior-start-func(arg_2, arg_3) && !melee-fact-get-bool(arg_3, is-boss) && !target-is-stunned?(arg_3) && !npc-in-meatshield?(arg_3) && !melee-character-bit-check(arg_3, #0000000046200000) && !any-character-in-struggle-with-player?();
+}
+
+u64? *joel-vs-npc-melee-behaviors*
+*dina-vs-npc-melee-behaviors*
+*mel-vs-npc-melee-behaviors*
+*manny-vs-npc-melee-behaviors*
+*tommy-vs-npc-melee-behaviors*
+*jesse-vs-npc-melee-behaviors*
+*lev-vs-npc-melee-behaviors*
+*yara-vs-npc-melee-behaviors*
+embedded@39de0(u64? arg_0, u64? arg_1, u64? arg_2, i64 arg_3) {
+    return buddy-attack-behavior-end-func(arg_2, arg_3) || target-is-stunned?(arg_3) || any-character-in-struggle-with-player?() || !(melee-fact-get-symbol(arg_2, buddy-desired-melee-target) == arg_3) && character-melee-event-active?(arg_3, 188, 0);
+}
+
+u64? *joel-vs-npc-melee-behaviors*
+*dina-vs-npc-melee-behaviors*
+*mel-vs-npc-melee-behaviors*
+*manny-vs-npc-melee-behaviors*
+*tommy-vs-npc-melee-behaviors*
+*jesse-vs-npc-melee-behaviors*
+*lev-vs-npc-melee-behaviors*
+*yara-vs-npc-melee-behaviors*
+embedded@3a4c0(u64? arg_0, u64? arg_1, u64? arg_2, i64 arg_3) {
+    return !npc-clicker?(arg_3) && !npc-shambler?(arg_3) && !npc-bloater?(arg_3) && !npc-in-meatshield?(arg_3) && melee-fact-get-symbol(arg_2, buddy-desired-melee-target) == arg_3;
+}
+
+u64? *joel-vs-npc-melee-behaviors*
+*dina-vs-npc-melee-behaviors*
+*mel-vs-npc-melee-behaviors*
+*manny-vs-npc-melee-behaviors*
+*tommy-vs-npc-melee-behaviors*
+*jesse-vs-npc-melee-behaviors*
+*lev-vs-npc-melee-behaviors*
+*yara-vs-npc-melee-behaviors*
+embedded@3a238(u64? arg_0, u64? arg_1, u64? arg_2, i64 arg_3) {
+    return npc-clicker?(arg_3) || npc-shambler?(arg_3) || npc-bloater?(arg_3) || npc-in-meatshield?(arg_3) && !(melee-fact-get-symbol(arg_2, buddy-desired-melee-target) == arg_3);
+}
+
+bool *npc-infected-shambler-vs-buddy-melee-behaviors*__melee-attack-behavior-list@1538
+*npc-infected-shambler-melee-behaviors*
+*shambler-moving-explode*__melee-attack-behavior@20be0
+embedded@25038(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    bool var_3;
+    if (shambler-standing-explode-line-of-motion-check(arg_2, arg_3) && is-rogue-mode?() && is-player?(arg_3)) {
+        if (player-is-prone?() && player-is-supine?() && player-in-prone-hiding-region?() && melee-fact-get-time-since(player, shambler-explode) > 5.00) {
+            var_3 = melee-fact-get-time-since(arg_2, time-since-in-finisher-fail) > 2.00;
+        }
+    }
+    return var_3;
+}
+
+u64? *npc-infected-shambler-vs-buddy-melee-behaviors*
+*npc-infected-shambler-vs-buddy-melee-behaviors*
+*npc-infected-shambler-melee-behaviors*__melee-attack-behavior-list@1b10
+*npc-infected-shambler-melee-behaviors*
+*npc-infected-shambler-melee-behaviors*
+*shambler-standing-explode*
+*shambler-moving-explode*
+embedded@28910(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return shambler-pustule-expand(arg_2);
+}
+
+u64? *npc-infected-shambler-vs-buddy-melee-behaviors*
+*npc-infected-shambler-melee-behaviors*
+*shambler-standing-explode*__melee-attack-behavior@1aaf8
+embedded@25b88(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_3;
+    if (shambler-standing-explode-line-of-motion-check(arg_2, arg_3) && is-rogue-mode?() && is-player?(arg_3)) {
+        if (player-is-prone?() && player-is-supine?()) {
+            if (player-in-prone-hiding-region?() && is-rogue-mode?() && is-player?(arg_3) && !npc-can-path-to-object?(arg_2, arg_3) && distance-between-points(npc-get-nav-destination(arg_2), get-object-position(arg_3)) <= 4.00 && melee-fact-get-time-since(player, shambler-explode) > 5.00) {
+                var_3 = melee-fact-get-time-since(arg_2, time-since-in-finisher-fail) > 1.50;
+            }
+        } else {
+            var_3 = is-rogue-mode?() && is-player?(arg_3) && !npc-can-path-to-object?(arg_2, arg_3) && distance-between-points(npc-get-nav-destination(arg_2), get-object-position(arg_3)) <= 4.00 && melee-fact-get-time-since(player, shambler-explode) > 5.00 && melee-fact-get-time-since(arg_2, time-since-in-finisher-fail) > 1.50;
+        }
+    }
+    return var_3;
+}
+
+u64? *npc-infected-stalker-melee-behaviors*__melee-attack-behavior-list@1558
+*npc-vs-player-1h-hybrid-behaviors*
+*npc-vs-player-2h-blunt-melee-behaviors*
+*basic-attack-inaccessible-target-behavior*__melee-attack-behavior@10540
+*npc-vs-player-1h-behaviors*
+*npc-vs-player-2h-blade-melee-behaviors*
+*npc-infected-runner-vs-player-melee-behaviors*__melee-attack-behavior-list@2a50
+*npc-infected-runner-horde-vs-player-melee-behaviors*__melee-attack-behavior-list@2b10
+embedded@277f0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return !melee-fact-get-bool(arg_2, disable-unreachable-behavior);
+}
+
+u64? *npc-infected-stalker-melee-behaviors*
+*npc-vs-player-1h-hybrid-behaviors*
+*npc-vs-player-2h-blunt-melee-behaviors*
+*basic-attack-inaccessible-target-behavior*
+*npc-vs-player-1h-behaviors*
+*npc-vs-player-2h-blade-melee-behaviors*
+*npc-infected-runner-vs-player-melee-behaviors*
+*npc-infected-runner-horde-vs-player-melee-behaviors*
+embedded@26198(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return melee-fact-get-bool(arg_2, disable-unreachable-behavior);
+}
+
+u64? *npc-infected-stalker-melee-behaviors*
+*npc-vs-player-1h-hybrid-behaviors*
+*npc-vs-player-2h-blunt-melee-behaviors*
+*basic-attack-inaccessible-target-behavior*
+*npc-vs-player-1h-behaviors*
+*npc-vs-player-2h-blade-melee-behaviors*
+*npc-infected-runner-vs-player-melee-behaviors*
+*npc-infected-runner-horde-vs-player-melee-behaviors*
+*npc-brute-pickaxe-melee-behaviors*
+embedded@251b0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return melee-fact-set-bool(arg_2, inaccessible-target, 1);
+}
+
+u64? *npc-infected-stalker-melee-behaviors*
+*npc-vs-player-1h-hybrid-behaviors*
+*npc-vs-player-2h-blunt-melee-behaviors*
+*basic-attack-inaccessible-target-behavior*
+*npc-vs-player-1h-behaviors*
+*npc-vs-player-2h-blade-melee-behaviors*
+*npc-infected-runner-vs-player-melee-behaviors*
+*npc-infected-runner-horde-vs-player-melee-behaviors*
+*npc-brute-pickaxe-melee-behaviors*
+embedded@258d8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return fact-remove(arg_2, inaccessible-target);
+}
+
+u64? *npc-infected-stalker-melee-behaviors*
+*npc-infected-clicker-vs-player-melee-behaviors*
+*npc-infected-runner-vs-player-melee-behaviors*
+*npc-infected-runner-horde-vs-player-melee-behaviors*
+embedded@253d8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return is-rogue-mode?() || task-node-active?(melee-ellie) && task-node-active?(melee-abby);
+}
+
+u64? *npc-infected-stalker-melee-behaviors*
+embedded@26220(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_1 = melee-fact-get-time-since(arg_2, attacker-grab-attempted);
+    npc-super-stalker?(arg_2);
+    return !melee-fact-get-bool(arg_2, disable-grabs) && var_1 && var_1;
+}
+
+u64? *npc-infected-stalker-melee-behaviors*
+*npc-infected-stalker-melee-behaviors*
+*npc-infected-stalker-melee-behaviors*
+*npc-infected-stalker-melee-behaviors*
+*npc-infected-stalker-melee-behaviors*
+embedded@283d8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return !(npc-super-stalker?(arg_2)) && superstalker-swing-start-func(arg_2, arg_3);
+}
+
+u64? *npc-infected-stalker-melee-behaviors*
+embedded@28660(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_1 = melee-fact-get-time-since(arg_2, attacker-grab-attempted);
+    npc-super-stalker?(arg_2);
+    return !melee-fact-get-bool(arg_2, disable-grabs) && var_1 && var_1;
+}
+
+u64? *npc-infected-stalker-melee-behaviors*
+embedded@25158(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return is-player?(arg_3) && character-in-struggle?(arg_3, 16);
+}
+
+u64? *npc-infected-stalker-melee-behaviors*
+embedded@27a58(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return !is-player?(arg_3) && !character-in-struggle?(arg_3, 16);
+}
+
+u64? *default-buddy-idle-outer-behavior*__melee-attack-behavior@87d8
+*dina-vs-human-melee-behaviors-grab-only*
+*lev-vs-human-melee-behaviors-grab-only*
+embedded@27990(u64? arg_0, u64? arg_1, u64? arg_2, i64 arg_3) {
+    return !npc-clicker?(arg_3) && !npc-shambler?(arg_3) && !npc-bloater?(arg_3) && !npc-in-meatshield?(arg_3) && melee-fact-get-symbol(arg_2, buddy-desired-melee-target) == arg_3;
+}
+
+u64? *default-buddy-idle-outer-behavior*
+*dina-vs-human-melee-behaviors-grab-only*
+*lev-vs-human-melee-behaviors-grab-only*
+embedded@25f68(u64? arg_0, u64? arg_1, u64? arg_2, i64 arg_3) {
+    return npc-clicker?(arg_3) || npc-shambler?(arg_3) || npc-bloater?(arg_3) || npc-in-meatshield?(arg_3) && !(melee-fact-get-symbol(arg_2, buddy-desired-melee-target) == arg_3);
+}
+
+u64? *npc-vs-player-1h-hybrid-behaviors*
+*npc-vs-player-2h-blunt-melee-behaviors*
+*default-standing-behind-grapple-attack-behavior*__melee-attack-behavior@108e0
+*npc-rifle-melee-behaviors*
+*npc-vs-player-1h-behaviors*
+*npc-vs-player-2h-blade-melee-behaviors*
+*npc-pistol-melee-behaviors*
+*npc-vs-player-grab-only-behaviors*
+embedded@24da0(u64? arg_0, u64? arg_1, u64? arg_2, sid arg_3) {
+    return is-player-base?(arg_3) && !melee-fact-get-bool(arg_2, disable-grabs) && npc-struggle-cooldown-func(arg_2, arg_3, 15.00, 30.00, 0) && !character-in-struggle?(arg_3, 16) && !character-in-finisher?(arg_3) && !character-in-brute-throw?(arg_3) && melee-fact-get-time-since(arg_3, last-time-in-prone-struggle) > 5.00 && arg_3 == player && melee-fact-get-time-since(player, time-since-buddy-grabbed) > 20.00;
+}
+
+u64? *npc-vs-player-1h-hybrid-behaviors*
+*npc-vs-player-2h-blunt-melee-behaviors*
+*default-standing-behind-grapple-attack-behavior*
+*npc-vs-player-1h-test-grab-behaviors*
+*npc-rifle-melee-behaviors*
+*npc-infected-runner-vs-player-grab-only-behaviors-test*
+*npc-vs-player-1h-behaviors*
+*npc-vs-player-2h-blade-melee-behaviors*
+*npc-vs-buddy-1h-test-grab-behaviors*
+*npc-pistol-melee-behaviors*
+*npc-vs-player-grab-only-behaviors*
+*npc-infected-runner-vs-player-melee-behaviors*
+*npc-infected-runner-vs-player-grab-only-behaviors*
+*npc-infected-runner-horde-vs-player-melee-behaviors*
+*default-standing-grapple-attack-behavior*
+embedded@264d0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return melee-fact-get-bool(arg_2, disable-grabs) || npc-struggle-cooldown-func(arg_2, arg_3, 15.00, 30.00, 1) || character-in-struggle?(arg_3, 16) && melee-fact-get-time-since(arg_3, last-time-in-prone-struggle) < 5.00;
+}
+
+u64? *npc-vs-player-1h-hybrid-behaviors*
+*npc-vs-player-2h-blunt-melee-behaviors*
+*basic-tell-far-attacks-behavior*__melee-attack-behavior@182b8
+*npc-vs-player-1h-behaviors*
+*npc-vs-player-2h-blade-melee-behaviors*
+*npc-vs-player-riot-shield-behaviors*__melee-attack-behavior-list@27a0
+embedded@26340(u64? arg_0, u64? arg_1, bool arg_2, bool arg_3) {
+    u64? var_4 = get-object-distance(arg_2, arg_3);
+    boxed_f32(var_4);
+    boxed_f32(0.00);
+    boxed_f32(4.50);
+    boxed_symbol(true);
+    return !character-in-brute-throw?(arg_3) && npc-is-melee-behavior-condition-active?(arg_2, 53, 0.50) && vector-magnitude(get-object-linear-velocity(arg_3)) > 2.00 && var_4 && var_4 && var_4 && var_4 && var_4 && var_4;
+}
+
+u64? *npc-vs-player-1h-hybrid-behaviors*
+*npc-vs-player-1h-hybrid-behaviors*
+*npc-vs-player-2h-blunt-melee-behaviors*
+*npc-vs-player-2h-blunt-melee-behaviors*
+*basic-tell-far-attacks-behavior*
+*npc-vs-buddy-1h-melee-behaviors*
+*npc-vs-buddy-1h-melee-behaviors*
+*npc-vs-player-1h-behaviors*
+*npc-vs-player-1h-behaviors*
+*npc-vs-player-2h-blade-melee-behaviors*
+*npc-vs-player-2h-blade-melee-behaviors*
+*npc-vs-buddy-2h-melee-behaviors*
+*npc-vs-buddy-2h-melee-behaviors*
+*npc-vs-player-riot-shield-behaviors*
+*npc-vs-player-riot-shield-behaviors*
+*basic-tell-close-attack-behavior*
+embedded@25ff0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return melee-fact-set-bool(arg_2, in-motion-match-melee-tell, 0);
+}
+
+u64? *npc-vs-player-1h-hybrid-behaviors*
+*npc-vs-player-1h-hybrid-behaviors*
+*npc-vs-player-2h-blunt-melee-behaviors*
+*npc-vs-player-2h-blunt-melee-behaviors*
+*basic-tell-far-attacks-behavior*
+*npc-vs-buddy-1h-melee-behaviors*
+*npc-vs-buddy-1h-melee-behaviors*
+*npc-vs-player-1h-behaviors*
+*npc-vs-player-1h-behaviors*
+*npc-vs-player-2h-blade-melee-behaviors*
+*npc-vs-player-2h-blade-melee-behaviors*
+*npc-vs-buddy-2h-melee-behaviors*
+*npc-vs-buddy-2h-melee-behaviors*
+*npc-vs-player-riot-shield-behaviors*
+*npc-vs-player-riot-shield-behaviors*
+*basic-tell-close-attack-behavior*
+embedded@27bd0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    behavior-motion-match-tell-fact-set(arg_2, arg_0);
+    behavior-motion-match-tell-vox(arg_2, vox-eff-gen-breath-fight-growl, 0.10, 0.20, 0.30, 0.60);
+    return disable-vox-melee-death-callout(arg_2, arg_3);
+}
+
+u64? *npc-vs-player-1h-hybrid-behaviors*
+*npc-vs-player-2h-blunt-melee-behaviors*
+*npc-vs-player-1h-behaviors*
+*npc-vs-player-2h-blade-melee-behaviors*
+*npc-vs-player-riot-shield-behaviors*
+*basic-tell-close-attack-behavior*__melee-attack-behavior@b518
+embedded@25328(u64? arg_0, u64? arg_1, bool arg_2, bool arg_3) {
+    u64? var_4 = get-object-distance(arg_2, arg_3);
+    boxed_f32(var_4);
+    boxed_f32(0.00);
+    boxed_f32(4.00);
+    boxed_symbol(true);
+    return !character-in-brute-throw?(arg_3) && npc-is-melee-behavior-condition-active?(arg_2, 53, 0.50) && vector-magnitude(get-object-linear-velocity(arg_3)) < 2.00 && var_4 && var_4 && var_4 && var_4 && var_4 && var_4;
+}
+
+u64? *npc-vs-player-1h-hybrid-behaviors*
+*npc-vs-player-1h-behaviors*
+*sprint-to-target*__melee-attack-behavior@7ae8
+embedded@25dc0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return melee-fact-get-time-since(arg_2, sprint-start) > 8.00 && melee-fact-get-time-since(arg_2, last-swing) < 1.50;
+}
+
+u64? *npc-vs-player-1h-hybrid-behaviors*
+*npc-vs-player-1h-behaviors*
+*sprint-to-target*
+embedded@27b08(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return melee-fact-get-bool(arg_2, started-sprint-timer) && melee-fact-get-time-since(arg_2, sprint-start) > 3.00;
+}
+
+u64? *npc-vs-player-1h-hybrid-behaviors*
+*npc-vs-player-1h-behaviors*
+*sprint-to-target*
+embedded@284a0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return fact-remove(arg_2, started-sprint-timer);
+}
+
+u16 *npc-vs-player-1h-hybrid-behaviors*
+*npc-vs-player-1h-behaviors*
+*sprint-to-target*
+embedded@27c40(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    u16 var_2;
+    if (npc-using-skill?(arg_2, 31) && !melee-fact-get-bool(arg_2, started-sprint-timer)) {
+        melee-fact-set-bool(arg_2, started-sprint-timer, 1);
+        var_2 = melee-fact-set-time(arg_2, sprint-start);
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+bool *infected-bloater-charge-attacks*__melee-attack-behavior@143b0
+*npc-infected-bloater-melee-behaviors*__melee-attack-behavior-list@1a98
+*npc-infected-ratking-bloater-melee-behaviors*__melee-attack-behavior-list@23e0
+embedded@285b0(u64? arg_0, u64? arg_1, bool arg_2, bool arg_3) {
+    bool var_4;
+    if (!(character-in-finisher?(arg_3)) && melee-fact-get-time-since(arg_2, charge-start-time) > 5.00 && npc-using-skill?(arg_2, 5)) {
+        if (!(*npc-prototypes* && *(u8*)(*npc-prototypes* + 7)) || !(fact-exists?(arg_2, bloater-disable-charge)) && !(melee-fact-get-bool(arg_2, bloater-disable-charge)) || !(*(u8*)(get-difficulty-detail-enemies() + 176)) && melee-fact-get-bool(arg_2, disable-melee-difficulty-adjustments) && npc-melee-get-time-since-combat-started(arg_2) > 2.00) {
+            f32 var_19;
+            if (!(melee-fact-get-bool(arg_2, disable-melee-difficulty-adjustments))) {
+                var_19 = *(f32*)(get-difficulty-detail-enemies() + 172);
+            } else {
+                var_19 = 7.00;
+            }
+            if (melee-fact-get-time-since(arg_2, bloater-charge-cooldown) > var_19 || !(*(u8*)(get-difficulty-detail-enemies() + 177))) {
+                if (npc-get-time-since-player-last-noticed-me(arg_2) < 2.00) {
+                    u64? var_25 = get-object-distance(arg_2, arg_3);
+                    bool var_26 = !(arg_2 == 0) && !(arg_3 == 0) && var_25 < 15.00 && var_25 > 7.00;
+                    u64? var_30;
+                    if (var_26) {
+                        var_30 = boxed_symbol(true);
+                    } else {
+                        var_30 = boxed_symbol(false);
+                    }
+                    do-melee-log(
+                        "characters-in-range? [[f]] [[f]] [[f]] [[s]]",
+                        boxed_f32(var_25),
+                        boxed_f32(7.00),
+                        boxed_f32(15.00),
+                        var_30
+                    );
+                    if (var_26 && *(u8*)(get-difficulty-detail-enemies() + 177) && npc-get-time-since-player-last-noticed-me(arg_2) >= 4.00) {
+                        u64? var_35 = get-object-distance(arg_2, arg_3);
+                        bool var_36 = !(arg_2 == 0) && !(arg_3 == 0) && var_35 < 10.00 && var_35 > 7.00;
+                        u64? var_40;
+                        if (var_36) {
+                            var_40 = boxed_symbol(true);
+                        } else {
+                            var_40 = boxed_symbol(false);
+                        }
+                        do-melee-log(
+                            "characters-in-range? [[f]] [[f]] [[f]] [[s]]",
+                            boxed_f32(var_35),
+                            boxed_f32(7.00),
+                            boxed_f32(10.00),
+                            var_40
+                        );
+                        if (var_36) {
+                            f32 var_44;
+                            if (npc-bloater?(arg_2)) {
+                                var_44 = 0.60;
+                            } else {
+                                var_44 = 0.80;
+                            }
+                            if (has-line-of-motion-to-object?(arg_2, arg_3, var_44, 1, 1) && character-facing-object-quadrant?(arg_2, arg_3) || !(melee-fact-get-bool(arg_2, proximity-kill-disabled))) {
+                                var_4 = melee-fact-get-bool(arg_2, force-charge);
+                            }
+                        }
+                    }
+                } else {
+                    u64? var_51 = npc-get-time-since-player-last-noticed-me(arg_2);
+                    if (*(u8*)(get-difficulty-detail-enemies() + 177) && var_51 >= 4.00) {
+                        var_4 = var_51 >= 4.00;
+                    }
+                }
+            }
+        }
+    }
+    return var_4;
+}
+
+u64? *infected-bloater-charge-attacks*
+*npc-infected-bloater-melee-behaviors*
+*npc-infected-ratking-bloater-melee-behaviors*
+embedded@27b78(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return melee-fact-get-bool(arg_2, bloater-charge-ended?) || npc-using-skill?(arg_2, 2) && !get-current-melee-attack(arg_2) || character-in-finisher?(arg_3) && npc-is-stunned?(arg_2);
+}
+
+u64? *infected-bloater-charge-attacks*
+*npc-infected-bloater-melee-behaviors*
+*npc-infected-ratking-bloater-melee-behaviors*
+embedded@24ba0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    melee-fact-set-bool(arg_2, accessibility-audio-tell, 1);
+    return melee-fact-set-bool(arg_2, accessibility-rumble-tell, 1);
+}
+
+u64? *infected-bloater-charge-attacks*
+*npc-infected-bloater-melee-behaviors*
+*npc-infected-ratking-bloater-melee-behaviors*
+embedded@27c98(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    melee-fact-remove(arg_2, force-charge);
+    melee-fact-remove(arg_2, bloater-charge-ended?);
+    return set-character-force-contact-with-big-collision(arg_2, 0, 0);
+}
+
+u16 *buddy-vs-npc-test-grab-behaviors*__melee-attack-behavior-list@1808
+*npc-vs-player-1h-test-grab-behaviors*__melee-attack-behavior-list@1848
+*npc-vs-player-1h-test-grab-behaviors*
+*npc-infected-runner-vs-player-grab-only-behaviors-test*__melee-attack-behavior-list@1d80
+*npc-infected-runner-vs-player-grab-only-behaviors-test*
+*npc-vs-buddy-1h-test-grab-behaviors*__melee-attack-behavior-list@2360
+embedded@27528(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return 1;
+}
+
+bool *default-inf-vs-buddy-idle-inner-behavior*__melee-attack-behavior@b8e0
+*npc-infected-runner-vs-buddy-melee-behaviors*
+embedded@27738(u64? arg_0, u64? arg_1, u64? arg_2, i64 arg_3) {
+    return melee-fact-get-symbol(arg_2, buddy-desired-melee-target) == arg_3;
+}
+
+bool *default-inf-vs-buddy-idle-inner-behavior*
+*npc-infected-runner-vs-buddy-melee-behaviors*
+embedded@281c0(u64? arg_0, u64? arg_1, i64 arg_2, u64? arg_3) {
+    return !(melee-fact-get-symbol(arg_3, buddy-desired-melee-target) == arg_2);
+}
+
+u64? *dog-buddy-melee-npc-behaviors*
+embedded@25930(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_15 = get-current-melee-attack(arg_3);
+    return !character-melee-event-active?(arg_3, 188, 0) && !character-in-struggle?(arg_3, 16) && melee-character-bit-check(arg_3, #000000001B100000) && melee-fact-get-time-since(arg_3, last-time-in-prone-struggle) > 5.00 && get-current-melee-attack(arg_3) || *(u64*)(get-current-melee-attack(arg_3) + 16) == melee-npc-grab-struggle-one-shot && !(*(u64*)(get-current-melee-attack(arg_3) + 16) == melee-npc-prone-supine-pullout-with-intro) && !character-in-finisher?(arg_3) && get-current-melee-attack(player) && characters-in-melee?(player, arg_3, 1) || character-in-unsynced-melee-attack-as-attacker?(player) && character-in-melee-attack-as-attacker?(player) || character-in-finisher?(player) || *(u64*)(get-current-melee-attack(player) + 16) == melee-player-swing-free-contextual && get-current-melee-attack(arg_3) && *(u64*)(var_15 + 16) == melee-player-synced-wall-hit-new && !(*(u64*)(var_15 + 16) == melee-player-synced-wall-hit-new);
+}
+
+u64? *dog-buddy-melee-npc-behaviors*
+embedded@25260(u64? arg_0, u64? arg_1, u64? arg_2, f32 arg_3) {
+    return character-melee-event-active?(arg_3, 188, 0) || !melee-character-bit-check(arg_3, #000000001B100000) || melee-fact-get-time-since(arg_3, last-time-in-prone-struggle) < 5.00 || character-in-struggle?(arg_3, 8) || character-in-finisher?(arg_3) && get-current-melee-attack(player) && characters-in-melee?(player, arg_3, 1) || character-in-unsynced-melee-attack-as-attacker?(player) && character-in-melee-attack-as-attacker?(player) || character-in-finisher?(player) || *(u64*)(get-current-melee-attack(player) + 16) == melee-player-swing-free-contextual && get-current-melee-attack(arg_3) && *(u64*)(get-current-melee-attack(arg_3) + 16) == melee-player-synced-wall-hit-new;
+}
+
+u64? *dog-buddy-melee-npc-behaviors*
+embedded@26460(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return melee-character-bit-check(arg_3, #000000001B100000);
+}
+
+u64? *dog-buddy-melee-npc-behaviors*
+embedded@259a0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return !melee-character-bit-check(arg_3, #000000001B100000);
+}
+
+u64? *melee-behavior-dina-human-grab-only*__melee-attack-behavior@89a8
+*dina-vs-human-melee-behaviors-grab-only*__melee-attack-behavior-list@1b30
+embedded@25a80(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return !npc-in-meatshield?(arg_3) && !characters-in-melee?(player, arg_3, 1) && !target-is-stunned?(arg_3) && !npc-brute?(arg_3) && !any-character-in-struggle-with-player?();
+}
+
+u64? *default-brute-attack-behavior*__melee-attack-behavior@18c8
+embedded@3e90(u64? arg_0, u64? arg_1, bool arg_2, bool arg_3) {
+    u64? var_5;
+    if (!is-player?(arg_3) && !player-in-prone-hiding-region?() && npc-get-motion-type(arg_2) == 1 && melee-fact-get-time-since(arg_2, last-swing) > melee-fact-get-float(arg_2, base-swing-cooldown)) {
+        melee-fact-set-float(arg_2, time-being-aimed-at, melee-fact-get-float(arg_2, time-being-aimed-at) + get-delta-time());
+        var_5 = melee-fact-get-time-since(arg_2, last-hit) > melee-fact-get-float(arg_2, base-hit-cooldown) && player-is-aiming-firearm-at-npc?(arg_2) && melee-fact-get-float(arg_2, time-being-aimed-at) > 1.00 && 1;
+    } else {
+        u16 var_14;
+        if (player-is-aiming-firearm-at-npc?(arg_2)) {
+            melee-fact-set-float(arg_2, time-being-aimed-at, melee-fact-get-float(arg_2, time-being-aimed-at) + get-delta-time());
+            if (melee-fact-get-float(arg_2, time-being-aimed-at) > 1.00) {
+                var_14 = 1;
+            } else {
+                var_14 = 0;
+            }
+        } else {
+            var_14 = 0;
+        }
+        var_5 = var_14 && player-is-aiming-firearm-at-npc?(arg_2) && joypad-command-active?(fire-press, 6) && 1;
+    }
+    return var_5;
+}
+
+u64? *default-brute-attack-behavior*
+embedded@6fc8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return is-player?(arg_3) && player-in-prone-hiding-region?();
+}
+
+u64? *default-brute-attack-behavior*
+embedded@14358(u64? arg_0, u64? arg_1, sid arg_2, u64? arg_3) {
+    melee-fact-set-float(arg_2, time-being-aimed-at, 0.00);
+    melee-fact-set-float(arg_2, time-player-too-close, 0.00);
+    u64? var_0;
+    if (arg_2 == npc-afm-burning-village-collapse-brute-1) {
+        melee-fact-set-float(arg_2, base-hit-cooldown, random-float-range(1.00, 2.00, 0));
+        var_0 = melee-fact-set-float(arg_2, base-swing-cooldown, random-float-range(0.75, 1.50, 0));
+    } else if (arg_2 == npc-ski-scar-sledgehammer-1) {
+        melee-fact-set-float(arg_2, base-hit-cooldown, random-float-range(2.00, 5.00, 0));
+        var_0 = melee-fact-set-float(arg_2, base-swing-cooldown, random-float-range(2.00, 3.50, 0));
+    } else {
+        melee-fact-set-float(arg_2, base-hit-cooldown, random-float-range(3.00 * *(f32*)(get-difficulty-detail-enemies() + 68), 7.00 * *(f32*)(get-difficulty-detail-enemies() + 68), 0));
+        var_0 = melee-fact-set-float(arg_2, base-swing-cooldown, random-float-range(2.50 * *(f32*)(get-difficulty-detail-enemies() + 68), 4.50 * *(f32*)(get-difficulty-detail-enemies() + 68), 0));
+    }
+    return var_0;
+}
+
+u64? *default-brute-attack-behavior*
+embedded@2bb0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    melee-fact-set-bool(arg_2, in-motion-match-melee-tell, 0);
+    return fact-remove(arg_2, brute-tell-vox-broadcast);
+}
+
+u16 *default-brute-attack-behavior*
+embedded@cc88(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    behavior-motion-match-tell-fact-set(arg_2, arg_0);
+    behavior-motion-match-tell-vox(arg_2, vox-eff-gen-breath-fight-growl, 0.10, 0.20, 0.30, 0.60);
+    u16 var_2;
+    if (!melee-fact-get-bool(arg_2, brute-tell-vox-broadcast) && melee-fact-get-bool(arg_2, in-motion-match-melee-tell)) {
+        request-dialog(ai-enemy-melee-fight-charge, arg_2, arg_3, 0, 0, 0, 0);
+        melee-fact-set-bool(arg_2, brute-tell-vox-broadcast, 1);
+        var_2 = broadcast-event(brute-tell-vox, boxed_symbol(arg_2));
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u64? *npc-infected-bloater-melee-behaviors*
+embedded@25ad8(u64? arg_0, u64? arg_1, bool arg_2, bool arg_3) {
+    u64? var_0 = get-object-distance(arg_2, arg_3);
+    bool var_1 = !(arg_2 == 0) && !(arg_3 == 0) && var_0 < 3.25 && var_0 > 0.00;
+    u64? var_5;
+    if (var_1) {
+        var_5 = boxed_symbol(true);
+    } else {
+        var_5 = boxed_symbol(false);
+    }
+    do-melee-log(
+        "characters-in-range? [[f]] [[f]] [[f]] [[s]]",
+        boxed_f32(var_0),
+        boxed_f32(0.00),
+        boxed_f32(3.25),
+        var_5
+    );
+    u64? var_9;
+    if (var_1 || has-line-of-motion-to-object?(arg_2, arg_3, 0.00, 0, 0)) {
+        u64? var_10 = get-object-distance(arg_2, arg_3);
+        bool var_11 = !(arg_2 == 0) && !(arg_3 == 0) && var_10 < 1.50 && var_10 > 0.00;
+        u64? var_15;
+        if (var_11) {
+            var_15 = boxed_symbol(true);
+        } else {
+            var_15 = boxed_symbol(false);
+        }
+        do-melee-log(
+            "characters-in-range? [[f]] [[f]] [[f]] [[s]]",
+            boxed_f32(var_10),
+            boxed_f32(0.00),
+            boxed_f32(1.50),
+            var_15
+        );
+        if (var_11 && npc-can-path-to-object?(arg_2, arg_3) || float-in-range?(get-object-distance-y(arg_2, arg_3), -0.50, 1.10)) {
+            u64? var_21 = get-object-distance(arg_2, arg_3);
+            bool var_22 = !(arg_2 == 0) && !(arg_3 == 0) && var_21 < 2.50 && var_21 > 0.00;
+            u64? var_26;
+            if (var_22) {
+                var_26 = boxed_symbol(true);
+            } else {
+                var_26 = boxed_symbol(false);
+            }
+            do-melee-log(
+                "characters-in-range? [[f]] [[f]] [[f]] [[s]]",
+                boxed_f32(var_21),
+                boxed_f32(0.00),
+                boxed_f32(2.50),
+                var_26
+            );
+            var_9 = var_22 && float-in-range?(get-object-distance-y(arg_2, arg_3), -0.50, 1.90) && !(npc-can-path-to-object?(arg_2, arg_3)) || melee-fact-get-time-since(arg_2, last-swing) > 1.00 && character-about-to-be-hit-by-player(arg_2, 30) && charge-attack != *(u64*)npc-get-melee-behavior-state-data(arg_2) && !(character-in-finisher?(arg_3)) || melee-fact-get-time-since(arg_2, last-bloater-hit) > 3.00 && melee-fact-get-time-since(arg_2, last-bloater-hit) < 3.00 || joypad-stick-pressed-towards?(move, get-object-locator(arg_2), 0, 60.00, 0.00) || angle-in-between-vectors(point-sub(get-object-position(arg_2), get-object-position(arg_3)), get-evade-stick-dir()) < 60.00 && character-about-to-be-hit-by-player(arg_2, 30);
+        } else if (melee-fact-get-time-since(arg_2, last-swing) > 1.00 && character-about-to-be-hit-by-player(arg_2, 30) && charge-attack != *(u64*)npc-get-melee-behavior-state-data(arg_2) && !(character-in-finisher?(arg_3))) {
+            var_9 = melee-fact-get-time-since(arg_2, last-bloater-hit) > 3.00 && melee-fact-get-time-since(arg_2, last-bloater-hit) < 3.00 || joypad-stick-pressed-towards?(move, get-object-locator(arg_2), 0, 60.00, 0.00) || angle-in-between-vectors(point-sub(get-object-position(arg_2), get-object-position(arg_3)), get-evade-stick-dir()) < 60.00 && character-about-to-be-hit-by-player(arg_2, 30);
+        }
+    }
+    return var_9;
+}
+
+u64? *npc-infected-bloater-melee-behaviors*
+embedded@255b0(u64? arg_0, u64? arg_1, bool arg_2, bool arg_3) {
+    u64? var_3 = get-object-distance(arg_2, arg_3);
+    boxed_f32(var_3);
+    boxed_f32(0.00);
+    boxed_f32(3.25);
+    boxed_symbol(true);
+    return character-in-finisher?(arg_3) && melee-fact-get-time-since(arg_2, last-npc-whiff-time) < 1.00 || !character-about-to-be-hit-by-player(arg_2, 30) && var_3 && var_3 && var_3 && var_3 && var_3 && var_3;
+}
+
+u64? *npc-infected-bloater-melee-behaviors*
+embedded@26ad8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return bloater-melee-tell-approach-normal-start-func(arg_2, arg_3);
+}
+
+u64? *npc-infected-bloater-melee-behaviors*
+embedded@25d68(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return !(bloater-melee-tell-approach-normal-start-func(arg_2, arg_3));
+}
+
+u16 *npc-infected-bloater-melee-behaviors*
+embedded@28088(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    u16 var_2;
+    if (melee-fact-get-time-since(arg_2, last-bloater-hit) > 3.00 && character-about-to-be-hit-by-player(arg_2, 30)) {
+        if (*(u8*)(get-difficulty-detail-enemies() + 152) && melee-fact-get-bool(arg_2, disable-melee-difficulty-adjustments)) {
+            var_2 = !(bloater-melee-tell-approach-normal-start-func(arg_2, arg_3));
+        } else {
+            var_2 = 1;
+        }
+    }
+    return var_2;
+}
+
+u64? *npc-infected-bloater-melee-behaviors*
+embedded@24fe0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return bloater-melee-tell-approach-normal-start-func(arg_2, arg_3);
+}
+
+u64? *enemy-abby-vs-player-phase-1-attack-behaviors*__melee-attack-behavior-list@1af0
+*enemy-abby-vs-player-phase-2-attack-behaviors*__melee-attack-behavior-list@2110
+*enemy-abby-vs-player-phase-3-attack-behaviors*__melee-attack-behavior-list@2b50
+*enemy-abby-out-of-bounds-grab-behavior*__melee-attack-behavior@afb0
+embedded@26558(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return abby-OoB-grab(arg_2, arg_3);
+}
+
+u64? *enemy-abby-vs-player-phase-1-attack-behaviors*
+*enemy-abby-vs-player-phase-2-attack-behaviors*
+*enemy-abby-vs-player-phase-3-attack-behaviors*
+*enemy-abby-out-of-bounds-grab-behavior*
+embedded@27ef0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return !abby-OoB-grab(arg_2, arg_3);
+}
+
+u64? *enemy-abby-vs-player-phase-1-attack-behaviors*
+*enemy-abby-vs-player-phase-2-attack-behaviors*
+*enemy-abby-vs-player-phase-3-attack-behaviors*
+*enemy-abby-out-of-bounds-grab-behavior*
+embedded@26b30(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    send-event(run-gestures, ss-san-beach-fight-abby-gesture-controller-1);
+    return melee-fact-set-bool(arg_2, reorient-grab, 1);
+}
+
+u64? *enemy-abby-vs-player-phase-1-attack-behaviors*
+*enemy-abby-vs-player-phase-2-attack-behaviors*
+*enemy-abby-vs-player-phase-3-attack-behaviors*
+*enemy-abby-out-of-bounds-grab-behavior*
+embedded@25cb8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return melee-fact-remove(arg_2, reorient-grab);
+}
+
+u64? *enemy-abby-vs-player-phase-1-attack-behaviors*
+embedded@26608(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return melee-fact-get-time-since(arg_2, parry-sync) > 2.50 && npc-struggle-cooldown-func(arg_2, arg_3, 15.00, 30.00, 0) && !(get-script-state(ss-san-beach-fight-abby-gesture-controller-1) == running-gestures) && !abby-OoB-grab(arg_2, arg_3);
+}
+
+u64? *enemy-abby-vs-player-phase-1-attack-behaviors*
+embedded@27f50(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return npc-struggle-cooldown-func(arg_2, arg_3, 15.00, 30.00, 1) && abby-OoB-grab(arg_2, arg_3);
+}
+
+u64? *enemy-abby-vs-player-phase-1-attack-behaviors*
+*enemy-abby-vs-player-phase-1-attack-behaviors*
+*enemy-abby-vs-player-phase-1-attack-behaviors*
+*enemy-abby-vs-player-gassed-phase*
+*enemy-abby-vs-player-phase-2-attack-behaviors*
+*enemy-abby-vs-player-phase-2-attack-behaviors*
+*enemy-abby-vs-player-phase-2-attack-behaviors*
+*enemy-abby-vs-player-phase-3-attack-behaviors*
+*enemy-abby-vs-player-phase-3-attack-behaviors*
+*enemy-abby-vs-player-phase-3-attack-behaviors*
+embedded@25698(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return send-event(run-gestures, ss-san-beach-fight-abby-gesture-controller-1);
+}
+
+u64? *enemy-abby-vs-player-phase-1-attack-behaviors*
+*enemy-abby-vs-player-phase-2-attack-behaviors*
+*enemy-abby-vs-player-phase-3-attack-behaviors*
+embedded@26768(u64? arg_0, u64? arg_1, bool arg_2, bool arg_3) {
+    u64? var_4 = get-object-distance(arg_2, arg_3);
+    boxed_f32(var_4);
+    boxed_f32(0.00);
+    boxed_f32(2.00);
+    boxed_symbol(true);
+    return melee-fact-get-time-since(arg_2, parry-sync) > 2.50 && !(get-script-state(ss-san-beach-fight-abby-gesture-controller-1) == running-gestures) || melee-fact-get-time-since(arg_2, last-swing) > 2.00 && npc-is-melee-behavior-condition-active?(arg_2, 54, 0.20) && var_4 && var_4 && var_4 && var_4 && var_4 && var_4;
+}
+
+u64? *enemy-abby-vs-player-phase-1-attack-behaviors*
+*enemy-abby-vs-player-phase-2-attack-behaviors*
+*enemy-abby-vs-player-phase-3-attack-behaviors*
+embedded@266b8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return abby-OoB-grab(arg_2, arg_3);
+}
+
+u16 *enemy-abby-vs-player-phase-1-attack-behaviors*
+*enemy-abby-vs-player-phase-1-attack-behaviors*
+*enemy-abby-vs-player-gassed-phase*
+*enemy-abby-vs-player-gassed-phase*
+*enemy-abby-vs-player-phase-2-attack-behaviors*
+*enemy-abby-vs-player-phase-2-attack-behaviors*
+*enemy-abby-vs-player-phase-3-attack-behaviors*
+*enemy-abby-vs-player-phase-3-attack-behaviors*
+embedded@260d0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    u16 var_2;
+    if (locator-in-region?(get-object-locator(arg_3), rgn-orient-to-center-1, player)) {
+        var_2 = npc-use-closest-melee-strafe-slot-by-obstacle/f(arg_2);
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u64? *lev-vs-human-melee-behaviors-grab-only*__melee-attack-behavior-list@1b70
+embedded@25100(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return !npc-in-meatshield?(arg_3) && !target-is-stunned?(arg_3) && !npc-brute?(arg_3) && !any-character-in-struggle-with-player?();
+}
+
+u64? *melee-behavior-buddy-grabs*__melee-attack-behavior@1b90
+embedded@4450(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3) {
+    u64? var_3 = get-object-distance(arg_2, player);
+    boxed_f32(var_3);
+    boxed_f32(3.00);
+    boxed_f32(10.00);
+    boxed_symbol(true);
+    return !melee-character-bit-check(arg_3, #0000000046200000) && get-closest-enemy-to-locator(get-object-locator(arg_2), 8.00, arg_3, 15) == 0 && var_3 && var_3 && var_3 && var_3 && var_3 && var_3;
+}
+
+u64? *npc-infected-stalker-vs-buddy-melee-behaviors*__melee-attack-behavior-list@1d60
+*npc-vs-buddy-1h-melee-behaviors*__melee-attack-behavior-list@1dc0
+*npc-vs-buddy-grab-behavior*__melee-attack-behavior@10710
+*npc-vs-buddy-2h-melee-behaviors*__melee-attack-behavior-list@2380
+*npc-infected-runner-vs-buddy-melee-behaviors*__melee-attack-behavior-list@2af0
+embedded@26140(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_0;
+    if (*buddy-prototypes* != nullptr || *(u8*)(*buddy-prototypes* + 41)) {
+        var_0 = character-buddy-struggle-cooldown(arg_2, arg_3) || rogue-get-current-task-game-mode() == 2 && get-object-health-percentage(player) > 0.30 || !npc-is-infected?(arg_2) && !melee-fact-get-bool(arg_3, melee-buddy-prevent-infected-grapples) && !is-allies-dont-get-grabbed-enabled?() && !character-melee-event-active?(arg_3, 224, 0) && !any-character-in-struggle-with-player?() && !character-in-struggle?(arg_3, 16) && !melee-character-bit-check(arg_3, 32) && is-player-abby?(player) && melee-character-bit-check(arg_3, 768) && 0;
+    }
+    return var_0;
+}
+
+u64? *npc-infected-stalker-vs-buddy-melee-behaviors*
+*npc-vs-buddy-1h-melee-behaviors*
+*npc-vs-buddy-grab-behavior*
+*npc-vs-buddy-2h-melee-behaviors*
+*npc-infected-runner-vs-buddy-melee-behaviors*
+embedded@287c0(u64? arg_0, u64? arg_1, i64 arg_2, u64? arg_3) {
+    u64? var_0;
+    if (*buddy-prototypes* != nullptr) {
+        var_0 = !*(u8*)(*buddy-prototypes* + 41) || !(melee-fact-get-symbol(arg_3, buddy-desired-melee-target) == arg_2) || get-object-health-percentage(player) < 0.30 && npc-is-infected?(arg_2) || melee-fact-get-bool(arg_3, melee-buddy-prevent-infected-grapples) || is-allies-dont-get-grabbed-enabled?() || character-melee-event-active?(arg_3, 224, 0) || any-character-in-struggle-with-player?() || melee-character-bit-check(arg_3, 32) && character-in-struggle?(arg_3, 16);
+    } else {
+        var_0 = !(melee-fact-get-symbol(arg_3, buddy-desired-melee-target) == arg_2) || get-object-health-percentage(player) < 0.30 && npc-is-infected?(arg_2) || melee-fact-get-bool(arg_3, melee-buddy-prevent-infected-grapples) || is-allies-dont-get-grabbed-enabled?() || character-melee-event-active?(arg_3, 224, 0) || any-character-in-struggle-with-player?() || melee-character-bit-check(arg_3, 32) && character-in-struggle?(arg_3, 16);
+    }
+    return var_0;
+}
+
+u64? *npc-infected-stalker-vs-buddy-melee-behaviors*
+*npc-infected-stalker-vs-buddy-melee-behaviors*
+*npc-infected-runner-vs-buddy-melee-behaviors*
+*npc-infected-runner-vs-buddy-melee-behaviors*
+embedded@27688(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return !character-in-struggle?(arg_3, 16);
+}
+
+u64? *npc-infected-stalker-vs-buddy-melee-behaviors*
+*npc-infected-stalker-vs-buddy-melee-behaviors*
+*npc-infected-runner-vs-buddy-melee-behaviors*
+*npc-infected-runner-vs-buddy-melee-behaviors*
+embedded@279e8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return character-in-struggle?(arg_3, 16);
+}
+
+u64? *npc-infected-stalker-vs-buddy-melee-behaviors*
+*npc-vs-buddy-1h-melee-behaviors*
+*npc-vs-buddy-2h-melee-behaviors*
+*melee-behavior-scripted-far-approach*__melee-attack-behavior@20e20
+*npc-infected-runner-vs-buddy-melee-behaviors*
+embedded@26978(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return !(npc-get-target(arg_2) == 0) && melee-fact-get-bool(arg_2, npc-force-scripted-melee-approach);
+}
+
+u64? *npc-infected-stalker-vs-buddy-melee-behaviors*
+*npc-vs-buddy-1h-melee-behaviors*
+*npc-vs-buddy-2h-melee-behaviors*
+*melee-behavior-scripted-far-approach*
+*npc-infected-runner-vs-buddy-melee-behaviors*
+embedded@268c8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return melee-fact-set-bool(arg_2, npc-force-scripted-melee-approach, 0);
+}
+
+u64? *npc-vs-buddy-1h-melee-behaviors*
+*npc-vs-buddy-1h-melee-behaviors*
+*npc-vs-buddy-2h-melee-behaviors*
+*npc-vs-buddy-2h-melee-behaviors*
+embedded@24df8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return !character-in-struggle?(arg_3, 16) && !melee-fact-get-bool(arg_3, buddy-request-no-melee);
+}
+
+u64? *npc-vs-buddy-1h-melee-behaviors*
+*npc-vs-buddy-1h-melee-behaviors*
+*npc-vs-buddy-2h-melee-behaviors*
+*npc-vs-buddy-2h-melee-behaviors*
+embedded@24c10(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return character-in-struggle?(arg_3, 16) && melee-fact-get-bool(arg_3, buddy-request-no-melee);
+}
+
+u64? *enemy-abby-vs-player-gassed-phase*__melee-attack-behavior-list@1e58
+embedded@275d8(u64? arg_0, u64? arg_1, bool arg_2, bool arg_3) {
+    u64? var_4 = get-object-distance(arg_2, arg_3);
+    boxed_f32(var_4);
+    boxed_f32(0.00);
+    boxed_f32(2.50);
+    boxed_symbol(true);
+    return melee-fact-get-time-since(arg_2, parry-sync) > 2.50 && !(get-script-state(ss-san-beach-fight-abby-gesture-controller-1) == running-gestures) || melee-fact-get-time-since(arg_2, last-swing) > (2.00 + 0.75) && npc-is-melee-behavior-condition-active?(arg_2, 54, 0.20) && var_4 && var_4 && var_4 && var_4 && var_4 && var_4;
 }
 
 u64? buddy-attack-behavior-end-func(u64? arg_0, i64 arg_1) {
     return character-melee-event-active?(arg_1, 188, 0) || !(melee-fact-get-symbol(arg_0, buddy-desired-melee-target) == arg_1) || characters-in-melee?(player, arg_1, 1) || in-knee-stun?(arg_1) || npc-in-tap?(arg_1) && melee-fact-get-time-since(arg_0, last-counter) < melee-fact-get-float(arg_0, buddy-rebuttal-cooldown);
 }
 
+u64? *enemy-abby-vs-player-phase-2-attack-behaviors*
+embedded@28710(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return npc-struggle-cooldown-func(arg_2, arg_3, 10.00, 30.00, 0);
+}
+
+u64? *enemy-abby-vs-player-phase-2-attack-behaviors*
+embedded@26660(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return npc-struggle-cooldown-func(arg_2, arg_3, 10.00, 30.00, 1);
+}
+
+u64? *melee-behavior-buddy-finisher-openers*__melee-attack-behavior@7020
+embedded@26a50(u64? arg_0, u64? arg_1, f32 arg_2, u64? arg_3) {
+    u64? var_4 = get-current-melee-attack(arg_3);
+    return health-requirements-met-for-buddy-finisher(arg_2, arg_3, 1) && buddy-attack-behavior-start-func(arg_2, arg_3) && get-current-melee-attack(arg_3) && !(*(u64*)(get-current-melee-attack(arg_3) + 16) == melee-npc-swing-free) && !(*(u64*)(var_4 + 16) == melee-npc-swing-tell) && !(*(u64*)(var_4 + 16) == melee-npc-swing-tell);
+}
+
+u64? *melee-behavior-buddy-finisher-openers*
+embedded@27938(u64? arg_0, u64? arg_1, u64? arg_2, i64 arg_3) {
+    u64? var_0 = health-requirements-met-for-buddy-finisher(arg_2, arg_3, 1);
+    if (!!var_0) {
+        melee-debug-text-file-line-fail("(not (health-requirements-met-for-buddy-finisher attacker defender #t))", "t2r/src/game/scriptx/melee/behaviors/behaviors-buddy.dcx", 200);
+    }
+    u64? var_3 = get-current-melee-attack(arg_3);
+    return !var_0 && get-current-melee-attack(arg_3) || *(u64*)(get-current-melee-attack(arg_3) + 16) == melee-npc-swing-free && *(u64*)(var_3 + 16) == melee-npc-swing-tell && *(u64*)(var_3 + 16) == melee-npc-swing-tell;
+}
+
+u64? *npc-infected-clicker-vs-player-melee-behaviors*
+embedded@26b88(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return is-player?(arg_3) && npc-clicker?(get-current-melee-attacker(arg_3)) && character-in-struggle?(arg_3, 16) && !(character-in-grapple-with-legless-attacker?(arg_3));
+}
+
+u64? *npc-infected-clicker-vs-player-melee-behaviors*
+embedded@28018(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_4;
+    if (is-player?(arg_3) && npc-clicker?(get-current-melee-attacker(arg_3)) && character-in-struggle?(arg_3, 16)) {
+        melee-fact-set-time(arg_2, cooldown-timer);
+        melee-fact-set-bool(arg_2, cooldown-start, 0);
+        var_4 = !!(character-in-grapple-with-legless-attacker?(arg_3)) && melee-fact-get-bool(arg_2, cooldown-start) && 1;
+    } else {
+        u16 var_10;
+        if (melee-fact-get-bool(arg_2, cooldown-start)) {
+            melee-fact-set-time(arg_2, cooldown-timer);
+            melee-fact-set-bool(arg_2, cooldown-start, 0);
+            var_10 = 1;
+        } else {
+            var_10 = 1;
+        }
+        var_4 = var_10 && melee-fact-get-time-since(arg_2, cooldown-timer) > melee-fact-get-float(arg_2, easy-struggle-cooldown);
+    }
+    return var_4;
+}
+
+u64? *npc-infected-clicker-vs-player-melee-behaviors*
+embedded@25760(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    melee-fact-set-float(arg_2, easy-struggle-cooldown, random-float-range(1.00, 2.00, 0));
+    return melee-fact-set-bool(arg_2, cooldown-start, 1);
+}
+
+u64? *npc-infected-clicker-vs-player-melee-behaviors*
+embedded@25e70(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    fact-remove(arg_2, easy-struggle-cooldown);
+    fact-remove(arg_2, cooldown-start);
+    return fact-remove(arg_2, cooldown-timer);
+}
+
+u64? *npc-infected-clicker-vs-player-melee-behaviors*
+embedded@25208(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_8;
+    if (!(npc-is-melee-behavior-condition-active?(arg_2, 14, 0.00)) || character-in-grapple-with-legless-attacker?(arg_3) && character-in-struggle?(arg_3, 1) && !clicker-bail-on-struggle(arg_2, arg_3) && !clicker-bail-on-finisher(arg_2, arg_3) && npc-has-awareness?(arg_2, arg_3, 2) && melee-fact-get-time-since(arg_2, shiv-saved-time) > 0.40) {
+        if (npc-on-screen-and-visible?(arg_2, -1, 0) || distance-between-objects-less-than?(arg_2, arg_3, 5.00) && has-line-of-motion-to-object?(arg_2, arg_3, 0.30, 0, 0) && melee-fact-get-time-since(arg_3, last-struggle-success) > *(f32*)(get-difficulty-detail-enemies() + 84)) {
+            var_8 = !is-player?(arg_3) && character-in-struggle?(arg_3, 16);
+        }
+    }
+    return var_8;
+}
+
+u64? *npc-infected-clicker-vs-player-melee-behaviors*
+embedded@27e68(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return melee-fact-get-time-since(arg_2, shiv-saved-time) < 0.40 || melee-fact-get-time-since(arg_3, last-struggle-success) < *(f32*)(get-difficulty-detail-enemies() + 84) || clicker-bail-on-struggle(arg_2, arg_3) && clicker-bail-on-finisher(arg_2, arg_3);
+}
+
+u64? *npc-infected-clicker-vs-player-melee-behaviors*
+embedded@25608(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    melee-fact-remove(arg_2, shiv-saved-time);
+    melee-fact-set-bool(arg_2, frenzy-announce-ready, 1);
+    return melee-fact-set-time(arg_2, frenzy-timer);
+}
+
+u64? *npc-infected-clicker-vs-player-melee-behaviors*
+*npc-infected-clicker-vs-human-melee-behaviors*
+embedded@262d0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    clicker-vox-frenzy-end(arg_2, arg_3, 1);
+    melee-fact-remove(arg_2, in-motion-match-melee-tell);
+    melee-fact-remove(arg_2, last-frenzy-start-vox);
+    melee-fact-remove(arg_2, last-frenzy-end-vox);
+    return melee-fact-remove(arg_2, frenzy-vox-active);
+}
+
+u16 *npc-infected-clicker-vs-player-melee-behaviors*
+*npc-infected-clicker-vs-human-melee-behaviors*
+embedded@28608(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_0 = melee-fact-get-bool(arg_2, in-motion-match-melee-tell);
+    behavior-motion-match-tell-fact-set(arg_2, arg_0);
+    if (var_0 == 0 && melee-fact-get-bool(arg_2, in-motion-match-melee-tell) == 1) {
+        clicker-vox-frenzy-start(arg_2, arg_3, 0);
+    }
+    if (var_0 == 1 || melee-fact-get-bool(arg_2, in-motion-match-melee-tell) == 0) {
+        if (melee-fact-get-bool(arg_2, frenzy-abort-vox)) {
+            clicker-vox-frenzy-end(arg_2, arg_3, 0);
+        }
+    }
+    u16 var_4;
+    if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 10)) {
+        if (melee-fact-get-bool(arg_2, in-motion-match-melee-tell)) {
+            debug-draw-string-centered("in motion match", 360.00, 1, 0.00, 1.00, 0, 0);
+        }
+        if (melee-fact-get-bool(arg_2, frenzy-vox-active)) {
+            var_4 = debug-draw-string-centered("frenzy vox active", 380.00, 3, 0.00, 1.00, 0, 0);
+        } else {
+            var_4 = debug-draw-string-centered("frenzy vox inactive", 380.00, 2, 0.00, 1.00, 0, 0);
+        }
+    } else {
+        var_4 = 0;
+    }
+    return var_4;
+}
+
+u64? *enemy-abby-fist-attack-behavior*__melee-attack-behavior@2170
+embedded@2c60(u64? arg_0, u64? arg_1, bool arg_2, bool arg_3) {
+    u64? var_4 = get-object-distance(arg_2, arg_3);
+    boxed_f32(var_4);
+    boxed_f32(0.00);
+    boxed_f32(2.00);
+    boxed_symbol(true);
+    return melee-fact-get-time-since(arg_2, parry-sync) > 2.50 && !(get-script-state(ss-san-beach-fight-abby-gesture-controller-1) == running-gestures) || melee-fact-get-time-since(arg_2, last-swing) > 2.00 && npc-is-melee-behavior-condition-active?(arg_2, 54, 0.20) && var_4 && var_4 && var_4 && var_4 && var_4 && var_4;
+}
+
+u64? *enemy-abby-fist-attack-behavior*
+embedded@ad88(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return abby-OoB-grab(arg_2, arg_3);
+}
+
+u64? *enemy-abby-fist-attack-behavior*
+*enemy-abby-grapple-attack-behavior*
+embedded@d110(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return send-event(run-gestures, ss-san-beach-fight-abby-gesture-controller-1);
+}
+
+u16 *enemy-abby-fist-attack-behavior*
+embedded@117a8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    u16 var_2;
+    if (locator-in-region?(get-object-locator(arg_3), rgn-orient-to-center-1, player)) {
+        var_2 = npc-use-closest-melee-strafe-slot-by-obstacle/f(arg_2);
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u64? *melee-behavior-buddy-struggle-saves*__melee-attack-behavior@10b08
+embedded@25be0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return !melee-fact-get-bool(arg_3, is-boss) && !melee-character-bit-check(arg_3, #0000000044200000) && !npc-in-meatshield?(arg_3) && character-in-struggle-with-player?(arg_3);
+}
+
+u64? *melee-behavior-buddy-struggle-saves*
+embedded@282e0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return !character-in-struggle-with-player?(arg_3);
+}
+
+u64? *npc-infected-stunner-melee-behaviors*
+embedded@28818(u64? arg_0, u64? arg_1, u64? arg_2, f32 arg_3) {
+    return is-player-base?(arg_3) && melee-fact-get-time-since(arg_3, npc-grab-enter-attempted) > 6.00 && melee-fact-get-time-since(arg_3, npc-grab-enter-success) > 10.00;
+}
+
+u64? *npc-infected-stunner-melee-behaviors*
+*npc-infected-runner-vs-player-melee-behaviors*
+embedded@257b8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return npc-last-alive?(arg_2);
+}
+
+u64? *npc-infected-ratking-bloater-melee-behaviors*
+embedded@28138(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return ratking-auto-kill-start-func(arg_2, arg_3);
+}
+
+u64? *npc-infected-ratking-bloater-melee-behaviors*
+embedded@27fc0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return distance-between-objects-greater-than?(arg_2, arg_3, 5.00, 1);
+}
+
+u64? *npc-infected-ratking-bloater-melee-behaviors*
+embedded@254b8(u64? arg_0, u64? arg_1, u64? arg_2, sid arg_3) {
+    return !(npc-reserved-tap?(arg_2)) && charge-attack != *(u64*)npc-get-melee-behavior-state-data(arg_2) && !(character-in-finisher?(arg_3)) || melee-fact-get-time-since(arg_2, last-bloater-hit) > 3.00 && melee-fact-get-time-since(arg_2, last-bloater-hit) < 3.00 || joypad-stick-pressed-towards?(move, get-object-locator(arg_2), 0, 60.00, 0.00) || angle-in-between-vectors(point-sub(get-object-position(arg_2), get-object-position(arg_3)), get-evade-stick-dir()) < 60.00 && character-about-to-be-hit-by-player(arg_2, 30) && !(*(u8*)(get-difficulty-detail-enemies() + 385));
+}
+
+u64? *npc-infected-ratking-bloater-melee-behaviors*
+embedded@25380(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return melee-fact-get-time-since(arg_2, last-bloater-hit) > 3.00 && character-about-to-be-hit-by-player(arg_2, 30);
+}
+
+u64? *infected-bloater-melee-tell-approach*__melee-attack-behavior@2400
+embedded@2c08(u64? arg_0, u64? arg_1, f32 arg_2, u64? arg_3) {
+    u64? var_2;
+    if (*(u8*)(get-difficulty-detail-enemies() + 152) && melee-fact-get-bool(arg_2, disable-melee-difficulty-adjustments)) {
+        if (melee-fact-get-time-since(arg_2, last-bloater-hit) > 3.00 && character-about-to-be-hit-by-player(arg_2, 30)) {
+            var_2 = facing-angle-in-range?(arg_2, arg_3, -30.00, 30.00, 0);
+        }
+    }
+    return var_2;
+}
+
 u64? abby-OoB-grab(u64? arg_0, u64? arg_1) {
     return locator-in-region?(get-object-locator(arg_1), rgn-orient-to-center-1, player) && npc-struggle-cooldown-func(arg_0, arg_1, 3.00, 10.00, 0);
+}
+
+u64? *melee-behavior-buddy-stealth-openers*__melee-attack-behavior@22588
+*buddy-vs-npc-test-stealth-kill-behaviors*__melee-attack-behavior-list@2b30
+embedded@28218(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return npc-buddy-should-perform-quiet-stealth-kill?(arg_2) && !melee-character-bit-check(arg_3, #0000000046200000) && !melee-fact-get-bool(arg_3, is-boss);
+}
+
+u64? *melee-behavior-buddy-stealth-openers*
+*buddy-vs-npc-test-stealth-kill-behaviors*
+embedded@25d10(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return characters-in-melee?(player, arg_3, 1) && any-character-in-struggle-with-player?();
+}
+
+u64? *npc-pistol-melee-behaviors*
+embedded@26870(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return facing-point-xz?(get-object-locator(arg_2), get-object-locator(arg_3), 90.00) && has-line-of-motion?(arg_2, vector-scale(-1.50, get-local-z(get-object-rotation(arg_2))), 0.00, 0, 0);
+}
+
+u64? *enemy-abby-grapple-attack-behavior*__melee-attack-behavior@2840
+embedded@165c8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return melee-fact-get-time-since(arg_2, parry-sync) > 2.50 && npc-struggle-cooldown-func(arg_2, arg_3, 15.00, 30.00, 0) && !(get-script-state(ss-san-beach-fight-abby-gesture-controller-1) == running-gestures) && !abby-OoB-grab(arg_2, arg_3);
+}
+
+u64? *enemy-abby-grapple-attack-behavior*
+embedded@20dc8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return npc-struggle-cooldown-func(arg_2, arg_3, 15.00, 30.00, 1) && abby-OoB-grab(arg_2, arg_3);
+}
+
+u64? *npc-infected-runner-vs-player-melee-behaviors*
+*npc-infected-runner-vs-player-grab-only-behaviors*
+*npc-infected-runner-horde-vs-player-melee-behaviors*
+*default-standing-grapple-attack-behavior*__melee-attack-behavior@12a08
+embedded@26048(u64? arg_0, u64? arg_1, u64? arg_2, sid arg_3) {
+    return is-player-base?(arg_3) && !melee-fact-get-bool(arg_2, disable-grabs) && npc-struggle-cooldown-func(arg_2, arg_3, 15.00, 30.00, 0) && !character-in-struggle?(arg_3, 16) && !character-in-finisher?(arg_3) && !character-in-brute-throw?(arg_3) && melee-fact-get-time-since(arg_3, last-time-in-prone-struggle) > 5.00 && arg_3 == player && melee-fact-get-time-since(player, time-since-buddy-grabbed) > 20.00;
+}
+
+u64? *npc-infected-runner-vs-player-melee-behaviors*
+*npc-infected-runner-horde-vs-player-melee-behaviors*
+embedded@286b8(u64? arg_0, u64? arg_1, bool arg_2, bool arg_3) {
+    u64? var_0 = get-object-distance(arg_2, arg_3);
+    bool var_1 = !(arg_2 == 0) && !(arg_3 == 0) && var_0 < 3.00 && var_0 > 6.00;
+    u64? var_5;
+    if (var_1) {
+        var_5 = boxed_symbol(true);
+    } else {
+        var_5 = boxed_symbol(false);
+    }
+    do-melee-log(
+        "characters-in-range? [[f]] [[f]] [[f]] [[s]]",
+        boxed_f32(var_0),
+        boxed_f32(6.00),
+        boxed_f32(3.00),
+        var_5
+    );
+    return !(var_1);
+}
+
+u64? *npc-infected-clicker-vs-human-melee-behaviors*
+embedded@26be0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return npc-has-awareness?(arg_2, arg_3, 2) || distance-between-objects-less-than?(arg_2, arg_3, 10.00) || has-line-of-motion-to-object?(arg_2, arg_3, 0.30, 0, 0) && melee-corner-line-of-motion?(arg_2, arg_3, 1.50);
+}
+
+u64? *npc-infected-clicker-vs-human-melee-behaviors*
+embedded@278e0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return melee-fact-get-time-since(arg_2, frenzy-timer) > 3.00 && 1;
+}
+
+u64? *npc-infected-clicker-vs-human-melee-behaviors*
+embedded@27e10(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    melee-fact-set-bool(arg_2, frenzy-announce-ready, 1);
+    return melee-fact-set-time(arg_2, frenzy-timer);
+}
+
+u64? *enemy-abby-vs-player-phase-3-attack-behaviors*
+embedded@24cf0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return npc-struggle-cooldown-func(arg_2, arg_3, 10.00, 60.00, 0);
+}
+
+u64? *enemy-abby-vs-player-phase-3-attack-behaviors*
+embedded@265b0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return npc-struggle-cooldown-func(arg_2, arg_3, 10.00, 60.00, 1);
+}
+
+u16 *npc-brute-pickaxe-melee-behaviors*__melee-attack-behavior-list@2b90
+embedded@25f10(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    u16 var_1;
+    if (is-player?(arg_3)) {
+        var_1 = !player-in-prone-hiding-region?() && !character-in-struggle?(arg_3, 8);
+    } else {
+        var_1 = 1;
+    }
+    return var_1;
+}
+
+u16 *npc-brute-pickaxe-melee-behaviors*
+embedded@250a8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    u16 var_1;
+    if (is-player?(arg_3)) {
+        var_1 = player-in-prone-hiding-region?() && character-in-struggle?(arg_3, 8);
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u64? *npc-brute-pickaxe-melee-behaviors*
+*npc-brute-pickaxe-melee-behaviors*
+*npc-brute-pickaxe-melee-behaviors*
+embedded@252b8(u64? arg_0, u64? arg_1, sid arg_2, u64? arg_3) {
+    melee-fact-set-float(arg_2, time-being-aimed-at, 0.00);
+    melee-fact-set-float(arg_2, time-player-too-close, 0.00);
+    u64? var_0;
+    if (arg_2 == npc-afm-burning-village-collapse-brute-1) {
+        melee-fact-set-float(arg_2, base-hit-cooldown, random-float-range(1.00, 2.00, 0));
+        var_0 = melee-fact-set-float(arg_2, base-swing-cooldown, random-float-range(0.75, 1.50, 0));
+    } else if (arg_2 == npc-ski-scar-sledgehammer-1) {
+        melee-fact-set-float(arg_2, base-hit-cooldown, random-float-range(2.00, 5.00, 0));
+        var_0 = melee-fact-set-float(arg_2, base-swing-cooldown, random-float-range(2.00, 3.50, 0));
+    } else {
+        melee-fact-set-float(arg_2, base-hit-cooldown, random-float-range(3.00 * *(f32*)(get-difficulty-detail-enemies() + 68), 7.00 * *(f32*)(get-difficulty-detail-enemies() + 68), 0));
+        var_0 = melee-fact-set-float(arg_2, base-swing-cooldown, random-float-range(2.50 * *(f32*)(get-difficulty-detail-enemies() + 68), 4.50 * *(f32*)(get-difficulty-detail-enemies() + 68), 0));
+    }
+    return var_0;
+}
+
+u64? *npc-brute-pickaxe-melee-behaviors*
+*npc-brute-pickaxe-melee-behaviors*
+*npc-brute-pickaxe-melee-behaviors*
+embedded@26710(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    melee-fact-set-bool(arg_2, in-motion-match-melee-tell, 0);
+    return fact-remove(arg_2, brute-tell-vox-broadcast);
+}
+
+u16 *npc-brute-pickaxe-melee-behaviors*
+*npc-brute-pickaxe-melee-behaviors*
+*npc-brute-pickaxe-melee-behaviors*
+embedded@280e0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    behavior-motion-match-tell-fact-set(arg_2, arg_0);
+    behavior-motion-match-tell-vox(arg_2, vox-eff-gen-breath-fight-growl, 0.10, 0.20, 0.30, 0.60);
+    u16 var_2;
+    if (!melee-fact-get-bool(arg_2, brute-tell-vox-broadcast) && melee-fact-get-bool(arg_2, in-motion-match-melee-tell)) {
+        request-dialog(ai-enemy-melee-fight-charge, arg_2, arg_3, 0, 0, 0, 0);
+        melee-fact-set-bool(arg_2, brute-tell-vox-broadcast, 1);
+        var_2 = broadcast-event(brute-tell-vox, boxed_symbol(arg_2));
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u64? *npc-brute-pickaxe-melee-behaviors*
+embedded@24d48(u64? arg_0, u64? arg_1, bool arg_2, bool arg_3) {
+    u64? var_5;
+    if (!is-player?(arg_3) && !player-in-prone-hiding-region?() && npc-get-motion-type(arg_2) == 1 && melee-fact-get-time-since(arg_2, last-swing) > melee-fact-get-float(arg_2, base-swing-cooldown)) {
+        melee-fact-set-float(arg_2, time-being-aimed-at, melee-fact-get-float(arg_2, time-being-aimed-at) + get-delta-time());
+        var_5 = melee-fact-get-time-since(arg_2, last-hit) > melee-fact-get-float(arg_2, base-hit-cooldown) && player-is-aiming-firearm-at-npc?(arg_2) && melee-fact-get-float(arg_2, time-being-aimed-at) > 1.00 && 1;
+    } else {
+        u16 var_14;
+        if (player-is-aiming-firearm-at-npc?(arg_2)) {
+            melee-fact-set-float(arg_2, time-being-aimed-at, melee-fact-get-float(arg_2, time-being-aimed-at) + get-delta-time());
+            if (melee-fact-get-float(arg_2, time-being-aimed-at) > 1.00) {
+                var_14 = 1;
+            } else {
+                var_14 = 0;
+            }
+        } else {
+            var_14 = 0;
+        }
+        var_5 = var_14 && player-is-aiming-firearm-at-npc?(arg_2) && joypad-command-active?(fire-press, 6) && 1;
+    }
+    return var_5;
+}
+
+u64? *npc-brute-pickaxe-melee-behaviors*
+embedded@26278(u64? arg_0, u64? arg_1, bool arg_2, bool arg_3) {
+    u64? var_4;
+    if (!is-player?(arg_3) && !player-in-prone-hiding-region?() && 1 && melee-fact-get-time-since(arg_2, last-swing) > melee-fact-get-float(arg_2, base-swing-cooldown)) {
+        melee-fact-set-float(arg_2, time-being-aimed-at, melee-fact-get-float(arg_2, time-being-aimed-at) + get-delta-time());
+        var_4 = melee-fact-get-time-since(arg_2, last-hit) > melee-fact-get-float(arg_2, base-hit-cooldown) && player-is-aiming-firearm-at-npc?(arg_2) && melee-fact-get-float(arg_2, time-being-aimed-at) > 1.00 && 1;
+    } else {
+        u16 var_13;
+        if (player-is-aiming-firearm-at-npc?(arg_2)) {
+            melee-fact-set-float(arg_2, time-being-aimed-at, melee-fact-get-float(arg_2, time-being-aimed-at) + get-delta-time());
+            if (melee-fact-get-float(arg_2, time-being-aimed-at) > 1.00) {
+                var_13 = 1;
+            } else {
+                var_13 = 0;
+            }
+        } else {
+            var_13 = 0;
+        }
+        var_4 = var_13 && player-is-aiming-firearm-at-npc?(arg_2) && joypad-command-active?(fire-press, 6) && 1;
+    }
+    return var_4;
+}
+
+u64? *npc-brute-pickaxe-melee-behaviors*
+embedded@25a28(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_2;
+    if (!is-player?(arg_3) && !player-in-prone-hiding-region?()) {
+        var_2 = !melee-fact-get-bool(arg_2, disable-unreachable-behavior);
+    }
+    return var_2;
+}
+
+u64? *npc-brute-pickaxe-melee-behaviors*
+embedded@26398(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return melee-fact-get-bool(arg_2, disable-unreachable-behavior) && is-player?(arg_3) && player-in-prone-hiding-region?();
+}
+
+u64? *npc-brute-pickaxe-melee-behaviors*
+embedded@25460(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return !is-player?(arg_3) && !player-in-prone-hiding-region?();
 }
 

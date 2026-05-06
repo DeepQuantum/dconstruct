@@ -11,73 +11,73 @@
 // #                                                                                                  #
 // ####################################################################################################
 
-u16 #554E73457874DC42__array*@120__#1B522DD6D3F9A40F@268__
-#554E73457874DC42__#1B522DD6D3F9A40F@4e8
-#8A625B0D266459C4__array*@148__#BC16B7CB059C4989@4b0__
-#8A625B0D266459C4__#BC16B7CB059C4989@450
-#8A625B0D266459C4__#BC16B7CB059C4989@540
-#8A625B0D266459C4__#BC16B7CB059C4989@690
-#8A625B0D266459C4__#BC16B7CB059C4989@740
-#8A625B0D266459C4__#BC16B7CB059C4989@778
-#DFA548032DA8ABF0__array*@190__#8CD3605A755D71F5@7b0__
-#DFA548032DA8ABF0__#8CD3605A755D71F5@488
-#DFA548032DA8ABF0__#8CD3605A755D71F5@6c8
-#DFA548032DA8ABF0__#8CD3605A755D71F5@2c0
-#DFA548032DA8ABF0__#8CD3605A755D71F5@3d8
-#DFA548032DA8ABF0__#8CD3605A755D71F5@518
-#DFA548032DA8ABF0__#8CD3605A755D71F5@298
-#DFA548032DA8ABF0__#8CD3605A755D71F5@428
-#DFA548032DA8ABF0__#8CD3605A755D71F5@360
-#DFA548032DA8ABF0__#8CD3605A755D71F5@310
-#DFA548032DA8ABF0__#8CD3605A755D71F5@640
-#DFA548032DA8ABF0__#8CD3605A755D71F5@668
-#DFA548032DA8ABF0__#8CD3605A755D71F5@5a0
-#DFA548032DA8ABF0__#8CD3605A755D71F5@5c8
-#DFA548032DA8ABF0__#8CD3605A755D71F5@578
-#DFA548032DA8ABF0__#8CD3605A755D71F5@3b0
-#DFA548032DA8ABF0__#8CD3605A755D71F5@388
-#DFA548032DA8ABF0__#8CD3605A755D71F5@718
-#DFA548032DA8ABF0__#8CD3605A755D71F5@338
-#DFA548032DA8ABF0__#8CD3605A755D71F5@5f0
-#DFA548032DA8ABF0__#8CD3605A755D71F5@6f0
-#DFA548032DA8ABF0__#8CD3605A755D71F5@400
-#DFA548032DA8ABF0__#8CD3605A755D71F5@618
-#DFA548032DA8ABF0__#8CD3605A755D71F5@2e8
+u16 *rogue-hubs*__array*@120__rogue-hub@268__
+*rogue-hubs*__rogue-hub@4e8
+*rogue-boss-encounters*__array*@148__rogue-boss-encounter@4b0__
+*rogue-boss-encounters*__rogue-boss-encounter@450
+*rogue-boss-encounters*__rogue-boss-encounter@540
+*rogue-boss-encounters*__rogue-boss-encounter@690
+*rogue-boss-encounters*__rogue-boss-encounter@740
+*rogue-boss-encounters*__rogue-boss-encounter@778
+*rogue-encounters*__array*@190__rogue-encounter@7b0__
+*rogue-encounters*__rogue-encounter@488
+*rogue-encounters*__rogue-encounter@6c8
+*rogue-encounters*__rogue-encounter@2c0
+*rogue-encounters*__rogue-encounter@3d8
+*rogue-encounters*__rogue-encounter@518
+*rogue-encounters*__rogue-encounter@298
+*rogue-encounters*__rogue-encounter@428
+*rogue-encounters*__rogue-encounter@360
+*rogue-encounters*__rogue-encounter@310
+*rogue-encounters*__rogue-encounter@640
+*rogue-encounters*__rogue-encounter@668
+*rogue-encounters*__rogue-encounter@5a0
+*rogue-encounters*__rogue-encounter@5c8
+*rogue-encounters*__rogue-encounter@578
+*rogue-encounters*__rogue-encounter@3b0
+*rogue-encounters*__rogue-encounter@388
+*rogue-encounters*__rogue-encounter@718
+*rogue-encounters*__rogue-encounter@338
+*rogue-encounters*__rogue-encounter@5f0
+*rogue-encounters*__rogue-encounter@6f0
+*rogue-encounters*__rogue-encounter@400
+*rogue-encounters*__rogue-encounter@618
+*rogue-encounters*__rogue-encounter@2e8
 embedded@9d0() {
     return 1;
 }
 
-u16 #DFA548032DA8ABF0__array*@190__array*@a28____#C1AFED25FB40D16B@da0__
-#DFA548032DA8ABF0__array*@190__#C1AFED25FB40D16B@da0__
-#DFA548032DA8ABF0__#C1AFED25FB40D16B@11c8
-#DFA548032DA8ABF0__array*@a58__#C1AFED25FB40D16B@1430__
-#DFA548032DA8ABF0__#C1AFED25FB40D16B@f60
-#DFA548032DA8ABF0__array*@8f8__#C1AFED25FB40D16B@f28__
-#DFA548032DA8ABF0__#C1AFED25FB40D16B@f28
-#DFA548032DA8ABF0__#C1AFED25FB40D16B@e48
-#DFA548032DA8ABF0__array*@9b8__#C1AFED25FB40D16B@c50__
-#DFA548032DA8ABF0__#C1AFED25FB40D16B@c50
-#DFA548032DA8ABF0__#C1AFED25FB40D16B@14d8
-#DFA548032DA8ABF0__array*@880__#C1AFED25FB40D16B@e80__
-#DFA548032DA8ABF0__#C1AFED25FB40D16B@e80
-#DFA548032DA8ABF0__array*@8c8__#C1AFED25FB40D16B@13f8__
-#DFA548032DA8ABF0__#C1AFED25FB40D16B@13f8
-#DFA548032DA8ABF0__#C1AFED25FB40D16B@1318
-#DFA548032DA8ABF0__array*@910__#C1AFED25FB40D16B@1270__
-#DFA548032DA8ABF0__#C1AFED25FB40D16B@1270
-#DFA548032DA8ABF0__#C1AFED25FB40D16B@dd8
-#DFA548032DA8ABF0__#C1AFED25FB40D16B@1238
-#DFA548032DA8ABF0__array*@928__#C1AFED25FB40D16B@12a8__
-#DFA548032DA8ABF0__#C1AFED25FB40D16B@12a8
-#DFA548032DA8ABF0__#C1AFED25FB40D16B@12e0
-#DFA548032DA8ABF0__#C1AFED25FB40D16B@c88
-#DFA548032DA8ABF0__array*@850__#C1AFED25FB40D16B@1510__
-#DFA548032DA8ABF0__#C1AFED25FB40D16B@1510
-#DFA548032DA8ABF0__array*@a40__#C1AFED25FB40D16B@1200__
-#DFA548032DA8ABF0__#C1AFED25FB40D16B@1200
-#DFA548032DA8ABF0__#C1AFED25FB40D16B@1350
-#DFA548032DA8ABF0__array*@898__#C1AFED25FB40D16B@1008__
-#DFA548032DA8ABF0__#C1AFED25FB40D16B@1008
+u16 *rogue-encounters*__array*@190__array*@a28____rogue-mode-definition@da0__
+*rogue-encounters*__array*@190__rogue-mode-definition@da0__
+*rogue-encounters*__rogue-mode-definition@11c8
+*rogue-encounters*__array*@a58__rogue-mode-definition@1430__
+*rogue-encounters*__rogue-mode-definition@f60
+*rogue-encounters*__array*@8f8__rogue-mode-definition@f28__
+*rogue-encounters*__rogue-mode-definition@f28
+*rogue-encounters*__rogue-mode-definition@e48
+*rogue-encounters*__array*@9b8__rogue-mode-definition@c50__
+*rogue-encounters*__rogue-mode-definition@c50
+*rogue-encounters*__rogue-mode-definition@14d8
+*rogue-encounters*__array*@880__rogue-mode-definition@e80__
+*rogue-encounters*__rogue-mode-definition@e80
+*rogue-encounters*__array*@8c8__rogue-mode-definition@13f8__
+*rogue-encounters*__rogue-mode-definition@13f8
+*rogue-encounters*__rogue-mode-definition@1318
+*rogue-encounters*__array*@910__rogue-mode-definition@1270__
+*rogue-encounters*__rogue-mode-definition@1270
+*rogue-encounters*__rogue-mode-definition@dd8
+*rogue-encounters*__rogue-mode-definition@1238
+*rogue-encounters*__array*@928__rogue-mode-definition@12a8__
+*rogue-encounters*__rogue-mode-definition@12a8
+*rogue-encounters*__rogue-mode-definition@12e0
+*rogue-encounters*__rogue-mode-definition@c88
+*rogue-encounters*__array*@850__rogue-mode-definition@1510__
+*rogue-encounters*__rogue-mode-definition@1510
+*rogue-encounters*__array*@a40__rogue-mode-definition@1200__
+*rogue-encounters*__rogue-mode-definition@1200
+*rogue-encounters*__rogue-mode-definition@1350
+*rogue-encounters*__array*@898__rogue-mode-definition@1008__
+*rogue-encounters*__rogue-mode-definition@1008
 embedded@1580() {
     return 1;
 }

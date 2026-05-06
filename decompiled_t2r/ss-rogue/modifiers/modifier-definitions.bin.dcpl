@@ -11,76 +11,76 @@
 // #                                                                                                  #
 // ####################################################################################################
 
-u16 #41B3BE8A1DF05B76__array@420
-#41B3BE8A1DF05B76
-#41B3BE8A1DF05B76
-#41B3BE8A1DF05B76
-#41B3BE8A1DF05B76
-#41B3BE8A1DF05B76
-#41B3BE8A1DF05B76
-#41B3BE8A1DF05B76
-#41B3BE8A1DF05B76
-#41B3BE8A1DF05B76
-#41B3BE8A1DF05B76
-#41B3BE8A1DF05B76
-#41B3BE8A1DF05B76
-#41B3BE8A1DF05B76
-#41B3BE8A1DF05B76
-#41B3BE8A1DF05B76
-#41B3BE8A1DF05B76
-#41B3BE8A1DF05B76
-#41B3BE8A1DF05B76
-#41B3BE8A1DF05B76
-#41B3BE8A1DF05B76
-#41B3BE8A1DF05B76
-#41B3BE8A1DF05B76
-#41B3BE8A1DF05B76
-#41B3BE8A1DF05B76
-#41B3BE8A1DF05B76
-#41B3BE8A1DF05B76
-#41B3BE8A1DF05B76
-#41B3BE8A1DF05B76
-#41B3BE8A1DF05B76
-#41B3BE8A1DF05B76
-#41B3BE8A1DF05B76
-#41B3BE8A1DF05B76
-#41B3BE8A1DF05B76
-#41B3BE8A1DF05B76
-#41B3BE8A1DF05B76
-#41B3BE8A1DF05B76
-#41B3BE8A1DF05B76
+u16 *t2r-skulls-array*__array@420
+*t2r-skulls-array*
+*t2r-skulls-array*
+*t2r-skulls-array*
+*t2r-skulls-array*
+*t2r-skulls-array*
+*t2r-skulls-array*
+*t2r-skulls-array*
+*t2r-skulls-array*
+*t2r-skulls-array*
+*t2r-skulls-array*
+*t2r-skulls-array*
+*t2r-skulls-array*
+*t2r-skulls-array*
+*t2r-skulls-array*
+*t2r-skulls-array*
+*t2r-skulls-array*
+*t2r-skulls-array*
+*t2r-skulls-array*
+*t2r-skulls-array*
+*t2r-skulls-array*
+*t2r-skulls-array*
+*t2r-skulls-array*
+*t2r-skulls-array*
+*t2r-skulls-array*
+*t2r-skulls-array*
+*t2r-skulls-array*
+*t2r-skulls-array*
+*t2r-skulls-array*
+*t2r-skulls-array*
+*t2r-skulls-array*
+*t2r-skulls-array*
+*t2r-skulls-array*
+*t2r-skulls-array*
+*t2r-skulls-array*
+*t2r-skulls-array*
+*t2r-skulls-array*
+*t2r-skulls-array*
 embedded@1f40() {
     return 1;
 }
 
-u16 #41B3BE8A1DF05B76
-#41B3BE8A1DF05B76
-#41B3BE8A1DF05B76
-#41B3BE8A1DF05B76
-#41B3BE8A1DF05B76
-#41B3BE8A1DF05B76
-#41B3BE8A1DF05B76
-#41B3BE8A1DF05B76
-#41B3BE8A1DF05B76
-#41B3BE8A1DF05B76
-#41B3BE8A1DF05B76
-#41B3BE8A1DF05B76
-#41B3BE8A1DF05B76
-#41B3BE8A1DF05B76
-#41B3BE8A1DF05B76
-#41B3BE8A1DF05B76
-#41B3BE8A1DF05B76
-#41B3BE8A1DF05B76
-#41B3BE8A1DF05B76
-#41B3BE8A1DF05B76
-#41B3BE8A1DF05B76
-#41B3BE8A1DF05B76
-#41B3BE8A1DF05B76
+u16 *t2r-skulls-array*
+*t2r-skulls-array*
+*t2r-skulls-array*
+*t2r-skulls-array*
+*t2r-skulls-array*
+*t2r-skulls-array*
+*t2r-skulls-array*
+*t2r-skulls-array*
+*t2r-skulls-array*
+*t2r-skulls-array*
+*t2r-skulls-array*
+*t2r-skulls-array*
+*t2r-skulls-array*
+*t2r-skulls-array*
+*t2r-skulls-array*
+*t2r-skulls-array*
+*t2r-skulls-array*
+*t2r-skulls-array*
+*t2r-skulls-array*
+*t2r-skulls-array*
+*t2r-skulls-array*
+*t2r-skulls-array*
+*t2r-skulls-array*
 embedded@1820() {
     return 0;
 }
 
-u16 #41B3BE8A1DF05B76
+u16 *t2r-skulls-array*
 embedded@19d0(u64? arg_0) {
     u64? var_0 = ddict-get(arg_0, id);
     u16 var_1;
@@ -93,11 +93,11 @@ embedded@19d0(u64? arg_0) {
     } else {
         var_1 = 0;
     }
-    u64? var_2 = #A0A407DE75286E0C();
+    u64? var_2 = custom-run--get-blacklisted-photo-filters();
     u64? var_3 = darray-create(single-frame, -1, 0);
     u64 i = 0;
-    while (i < *(i32*)(#703BB32FFBDF36A4 + 8)) {
-        darray-append(var_3, boxed_symbol(*(u64*)(*#703BB32FFBDF36A4 + (i * 8))), 0);
+    while (i < *(i32*)(*skull-photo-mode-filter-rs* + 8)) {
+        darray-append(var_3, boxed_symbol(*(u64*)(**skull-photo-mode-filter-rs* + (i * 8))), 0);
         i = i + 1;
     }
     if (darray-count(var_2) > 0) {
@@ -105,8 +105,8 @@ embedded@19d0(u64? arg_0) {
             darray-find-remove(var_3, boxed_symbol(var_9), 0);
         }
     }
-    if (ddict-contains-key?(#84C40C92E0E9084B, var_1)) {
-        u64? var_13 = ddict-get(#84C40C92E0E9084B, var_1);
+    if (ddict-contains-key?(ddict-encounters-filter-blacklist, var_1)) {
+        u64? var_13 = ddict-get(ddict-encounters-filter-blacklist, var_1);
         u16 var_14;
         if (var_13 && *(u16*)(var_13 + 12) == 7) {
             var_14 = *(u64*)var_13;
@@ -132,12 +132,12 @@ embedded@19d0(u64? arg_0) {
     return var_21;
 }
 
-bool #41B3BE8A1DF05B76
+bool *t2r-skulls-array*
 embedded@1d80() {
-    return darray-count(#CABD290A43FCCD41()) < *(i32*)(#703BB32FFBDF36A4 + 8);
+    return darray-count(custom-run--get-blacklisted-photo-filters-ui()) < *(i32*)(*skull-photo-mode-filter-rs* + 8);
 }
 
-u64? #41B3BE8A1DF05B76
+u64? *t2r-skulls-array*
 embedded@1dd8(u64? arg_0) {
     u64? var_0 = ddict-get(arg_0, id);
     u16 var_1;
@@ -150,21 +150,21 @@ embedded@1dd8(u64? arg_0) {
     } else {
         var_1 = 0;
     }
-    return darray-contains?(#570D9E610271B786, boxed_symbol(var_1));
+    return darray-contains?(grp-tripwire-ids, boxed_symbol(var_1));
 }
 
-u64? #41B3BE8A1DF05B76
-#41B3BE8A1DF05B76
+u64? *t2r-skulls-array*
+*t2r-skulls-array*
 embedded@1920(u64? arg_0) {
     return darray-contains?(arg_0, boxed_symbol(enemy-increased-speed));
 }
 
-u64? #41B3BE8A1DF05B76
+u64? *t2r-skulls-array*
 embedded@1be8(u64? arg_0) {
     return darray-contains?(arg_0, boxed_symbol(enemy-increased-health)) && darray-contains?(arg_0, boxed_symbol(enemy-decreased-health));
 }
 
-u64? #41B3BE8A1DF05B76
+u64? *t2r-skulls-array*
 embedded@1f98(u64? arg_0) {
     u64? var_0 = ddict-get(arg_0, id);
     u16 var_1;
@@ -177,11 +177,11 @@ embedded@1f98(u64? arg_0) {
     } else {
         var_1 = 0;
     }
-    return ddict-contains-key?(#F3805936341FF11C, var_1);
+    return ddict-contains-key?(ddict-fog-id-rs, var_1);
 }
 
-bool #41B3BE8A1DF05B76
-#41B3BE8A1DF05B76
+bool *t2r-skulls-array*
+*t2r-skulls-array*
 embedded@1e48(u64? arg_0) {
     u64? var_0 = ddict-get(arg_0, mode);
     u16 var_1;
@@ -203,23 +203,23 @@ embedded@1e48(u64? arg_0) {
     return var_1 == 0;
 }
 
-u64? #41B3BE8A1DF05B76
-#41B3BE8A1DF05B76
+u64? *t2r-skulls-array*
+*t2r-skulls-array*
 embedded@1c98() {
-    return #CA924EF44CF427F4();
+    return custom-run--is-assault-mode-enabled-ui?();
 }
 
-u64? #41B3BE8A1DF05B76
+u64? *t2r-skulls-array*
 embedded@1978(u64? arg_0) {
-    u64? var_1 = ddict-get(arg_0, #C75BAA1ECD8545B3);
-    return ddict-contains-key?(arg_0, #C75BAA1ECD8545B3) && var_1 && var_1 && var_1;
+    u64? var_1 = ddict-get(arg_0, faction-enum);
+    return ddict-contains-key?(arg_0, faction-enum) && var_1 && var_1 && var_1;
 }
 
-u16 #41B3BE8A1DF05B76
-#41B3BE8A1DF05B76
+u16 *t2r-skulls-array*
+*t2r-skulls-array*
 embedded@1ee8() {
     u16 var_2;
-    foreach (u64? var_3 : #0EB86C87ADEB07D8()) {
+    foreach (u64? var_3 : custom-run--get-blacklisted-factions-ui()) {
         u16 var_4;
         if (var_3 && *(u16*)(var_3 + 12) == 1) {
             var_4 = *(u8*)var_3;
@@ -245,21 +245,21 @@ embedded@1ee8() {
     return var_2;
 }
 
-u64? #41B3BE8A1DF05B76
+u64? *t2r-skulls-array*
 embedded@1c40(u64? arg_0) {
-    u64? var_1 = ddict-get(arg_0, #C75BAA1ECD8545B3);
-    return ddict-contains-key?(arg_0, #C75BAA1ECD8545B3) && var_1 && var_1 && var_1;
+    u64? var_1 = ddict-get(arg_0, faction-enum);
+    return ddict-contains-key?(arg_0, faction-enum) && var_1 && var_1 && var_1;
 }
 
-u64? #41B3BE8A1DF05B76
+u64? *t2r-skulls-array*
 embedded@1d10(u64? arg_0) {
-    u64? var_1 = ddict-get(arg_0, #C75BAA1ECD8545B3);
-    return ddict-contains-key?(arg_0, #C75BAA1ECD8545B3) && var_1 && var_1 && var_1;
+    u64? var_1 = ddict-get(arg_0, faction-enum);
+    return ddict-contains-key?(arg_0, faction-enum) && var_1 && var_1 && var_1;
 }
 
-u64? #41B3BE8A1DF05B76
+u64? *t2r-skulls-array*
 embedded@17c8() {
-    u64? var_0 = #0EB86C87ADEB07D8();
-    return !(darray-contains?(var_0, boxed_i32(0))) || !(darray-contains?(var_0, boxed_i32(1))) && !(darray-contains?(var_0, boxed_i32(2))) && get-svar-as-boolean(#CB0D0922BA03D928);
+    u64? var_0 = custom-run--get-blacklisted-factions-ui();
+    return !(darray-contains?(var_0, boxed_i32(0))) || !(darray-contains?(var_0, boxed_i32(1))) && !(darray-contains?(var_0, boxed_i32(2))) && get-svar-as-boolean(enemy-unlock-rattlers);
 }
 

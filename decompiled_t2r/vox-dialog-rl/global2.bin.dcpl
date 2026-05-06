@@ -4,7 +4,7 @@
 // #   listing for file: game_dumps/t2r/dc1/vox-dialog-rl\global2.bin                                 #
 // #   filesize: 2156355 bytes                                                                        #
 // #   total entries: 131                                                                             #
-// #   functions: 26                                                                                  #
+// #   functions: 29                                                                                  #
 // #   has state script: false                                                                        #
 // #   game type: t2r                                                                                 #
 // #   optimizations enabled: true                                                                    #
@@ -91,6 +91,30 @@ u64? task-range-active-joe-school-fight?() {
 
 u64? militia-investigating?() {
     return !(faction-investigating?(3));
+}
+
+u64? vox-remap-global-enemy-story-santa-barbara__vox-remap-module-def@2918__vox-remap-def@15630____vox-link-def@69c10__
+vox-remap-global-enemy-story-santa-barbara__vox-remap-def@15630__vox-link-def@69c10__
+vox-remap-global-enemy-story-santa-barbara__vox-remap-def@15630__vox-link-def@69c10__
+vox-remap-global-enemy-story-santa-barbara__vox-remap-def@15630__vox-link-def@69c10__
+embedded@125488() {
+    return gesture_(role(speaker), npc-talk-head-strong-gesture, alloc-gesture-play-params());
+}
+
+u64? vox-remap-global-enemy-story-santa-barbara__vox-remap-def@16070__vox-link-def@6b8f0__
+vox-remap-global-enemy-story-santa-barbara__vox-remap-def@16070__vox-link-def@6b8f0__
+vox-remap-global-enemy-story-santa-barbara__vox-remap-def@16070__vox-link-def@6b8f0__
+vox-remap-global-enemy-story-santa-barbara__vox-remap-def@16070__vox-link-def@6b8f0__
+embedded@126640() {
+    return gesture_(role(speaker), npc-talk-head-strong-2-gesture, alloc-gesture-play-params());
+}
+
+u64? vox-remap-global-enemy-story-santa-barbara__vox-remap-def@16ef0__vox-link-def@6e0d0__
+vox-remap-global-enemy-story-santa-barbara__vox-remap-def@16ef0__vox-link-def@6e0d0__
+vox-remap-global-enemy-story-santa-barbara__vox-remap-def@16ef0__vox-link-def@6e0d0__
+vox-remap-global-enemy-story-santa-barbara__vox-remap-def@16ef0__vox-link-def@6e0d0__
+embedded@127e28() {
+    return gesture_(role(speaker), npc-talk-head-right-strong-gesture, alloc-gesture-play-params());
 }
 
 u64? fight-ruins-combat?() {

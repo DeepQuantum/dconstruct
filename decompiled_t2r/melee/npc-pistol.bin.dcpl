@@ -516,7 +516,7 @@ embedded@560(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? ar
                 if (player-in-meatshield?() && player-get-meatshield() == arg_2) {
                     if (is-in-front?(get-object-locator(arg_2), get-object-locator(arg_1), 2, 180.00) && is-in-front?(get-object-locator(arg_1), get-object-locator(arg_2), 2, 180.00)) {
                         if (!is-final-build?()) {
-                            display(#5445173390656D6D("END PLAYER MEATSHIELD DUE TO CLICKER MEATSHIELD CASE"), 19);
+                            display(dc:format("END PLAYER MEATSHIELD DUE TO CLICKER MEATSHIELD CASE"), 19);
                         }
                         log-event("clicker-ate-meatshield-npc", 1, "", 0, 0);
                         player-end-meatshield();

@@ -4,7 +4,7 @@
 // #   listing for file: game_dumps/t2r/dc1/anim-player\player-drive.bin                              #
 // #   filesize: 34357 bytes                                                                          #
 // #   total entries: 1                                                                               #
-// #   functions: 31                                                                                  #
+// #   functions: 32                                                                                  #
 // #   has state script: false                                                                        #
 // #   game type: t2r                                                                                 #
 // #   optimizations enabled: true                                                                    #
@@ -15,6 +15,48 @@ u64 anim-player-drive-states__actor-state-list@48__anim-node-animation@1cb8__
 anim-player-drive-states__anim-node-animation@1cb8
 embedded@4138(u64? arg_0, u64 arg_1, u64? arg_2) {
     return *(u64*)((*arg_1 + 816) + 24);
+}
+
+bool anim-player-drive-states__anim-transition-group@1fb0__anim-transition-condition-lambda@5b50__
+anim-player-drive-states__anim-transition-condition-lambda@5b50
+anim-player-drive-states__anim-transition-group@16b0__anim-transition-condition-lambda@5b50__
+anim-player-drive-states__anim-transition-condition-lambda@5b50
+anim-player-drive-states__anim-transition-group@1ad0__anim-transition-condition-lambda@5b50__
+anim-player-drive-states__anim-transition-condition-lambda@5b50
+anim-player-drive-states__anim-transition-group@1e90__anim-transition-condition-lambda@5b50__
+anim-player-drive-states__anim-transition-condition-lambda@5b50
+embedded@65d0(i32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return *(i32*)((*arg_0 + 816) + 128) == 1;
+}
+
+bool anim-player-drive-states__anim-transition-condition-lambda@5870
+anim-player-drive-states__anim-transition-condition-lambda@5870
+anim-player-drive-states__anim-transition-condition-lambda@5870
+anim-player-drive-states__anim-transition-condition-lambda@5870
+anim-player-drive-states__anim-transition-condition-lambda@5870
+anim-player-drive-states__anim-transition-condition-lambda@5870
+anim-player-drive-states__anim-transition-condition-lambda@5870
+anim-player-drive-states__anim-transition-condition-lambda@5870
+embedded@6738(i32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return *(i32*)((*arg_0 + 816) + 128) == 2;
+}
+
+bool anim-player-drive-states__anim-transition-condition-lambda@5a70
+anim-player-drive-states__anim-transition-condition-lambda@5a70
+anim-player-drive-states__anim-transition-condition-lambda@5a70
+anim-player-drive-states__anim-transition-condition-lambda@5a70
+anim-player-drive-states__anim-transition-condition-lambda@5a70
+anim-player-drive-states__anim-transition-condition-lambda@5a70
+anim-player-drive-states__anim-transition-condition-lambda@5a70
+anim-player-drive-states__anim-transition-condition-lambda@5a70
+embedded@64c8(i32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return *(i32*)((*arg_0 + 816) + 128) == 3;
+}
+
+u64? anim-player-drive-states__anim-transition-condition-lambda@59a0
+anim-player-drive-states__anim-transition-condition-lambda@59a0
+embedded@6b18(u8 arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return *(i32*)((*arg_0 + 816) + 128) == 1 && *(u8*)((*arg_0 + 816) + 176);
 }
 
 u64? anim-player-drive-states
@@ -60,30 +102,6 @@ embedded@1cf0(u64? arg_0, u64 arg_1, u64? arg_2) {
 u64 anim-player-drive-states__anim-node-animation@1b88
 embedded@4fd8(u64? arg_0, u64 arg_1, u64? arg_2) {
     return *(u64*)((*arg_1 + 816) + 200);
-}
-
-bool anim-player-drive-states__anim-transition-group@16b0__anim-transition-condition-lambda@5b50__
-anim-player-drive-states__anim-transition-condition-lambda@5b50
-anim-player-drive-states__anim-transition-group@1e90__anim-transition-condition-lambda@5b50__
-anim-player-drive-states__anim-transition-condition-lambda@5b50
-embedded@65d0(i32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
-    return *(i32*)((*arg_0 + 816) + 128) == 1;
-}
-
-bool anim-player-drive-states__anim-transition-condition-lambda@5870
-anim-player-drive-states__anim-transition-condition-lambda@5870
-anim-player-drive-states__anim-transition-condition-lambda@5870
-anim-player-drive-states__anim-transition-condition-lambda@5870
-embedded@6738(i32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
-    return *(i32*)((*arg_0 + 816) + 128) == 2;
-}
-
-bool anim-player-drive-states__anim-transition-condition-lambda@5a70
-anim-player-drive-states__anim-transition-condition-lambda@5a70
-anim-player-drive-states__anim-transition-condition-lambda@5a70
-anim-player-drive-states__anim-transition-condition-lambda@5a70
-embedded@64c8(i32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
-    return *(i32*)((*arg_0 + 816) + 128) == 3;
 }
 
 u64 anim-player-drive-states
@@ -215,7 +233,7 @@ embedded@7698(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
 
 u64? anim-player-drive-states__anim-node-arm-ik@1ea8__anim-node-blend@4b18____anim-node-animation@5dc8__
 embedded@6808(u64? arg_0, i64 arg_1, u64? arg_2) {
-    return string-to-symbol(#5445173390656D6D("hero-steer-range-right-hand-gearshift-%s--part", *(i64*)((*arg_1 + 816) + 120)));
+    return string-to-symbol(dc:format("hero-steer-range-right-hand-gearshift-%s--part", *(i64*)((*arg_1 + 816) + 120)));
 }
 
 f32 anim-player-drive-states

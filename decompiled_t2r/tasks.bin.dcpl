@@ -4,7 +4,7 @@
 // #   listing for file: game_dumps/t2r/dc1/tasks.bin                                                 #
 // #   filesize: 1657456 bytes                                                                        #
 // #   total entries: 35                                                                              #
-// #   functions: 1                                                                                   #
+// #   functions: 37                                                                                  #
 // #   has state script: false                                                                        #
 // #   game type: t2r                                                                                 #
 // #   optimizations enabled: true                                                                    #
@@ -14,5 +14,1041 @@
 u64? top-level() {
     game-task-graph-login(*task-graph*);
     return update-task-menu();
+}
+
+u16 *task-graph*__game-task-graph@518__map@678____game-task-node@1468____map@3740____game-task-subnode@79010__
+*task-graph*__game-task-graph@518__map@678____game-task-node@1468____game-task-subnode@79228__
+*task-graph*__game-task-graph@518__game-task-subnode@79870__
+*task-graph*__game-task-subnode@79a88
+*task-graph*__game-task-subnode@7a500
+*task-graph*__game-task-subnode@7ad60
+embedded@f2fc0() {
+    u16 var_1;
+    if (task-played-from-dev-menu?()) {
+        var_1 = set-svar(pat-jackson-player-entering-bar, 0);
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 *task-graph*__game-task-graph@518__map@678____game-task-subnode@79440__
+*task-graph*__game-task-subnode@7a0d0
+embedded@eeb58() {
+    u16 var_2;
+    if (task-played-from-dev-menu?() && is-cinematic-select?()) {
+        var_2 = set-svar(pat-jackson-player-entering-bar, 1);
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u64? *task-graph*__game-task-subnode@79eb8
+embedded@fcd20() {
+    return set-svar(pat-jackson-player-entering-bar, 1);
+}
+
+u16 *task-graph*__game-task-node@1568__map@3550____game-task-subnode@3a0f8__
+embedded@10c110() {
+    u16 var_1;
+    if (task-played-from-dev-menu?()) {
+        var_1 = set-svar(fob-explore-alley-manny-note, 0);
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 *task-graph*__game-task-node@1568__game-task-subnode@3e1e0__
+embedded@d50f8() {
+    u16 var_1;
+    if (task-played-from-encounter-selection?()) {
+        if (task-subnode-get-active-continue(task-find(forward-base, fob-hostile-territory-sniper)) == default) {
+            var_1 = set-svar(fob-sniper-load-pre-scars, 0);
+        } else {
+            var_1 = 0;
+        }
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 *task-graph*__game-task-node@17e8__map@38e8____game-task-subnode@491c0__
+*task-graph*__game-task-subnode@495f0
+*task-graph*__game-task-subnode@49808
+*task-graph*__game-task-subnode@4a6b0
+embedded@dc050() {
+    u16 var_1;
+    if (task-played-from-dev-menu?()) {
+        set-svar(joe-player-in-utility-corridor, 0);
+        set-svar(joe-load-corridor-shadow-blocker, 0);
+        set-svar(joe-vent-igc-succeeded, 0);
+        set-svar(joe-school-cubemaps, 0);
+        set-svar(joe-school-corridor-library-cubemaps, 0);
+        set-svar(joe-player-on-roof, 0);
+        var_1 = set-svar(joe-exit-load-wat-wide, 0);
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 *task-graph*__game-task-node@17e8__game-task-subnode@493d8__
+*task-graph*__game-task-subnode@4a498
+embedded@d52e8() {
+    u16 var_1;
+    if (task-played-from-dev-menu?()) {
+        var_1 = set-svar(joe-exit-load-wat-wide, 0);
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 *task-graph*__game-task-subnode@49a20
+*task-graph*__game-task-subnode@49c38
+*task-graph*__game-task-subnode@4a280
+embedded@132048() {
+    u16 var_1;
+    if (task-played-from-dev-menu?()) {
+        var_1 = set-svar(joe-exit-load-wat-wide, 1);
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 *task-graph*__game-task-subnode@49e50
+embedded@cb238() {
+    u16 var_2;
+    if (task-subnode-get-active-continue(task-find(jordan-escape, joe-school-fight)) == default) {
+        set-svar(joe-player-in-utility-corridor, 0);
+        set-svar(joe-load-corridor-shadow-blocker, 0);
+        set-svar(joe-vent-igc-succeeded, 0);
+        set-svar(joe-school-cubemaps, 0);
+        set-svar(joe-school-corridor-library-cubemaps, 0);
+        set-svar(joe-player-on-roof, 0);
+        var_2 = set-svar(joe-exit-load-wat-wide, 0);
+    } else if (task-subnode-get-active-continue(task-find(jordan-escape, joe-school-fight)) == classroom-done) {
+        set-svar(joe-player-in-utility-corridor, 0);
+        set-svar(joe-load-corridor-shadow-blocker, 0);
+        set-svar(joe-vent-igc-succeeded, 0);
+        set-svar(joe-school-cubemaps, 0);
+        set-svar(joe-school-corridor-library-cubemaps, 0);
+        set-svar(joe-player-on-roof, 0);
+        var_2 = set-svar(joe-exit-load-wat-wide, 0);
+    } else if (task-subnode-get-active-continue(task-find(jordan-escape, joe-school-fight)) == corridor-start) {
+        set-svar(joe-player-in-utility-corridor, 0);
+        set-svar(joe-load-corridor-shadow-blocker, 0);
+        set-svar(joe-vent-igc-succeeded, 0);
+        set-svar(joe-school-cubemaps, 0);
+        set-svar(joe-school-corridor-library-cubemaps, 1);
+        set-svar(joe-player-on-roof, 0);
+        var_2 = set-svar(joe-exit-load-wat-wide, 0);
+    } else if (task-subnode-get-active-continue(task-find(jordan-escape, joe-school-fight)) == corridor-combat) {
+        set-svar(joe-player-in-utility-corridor, 0);
+        set-svar(joe-load-corridor-shadow-blocker, 0);
+        set-svar(joe-vent-igc-succeeded, 0);
+        set-svar(joe-school-cubemaps, 0);
+        set-svar(joe-school-corridor-library-cubemaps, 1);
+        set-svar(joe-player-on-roof, 0);
+        var_2 = set-svar(joe-exit-load-wat-wide, 0);
+    } else if (task-subnode-get-active-continue(task-find(jordan-escape, joe-school-fight)) == corridor-done) {
+        set-svar(joe-player-in-utility-corridor, 0);
+        set-svar(joe-load-corridor-shadow-blocker, 0);
+        set-svar(joe-vent-igc-succeeded, 0);
+        set-svar(joe-school-cubemaps, 0);
+        set-svar(joe-school-corridor-library-cubemaps, 1);
+        set-svar(joe-player-on-roof, 0);
+        var_2 = set-svar(joe-exit-load-wat-wide, 0);
+    } else if (task-subnode-get-active-continue(task-find(jordan-escape, joe-school-fight)) == courtyard-start) {
+        set-svar(joe-player-in-utility-corridor, 0);
+        set-svar(joe-load-corridor-shadow-blocker, 0);
+        set-svar(joe-vent-igc-succeeded, 0);
+        set-svar(joe-school-cubemaps, 0);
+        set-svar(joe-school-corridor-library-cubemaps, 0);
+        set-svar(joe-player-on-roof, 0);
+        var_2 = set-svar(joe-exit-load-wat-wide, 0);
+    } else if (task-subnode-get-active-continue(task-find(jordan-escape, joe-school-fight)) == courtyard-checkpoint) {
+        set-svar(joe-player-in-utility-corridor, 0);
+        set-svar(joe-load-corridor-shadow-blocker, 0);
+        set-svar(joe-vent-igc-succeeded, 0);
+        set-svar(joe-school-cubemaps, 0);
+        set-svar(joe-school-corridor-library-cubemaps, 0);
+        set-svar(joe-player-on-roof, 0);
+        var_2 = set-svar(joe-exit-load-wat-wide, 0);
+    } else if (task-subnode-get-active-continue(task-find(jordan-escape, joe-school-fight)) == courtyard-done) {
+        set-svar(joe-player-in-utility-corridor, 0);
+        set-svar(joe-load-corridor-shadow-blocker, 0);
+        set-svar(joe-vent-igc-succeeded, 0);
+        set-svar(joe-school-cubemaps, 0);
+        set-svar(joe-school-corridor-library-cubemaps, 0);
+        set-svar(joe-player-on-roof, 0);
+        var_2 = set-svar(joe-exit-load-wat-wide, 0);
+    } else if (task-subnode-get-active-continue(task-find(jordan-escape, joe-school-fight)) == roof-start) {
+        set-svar(joe-player-in-utility-corridor, 0);
+        set-svar(joe-load-corridor-shadow-blocker, 0);
+        set-svar(joe-vent-igc-succeeded, 0);
+        set-svar(joe-school-cubemaps, 1);
+        set-svar(joe-school-corridor-library-cubemaps, 0);
+        set-svar(joe-player-on-roof, 1);
+        var_2 = set-svar(joe-exit-load-wat-wide, 0);
+    } else if (task-subnode-get-active-continue(task-find(jordan-escape, joe-school-fight)) == roof-combat) {
+        set-svar(joe-player-in-utility-corridor, 0);
+        set-svar(joe-load-corridor-shadow-blocker, 0);
+        set-svar(joe-vent-igc-succeeded, 0);
+        set-svar(joe-school-cubemaps, 1);
+        set-svar(joe-school-corridor-library-cubemaps, 0);
+        set-svar(joe-player-on-roof, 1);
+        var_2 = set-svar(joe-exit-load-wat-wide, 0);
+    } else if (task-subnode-get-active-continue(task-find(jordan-escape, joe-school-fight)) == roof-moved-to-courtyard) {
+        set-svar(joe-player-in-utility-corridor, 0);
+        set-svar(joe-load-corridor-shadow-blocker, 0);
+        set-svar(joe-vent-igc-succeeded, 0);
+        set-svar(joe-school-cubemaps, 1);
+        set-svar(joe-school-corridor-library-cubemaps, 0);
+        set-svar(joe-player-on-roof, 1);
+        var_2 = set-svar(joe-exit-load-wat-wide, 0);
+    } else if (task-subnode-get-active-continue(task-find(jordan-escape, joe-school-fight)) == roof-done) {
+        set-svar(joe-player-in-utility-corridor, 0);
+        set-svar(joe-load-corridor-shadow-blocker, 0);
+        set-svar(joe-vent-igc-succeeded, 0);
+        set-svar(joe-school-cubemaps, 1);
+        set-svar(joe-school-corridor-library-cubemaps, 0);
+        set-svar(joe-player-on-roof, 1);
+        var_2 = set-svar(joe-exit-load-wat-wide, 0);
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u16 *task-graph*__game-task-subnode@4a068
+embedded@10ac80() {
+    u16 var_1;
+    if (task-played-from-dev-menu?()) {
+        set-svar(joe-player-in-utility-corridor, 0);
+        set-svar(joe-load-corridor-shadow-blocker, 1);
+        set-svar(joe-vent-igc-succeeded, 0);
+        set-svar(joe-school-cubemaps, 1);
+        set-svar(joe-school-corridor-library-cubemaps, 0);
+        set-svar(joe-player-on-roof, 1);
+        var_1 = set-svar(joe-exit-load-wat-wide, 0);
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 *task-graph*__game-task-node@1b68__map@3f68____game-task-subnode@66290__
+embedded@f12b8() {
+    u16 var_1;
+    if (task-played-from-dev-menu?()) {
+        var_1 = set-svar(sea-horse-load-levels, 514);
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 *task-graph*__game-task-node@1b68__game-task-subnode@67bb0__
+embedded@d9a78() {
+    if (is-cinematic-select?()) {
+        if (task-subnode-get-active-continue(task-find(seattle-arrival, sea-hub-explore)) == sea-wlf-torture) {
+            set-svar-temp-value(sea-horse-load-levels, 1538);
+            set-svar-temp-value(sea-horse-finding-gas, 8);
+            set-svar-temp-value(sea-horse-code-found, 0);
+            set-svar-temp-value(sea-horse-left-hotel, 0);
+            set-svar-temp-value(sea-horse-load-bodies, 0);
+        }
+        if (task-subnode-get-active-continue(task-find(seattle-arrival, sea-hub-explore)) == guitar-cute-beat) {
+            set-svar(sea-horse-load-levels, 16416);
+        }
+    }
+    if (task-played-from-dev-menu?()) {
+        if (task-subnode-get-active-continue(task-find(seattle-arrival, sea-hub-explore)) == default) {
+            set-svar(sea-horse-load-levels, 512);
+            set-svar(sea-horse-load-bodies, 0);
+        } else if (task-subnode-get-active-continue(task-find(seattle-arrival, sea-hub-explore)) == big-reveal) {
+            set-svar(sea-horse-load-levels, 512);
+            set-svar(sea-horse-load-bodies, 0);
+        } else if (task-subnode-get-active-continue(task-find(seattle-arrival, sea-hub-explore)) == hotel-gate) {
+            set-svar(sea-horse-load-levels, 514);
+            set-svar(sea-horse-load-bodies, 0);
+        } else if (task-subnode-get-active-continue(task-find(seattle-arrival, sea-hub-explore)) == hotel-gate-with-gas) {
+            set-svar(sea-horse-load-levels, 514);
+            set-svar(sea-horse-load-bodies, 0);
+        } else if (task-subnode-get-active-continue(task-find(seattle-arrival, sea-hub-explore)) == hotel-courtyard) {
+            set-svar(sea-horse-load-levels, 1538);
+            set-svar(sea-horse-finding-gas, 8);
+            set-svar(sea-horse-code-found, 0);
+            set-svar(sea-horse-load-bodies, 0);
+        } else if (task-subnode-get-active-continue(task-find(seattle-arrival, sea-hub-explore)) == hotel-courtyard-fight) {
+            set-svar(sea-horse-load-levels, 1538);
+            set-svar(sea-horse-finding-gas, 8);
+            set-svar(sea-horse-code-found, 0);
+            set-svar(sea-horse-load-bodies, 0);
+        } else if (task-subnode-get-active-continue(task-find(seattle-arrival, sea-hub-explore)) == hotel-lobby) {
+            set-svar(sea-horse-load-levels, 1538);
+            set-svar(sea-horse-finding-gas, 8);
+            set-svar(sea-horse-code-found, 0);
+            set-svar(sea-horse-load-bodies, 0);
+        } else if (task-subnode-get-active-continue(task-find(seattle-arrival, sea-hub-explore)) == hotel-second-floor) {
+            set-svar(sea-horse-load-levels, 1538);
+            set-svar(sea-horse-finding-gas, 8);
+            set-svar(sea-horse-code-found, 0);
+            set-svar(sea-horse-load-bodies, 0);
+        } else if (task-subnode-get-active-continue(task-find(seattle-arrival, sea-hub-explore)) == sea-wlf-torture) {
+            set-svar(sea-horse-load-levels, 1538);
+            set-svar(sea-horse-finding-gas, 8);
+            set-svar(sea-horse-code-found, 0);
+            set-svar(sea-horse-left-hotel, 0);
+            set-svar(sea-horse-load-bodies, 0);
+        } else if (task-subnode-get-active-continue(task-find(seattle-arrival, sea-hub-explore)) == hotel-leave-torture) {
+            set-svar(sea-horse-load-levels, 1538);
+            set-svar(sea-horse-finding-gas, 8);
+            set-svar(sea-horse-left-hotel, 0);
+            set-svar(sea-horse-load-bodies, 0);
+        } else if (task-subnode-get-active-continue(task-find(seattle-arrival, sea-hub-explore)) == hotel-left-torture) {
+            set-svar(sea-horse-load-levels, 1538);
+            set-svar(sea-horse-finding-gas, 8);
+            set-svar(sea-horse-code-found, 1);
+            set-svar(sea-horse-left-hotel, 1);
+            set-svar(sea-horse-load-bodies, 0);
+        } else if (task-subnode-get-active-continue(task-find(seattle-arrival, sea-hub-explore)) == hotel-last-gate) {
+            set-svar(sea-horse-load-levels, 1538);
+            set-svar(sea-horse-finding-gas, 8);
+            set-svar(sea-horse-code-found, 1);
+            set-svar(sea-horse-left-hotel, 1);
+            set-svar(sea-horse-load-bodies, 0);
+        } else if (task-subnode-get-active-continue(task-find(seattle-arrival, sea-hub-explore)) == hotel-pre-explosion) {
+            set-svar(sea-horse-load-levels, 1538);
+            set-svar(sea-horse-finding-gas, 8);
+            set-svar(sea-horse-code-found, 1);
+            set-svar(sea-horse-left-hotel, 1);
+            set-svar(sea-horse-load-bodies, 0);
+        } else if (task-subnode-get-active-continue(task-find(seattle-arrival, sea-hub-explore)) == courthouse-entry) {
+            set-svar(sea-horse-load-levels, 65544);
+            set-svar(sea-horse-court-load, 1);
+            set-svar(sea-horse-court-window, 1);
+            set-svar-bit(sea-horse-load-levels, 19, 1);
+            set-svar(sea-horse-load-bodies, 0);
+        } else if (task-subnode-get-active-continue(task-find(seattle-arrival, sea-hub-explore)) == courthouse-entry-checkpoint) {
+            set-svar(sea-horse-load-levels, 65544);
+            set-svar(sea-horse-court-load, 1);
+            set-svar(sea-horse-court-window, 1);
+            set-svar-bit(sea-horse-load-levels, 19, 1);
+            set-svar(sea-horse-load-bodies, 0);
+        } else if (task-subnode-get-active-continue(task-find(seattle-arrival, sea-hub-explore)) == courthouse-stairwell) {
+            set-svar(sea-horse-load-levels, 65544);
+            set-svar(sea-horse-court-load, 2);
+            set-svar(sea-horse-court-window, 1);
+            set-svar-bit(sea-horse-load-levels, 19, 1);
+            set-svar(sea-horse-load-bodies, 0);
+        } else if (task-subnode-get-active-continue(task-find(seattle-arrival, sea-hub-explore)) == courthouse-front) {
+            set-svar(sea-horse-load-levels, 65544);
+            set-svar(sea-horse-court-load, 2);
+            set-svar-bit(sea-horse-load-levels, 19, 1);
+            set-svar(sea-horse-load-bodies, 0);
+        } else if (task-subnode-get-active-continue(task-find(seattle-arrival, sea-hub-explore)) == courthouse-fight) {
+            set-svar(sea-horse-load-levels, 65544);
+            set-svar(sea-horse-court-load, 3);
+            set-svar-bit(sea-horse-load-levels, 19, 1);
+            set-svar(sea-horse-load-bodies, 0);
+        } else if (task-subnode-get-active-continue(task-find(seattle-arrival, sea-hub-explore)) == courthouse-post-fight) {
+            set-svar(sea-horse-load-levels, 65544);
+            set-svar(sea-horse-court-load, 4);
+            set-svar-bit(sea-horse-load-levels, 19, 1);
+            set-svar(sea-horse-load-bodies, 0);
+        } else if (task-subnode-get-active-continue(task-find(seattle-arrival, sea-hub-explore)) == courthouse-post-fight-with-gas) {
+            set-svar(sea-horse-load-levels, 65544);
+            set-svar(sea-horse-court-load, 4);
+            set-svar-bit(sea-horse-load-levels, 19, 1);
+        } else if (task-subnode-get-active-continue(task-find(seattle-arrival, sea-hub-explore)) == sanctuary-parking) {
+            set-svar(sea-horse-load-levels, 10240);
+            set-svar-bit(sea-horse-load-levels, 19, 1);
+            set-svar(sea-horse-load-bodies, 0);
+        } else if (task-subnode-get-active-continue(task-find(seattle-arrival, sea-hub-explore)) == sanctuary-infected) {
+            set-svar(sea-horse-load-levels, 10244 + 262144);
+            set-svar-bit(sea-horse-load-levels, 19, 1);
+            set-svar-bit(sea-horse-load-levels, 22, 1);
+            set-svar(sea-horse-dome-window, 1);
+            set-svar(sea-horse-load-bodies, 0);
+        } else if (task-subnode-get-active-continue(task-find(seattle-arrival, sea-hub-explore)) == sanctuary-construction) {
+            set-svar(sea-horse-load-levels, 10244 + 262144);
+            set-svar-bit(sea-horse-load-levels, 19, 1);
+            set-svar-bit(sea-horse-load-levels, 22, 1);
+            set-svar(sea-horse-dome-window, 1);
+            set-svar(sea-horse-load-bodies, 0);
+        } else if (task-subnode-get-active-continue(task-find(seattle-arrival, sea-hub-explore)) == sanctuary-boost) {
+            set-svar(sea-horse-load-levels, 10244 + 262144);
+            set-svar-bit(sea-horse-load-levels, 19, 1);
+            set-svar-bit(sea-horse-load-levels, 22, 1);
+            set-svar(sea-horse-dome-window, 1);
+            set-svar(sea-horse-load-bodies, 0);
+        } else if (task-subnode-get-active-continue(task-find(seattle-arrival, sea-hub-explore)) == sanctuary-first-floor) {
+            set-svar(sea-horse-load-levels, 2052);
+            set-svar-bit(sea-horse-load-levels, 19, 1);
+            set-svar(sea-horse-dome-window, 1);
+            set-svar(sea-horse-load-bodies, 0);
+        } else if (task-subnode-get-active-continue(task-find(seattle-arrival, sea-hub-explore)) == sanctuary-first-floor-with-gas) {
+            set-svar(sea-horse-load-levels, 2052);
+            set-svar-bit(sea-horse-load-levels, 19, 1);
+            set-svar(sea-horse-dome-window, 1);
+            set-svar(sea-horse-load-bodies, 0);
+        } else if (task-subnode-get-active-continue(task-find(seattle-arrival, sea-hub-explore)) == sanctuary-near-rope) {
+            set-svar(sea-horse-load-levels, 2052);
+            set-svar-bit(sea-horse-load-levels, 19, 1);
+            set-svar(sea-horse-dome-window, 1);
+            set-svar(sea-horse-load-bodies, 0);
+        } else if (task-subnode-get-active-continue(task-find(seattle-arrival, sea-hub-explore)) == sanctuary-second-floor) {
+            set-svar(sea-horse-load-levels, 2052);
+            set-svar-bit(sea-horse-load-levels, 19, 1);
+            set-svar(sea-horse-dome-window, 1);
+            set-svar(sea-horse-load-bodies, 0);
+        } else if (task-subnode-get-active-continue(task-find(seattle-arrival, sea-hub-explore)) == bank-entrance) {
+            set-svar(sea-horse-load-levels, 2097152);
+            set-svar-bit(sea-horse-load-levels, 19, 1);
+            set-svar(sea-horse-load-bodies, 0);
+        } else if (task-subnode-get-active-continue(task-find(seattle-arrival, sea-hub-explore)) == bank-descent) {
+            set-svar(sea-horse-load-levels, 2097153);
+            set-svar-bit(sea-horse-load-levels, 19, 1);
+            set-svar(sea-horse-load-bodies, 0);
+        } else if (task-subnode-get-active-continue(task-find(seattle-arrival, sea-hub-explore)) == bank-lobby) {
+            set-svar(sea-horse-load-levels, 3145729);
+            set-svar-bit(sea-horse-load-levels, 19, 1);
+            set-svar-bit(sea-horse-load-levels, 20, 1);
+            set-svar(sea-horse-load-bodies, 0);
+        } else if (task-subnode-get-active-continue(task-find(seattle-arrival, sea-hub-explore)) == bank-vault) {
+            set-svar(sea-horse-load-levels, 3145729);
+            set-svar-bit(sea-horse-load-levels, 19, 1);
+            set-svar-bit(sea-horse-load-levels, 20, 1);
+            set-svar(sea-horse-load-bodies, 0);
+        } else if (task-subnode-get-active-continue(task-find(seattle-arrival, sea-hub-explore)) == bank-lobby-2) {
+            set-svar(sea-horse-load-levels, 3145729);
+            set-svar-bit(sea-horse-load-levels, 19, 1);
+            set-svar-bit(sea-horse-load-levels, 20, 1);
+            set-svar(sea-horse-load-bodies, 0);
+        } else if (task-subnode-get-active-continue(task-find(seattle-arrival, sea-hub-explore)) == sea-bank-exit) {
+            set-svar(sea-horse-load-levels, 3145729);
+            set-svar-bit(sea-horse-load-levels, 19, 1);
+            set-svar-bit(sea-horse-load-levels, 20, 1);
+            set-svar(sea-horse-load-bodies, 0);
+        } else if (task-subnode-get-active-continue(task-find(seattle-arrival, sea-hub-explore)) == store-fronts) {
+            set-svar(sea-horse-load-levels, 264);
+            set-svar-bit(sea-horse-load-levels, 19, 1);
+            set-svar(sea-horse-load-bodies, 7);
+        } else if (task-subnode-get-active-continue(task-find(seattle-arrival, sea-hub-explore)) == freeway-south) {
+            set-svar(sea-horse-load-levels, 512);
+            set-svar(sea-horse-load-bodies, 0);
+        } else if (task-subnode-get-active-continue(task-find(seattle-arrival, sea-hub-explore)) == freeway-underpass) {
+            set-svar(sea-horse-load-levels, 0);
+            set-svar-bit(sea-horse-load-levels, 19, 1);
+            set-svar(sea-horse-load-bodies, 7);
+        } else if (task-subnode-get-active-continue(task-find(seattle-arrival, sea-hub-explore)) == freeway-bridge) {
+            set-svar(sea-horse-load-levels, 0);
+            set-svar-bit(sea-horse-load-levels, 19, 1);
+            set-svar(sea-horse-load-bodies, 4);
+        } else if (task-subnode-get-active-continue(task-find(seattle-arrival, sea-hub-explore)) == freeway-ambulance) {
+            set-svar(sea-horse-load-levels, 0);
+            set-svar(sea-horse-load-bodies, 3);
+        } else if (task-subnode-get-active-continue(task-find(seattle-arrival, sea-hub-explore)) == collapse-building-hill) {
+            set-svar(sea-horse-load-levels, 0);
+            set-svar-bit(sea-horse-load-levels, 11, 1);
+            set-svar-bit(sea-horse-load-levels, 19, 1);
+            set-svar(sea-horse-load-bodies, 0);
+        } else if (task-subnode-get-active-continue(task-find(seattle-arrival, sea-hub-explore)) == old-city-hall) {
+            set-svar(sea-horse-load-levels, 2048);
+            set-svar-bit(sea-horse-load-levels, 19, 1);
+            set-svar(sea-horse-load-bodies, 0);
+        } else if (task-subnode-get-active-continue(task-find(seattle-arrival, sea-hub-explore)) == tower-steps) {
+            set-svar(sea-horse-load-levels, 2048);
+            set-svar-bit(sea-horse-load-levels, 19, 1);
+            set-svar(sea-horse-load-bodies, 0);
+        } else if (task-subnode-get-active-continue(task-find(seattle-arrival, sea-hub-explore)) == library) {
+            set-svar(sea-horse-load-levels, 136);
+            set-svar-bit(sea-horse-load-levels, 19, 1);
+            set-svar(sea-horse-load-bodies, 0);
+        } else if (task-subnode-get-active-continue(task-find(seattle-arrival, sea-hub-explore)) == courthouse-steps) {
+            set-svar(sea-horse-load-levels, 136);
+            set-svar-bit(sea-horse-load-levels, 19, 1);
+            set-svar(sea-horse-load-bodies, 0);
+        } else if (task-subnode-get-active-continue(task-find(seattle-arrival, sea-hub-explore)) == courthouse-staircase) {
+            set-svar(sea-horse-load-levels, 136);
+            set-svar-bit(sea-horse-load-levels, 19, 1);
+            set-svar(sea-horse-load-bodies, 0);
+        } else if (task-subnode-get-active-continue(task-find(seattle-arrival, sea-hub-explore)) == courthouse-side) {
+            set-svar(sea-horse-load-levels, 200);
+            set-svar-bit(sea-horse-load-levels, 19, 1);
+            set-svar(sea-horse-load-bodies, 4);
+        } else if (task-subnode-get-active-continue(task-find(seattle-arrival, sea-hub-explore)) == checkpoint) {
+            set-svar(sea-horse-load-levels, 136);
+            set-svar-bit(sea-horse-load-levels, 19, 1);
+            set-svar(sea-horse-load-bodies, 0);
+        } else {
+            set-svar(sea-horse-load-levels, 18464);
+            set-svar-bit(sea-horse-load-levels, 19, 1);
+            set-svar(sea-horse-load-bodies, 0);
+        }
+        if (task-subnode-get-active-continue(task-find(seattle-arrival, sea-hub-explore)) == courthouse-entry || task-subnode-get-active-continue(task-find(seattle-arrival, sea-hub-explore)) == courthouse-entry-checkpoint || task-subnode-get-active-continue(task-find(seattle-arrival, sea-hub-explore)) == courthouse-stairwell || task-subnode-get-active-continue(task-find(seattle-arrival, sea-hub-explore)) == courthouse-front || task-subnode-get-active-continue(task-find(seattle-arrival, sea-hub-explore)) == courthouse-fight || task-subnode-get-active-continue(task-find(seattle-arrival, sea-hub-explore)) == courthouse-post-fight && !(task-subnode-get-active-continue(task-find(seattle-arrival, sea-hub-explore)) == courthouse-post-fight-with-gas)) {
+            u16 var_115;
+            if (stat-value?(sea-horse-library-key-found) > 0) {
+                var_115 = 5;
+            } else {
+                var_115 = 0;
+            }
+            set-svar(sea-horse-court-load, var_115);
+        }
+    }
+    if (is-encounter-restart?() && task-subnode-get-active-continue(task-find(seattle-arrival, sea-hub-explore)) == bank-descent) {
+        set-svar(sea-horse-tunnels-infected-npcs, 0);
+        set-svar(sea-horse-tunnels-infected-done, 0);
+    }
+    u16 var_120;
+    if (is-encounter-select?()) {
+        if (task-subnode-get-active-continue(task-find(seattle-arrival, sea-hub-explore)) == hotel-courtyard-fight) {
+            set-svar(sea-horse-load-levels, 1538);
+            set-svar(sea-horse-finding-gas, 8);
+            set-svar(sea-horse-code-found, 0);
+            var_120 = set-svar(sea-horse-load-bodies, 0);
+        } else if (task-subnode-get-active-continue(task-find(seattle-arrival, sea-hub-explore)) == courthouse-entry) {
+            set-svar(sea-horse-load-levels, 65544);
+            set-svar(sea-horse-court-load, 1);
+            set-svar(sea-horse-court-window, 1);
+            set-svar-bit(sea-horse-load-levels, 19, 1);
+            set-svar(sea-horse-load-bodies, 0);
+            set-svar(sea-horse-code-found, 0);
+            if (get-svar(sea-horse-finding-gas) > 2) {
+                var_120 = set-svar(sea-horse-finding-gas, 3);
+            } else {
+                var_120 = set-svar(sea-horse-finding-gas, 0);
+            }
+        } else if (task-subnode-get-active-continue(task-find(seattle-arrival, sea-hub-explore)) == courthouse-fight) {
+            set-svar(sea-horse-load-levels, 65544);
+            set-svar(sea-horse-court-load, 3);
+            set-svar-bit(sea-horse-load-levels, 19, 1);
+            set-svar(sea-horse-load-bodies, 0);
+            set-svar(sea-horse-code-found, 0);
+            if (get-svar(sea-horse-finding-gas) > 2) {
+                var_120 = set-svar(sea-horse-finding-gas, 3);
+            } else {
+                var_120 = set-svar(sea-horse-finding-gas, 2);
+            }
+        } else if (task-subnode-get-active-continue(task-find(seattle-arrival, sea-hub-explore)) == sanctuary-infected) {
+            set-svar(sea-horse-load-levels, 10244 + 262144);
+            set-svar-bit(sea-horse-load-levels, 19, 1);
+            set-svar-bit(sea-horse-load-levels, 22, 1);
+            set-svar(sea-horse-dome-window, 1);
+            set-svar(sea-horse-load-bodies, 0);
+            set-svar(sea-horse-dome-gates, 0);
+            set-svar(sea-horse-code-found, 0);
+            set-svar(sea-horse-tower-infect-npcs, 0);
+            set-svar(sea-horse-court-load, 0);
+            if (get-svar(sea-horse-finding-gas) > 2) {
+                var_120 = set-svar(sea-horse-finding-gas, 4);
+            } else {
+                var_120 = set-svar(sea-horse-finding-gas, 0);
+            }
+        } else if (task-subnode-get-active-continue(task-find(seattle-arrival, sea-hub-explore)) == bank-lobby) {
+            set-svar(sea-horse-load-levels, 3145729);
+            set-svar-bit(sea-horse-load-levels, 19, 1);
+            set-svar-bit(sea-horse-load-levels, 20, 1);
+            set-svar(sea-horse-load-bodies, 0);
+            set-svar(sea-horse-code-found, 0);
+            set-svar(sea-horse-bank-vault, 0);
+            set-svar(sea-horse-court-load, 0);
+            if (get-svar(sea-horse-finding-gas) > 6) {
+                var_120 = set-svar(sea-horse-finding-gas, 6);
+            } else {
+                var_120 = 0;
+            }
+        } else {
+            var_120 = 0;
+        }
+    } else {
+        var_120 = 0;
+    }
+    return var_120;
+}
+
+u16 *task-graph*__game-task-subnode@67dc8
+embedded@c39d0() {
+    u16 var_1;
+    if (task-played-from-dev-menu?()) {
+        var_1 = set-svar(sea-arrival-forest-trees, 0);
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 *task-graph*__game-task-subnode@67fe0
+embedded@e8748() {
+    u16 var_1;
+    if (task-played-from-dev-menu?()) {
+        var_1 = set-svar(sea-arrival-forest-trees, 4);
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 *task-graph*__game-task-subnode@68410
+embedded@1232b8() {
+    u16 var_1;
+    if (task-played-from-dev-menu?()) {
+        var_1 = set-svar(sea-horse-load-levels, 512);
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 *task-graph*__game-task-node@1d68__map@33e8____game-task-subnode@43388__
+*task-graph*__game-task-subnode@44448
+*task-graph*__game-task-subnode@450d8
+embedded@100a38() {
+    u16 var_1;
+    if (task-played-from-dev-menu?()) {
+        var_1 = set-svar-as-boolean(afm-approaching-river-school, 1);
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 *task-graph*__game-task-node@1d68__game-task-subnode@44018__
+*task-graph*__game-task-subnode@478a0
+*task-graph*__game-task-node@20e8__map@3e40____game-task-subnode@4f640__
+embedded@d3a80() {
+    u16 var_1;
+    if (task-played-from-dev-menu?()) {
+        var_1 = set-svar-as-boolean(afm-approaching-river-school, 0);
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 *task-graph*__game-task-node@23e8__map@36e0____game-task-subnode@1fe38__
+embedded@bbf40() {
+    u16 var_1;
+    if (task-played-from-dev-menu?()) {
+        var_1 = set-svar(nor-stalker-see-hospital-look-at-complete, 0);
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u64? *task-graph*__game-task-node@23e8__game-task-subnode@24138__
+*task-graph*__game-task-subnode@24dc8
+*task-graph*__game-task-subnode@25410
+*task-graph*__game-task-subnode@25e88
+embedded@10c0b8() {
+    set-svar(nor-alone-unload-military-checkpoint, 0);
+    set-svar(nor-alone-bar-infected-killed, 0);
+    set-svar(nor-alone-look-at-hospital-done, 0);
+    set-svar(nor-alone-dumpster-puzzle-done, 0);
+    set-svar(nor-alone-rope-puzzle-done, 0);
+    return set-svar(nor-alone-load-upper-interiors, 0);
+}
+
+u16 *task-graph*__game-task-subnode@251f8
+embedded@d0fa0() {
+    u16 var_1;
+    if (task-played-from-dev-menu?()) {
+        if (task-subnode-get-active-continue(task-find(find-nora, nor-scar-forest-combat)) == default) {
+            set-svar(nor-forest-load-stripmall-interior, 0);
+            var_1 = set-svar(nor-forest-player-valved-in-stripmall, 0);
+        } else if (task-subnode-get-active-continue(task-find(find-nora, nor-scar-forest-combat)) == forest) {
+            set-svar(nor-forest-load-stripmall-interior, 0);
+            var_1 = set-svar(nor-forest-player-valved-in-stripmall, 0);
+        } else if (task-subnode-get-active-continue(task-find(find-nora, nor-scar-forest-combat)) == bridge) {
+            set-svar(nor-forest-load-stripmall-interior, 0);
+            var_1 = set-svar(nor-forest-player-valved-in-stripmall, 0);
+        } else if (task-subnode-get-active-continue(task-find(find-nora, nor-scar-forest-combat)) == stripmall) {
+            set-svar(nor-forest-load-stripmall-interior, 1);
+            var_1 = set-svar(nor-forest-player-valved-in-stripmall, 1);
+        } else if (task-subnode-get-active-continue(task-find(find-nora, nor-scar-forest-combat)) == brute-intro) {
+            set-svar(nor-forest-load-stripmall-interior, 1);
+            var_1 = set-svar(nor-forest-player-valved-in-stripmall, 1);
+        } else if (task-subnode-get-active-continue(task-find(find-nora, nor-scar-forest-combat)) == brute-combat-done) {
+            set-svar(nor-forest-load-stripmall-interior, 1);
+            var_1 = set-svar(nor-forest-player-valved-in-stripmall, 1);
+        } else {
+            var_1 = 0;
+        }
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 *task-graph*__game-task-subnode@264d0
+embedded@b5b40() {
+    u16 var_1;
+    if (task-played-from-dev-menu?()) {
+        if (task-subnode-get-active-continue(task-find(find-nora, nor-ellie-alone-streets)) == default) {
+            set-svar(nor-alone-unload-military-checkpoint, 0);
+            set-svar(nor-alone-load-upper-interiors, 0);
+            set-svar(nor-alone-load-workbench-anims, 1);
+            var_1 = set-svar(nor-alone-workbench-ambush-started, 0);
+        } else if (task-subnode-get-active-continue(task-find(find-nora, nor-ellie-alone-streets)) == streets-lower) {
+            set-svar(nor-alone-unload-military-checkpoint, 0);
+            set-svar(nor-alone-load-upper-interiors, 0);
+            var_1 = set-svar(nor-alone-load-workbench-anims, 1);
+        } else if (task-subnode-get-active-continue(task-find(find-nora, nor-ellie-alone-streets)) == streets-upper) {
+            set-svar(nor-alone-unload-military-checkpoint, 0);
+            set-svar(nor-alone-load-upper-interiors, 1);
+            var_1 = set-svar(nor-alone-load-workbench-anims, 1);
+        } else if (task-subnode-get-active-continue(task-find(find-nora, nor-ellie-alone-streets)) == bar-combat-done) {
+            set-svar(nor-alone-unload-military-checkpoint, 0);
+            set-svar(nor-alone-bar-infected-killed, 1);
+            set-svar(nor-alone-load-upper-interiors, 0);
+            var_1 = set-svar(nor-alone-load-workbench-anims, 1);
+        } else if (task-subnode-get-active-continue(task-find(find-nora, nor-ellie-alone-streets)) == rope-puzzle-start) {
+            set-svar(nor-alone-unload-military-checkpoint, 0);
+            set-svar(nor-alone-rope-puzzle-done, 0);
+            set-svar(nor-alone-load-upper-interiors, 0);
+            var_1 = set-svar(nor-alone-load-workbench-anims, 1);
+        } else if (task-subnode-get-active-continue(task-find(find-nora, nor-ellie-alone-streets)) == rope-puzzle-done) {
+            set-svar(nor-alone-unload-military-checkpoint, 0);
+            set-svar(nor-alone-rope-puzzle-done, 1);
+            set-svar(nor-alone-load-upper-interiors, 0);
+            var_1 = set-svar(nor-alone-load-workbench-anims, 1);
+        } else if (task-subnode-get-active-continue(task-find(find-nora, nor-ellie-alone-streets)) == dumpster-puzzle-start) {
+            set-svar(nor-alone-unload-military-checkpoint, 0);
+            set-svar(nor-alone-dumpster-puzzle-done, 0);
+            set-svar(nor-alone-load-upper-interiors, 1);
+            var_1 = set-svar(nor-alone-load-workbench-anims, 0);
+        } else if (task-subnode-get-active-continue(task-find(find-nora, nor-ellie-alone-streets)) == dumpster-puzzle-done) {
+            set-svar(nor-alone-unload-military-checkpoint, 0);
+            set-svar(nor-alone-dumpster-puzzle-done, 1);
+            set-svar(nor-alone-load-upper-interiors, 1);
+            var_1 = set-svar(nor-alone-load-workbench-anims, 0);
+        } else if (task-subnode-get-active-continue(task-find(find-nora, nor-ellie-alone-streets)) == ambush-apartment) {
+            set-svar(nor-alone-unload-military-checkpoint, 0);
+            set-svar(nor-alone-workbench-ambush-done, 0);
+            set-svar(nor-alone-load-upper-interiors, 1);
+            var_1 = set-svar(nor-alone-load-workbench-anims, 1);
+        } else if (task-subnode-get-active-continue(task-find(find-nora, nor-ellie-alone-streets)) == workbench-ambush-mid-struggle) {
+            set-svar(nor-alone-unload-military-checkpoint, 0);
+            set-svar(nor-alone-workbench-ambush-done, 0);
+            set-svar(nor-alone-load-upper-interiors, 1);
+            set-svar(nor-alone-load-workbench-anims, 1);
+            var_1 = set-svar(nor-alone-workbench-ambush-started, 1);
+        } else if (task-subnode-get-active-continue(task-find(find-nora, nor-ellie-alone-streets)) == workbench-ambush) {
+            set-svar(nor-alone-unload-military-checkpoint, 0);
+            set-svar(nor-alone-load-upper-interiors, 1);
+            set-svar(nor-alone-load-workbench-anims, 1);
+            var_1 = set-svar(nor-alone-workbench-ambush-started, 1);
+        } else if (task-subnode-get-active-continue(task-find(find-nora, nor-ellie-alone-streets)) == ambush-done) {
+            set-svar(nor-alone-unload-military-checkpoint, 0);
+            set-svar(nor-alone-workbench-ambush-done, 1);
+            set-svar(nor-alone-load-upper-interiors, 1);
+            set-svar(nor-alone-load-workbench-anims, 1);
+            var_1 = set-svar(nor-alone-workbench-ambush-started, 1);
+        } else if (task-subnode-get-active-continue(task-find(find-nora, nor-ellie-alone-streets)) == stairway-exit) {
+            set-svar(nor-alone-unload-military-checkpoint, 0);
+            set-svar(nor-alone-dumpster-puzzle-done, 1);
+            set-svar(nor-alone-load-upper-interiors, 1);
+            var_1 = set-svar(nor-alone-load-workbench-anims, 0);
+        } else if (task-subnode-get-active-continue(task-find(find-nora, nor-ellie-alone-streets)) == hospital-vantage-point) {
+            set-svar(nor-alone-unload-military-checkpoint, 1);
+            set-svar(nor-alone-look-at-hospital-done, 1);
+            set-svar(nor-alone-load-upper-interiors, 1);
+            var_1 = set-svar(nor-alone-load-workbench-anims, 0);
+        } else {
+            var_1 = 0;
+        }
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 *task-graph*__game-task-node@25e8__map@39d8____game-task-subnode@68e88__
+embedded@ac238() {
+    u16 var_4;
+    if (task-played-from-dev-menu?() && task-played-from-encounter-selection?() && task-subnode-get-active-continue(task-find(watchtower, wat-explore-capitol-hill)) == default) {
+        set-svar(wat-explore-load-cleaners, 1);
+        set-svar(wat-explore-load-halloween, 1);
+        set-svar(wat-explore-load-gas-station, 0);
+        set-svar(wat-explore-load-bookstore, 0);
+        set-svar(wat-explore-load-grocery, 0);
+        set-svar(wat-explore-load-bank, 0);
+        set-svar(wat-explore-load-sandwich, 0);
+        set-svar(wat-explore-load-crossover, 0);
+        set-svar(wat-explore-load-checkpoint, 0);
+        set-svar(wat-explore-load-checkpoint-wide, 0);
+        var_4 = set-svar(wat-explore-load-motel, 1);
+    } else if (task-subnode-get-active-continue(task-find(watchtower, wat-explore-capitol-hill)) == laundry) {
+        set-svar(wat-explore-load-cleaners, 1);
+        set-svar(wat-explore-load-halloween, 1);
+        set-svar(wat-explore-load-gas-station, 0);
+        set-svar(wat-explore-load-bookstore, 0);
+        set-svar(wat-explore-load-grocery, 0);
+        set-svar(wat-explore-load-bank, 0);
+        set-svar(wat-explore-load-sandwich, 0);
+        set-svar(wat-explore-load-crossover, 0);
+        set-svar(wat-explore-load-checkpoint, 0);
+        set-svar(wat-explore-load-checkpoint-wide, 0);
+        var_4 = set-svar(wat-explore-load-motel, 1);
+    } else if (task-subnode-get-active-continue(task-find(watchtower, wat-explore-capitol-hill)) == gas-station) {
+        set-svar(wat-explore-load-cleaners, 0);
+        set-svar(wat-explore-load-halloween, 1);
+        set-svar(wat-explore-load-gas-station, 1);
+        set-svar(wat-explore-load-bookstore, 0);
+        set-svar(wat-explore-load-grocery, 0);
+        set-svar(wat-explore-load-bank, 0);
+        set-svar(wat-explore-load-sandwich, 0);
+        set-svar(wat-explore-load-crossover, 0);
+        set-svar(wat-explore-load-checkpoint, 0);
+        set-svar(wat-explore-load-checkpoint-wide, 0);
+        var_4 = set-svar(wat-explore-load-motel, 0);
+    } else if (task-subnode-get-active-continue(task-find(watchtower, wat-explore-capitol-hill)) == olive-st) {
+        set-svar(wat-explore-load-cleaners, 0);
+        set-svar(wat-explore-load-halloween, 0);
+        set-svar(wat-explore-load-gas-station, 0);
+        set-svar(wat-explore-load-bookstore, 0);
+        set-svar(wat-explore-load-grocery, 1);
+        set-svar(wat-explore-load-bank, 1);
+        set-svar(wat-explore-load-sandwich, 0);
+        set-svar(wat-explore-load-crossover, 0);
+        set-svar(wat-explore-load-checkpoint, 1);
+        set-svar(wat-explore-load-checkpoint-wide, 0);
+        var_4 = set-svar(wat-explore-load-motel, 0);
+    } else if (task-subnode-get-active-continue(task-find(watchtower, wat-explore-capitol-hill)) == checkpoint) {
+        set-svar(wat-explore-load-cleaners, 0);
+        set-svar(wat-explore-load-halloween, 0);
+        set-svar(wat-explore-load-gas-station, 0);
+        set-svar(wat-explore-load-bookstore, 0);
+        set-svar(wat-explore-load-grocery, 0);
+        set-svar(wat-explore-load-bank, 0);
+        set-svar(wat-explore-load-sandwich, 0);
+        set-svar(wat-explore-load-crossover, 1);
+        set-svar(wat-explore-load-checkpoint, 2);
+        set-svar(wat-explore-load-checkpoint-wide, 0);
+        var_4 = set-svar(wat-explore-load-motel, 0);
+    } else {
+        var_4 = 0;
+    }
+    return var_4;
+}
+
+u64? *task-graph*__game-task-node@25e8__game-task-subnode@690a0__
+embedded@11e5d0() {
+    set-svar(wat-traps-load-station, 1);
+    return set-svar(wat-traps-show-station, 1);
+}
+
+u16 *task-graph*__game-task-subnode@694d0
+embedded@116168() {
+    u16 var_2;
+    if (task-subnode-get-active-continue(task-find(watchtower, wat-explore-start)) == default) {
+        set-svar(wat-explore-load-apartment, 0);
+        set-svar(wat-explore-load-apartment-a, 1);
+        set-svar(wat-explore-load-apartment-b, 1);
+        set-svar(wat-explore-load-motel, 0);
+        set-svar(wat-explore-load-cleaners, 0);
+        set-svar(wat-explore-load-halloween, 0);
+        set-svar(wat-explore-load-gas-station, 0);
+        set-svar(wat-explore-load-bookstore, 0);
+        set-svar(wat-explore-load-grocery, 0);
+        set-svar(wat-explore-load-bank, 0);
+        set-svar(wat-explore-load-sandwich, 0);
+        set-svar(wat-explore-load-crossover, 0);
+        set-svar(wat-explore-load-checkpoint, 0);
+        var_2 = set-svar(wat-explore-load-checkpoint-wide, 0);
+    } else if (task-subnode-get-active-continue(task-find(watchtower, wat-explore-start)) == dumpster-puzzle-done) {
+        set-svar(wat-explore-load-apartment, 1);
+        set-svar(wat-explore-load-apartment-a, 0);
+        set-svar(wat-explore-load-apartment-b, 0);
+        set-svar(wat-explore-load-motel, 1);
+        set-svar(wat-explore-load-cleaners, 0);
+        set-svar(wat-explore-load-halloween, 0);
+        set-svar(wat-explore-load-gas-station, 0);
+        set-svar(wat-explore-load-bookstore, 0);
+        set-svar(wat-explore-load-grocery, 0);
+        set-svar(wat-explore-load-bank, 0);
+        set-svar(wat-explore-load-sandwich, 0);
+        set-svar(wat-explore-load-crossover, 0);
+        set-svar(wat-explore-load-checkpoint, 0);
+        var_2 = set-svar(wat-explore-load-checkpoint-wide, 0);
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u16 *task-graph*__game-task-subnode@69d30
+embedded@114f10() {
+    u16 var_1;
+    if (task-played-from-dev-menu?()) {
+        set-svar(wat-traps-load-station, 1);
+        var_1 = set-svar(wat-traps-show-station, 1);
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u64? *task-graph*__game-task-subnode@6a7a8
+*task-graph*__game-task-subnode@6b868
+*task-graph*__game-task-subnode@6beb0
+*task-graph*__game-task-subnode@6d5b8
+embedded@113580() {
+    set-svar(wat-traps-load-station, 0);
+    return set-svar(wat-traps-show-station, 0);
+}
+
+u16 *task-graph*__game-task-subnode@6b438
+embedded@126c50() {
+    u16 var_2;
+    if (task-subnode-get-active-continue(task-find(watchtower, wat-perimeter-traps-street)) == default) {
+        set-svar(wat-traps-load-station, 0);
+        var_2 = set-svar(wat-traps-show-station, 0);
+    } else if (task-subnode-get-active-continue(task-find(watchtower, wat-perimeter-traps-street)) == at-truck) {
+        set-svar(wat-traps-load-station, 1);
+        var_2 = set-svar(wat-traps-show-station, 0);
+    } else if (task-subnode-get-active-continue(task-find(watchtower, wat-perimeter-traps-street)) == thrift-store) {
+        set-svar(wat-traps-load-station, 1);
+        var_2 = set-svar(wat-traps-show-station, 0);
+    } else if (task-subnode-get-active-continue(task-find(watchtower, wat-perimeter-traps-street)) == safe-room) {
+        set-svar(wat-traps-load-station, 1);
+        var_2 = set-svar(wat-traps-show-station, 0);
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u16 *task-graph*__game-task-node@28e8__map@3fd8____game-task-subnode@93b30__
+*task-graph*__game-task-node@28e8__game-task-subnode@93f60__
+embedded@f76b8() {
+    u16 var_1;
+    if (task-played-from-dev-menu?()) {
+        set-svar(aef-bridge-loaded, 1);
+        var_1 = set-svar(aef-basement-loaded, 0);
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 *task-graph*__game-task-subnode@947c0
+embedded@134ea8() {
+    u16 var_1;
+    if (task-played-from-dev-menu?()) {
+        var_1 = set-svar(aef-basement-loaded, 0);
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 *task-graph*__game-task-node@2de8__map@3368____game-task-subnode@545d0__
+embedded@c8948() {
+    u16 var_1;
+    if (task-played-from-dev-menu?()) {
+        var_1 = set-svar(flo-boat-explore-load-levels, 7);
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 *task-graph*__game-task-node@2de8__game-task-subnode@547e8__
+embedded@f3e70() {
+    u16 var_1;
+    if (task-played-from-dev-menu?()) {
+        var_1 = set-svar(flo-approach-bay-coastline-loaded, 1);
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 *task-graph*__game-task-subnode@56320
+embedded@1177e0() {
+    u16 var_1;
+    if (task-played-from-dev-menu?()) {
+        var_1 = set-svar(flo-approach-bay-coastline-loaded, 0);
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 *task-graph*__game-task-subnode@56750
+embedded@e13e0() {
+    u16 var_1;
+    if (task-played-from-dev-menu?()) {
+        var_1 = set-svar(flo-tunnel-fg-visible, 0);
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 *task-graph*__game-task-subnode@56968
+embedded@e6478() {
+    u16 var_4;
+    if (task-played-from-dev-menu?() && task-played-from-encounter-selection?() && task-subnode-get-active-continue(task-find(flooded-city, flo-boat-explore-downtown)) == default) {
+        set-svar(flo-boat-explore-load-levels, 7);
+        set-svar(flo-boat-explore-monorail-puzzle-solved-roof, 0);
+        var_4 = set-svar(flo-boat-explore-monorail-puzzle-solved-side, 0);
+    } else if (task-subnode-get-active-continue(task-find(flooded-city, flo-boat-explore-downtown)) == parking-lot) {
+        set-svar(flo-boat-explore-load-levels, 7);
+        set-svar(flo-boat-explore-monorail-puzzle-solved-roof, 0);
+        var_4 = set-svar(flo-boat-explore-monorail-puzzle-solved-side, 0);
+    } else if (task-subnode-get-active-continue(task-find(flooded-city, flo-boat-explore-downtown)) == 6th-ave) {
+        set-svar(flo-boat-explore-load-levels, 14);
+        set-svar(flo-boat-explore-monorail-puzzle-solved-roof, 0);
+        var_4 = set-svar(flo-boat-explore-monorail-puzzle-solved-side, 0);
+    } else if (task-subnode-get-active-continue(task-find(flooded-city, flo-boat-explore-downtown)) == scar-fight-pre-ambush-bank) {
+        set-svar(flo-boat-explore-load-levels, 30);
+        set-svar(flo-boat-explore-monorail-puzzle-solved-roof, 0);
+        var_4 = set-svar(flo-boat-explore-monorail-puzzle-solved-side, 0);
+    } else if (task-subnode-get-active-continue(task-find(flooded-city, flo-boat-explore-downtown)) == scar-fight-post-ambush) {
+        set-svar(flo-boat-explore-load-levels, 28);
+        set-svar(flo-boat-explore-monorail-puzzle-solved-roof, 0);
+        var_4 = set-svar(flo-boat-explore-monorail-puzzle-solved-side, 0);
+    } else if (task-subnode-get-active-continue(task-find(flooded-city, flo-boat-explore-downtown)) == scar-fight-complete) {
+        set-svar(flo-boat-explore-load-levels, 28);
+        set-svar(flo-boat-explore-monorail-puzzle-solved-roof, 0);
+        var_4 = set-svar(flo-boat-explore-monorail-puzzle-solved-side, 0);
+    } else if (task-subnode-get-active-continue(task-find(flooded-city, flo-boat-explore-downtown)) == monorail) {
+        set-svar(flo-boat-explore-load-levels, 28);
+        set-svar(flo-boat-explore-monorail-puzzle-solved-roof, 0);
+        var_4 = set-svar(flo-boat-explore-monorail-puzzle-solved-side, 0);
+    } else if (task-subnode-get-active-continue(task-find(flooded-city, flo-boat-explore-downtown)) == monorail-puzzle-done) {
+        set-svar(flo-boat-explore-load-levels, 28);
+        set-svar(flo-boat-explore-monorail-puzzle-solved-roof, 1);
+        var_4 = set-svar(flo-boat-explore-monorail-puzzle-solved-side, 0);
+    } else {
+        var_4 = 0;
+    }
+    return var_4;
+}
+
+u16 *task-graph*__game-task-subnode@56d98
+*task-graph*__game-task-subnode@571c8
+embedded@121028() {
+    u16 var_1;
+    if (task-played-from-dev-menu?()) {
+        var_1 = set-svar(flo-convention-center-low-loaded, 0);
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u64? *task-graph*__game-task-node@3168__map@3330____game-task-subnode@78168__
+embedded@ef8e0() {
+    return task-play-debug!(main-menu, menu, 0);
 }
 

@@ -364,7 +364,7 @@ embedded@14040(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     if (is-player?(arg_1) || !1 && character-is-dead?(arg_2)) {
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("Melee deadened for %f seconds", 0.50), 19);
+                display(dc:format("Melee deadened for %f seconds", 0.50), 19);
             }
         }
         disable-untargeted-melee-attack-timed(0.50);
@@ -454,7 +454,7 @@ embedded@15828(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
         var_0 = 1 && valid-contextual-dodge?(melee-fact-get-symbol(var_1, contextual-dodge-npc), 18, 63);
     } else {
         if (dc-assert-enabled?() && !1) {
-            display-error(#5445173390656D6D("allow-contextual-dodge-abort: invalid character to abort, provided '%s' please provide 'attacker or 'defender", string-debug(attacker)));
+            display-error(dc:format("allow-contextual-dodge-abort: invalid character to abort, provided '%s' please provide 'attacker or 'defender", string-debug(attacker)));
         }
         var_0 = 0;
     }
@@ -868,7 +868,7 @@ switchblade-exhausted-attack-2
 switchblade-exhausted-attack-4
 switchblade-exhausted-dodge-back-attack-1
 embedded@14530(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
-    return !task-range-active?(santa-barbara, san-free-abby-fight, #AB856B4E629B5F28, santa-barbara);
+    return !task-range-active?(santa-barbara, san-free-abby-fight, san-streets-spikes-abby-counter, santa-barbara);
 }
 
 u64? switchblade-exhausted-attack-1-far
@@ -1038,7 +1038,7 @@ u16 switchblade-exhausted-attack-1-far
 embedded@14168(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_1;
     if (!is-final-build?()) {
-        var_1 = display(#5445173390656D6D("event for hit intro: %f", 25.00), 19);
+        var_1 = display(dc:format("event for hit intro: %f", 25.00), 19);
     } else {
         var_1 = 0;
     }
@@ -1367,7 +1367,7 @@ u16 switchblade-exhausted-attack-1
 embedded@139b0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_1;
     if (!is-final-build?()) {
-        var_1 = display(#5445173390656D6D("event for hit intro: %f", 12.00), 19);
+        var_1 = display(dc:format("event for hit intro: %f", 12.00), 19);
     } else {
         var_1 = 0;
     }
@@ -1418,7 +1418,7 @@ switchblade-exhausted-attack-2
 embedded@14bc8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_1;
     if (!is-final-build?()) {
-        var_1 = display(#5445173390656D6D("event for hit intro: %f", 14.00), 19);
+        var_1 = display(dc:format("event for hit intro: %f", 14.00), 19);
     } else {
         var_1 = 0;
     }
@@ -1460,7 +1460,7 @@ switchblade-exhausted-dodge-back-attack-1
 embedded@13658(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_1;
     if (!is-final-build?()) {
-        var_1 = display(#5445173390656D6D("event for hit intro: %f", 16.00), 19);
+        var_1 = display(dc:format("event for hit intro: %f", 16.00), 19);
     } else {
         var_1 = 0;
     }

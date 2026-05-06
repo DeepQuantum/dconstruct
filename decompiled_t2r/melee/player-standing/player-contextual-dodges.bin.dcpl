@@ -171,16 +171,16 @@ player-contextual-dodge-right-downward-right-b
 embedded@b2e8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
     u16 var_1;
     if (is-player?(arg_0)) {
-        broadcast-event(#838AEFD5AE03AADE);
+        broadcast-event(player-dodge-end);
         if (!is-final-build?()) {
-            display(#5445173390656D6D("PLAYER DODGE END"), 19);
+            display(dc:format("PLAYER DODGE END"), 19);
         }
         melee-fact-set-bool(arg_1, is-dodging, 0);
         u64? var_6 = minmax(round-float(18.00 - get-layer-animation-frame(arg_0, base)), 0.00, 999.00);
         u16 var_7;
         if ((var_6 / 30.00) > 0.00) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("Run off i-frames awarded: %f", var_6 / 30.00), 19);
+                display(dc:format("Run off i-frames awarded: %f", var_6 / 30.00), 19);
             }
             var_7 = give-i-frames(arg_0, var_6 / 30.00);
         } else {
@@ -554,14 +554,14 @@ player-contextual-dodge-right-downward-right-d
 player-contextual-dodge-right-downward-right-a
 player-contextual-dodge-right-downward-right-b
 embedded@3b0c8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
-    broadcast-event(#7C1C79761A9546FB);
+    broadcast-event(player-dodge-start);
     if (!is-final-build?()) {
-        display(#5445173390656D6D("PLAYER DODGE START"), 19);
+        display(dc:format("PLAYER DODGE START"), 19);
     }
     melee-fact-set-float(arg_1, dodge-speed-flex, dodge-speed-flex(arg_1, arg_2, 10));
     if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D("Dodge speed adjustment: %f", melee-fact-get-float(arg_1, dodge-speed-flex)), 19);
+            display(dc:format("Dodge speed adjustment: %f", melee-fact-get-float(arg_1, dodge-speed-flex)), 19);
         }
     }
     melee-fact-set-time(arg_1, npc-nullify-dodge);
@@ -2278,11 +2278,11 @@ embedded@38040(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     u16 var_1;
     if (joypad-has-haptics?(2)) {
         if (2 == 3) {
-            var_1 = play-hfx-id(#4940C7D528DE9CB7, 0, 2);
+            var_1 = play-hfx-id(melee-dodge-haptic-left, 0, 2);
         } else if (3 == 3) {
-            var_1 = play-hfx-id(#B8FA84C1F04D17A8, 0, 2);
+            var_1 = play-hfx-id(melee-dodge-haptic-right, 0, 2);
         } else {
-            var_1 = play-hfx-id(#5B6E98386ABC6EB3, 0, 2);
+            var_1 = play-hfx-id(melee-dodge-haptic, 0, 2);
         }
     } else {
         var_1 = 0;
@@ -2444,11 +2444,11 @@ embedded@3a700(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     u16 var_1;
     if (joypad-has-haptics?(2)) {
         if (2 == 1) {
-            var_1 = play-hfx-id(#4940C7D528DE9CB7, 0, 2);
+            var_1 = play-hfx-id(melee-dodge-haptic-left, 0, 2);
         } else if (3 == 1) {
-            var_1 = play-hfx-id(#B8FA84C1F04D17A8, 0, 2);
+            var_1 = play-hfx-id(melee-dodge-haptic-right, 0, 2);
         } else {
-            var_1 = play-hfx-id(#5B6E98386ABC6EB3, 0, 2);
+            var_1 = play-hfx-id(melee-dodge-haptic, 0, 2);
         }
     } else {
         var_1 = 0;
@@ -2476,14 +2476,14 @@ embedded@38bc8(u64? arg_0, bool arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 
 u64? player-contextual-dodge-back-downward-left-b
 embedded@38e08(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
-    broadcast-event(#7C1C79761A9546FB);
+    broadcast-event(player-dodge-start);
     if (!is-final-build?()) {
-        display(#5445173390656D6D("PLAYER DODGE START"), 19);
+        display(dc:format("PLAYER DODGE START"), 19);
     }
     melee-fact-set-float(arg_1, dodge-speed-flex, dodge-speed-flex(arg_1, arg_2, 6));
     if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D("Dodge speed adjustment: %f", melee-fact-get-float(arg_1, dodge-speed-flex)), 19);
+            display(dc:format("Dodge speed adjustment: %f", melee-fact-get-float(arg_1, dodge-speed-flex)), 19);
         }
     }
     melee-fact-set-time(arg_1, npc-nullify-dodge);
@@ -2847,11 +2847,11 @@ embedded@37e88(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     u16 var_1;
     if (joypad-has-haptics?(2)) {
         if (2 == 2) {
-            var_1 = play-hfx-id(#4940C7D528DE9CB7, 0, 2);
+            var_1 = play-hfx-id(melee-dodge-haptic-left, 0, 2);
         } else if (3 == 2) {
-            var_1 = play-hfx-id(#B8FA84C1F04D17A8, 0, 2);
+            var_1 = play-hfx-id(melee-dodge-haptic-right, 0, 2);
         } else {
-            var_1 = play-hfx-id(#5B6E98386ABC6EB3, 0, 2);
+            var_1 = play-hfx-id(melee-dodge-haptic, 0, 2);
         }
     } else {
         var_1 = 0;
@@ -2920,11 +2920,11 @@ embedded@379f8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     u16 var_1;
     if (joypad-has-haptics?(2)) {
         if (2 == 0) {
-            var_1 = play-hfx-id(#4940C7D528DE9CB7, 0, 2);
+            var_1 = play-hfx-id(melee-dodge-haptic-left, 0, 2);
         } else if (3 == 0) {
-            var_1 = play-hfx-id(#B8FA84C1F04D17A8, 0, 2);
+            var_1 = play-hfx-id(melee-dodge-haptic-right, 0, 2);
         } else {
-            var_1 = play-hfx-id(#5B6E98386ABC6EB3, 0, 2);
+            var_1 = play-hfx-id(melee-dodge-haptic, 0, 2);
         }
     } else {
         var_1 = 0;

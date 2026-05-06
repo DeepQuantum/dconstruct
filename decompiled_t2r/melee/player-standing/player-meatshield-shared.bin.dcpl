@@ -426,7 +426,7 @@ embedded@2d10(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
         u64? var_5 = round-float(100.00 * (1.00 / var_3));
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D(
+                display(dc:format(
                     "%s - projected sync: %s - sync pose rating: %f - relative priority func rating: %i",
                     string-debug(meatshield-knee-grab-forward-intro),
                     string-debug(*(u64*)(*(lookup-symbol(meatshield-knee-grab-forward, melee-attack) + 112) + 32)),
@@ -576,7 +576,7 @@ embedded@3090(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
         u64? var_5 = round-float(100.00 * (1.00 / var_3));
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D(
+                display(dc:format(
                     "%s - projected sync: %s - sync pose rating: %f - relative priority func rating: %i",
                     string-debug(meatshield-knee-grab-back-intro),
                     string-debug(*(u64*)(*(lookup-symbol(meatshield-knee-grab-back, melee-attack) + 112) + 32)),
@@ -650,7 +650,7 @@ embedded@27d8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
         u64? var_5 = round-float(100.00 * (1.00 / var_3));
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D(
+                display(dc:format(
                     "%s - projected sync: %s - sync pose rating: %f - relative priority func rating: %i",
                     string-debug(meatshield-stealth-attack-grab-left-intro),
                     string-debug(*(u64*)(*(lookup-symbol(meatshield-stealth-attack-grab-left, melee-attack) + 112) + 32)),
@@ -814,7 +814,7 @@ embedded@3268(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
         u64? var_5 = round-float(100.00 * (1.00 / var_3));
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D(
+                display(dc:format(
                     "%s - projected sync: %s - sync pose rating: %f - relative priority func rating: %i",
                     string-debug(meatshield-stealth-attack-grab-intro),
                     string-debug(*(u64*)(*(lookup-symbol(meatshield-stealth-attack-grab, melee-attack) + 112) + 32)),
@@ -871,7 +871,7 @@ embedded@2830(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
         u64? var_5 = round-float(100.00 * (1.00 / var_3));
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D(
+                display(dc:format(
                     "%s - projected sync: %s - sync pose rating: %f - relative priority func rating: %i",
                     string-debug(meatshield-stealth-attack-grab-front-intro),
                     string-debug(*(u64*)(*(lookup-symbol(meatshield-stealth-attack-grab-front, melee-attack) + 112) + 32)),
@@ -928,7 +928,7 @@ embedded@3a70(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
         u64? var_5 = round-float(100.00 * (1.00 / var_3));
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D(
+                display(dc:format(
                     "%s - projected sync: %s - sync pose rating: %f - relative priority func rating: %i",
                     string-debug(meatshield-stealth-attack-grab-right-intro),
                     string-debug(*(u64*)(*(lookup-symbol(meatshield-stealth-attack-grab-right, melee-attack) + 112) + 32)),
@@ -1029,7 +1029,7 @@ embedded@3710(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
         u64? var_5 = round-float(100.00 * (1.00 / var_3));
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D(
+                display(dc:format(
                     "%s - projected sync: %s - sync pose rating: %f - relative priority func rating: %i",
                     string-debug(meatshield-knee-grab-left-intro),
                     string-debug(*(u64*)(*(lookup-symbol(meatshield-knee-grab-left, melee-attack) + 112) + 32)),
@@ -1086,7 +1086,7 @@ embedded@2eb8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
         u64? var_5 = round-float(100.00 * (1.00 / var_3));
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D(
+                display(dc:format(
                     "%s - projected sync: %s - sync pose rating: %f - relative priority func rating: %i",
                     string-debug(meatshield-knee-grab-right-intro),
                     string-debug(*(u64*)(*(lookup-symbol(meatshield-knee-grab-right, melee-attack) + 112) + 32)),

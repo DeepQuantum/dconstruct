@@ -4,12 +4,38 @@
 // #   listing for file: game_dumps/t2r/dc1/ss-abby-fights-militia\ss-afm-burning-village-bg-melee-struggle.bin#
 // #   filesize: 39711 bytes                                                                          #
 // #   total entries: 4                                                                               #
-// #   functions: 103                                                                                 #
+// #   functions: 106                                                                                 #
 // #   has state script: true                                                                         #
 // #   game type: t2r                                                                                 #
 // #   optimizations enabled: true                                                                    #
 // #                                                                                                  #
 // ####################################################################################################
+
+u16 scar-vs-militia-hatchet-finisher__melee-attack@90__start-func-array@578__
+embedded@1048(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    return 1;
+}
+
+u16 scar-vs-militia-hatchet-finisher__melee-event-list@3c0
+embedded@f50(u64? arg_0, u64? arg_1, sid arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u16 var_0;
+    if (player == arg_2) {
+        var_0 = log-event("melee-damage-received", 1, "", get-object-locator(player), 0);
+    } else {
+        var_0 = 0;
+    }
+    return var_0;
+}
+
+u64? scar-vs-militia-hatchet-finisher
+embedded@12a8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    return broadcast-event(
+        melee-damage,
+        boxed_symbol(arg_1),
+        boxed_symbol(arg_2),
+        boxed_f32(100.00)
+    );
+}
 
 statescript {
     options {

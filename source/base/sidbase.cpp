@@ -17,15 +17,15 @@ namespace dconstruct {
         std::byte* temp_buffer = new std::byte[fsize];
 
         u64 num_entries = 0;
-        sidfile.read(reinterpret_cast<char*>(&num_entries), 8);
+        sidfile.read(reinterpret_cast<char*>(&num_entries), sizeof(u64));
         sidfile.seekg(0);
 
         sidfile.read(reinterpret_cast<char*>(temp_buffer), fsize);
 
-        auto entries = reinterpret_cast<SIDBaseEntry*>(temp_buffer + 8);
+        auto entries = reinterpret_cast<SIDBaseEntry*>(temp_buffer + sizeof(u64));
         auto bytes = std::unique_ptr<std::byte[]>(temp_buffer);
         const sid64 lowest = entries[0].hash;
-        const sid64 highest = entries[num_entries - 1].hash;
+        const sid64 highest = entries[num_entries - 1 - sizeof(u64)].hash;
 
         return SIDBase{num_entries, std::move(bytes), entries, lowest, highest};
     }

@@ -42,7 +42,7 @@ u64? switchblade-low-cover-attack-enter-right-far
 switchblade-low-cover-attack-enter-right
 switchblade-low-cover-attack-left-enter
 embedded@1f6f8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
-    return !is-rogue-mode?() && is-rogue-mode?() || !melee-fact-get-bool(arg_2, #C5AC6809F76060D9) && melee-fact-get-bool(arg_2, #C5AC6809F76060D9) && melee-fact-get-time-since(player, #341F6962744F9F8C) > 15.00;
+    return !is-rogue-mode?() && is-rogue-mode?() || !melee-fact-get-bool(arg_2, is-boss) && melee-fact-get-bool(arg_2, is-boss) && melee-fact-get-time-since(player, contextual-cooldown) > 15.00;
 }
 
 u64? switchblade-low-cover-attack-enter-right-far__melee-event-list@6128
@@ -219,7 +219,7 @@ embedded@1f5c8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
         var_0 = 1 && valid-contextual-dodge?(melee-fact-get-symbol(var_1, contextual-dodge-npc), 18, 63);
     } else {
         if (dc-assert-enabled?() && !1) {
-            display-error(#5445173390656D6D("allow-contextual-dodge-abort: invalid character to abort, provided '%s' please provide 'attacker or 'defender", string-debug(attacker)));
+            display-error(dc:format("allow-contextual-dodge-abort: invalid character to abort, provided '%s' please provide 'attacker or 'defender", string-debug(attacker)));
         }
         var_0 = 0;
     }
@@ -401,7 +401,7 @@ switchblade-low-cover-attack-left-enter
 switchblade-wall-attack-left-enter
 embedded@1edf8(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     if (!is-final-build?()) {
-        display(#5445173390656D6D("bruh"), 19);
+        display(dc:format("bruh"), 19);
     }
     if (!1) {
         melee-debug-text-file-line-fail("(begin (printf bruh) #t)", "t2r/src/game/scriptx/melee/player-standing/imports/player-standing-macros.dcx", 968);
@@ -634,7 +634,7 @@ embedded@20568(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     if (is-player?(arg_1) || !1 && character-is-dead?(arg_2)) {
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("Melee deadened for %f seconds", 0.50), 19);
+                display(dc:format("Melee deadened for %f seconds", 0.50), 19);
             }
         }
         disable-untargeted-melee-attack-timed(0.50);
@@ -762,7 +762,7 @@ switchblade-wall-attack-enter-right-far
 switchblade-low-cover-attack-left-enter
 switchblade-wall-attack-left-enter
 embedded@1f9f0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
-    return melee-fact-set-time(player, #341F6962744F9F8C);
+    return melee-fact-set-time(player, contextual-cooldown);
 }
 
 u16 switchblade-low-cover-attack-enter-right-far
@@ -1214,7 +1214,7 @@ i32 switchblade-low-cover-attack-enter-right-hit__melee-attack@c80
 embedded@5918(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
     if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D(
+            display(dc:format(
                 "wall dist: %f, ideal dist %f, ranking: %i",
                 get-locator-distance-xz(get-object-locator(arg_2), get-bf-from-cache(arg_7, 0)),
                 0.30,
@@ -1894,7 +1894,7 @@ switchblade-low-cover-attack-4-hit__melee-attack@3340
 embedded@60b8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
     if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D(
+            display(dc:format(
                 "wall dist: %f, ideal dist %f, ranking: %i",
                 get-locator-distance-xz(get-object-locator(arg_2), get-bf-from-cache(arg_7, 0)),
                 0.00,
@@ -1921,7 +1921,7 @@ i32 switchblade-wall-attack-enter-right-hit__melee-attack@1c00
 embedded@4740(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
     if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D(
+            display(dc:format(
                 "wall dist: %f, ideal dist %f, ranking: %i",
                 get-locator-distance-xz(get-object-locator(arg_2), get-bf-from-cache(arg_7, 0)),
                 0.60,
@@ -1964,7 +1964,7 @@ u64? switchblade-wall-attack-enter-right
 switchblade-wall-attack-enter-right-far
 switchblade-wall-attack-left-enter
 embedded@210a0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
-    return is-player-ellie?(player) || !is-rogue-mode?() && is-rogue-mode?() || !melee-fact-get-bool(arg_2, #C5AC6809F76060D9) && melee-fact-get-bool(arg_2, #C5AC6809F76060D9) && melee-fact-get-time-since(player, #341F6962744F9F8C) > 15.00;
+    return is-player-ellie?(player) || !is-rogue-mode?() && is-rogue-mode?() || !melee-fact-get-bool(arg_2, is-boss) && melee-fact-get-bool(arg_2, is-boss) && melee-fact-get-time-since(player, contextual-cooldown) > 15.00;
 }
 
 u64? switchblade-wall-attack-enter-right__melee-event-list@5348
@@ -2120,7 +2120,7 @@ i32 switchblade-wall-attack-left-enter-hit__melee-attack@27a0
 embedded@4058(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
     if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D(
+            display(dc:format(
                 "wall dist: %f, ideal dist %f, ranking: %i",
                 get-locator-distance-xz(get-object-locator(arg_2), get-bf-from-cache(arg_7, 0)),
                 1.40,
@@ -2135,7 +2135,7 @@ i32 switchblade-wall-attack-enter-right-far-hit__melee-attack@2b80
 embedded@6290(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
     if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D(
+            display(dc:format(
                 "wall dist: %f, ideal dist %f, ranking: %i",
                 get-locator-distance-xz(get-object-locator(arg_2), get-bf-from-cache(arg_7, 0)),
                 1.80,
@@ -2150,7 +2150,7 @@ i32 switchblade-low-cover-attack-left-enter-hit__melee-attack@2f60
 embedded@6578(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
     if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D(
+            display(dc:format(
                 "wall dist: %f, ideal dist %f, ranking: %i",
                 get-locator-distance-xz(get-object-locator(arg_2), get-bf-from-cache(arg_7, 0)),
                 1.50,
@@ -2177,7 +2177,7 @@ i32 switchblade-low-cover-attack-enter-right-far-hit__melee-attack@3530
 embedded@5ac0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
     if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D(
+            display(dc:format(
                 "wall dist: %f, ideal dist %f, ranking: %i",
                 get-locator-distance-xz(get-object-locator(arg_2), get-bf-from-cache(arg_7, 0)),
                 1.00,

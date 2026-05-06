@@ -36,7 +36,7 @@ buddy-m-1hblade-vs-human-hamstring-neck-slice-finisher__start-func-array@8340
 buddy-m-1hblade-vs-inf-back-finisher__start-func-array@7a38
 buddy-m-1hblade-vs-human-stomach-drive-finisher__start-func-array@80a0
 embedded@19250(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
-    return !is-rogue-mode?() && is-rogue-mode?() && !melee-fact-get-bool(arg_2, #C5AC6809F76060D9);
+    return !is-rogue-mode?() && is-rogue-mode?() && !melee-fact-get-bool(arg_2, is-boss);
 }
 
 u64? buddy-m-1hblade-vs-human-back-hamstring-neck-chop-finisher
@@ -295,7 +295,7 @@ embedded@18530(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
             var_0 = 0;
         }
     } else if (dc-assert-enabled?() && !1) {
-        var_0 = display-error(#5445173390656D6D("melee-simple-damage-event: incorrect character '%s'", string-debug(attacker)));
+        var_0 = display-error(dc:format("melee-simple-damage-event: incorrect character '%s'", string-debug(attacker)));
     } else {
         var_0 = 0;
     }
@@ -1044,7 +1044,7 @@ embedded@19d28(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
             var_0 = 0;
         }
     } else if (dc-assert-enabled?() && !1) {
-        var_0 = display-error(#5445173390656D6D("melee-simple-damage-event: incorrect character '%s'", string-debug(attacker)));
+        var_0 = display-error(dc:format("melee-simple-damage-event: incorrect character '%s'", string-debug(attacker)));
     } else {
         var_0 = 0;
     }
@@ -1113,7 +1113,7 @@ embedded@18638(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
             var_0 = 0;
         }
     } else if (dc-assert-enabled?() && !1) {
-        var_0 = display-error(#5445173390656D6D("melee-simple-damage-event: incorrect character '%s'", string-debug(defender)));
+        var_0 = display-error(dc:format("melee-simple-damage-event: incorrect character '%s'", string-debug(defender)));
     } else {
         var_0 = 0;
     }

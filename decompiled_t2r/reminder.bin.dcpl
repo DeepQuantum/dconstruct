@@ -23,7 +23,7 @@ u16 *infected-flashlight-reminder*__reminder@480
 *arrow-impalement-reminder*__reminder@800
 *stealth-kill-reminder*__reminder@880
 *invisible-enemies-listen-mode-reminder*__reminder@900
-#201E424FEFE100D4__reminder@980
+*reload-reminder-rogue*__reminder@980
 *stun-strike-reminder*__reminder@a00
 *stun-strike-reminder*
 *rogue-holdout-left-buddy-defense-zone-reminder*__reminder@a80
@@ -171,7 +171,7 @@ embedded@2600(u64? arg_0) {
     return is-rogue-mode?() && !player-listen-mode-active?() || tension-mode-is?(2) && tension-mode-is?(4) && npc-group-alive-count(all-enemy-npcs) > 0 && !hud2-look-at-prompt-active?() && is-listen-mode-player-enabled?();
 }
 
-u64? #201E424FEFE100D4
+u64? *reload-reminder-rogue*
 embedded@2c60(u64? arg_0) {
     u64? var_15 = get-weapon-process-clip-size(get-player-weapon-process-id());
     get-player-weapon-ammo-in-clip(0);
@@ -180,7 +180,7 @@ embedded@2c60(u64? arg_0) {
     return !(get-player-weapon-id() == 0) && !(get-player-weapon-process-id() == 0) && is-rogue-mode?() || get-player-weapon-type() == 2 && get-player-weapon-type() == 1 && !player-is-reloading?() && !hud2-look-at-prompt-active?() && hud2-health-ammo-is-visible?(0) && is-health-ammo-weapon-hud-enabled?() || !tension-mode-is?(3) && get-closest-enemy-to-player(15.00, 0, 15) == 0 && joypad-command-enabled?(reload) && is-rogue-mode?() && !task-node-active?(ellie-flashback-museum) && var_15 && var_15 && var_15 && var_15 && var_15 && var_15 > 2;
 }
 
-u64? #201E424FEFE100D4
+u64? *reload-reminder-rogue*
 *reload-reminder*
 embedded@2340(u64? arg_0) {
     return player-in-state?(Swim) || player-in-state?(Melee) || player-in-state?(Inventory) || 0 || player-is-aiming?() || character-in-struggle?(player, 16) || player-in-meatshield-sequence?(1) && !tension-mode-is?(1) && player-is-sprinting?(1);
@@ -217,21 +217,21 @@ embedded@2b00(u64? arg_0) {
 }
 
 u64? *use-health-kit-reminder*
-#454FF1C52E80ED3E
+*use-health-kit-reminder-kbm*
 embedded@1e70(u64? arg_0) {
     return get-inventory-item-quantity(health-kit) > 0 && (f32)get-player-health() <= 40.00 && joypad-command-enabled?(weapon-cross-up) || player-in-state?(Death) || player-in-state?(Script) && !0 && !hud2-look-at-prompt-active?();
 }
 
 u64? *use-health-kit-reminder*
-#454FF1C52E80ED3E
-#6537FE092EBC1695
+*use-health-kit-reminder-kbm*
+*craft-health-kit-reminder-kbm*
 *craft-health-kit-reminder*
 embedded@2bb0(u64? arg_0) {
     return player-in-state?(Swim) || player-in-state?(Melee) || 0 && character-in-struggle?(player, 16);
 }
 
-u64? #454FF1C52E80ED3E__reminder@c00
-#6537FE092EBC1695__reminder@f10
+u64? *use-health-kit-reminder-kbm*__reminder@c00
+*craft-health-kit-reminder-kbm*__reminder@f10
 embedded@2290(u64? arg_0) {
     return is-weapon-cross-toggle-setting-enabled?();
 }
@@ -254,15 +254,15 @@ embedded@1d68(u64? arg_0) {
 
 u64? *rogue-chained-inf-meatshield-reminder*
 embedded@2130(u64? arg_0) {
-    return is-rogue-mode?() && get-svar(#B588F9BE19063DAC) == 2 && !#F9F32B4822B8A98C() && player-in-meatshield?() && npc-clicker?(get-closest-enemy-to-player(7.00, player-get-meatshield(), 5));
+    return is-rogue-mode?() && get-svar(rogue-wave-faction) == 2 && !custom-run--is-chained-infected-blacklisted?() && player-in-meatshield?() && npc-clicker?(get-closest-enemy-to-player(7.00, player-get-meatshield(), 5));
 }
 
 u64? *flashlight-input-reminder*__reminder@d80
 embedded@1f20(u64? arg_0) {
     u16 var_1;
-    if (joypad-button-from-input(#69A7A17F4F122F3B) == 1024) {
+    if (joypad-button-from-input(gen:flashlight) == 1024) {
         var_1 = 1;
-    } else if (joypad-button-from-input(#69A7A17F4F122F3B) == 16384) {
+    } else if (joypad-button-from-input(gen:flashlight) == 16384) {
         var_1 = 1;
     } else {
         var_1 = 0;
@@ -295,7 +295,7 @@ embedded@2dc0(u64? arg_0) {
     return player-in-state?(Swim) || player-in-state?(Melee) || player-in-state?(Inventory) || 0 || character-in-struggle?(player, 16) || player-in-meatshield-sequence?(1) && hud2-weapon-cross-active?(1);
 }
 
-u64? #6537FE092EBC1695
+u64? *craft-health-kit-reminder-kbm*
 *craft-health-kit-reminder*
 embedded@2d10(u64? arg_0) {
     return player-can-craft?(health-kit, 0) && (f32)get-player-health() <= 40.00 && get-inventory-item-quantity(health-kit) == 0 && joypad-command-enabled?(inventory-open) || player-in-state?(Death) || player-in-state?(Script) && !0 && !hud2-look-at-prompt-active?();
@@ -382,7 +382,7 @@ embedded@2658(u64? arg_0) {
 u64? *rogue-nav-assist-goals-hub-reminder*__reminder@1510
 *rogue-nav-assist-goals-combat-reminder*__reminder@1790
 embedded@2b58(u64? arg_0) {
-    return #437B4E89B54246C4();
+    return use-accessibility-chords?();
 }
 
 u64? *rogue-nav-assist-goals-hub-reminder*
@@ -433,7 +433,7 @@ embedded@3080(u64? arg_0) {
 
 u64? *rogue-nav-assist-goals-combat-reminder*
 embedded@2ec8(u64? arg_0) {
-    return rogue-player-in-encounter?() && #61BFF1817E125857() && #B8F261E442364781() >= 2 && get-tension-mode() != 3;
+    return rogue-player-in-encounter?() && rogue-navigation-goal-enabled?() && get-num-rogue-navigation-goals-available() >= 2 && get-tension-mode() != 3;
 }
 
 u64? *dive-underwater-reminder*
@@ -455,7 +455,7 @@ u64? *hold-breath-reminder*
 embedded@2a50(u64? arg_0) {
     u64? var_15 = get-closest-visible-enemy-to-reticle(all-enemy-npcs);
     u64? var_17 = get-closest-enemy-to-player(9999.00, 0, 15);
-    return player-upgrade-active?(aim-hold-breath) && player-is-aiming?() || player-in-state?(GunMove) || player-in-state?(BowMove) || player-in-state?(Prone) && 0 && !hud2-look-at-prompt-active?() && allow-melee-while-aiming?() && !(joypad-button-from-input(#ECF01A1E2F1494A5) == joypad-button-from-input(#0B454F7453718A2E)) || get-player-weapon-type() == 2 && get-player-weapon-type() == 1 && get-player-weapon-total-ammo() > 0 || tension-mode-is?(2) && tension-mode-is?(4) && !player-in-meatshield-sequence?(1) && var_15 && var_15 && distance-between-objects-greater-than?(var_15, player, 20.00, 1) || var_17 && var_17 && distance-between-objects-greater-than?(var_17, player, 5.00, 1) && !task-range-active?(save-lev, sle-manny, save-lev, sle-boating);
+    return player-upgrade-active?(aim-hold-breath) && player-is-aiming?() || player-in-state?(GunMove) || player-in-state?(BowMove) || player-in-state?(Prone) && 0 && !hud2-look-at-prompt-active?() && allow-melee-while-aiming?() && !(joypad-button-from-input(gen:attack) == joypad-button-from-input(aim:hold-breath)) || get-player-weapon-type() == 2 && get-player-weapon-type() == 1 && get-player-weapon-total-ammo() > 0 || tension-mode-is?(2) && tension-mode-is?(4) && !player-in-meatshield-sequence?(1) && var_15 && var_15 && distance-between-objects-greater-than?(var_15, player, 20.00, 1) || var_17 && var_17 && distance-between-objects-greater-than?(var_17, player, 5.00, 1) && !task-range-active?(save-lev, sle-manny, save-lev, sle-boating);
 }
 
 u64? *silencer-toggle-reminder*

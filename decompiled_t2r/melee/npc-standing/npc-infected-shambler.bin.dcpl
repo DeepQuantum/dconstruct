@@ -290,7 +290,7 @@ embedded@1bd50(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 u64? npc-infected-shambler-left-swing
 npc-infected-shambler-right-swing
 embedded@1d3b8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
-    return is-rogue-mode?() && melee-fact-get-bool(arg_2, #0A38E8AE5A91B7D9);
+    return is-rogue-mode?() && melee-fact-get-bool(arg_2, extended-melee);
 }
 
 u64? npc-infected-shambler-left-swing
@@ -666,7 +666,7 @@ embedded@2e90(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
                 if (player-in-meatshield?() && player-get-meatshield() == arg_2) {
                     if (is-in-front?(get-object-locator(arg_2), get-object-locator(arg_1), 2, 180.00) && is-in-front?(get-object-locator(arg_1), get-object-locator(arg_2), 2, 180.00)) {
                         if (!is-final-build?()) {
-                            display(#5445173390656D6D("END PLAYER MEATSHIELD DUE TO CLICKER MEATSHIELD CASE"), 19);
+                            display(dc:format("END PLAYER MEATSHIELD DUE TO CLICKER MEATSHIELD CASE"), 19);
                         }
                         log-event("clicker-ate-meatshield-npc", 1, "", 0, 0);
                         player-end-meatshield();
@@ -1212,7 +1212,7 @@ embedded@1e0b0(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? 
 }
 
 u64? shambler-stand-explode-chained
-#4B6A48FA938AF58B
+rogue-npc-infected-shambler-standing-struggle-finisher
 npc-infected-shambler-standing-struggle
 npc-infected-shambler-standing-struggle-finisher
 shambler-explode-moving-explode
@@ -1628,8 +1628,8 @@ embedded@1d308(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return 1;
 }
 
-f32 #4B6A48FA938AF58B__melee-attack@b78__character-melee-info@3750__
-#4B6A48FA938AF58B__character-melee-info@3f30
+f32 rogue-npc-infected-shambler-standing-struggle-finisher__melee-attack@b78__character-melee-info@3750__
+rogue-npc-infected-shambler-standing-struggle-finisher__character-melee-info@3f30
 npc-infected-shambler-standing-struggle-finisher__melee-attack@1af8__character-melee-info@3750__
 npc-infected-shambler-standing-struggle-finisher__character-melee-info@3d68
 embedded@17d18(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
@@ -1644,7 +1644,7 @@ embedded@17d18(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return var_0;
 }
 
-f32 #4B6A48FA938AF58B__melee-attack@b78
+f32 rogue-npc-infected-shambler-standing-struggle-finisher__melee-attack@b78
 npc-infected-shambler-standing-struggle-finisher__melee-attack@1af8
 embedded@17c40(u64? arg_0, u64? arg_1, u64? arg_2) {
     f32 var_1;
@@ -1656,7 +1656,7 @@ embedded@17c40(u64? arg_0, u64? arg_1, u64? arg_2) {
     return var_1;
 }
 
-f32 #4B6A48FA938AF58B
+f32 rogue-npc-infected-shambler-standing-struggle-finisher
 npc-infected-shambler-standing-struggle-finisher
 embedded@16348(u64? arg_0, u64? arg_1, u64? arg_2) {
     f32 var_1;
@@ -1668,7 +1668,7 @@ embedded@16348(u64? arg_0, u64? arg_1, u64? arg_2) {
     return var_1;
 }
 
-u64? #4B6A48FA938AF58B__start-func-array@2880
+u64? rogue-npc-infected-shambler-standing-struggle-finisher__start-func-array@2880
 embedded@1bf18(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
     u64? var_0 = get-object-distance(arg_1, arg_2);
     bool var_1 = !(arg_1 == 0) && !(arg_2 == 0) && var_0 < 4.00 && var_0 > 0.00;
@@ -1685,10 +1685,10 @@ embedded@1bf18(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? 
         boxed_f32(4.00),
         var_5
     );
-    return var_1 && #329DF6617C39EA76() && 1;
+    return var_1 && rogue-mode-finisher() && 1;
 }
 
-u64? #4B6A48FA938AF58B
+u64? rogue-npc-infected-shambler-standing-struggle-finisher
 npc-infected-shambler-standing-struggle-finisher
 embedded@1be28(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
     u64? var_0 = character-melee-event-active?(arg_2, 211, 0);
@@ -1699,7 +1699,7 @@ embedded@1be28(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return !var_0 && 1 && 1;
 }
 
-u16 #4B6A48FA938AF58B
+u16 rogue-npc-infected-shambler-standing-struggle-finisher
 npc-infected-shambler-standing-struggle-finisher
 embedded@2420(i64 arg_0, i64 arg_1, i64 arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
     if (arg_0 == arg_2) {
@@ -1741,7 +1741,7 @@ embedded@2420(i64 arg_0, i64 arg_1, i64 arg_2, u64? arg_3, u64? arg_4, u64? arg_
     return var_9;
 }
 
-u16 #4B6A48FA938AF58B__melee-event-list@2fc8
+u16 rogue-npc-infected-shambler-standing-struggle-finisher__melee-event-list@2fc8
 npc-infected-shambler-standing-struggle-finisher__melee-event-list@4368
 embedded@1f738(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_1;
@@ -1756,21 +1756,21 @@ embedded@1f738(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return var_1;
 }
 
-u64? #4B6A48FA938AF58B
+u64? rogue-npc-infected-shambler-standing-struggle-finisher
 embedded@1e1a0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     if (is-player?(arg_2)) {
         send-event(synced-finisher-v-player, ss-promote-death-hints, boxed_symbol(arg_1));
     }
-    return log-event("melee-npc-finisher", 1, string-debug(#4B6A48FA938AF58B), 0, 0);
+    return log-event("melee-npc-finisher", 1, string-debug(rogue-npc-infected-shambler-standing-struggle-finisher), 0, 0);
 }
 
-u64? #4B6A48FA938AF58B
+u64? rogue-npc-infected-shambler-standing-struggle-finisher
 npc-infected-shambler-standing-struggle-finisher
 embedded@1bae8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return is-player?(arg_2);
 }
 
-u64? #4B6A48FA938AF58B
+u64? rogue-npc-infected-shambler-standing-struggle-finisher
 npc-infected-shambler-standing-struggle-finisher
 embedded@1f558(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     f32 var_0;
@@ -1782,9 +1782,9 @@ embedded@1f558(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return play-melee-facial-gesture(arg_2, 12, var_0, 0.10);
 }
 
-u64? #4B6A48FA938AF58B
-#4B6A48FA938AF58B
-#4B6A48FA938AF58B
+u64? rogue-npc-infected-shambler-standing-struggle-finisher
+rogue-npc-infected-shambler-standing-struggle-finisher
+rogue-npc-infected-shambler-standing-struggle-finisher
 npc-infected-shambler-standing-struggle-finisher
 npc-infected-shambler-standing-struggle-finisher
 npc-infected-shambler-standing-struggle-finisher
@@ -1798,8 +1798,8 @@ embedded@1e688(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return var_0 && var_1 && var_1;
 }
 
-u64? #4B6A48FA938AF58B
-#4B6A48FA938AF58B
+u64? rogue-npc-infected-shambler-standing-struggle-finisher
+rogue-npc-infected-shambler-standing-struggle-finisher
 npc-infected-shambler-standing-struggle-finisher
 npc-infected-shambler-standing-struggle-finisher
 embedded@1d810(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
@@ -1812,9 +1812,9 @@ embedded@1d810(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return play-melee-facial-gesture(arg_2, 14, var_0, 0.20);
 }
 
-u64? #4B6A48FA938AF58B
-#4B6A48FA938AF58B
-#4B6A48FA938AF58B
+u64? rogue-npc-infected-shambler-standing-struggle-finisher
+rogue-npc-infected-shambler-standing-struggle-finisher
+rogue-npc-infected-shambler-standing-struggle-finisher
 npc-infected-shambler-standing-struggle
 npc-infected-shambler-standing-struggle-finisher
 npc-infected-shambler-standing-struggle-finisher
@@ -1829,8 +1829,8 @@ embedded@1d670(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return var_0 && var_1 && var_1;
 }
 
-u64? #4B6A48FA938AF58B
-#4B6A48FA938AF58B
+u64? rogue-npc-infected-shambler-standing-struggle-finisher
+rogue-npc-infected-shambler-standing-struggle-finisher
 npc-infected-shambler-standing-struggle-finisher
 npc-infected-shambler-standing-struggle-finisher
 embedded@1fb98(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
@@ -1843,7 +1843,7 @@ embedded@1fb98(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return play-melee-facial-gesture(arg_2, 12, var_0, 0.20);
 }
 
-u64? #4B6A48FA938AF58B
+u64? rogue-npc-infected-shambler-standing-struggle-finisher
 npc-infected-shambler-standing-struggle-finisher
 embedded@1c5c0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     f32 var_0;
@@ -1855,7 +1855,7 @@ embedded@1c5c0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return play-melee-facial-gesture(arg_2, 14, var_0, 0.06);
 }
 
-u64? #4B6A48FA938AF58B
+u64? rogue-npc-infected-shambler-standing-struggle-finisher
 npc-infected-shambler-standing-struggle-finisher
 embedded@1fea0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     f32 var_0;
@@ -1867,7 +1867,7 @@ embedded@1fea0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return play-melee-facial-gesture(arg_2, 28, var_0, 0.60);
 }
 
-u64? #4B6A48FA938AF58B
+u64? rogue-npc-infected-shambler-standing-struggle-finisher
 npc-infected-shambler-standing-struggle-finisher
 embedded@1db48(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u64? var_0 = is-player?(arg_2);
@@ -1879,7 +1879,7 @@ embedded@1db48(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return var_0 && var_1 && var_1;
 }
 
-u64? #4B6A48FA938AF58B
+u64? rogue-npc-infected-shambler-standing-struggle-finisher
 npc-infected-shambler-left-swing-enter
 npc-infected-shambler-right-swing-enter
 npc-infected-shambler-standing-struggle
@@ -1895,7 +1895,7 @@ embedded@1cfb0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return play-melee-facial-gesture(arg_1, 25, var_0, 0.10);
 }
 
-u64? #4B6A48FA938AF58B
+u64? rogue-npc-infected-shambler-standing-struggle-finisher
 npc-infected-shambler-left-swing-enter
 npc-infected-shambler-right-swing-enter
 npc-infected-shambler-standing-struggle
@@ -1911,7 +1911,7 @@ embedded@1dbf8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return var_0 && var_1 && var_1;
 }
 
-u16 #4B6A48FA938AF58B
+u16 rogue-npc-infected-shambler-standing-struggle-finisher
 npc-infected-shambler-standing-struggle-finisher
 embedded@20078(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_3;
@@ -1924,7 +1924,7 @@ embedded@20078(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return var_3;
 }
 
-u16 #4B6A48FA938AF58B
+u16 rogue-npc-infected-shambler-standing-struggle-finisher
 npc-infected-shambler-standing-struggle-finisher
 embedded@1cc98(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_3;
@@ -1937,7 +1937,7 @@ embedded@1cc98(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return var_3;
 }
 
-u16 #4B6A48FA938AF58B
+u16 rogue-npc-infected-shambler-standing-struggle-finisher
 npc-infected-shambler-standing-struggle-finisher
 embedded@1bb98(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_3;
@@ -1950,7 +1950,7 @@ embedded@1bb98(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return var_3;
 }
 
-u16 #4B6A48FA938AF58B
+u16 rogue-npc-infected-shambler-standing-struggle-finisher
 npc-infected-shambler-standing-struggle
 npc-infected-shambler-standing-struggle-finisher
 embedded@1e800(u64? arg_0, u64? arg_1, sid arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
@@ -1963,7 +1963,7 @@ embedded@1e800(u64? arg_0, u64? arg_1, sid arg_2, u64? arg_3, u64? arg_4, u64? a
     return var_0;
 }
 
-u64? #4B6A48FA938AF58B
+u64? rogue-npc-infected-shambler-standing-struggle-finisher
 npc-infected-shambler-standing-struggle-finisher
 embedded@1fa90(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return broadcast-event(
@@ -1974,9 +1974,9 @@ embedded@1fa90(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     );
 }
 
-u64? #4B6A48FA938AF58B
-#4B6A48FA938AF58B
-#4B6A48FA938AF58B
+u64? rogue-npc-infected-shambler-standing-struggle-finisher
+rogue-npc-infected-shambler-standing-struggle-finisher
+rogue-npc-infected-shambler-standing-struggle-finisher
 npc-infected-shambler-standing-struggle-finisher
 npc-infected-shambler-standing-struggle-finisher
 npc-infected-shambler-standing-struggle-finisher
@@ -1984,25 +1984,25 @@ embedded@1c0d0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return is-npc?(arg_2) && is-npc?(arg_1) && !npc-is-buddy?(arg_1);
 }
 
-u64? #4B6A48FA938AF58B
+u64? rogue-npc-infected-shambler-standing-struggle-finisher
 npc-infected-shambler-standing-struggle-finisher
 embedded@1f430(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return !is-player?(arg_2);
 }
 
-u64? #4B6A48FA938AF58B
+u64? rogue-npc-infected-shambler-standing-struggle-finisher
 npc-infected-shambler-standing-struggle-finisher
 embedded@1e868(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return !character-in-melee-move?(arg_11, arg_1) && !is-player?(arg_2);
 }
 
-u64? #4B6A48FA938AF58B
+u64? rogue-npc-infected-shambler-standing-struggle-finisher
 npc-infected-shambler-standing-struggle-finisher
 embedded@1eb60(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return !character-in-melee-move?(arg_11, arg_2);
 }
 
-u16 #4B6A48FA938AF58B
+u16 rogue-npc-infected-shambler-standing-struggle-finisher
 npc-infected-shambler-standing-struggle-finisher
 embedded@1c890(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_1;
@@ -2015,13 +2015,13 @@ embedded@1c890(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return var_1;
 }
 
-u64? #4B6A48FA938AF58B
+u64? rogue-npc-infected-shambler-standing-struggle-finisher
 npc-infected-shambler-standing-struggle-finisher
 embedded@1c3d0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return !is-npc?(arg_2) && is-npc?(arg_1) && !npc-is-buddy?(arg_1);
 }
 
-u16 #4B6A48FA938AF58B
+u16 rogue-npc-infected-shambler-standing-struggle-finisher
 npc-infected-shambler-standing-struggle-finisher
 embedded@1ccf0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_1;
@@ -2033,19 +2033,19 @@ embedded@1ccf0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return var_1;
 }
 
-u64? #4B6A48FA938AF58B
+u64? rogue-npc-infected-shambler-standing-struggle-finisher
 npc-infected-shambler-standing-struggle-finisher
 embedded@1d918(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return !is-camera-animated?();
 }
 
-u64? #4B6A48FA938AF58B
+u64? rogue-npc-infected-shambler-standing-struggle-finisher
 npc-infected-shambler-standing-struggle-finisher
 embedded@1dec0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return shambler-pustule-expand(arg_1);
 }
 
-u64? #4B6A48FA938AF58B
+u64? rogue-npc-infected-shambler-standing-struggle-finisher
 npc-infected-shambler-standing-struggle-finisher
 embedded@1dc70(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return melee-fact-set-bool(arg_2, melee-killed, 1);
@@ -2237,7 +2237,7 @@ embedded@2588(i64 arg_0, i64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg
     u16 var_2;
     if (arg_0 == arg_1 && ((var_0 * 30.00) - var_1) > 2.00) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D("TELL INTERUPTED: interupted by %f frames", (var_0 * 30.00) - var_1), 19);
+            display(dc:format("TELL INTERUPTED: interupted by %f frames", (var_0 * 30.00) - var_1), 19);
         }
         var_2 = melee-fact-set-time(arg_0, last-time-tell-interupted);
     } else {
@@ -2714,7 +2714,7 @@ embedded@3138(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
                 if (player-in-meatshield?() && player-get-meatshield() == arg_2) {
                     if (is-in-front?(get-object-locator(arg_2), get-object-locator(arg_1), 2, 180.00) && is-in-front?(get-object-locator(arg_1), get-object-locator(arg_2), 2, 180.00)) {
                         if (!is-final-build?()) {
-                            display(#5445173390656D6D("END PLAYER MEATSHIELD DUE TO CLICKER MEATSHIELD CASE"), 19);
+                            display(dc:format("END PLAYER MEATSHIELD DUE TO CLICKER MEATSHIELD CASE"), 19);
                         }
                         log-event("clicker-ate-meatshield-npc", 1, "", 0, 0);
                         player-end-meatshield();
@@ -3179,7 +3179,7 @@ embedded@2cd8(i64 arg_0, i64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg
     u16 var_2;
     if (arg_0 == arg_1 && ((var_0 * 30.00) - var_1) > 2.00) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D("TELL INTERUPTED: interupted by %f frames", (var_0 * 30.00) - var_1), 19);
+            display(dc:format("TELL INTERUPTED: interupted by %f frames", (var_0 * 30.00) - var_1), 19);
         }
         var_2 = melee-fact-set-time(arg_0, last-time-tell-interupted);
     } else {
@@ -3579,7 +3579,7 @@ embedded@1bf80(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     holster-player-weapon(4, 1.00);
     u16 var_1;
     if (is-rogue-mode?()) {
-        var_1 = send-event(#7D70C7896B7D87D4, ss-reminders);
+        var_1 = send-event(player-grabbed-by-npc, ss-reminders);
     } else {
         var_1 = 0;
     }
@@ -3614,7 +3614,7 @@ embedded@1f120(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? 
         boxed_f32(4.00),
         var_5
     );
-    return var_1 && #BCC56A0BCEA8CC56() && 1;
+    return var_1 && not-rogue-mode-finisher() && 1;
 }
 
 u64? npc-infected-shambler-standing-struggle-finisher
@@ -3704,7 +3704,7 @@ embedded@30e0(i64 arg_0, i64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg
     u16 var_2;
     if (arg_0 == arg_1 && ((var_0 * 30.00) - var_1) > 2.00) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D("TELL INTERUPTED: interupted by %f frames", (var_0 * 30.00) - var_1), 19);
+            display(dc:format("TELL INTERUPTED: interupted by %f frames", (var_0 * 30.00) - var_1), 19);
         }
         var_2 = melee-fact-set-time(arg_0, last-time-tell-interupted);
     } else {

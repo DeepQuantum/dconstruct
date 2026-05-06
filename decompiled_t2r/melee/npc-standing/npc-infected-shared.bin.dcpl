@@ -17,8 +17,8 @@ npc-infected-standing-struggle-finisher__melee-attack@6d0__character-melee-info@
 npc-infected-standing-struggle-finisher__character-melee-info@7fa0
 npc-infected-low-cover-standing-struggle-finisher__melee-attack@1478__character-melee-info@8d18__
 npc-infected-low-cover-standing-struggle-finisher__character-melee-info@a470
-#702F871BCAF9DFC6__melee-attack@23f8__character-melee-info@9120__
-#702F871BCAF9DFC6__character-melee-info@9a30
+rogue-npc-infected-standing-struggle-finisher__melee-attack@23f8__character-melee-info@9120__
+rogue-npc-infected-standing-struggle-finisher__character-melee-info@9a30
 embedded@340a0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
     f32 var_0;
     if (-1 > -1) {
@@ -34,7 +34,7 @@ embedded@340a0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 f32 npc-infected-wall-standing-struggle-finisher__melee-attack@4e0
 npc-infected-standing-struggle-finisher__melee-attack@6d0
 npc-infected-low-cover-standing-struggle-finisher__melee-attack@1478
-#702F871BCAF9DFC6__melee-attack@23f8
+rogue-npc-infected-standing-struggle-finisher__melee-attack@23f8
 embedded@33088(u64? arg_0, u64? arg_1, u64? arg_2) {
     f32 var_1;
     if (is-npc?(arg_2)) {
@@ -48,7 +48,7 @@ embedded@33088(u64? arg_0, u64? arg_1, u64? arg_2) {
 f32 npc-infected-wall-standing-struggle-finisher
 npc-infected-standing-struggle-finisher
 npc-infected-low-cover-standing-struggle-finisher
-#702F871BCAF9DFC6
+rogue-npc-infected-standing-struggle-finisher
 embedded@20d98(u64? arg_0, u64? arg_1, u64? arg_2) {
     f32 var_1;
     if (is-npc?(arg_1)) {
@@ -63,7 +63,7 @@ u64? npc-infected-wall-standing-struggle-finisher__start-func-array@6700
 npc-infected-standing-struggle-finisher__start-func-array@6700
 npc-infected-low-cover-standing-struggle-finisher__start-func-array@6160
 embedded@3c470(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
-    return #BCC56A0BCEA8CC56();
+    return not-rogue-mode-finisher();
 }
 
 u64? npc-infected-wall-standing-struggle-finisher
@@ -80,7 +80,7 @@ embedded@39348(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 u16 npc-infected-wall-standing-struggle-finisher
 npc-infected-standing-struggle-finisher
 npc-infected-low-cover-standing-struggle-finisher
-#702F871BCAF9DFC6
+rogue-npc-infected-standing-struggle-finisher
 embedded@ac60(i64 arg_0, i64 arg_1, i64 arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
     if (arg_0 == arg_2) {
         if (is-player?(arg_2)) {
@@ -124,7 +124,7 @@ embedded@ac60(i64 arg_0, i64 arg_1, i64 arg_2, u64? arg_3, u64? arg_4, u64? arg_
 u16 npc-infected-wall-standing-struggle-finisher__melee-event-list@82b0
 npc-infected-standing-struggle-finisher__melee-event-list@9858
 npc-infected-low-cover-standing-struggle-finisher__melee-event-list@9240
-#702F871BCAF9DFC6__melee-event-list@9ca0
+rogue-npc-infected-standing-struggle-finisher__melee-event-list@9ca0
 embedded@3a698(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_1;
     if (is-player?(arg_2)) {
@@ -149,7 +149,7 @@ embedded@38b50(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 u64? npc-infected-wall-standing-struggle-finisher
 npc-infected-standing-struggle-finisher
 npc-infected-low-cover-standing-struggle-finisher
-#702F871BCAF9DFC6
+rogue-npc-infected-standing-struggle-finisher
 embedded@3b2c8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return is-player?(arg_2);
 }
@@ -174,7 +174,7 @@ embedded@37368(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
         if (!(clicker-muscle-tendon == 0)) {
             var_3 = spawn-gore-piece(clicker-muscle-tendon, arg_1, inf-runner-vs-ellie-wall-struggle-fail--tendon, arg_6, 1, 1);
         } else if (!(inf-runner-vs-ellie-wall-struggle-fail--tendon == 0)) {
-            u64? var_8 = %alloc-array(single-frame, 16, 2, 1);
+            u64? var_8 = #%alloc-array(single-frame, 16, 2, 1);
             *(i32*)*var_8[0] = 40;
             *(u64*)(*var_8[0] + 8) = 0;
             *(i32*)(*var_8[0] + 8) = 1;
@@ -182,19 +182,19 @@ embedded@37368(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
             *(u64*)(*var_8[1] + 8) = 0;
             *(u8*)(*var_8[1] + 8) = 1;
             animate_(arg_1, gore-finisher-blunt-head-bind, var_8);
-            u64? var_9 = %alloc-array(single-frame, 16, 1, 1);
+            u64? var_9 = #%alloc-array(single-frame, 16, 1, 1);
             *(i32*)*var_9[0] = 40;
             *(u64*)(*var_9[0] + 8) = 0;
             *(i32*)(*var_9[0] + 8) = 1;
             var_3 = animate_(arg_1, inf-runner-vs-ellie-wall-struggle-fail--tendon, var_9);
         } else if (!is-final-build?()) {
-            var_3 = display(#5445173390656D6D("MELEE GORE SPAWN FAILURE"), 19);
+            var_3 = display(dc:format("MELEE GORE SPAWN FAILURE"), 19);
         } else {
             var_3 = 0;
         }
     } else if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 5)) {
         if (!is-final-build?()) {
-            var_3 = display(#5445173390656D6D("INVALID CHARACTERS FOR %s", string-debug(clicker-muscle-tendon)), 19);
+            var_3 = display(dc:format("INVALID CHARACTERS FOR %s", string-debug(clicker-muscle-tendon)), 19);
         } else {
             var_3 = 0;
         }
@@ -224,7 +224,7 @@ embedded@3f378(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
         if (!(clicker-muscle-tendon == 0)) {
             var_3 = spawn-gore-piece(clicker-muscle-tendon, arg_1, inf-runner-vs-abby-wall-struggle-fail--tendon, arg_6, 1, 1);
         } else if (!(inf-runner-vs-abby-wall-struggle-fail--tendon == 0)) {
-            u64? var_8 = %alloc-array(single-frame, 16, 2, 1);
+            u64? var_8 = #%alloc-array(single-frame, 16, 2, 1);
             *(i32*)*var_8[0] = 40;
             *(u64*)(*var_8[0] + 8) = 0;
             *(i32*)(*var_8[0] + 8) = 1;
@@ -232,19 +232,19 @@ embedded@3f378(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
             *(u64*)(*var_8[1] + 8) = 0;
             *(u8*)(*var_8[1] + 8) = 1;
             animate_(arg_1, gore-finisher-blunt-head-bind, var_8);
-            u64? var_9 = %alloc-array(single-frame, 16, 1, 1);
+            u64? var_9 = #%alloc-array(single-frame, 16, 1, 1);
             *(i32*)*var_9[0] = 40;
             *(u64*)(*var_9[0] + 8) = 0;
             *(i32*)(*var_9[0] + 8) = 1;
             var_3 = animate_(arg_1, inf-runner-vs-abby-wall-struggle-fail--tendon, var_9);
         } else if (!is-final-build?()) {
-            var_3 = display(#5445173390656D6D("MELEE GORE SPAWN FAILURE"), 19);
+            var_3 = display(dc:format("MELEE GORE SPAWN FAILURE"), 19);
         } else {
             var_3 = 0;
         }
     } else if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 5)) {
         if (!is-final-build?()) {
-            var_3 = display(#5445173390656D6D("INVALID CHARACTERS FOR %s", string-debug(clicker-muscle-tendon)), 19);
+            var_3 = display(dc:format("INVALID CHARACTERS FOR %s", string-debug(clicker-muscle-tendon)), 19);
         } else {
             var_3 = 0;
         }
@@ -274,7 +274,7 @@ embedded@3cb48(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
         if (!(gore-finisher-ellie-neck-bite-l == 0)) {
             var_3 = spawn-gore-piece(gore-finisher-ellie-neck-bite-l, arg_2, 0, arg_6, 1, 1);
         } else if (!(0 == 0)) {
-            u64? var_8 = %alloc-array(single-frame, 16, 2, 1);
+            u64? var_8 = #%alloc-array(single-frame, 16, 2, 1);
             *(i32*)*var_8[0] = 40;
             *(u64*)(*var_8[0] + 8) = 0;
             *(i32*)(*var_8[0] + 8) = 1;
@@ -282,19 +282,19 @@ embedded@3cb48(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
             *(u64*)(*var_8[1] + 8) = 0;
             *(u8*)(*var_8[1] + 8) = 1;
             animate_(arg_2, gore-finisher-blunt-head-bind, var_8);
-            u64? var_9 = %alloc-array(single-frame, 16, 1, 1);
+            u64? var_9 = #%alloc-array(single-frame, 16, 1, 1);
             *(i32*)*var_9[0] = 40;
             *(u64*)(*var_9[0] + 8) = 0;
             *(i32*)(*var_9[0] + 8) = 1;
             var_3 = animate_(arg_2, 0, var_9);
         } else if (!is-final-build?()) {
-            var_3 = display(#5445173390656D6D("MELEE GORE SPAWN FAILURE"), 19);
+            var_3 = display(dc:format("MELEE GORE SPAWN FAILURE"), 19);
         } else {
             var_3 = 0;
         }
     } else if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 5)) {
         if (!is-final-build?()) {
-            var_3 = display(#5445173390656D6D("INVALID CHARACTERS FOR %s", string-debug(gore-finisher-ellie-neck-bite-l)), 19);
+            var_3 = display(dc:format("INVALID CHARACTERS FOR %s", string-debug(gore-finisher-ellie-neck-bite-l)), 19);
         } else {
             var_3 = 0;
         }
@@ -324,7 +324,7 @@ embedded@379c0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
         if (!(gore-finisher-abby-neck-bite-l == 0)) {
             var_3 = spawn-gore-piece(gore-finisher-abby-neck-bite-l, arg_2, 0, arg_6, 1, 1);
         } else if (!(0 == 0)) {
-            u64? var_8 = %alloc-array(single-frame, 16, 2, 1);
+            u64? var_8 = #%alloc-array(single-frame, 16, 2, 1);
             *(i32*)*var_8[0] = 40;
             *(u64*)(*var_8[0] + 8) = 0;
             *(i32*)(*var_8[0] + 8) = 1;
@@ -332,19 +332,19 @@ embedded@379c0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
             *(u64*)(*var_8[1] + 8) = 0;
             *(u8*)(*var_8[1] + 8) = 1;
             animate_(arg_2, gore-finisher-blunt-head-bind, var_8);
-            u64? var_9 = %alloc-array(single-frame, 16, 1, 1);
+            u64? var_9 = #%alloc-array(single-frame, 16, 1, 1);
             *(i32*)*var_9[0] = 40;
             *(u64*)(*var_9[0] + 8) = 0;
             *(i32*)(*var_9[0] + 8) = 1;
             var_3 = animate_(arg_2, 0, var_9);
         } else if (!is-final-build?()) {
-            var_3 = display(#5445173390656D6D("MELEE GORE SPAWN FAILURE"), 19);
+            var_3 = display(dc:format("MELEE GORE SPAWN FAILURE"), 19);
         } else {
             var_3 = 0;
         }
     } else if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 5)) {
         if (!is-final-build?()) {
-            var_3 = display(#5445173390656D6D("INVALID CHARACTERS FOR %s", string-debug(gore-finisher-abby-neck-bite-l)), 19);
+            var_3 = display(dc:format("INVALID CHARACTERS FOR %s", string-debug(gore-finisher-abby-neck-bite-l)), 19);
         } else {
             var_3 = 0;
         }
@@ -369,9 +369,9 @@ u64? npc-infected-wall-standing-struggle-finisher
 npc-infected-standing-struggle-finisher
 npc-infected-standing-struggle-finisher
 npc-infected-standing-struggle-finisher
-#702F871BCAF9DFC6
-#702F871BCAF9DFC6
-#702F871BCAF9DFC6
+rogue-npc-infected-standing-struggle-finisher
+rogue-npc-infected-standing-struggle-finisher
+rogue-npc-infected-standing-struggle-finisher
 embedded@3dc18(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u64? var_0 = is-player?(arg_2);
     if (!var_0) {
@@ -427,8 +427,8 @@ npc-infected-low-cover-standing-struggle-finisher
 npc-infected-back-standing-struggle-enter
 npc-infected-standing-struggle
 npc-infected-standing-struggle
-#702F871BCAF9DFC6
-#702F871BCAF9DFC6
+rogue-npc-infected-standing-struggle-finisher
+rogue-npc-infected-standing-struggle-finisher
 npc-infected-wall-standing-struggle
 npc-infected-wall-standing-struggle
 npc-infected-wall-standing-struggle
@@ -456,9 +456,9 @@ npc-infected-low-cover-standing-struggle-finisher
 npc-infected-back-standing-struggle-enter
 npc-infected-standing-struggle
 npc-infected-standing-struggle
-#702F871BCAF9DFC6
-#702F871BCAF9DFC6
-#702F871BCAF9DFC6
+rogue-npc-infected-standing-struggle-finisher
+rogue-npc-infected-standing-struggle-finisher
+rogue-npc-infected-standing-struggle-finisher
 npc-infected-wall-standing-struggle
 npc-infected-wall-standing-struggle
 npc-infected-wall-standing-struggle
@@ -500,7 +500,7 @@ embedded@37a70(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 
 u64? npc-infected-wall-standing-struggle-finisher
 npc-infected-standing-struggle-finisher
-#702F871BCAF9DFC6
+rogue-npc-infected-standing-struggle-finisher
 embedded@3cfb8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     f32 var_0;
     if (!(0.00 == 0.00)) {
@@ -536,7 +536,7 @@ embedded@39518(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 u64? npc-infected-wall-standing-struggle-finisher
 npc-infected-standing-struggle-finisher
 npc-infected-low-cover-standing-struggle-finisher
-#702F871BCAF9DFC6
+rogue-npc-infected-standing-struggle-finisher
 embedded@3d280(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u64? var_0 = is-player?(arg_2);
     if (!var_0) {
@@ -560,7 +560,7 @@ npc-infected-back-standing-struggle-enter
 npc-infected-front-prone-tell
 npc-infected-standing-struggle
 npc-infected-standing-struggle
-#702F871BCAF9DFC6
+rogue-npc-infected-standing-struggle-finisher
 npc-infected-wall-standing-struggle
 npc-infected-low-cover-standing-struggle
 npc-infected-low-cover-standing-struggle
@@ -600,7 +600,7 @@ npc-infected-back-standing-struggle-enter
 npc-infected-front-prone-tell
 npc-infected-standing-struggle
 npc-infected-standing-struggle
-#702F871BCAF9DFC6
+rogue-npc-infected-standing-struggle-finisher
 npc-infected-wall-standing-struggle
 npc-infected-low-cover-standing-struggle
 npc-infected-low-cover-standing-struggle
@@ -640,14 +640,14 @@ npc-infected-standing-struggle-finisher
 npc-infected-standing-struggle-finisher
 npc-infected-standing-struggle-finisher
 npc-infected-standing-struggle-finisher
-#702F871BCAF9DFC6
-#702F871BCAF9DFC6
-#702F871BCAF9DFC6
-#702F871BCAF9DFC6
-#702F871BCAF9DFC6
-#702F871BCAF9DFC6
-#702F871BCAF9DFC6
-#702F871BCAF9DFC6
+rogue-npc-infected-standing-struggle-finisher
+rogue-npc-infected-standing-struggle-finisher
+rogue-npc-infected-standing-struggle-finisher
+rogue-npc-infected-standing-struggle-finisher
+rogue-npc-infected-standing-struggle-finisher
+rogue-npc-infected-standing-struggle-finisher
+rogue-npc-infected-standing-struggle-finisher
+rogue-npc-infected-standing-struggle-finisher
 embedded@3b730(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_3;
     if (!(1) && 1 || is-player?(arg_1) && is-player?(arg_2)) {
@@ -706,7 +706,7 @@ u16 npc-infected-wall-standing-struggle-finisher
 npc-infected-standing-struggle-finisher
 npc-infected-low-cover-standing-struggle-finisher
 npc-infected-low-cover-standing-struggle-finisher
-#702F871BCAF9DFC6
+rogue-npc-infected-standing-struggle-finisher
 embedded@3c1d0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     if (is-player?(arg_1) && is-player?(arg_2)) {
         start-rumble(melee-standing-finisher-strong-rumble-settings, 1);
@@ -724,7 +724,7 @@ embedded@3c1d0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 u16 npc-infected-wall-standing-struggle-finisher
 npc-infected-standing-struggle-finisher
 npc-infected-low-cover-standing-struggle-finisher
-#702F871BCAF9DFC6
+rogue-npc-infected-standing-struggle-finisher
 embedded@3b158(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_3;
     if (is-npc?(arg_2) && is-npc?(arg_1) && !npc-is-buddy?(arg_1)) {
@@ -739,7 +739,7 @@ embedded@3b158(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 u16 npc-infected-wall-standing-struggle-finisher
 npc-infected-standing-struggle-finisher
 npc-infected-low-cover-standing-struggle-finisher
-#702F871BCAF9DFC6
+rogue-npc-infected-standing-struggle-finisher
 embedded@3c3e0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_3;
     if (is-npc?(arg_2) && is-npc?(arg_1) && !npc-is-buddy?(arg_1)) {
@@ -754,7 +754,7 @@ embedded@3c3e0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 u16 npc-infected-wall-standing-struggle-finisher
 npc-infected-standing-struggle-finisher
 npc-infected-low-cover-standing-struggle-finisher
-#702F871BCAF9DFC6
+rogue-npc-infected-standing-struggle-finisher
 embedded@3b388(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_3;
     if (is-npc?(arg_2) && is-npc?(arg_1) && !npc-is-buddy?(arg_1)) {
@@ -770,7 +770,7 @@ u16 npc-infected-wall-standing-struggle-finisher
 npc-infected-standing-struggle-finisher
 npc-infected-low-cover-standing-struggle-finisher
 npc-infected-standing-struggle
-#702F871BCAF9DFC6
+rogue-npc-infected-standing-struggle-finisher
 npc-infected-wall-standing-struggle
 npc-infected-low-cover-standing-struggle
 embedded@37a18(u64? arg_0, u64? arg_1, sid arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
@@ -786,7 +786,7 @@ embedded@37a18(u64? arg_0, u64? arg_1, sid arg_2, u64? arg_3, u64? arg_4, u64? a
 u64? npc-infected-wall-standing-struggle-finisher
 npc-infected-standing-struggle-finisher
 npc-infected-low-cover-standing-struggle-finisher
-#702F871BCAF9DFC6
+rogue-npc-infected-standing-struggle-finisher
 embedded@39b78(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return broadcast-event(
         melee-damage,
@@ -805,9 +805,9 @@ npc-infected-standing-struggle-finisher
 npc-infected-low-cover-standing-struggle-finisher
 npc-infected-low-cover-standing-struggle-finisher
 npc-infected-low-cover-standing-struggle-finisher
-#702F871BCAF9DFC6
-#702F871BCAF9DFC6
-#702F871BCAF9DFC6
+rogue-npc-infected-standing-struggle-finisher
+rogue-npc-infected-standing-struggle-finisher
+rogue-npc-infected-standing-struggle-finisher
 embedded@3b970(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return is-npc?(arg_2) && is-npc?(arg_1) && !npc-is-buddy?(arg_1);
 }
@@ -815,7 +815,7 @@ embedded@3b970(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 u64? npc-infected-wall-standing-struggle-finisher
 npc-infected-standing-struggle-finisher
 npc-infected-low-cover-standing-struggle-finisher
-#702F871BCAF9DFC6
+rogue-npc-infected-standing-struggle-finisher
 embedded@3a438(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return !is-player?(arg_2);
 }
@@ -823,7 +823,7 @@ embedded@3a438(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 u64? npc-infected-wall-standing-struggle-finisher
 npc-infected-standing-struggle-finisher
 npc-infected-low-cover-standing-struggle-finisher
-#702F871BCAF9DFC6
+rogue-npc-infected-standing-struggle-finisher
 embedded@391f0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return !character-in-melee-move?(arg_11, arg_1) && !is-player?(arg_2);
 }
@@ -831,7 +831,7 @@ embedded@391f0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 u64? npc-infected-wall-standing-struggle-finisher
 npc-infected-standing-struggle-finisher
 npc-infected-low-cover-standing-struggle-finisher
-#702F871BCAF9DFC6
+rogue-npc-infected-standing-struggle-finisher
 embedded@374e8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return !character-in-melee-move?(arg_11, arg_2);
 }
@@ -839,7 +839,7 @@ embedded@374e8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 u16 npc-infected-wall-standing-struggle-finisher
 npc-infected-standing-struggle-finisher
 npc-infected-low-cover-standing-struggle-finisher
-#702F871BCAF9DFC6
+rogue-npc-infected-standing-struggle-finisher
 embedded@37d48(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_1;
     if (is-player?(arg_2)) {
@@ -854,7 +854,7 @@ embedded@37d48(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 u64? npc-infected-wall-standing-struggle-finisher
 npc-infected-standing-struggle-finisher
 npc-infected-low-cover-standing-struggle-finisher
-#702F871BCAF9DFC6
+rogue-npc-infected-standing-struggle-finisher
 embedded@37808(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return !is-npc?(arg_2) && is-npc?(arg_1) && !npc-is-buddy?(arg_1);
 }
@@ -862,7 +862,7 @@ embedded@37808(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 u16 npc-infected-wall-standing-struggle-finisher
 npc-infected-standing-struggle-finisher
 npc-infected-low-cover-standing-struggle-finisher
-#702F871BCAF9DFC6
+rogue-npc-infected-standing-struggle-finisher
 embedded@3f0d8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_1;
     if (is-player?(arg_2)) {
@@ -876,7 +876,7 @@ embedded@3f0d8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 u64? npc-infected-wall-standing-struggle-finisher
 npc-infected-standing-struggle-finisher
 npc-infected-low-cover-standing-struggle-finisher
-#702F871BCAF9DFC6
+rogue-npc-infected-standing-struggle-finisher
 embedded@38db0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return !is-camera-animated?();
 }
@@ -900,7 +900,7 @@ embedded@3ae10(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 u64? npc-infected-wall-standing-struggle-finisher
 npc-infected-standing-struggle-finisher
 npc-infected-low-cover-standing-struggle-finisher
-#702F871BCAF9DFC6
+rogue-npc-infected-standing-struggle-finisher
 embedded@390a0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return melee-fact-set-bool(arg_2, melee-killed, 1);
 }
@@ -914,7 +914,7 @@ embedded@3bdd0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 }
 
 u16 npc-infected-standing-struggle-finisher
-#702F871BCAF9DFC6
+rogue-npc-infected-standing-struggle-finisher
 embedded@37638(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_3;
     if (melee-character-bit-check(arg_1, 4294967296) && melee-character-bit-check(arg_2, 1) && melee-weapon-bit-check(arg_2, 1, 1, 0)) {
@@ -934,7 +934,7 @@ embedded@37638(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
         if (!(clicker-muscle-tendon == 0)) {
             var_3 = spawn-gore-piece(clicker-muscle-tendon, arg_1, infected-standing-struggle-fail--tendon, arg_6, 1, 1);
         } else if (!(infected-standing-struggle-fail--tendon == 0)) {
-            u64? var_8 = %alloc-array(single-frame, 16, 2, 1);
+            u64? var_8 = #%alloc-array(single-frame, 16, 2, 1);
             *(i32*)*var_8[0] = 40;
             *(u64*)(*var_8[0] + 8) = 0;
             *(i32*)(*var_8[0] + 8) = 1;
@@ -942,19 +942,19 @@ embedded@37638(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
             *(u64*)(*var_8[1] + 8) = 0;
             *(u8*)(*var_8[1] + 8) = 1;
             animate_(arg_1, gore-finisher-blunt-head-bind, var_8);
-            u64? var_9 = %alloc-array(single-frame, 16, 1, 1);
+            u64? var_9 = #%alloc-array(single-frame, 16, 1, 1);
             *(i32*)*var_9[0] = 40;
             *(u64*)(*var_9[0] + 8) = 0;
             *(i32*)(*var_9[0] + 8) = 1;
             var_3 = animate_(arg_1, infected-standing-struggle-fail--tendon, var_9);
         } else if (!is-final-build?()) {
-            var_3 = display(#5445173390656D6D("MELEE GORE SPAWN FAILURE"), 19);
+            var_3 = display(dc:format("MELEE GORE SPAWN FAILURE"), 19);
         } else {
             var_3 = 0;
         }
     } else if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 5)) {
         if (!is-final-build?()) {
-            var_3 = display(#5445173390656D6D("INVALID CHARACTERS FOR %s", string-debug(clicker-muscle-tendon)), 19);
+            var_3 = display(dc:format("INVALID CHARACTERS FOR %s", string-debug(clicker-muscle-tendon)), 19);
         } else {
             var_3 = 0;
         }
@@ -965,7 +965,7 @@ embedded@37638(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 }
 
 u16 npc-infected-standing-struggle-finisher
-#702F871BCAF9DFC6
+rogue-npc-infected-standing-struggle-finisher
 embedded@3f188(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_3;
     if (melee-character-bit-check(arg_2, 4) && melee-character-bit-check(arg_1, 1) && melee-weapon-bit-check(arg_1, 1, 1, 0)) {
@@ -985,7 +985,7 @@ embedded@3f188(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
         if (!(gore-finisher-ellie-neck-bite-r == 0)) {
             var_3 = spawn-gore-piece(gore-finisher-ellie-neck-bite-r, arg_2, 0, arg_6, 1, 1);
         } else if (!(0 == 0)) {
-            u64? var_8 = %alloc-array(single-frame, 16, 2, 1);
+            u64? var_8 = #%alloc-array(single-frame, 16, 2, 1);
             *(i32*)*var_8[0] = 40;
             *(u64*)(*var_8[0] + 8) = 0;
             *(i32*)(*var_8[0] + 8) = 1;
@@ -993,19 +993,19 @@ embedded@3f188(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
             *(u64*)(*var_8[1] + 8) = 0;
             *(u8*)(*var_8[1] + 8) = 1;
             animate_(arg_2, gore-finisher-blunt-head-bind, var_8);
-            u64? var_9 = %alloc-array(single-frame, 16, 1, 1);
+            u64? var_9 = #%alloc-array(single-frame, 16, 1, 1);
             *(i32*)*var_9[0] = 40;
             *(u64*)(*var_9[0] + 8) = 0;
             *(i32*)(*var_9[0] + 8) = 1;
             var_3 = animate_(arg_2, 0, var_9);
         } else if (!is-final-build?()) {
-            var_3 = display(#5445173390656D6D("MELEE GORE SPAWN FAILURE"), 19);
+            var_3 = display(dc:format("MELEE GORE SPAWN FAILURE"), 19);
         } else {
             var_3 = 0;
         }
     } else if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 5)) {
         if (!is-final-build?()) {
-            var_3 = display(#5445173390656D6D("INVALID CHARACTERS FOR %s", string-debug(gore-finisher-ellie-neck-bite-r)), 19);
+            var_3 = display(dc:format("INVALID CHARACTERS FOR %s", string-debug(gore-finisher-ellie-neck-bite-r)), 19);
         } else {
             var_3 = 0;
         }
@@ -1016,7 +1016,7 @@ embedded@3f188(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 }
 
 u16 npc-infected-standing-struggle-finisher
-#702F871BCAF9DFC6
+rogue-npc-infected-standing-struggle-finisher
 embedded@3fae8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_3;
     if (melee-character-bit-check(arg_2, 2) && melee-character-bit-check(arg_1, 1) && melee-weapon-bit-check(arg_1, 1, 1, 0)) {
@@ -1036,7 +1036,7 @@ embedded@3fae8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
         if (!(gore-finisher-abby-neck-bite-r == 0)) {
             var_3 = spawn-gore-piece(gore-finisher-abby-neck-bite-r, arg_2, 0, arg_6, 1, 1);
         } else if (!(0 == 0)) {
-            u64? var_8 = %alloc-array(single-frame, 16, 2, 1);
+            u64? var_8 = #%alloc-array(single-frame, 16, 2, 1);
             *(i32*)*var_8[0] = 40;
             *(u64*)(*var_8[0] + 8) = 0;
             *(i32*)(*var_8[0] + 8) = 1;
@@ -1044,19 +1044,19 @@ embedded@3fae8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
             *(u64*)(*var_8[1] + 8) = 0;
             *(u8*)(*var_8[1] + 8) = 1;
             animate_(arg_2, gore-finisher-blunt-head-bind, var_8);
-            u64? var_9 = %alloc-array(single-frame, 16, 1, 1);
+            u64? var_9 = #%alloc-array(single-frame, 16, 1, 1);
             *(i32*)*var_9[0] = 40;
             *(u64*)(*var_9[0] + 8) = 0;
             *(i32*)(*var_9[0] + 8) = 1;
             var_3 = animate_(arg_2, 0, var_9);
         } else if (!is-final-build?()) {
-            var_3 = display(#5445173390656D6D("MELEE GORE SPAWN FAILURE"), 19);
+            var_3 = display(dc:format("MELEE GORE SPAWN FAILURE"), 19);
         } else {
             var_3 = 0;
         }
     } else if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 5)) {
         if (!is-final-build?()) {
-            var_3 = display(#5445173390656D6D("INVALID CHARACTERS FOR %s", string-debug(gore-finisher-abby-neck-bite-r)), 19);
+            var_3 = display(dc:format("INVALID CHARACTERS FOR %s", string-debug(gore-finisher-abby-neck-bite-r)), 19);
         } else {
             var_3 = 0;
         }
@@ -1067,7 +1067,7 @@ embedded@3fae8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 }
 
 u64? npc-infected-standing-struggle-finisher
-#702F871BCAF9DFC6
+rogue-npc-infected-standing-struggle-finisher
 embedded@3f730(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     f32 var_0;
     if (!(0.00 == 0.00)) {
@@ -1079,7 +1079,7 @@ embedded@3f730(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 }
 
 u64? npc-infected-standing-struggle-finisher
-#702F871BCAF9DFC6
+rogue-npc-infected-standing-struggle-finisher
 embedded@3c530(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u64? var_0 = is-player?(arg_2);
     if (!var_0) {
@@ -1093,9 +1093,9 @@ embedded@3c530(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 u64? npc-infected-standing-struggle-finisher
 npc-infected-standing-struggle-finisher
 npc-infected-standing-struggle-finisher
-#702F871BCAF9DFC6
-#702F871BCAF9DFC6
-#702F871BCAF9DFC6
+rogue-npc-infected-standing-struggle-finisher
+rogue-npc-infected-standing-struggle-finisher
+rogue-npc-infected-standing-struggle-finisher
 embedded@3abe0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     f32 var_0;
     if (!(0.00 == 0.00)) {
@@ -1107,7 +1107,7 @@ embedded@3abe0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 }
 
 u64? npc-infected-standing-struggle-finisher
-#702F871BCAF9DFC6
+rogue-npc-infected-standing-struggle-finisher
 embedded@38c88(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     f32 var_0;
     if (!(0.00 == 0.00)) {
@@ -1119,7 +1119,7 @@ embedded@38c88(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 }
 
 u16 npc-infected-standing-struggle-finisher
-#702F871BCAF9DFC6
+rogue-npc-infected-standing-struggle-finisher
 embedded@3ee88(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_3;
     if (!(1) && 1 || is-player?(arg_1) && is-player?(arg_2)) {
@@ -1131,7 +1131,7 @@ embedded@3ee88(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 }
 
 u16 npc-infected-standing-struggle-finisher
-#702F871BCAF9DFC6
+rogue-npc-infected-standing-struggle-finisher
 embedded@3a378(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_3;
     if (!(1) && 1 || is-player?(arg_1) && is-player?(arg_2)) {
@@ -1143,7 +1143,7 @@ embedded@3a378(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 }
 
 u16 npc-infected-standing-struggle-finisher
-#702F871BCAF9DFC6
+rogue-npc-infected-standing-struggle-finisher
 embedded@3f248(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_3;
     if (!(1) && 1 || is-player?(arg_1) && is-player?(arg_2)) {
@@ -1155,7 +1155,7 @@ embedded@3f248(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 }
 
 u16 npc-infected-standing-struggle-finisher
-#702F871BCAF9DFC6
+rogue-npc-infected-standing-struggle-finisher
 embedded@3e2b8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_3;
     if (!(1) && 1 || is-player?(arg_1) && is-player?(arg_2)) {
@@ -1167,7 +1167,7 @@ embedded@3e2b8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 }
 
 u16 npc-infected-standing-struggle-finisher
-#702F871BCAF9DFC6
+rogue-npc-infected-standing-struggle-finisher
 embedded@3a2e0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_3;
     if (!(1) && 1 || is-player?(arg_1) && is-player?(arg_2)) {
@@ -1180,8 +1180,8 @@ embedded@3a2e0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 
 u64? npc-infected-standing-struggle-finisher
 npc-infected-standing-struggle-finisher
-#702F871BCAF9DFC6
-#702F871BCAF9DFC6
+rogue-npc-infected-standing-struggle-finisher
+rogue-npc-infected-standing-struggle-finisher
 embedded@3f048(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return is-npc?(arg_2);
 }
@@ -1742,7 +1742,7 @@ embedded@7390(i64 arg_0, i64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg
     u16 var_2;
     if (arg_0 == arg_1 && ((var_0 * 30.00) - var_1) > 2.00) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D("TELL INTERUPTED: interupted by %f frames", (var_0 * 30.00) - var_1), 19);
+            display(dc:format("TELL INTERUPTED: interupted by %f frames", (var_0 * 30.00) - var_1), 19);
         }
         var_2 = melee-fact-set-time(arg_0, last-time-tell-interupted);
     } else {
@@ -2360,7 +2360,7 @@ embedded@3e6d8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     }
     u16 var_3;
     if (is-rogue-mode?()) {
-        var_3 = send-event(#7D70C7896B7D87D4, ss-reminders);
+        var_3 = send-event(player-grabbed-by-npc, ss-reminders);
     } else {
         var_3 = 0;
     }
@@ -2575,7 +2575,7 @@ embedded@6788(i64 arg_0, i64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg
     u16 var_2;
     if (arg_0 == arg_1 && ((var_0 * 30.00) - var_1) > 2.00) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D("TELL INTERUPTED: interupted by %f frames", (var_0 * 30.00) - var_1), 19);
+            display(dc:format("TELL INTERUPTED: interupted by %f frames", (var_0 * 30.00) - var_1), 19);
         }
         var_2 = melee-fact-set-time(arg_0, last-time-tell-interupted);
     } else {
@@ -2736,7 +2736,7 @@ embedded@66a8(i64 arg_0, i64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg
     u16 var_2;
     if (arg_0 == arg_1 && ((var_0 * 30.00) - var_1) > 2.00) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D("TELL INTERUPTED: interupted by %f frames", (var_0 * 30.00) - var_1), 19);
+            display(dc:format("TELL INTERUPTED: interupted by %f frames", (var_0 * 30.00) - var_1), 19);
         }
         var_2 = melee-fact-set-time(arg_0, last-time-tell-interupted);
     } else {
@@ -2867,7 +2867,7 @@ embedded@8388(i64 arg_0, i64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg
     u16 var_2;
     if (arg_0 == arg_1 && ((var_0 * 30.00) - var_1) > 2.00) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D("TELL INTERUPTED: interupted by %f frames", (var_0 * 30.00) - var_1), 19);
+            display(dc:format("TELL INTERUPTED: interupted by %f frames", (var_0 * 30.00) - var_1), 19);
         }
         var_2 = melee-fact-set-time(arg_0, last-time-tell-interupted);
     } else {
@@ -3266,7 +3266,7 @@ embedded@3b1f8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
             var_0 = 0;
         }
     } else if (dc-assert-enabled?() && !1) {
-        var_0 = display-error(#5445173390656D6D("melee-simple-damage-event: incorrect character '%s'", string-debug(defender)));
+        var_0 = display-error(dc:format("melee-simple-damage-event: incorrect character '%s'", string-debug(defender)));
     } else {
         var_0 = 0;
     }
@@ -3641,12 +3641,12 @@ embedded@721e8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
     return player-meat-shield-grab-attacks;
 }
 
-u64? #702F871BCAF9DFC6__start-func-array@9210
+u64? rogue-npc-infected-standing-struggle-finisher__start-func-array@9210
 embedded@3df68(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
-    return #329DF6617C39EA76();
+    return rogue-mode-finisher();
 }
 
-u64? #702F871BCAF9DFC6
+u64? rogue-npc-infected-standing-struggle-finisher
 embedded@3e800(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
     u64? var_0 = character-melee-event-active?(arg_2, 211, 0);
     if (!!var_0) {
@@ -3656,12 +3656,12 @@ embedded@3e800(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return !var_0 && 1 && 1;
 }
 
-u64? #702F871BCAF9DFC6
+u64? rogue-npc-infected-standing-struggle-finisher
 embedded@3b320(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     if (is-player?(arg_2)) {
         send-event(synced-finisher-v-player, ss-promote-death-hints, boxed_symbol(arg_1));
     }
-    return log-event("melee-npc-finisher", 1, string-debug(#702F871BCAF9DFC6), 0, 0);
+    return log-event("melee-npc-finisher", 1, string-debug(rogue-npc-infected-standing-struggle-finisher), 0, 0);
 }
 
 u64? npc-infected-front-prone-swing-hit
@@ -4372,7 +4372,7 @@ embedded@7130(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
                 if (player-in-meatshield?() && player-get-meatshield() == arg_2) {
                     if (is-in-front?(get-object-locator(arg_2), get-object-locator(arg_1), 2, 180.00) && is-in-front?(get-object-locator(arg_1), get-object-locator(arg_2), 2, 180.00)) {
                         if (!is-final-build?()) {
-                            display(#5445173390656D6D("END PLAYER MEATSHIELD DUE TO CLICKER MEATSHIELD CASE"), 19);
+                            display(dc:format("END PLAYER MEATSHIELD DUE TO CLICKER MEATSHIELD CASE"), 19);
                         }
                         log-event("clicker-ate-meatshield-npc", 1, "", 0, 0);
                         player-end-meatshield();
@@ -4918,7 +4918,7 @@ embedded@3f788(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
             var_0 = 0;
         }
     } else if (dc-assert-enabled?() && !1) {
-        var_0 = display-error(#5445173390656D6D("melee-simple-damage-event: incorrect character '%s'", string-debug(defender)));
+        var_0 = display-error(dc:format("melee-simple-damage-event: incorrect character '%s'", string-debug(defender)));
     } else {
         var_0 = 0;
     }
@@ -4971,7 +4971,7 @@ embedded@39580(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
             var_0 = 0;
         }
     } else if (dc-assert-enabled?() && !1) {
-        var_0 = display-error(#5445173390656D6D("melee-simple-damage-event: incorrect character '%s'", string-debug(defender)));
+        var_0 = display-error(dc:format("melee-simple-damage-event: incorrect character '%s'", string-debug(defender)));
     } else {
         var_0 = 0;
     }
@@ -5020,7 +5020,7 @@ embedded@3ac38(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
             var_0 = 0;
         }
     } else if (dc-assert-enabled?() && !1) {
-        var_0 = display-error(#5445173390656D6D("melee-simple-damage-event: incorrect character '%s'", string-debug(defender)));
+        var_0 = display-error(dc:format("melee-simple-damage-event: incorrect character '%s'", string-debug(defender)));
     } else {
         var_0 = 0;
     }
@@ -5410,7 +5410,7 @@ embedded@68e8(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
                 if (player-in-meatshield?() && player-get-meatshield() == arg_2) {
                     if (is-in-front?(get-object-locator(arg_2), get-object-locator(arg_1), 2, 180.00) && is-in-front?(get-object-locator(arg_1), get-object-locator(arg_2), 2, 180.00)) {
                         if (!is-final-build?()) {
-                            display(#5445173390656D6D("END PLAYER MEATSHIELD DUE TO CLICKER MEATSHIELD CASE"), 19);
+                            display(dc:format("END PLAYER MEATSHIELD DUE TO CLICKER MEATSHIELD CASE"), 19);
                         }
                         log-event("clicker-ate-meatshield-npc", 1, "", 0, 0);
                         player-end-meatshield();
@@ -5897,7 +5897,7 @@ u16 npc-infected-standing-struggle-success-ellie
 embedded@376b0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_1;
     if (is-player-ellie?(arg_2)) {
-        var_1 = #DAD0704471AE382A();
+        var_1 = rogue-draw-melee-weapon();
     } else {
         var_1 = 0;
     }
@@ -6176,7 +6176,7 @@ embedded@65a8(i64 arg_0, i64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg
     u16 var_2;
     if (arg_0 == arg_1 && ((var_0 * 30.00) - var_1) > 2.00) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D("TELL INTERUPTED: interupted by %f frames", (var_0 * 30.00) - var_1), 19);
+            display(dc:format("TELL INTERUPTED: interupted by %f frames", (var_0 * 30.00) - var_1), 19);
         }
         var_2 = melee-fact-set-time(arg_0, last-time-tell-interupted);
     } else {
@@ -6373,7 +6373,7 @@ embedded@7988(i64 arg_0, i64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg
     u16 var_2;
     if (arg_0 == arg_1 && ((var_0 * 30.00) - var_1) > 2.00) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D("TELL INTERUPTED: interupted by %f frames", (var_0 * 30.00) - var_1), 19);
+            display(dc:format("TELL INTERUPTED: interupted by %f frames", (var_0 * 30.00) - var_1), 19);
         }
         var_2 = melee-fact-set-time(arg_0, last-time-tell-interupted);
     } else {
@@ -6506,7 +6506,7 @@ embedded@7930(i64 arg_0, i64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg
     u16 var_2;
     if (arg_0 == arg_1 && ((var_0 * 30.00) - var_1) > 2.00) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D("TELL INTERUPTED: interupted by %f frames", (var_0 * 30.00) - var_1), 19);
+            display(dc:format("TELL INTERUPTED: interupted by %f frames", (var_0 * 30.00) - var_1), 19);
         }
         var_2 = melee-fact-set-time(arg_0, last-time-tell-interupted);
     } else {
@@ -6607,7 +6607,7 @@ embedded@9ad8(i64 arg_0, i64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg
     u16 var_2;
     if (arg_0 == arg_1 && ((var_0 * 30.00) - var_1) > 2.00) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D("TELL INTERUPTED: interupted by %f frames", (var_0 * 30.00) - var_1), 19);
+            display(dc:format("TELL INTERUPTED: interupted by %f frames", (var_0 * 30.00) - var_1), 19);
         }
         var_2 = melee-fact-set-time(arg_0, last-time-tell-interupted);
     } else {
@@ -6747,7 +6747,7 @@ embedded@9b30(i64 arg_0, i64 arg_1, i64 arg_2, u64? arg_3, u64? arg_4, u64? arg_
 u64? npc-infected-low-cover-standing-struggle-success-ellie__melee-event-list@72b8
 npc-infected-wall-standing-struggle-success-ellie
 embedded@3a848(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
-    return #DAD0704471AE382A();
+    return rogue-draw-melee-weapon();
 }
 
 u64? npc-infected-low-cover-standing-struggle-success-ellie
@@ -6799,7 +6799,7 @@ embedded@a920(i64 arg_0, i64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg
     u16 var_2;
     if (arg_0 == arg_1 && ((var_0 * 30.00) - var_1) > 2.00) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D("TELL INTERUPTED: interupted by %f frames", (var_0 * 30.00) - var_1), 19);
+            display(dc:format("TELL INTERUPTED: interupted by %f frames", (var_0 * 30.00) - var_1), 19);
         }
         var_2 = melee-fact-set-time(arg_0, last-time-tell-interupted);
     } else {
@@ -6855,7 +6855,7 @@ embedded@9538(i64 arg_0, i64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg
     u16 var_2;
     if (arg_0 == arg_1 && ((var_0 * 30.00) - var_1) > 2.00) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D("TELL INTERUPTED: interupted by %f frames", (var_0 * 30.00) - var_1), 19);
+            display(dc:format("TELL INTERUPTED: interupted by %f frames", (var_0 * 30.00) - var_1), 19);
         }
         var_2 = melee-fact-set-time(arg_0, last-time-tell-interupted);
     } else {
@@ -6959,7 +6959,7 @@ embedded@6a90(i64 arg_0, i64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg
     u16 var_2;
     if (arg_0 == arg_1 && ((var_0 * 30.00) - var_1) > 2.00) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D("TELL INTERUPTED: interupted by %f frames", (var_0 * 30.00) - var_1), 19);
+            display(dc:format("TELL INTERUPTED: interupted by %f frames", (var_0 * 30.00) - var_1), 19);
         }
         var_2 = melee-fact-set-time(arg_0, last-time-tell-interupted);
     } else {
@@ -7075,7 +7075,7 @@ embedded@90c8(i64 arg_0, i64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg
     u16 var_2;
     if (arg_0 == arg_1 && ((var_0 * 30.00) - var_1) > 2.00) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D("TELL INTERUPTED: interupted by %f frames", (var_0 * 30.00) - var_1), 19);
+            display(dc:format("TELL INTERUPTED: interupted by %f frames", (var_0 * 30.00) - var_1), 19);
         }
         var_2 = melee-fact-set-time(arg_0, last-time-tell-interupted);
     } else {
@@ -7179,7 +7179,7 @@ embedded@67e0(i64 arg_0, i64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg
     u16 var_2;
     if (arg_0 == arg_1 && ((var_0 * 30.00) - var_1) > 2.00) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D("TELL INTERUPTED: interupted by %f frames", (var_0 * 30.00) - var_1), 19);
+            display(dc:format("TELL INTERUPTED: interupted by %f frames", (var_0 * 30.00) - var_1), 19);
         }
         var_2 = melee-fact-set-time(arg_0, last-time-tell-interupted);
     } else {
@@ -7312,7 +7312,7 @@ embedded@9870(i64 arg_0, i64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg
     u16 var_2;
     if (arg_0 == arg_1 && ((var_0 * 30.00) - var_1) > 2.00) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D("TELL INTERUPTED: interupted by %f frames", (var_0 * 30.00) - var_1), 19);
+            display(dc:format("TELL INTERUPTED: interupted by %f frames", (var_0 * 30.00) - var_1), 19);
         }
         var_2 = melee-fact-set-time(arg_0, last-time-tell-interupted);
     } else {
@@ -7416,7 +7416,7 @@ embedded@7188(i64 arg_0, i64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg
     u16 var_2;
     if (arg_0 == arg_1 && ((var_0 * 30.00) - var_1) > 2.00) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D("TELL INTERUPTED: interupted by %f frames", (var_0 * 30.00) - var_1), 19);
+            display(dc:format("TELL INTERUPTED: interupted by %f frames", (var_0 * 30.00) - var_1), 19);
         }
         var_2 = melee-fact-set-time(arg_0, last-time-tell-interupted);
     } else {

@@ -810,7 +810,7 @@ embedded@35c0(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
                 if (player-in-meatshield?() && player-get-meatshield() == arg_2) {
                     if (is-in-front?(get-object-locator(arg_2), get-object-locator(arg_1), 2, 180.00) && is-in-front?(get-object-locator(arg_1), get-object-locator(arg_2), 2, 180.00)) {
                         if (!is-final-build?()) {
-                            display(#5445173390656D6D("END PLAYER MEATSHIELD DUE TO CLICKER MEATSHIELD CASE"), 19);
+                            display(dc:format("END PLAYER MEATSHIELD DUE TO CLICKER MEATSHIELD CASE"), 19);
                         }
                         log-event("clicker-ate-meatshield-npc", 1, "", 0, 0);
                         player-end-meatshield();
@@ -1395,7 +1395,7 @@ embedded@1bd98(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     u64? var_0 = estimate-frames-til-hit(arg_1);
     if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D("frames to parry hit: %i", var_0), 19);
+            display(dc:format("frames to parry hit: %i", var_0), 19);
         }
     }
     return melee-fact-set-float(arg_2, parry-intro-rate, minmax((f32)sec-to-frames(get-animation-duration(arg_2, npc-f-1hblunt-parry-fist-rt-cross-enter--npc) - frames-to-sec(2)) / (f32)var_0, 0.25, 2.00));
@@ -1479,7 +1479,7 @@ embedded@1a970(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     u64? var_0 = estimate-frames-til-hit(arg_1);
     if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D("frames to parry hit: %i", var_0), 19);
+            display(dc:format("frames to parry hit: %i", var_0), 19);
         }
     }
     return melee-fact-set-float(arg_2, parry-intro-rate, minmax((f32)sec-to-frames(get-animation-duration(arg_2, npc-f-1hblunt-parry-switchblade-backhand-enter--npc) - frames-to-sec(2)) / (f32)var_0, 0.25, 2.00));
@@ -1552,7 +1552,7 @@ embedded@3388(i64 arg_0, i64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg
     u16 var_2;
     if (arg_0 == arg_1 && ((var_0 * 30.00) - var_1) > 2.00) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D("TELL INTERUPTED: interupted by %f frames", (var_0 * 30.00) - var_1), 19);
+            display(dc:format("TELL INTERUPTED: interupted by %f frames", (var_0 * 30.00) - var_1), 19);
         }
         var_2 = melee-fact-set-time(arg_0, last-time-tell-interupted);
     } else {
@@ -1901,7 +1901,7 @@ embedded@dbd0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
 u64? fist-left-1h-parry-sync
 embedded@19e90(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
     if (!is-final-build?()) {
-        display(#5445173390656D6D("current-melee-move: %s comparision name: %s", string-debug(*(u64*)get-current-melee-attack(arg_2)), string-debug(fist-left-1h-parry-enter)), 19);
+        display(dc:format("current-melee-move: %s comparision name: %s", string-debug(*(u64*)get-current-melee-attack(arg_2)), string-debug(fist-left-1h-parry-enter)), 19);
     }
     if (!1) {
         melee-debug-text-file-line-fail("(cond (#t (printf current-melee-move: %s comparision name: %s (string-debug (-> (get-current-melee-attack defender) name)) (string-debug name)) #t) (else #t))", "t2r/src/game/scriptx/melee/player-standing/imports/player-standing-macros.dcx", 5261);
@@ -1955,7 +1955,7 @@ embedded@1c3f8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     if (is-player?(arg_1)) {
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("Melee deadened for %f seconds post parry", 0.00), 19);
+                display(dc:format("Melee deadened for %f seconds post parry", 0.00), 19);
             }
         }
         invalidate-single-melee-command-queue(arg_1, melee-attack);
@@ -2111,7 +2111,7 @@ fist-right-1h-parry-sync
 embedded@1a790(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u64? var_0 = random-float-range(0.00, 1.00, 0);
     if (!is-final-build?()) {
-        display(#5445173390656D6D("%f > %f  ?", 1.00, var_0), 19);
+        display(dc:format("%f > %f  ?", 1.00, var_0), 19);
     }
     return 1.00 >= var_0;
 }
@@ -2162,7 +2162,7 @@ embedded@1bc70(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     u64? var_0 = estimate-frames-til-hit(arg_1);
     if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D("frames to parry hit: %i", var_0), 19);
+            display(dc:format("frames to parry hit: %i", var_0), 19);
         }
     }
     return melee-fact-set-float(arg_2, parry-intro-rate, minmax((f32)sec-to-frames(get-animation-duration(arg_2, npc-f-1hblunt-parry-fist-lt-cross-enter--npc) - frames-to-sec(2)) / (f32)var_0, 0.25, 2.00));
@@ -2186,7 +2186,7 @@ embedded@33e0(i64 arg_0, i64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg
     u16 var_2;
     if (arg_0 == arg_1 && ((var_0 * 30.00) - var_1) > 2.00) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D("TELL INTERUPTED: interupted by %f frames", (var_0 * 30.00) - var_1), 19);
+            display(dc:format("TELL INTERUPTED: interupted by %f frames", (var_0 * 30.00) - var_1), 19);
         }
         var_2 = melee-fact-set-time(arg_0, last-time-tell-interupted);
     } else {
@@ -2257,7 +2257,7 @@ embedded@52d8(i64 arg_0, i64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg
     u16 var_2;
     if (arg_0 == arg_1 && ((var_0 * 30.00) - var_1) > 2.00) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D("TELL INTERUPTED: interupted by %f frames", (var_0 * 30.00) - var_1), 19);
+            display(dc:format("TELL INTERUPTED: interupted by %f frames", (var_0 * 30.00) - var_1), 19);
         }
         var_2 = melee-fact-set-time(arg_0, last-time-tell-interupted);
     } else {
@@ -2336,7 +2336,7 @@ embedded@19920(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     u64? var_0 = estimate-frames-til-hit(arg_1);
     if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D("frames to parry hit: %i", var_0), 19);
+            display(dc:format("frames to parry hit: %i", var_0), 19);
         }
     }
     return melee-fact-set-float(arg_2, parry-intro-rate, minmax((f32)sec-to-frames(get-animation-duration(arg_2, npc-f-1hblunt-parry-switchblade-forehand-enter--npc) - frames-to-sec(2)) / (f32)var_0, 0.25, 2.00));
@@ -2441,7 +2441,7 @@ embedded@3a78(i64 arg_0, i64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg
     u16 var_2;
     if (arg_0 == arg_1 && ((var_0 * 30.00) - var_1) > 2.00) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D("TELL INTERUPTED: interupted by %f frames", (var_0 * 30.00) - var_1), 19);
+            display(dc:format("TELL INTERUPTED: interupted by %f frames", (var_0 * 30.00) - var_1), 19);
         }
         var_2 = melee-fact-set-time(arg_0, last-time-tell-interupted);
     } else {
@@ -2497,7 +2497,7 @@ embedded@1ba50(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 u64? switchblade-right-1h-parry-enter-sync
 embedded@1c368(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
     if (!is-final-build?()) {
-        display(#5445173390656D6D("current-melee-move: %s comparision name: %s", string-debug(*(u64*)get-current-melee-attack(arg_2)), string-debug(switchblade-right-1h-parry-enter)), 19);
+        display(dc:format("current-melee-move: %s comparision name: %s", string-debug(*(u64*)get-current-melee-attack(arg_2)), string-debug(switchblade-right-1h-parry-enter)), 19);
     }
     if (!1) {
         melee-debug-text-file-line-fail("(cond (#t (printf current-melee-move: %s comparision name: %s (string-debug (-> (get-current-melee-attack defender) name)) (string-debug name)) #t) (else #t))", "t2r/src/game/scriptx/melee/player-standing/imports/player-standing-macros.dcx", 5261);
@@ -2525,7 +2525,7 @@ embedded@4708(i64 arg_0, i64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg
     u16 var_2;
     if (arg_0 == arg_1 && ((var_0 * 30.00) - var_1) > 2.00) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D("TELL INTERUPTED: interupted by %f frames", (var_0 * 30.00) - var_1), 19);
+            display(dc:format("TELL INTERUPTED: interupted by %f frames", (var_0 * 30.00) - var_1), 19);
         }
         var_2 = melee-fact-set-time(arg_0, last-time-tell-interupted);
     } else {
@@ -2612,7 +2612,7 @@ embedded@19e38(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     u64? var_0 = estimate-frames-til-hit(arg_1);
     if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D("frames to parry hit: %i", var_0), 19);
+            display(dc:format("frames to parry hit: %i", var_0), 19);
         }
     }
     return melee-fact-set-float(arg_2, parry-intro-rate, minmax((f32)sec-to-frames(get-animation-duration(arg_2, npc-f-1hblunt-parry-1hblunt-forehand-enter--npc) - frames-to-sec(2)) / (f32)var_0, 0.25, 2.00));
@@ -2621,7 +2621,7 @@ embedded@19e38(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 u64? 1h-blunt-right-1h-parry-sync
 embedded@1aa48(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
     if (!is-final-build?()) {
-        display(#5445173390656D6D("current-melee-move: %s comparision name: %s", string-debug(*(u64*)get-current-melee-attack(arg_2)), string-debug(1h-blunt-right-1h-parry-enter)), 19);
+        display(dc:format("current-melee-move: %s comparision name: %s", string-debug(*(u64*)get-current-melee-attack(arg_2)), string-debug(1h-blunt-right-1h-parry-enter)), 19);
     }
     if (!1) {
         melee-debug-text-file-line-fail("(cond (#t (printf current-melee-move: %s comparision name: %s (string-debug (-> (get-current-melee-attack defender) name)) (string-debug name)) #t) (else #t))", "t2r/src/game/scriptx/melee/player-standing/imports/player-standing-macros.dcx", 5261);
@@ -2634,7 +2634,7 @@ embedded@1aa48(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 u64? switchblade-left-1h-parry-enter-sync
 embedded@1bb00(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
     if (!is-final-build?()) {
-        display(#5445173390656D6D("current-melee-move: %s comparision name: %s", string-debug(*(u64*)get-current-melee-attack(arg_2)), string-debug(switchblade-left-1h-parry-enter)), 19);
+        display(dc:format("current-melee-move: %s comparision name: %s", string-debug(*(u64*)get-current-melee-attack(arg_2)), string-debug(switchblade-left-1h-parry-enter)), 19);
     }
     if (!1) {
         melee-debug-text-file-line-fail("(cond (#t (printf current-melee-move: %s comparision name: %s (string-debug (-> (get-current-melee-attack defender) name)) (string-debug name)) #t) (else #t))", "t2r/src/game/scriptx/melee/player-standing/imports/player-standing-macros.dcx", 5261);
@@ -2707,7 +2707,7 @@ embedded@3318(i64 arg_0, i64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg
     u16 var_2;
     if (arg_0 == arg_1 && ((var_0 * 30.00) - var_1) > 2.00) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D("TELL INTERUPTED: interupted by %f frames", (var_0 * 30.00) - var_1), 19);
+            display(dc:format("TELL INTERUPTED: interupted by %f frames", (var_0 * 30.00) - var_1), 19);
         }
         var_2 = melee-fact-set-time(arg_0, last-time-tell-interupted);
     } else {
@@ -2763,7 +2763,7 @@ embedded@1bfd0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 u64? fist-right-1h-parry-sync
 embedded@1aac0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
     if (!is-final-build?()) {
-        display(#5445173390656D6D("current-melee-move: %s comparision name: %s", string-debug(*(u64*)get-current-melee-attack(arg_2)), string-debug(fist-right-1h-parry-enter)), 19);
+        display(dc:format("current-melee-move: %s comparision name: %s", string-debug(*(u64*)get-current-melee-attack(arg_2)), string-debug(fist-right-1h-parry-enter)), 19);
     }
     if (!1) {
         melee-debug-text-file-line-fail("(cond (#t (printf current-melee-move: %s comparision name: %s (string-debug (-> (get-current-melee-attack defender) name)) (string-debug name)) #t) (else #t))", "t2r/src/game/scriptx/melee/player-standing/imports/player-standing-macros.dcx", 5261);
@@ -2776,7 +2776,7 @@ embedded@1aac0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 u64? 1h-blunt-left-1h-parry-sync
 embedded@1be30(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
     if (!is-final-build?()) {
-        display(#5445173390656D6D("current-melee-move: %s comparision name: %s", string-debug(*(u64*)get-current-melee-attack(arg_2)), string-debug(1h-blunt-left-1h-parry-enter)), 19);
+        display(dc:format("current-melee-move: %s comparision name: %s", string-debug(*(u64*)get-current-melee-attack(arg_2)), string-debug(1h-blunt-left-1h-parry-enter)), 19);
     }
     if (!1) {
         melee-debug-text-file-line-fail("(cond (#t (printf current-melee-move: %s comparision name: %s (string-debug (-> (get-current-melee-attack defender) name)) (string-debug name)) #t) (else #t))", "t2r/src/game/scriptx/melee/player-standing/imports/player-standing-macros.dcx", 5261);
@@ -2812,7 +2812,7 @@ embedded@1b990(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     u64? var_0 = estimate-frames-til-hit(arg_1);
     if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D("frames to parry hit: %i", var_0), 19);
+            display(dc:format("frames to parry hit: %i", var_0), 19);
         }
     }
     return melee-fact-set-float(arg_2, parry-intro-rate, minmax((f32)sec-to-frames(get-animation-duration(arg_2, npc-f-1hblunt-parry-1hblunt-backhand-enter--npc) - frames-to-sec(2)) / (f32)var_0, 0.25, 2.00));

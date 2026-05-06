@@ -65,7 +65,7 @@ embedded@8230() {
 
 bool wat-juicery-int-scriptset__level-set@618__level-scripted-set@12b8__
 embedded@8348() {
-    return stat-value?(#98B8463941F40618) > 0;
+    return stat-value?(wat-explore-load-juicery) > 0;
 }
 
 bool tsk-wat-perimeter-traps-approach__level-set@708__level-scripted-set@1a68__
@@ -146,12 +146,12 @@ embedded@6458() {
 
 u64? lvlset-wat-highway-checkpoint-olive__level-set@ba0__level-scripted-set@14c8__
 embedded@83c0() {
-    return !(get-boolean(#B9C9C5CC01E1A8AE, ss-wat-freeway-checkpoint-boost-1));
+    return !(get-boolean(load-full-crossover, ss-wat-freeway-checkpoint-boost-1));
 }
 
 bool lvlset-wat-highway-checkpoint-olive__level-scripted-set@1de0
 embedded@7fd8() {
-    return get-boolean(#B9C9C5CC01E1A8AE, ss-wat-freeway-checkpoint-boost-1);
+    return get-boolean(load-full-crossover, ss-wat-freeway-checkpoint-boost-1);
 }
 
 bool tsk-wat-infected-tunnels-shambler-facility__level-set@c70__level-scripted-set@22d8__
@@ -201,7 +201,7 @@ embedded@8068() {
 
 bool wat-flower-shop-int-scriptset__level-set@e60__level-scripted-set@20b0__
 embedded@a1b0() {
-    return stat-value?(#B23ACCA9C918520F) > 0;
+    return stat-value?(wat-explore-load-flower-shop) > 0;
 }
 
 bool wat-apartment-a-int-scriptset__level-set@ea8__level-scripted-set@1510__

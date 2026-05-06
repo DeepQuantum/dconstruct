@@ -89,11 +89,11 @@ embedded@25750(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 }
 
 u64? npc-fists-wall-standing-struggle-success-abby
-#0B5A2EA7A5D517E4
+rogue-npc-fists-low-cover-standing-struggle-finisher
 npc-fists-low-cover-standing-struggle-success-ellie
 npc-fists-low-cover-standing-struggle-finisher
 npc-fists-low-cover-standing-struggle-success-abby
-#41367C71DD503200
+rogue-npc-fists-wall-standing-struggle-finisher
 npc-fists-wall-standing-struggle-finisher
 npc-fists-wall-standing-struggle-success-ellie
 embedded@221e0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
@@ -147,11 +147,11 @@ embedded@24fa8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 u64? npc-fists-wall-standing-struggle-success-abby
 npc-fists-low-cover-standing-struggle-success-ellie
 npc-fists-front-standing-struggle-enter
-#3D2DA3D8CD63749B
-#3D2DA3D8CD63749B
+rogue-npc-fists-standing-struggle-finisher
+rogue-npc-fists-standing-struggle-finisher
 npc-fists-standing-struggle-finisher
 npc-fists-standing-struggle-finisher
-#41367C71DD503200
+rogue-npc-fists-wall-standing-struggle-finisher
 npc-fists-wall-standing-struggle-finisher
 npc-fists-wall-standing-struggle
 npc-fists-wall-standing-struggle
@@ -171,18 +171,18 @@ embedded@25568(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 }
 
 u64? npc-fists-wall-standing-struggle-success-abby
-#0B5A2EA7A5D517E4
-#0B5A2EA7A5D517E4
+rogue-npc-fists-low-cover-standing-struggle-finisher
+rogue-npc-fists-low-cover-standing-struggle-finisher
 npc-fists-low-cover-standing-struggle-success-ellie
 npc-fists-low-cover-standing-struggle-finisher
 npc-fists-low-cover-standing-struggle-finisher
 npc-fists-front-standing-struggle-enter
-#3D2DA3D8CD63749B
-#3D2DA3D8CD63749B
+rogue-npc-fists-standing-struggle-finisher
+rogue-npc-fists-standing-struggle-finisher
 npc-fists-standing-struggle-finisher
 npc-fists-standing-struggle-finisher
-#41367C71DD503200
-#41367C71DD503200
+rogue-npc-fists-wall-standing-struggle-finisher
+rogue-npc-fists-wall-standing-struggle-finisher
 npc-fists-wall-standing-struggle-finisher
 npc-fists-wall-standing-struggle-finisher
 npc-fists-wall-standing-struggle
@@ -238,15 +238,15 @@ embedded@257b8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 }
 
 u64? npc-fists-wall-standing-struggle-success-abby
-#0B5A2EA7A5D517E4
+rogue-npc-fists-low-cover-standing-struggle-finisher
 npc-fists-contextual-struggle-tell
 npc-fists-low-cover-standing-struggle-success-ellie
 npc-fists-low-cover-standing-struggle-finisher
 npc-fists-front-standing-struggle-enter__melee-event-list@5c30
 npc-fists-front-standing-struggle-enter
-#3D2DA3D8CD63749B
+rogue-npc-fists-standing-struggle-finisher
 npc-fists-standing-struggle-finisher
-#41367C71DD503200
+rogue-npc-fists-wall-standing-struggle-finisher
 npc-fists-wall-standing-struggle-finisher
 npc-fists-low-cover-enter
 npc-fists-wall-standing-struggle
@@ -270,15 +270,15 @@ embedded@21f88(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 }
 
 u64? npc-fists-wall-standing-struggle-success-abby
-#0B5A2EA7A5D517E4
+rogue-npc-fists-low-cover-standing-struggle-finisher
 npc-fists-contextual-struggle-tell
 npc-fists-low-cover-standing-struggle-success-ellie
 npc-fists-low-cover-standing-struggle-finisher
 npc-fists-front-standing-struggle-enter
 npc-fists-front-standing-struggle-enter
-#3D2DA3D8CD63749B
+rogue-npc-fists-standing-struggle-finisher
 npc-fists-standing-struggle-finisher
-#41367C71DD503200
+rogue-npc-fists-wall-standing-struggle-finisher
 npc-fists-wall-standing-struggle-finisher
 npc-fists-low-cover-enter
 npc-fists-wall-standing-struggle
@@ -510,16 +510,16 @@ embedded@3f430(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
     return player-meat-shield-grab-attacks;
 }
 
-f32 #0B5A2EA7A5D517E4__melee-attack@628__character-melee-info@6580__
-#0B5A2EA7A5D517E4__character-melee-info@8840
+f32 rogue-npc-fists-low-cover-standing-struggle-finisher__melee-attack@628__character-melee-info@6580__
+rogue-npc-fists-low-cover-standing-struggle-finisher__character-melee-info@8840
 npc-fists-low-cover-standing-struggle-finisher__melee-attack@11c8__character-melee-info@6580__
 npc-fists-low-cover-standing-struggle-finisher__character-melee-info@7660
-#3D2DA3D8CD63749B__melee-attack@1798__character-melee-info@8e20__
-#3D2DA3D8CD63749B__character-melee-info@7f70
+rogue-npc-fists-standing-struggle-finisher__melee-attack@1798__character-melee-info@8e20__
+rogue-npc-fists-standing-struggle-finisher__character-melee-info@7f70
 npc-fists-standing-struggle-finisher__melee-attack@1988__character-melee-info@8e20__
 npc-fists-standing-struggle-finisher__character-melee-info@5b88
-#41367C71DD503200__melee-attack@1b78__character-melee-info@5fc0__
-#41367C71DD503200__character-melee-info@7c40
+rogue-npc-fists-wall-standing-struggle-finisher__melee-attack@1b78__character-melee-info@5fc0__
+rogue-npc-fists-wall-standing-struggle-finisher__character-melee-info@7c40
 npc-fists-wall-standing-struggle-finisher__melee-attack@2528__character-melee-info@5fc0__
 npc-fists-wall-standing-struggle-finisher__character-melee-info@8af8
 embedded@1f128(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
@@ -534,11 +534,11 @@ embedded@1f128(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return var_0;
 }
 
-f32 #0B5A2EA7A5D517E4__melee-attack@628
+f32 rogue-npc-fists-low-cover-standing-struggle-finisher__melee-attack@628
 npc-fists-low-cover-standing-struggle-finisher__melee-attack@11c8
-#3D2DA3D8CD63749B__melee-attack@1798
+rogue-npc-fists-standing-struggle-finisher__melee-attack@1798
 npc-fists-standing-struggle-finisher__melee-attack@1988
-#41367C71DD503200__melee-attack@1b78
+rogue-npc-fists-wall-standing-struggle-finisher__melee-attack@1b78
 npc-fists-wall-standing-struggle-finisher__melee-attack@2528
 embedded@1df10(u64? arg_0, u64? arg_1, u64? arg_2) {
     f32 var_1;
@@ -550,11 +550,11 @@ embedded@1df10(u64? arg_0, u64? arg_1, u64? arg_2) {
     return var_1;
 }
 
-f32 #0B5A2EA7A5D517E4
+f32 rogue-npc-fists-low-cover-standing-struggle-finisher
 npc-fists-low-cover-standing-struggle-finisher
-#3D2DA3D8CD63749B
+rogue-npc-fists-standing-struggle-finisher
 npc-fists-standing-struggle-finisher
-#41367C71DD503200
+rogue-npc-fists-wall-standing-struggle-finisher
 npc-fists-wall-standing-struggle-finisher
 embedded@19160(u64? arg_0, u64? arg_1, u64? arg_2) {
     f32 var_1;
@@ -566,18 +566,18 @@ embedded@19160(u64? arg_0, u64? arg_1, u64? arg_2) {
     return var_1;
 }
 
-u64? #0B5A2EA7A5D517E4__start-func-array@58f0
-#3D2DA3D8CD63749B__start-func-array@58f0
-#41367C71DD503200__start-func-array@58f0
+u64? rogue-npc-fists-low-cover-standing-struggle-finisher__start-func-array@58f0
+rogue-npc-fists-standing-struggle-finisher__start-func-array@58f0
+rogue-npc-fists-wall-standing-struggle-finisher__start-func-array@58f0
 embedded@25e10(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
-    return #329DF6617C39EA76();
+    return rogue-mode-finisher();
 }
 
-u64? #0B5A2EA7A5D517E4
+u64? rogue-npc-fists-low-cover-standing-struggle-finisher
 npc-fists-low-cover-standing-struggle-finisher
-#3D2DA3D8CD63749B
+rogue-npc-fists-standing-struggle-finisher
 npc-fists-standing-struggle-finisher
-#41367C71DD503200
+rogue-npc-fists-wall-standing-struggle-finisher
 npc-fists-wall-standing-struggle-finisher
 embedded@22870(u64? arg_0, u64? arg_1, string arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
     u64? var_0 = character-melee-event-active?(arg_2, 211, 0);
@@ -588,11 +588,11 @@ embedded@22870(u64? arg_0, u64? arg_1, string arg_2, u64? arg_3, u64? arg_4, u64
     return !var_0 && 1 && 1;
 }
 
-u16 #0B5A2EA7A5D517E4
+u16 rogue-npc-fists-low-cover-standing-struggle-finisher
 npc-fists-low-cover-standing-struggle-finisher
-#3D2DA3D8CD63749B
+rogue-npc-fists-standing-struggle-finisher
 npc-fists-standing-struggle-finisher
-#41367C71DD503200
+rogue-npc-fists-wall-standing-struggle-finisher
 npc-fists-wall-standing-struggle-finisher
 embedded@8630(i64 arg_0, i64 arg_1, i64 arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
     if (arg_0 == arg_2) {
@@ -634,11 +634,11 @@ embedded@8630(i64 arg_0, i64 arg_1, i64 arg_2, u64? arg_3, u64? arg_4, u64? arg_
     return var_9;
 }
 
-u16 #0B5A2EA7A5D517E4__melee-event-list@6208
+u16 rogue-npc-fists-low-cover-standing-struggle-finisher__melee-event-list@6208
 npc-fists-low-cover-standing-struggle-finisher__melee-event-list@70d0
-#3D2DA3D8CD63749B__melee-event-list@7f40
+rogue-npc-fists-standing-struggle-finisher__melee-event-list@7f40
 npc-fists-standing-struggle-finisher__melee-event-list@6c38
-#41367C71DD503200__melee-event-list@5908
+rogue-npc-fists-wall-standing-struggle-finisher__melee-event-list@5908
 npc-fists-wall-standing-struggle-finisher__melee-event-list@5920
 embedded@237d0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_1;
@@ -653,27 +653,27 @@ embedded@237d0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return var_1;
 }
 
-u64? #0B5A2EA7A5D517E4
+u64? rogue-npc-fists-low-cover-standing-struggle-finisher
 embedded@25170(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     if (is-player?(arg_2)) {
         send-event(synced-finisher-v-player, ss-promote-death-hints, boxed_symbol(arg_1));
     }
-    return log-event("melee-npc-finisher", 1, string-debug(#0B5A2EA7A5D517E4), 0, 0);
+    return log-event("melee-npc-finisher", 1, string-debug(rogue-npc-fists-low-cover-standing-struggle-finisher), 0, 0);
 }
 
-u64? #0B5A2EA7A5D517E4
+u64? rogue-npc-fists-low-cover-standing-struggle-finisher
 npc-fists-low-cover-standing-struggle-finisher
-#3D2DA3D8CD63749B
+rogue-npc-fists-standing-struggle-finisher
 npc-fists-standing-struggle-finisher
-#41367C71DD503200
+rogue-npc-fists-wall-standing-struggle-finisher
 npc-fists-wall-standing-struggle-finisher
 embedded@23fa0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return is-player?(arg_2);
 }
 
-u64? #0B5A2EA7A5D517E4
+u64? rogue-npc-fists-low-cover-standing-struggle-finisher
 npc-fists-low-cover-standing-struggle-finisher
-#41367C71DD503200
+rogue-npc-fists-wall-standing-struggle-finisher
 npc-fists-wall-standing-struggle-finisher
 npc-fists-wall-standing-struggle
 npc-fists-low-cover-standing-struggle
@@ -689,14 +689,14 @@ embedded@225a0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return play-melee-facial-gesture(arg_2, 8, var_0, 0.10);
 }
 
-u64? #0B5A2EA7A5D517E4
-#0B5A2EA7A5D517E4
+u64? rogue-npc-fists-low-cover-standing-struggle-finisher
+rogue-npc-fists-low-cover-standing-struggle-finisher
 npc-fists-low-cover-standing-struggle-finisher
 npc-fists-low-cover-standing-struggle-finisher
-#3D2DA3D8CD63749B
+rogue-npc-fists-standing-struggle-finisher
 npc-fists-standing-struggle-finisher
-#41367C71DD503200
-#41367C71DD503200
+rogue-npc-fists-wall-standing-struggle-finisher
+rogue-npc-fists-wall-standing-struggle-finisher
 npc-fists-wall-standing-struggle-finisher
 npc-fists-wall-standing-struggle-finisher
 npc-fists-wall-standing-struggle
@@ -713,11 +713,11 @@ embedded@24ec0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return var_0 && var_1 && var_1;
 }
 
-u64? #0B5A2EA7A5D517E4
-#0B5A2EA7A5D517E4
+u64? rogue-npc-fists-low-cover-standing-struggle-finisher
+rogue-npc-fists-low-cover-standing-struggle-finisher
 npc-fists-low-cover-standing-struggle-finisher
 npc-fists-low-cover-standing-struggle-finisher
-#41367C71DD503200
+rogue-npc-fists-wall-standing-struggle-finisher
 npc-fists-wall-standing-struggle-finisher
 embedded@252c8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     f32 var_0;
@@ -729,9 +729,9 @@ embedded@252c8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return play-melee-facial-gesture(arg_2, 14, var_0, 0.20);
 }
 
-u64? #0B5A2EA7A5D517E4
+u64? rogue-npc-fists-low-cover-standing-struggle-finisher
 npc-fists-low-cover-standing-struggle-finisher
-#3D2DA3D8CD63749B
+rogue-npc-fists-standing-struggle-finisher
 npc-fists-standing-struggle-finisher
 embedded@241e8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     f32 var_0;
@@ -743,7 +743,7 @@ embedded@241e8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return play-melee-facial-gesture(arg_2, 8, var_0, 0.20);
 }
 
-u64? #0B5A2EA7A5D517E4
+u64? rogue-npc-fists-low-cover-standing-struggle-finisher
 npc-fists-low-cover-standing-struggle-finisher
 embedded@24298(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     f32 var_0;
@@ -755,11 +755,11 @@ embedded@24298(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return play-melee-facial-gesture(arg_2, 28, var_0, 0.70);
 }
 
-u64? #0B5A2EA7A5D517E4
+u64? rogue-npc-fists-low-cover-standing-struggle-finisher
 npc-fists-low-cover-standing-struggle-finisher
-#3D2DA3D8CD63749B
+rogue-npc-fists-standing-struggle-finisher
 npc-fists-standing-struggle-finisher
-#41367C71DD503200
+rogue-npc-fists-wall-standing-struggle-finisher
 npc-fists-wall-standing-struggle-finisher
 embedded@254b8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u64? var_0 = is-player?(arg_2);
@@ -771,7 +771,7 @@ embedded@254b8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return var_0 && var_1 && var_1;
 }
 
-u16 #0B5A2EA7A5D517E4
+u16 rogue-npc-fists-low-cover-standing-struggle-finisher
 npc-fists-low-cover-standing-struggle-finisher
 embedded@212d8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_3;
@@ -783,9 +783,9 @@ embedded@212d8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return var_3;
 }
 
-u16 #0B5A2EA7A5D517E4
+u16 rogue-npc-fists-low-cover-standing-struggle-finisher
 npc-fists-low-cover-standing-struggle-finisher
-#41367C71DD503200
+rogue-npc-fists-wall-standing-struggle-finisher
 npc-fists-wall-standing-struggle-finisher
 embedded@24c50(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_3;
@@ -797,11 +797,11 @@ embedded@24c50(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return var_3;
 }
 
-u16 #0B5A2EA7A5D517E4
+u16 rogue-npc-fists-low-cover-standing-struggle-finisher
 npc-fists-low-cover-standing-struggle-finisher
-#3D2DA3D8CD63749B
+rogue-npc-fists-standing-struggle-finisher
 npc-fists-standing-struggle-finisher
-#41367C71DD503200
+rogue-npc-fists-wall-standing-struggle-finisher
 npc-fists-wall-standing-struggle-finisher
 embedded@23ec0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_3;
@@ -814,11 +814,11 @@ embedded@23ec0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return var_3;
 }
 
-u16 #0B5A2EA7A5D517E4
+u16 rogue-npc-fists-low-cover-standing-struggle-finisher
 npc-fists-low-cover-standing-struggle-finisher
-#3D2DA3D8CD63749B
+rogue-npc-fists-standing-struggle-finisher
 npc-fists-standing-struggle-finisher
-#41367C71DD503200
+rogue-npc-fists-wall-standing-struggle-finisher
 npc-fists-wall-standing-struggle-finisher
 embedded@24ab0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_3;
@@ -831,11 +831,11 @@ embedded@24ab0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return var_3;
 }
 
-u16 #0B5A2EA7A5D517E4
+u16 rogue-npc-fists-low-cover-standing-struggle-finisher
 npc-fists-low-cover-standing-struggle-finisher
-#3D2DA3D8CD63749B
+rogue-npc-fists-standing-struggle-finisher
 npc-fists-standing-struggle-finisher
-#41367C71DD503200
+rogue-npc-fists-wall-standing-struggle-finisher
 npc-fists-wall-standing-struggle-finisher
 embedded@24050(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_3;
@@ -848,11 +848,11 @@ embedded@24050(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return var_3;
 }
 
-u16 #0B5A2EA7A5D517E4
+u16 rogue-npc-fists-low-cover-standing-struggle-finisher
 npc-fists-low-cover-standing-struggle-finisher
-#3D2DA3D8CD63749B
+rogue-npc-fists-standing-struggle-finisher
 npc-fists-standing-struggle-finisher
-#41367C71DD503200
+rogue-npc-fists-wall-standing-struggle-finisher
 npc-fists-wall-standing-struggle-finisher
 npc-fists-wall-standing-struggle
 npc-fists-low-cover-standing-struggle
@@ -867,11 +867,11 @@ embedded@216b8(u64? arg_0, u64? arg_1, sid arg_2, u64? arg_3, u64? arg_4, u64? a
     return var_0;
 }
 
-u64? #0B5A2EA7A5D517E4
+u64? rogue-npc-fists-low-cover-standing-struggle-finisher
 npc-fists-low-cover-standing-struggle-finisher
-#3D2DA3D8CD63749B
+rogue-npc-fists-standing-struggle-finisher
 npc-fists-standing-struggle-finisher
-#41367C71DD503200
+rogue-npc-fists-wall-standing-struggle-finisher
 npc-fists-wall-standing-struggle-finisher
 embedded@23b20(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return broadcast-event(
@@ -882,21 +882,21 @@ embedded@23b20(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     );
 }
 
-u64? #0B5A2EA7A5D517E4
-#0B5A2EA7A5D517E4
-#0B5A2EA7A5D517E4
+u64? rogue-npc-fists-low-cover-standing-struggle-finisher
+rogue-npc-fists-low-cover-standing-struggle-finisher
+rogue-npc-fists-low-cover-standing-struggle-finisher
 npc-fists-low-cover-standing-struggle-finisher
 npc-fists-low-cover-standing-struggle-finisher
 npc-fists-low-cover-standing-struggle-finisher
-#3D2DA3D8CD63749B
-#3D2DA3D8CD63749B
-#3D2DA3D8CD63749B
+rogue-npc-fists-standing-struggle-finisher
+rogue-npc-fists-standing-struggle-finisher
+rogue-npc-fists-standing-struggle-finisher
 npc-fists-standing-struggle-finisher
 npc-fists-standing-struggle-finisher
 npc-fists-standing-struggle-finisher
-#41367C71DD503200
-#41367C71DD503200
-#41367C71DD503200
+rogue-npc-fists-wall-standing-struggle-finisher
+rogue-npc-fists-wall-standing-struggle-finisher
+rogue-npc-fists-wall-standing-struggle-finisher
 npc-fists-wall-standing-struggle-finisher
 npc-fists-wall-standing-struggle-finisher
 npc-fists-wall-standing-struggle-finisher
@@ -904,41 +904,41 @@ embedded@243c0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return is-npc?(arg_2) && is-npc?(arg_1) && !npc-is-buddy?(arg_1);
 }
 
-u64? #0B5A2EA7A5D517E4
+u64? rogue-npc-fists-low-cover-standing-struggle-finisher
 npc-fists-low-cover-standing-struggle-finisher
-#3D2DA3D8CD63749B
+rogue-npc-fists-standing-struggle-finisher
 npc-fists-standing-struggle-finisher
-#41367C71DD503200
+rogue-npc-fists-wall-standing-struggle-finisher
 npc-fists-wall-standing-struggle-finisher
 embedded@26380(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return !is-player?(arg_2);
 }
 
-u64? #0B5A2EA7A5D517E4
+u64? rogue-npc-fists-low-cover-standing-struggle-finisher
 npc-fists-low-cover-standing-struggle-finisher
-#3D2DA3D8CD63749B
+rogue-npc-fists-standing-struggle-finisher
 npc-fists-standing-struggle-finisher
-#41367C71DD503200
+rogue-npc-fists-wall-standing-struggle-finisher
 npc-fists-wall-standing-struggle-finisher
 embedded@22a48(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return !character-in-melee-move?(arg_11, arg_1) && !is-player?(arg_2);
 }
 
-u64? #0B5A2EA7A5D517E4
+u64? rogue-npc-fists-low-cover-standing-struggle-finisher
 npc-fists-low-cover-standing-struggle-finisher
-#3D2DA3D8CD63749B
+rogue-npc-fists-standing-struggle-finisher
 npc-fists-standing-struggle-finisher
-#41367C71DD503200
+rogue-npc-fists-wall-standing-struggle-finisher
 npc-fists-wall-standing-struggle-finisher
 embedded@231d8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return !character-in-melee-move?(arg_11, arg_2);
 }
 
-u16 #0B5A2EA7A5D517E4
+u16 rogue-npc-fists-low-cover-standing-struggle-finisher
 npc-fists-low-cover-standing-struggle-finisher
-#3D2DA3D8CD63749B
+rogue-npc-fists-standing-struggle-finisher
 npc-fists-standing-struggle-finisher
-#41367C71DD503200
+rogue-npc-fists-wall-standing-struggle-finisher
 npc-fists-wall-standing-struggle-finisher
 embedded@218e0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_1;
@@ -951,21 +951,21 @@ embedded@218e0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return var_1;
 }
 
-u64? #0B5A2EA7A5D517E4
+u64? rogue-npc-fists-low-cover-standing-struggle-finisher
 npc-fists-low-cover-standing-struggle-finisher
-#3D2DA3D8CD63749B
+rogue-npc-fists-standing-struggle-finisher
 npc-fists-standing-struggle-finisher
-#41367C71DD503200
+rogue-npc-fists-wall-standing-struggle-finisher
 npc-fists-wall-standing-struggle-finisher
 embedded@267a8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return !is-npc?(arg_2) && is-npc?(arg_1) && !npc-is-buddy?(arg_1);
 }
 
-u16 #0B5A2EA7A5D517E4
+u16 rogue-npc-fists-low-cover-standing-struggle-finisher
 npc-fists-low-cover-standing-struggle-finisher
-#3D2DA3D8CD63749B
+rogue-npc-fists-standing-struggle-finisher
 npc-fists-standing-struggle-finisher
-#41367C71DD503200
+rogue-npc-fists-wall-standing-struggle-finisher
 npc-fists-wall-standing-struggle-finisher
 embedded@26638(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_1;
@@ -977,25 +977,25 @@ embedded@26638(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return var_1;
 }
 
-u64? #0B5A2EA7A5D517E4
+u64? rogue-npc-fists-low-cover-standing-struggle-finisher
 npc-fists-low-cover-standing-struggle-finisher
-#3D2DA3D8CD63749B
+rogue-npc-fists-standing-struggle-finisher
 npc-fists-standing-struggle-finisher
-#41367C71DD503200
+rogue-npc-fists-wall-standing-struggle-finisher
 npc-fists-wall-standing-struggle-finisher
 embedded@22688(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return !is-camera-animated?();
 }
 
-u64? #0B5A2EA7A5D517E4
+u64? rogue-npc-fists-low-cover-standing-struggle-finisher
 npc-fists-low-cover-standing-struggle-finisher
-#41367C71DD503200
+rogue-npc-fists-wall-standing-struggle-finisher
 npc-fists-wall-standing-struggle-finisher
 embedded@26488(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return start-rumble(soft-land-rumble-settings, 0);
 }
 
-u64? #0B5A2EA7A5D517E4
+u64? rogue-npc-fists-low-cover-standing-struggle-finisher
 npc-fists-low-cover-standing-struggle-finisher
 embedded@233b8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     sid var_1;
@@ -1007,11 +1007,11 @@ embedded@233b8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return set-table-shader-material-values-param(var_1, curve-scale(0.00, 50.00, 0.00, 1.00, get-animation-frame(arg_2, 2, lookup-resolved-anim-name(arg_2, npc-fist-low-cover-struggle-fail--ellie)), 3));
 }
 
-u64? #0B5A2EA7A5D517E4
+u64? rogue-npc-fists-low-cover-standing-struggle-finisher
 npc-fists-low-cover-standing-struggle-finisher
-#3D2DA3D8CD63749B
+rogue-npc-fists-standing-struggle-finisher
 npc-fists-standing-struggle-finisher
-#41367C71DD503200
+rogue-npc-fists-wall-standing-struggle-finisher
 npc-fists-wall-standing-struggle-finisher
 embedded@228c8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return melee-fact-set-bool(arg_2, melee-killed, 1);
@@ -1023,9 +1023,9 @@ attacker-wall-struggle-break__melee-attack@2148__start-func-array@7378__
 attacker-parry-break__melee-attack@2908__start-func-array@7378__
 attacker-standing-struggle-break-front__melee-attack@2ed8__start-func-array@7378__
 defender-wall-struggle-break__melee-attack@30c8__start-func-array@7378__
-#8E974B10123E9AD7__melee-attack@32b8__start-func-array@7378__
+defender-ellie-death-break__melee-attack@32b8__start-func-array@7378__
 defender-low-cover-struggle-break__melee-attack@3698__start-func-array@7378__
-#ABF76EEDC9F0FC02__melee-attack@4048__start-func-array@7378__
+defender-abby-death-break__melee-attack@4048__start-func-array@7378__
 defender-parry-break__melee-attack@4238__start-func-array@7378__
 defender-standing-struggle-break-front__melee-attack@4be8__start-func-array@7378__
 defender-standing-struggle-break-back__melee-attack@51b8__start-func-array@7378__
@@ -1110,7 +1110,7 @@ embedded@80c0(i64 arg_0, i64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg
     u16 var_2;
     if (arg_0 == arg_1 && ((var_0 * 30.00) - var_1) > 2.00) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D("TELL INTERUPTED: interupted by %f frames", (var_0 * 30.00) - var_1), 19);
+            display(dc:format("TELL INTERUPTED: interupted by %f frames", (var_0 * 30.00) - var_1), 19);
         }
         var_2 = melee-fact-set-time(arg_0, last-time-tell-interupted);
     } else {
@@ -1402,15 +1402,15 @@ embedded@8f88(i64 arg_0, i64 arg_1, i64 arg_2, u64? arg_3, u64? arg_4, u64? arg_
 u64? npc-fists-low-cover-standing-struggle-success-ellie__melee-event-list@9268
 npc-fists-wall-standing-struggle-success-ellie__melee-event-list@5830
 embedded@26948(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
-    #DAD0704471AE382A();
-    return #49E1E9872AC6921D(ellie-fist-low-cover-struggle-success--switchblade);
+    rogue-draw-melee-weapon();
+    return rogue-animate-melee-weapon(ellie-fist-low-cover-struggle-success--switchblade);
 }
 
 u64? npc-fists-low-cover-standing-struggle-finisher__start-func-array@64c0
 npc-fists-standing-struggle-finisher__start-func-array@64c0
 npc-fists-wall-standing-struggle-finisher__start-func-array@64c0
 embedded@24b08(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
-    return #BCC56A0BCEA8CC56();
+    return not-rogue-mode-finisher();
 }
 
 u64? npc-fists-low-cover-standing-struggle-finisher
@@ -1474,7 +1474,7 @@ embedded@23be0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     }
     u16 var_2;
     if (is-rogue-mode?()) {
-        var_2 = send-event(#7D70C7896B7D87D4, ss-reminders);
+        var_2 = send-event(player-grabbed-by-npc, ss-reminders);
     } else {
         var_2 = 0;
     }
@@ -1568,15 +1568,15 @@ embedded@25090(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return var_3;
 }
 
-u64? #3D2DA3D8CD63749B
+u64? rogue-npc-fists-standing-struggle-finisher
 embedded@23288(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     if (is-player?(arg_2)) {
         send-event(synced-finisher-v-player, ss-promote-death-hints, boxed_symbol(arg_1));
     }
-    return log-event("melee-npc-finisher", 1, string-debug(#3D2DA3D8CD63749B), 0, 0);
+    return log-event("melee-npc-finisher", 1, string-debug(rogue-npc-fists-standing-struggle-finisher), 0, 0);
 }
 
-u64? #3D2DA3D8CD63749B
+u64? rogue-npc-fists-standing-struggle-finisher
 npc-fists-standing-struggle-finisher
 embedded@23550(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     f32 var_0;
@@ -1588,7 +1588,7 @@ embedded@23550(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return play-melee-facial-gesture(arg_2, 28, var_0, 0.40);
 }
 
-u16 #3D2DA3D8CD63749B
+u16 rogue-npc-fists-standing-struggle-finisher
 npc-fists-standing-struggle-finisher
 embedded@22988(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_3;
@@ -1600,7 +1600,7 @@ embedded@22988(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return var_3;
 }
 
-u16 #3D2DA3D8CD63749B
+u16 rogue-npc-fists-standing-struggle-finisher
 npc-fists-standing-struggle-finisher
 embedded@24870(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_3;
@@ -1612,7 +1612,7 @@ embedded@24870(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return var_3;
 }
 
-u16 #3D2DA3D8CD63749B
+u16 rogue-npc-fists-standing-struggle-finisher
 npc-fists-standing-struggle-finisher
 embedded@211c0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_3;
@@ -1624,7 +1624,7 @@ embedded@211c0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return var_3;
 }
 
-u16 #3D2DA3D8CD63749B
+u16 rogue-npc-fists-standing-struggle-finisher
 npc-fists-standing-struggle-finisher
 embedded@224f0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_2;
@@ -1637,7 +1637,7 @@ embedded@224f0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return var_2;
 }
 
-u16 #3D2DA3D8CD63749B
+u16 rogue-npc-fists-standing-struggle-finisher
 npc-fists-standing-struggle-finisher
 npc-fists-wall-standing-struggle
 npc-fists-wall-enter
@@ -1652,14 +1652,14 @@ embedded@22d38(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return var_1;
 }
 
-u64? #3D2DA3D8CD63749B
+u64? rogue-npc-fists-standing-struggle-finisher
 npc-fists-standing-struggle-finisher
 npc-fists-standing-abby-struggle-success__melee-event-list@62c8
 embedded@22290(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return melee-fact-set-bool(arg_1, player-struggle-success, 1);
 }
 
-u64? #3D2DA3D8CD63749B
+u64? rogue-npc-fists-standing-struggle-finisher
 npc-fists-standing-struggle-finisher
 embedded@26240(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     sid var_1;
@@ -1686,15 +1686,15 @@ embedded@23d28(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return log-event("melee-npc-finisher", 1, string-debug(npc-fists-standing-struggle-finisher), 0, 0);
 }
 
-u64? #41367C71DD503200
+u64? rogue-npc-fists-wall-standing-struggle-finisher
 embedded@21740(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     if (is-player?(arg_2)) {
         send-event(synced-finisher-v-player, ss-promote-death-hints, boxed_symbol(arg_1));
     }
-    return log-event("melee-npc-finisher", 1, string-debug(#41367C71DD503200), 0, 0);
+    return log-event("melee-npc-finisher", 1, string-debug(rogue-npc-fists-wall-standing-struggle-finisher), 0, 0);
 }
 
-u64? #41367C71DD503200
+u64? rogue-npc-fists-wall-standing-struggle-finisher
 npc-fists-wall-standing-struggle-finisher
 embedded@24758(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     f32 var_0;
@@ -1706,7 +1706,7 @@ embedded@24758(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return play-melee-facial-gesture(arg_2, 8, var_0, 0.40);
 }
 
-u64? #41367C71DD503200
+u64? rogue-npc-fists-wall-standing-struggle-finisher
 npc-fists-wall-standing-struggle-finisher
 embedded@223d8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     f32 var_0;
@@ -1718,7 +1718,7 @@ embedded@223d8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return play-melee-facial-gesture(arg_2, 28, var_0, 0.80);
 }
 
-u16 #41367C71DD503200
+u16 rogue-npc-fists-wall-standing-struggle-finisher
 npc-fists-wall-standing-struggle-finisher
 embedded@22380(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_3;
@@ -1730,7 +1730,7 @@ embedded@22380(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return var_3;
 }
 
-u16 #41367C71DD503200
+u16 rogue-npc-fists-wall-standing-struggle-finisher
 npc-fists-wall-standing-struggle-finisher
 embedded@235d8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_3;
@@ -1742,7 +1742,7 @@ embedded@235d8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return var_3;
 }
 
-u64? #41367C71DD503200
+u64? rogue-npc-fists-wall-standing-struggle-finisher
 npc-fists-wall-standing-struggle-finisher
 embedded@21ec8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     sid var_1;
@@ -1816,7 +1816,7 @@ embedded@6068(i64 arg_0, i64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg
     u16 var_2;
     if (arg_0 == arg_1 && ((var_0 * 30.00) - var_1) > 2.00) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D("TELL INTERUPTED: interupted by %f frames", (var_0 * 30.00) - var_1), 19);
+            display(dc:format("TELL INTERUPTED: interupted by %f frames", (var_0 * 30.00) - var_1), 19);
         }
         var_2 = melee-fact-set-time(arg_0, last-time-tell-interupted);
     } else {
@@ -2410,7 +2410,7 @@ embedded@73a8(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
                 if (player-in-meatshield?() && player-get-meatshield() == arg_2) {
                     if (is-in-front?(get-object-locator(arg_2), get-object-locator(arg_1), 2, 180.00) && is-in-front?(get-object-locator(arg_1), get-object-locator(arg_2), 2, 180.00)) {
                         if (!is-final-build?()) {
-                            display(#5445173390656D6D("END PLAYER MEATSHIELD DUE TO CLICKER MEATSHIELD CASE"), 19);
+                            display(dc:format("END PLAYER MEATSHIELD DUE TO CLICKER MEATSHIELD CASE"), 19);
                         }
                         log-event("clicker-ate-meatshield-npc", 1, "", 0, 0);
                         player-end-meatshield();
@@ -2970,12 +2970,12 @@ embedded@23b88(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 
 u16 npc-fists-low-cover-enter
 npc-fists-low-cover-enter
-#8E974B10123E9AD7__melee-event-list@7a88
-#8E974B10123E9AD7
+defender-ellie-death-break__melee-event-list@7a88
+defender-ellie-death-break
 npc-fists-wall-enter
 npc-fists-wall-enter
-#ABF76EEDC9F0FC02__melee-event-list@7a88
-#ABF76EEDC9F0FC02
+defender-abby-death-break__melee-event-list@7a88
+defender-abby-death-break
 embedded@24d78(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return 0;
 }
@@ -3339,7 +3339,7 @@ embedded@230b0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
             var_0 = 0;
         }
     } else if (dc-assert-enabled?() && !1) {
-        var_0 = display-error(#5445173390656D6D("melee-simple-damage-event: incorrect character '%s'", string-debug(defender)));
+        var_0 = display-error(dc:format("melee-simple-damage-event: incorrect character '%s'", string-debug(defender)));
     } else {
         var_0 = 0;
     }
@@ -3769,7 +3769,7 @@ embedded@60c0(i64 arg_0, i64 arg_1, i64 arg_2, u64? arg_3, u64? arg_4, u64? arg_
 u64? npc-fists-standing-ellie-struggle-success__melee-event-list@8a38
 embedded@23de8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     melee-fact-set-bool(arg_1, player-struggle-success, 1);
-    return #DAD0704471AE382A();
+    return rogue-draw-melee-weapon();
 }
 
 u64? npc-fists-standing-ellie-struggle-success

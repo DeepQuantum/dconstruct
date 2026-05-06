@@ -48,12 +48,12 @@ embedded@6fc8() {
 
 bool tsk-res-downhill-chase-start__level-set@7b8__level-scripted-set@1330__
 embedded@5e08() {
-    return get-boolean(#119893BEB87DDF23, ss-res-jesse-reunite-1);
+    return get-boolean(show-top-world, ss-res-jesse-reunite-1);
 }
 
 u64? tsk-res-downhill-chase-start__level-scripted-set@13d8
 embedded@73e8() {
-    return !(get-boolean(#119893BEB87DDF23, ss-res-jesse-reunite-1));
+    return !(get-boolean(show-top-world, ss-res-jesse-reunite-1));
 }
 
 u64? tsk-the-apologies__level-set@950__level-scripted-set@d18__
@@ -73,7 +73,7 @@ embedded@4c30() {
 
 u64? tsk-the-apologies__level-scripted-set@1480
 embedded@4830() {
-    return task-not-complete?(rescue-jesse, res-apologies-c) && get-boolean(#D3A1A91E026E09A3, ss-the-res-apologies-c-1);
+    return task-not-complete?(rescue-jesse, res-apologies-c) && get-boolean(res-apologies-c-outro-fade?, ss-the-res-apologies-c-1);
 }
 
 u64? tsk-the-apologies__level-scripted-set@1d68
@@ -83,12 +83,12 @@ embedded@4ac8() {
 
 u64? tsk-res-downhill-escape-post-crash__level-set@b38__level-scripted-set@19f0__
 embedded@67b0() {
-    return !(get-boolean(#A5D588E81B36BF14, ss-res-escape-post-crash-1)) && !(is-chronological-mode-enabled?());
+    return !(get-boolean(flip-level-set, ss-res-escape-post-crash-1)) && !(is-chronological-mode-enabled?());
 }
 
 u64? tsk-res-downhill-escape-post-crash__level-scripted-set@1000
 embedded@5ba8() {
-    return get-boolean(#A5D588E81B36BF14, ss-res-escape-post-crash-1) && !(is-chronological-mode-enabled?());
+    return get-boolean(flip-level-set, ss-res-escape-post-crash-1) && !(is-chronological-mode-enabled?());
 }
 
 u64? tsk-res-downhill-escape-post-crash__level-scripted-set@d00

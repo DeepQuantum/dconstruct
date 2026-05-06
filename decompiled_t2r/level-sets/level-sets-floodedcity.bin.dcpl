@@ -13,7 +13,7 @@
 
 u64? tsk-flo-flooded-street-skybridge__level-set@500__level-scripted-set@2238__
 embedded@8b90() {
-    return !get-boolean(#D90FE4EAE88CC732, ss-flo-flooded-street-jesse-points-igc-1);
+    return !get-boolean(jesse-under-bus?, ss-flo-flooded-street-jesse-points-igc-1);
 }
 
 u16 tsk-flo-flooded-street-skybridge__level-scripted-set@1b48
@@ -51,7 +51,7 @@ embedded@6228() {
 
 u64? tsk-flo-stormy-seas__level-set@7a8__level-scripted-set@1c68__
 embedded@79b8() {
-    return task-active?(flooded-city, flo-stormy-seas-boat-sink) && !get-boolean(#4D45C491561C8B9A, ss-flo-approach-bay-wreck-1) && time-since-last-checkpoint?() < 5.00;
+    return task-active?(flooded-city, flo-stormy-seas-boat-sink) && !get-boolean(tasked-in-to-sink?, ss-flo-approach-bay-wreck-1) && time-since-last-checkpoint?() < 5.00;
 }
 
 u64? tsk-flo-mall__level-set@860__level-scripted-set@1920__
@@ -61,7 +61,7 @@ embedded@5220() {
 
 bool tsk-flo-flooded-street-militia-fight__level-set@8e0__level-scripted-set@1938__
 embedded@8a30() {
-    return get-boolean(#E6EE815545074A83, ss-flo-flooded-street-bookstore-explore-1);
+    return get-boolean(jesse-exited-bookstore?, ss-flo-flooded-street-bookstore-explore-1);
 }
 
 bool tsk-flo-into-the-city-ferris-wheel-vista__level-set@928__level-scripted-set@1bc0__

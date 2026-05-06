@@ -12,11 +12,11 @@
 // ####################################################################################################
 
 u16 fist-dodge-forward-attack-1__melee-attack@558
-#0DEE9E714599F8D7__melee-attack@d18
-#2C85D53610A787F1__melee-attack@18b8
+fist-light-attack-dog-kick-sidekick__melee-attack@d18
+fist-light-attack-dog-kick-mirror__melee-attack@18b8
 fist-light-attack-4-kick__melee-attack@1c98
-#3E34FA07F5F2B33F__melee-attack@1e88
-#3E34FB07F5F2B4F2__melee-attack@2078
+fist-light-attack-dog-kick-pushkick-2__melee-attack@1e88
+fist-light-attack-dog-kick-pushkick-1__melee-attack@2078
 fist-light-attack-1__melee-attack@2458
 fist-light-attack-2__melee-attack@2648
 fist-light-attack-3__melee-attack@2838
@@ -30,11 +30,11 @@ embedded@7c80(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
 }
 
 f32 fist-dodge-forward-attack-1__character-melee-info@7bd8
-#0DEE9E714599F8D7__character-melee-info@c368
+fist-light-attack-dog-kick-sidekick__character-melee-info@c368
 fist-light-attack-1-far__character-melee-info@9528
-#2C85D53610A787F1__character-melee-info@7610
-#3E34FA07F5F2B33F__character-melee-info@b228
-#3E34FB07F5F2B4F2__character-melee-info@b150
+fist-light-attack-dog-kick-mirror__character-melee-info@7610
+fist-light-attack-dog-kick-pushkick-2__character-melee-info@b228
+fist-light-attack-dog-kick-pushkick-1__character-melee-info@b150
 fist-light-attack-left-1__character-melee-info@a6c0
 abby-fists-sprinting-attack-1__character-melee-info@8d20
 fists-stun-combo-1__character-melee-info@af10
@@ -55,12 +55,12 @@ embedded@236e0(u64? arg_0, u64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
 }
 
 f32 fist-dodge-forward-attack-1
-#0DEE9E714599F8D7
+fist-light-attack-dog-kick-sidekick
 fist-light-attack-1-far
-#2C85D53610A787F1
+fist-light-attack-dog-kick-mirror
 fist-light-attack-4-kick
-#3E34FA07F5F2B33F
-#3E34FB07F5F2B4F2
+fist-light-attack-dog-kick-pushkick-2
+fist-light-attack-dog-kick-pushkick-1
 fist-light-attack-1
 fist-light-attack-2
 fist-light-attack-3
@@ -81,12 +81,12 @@ embedded@316f8(u64? arg_0, u64? arg_1, u64? arg_2) {
 }
 
 u64? fist-dodge-forward-attack-1__start-func-array@71b0
-#0DEE9E714599F8D7__start-func-array@b8f0
+fist-light-attack-dog-kick-sidekick__start-func-array@b8f0
 fist-light-attack-1-far__start-func-array@a390
-#2C85D53610A787F1__start-func-array@8390
+fist-light-attack-dog-kick-mirror__start-func-array@8390
 fist-light-attack-4-kick__start-func-array@99e8
-#3E34FA07F5F2B33F__start-func-array@b138
-#3E34FB07F5F2B4F2__start-func-array@88b0
+fist-light-attack-dog-kick-pushkick-2__start-func-array@b138
+fist-light-attack-dog-kick-pushkick-1__start-func-array@88b0
 fist-light-attack-1__start-func-array@9f70
 fist-light-attack-2__start-func-array@7b18
 fist-light-attack-3__start-func-array@7b18
@@ -107,12 +107,12 @@ embedded@523e0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 }
 
 u16 fist-dodge-forward-attack-1
-#0DEE9E714599F8D7
+fist-light-attack-dog-kick-sidekick
 fist-light-attack-1-far
-#2C85D53610A787F1
+fist-light-attack-dog-kick-mirror
 fist-light-attack-4-kick
-#3E34FA07F5F2B33F
-#3E34FB07F5F2B4F2
+fist-light-attack-dog-kick-pushkick-2
+fist-light-attack-dog-kick-pushkick-1
 fist-light-attack-1
 fist-light-attack-2
 fist-light-attack-3
@@ -145,12 +145,12 @@ embedded@51a98(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 }
 
 u64? fist-dodge-forward-attack-1
-#0DEE9E714599F8D7
+fist-light-attack-dog-kick-sidekick
 fist-light-attack-1-far
-#2C85D53610A787F1
+fist-light-attack-dog-kick-mirror
 fist-light-attack-4-kick
-#3E34FA07F5F2B33F
-#3E34FB07F5F2B4F2
+fist-light-attack-dog-kick-pushkick-2
+fist-light-attack-dog-kick-pushkick-1
 fist-light-attack-1
 fist-light-attack-2
 fist-light-attack-3
@@ -166,12 +166,12 @@ embedded@518b8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 }
 
 u64? fist-dodge-forward-attack-1
-#0DEE9E714599F8D7
+fist-light-attack-dog-kick-sidekick
 fist-light-attack-1-far
-#2C85D53610A787F1
+fist-light-attack-dog-kick-mirror
 fist-light-attack-4-kick
-#3E34FA07F5F2B33F
-#3E34FB07F5F2B4F2
+fist-light-attack-dog-kick-pushkick-2
+fist-light-attack-dog-kick-pushkick-1
 fist-light-attack-1
 fist-light-attack-2
 fist-light-attack-3
@@ -192,11 +192,11 @@ embedded@515c0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 }
 
 u64? fist-dodge-forward-attack-1
-#0DEE9E714599F8D7
+fist-light-attack-dog-kick-sidekick
 fist-light-attack-1-far
-#2C85D53610A787F1
-#3E34FA07F5F2B33F
-#3E34FB07F5F2B4F2
+fist-light-attack-dog-kick-mirror
+fist-light-attack-dog-kick-pushkick-2
+fist-light-attack-dog-kick-pushkick-1
 fist-light-attack-1
 fist-light-attack-left-1
 abby-fists-sprinting-attack-1
@@ -207,12 +207,12 @@ embedded@55298(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 }
 
 bool fist-dodge-forward-attack-1
-#0DEE9E714599F8D7
+fist-light-attack-dog-kick-sidekick
 fist-light-attack-1-far
-#2C85D53610A787F1
+fist-light-attack-dog-kick-mirror
 fist-light-attack-4-kick
-#3E34FA07F5F2B33F
-#3E34FB07F5F2B4F2
+fist-light-attack-dog-kick-pushkick-2
+fist-light-attack-dog-kick-pushkick-1
 fist-light-attack-1
 fist-light-attack-2
 fist-light-attack-3
@@ -227,12 +227,12 @@ embedded@54390(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? 
 }
 
 u64? fist-dodge-forward-attack-1
-#0DEE9E714599F8D7
+fist-light-attack-dog-kick-sidekick
 fist-light-attack-1-far
-#2C85D53610A787F1
+fist-light-attack-dog-kick-mirror
 fist-light-attack-4-kick
-#3E34FA07F5F2B33F
-#3E34FB07F5F2B4F2
+fist-light-attack-dog-kick-pushkick-2
+fist-light-attack-dog-kick-pushkick-1
 fist-light-attack-1
 fist-light-attack-2
 fist-light-attack-3
@@ -260,18 +260,18 @@ embedded@51b00(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 
 u64? fist-dodge-forward-attack-1
 fist-dodge-forward-attack-1
-#0DEE9E714599F8D7
-#0DEE9E714599F8D7
+fist-light-attack-dog-kick-sidekick
+fist-light-attack-dog-kick-sidekick
 fist-light-attack-1-far
 fist-light-attack-1-far
-#2C85D53610A787F1
-#2C85D53610A787F1
+fist-light-attack-dog-kick-mirror
+fist-light-attack-dog-kick-mirror
 fist-light-attack-4-kick
 fist-light-attack-4-kick
-#3E34FA07F5F2B33F
-#3E34FA07F5F2B33F
-#3E34FB07F5F2B4F2
-#3E34FB07F5F2B4F2
+fist-light-attack-dog-kick-pushkick-2
+fist-light-attack-dog-kick-pushkick-2
+fist-light-attack-dog-kick-pushkick-1
+fist-light-attack-dog-kick-pushkick-1
 fist-light-attack-1
 fist-light-attack-1
 fist-light-attack-2
@@ -309,23 +309,23 @@ embedded@54978(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 u64? fist-dodge-forward-attack-1
 fist-light-attack-4-punch-hit-inf
 fist-dodge-back-attack-1-hit-inf
-#0DEE9E714599F8D7
+fist-light-attack-dog-kick-sidekick
 fist-dodge-forward-attack-1-hit
 fists-stun-combo-2-hit
 fist-light-attack-1-far
-#2743DD18E80813E2
-#2C85D53610A787F1
+fist-light-attack-dog-kick-pushkick-1-hit
+fist-light-attack-dog-kick-mirror
 fist-dodge-back-attack-1-hit
 fist-light-attack-4-kick
-#3E34FA07F5F2B33F
-#3E34FB07F5F2B4F2
+fist-light-attack-dog-kick-pushkick-2
+fist-light-attack-dog-kick-pushkick-1
 fist-light-attack-left-1-hit-ellie
 fist-light-attack-1
 fist-light-attack-2
 fist-light-attack-3
 fist-light-attack-left-1
 fist-light-attack-1-hit
-#627BFB0D087A4EA9
+fist-light-attack-dog-kick-mirror-hit
 fist-glass-attack-1
 abby-fists-sprinting-attack-1
 fist-light-attack-3-hit
@@ -343,25 +343,25 @@ fist-light-attack-left-1-hit
 fist-light-attack-4-punch
 abby-fists-sprinting-attack-1-hit
 fist-light-attack-2-hit-inf
-#AC7DE19943BFC3CF
+fist-light-attack-dog-kick-sidekick-hit
 fist-light-attack-4-kick-hit-inf
 fist-light-attack-left-1-hit-inf
 fist-light-attack-4-punch-hit
 fist-jump-attack-back-kill
 fist-glass-crouched-low-attack-1
-#E766BD19A7F292C7
+fist-light-attack-dog-kick-pushkick-2-hit
 fist-glass-crouched-high-attack-1
 embedded@525e8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return !melee-fact-get-bool(arg_1, break-partial-playing);
 }
 
 u64? fist-dodge-forward-attack-1
-#0DEE9E714599F8D7
+fist-light-attack-dog-kick-sidekick
 fist-light-attack-1-far
-#2C85D53610A787F1
+fist-light-attack-dog-kick-mirror
 fist-light-attack-4-kick
-#3E34FA07F5F2B33F
-#3E34FB07F5F2B4F2
+fist-light-attack-dog-kick-pushkick-2
+fist-light-attack-dog-kick-pushkick-1
 fist-light-attack-1
 fist-light-attack-2
 fist-light-attack-3
@@ -377,12 +377,12 @@ embedded@510f0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 }
 
 u64? fist-dodge-forward-attack-1
-#0DEE9E714599F8D7
+fist-light-attack-dog-kick-sidekick
 fist-light-attack-1-far
-#2C85D53610A787F1
+fist-light-attack-dog-kick-mirror
 fist-light-attack-4-kick
-#3E34FA07F5F2B33F
-#3E34FB07F5F2B4F2
+fist-light-attack-dog-kick-pushkick-2
+fist-light-attack-dog-kick-pushkick-1
 fist-light-attack-1
 fist-light-attack-2
 fist-light-attack-3
@@ -398,12 +398,12 @@ embedded@53578(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 }
 
 u64? fist-dodge-forward-attack-1
-#0DEE9E714599F8D7
+fist-light-attack-dog-kick-sidekick
 fist-light-attack-1-far
-#2C85D53610A787F1
+fist-light-attack-dog-kick-mirror
 fist-light-attack-4-kick
-#3E34FA07F5F2B33F
-#3E34FB07F5F2B4F2
+fist-light-attack-dog-kick-pushkick-2
+fist-light-attack-dog-kick-pushkick-1
 fist-light-attack-1
 fist-light-attack-2
 fist-light-attack-3
@@ -422,22 +422,22 @@ fist-dodge-forward-attack-1
 fist-light-attack-4-punch-hit-inf
 fist-dodge-back-attack-1-hit-inf
 fist-dodge-back-attack-1-hit-brute
-#0DEE9E714599F8D7
-#0DEE9E714599F8D7
+fist-light-attack-dog-kick-sidekick
+fist-light-attack-dog-kick-sidekick
 fist-dodge-forward-attack-1-hit
 fist-light-attack-left-1-hit-brute
 fist-light-attack-1-far
 fist-light-attack-1-far
-#2743DD18E80813E2
-#2C85D53610A787F1
-#2C85D53610A787F1
+fist-light-attack-dog-kick-pushkick-1-hit
+fist-light-attack-dog-kick-mirror
+fist-light-attack-dog-kick-mirror
 fist-dodge-back-attack-1-hit
 fist-light-attack-4-kick
 fist-light-attack-4-kick
-#3E34FA07F5F2B33F
-#3E34FA07F5F2B33F
-#3E34FB07F5F2B4F2
-#3E34FB07F5F2B4F2
+fist-light-attack-dog-kick-pushkick-2
+fist-light-attack-dog-kick-pushkick-2
+fist-light-attack-dog-kick-pushkick-1
+fist-light-attack-dog-kick-pushkick-1
 fist-light-attack-left-1-hit-ellie
 fist-light-attack-1
 fist-light-attack-1
@@ -452,7 +452,7 @@ fist-light-attack-2-hit-brute
 fist-dodge-forward-attack-1-hit-brute
 fist-light-attack-1-hit
 abby-fists-sprinting-attack-1-hit-brute
-#627BFB0D087A4EA9
+fist-light-attack-dog-kick-mirror-hit
 abby-fists-sprinting-attack-1
 abby-fists-sprinting-attack-1
 fist-light-attack-3-hit
@@ -474,13 +474,13 @@ fist-light-attack-4-punch
 fist-light-attack-4-kick-hit-brute
 abby-fists-sprinting-attack-1-hit
 fist-light-attack-2-hit-inf
-#AC7DE19943BFC3CF
+fist-light-attack-dog-kick-sidekick-hit
 fist-light-attack-3-hit-brute
 fist-light-attack-4-kick-hit-inf
 fist-light-attack-4-punch-hit-brute
 fist-light-attack-left-1-hit-inf
 fist-light-attack-4-punch-hit
-#E766BD19A7F292C7
+fist-light-attack-dog-kick-pushkick-2-hit
 embedded@520e8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_0;
     if (attacker == attacker && attacker == defender) {
@@ -500,7 +500,7 @@ embedded@520e8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
         var_0 = 1 && valid-contextual-dodge?(melee-fact-get-symbol(var_1, contextual-dodge-npc), 18, 63);
     } else {
         if (dc-assert-enabled?() && !1) {
-            display-error(#5445173390656D6D("allow-contextual-dodge-abort: invalid character to abort, provided '%s' please provide 'attacker or 'defender", string-debug(attacker)));
+            display-error(dc:format("allow-contextual-dodge-abort: invalid character to abort, provided '%s' please provide 'attacker or 'defender", string-debug(attacker)));
         }
         var_0 = 0;
     }
@@ -508,12 +508,12 @@ embedded@520e8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 }
 
 u64? fist-dodge-forward-attack-1
-#0DEE9E714599F8D7
+fist-light-attack-dog-kick-sidekick
 fist-light-attack-1-far
-#2C85D53610A787F1
+fist-light-attack-dog-kick-mirror
 fist-light-attack-4-kick
-#3E34FA07F5F2B33F
-#3E34FB07F5F2B4F2
+fist-light-attack-dog-kick-pushkick-2
+fist-light-attack-dog-kick-pushkick-1
 fist-light-attack-1
 fist-light-attack-2
 fist-light-attack-3
@@ -524,23 +524,23 @@ fists-stun-combo-2
 fists-stun-combo-1
 fist-light-attack-4-punch
 embedded@54ae0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
-    return !task-range-active?(santa-barbara, san-free-abby-fight, #AB856B4E629B5F28, santa-barbara);
+    return !task-range-active?(santa-barbara, san-free-abby-fight, san-streets-spikes-abby-counter, santa-barbara);
 }
 
 u16 fist-dodge-forward-attack-1
 fist-light-attack-4-punch-hit-inf
 fist-dodge-back-attack-1-hit-inf
 fist-dodge-back-attack-1-hit-brute
-#0DEE9E714599F8D7
+fist-light-attack-dog-kick-sidekick
 fist-dodge-forward-attack-1-hit
 fist-light-attack-left-1-hit-brute
 fist-light-attack-1-far
-#2743DD18E80813E2
-#2C85D53610A787F1
+fist-light-attack-dog-kick-pushkick-1-hit
+fist-light-attack-dog-kick-mirror
 fist-dodge-back-attack-1-hit
 fist-light-attack-4-kick
-#3E34FA07F5F2B33F
-#3E34FB07F5F2B4F2
+fist-light-attack-dog-kick-pushkick-2
+fist-light-attack-dog-kick-pushkick-1
 fist-light-attack-left-1-hit-ellie
 fist-light-attack-1
 fist-light-attack-2
@@ -551,7 +551,7 @@ fist-light-attack-2-hit-brute
 fist-dodge-forward-attack-1-hit-brute
 fist-light-attack-1-hit
 abby-fists-sprinting-attack-1-hit-brute
-#627BFB0D087A4EA9
+fist-light-attack-dog-kick-mirror-hit
 abby-fists-sprinting-attack-1
 fist-light-attack-3-hit
 abby-fists-sprinting-attack-1-hit-inf
@@ -568,13 +568,13 @@ fist-light-attack-4-punch
 fist-light-attack-4-kick-hit-brute
 abby-fists-sprinting-attack-1-hit
 fist-light-attack-2-hit-inf
-#AC7DE19943BFC3CF
+fist-light-attack-dog-kick-sidekick-hit
 fist-light-attack-3-hit-brute
 fist-light-attack-4-kick-hit-inf
 fist-light-attack-4-punch-hit-brute
 fist-light-attack-left-1-hit-inf
 fist-light-attack-4-punch-hit
-#E766BD19A7F292C7
+fist-light-attack-dog-kick-pushkick-2-hit
 embedded@52d28(u64 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_1;
     if (character-in-melee-move-name?(player, *(u64*)arg_0)) {
@@ -587,18 +587,18 @@ embedded@52d28(u64 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
 
 u64? fist-dodge-forward-attack-1
 fist-dodge-forward-attack-1
-#0DEE9E714599F8D7
-#0DEE9E714599F8D7
+fist-light-attack-dog-kick-sidekick
+fist-light-attack-dog-kick-sidekick
 fist-light-attack-1-far
 fist-light-attack-1-far
-#2C85D53610A787F1
-#2C85D53610A787F1
+fist-light-attack-dog-kick-mirror
+fist-light-attack-dog-kick-mirror
 fist-light-attack-4-kick
 fist-light-attack-4-kick
-#3E34FA07F5F2B33F
-#3E34FA07F5F2B33F
-#3E34FB07F5F2B4F2
-#3E34FB07F5F2B4F2
+fist-light-attack-dog-kick-pushkick-2
+fist-light-attack-dog-kick-pushkick-2
+fist-light-attack-dog-kick-pushkick-1
+fist-light-attack-dog-kick-pushkick-1
 fist-light-attack-1
 fist-light-attack-1
 fist-light-attack-2
@@ -622,12 +622,12 @@ embedded@54338(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 }
 
 u16 fist-dodge-forward-attack-1
-#0DEE9E714599F8D7
+fist-light-attack-dog-kick-sidekick
 fist-light-attack-1-far
-#2C85D53610A787F1
+fist-light-attack-dog-kick-mirror
 fist-light-attack-4-kick
-#3E34FA07F5F2B33F
-#3E34FB07F5F2B4F2
+fist-light-attack-dog-kick-pushkick-2
+fist-light-attack-dog-kick-pushkick-1
 fist-light-attack-1
 fist-light-attack-2
 fist-light-attack-3
@@ -648,12 +648,12 @@ embedded@55c28(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 }
 
 u64? fist-dodge-forward-attack-1
-#0DEE9E714599F8D7
+fist-light-attack-dog-kick-sidekick
 fist-light-attack-1-far
-#2C85D53610A787F1
+fist-light-attack-dog-kick-mirror
 fist-light-attack-4-kick
-#3E34FA07F5F2B33F
-#3E34FB07F5F2B4F2
+fist-light-attack-dog-kick-pushkick-2
+fist-light-attack-dog-kick-pushkick-1
 fist-light-attack-1
 fist-light-attack-2
 fist-light-attack-3
@@ -668,12 +668,12 @@ embedded@51510(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 }
 
 u64? fist-dodge-forward-attack-1
-#0DEE9E714599F8D7
+fist-light-attack-dog-kick-sidekick
 fist-light-attack-1-far
-#2C85D53610A787F1
+fist-light-attack-dog-kick-mirror
 fist-light-attack-4-kick
-#3E34FA07F5F2B33F
-#3E34FB07F5F2B4F2
+fist-light-attack-dog-kick-pushkick-2
+fist-light-attack-dog-kick-pushkick-1
 fist-light-attack-1
 fist-light-attack-2
 fist-light-attack-3
@@ -696,12 +696,12 @@ embedded@542e0(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? 
 }
 
 u64? fist-dodge-forward-attack-1
-#0DEE9E714599F8D7
+fist-light-attack-dog-kick-sidekick
 fist-light-attack-1-far
-#2C85D53610A787F1
+fist-light-attack-dog-kick-mirror
 fist-light-attack-4-kick
-#3E34FA07F5F2B33F
-#3E34FB07F5F2B4F2
+fist-light-attack-dog-kick-pushkick-2
+fist-light-attack-dog-kick-pushkick-1
 fist-light-attack-1
 fist-light-attack-2
 fist-light-attack-3
@@ -724,12 +724,12 @@ embedded@521a8(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? 
 }
 
 u64? fist-dodge-forward-attack-1
-#0DEE9E714599F8D7
+fist-light-attack-dog-kick-sidekick
 fist-light-attack-1-far
-#2C85D53610A787F1
+fist-light-attack-dog-kick-mirror
 fist-light-attack-4-kick
-#3E34FA07F5F2B33F
-#3E34FB07F5F2B4F2
+fist-light-attack-dog-kick-pushkick-2
+fist-light-attack-dog-kick-pushkick-1
 fist-light-attack-1
 fist-light-attack-2
 fist-light-attack-3
@@ -750,12 +750,12 @@ embedded@546b0(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? 
 }
 
 u64? fist-dodge-forward-attack-1
-#0DEE9E714599F8D7
+fist-light-attack-dog-kick-sidekick
 fist-light-attack-1-far
-#2C85D53610A787F1
+fist-light-attack-dog-kick-mirror
 fist-light-attack-4-kick
-#3E34FA07F5F2B33F
-#3E34FB07F5F2B4F2
+fist-light-attack-dog-kick-pushkick-2
+fist-light-attack-dog-kick-pushkick-1
 fist-light-attack-1
 fist-light-attack-2
 fist-light-attack-3
@@ -770,12 +770,12 @@ embedded@52ee8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 }
 
 u64? fist-dodge-forward-attack-1
-#0DEE9E714599F8D7
+fist-light-attack-dog-kick-sidekick
 fist-light-attack-1-far
-#2C85D53610A787F1
+fist-light-attack-dog-kick-mirror
 fist-light-attack-4-kick
-#3E34FA07F5F2B33F
-#3E34FB07F5F2B4F2
+fist-light-attack-dog-kick-pushkick-2
+fist-light-attack-dog-kick-pushkick-1
 fist-light-attack-1
 fist-light-attack-2
 fist-light-attack-3
@@ -801,7 +801,7 @@ fist-dodge-back-attack-1-hit-brute
 fist-dodge-forward-attack-1-hit
 fist-light-attack-left-1-hit-brute
 fist-light-attack-1-far
-#2743DD18E80813E2
+fist-light-attack-dog-kick-pushkick-1-hit
 fist-dodge-back-attack-1-hit
 fist-light-attack-left-1-hit-ellie
 fist-light-attack-1
@@ -824,7 +824,7 @@ fist-light-attack-2-hit
 fist-light-attack-left-1-hit
 abby-fists-sprinting-attack-1-hit
 fist-light-attack-2-hit-inf
-#AC7DE19943BFC3CF
+fist-light-attack-dog-kick-sidekick-hit
 fist-light-attack-3-hit-brute
 fist-light-attack-left-1-hit-inf
 embedded@55558(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
@@ -838,7 +838,7 @@ fist-dodge-back-attack-1-hit-brute__melee-event-transitions@55448
 fist-dodge-forward-attack-1-hit__melee-event-transitions@55448
 fist-light-attack-left-1-hit-brute__melee-event-transitions@55448
 fist-light-attack-1-far__melee-event-transitions@55448
-#2743DD18E80813E2__melee-event-transitions@55448
+fist-light-attack-dog-kick-pushkick-1-hit__melee-event-transitions@55448
 fist-dodge-back-attack-1-hit__melee-event-transitions@55448
 fist-dodge-back-attack-1-hit__melee-event-transitions@55448
 fist-light-attack-left-1-hit-ellie__melee-event-transitions@55448
@@ -862,7 +862,7 @@ fist-light-attack-2-hit__melee-event-transitions@55448
 fist-light-attack-left-1-hit__melee-event-transitions@55448
 abby-fists-sprinting-attack-1-hit__melee-event-transitions@55448
 fist-light-attack-2-hit-inf__melee-event-transitions@55448
-#AC7DE19943BFC3CF__melee-event-transitions@55448
+fist-light-attack-dog-kick-sidekick-hit__melee-event-transitions@55448
 fist-light-attack-3-hit-brute__melee-event-transitions@55448
 fist-light-attack-left-1-hit-inf__melee-event-transitions@55448
 embedded@72428(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
@@ -918,7 +918,7 @@ fist-dodge-back-attack-1
 fist-light-attack-4-punch
 embedded@53f10(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     if (!is-final-build?()) {
-        display(#5445173390656D6D("bruh"), 19);
+        display(dc:format("bruh"), 19);
     }
     if (!1) {
         melee-debug-text-file-line-fail("(begin (printf bruh) #t)", "t2r/src/game/scriptx/melee/player-standing/imports/player-standing-macros.dcx", 968);
@@ -1012,12 +1012,12 @@ embedded@54cf8(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? 
 }
 
 u64? fist-dodge-forward-attack-1
-#0DEE9E714599F8D7
+fist-light-attack-dog-kick-sidekick
 fist-light-attack-1-far
-#2C85D53610A787F1
+fist-light-attack-dog-kick-mirror
 fist-light-attack-4-kick
-#3E34FA07F5F2B33F
-#3E34FB07F5F2B4F2
+fist-light-attack-dog-kick-pushkick-2
+fist-light-attack-dog-kick-pushkick-1
 fist-light-attack-1
 fist-light-attack-2
 fist-light-attack-3
@@ -1030,12 +1030,12 @@ embedded@51228(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? 
 }
 
 u64? fist-dodge-forward-attack-1
-#0DEE9E714599F8D7
+fist-light-attack-dog-kick-sidekick
 fist-light-attack-1-far
-#2C85D53610A787F1
+fist-light-attack-dog-kick-mirror
 fist-light-attack-4-kick
-#3E34FA07F5F2B33F
-#3E34FB07F5F2B4F2
+fist-light-attack-dog-kick-pushkick-2
+fist-light-attack-dog-kick-pushkick-1
 fist-light-attack-1
 fist-light-attack-2
 fist-light-attack-3
@@ -1053,17 +1053,17 @@ u16 fist-dodge-forward-attack-1
 fist-light-attack-4-punch-hit-inf
 fist-dodge-back-attack-1-hit-inf
 fist-dodge-back-attack-1-hit-brute
-#0DEE9E714599F8D7
+fist-light-attack-dog-kick-sidekick
 fist-dodge-forward-attack-1-hit
 fists-stun-combo-2-hit
 fist-light-attack-left-1-hit-brute
 fist-light-attack-1-far
-#2743DD18E80813E2
-#2C85D53610A787F1
+fist-light-attack-dog-kick-pushkick-1-hit
+fist-light-attack-dog-kick-mirror
 fist-dodge-back-attack-1-hit
 fist-light-attack-4-kick
-#3E34FA07F5F2B33F
-#3E34FB07F5F2B4F2
+fist-light-attack-dog-kick-pushkick-2
+fist-light-attack-dog-kick-pushkick-1
 fist-light-attack-left-1-hit-ellie
 fist-light-attack-1
 fist-light-attack-2
@@ -1074,7 +1074,7 @@ fist-light-attack-2-hit-brute
 fist-dodge-forward-attack-1-hit-brute
 fist-light-attack-1-hit
 abby-fists-sprinting-attack-1-hit-brute
-#627BFB0D087A4EA9
+fist-light-attack-dog-kick-mirror-hit
 fist-glass-attack-1
 abby-fists-sprinting-attack-1
 fist-light-attack-3-hit
@@ -1093,7 +1093,7 @@ fist-light-attack-4-punch
 fist-light-attack-4-kick-hit-brute
 abby-fists-sprinting-attack-1-hit
 fist-light-attack-2-hit-inf
-#AC7DE19943BFC3CF
+fist-light-attack-dog-kick-sidekick-hit
 fist-light-attack-3-hit-brute
 fist-light-attack-4-kick-hit-inf
 fist-light-attack-4-punch-hit-brute
@@ -1101,7 +1101,7 @@ fist-light-attack-left-1-hit-inf
 fist-light-attack-4-punch-hit
 fist-jump-attack-back-kill
 fist-glass-crouched-low-attack-1
-#E766BD19A7F292C7
+fist-light-attack-dog-kick-pushkick-2-hit
 fist-glass-crouched-high-attack-1
 embedded@53bb0(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_4;
@@ -1117,17 +1117,17 @@ u16 fist-dodge-forward-attack-1
 fist-light-attack-4-punch-hit-inf
 fist-dodge-back-attack-1-hit-inf
 fist-dodge-back-attack-1-hit-brute
-#0DEE9E714599F8D7
+fist-light-attack-dog-kick-sidekick
 fist-dodge-forward-attack-1-hit
 fists-stun-combo-2-hit
 fist-light-attack-left-1-hit-brute
 fist-light-attack-1-far
-#2743DD18E80813E2
-#2C85D53610A787F1
+fist-light-attack-dog-kick-pushkick-1-hit
+fist-light-attack-dog-kick-mirror
 fist-dodge-back-attack-1-hit
 fist-light-attack-4-kick
-#3E34FA07F5F2B33F
-#3E34FB07F5F2B4F2
+fist-light-attack-dog-kick-pushkick-2
+fist-light-attack-dog-kick-pushkick-1
 fist-light-attack-left-1-hit-ellie
 fist-light-attack-1
 fist-light-attack-2
@@ -1138,7 +1138,7 @@ fist-light-attack-2-hit-brute
 fist-dodge-forward-attack-1-hit-brute
 fist-light-attack-1-hit
 abby-fists-sprinting-attack-1-hit-brute
-#627BFB0D087A4EA9
+fist-light-attack-dog-kick-mirror-hit
 fist-glass-attack-1
 abby-fists-sprinting-attack-1
 fist-light-attack-3-hit
@@ -1157,7 +1157,7 @@ fist-light-attack-4-punch
 fist-light-attack-4-kick-hit-brute
 abby-fists-sprinting-attack-1-hit
 fist-light-attack-2-hit-inf
-#AC7DE19943BFC3CF
+fist-light-attack-dog-kick-sidekick-hit
 fist-light-attack-3-hit-brute
 fist-light-attack-4-kick-hit-inf
 fist-light-attack-4-punch-hit-brute
@@ -1165,7 +1165,7 @@ fist-light-attack-left-1-hit-inf
 fist-light-attack-4-punch-hit
 fist-jump-attack-back-kill
 fist-glass-crouched-low-attack-1
-#E766BD19A7F292C7
+fist-light-attack-dog-kick-pushkick-2-hit
 fist-glass-crouched-high-attack-1
 embedded@52fc8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_2;
@@ -1182,17 +1182,17 @@ u16 fist-dodge-forward-attack-1
 fist-light-attack-4-punch-hit-inf
 fist-dodge-back-attack-1-hit-inf
 fist-dodge-back-attack-1-hit-brute
-#0DEE9E714599F8D7
+fist-light-attack-dog-kick-sidekick
 fist-dodge-forward-attack-1-hit
 fists-stun-combo-2-hit
 fist-light-attack-left-1-hit-brute
 fist-light-attack-1-far
-#2743DD18E80813E2
-#2C85D53610A787F1
+fist-light-attack-dog-kick-pushkick-1-hit
+fist-light-attack-dog-kick-mirror
 fist-dodge-back-attack-1-hit
 fist-light-attack-4-kick
-#3E34FA07F5F2B33F
-#3E34FB07F5F2B4F2
+fist-light-attack-dog-kick-pushkick-2
+fist-light-attack-dog-kick-pushkick-1
 fist-light-attack-left-1-hit-ellie
 fist-light-attack-1
 fist-light-attack-2
@@ -1203,7 +1203,7 @@ fist-light-attack-2-hit-brute
 fist-dodge-forward-attack-1-hit-brute
 fist-light-attack-1-hit
 abby-fists-sprinting-attack-1-hit-brute
-#627BFB0D087A4EA9
+fist-light-attack-dog-kick-mirror-hit
 fist-glass-attack-1
 abby-fists-sprinting-attack-1
 fist-light-attack-3-hit
@@ -1222,7 +1222,7 @@ fist-light-attack-4-punch
 fist-light-attack-4-kick-hit-brute
 abby-fists-sprinting-attack-1-hit
 fist-light-attack-2-hit-inf
-#AC7DE19943BFC3CF
+fist-light-attack-dog-kick-sidekick-hit
 fist-light-attack-3-hit-brute
 fist-light-attack-4-kick-hit-inf
 fist-light-attack-4-punch-hit-brute
@@ -1230,14 +1230,14 @@ fist-light-attack-left-1-hit-inf
 fist-light-attack-4-punch-hit
 fist-jump-attack-back-kill
 fist-glass-crouched-low-attack-1
-#E766BD19A7F292C7
+fist-light-attack-dog-kick-pushkick-2-hit
 fist-glass-crouched-high-attack-1
 embedded@543e8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_2;
     if (is-player?(arg_1) || !1 && character-is-dead?(arg_2)) {
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("Melee deadened for %f seconds", 0.50), 19);
+                display(dc:format("Melee deadened for %f seconds", 0.50), 19);
             }
         }
         disable-untargeted-melee-attack-timed(0.50);
@@ -1253,17 +1253,17 @@ u64? fist-dodge-forward-attack-1
 fist-light-attack-4-punch-hit-inf
 fist-dodge-back-attack-1-hit-inf
 fist-dodge-back-attack-1-hit-brute
-#0DEE9E714599F8D7
+fist-light-attack-dog-kick-sidekick
 fist-dodge-forward-attack-1-hit
 fists-stun-combo-2-hit
 fist-light-attack-left-1-hit-brute
 fist-light-attack-1-far
-#2743DD18E80813E2
-#2C85D53610A787F1
+fist-light-attack-dog-kick-pushkick-1-hit
+fist-light-attack-dog-kick-mirror
 fist-dodge-back-attack-1-hit
 fist-light-attack-4-kick
-#3E34FA07F5F2B33F
-#3E34FB07F5F2B4F2
+fist-light-attack-dog-kick-pushkick-2
+fist-light-attack-dog-kick-pushkick-1
 fist-light-attack-left-1-hit-ellie
 fist-light-attack-1
 fist-light-attack-2
@@ -1274,7 +1274,7 @@ fist-light-attack-2-hit-brute
 fist-dodge-forward-attack-1-hit-brute
 fist-light-attack-1-hit
 abby-fists-sprinting-attack-1-hit-brute
-#627BFB0D087A4EA9
+fist-light-attack-dog-kick-mirror-hit
 fist-glass-attack-1
 abby-fists-sprinting-attack-1
 fist-light-attack-3-hit
@@ -1293,7 +1293,7 @@ fist-light-attack-4-punch
 fist-light-attack-4-kick-hit-brute
 abby-fists-sprinting-attack-1-hit
 fist-light-attack-2-hit-inf
-#AC7DE19943BFC3CF
+fist-light-attack-dog-kick-sidekick-hit
 fist-light-attack-3-hit-brute
 fist-light-attack-4-kick-hit-inf
 fist-light-attack-4-punch-hit-brute
@@ -1301,7 +1301,7 @@ fist-light-attack-left-1-hit-inf
 fist-light-attack-4-punch-hit
 fist-jump-attack-back-kill
 fist-glass-crouched-low-attack-1
-#E766BD19A7F292C7
+fist-light-attack-dog-kick-pushkick-2-hit
 fist-glass-crouched-high-attack-1
 embedded@54708(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return !(melee-fact-get-bool(arg_1, break-partial-playing));
@@ -1311,17 +1311,17 @@ u16 fist-dodge-forward-attack-1
 fist-light-attack-4-punch-hit-inf
 fist-dodge-back-attack-1-hit-inf
 fist-dodge-back-attack-1-hit-brute
-#0DEE9E714599F8D7
+fist-light-attack-dog-kick-sidekick
 fist-dodge-forward-attack-1-hit
 fists-stun-combo-2-hit
 fist-light-attack-left-1-hit-brute
 fist-light-attack-1-far
-#2743DD18E80813E2
-#2C85D53610A787F1
+fist-light-attack-dog-kick-pushkick-1-hit
+fist-light-attack-dog-kick-mirror
 fist-dodge-back-attack-1-hit
 fist-light-attack-4-kick
-#3E34FA07F5F2B33F
-#3E34FB07F5F2B4F2
+fist-light-attack-dog-kick-pushkick-2
+fist-light-attack-dog-kick-pushkick-1
 fist-light-attack-left-1-hit-ellie
 fist-light-attack-1
 fist-light-attack-2
@@ -1332,7 +1332,7 @@ fist-light-attack-2-hit-brute
 fist-dodge-forward-attack-1-hit-brute
 fist-light-attack-1-hit
 abby-fists-sprinting-attack-1-hit-brute
-#627BFB0D087A4EA9
+fist-light-attack-dog-kick-mirror-hit
 fist-glass-attack-1
 abby-fists-sprinting-attack-1
 fist-light-attack-3-hit
@@ -1351,7 +1351,7 @@ fist-light-attack-4-punch
 fist-light-attack-4-kick-hit-brute
 abby-fists-sprinting-attack-1-hit
 fist-light-attack-2-hit-inf
-#AC7DE19943BFC3CF
+fist-light-attack-dog-kick-sidekick-hit
 fist-light-attack-3-hit-brute
 fist-light-attack-4-kick-hit-inf
 fist-light-attack-4-punch-hit-brute
@@ -1359,7 +1359,7 @@ fist-light-attack-left-1-hit-inf
 fist-light-attack-4-punch-hit
 fist-jump-attack-back-kill
 fist-glass-crouched-low-attack-1
-#E766BD19A7F292C7
+fist-light-attack-dog-kick-pushkick-2-hit
 fist-glass-crouched-high-attack-1
 embedded@51618(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_1;
@@ -1388,12 +1388,12 @@ embedded@556e0(u64 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
 }
 
 u64? fist-dodge-forward-attack-1
-#0DEE9E714599F8D7
+fist-light-attack-dog-kick-sidekick
 fist-light-attack-1-far
-#2C85D53610A787F1
+fist-light-attack-dog-kick-mirror
 fist-light-attack-4-kick
-#3E34FA07F5F2B33F
-#3E34FB07F5F2B4F2
+fist-light-attack-dog-kick-pushkick-2
+fist-light-attack-dog-kick-pushkick-1
 fist-light-attack-1
 fist-light-attack-2
 fist-light-attack-3
@@ -1408,12 +1408,12 @@ embedded@553b8(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? 
 }
 
 bool fist-dodge-forward-attack-1
-#0DEE9E714599F8D7
+fist-light-attack-dog-kick-sidekick
 fist-light-attack-1-far
-#2C85D53610A787F1
+fist-light-attack-dog-kick-mirror
 fist-light-attack-4-kick
-#3E34FA07F5F2B33F
-#3E34FB07F5F2B4F2
+fist-light-attack-dog-kick-pushkick-2
+fist-light-attack-dog-kick-pushkick-1
 fist-light-attack-1
 fist-light-attack-2
 fist-light-attack-3
@@ -1428,12 +1428,12 @@ embedded@52d80(u64? arg_0, u64? arg_1, u16 arg_2, u64? arg_3, u64? arg_4, u64? a
 }
 
 u64? fist-dodge-forward-attack-1
-#0DEE9E714599F8D7
+fist-light-attack-dog-kick-sidekick
 fist-light-attack-1-far
-#2C85D53610A787F1
+fist-light-attack-dog-kick-mirror
 fist-light-attack-4-kick
-#3E34FA07F5F2B33F
-#3E34FB07F5F2B4F2
+fist-light-attack-dog-kick-pushkick-2
+fist-light-attack-dog-kick-pushkick-1
 fist-light-attack-1
 fist-light-attack-2
 fist-light-attack-3
@@ -1453,12 +1453,12 @@ embedded@51c60(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? 
 }
 
 u64? fist-dodge-forward-attack-1
-#0DEE9E714599F8D7
+fist-light-attack-dog-kick-sidekick
 fist-light-attack-1-far
-#2C85D53610A787F1
+fist-light-attack-dog-kick-mirror
 fist-light-attack-4-kick
-#3E34FA07F5F2B33F
-#3E34FB07F5F2B4F2
+fist-light-attack-dog-kick-pushkick-2
+fist-light-attack-dog-kick-pushkick-1
 fist-light-attack-1
 fist-light-attack-2
 fist-light-attack-3
@@ -1473,12 +1473,12 @@ embedded@52748(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 }
 
 u64? fist-dodge-forward-attack-1
-#0DEE9E714599F8D7
+fist-light-attack-dog-kick-sidekick
 fist-light-attack-1-far
-#2C85D53610A787F1
+fist-light-attack-dog-kick-mirror
 fist-light-attack-4-kick
-#3E34FA07F5F2B33F
-#3E34FB07F5F2B4F2
+fist-light-attack-dog-kick-pushkick-2
+fist-light-attack-dog-kick-pushkick-1
 fist-light-attack-1
 fist-light-attack-2
 fist-light-attack-3
@@ -1500,12 +1500,12 @@ embedded@55470(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 }
 
 u16 fist-dodge-forward-attack-1
-#0DEE9E714599F8D7
+fist-light-attack-dog-kick-sidekick
 fist-light-attack-1-far
-#2C85D53610A787F1
+fist-light-attack-dog-kick-mirror
 fist-light-attack-4-kick
-#3E34FA07F5F2B33F
-#3E34FB07F5F2B4F2
+fist-light-attack-dog-kick-pushkick-2
+fist-light-attack-dog-kick-pushkick-1
 fist-light-attack-1
 fist-light-attack-2
 fist-light-attack-3
@@ -1657,12 +1657,12 @@ embedded@7aa8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
 }
 
 u64? fist-dodge-forward-attack-1
-#0DEE9E714599F8D7
+fist-light-attack-dog-kick-sidekick
 fist-light-attack-1-far
-#2C85D53610A787F1
+fist-light-attack-dog-kick-mirror
 fist-light-attack-4-kick
-#3E34FA07F5F2B33F
-#3E34FB07F5F2B4F2
+fist-light-attack-dog-kick-pushkick-2
+fist-light-attack-dog-kick-pushkick-1
 fist-light-attack-1
 fist-light-attack-2
 fist-light-attack-3
@@ -1690,11 +1690,11 @@ embedded@95d0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
 f32 fist-light-attack-4-punch-hit-inf__character-melee-info@7a00
 fist-dodge-back-attack-1-hit-inf__character-melee-info@72e0
 fist-dodge-forward-attack-1-hit__character-melee-info@7fe0
-#2743DD18E80813E2__character-melee-info@cb78
+fist-light-attack-dog-kick-pushkick-1-hit__character-melee-info@cb78
 fist-dodge-back-attack-1-hit__character-melee-info@72e0
 fist-light-attack-left-1-hit-ellie__character-melee-info@9860
 fist-light-attack-1-hit__character-melee-info@81f0
-#627BFB0D087A4EA9__character-melee-info@a8d0
+fist-light-attack-dog-kick-mirror-hit__character-melee-info@a8d0
 fist-light-attack-3-hit__character-melee-info@c078
 abby-fists-sprinting-attack-1-hit-inf__character-melee-info@7550
 fist-light-attack-4-kick-hit__character-melee-info@b768
@@ -1705,12 +1705,12 @@ fist-light-attack-2-hit__character-melee-info@b5c8
 fist-light-attack-left-1-hit__character-melee-info@9860
 abby-fists-sprinting-attack-1-hit__character-melee-info@7550
 fist-light-attack-2-hit-inf__character-melee-info@b5c8
-#AC7DE19943BFC3CF__character-melee-info@7f38
+fist-light-attack-dog-kick-sidekick-hit__character-melee-info@7f38
 fist-light-attack-4-kick-hit-inf__character-melee-info@b768
 fists-stun-combo-hit-1__character-melee-info@bed8
 fist-light-attack-left-1-hit-inf__character-melee-info@9860
 fist-light-attack-4-punch-hit__character-melee-info@7a00
-#E766BD19A7F292C7__character-melee-info@cb78
+fist-light-attack-dog-kick-pushkick-2-hit__character-melee-info@cb78
 embedded@24388(u64? arg_0, u64? arg_1, u64? arg_2) {
     f32 var_1;
     if (melee-fact-get-bool(arg_1, aborted-sync-hit-due-to-BfL)) {
@@ -1726,7 +1726,7 @@ fist-dodge-back-attack-1-hit-inf
 fist-dodge-back-attack-1-hit-brute__character-melee-info@a5c0
 fist-dodge-forward-attack-1-hit
 fist-light-attack-left-1-hit-brute__character-melee-info@88c8
-#2743DD18E80813E2
+fist-light-attack-dog-kick-pushkick-1-hit
 fist-dodge-back-attack-1-hit
 fist-light-attack-left-1-hit-ellie
 fist-light-attack-1-hit-brute__character-melee-info@a3a8
@@ -1734,7 +1734,7 @@ fist-light-attack-2-hit-brute__character-melee-info@ac20
 fist-dodge-forward-attack-1-hit-brute__character-melee-info@a450
 fist-light-attack-1-hit
 abby-fists-sprinting-attack-1-hit-brute__character-melee-info@7b30
-#627BFB0D087A4EA9
+fist-light-attack-dog-kick-mirror-hit
 fist-light-attack-3-hit
 abby-fists-sprinting-attack-1-hit-inf
 fist-light-attack-4-kick-hit
@@ -1746,14 +1746,14 @@ fist-light-attack-left-1-hit
 fist-light-attack-4-kick-hit-brute__character-melee-info@8710
 abby-fists-sprinting-attack-1-hit
 fist-light-attack-2-hit-inf
-#AC7DE19943BFC3CF
+fist-light-attack-dog-kick-sidekick-hit
 fist-light-attack-3-hit-brute__character-melee-info@bba8
 fist-light-attack-4-kick-hit-inf
 fist-light-attack-4-punch-hit-brute__character-melee-info@9030
 fists-stun-combo-hit-1
 fist-light-attack-left-1-hit-inf
 fist-light-attack-4-punch-hit
-#E766BD19A7F292C7
+fist-light-attack-dog-kick-pushkick-2-hit
 embedded@31c60(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
     u16 var_2;
     if (melee-weapon-bit-check(arg_0, 2, 1, 0) && !(player-get-melee-weapon-health() <= 0)) {
@@ -1817,11 +1817,11 @@ embedded@52868(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? 
 u16 fist-light-attack-4-punch-hit-inf
 fist-dodge-back-attack-1-hit-inf
 fist-dodge-forward-attack-1-hit
-#2743DD18E80813E2
+fist-light-attack-dog-kick-pushkick-1-hit
 fist-dodge-back-attack-1-hit
 fist-light-attack-left-1-hit-ellie
 fist-light-attack-1-hit
-#627BFB0D087A4EA9
+fist-light-attack-dog-kick-mirror-hit
 fist-light-attack-3-hit
 abby-fists-sprinting-attack-1-hit-inf
 fist-light-attack-4-kick-hit
@@ -1832,12 +1832,12 @@ fist-light-attack-2-hit
 fist-light-attack-left-1-hit
 abby-fists-sprinting-attack-1-hit
 fist-light-attack-2-hit-inf
-#AC7DE19943BFC3CF
+fist-light-attack-dog-kick-sidekick-hit
 fist-light-attack-4-kick-hit-inf
 fists-stun-combo-hit-1
 fist-light-attack-left-1-hit-inf
 fist-light-attack-4-punch-hit
-#E766BD19A7F292C7
+fist-light-attack-dog-kick-pushkick-2-hit
 embedded@b908(i64 arg_0, i64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
     if (is-player?(arg_0)) {
         melee-fact-set-bool(arg_0, break-partial-playing, 0);
@@ -1857,7 +1857,7 @@ fist-dodge-back-attack-1-hit-inf__melee-event-list@cb48
 fist-dodge-back-attack-1-hit-brute__melee-event-list@8488
 fist-dodge-forward-attack-1-hit__melee-event-list@8088
 fist-light-attack-left-1-hit-brute__melee-event-list@7d98
-#2743DD18E80813E2__melee-event-list@7d80
+fist-light-attack-dog-kick-pushkick-1-hit__melee-event-list@7d80
 fist-dodge-back-attack-1-hit__melee-event-list@cb48
 fist-light-attack-left-1-hit-ellie__melee-event-list@cb60
 fist-light-attack-1-hit-brute__melee-event-list@b078
@@ -1865,7 +1865,7 @@ fist-light-attack-2-hit-brute__melee-event-list@7128
 fist-dodge-forward-attack-1-hit-brute__melee-event-list@75f8
 fist-light-attack-1-hit__melee-event-list@8970
 abby-fists-sprinting-attack-1-hit-brute__melee-event-list@75f8
-#627BFB0D087A4EA9__melee-event-list@7058
+fist-light-attack-dog-kick-mirror-hit__melee-event-list@7058
 fist-light-attack-3-hit__melee-event-list@b448
 abby-fists-sprinting-attack-1-hit-inf__melee-event-list@8088
 fist-light-attack-4-kick-hit__melee-event-list@b430
@@ -1877,13 +1877,13 @@ fist-light-attack-left-1-hit__melee-event-list@77b8
 fist-light-attack-4-kick-hit-brute__melee-event-list@c138
 abby-fists-sprinting-attack-1-hit__melee-event-list@8088
 fist-light-attack-2-hit-inf__melee-event-list@c410
-#AC7DE19943BFC3CF__melee-event-list@7d80
+fist-light-attack-dog-kick-sidekick-hit__melee-event-list@7d80
 fist-light-attack-3-hit-brute__melee-event-list@8298
 fist-light-attack-4-kick-hit-inf__melee-event-list@85a0
 fist-light-attack-4-punch-hit-brute__melee-event-list@b060
 fist-light-attack-left-1-hit-inf__melee-event-list@77b8
 fist-light-attack-4-punch-hit__melee-event-list@a5a8
-#E766BD19A7F292C7__melee-event-list@7058
+fist-light-attack-dog-kick-pushkick-2-hit__melee-event-list@7058
 embedded@54278(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     if (melee-fact-get-time-since(player, last-swing-hit-time) < 2.30) {
         melee-fact-increment-int(player, swing-hit-repeat-count, 1);
@@ -1924,11 +1924,11 @@ embedded@54278(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 u16 fist-light-attack-4-punch-hit-inf
 fist-dodge-back-attack-1-hit-inf
 fist-dodge-forward-attack-1-hit
-#2743DD18E80813E2
+fist-light-attack-dog-kick-pushkick-1-hit
 fist-dodge-back-attack-1-hit
 fist-light-attack-left-1-hit-ellie
 fist-light-attack-1-hit
-#627BFB0D087A4EA9
+fist-light-attack-dog-kick-mirror-hit
 fist-light-attack-3-hit
 abby-fists-sprinting-attack-1-hit-inf
 fist-light-attack-4-kick-hit
@@ -1939,11 +1939,11 @@ fist-light-attack-2-hit
 fist-light-attack-left-1-hit
 abby-fists-sprinting-attack-1-hit
 fist-light-attack-2-hit-inf
-#AC7DE19943BFC3CF
+fist-light-attack-dog-kick-sidekick-hit
 fist-light-attack-4-kick-hit-inf
 fist-light-attack-left-1-hit-inf
 fist-light-attack-4-punch-hit
-#E766BD19A7F292C7
+fist-light-attack-dog-kick-pushkick-2-hit
 embedded@53f78(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_1;
     if (joypad-command-active?(melee-attack, 6)) {
@@ -1985,11 +1985,11 @@ embedded@516d8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 u64? fist-light-attack-4-punch-hit-inf
 fist-dodge-back-attack-1-hit-inf
 fist-dodge-forward-attack-1-hit
-#2743DD18E80813E2
+fist-light-attack-dog-kick-pushkick-1-hit
 fist-dodge-back-attack-1-hit
 fist-light-attack-left-1-hit-ellie
 fist-light-attack-1-hit
-#627BFB0D087A4EA9
+fist-light-attack-dog-kick-mirror-hit
 fist-light-attack-3-hit
 abby-fists-sprinting-attack-1-hit-inf
 fist-light-attack-4-kick-hit
@@ -2000,11 +2000,11 @@ fist-light-attack-2-hit
 fist-light-attack-left-1-hit
 abby-fists-sprinting-attack-1-hit
 fist-light-attack-2-hit-inf
-#AC7DE19943BFC3CF
+fist-light-attack-dog-kick-sidekick-hit
 fist-light-attack-4-kick-hit-inf
 fist-light-attack-left-1-hit-inf
 fist-light-attack-4-punch-hit
-#E766BD19A7F292C7
+fist-light-attack-dog-kick-pushkick-2-hit
 embedded@55150(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return !(clear-motion-to-target?(arg_1, arg_2));
 }
@@ -2012,11 +2012,11 @@ embedded@55150(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 u16 fist-light-attack-4-punch-hit-inf
 fist-dodge-back-attack-1-hit-inf
 fist-dodge-forward-attack-1-hit
-#2743DD18E80813E2
+fist-light-attack-dog-kick-pushkick-1-hit
 fist-dodge-back-attack-1-hit
 fist-light-attack-left-1-hit-ellie
 fist-light-attack-1-hit
-#627BFB0D087A4EA9
+fist-light-attack-dog-kick-mirror-hit
 fist-light-attack-3-hit
 abby-fists-sprinting-attack-1-hit-inf
 fist-light-attack-4-kick-hit
@@ -2027,11 +2027,11 @@ fist-light-attack-2-hit
 fist-light-attack-left-1-hit
 abby-fists-sprinting-attack-1-hit
 fist-light-attack-2-hit-inf
-#AC7DE19943BFC3CF
+fist-light-attack-dog-kick-sidekick-hit
 fist-light-attack-4-kick-hit-inf
 fist-light-attack-left-1-hit-inf
 fist-light-attack-4-punch-hit
-#E766BD19A7F292C7
+fist-light-attack-dog-kick-pushkick-2-hit
 embedded@52150(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_1;
     if (character-melee-event-active?(arg_3, 188, 0)) {
@@ -2045,11 +2045,11 @@ embedded@52150(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 u64? fist-light-attack-4-punch-hit-inf
 fist-dodge-back-attack-1-hit-inf
 fist-dodge-forward-attack-1-hit
-#2743DD18E80813E2
+fist-light-attack-dog-kick-pushkick-1-hit
 fist-dodge-back-attack-1-hit
 fist-light-attack-left-1-hit-ellie
 fist-light-attack-1-hit
-#627BFB0D087A4EA9
+fist-light-attack-dog-kick-mirror-hit
 fist-light-attack-3-hit
 abby-fists-sprinting-attack-1-hit-inf
 fist-light-attack-4-kick-hit
@@ -2060,11 +2060,11 @@ fist-light-attack-2-hit
 fist-light-attack-left-1-hit
 abby-fists-sprinting-attack-1-hit
 fist-light-attack-2-hit-inf
-#AC7DE19943BFC3CF
+fist-light-attack-dog-kick-sidekick-hit
 fist-light-attack-4-kick-hit-inf
 fist-light-attack-left-1-hit-inf
 fist-light-attack-4-punch-hit
-#E766BD19A7F292C7
+fist-light-attack-dog-kick-pushkick-2-hit
 embedded@53c90(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return melee-fact-get-bool(arg_1, BfL-abort-from-sync-hit);
 }
@@ -2109,7 +2109,7 @@ fist-dodge-back-attack-1-hit-inf
 fist-dodge-back-attack-1-hit-brute
 fist-dodge-forward-attack-1-hit
 fist-light-attack-left-1-hit-brute
-#2743DD18E80813E2
+fist-light-attack-dog-kick-pushkick-1-hit
 fist-dodge-back-attack-1-hit
 fist-light-attack-left-1-hit-ellie
 fist-light-attack-1-hit-brute
@@ -2117,7 +2117,7 @@ fist-light-attack-2-hit-brute
 fist-dodge-forward-attack-1-hit-brute
 fist-light-attack-1-hit
 abby-fists-sprinting-attack-1-hit-brute
-#627BFB0D087A4EA9
+fist-light-attack-dog-kick-mirror-hit
 fist-light-attack-3-hit
 abby-fists-sprinting-attack-1-hit-inf
 fist-light-attack-4-kick-hit
@@ -2129,13 +2129,13 @@ fist-light-attack-left-1-hit
 fist-light-attack-4-kick-hit-brute
 abby-fists-sprinting-attack-1-hit
 fist-light-attack-2-hit-inf
-#AC7DE19943BFC3CF
+fist-light-attack-dog-kick-sidekick-hit
 fist-light-attack-3-hit-brute
 fist-light-attack-4-kick-hit-inf
 fist-light-attack-4-punch-hit-brute
 fist-light-attack-left-1-hit-inf
 fist-light-attack-4-punch-hit
-#E766BD19A7F292C7
+fist-light-attack-dog-kick-pushkick-2-hit
 embedded@55868(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return character-in-melee-move?(arg_11, arg_2);
 }
@@ -2250,17 +2250,17 @@ embedded@54110(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? 
 
 u64? fist-dodge-back-attack-1-hit-brute
 fist-light-attack-left-1-hit-brute
-#2743DD18E80813E2
+fist-light-attack-dog-kick-pushkick-1-hit
 fist-light-attack-1-hit-brute
 fist-light-attack-2-hit-brute
 fist-dodge-forward-attack-1-hit-brute
 abby-fists-sprinting-attack-1-hit-brute
-#627BFB0D087A4EA9
+fist-light-attack-dog-kick-mirror-hit
 fist-light-attack-4-kick-hit-brute
-#AC7DE19943BFC3CF
+fist-light-attack-dog-kick-sidekick-hit
 fist-light-attack-3-hit-brute
 fist-light-attack-4-punch-hit-brute
-#E766BD19A7F292C7
+fist-light-attack-dog-kick-pushkick-2-hit
 embedded@544a8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return broadcast-event(melee-player-sync-hit, boxed_symbol(arg_2));
 }
@@ -2303,7 +2303,7 @@ embedded@533c8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return var_0 && var_1 && var_1;
 }
 
-u64? #0DEE9E714599F8D7
+u64? fist-light-attack-dog-kick-sidekick
 embedded@528c0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
     bool var_3 = distance-between-objects-less-than?(arg_1, arg_2, 3.00) && player-is-sprinting?(1) && distance-between-objects-less-than?(arg_1, arg_2, 5.00);
     if (!var_3) {
@@ -2314,15 +2314,15 @@ embedded@528c0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return var_3 && var_4 && var_4;
 }
 
-u64? #0DEE9E714599F8D7__melee-event-list@93e8
+u64? fist-light-attack-dog-kick-sidekick__melee-event-list@93e8
 embedded@53610(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
-    return send-event(new-swing, ss-melee-dodge-attack-spam, boxed_symbol(#0DEE9E714599F8D7), boxed_symbol(arg_2));
+    return send-event(new-swing, ss-melee-dodge-attack-spam, boxed_symbol(fist-light-attack-dog-kick-sidekick), boxed_symbol(arg_2));
 }
 
-u64? #0DEE9E714599F8D7
-#2C85D53610A787F1
-#3E34FA07F5F2B33F
-#3E34FB07F5F2B4F2
+u64? fist-light-attack-dog-kick-sidekick
+fist-light-attack-dog-kick-mirror
+fist-light-attack-dog-kick-pushkick-2
+fist-light-attack-dog-kick-pushkick-1
 embedded@531c8(u64? arg_0, bool arg_1, string arg_2, u64? arg_3, u64? arg_4, u64? arg_5, string arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u64? var_1;
     if (melee-fact-get-bool(arg_2, force-finisher?)) {
@@ -2355,11 +2355,11 @@ embedded@531c8(u64? arg_0, bool arg_1, string arg_2, u64? arg_3, u64? arg_4, u64
     return var_1;
 }
 
-u64? #0DEE9E714599F8D7
-#2C85D53610A787F1
+u64? fist-light-attack-dog-kick-sidekick
+fist-light-attack-dog-kick-mirror
 fist-light-attack-4-kick
-#3E34FA07F5F2B33F
-#3E34FB07F5F2B4F2
+fist-light-attack-dog-kick-pushkick-2
+fist-light-attack-dog-kick-pushkick-1
 fist-light-attack-left-1
 embedded@52f70(u64 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u64? var_2 = sec-to-frames(get-animation-duration(arg_1, *(u64*)(*(arg_0 + 104) + 32)));
@@ -2370,10 +2370,10 @@ embedded@52f70(u64 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
     return *(arg_0 + 104) || var_2 - 30 && var_2 - 30 && var_2 - 30 && var_2 - 30;
 }
 
-u16 #0DEE9E714599F8D7
-#2C85D53610A787F1
-#3E34FA07F5F2B33F
-#3E34FB07F5F2B4F2
+u16 fist-light-attack-dog-kick-sidekick
+fist-light-attack-dog-kick-mirror
+fist-light-attack-dog-kick-pushkick-2
+fist-light-attack-dog-kick-pushkick-1
 embedded@a668(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
     u16 var_1;
     if (!is-character?(arg_2)) {
@@ -2760,20 +2760,20 @@ embedded@52bb0(u64 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
     return *(arg_0 + 104) || var_2 - 30 && var_2 - 30 && var_2 - 30 && var_2 - 30;
 }
 
-u16 #2743DD18E80813E2__melee-attack@16c8
-#E766BD19A7F292C7__melee-attack@6c08
+u16 fist-light-attack-dog-kick-pushkick-1-hit__melee-attack@16c8
+fist-light-attack-dog-kick-pushkick-2-hit__melee-attack@6c08
 embedded@c6c8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
     u16 var_1;
     if (is-npc?(arg_2)) {
-        var_1 = rate-animation-for-melee-impact(arg_2, #7F7ED4399CEE8B43, get-hit-direction(arg_2), get-hit-pos(arg_2), *player-npc-sync-hit-reaction-match-ratings*);
+        var_1 = rate-animation-for-melee-impact(arg_2, abby-kick-combo-2-pushkick-hit--dog, get-hit-direction(arg_2), get-hit-pos(arg_2), *player-npc-sync-hit-reaction-match-ratings*);
     } else {
         var_1 = 0;
     }
     return var_1;
 }
 
-u64? #2743DD18E80813E2__character-melee-info@8148
-#E766BD19A7F292C7__character-melee-info@8148
+u64? fist-light-attack-dog-kick-pushkick-1-hit__character-melee-info@8148
+fist-light-attack-dog-kick-pushkick-2-hit__character-melee-info@8148
 embedded@290f8(u64? arg_0, f32 arg_1, u64? arg_2, u64? arg_3) {
     if (!(npc-is-dog?(arg_0))) {
         var_2 = flatten-locator(rotate-locator-angle(alloc-bound-frame(
@@ -2810,23 +2810,23 @@ embedded@290f8(u64? arg_0, f32 arg_1, u64? arg_2, u64? arg_3) {
     return var_46;
 }
 
-u64? #2743DD18E80813E2__start-func-array@ada8
-#627BFB0D087A4EA9__start-func-array@ada8
-#AC7DE19943BFC3CF__start-func-array@ada8
-#E766BD19A7F292C7__start-func-array@ada8
+u64? fist-light-attack-dog-kick-pushkick-1-hit__start-func-array@ada8
+fist-light-attack-dog-kick-mirror-hit__start-func-array@ada8
+fist-light-attack-dog-kick-sidekick-hit__start-func-array@ada8
+fist-light-attack-dog-kick-pushkick-2-hit__start-func-array@ada8
 embedded@52cc0(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
     return !(arg_2 == 0) || is-player?(arg_2) && !is-player-base?(arg_2) && melee-character-bit-check(arg_2, 8589934592);
 }
 
-u64? #2743DD18E80813E2
-#627BFB0D087A4EA9
-#AC7DE19943BFC3CF
-#E766BD19A7F292C7
+u64? fist-light-attack-dog-kick-pushkick-1-hit
+fist-light-attack-dog-kick-mirror-hit
+fist-light-attack-dog-kick-sidekick-hit
+fist-light-attack-dog-kick-pushkick-2-hit
 embedded@52458(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return melee-log-player-event("melee-player-sync-hit", 1);
 }
 
-u64? #2C85D53610A787F1
+u64? fist-light-attack-dog-kick-mirror
 embedded@51680(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
     bool var_3 = distance-between-objects-less-than?(arg_1, arg_2, 3.00) && player-is-sprinting?(1) && distance-between-objects-less-than?(arg_1, arg_2, 5.00);
     if (!var_3) {
@@ -2837,9 +2837,9 @@ embedded@51680(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return var_3 && var_4 && var_4;
 }
 
-u64? #2C85D53610A787F1__melee-event-list@70e0
+u64? fist-light-attack-dog-kick-mirror__melee-event-list@70e0
 embedded@53170(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
-    return send-event(new-swing, ss-melee-dodge-attack-spam, boxed_symbol(#2C85D53610A787F1), boxed_symbol(arg_2));
+    return send-event(new-swing, ss-melee-dodge-attack-spam, boxed_symbol(fist-light-attack-dog-kick-mirror), boxed_symbol(arg_2));
 }
 
 f32 fist-light-attack-4-kick__character-melee-info@97b8
@@ -2989,7 +2989,7 @@ embedded@ab20(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
     return var_1;
 }
 
-u64? #3E34FA07F5F2B33F
+u64? fist-light-attack-dog-kick-pushkick-2
 embedded@50f78(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
     bool var_3 = distance-between-objects-less-than?(arg_1, arg_2, 3.00) && player-is-sprinting?(1) && distance-between-objects-less-than?(arg_1, arg_2, 5.00);
     if (!var_3) {
@@ -3000,12 +3000,12 @@ embedded@50f78(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return var_3 && var_4 && var_4;
 }
 
-u64? #3E34FA07F5F2B33F__melee-event-list@b418
+u64? fist-light-attack-dog-kick-pushkick-2__melee-event-list@b418
 embedded@54c70(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
-    return send-event(new-swing, ss-melee-dodge-attack-spam, boxed_symbol(#3E34FA07F5F2B33F), boxed_symbol(arg_2));
+    return send-event(new-swing, ss-melee-dodge-attack-spam, boxed_symbol(fist-light-attack-dog-kick-pushkick-2), boxed_symbol(arg_2));
 }
 
-u64? #3E34FB07F5F2B4F2
+u64? fist-light-attack-dog-kick-pushkick-1
 embedded@54ff8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
     bool var_3 = distance-between-objects-less-than?(arg_1, arg_2, 3.00) && player-is-sprinting?(1) && distance-between-objects-less-than?(arg_1, arg_2, 5.00);
     if (!var_3) {
@@ -3016,9 +3016,9 @@ embedded@54ff8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return var_3 && var_4 && var_4;
 }
 
-u64? #3E34FB07F5F2B4F2__melee-event-list@a210
+u64? fist-light-attack-dog-kick-pushkick-1__melee-event-list@a210
 embedded@52590(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
-    return send-event(new-swing, ss-melee-dodge-attack-spam, boxed_symbol(#3E34FB07F5F2B4F2), boxed_symbol(arg_2));
+    return send-event(new-swing, ss-melee-dodge-attack-spam, boxed_symbol(fist-light-attack-dog-kick-pushkick-1), boxed_symbol(arg_2));
 }
 
 u16 fist-light-attack-left-1-hit-ellie__melee-attack@2268
@@ -3659,18 +3659,18 @@ embedded@1bb10(u64? arg_0, f32 arg_1, u64? arg_2, u64? arg_3) {
     return is-npc?(arg_1) && melee-fact-get-bool(arg_1, ignore-poise) && 1;
 }
 
-u16 #627BFB0D087A4EA9__melee-attack@35c8
+u16 fist-light-attack-dog-kick-mirror-hit__melee-attack@35c8
 embedded@a1b8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
     u16 var_1;
     if (is-npc?(arg_2)) {
-        var_1 = rate-animation-for-melee-impact(arg_2, #6486B0B030AB12C5, get-hit-direction(arg_2), get-hit-pos(arg_2), *player-npc-sync-hit-reaction-match-ratings*);
+        var_1 = rate-animation-for-melee-impact(arg_2, abby-kick-combo-1-mirror-hit--dog, get-hit-direction(arg_2), get-hit-pos(arg_2), *player-npc-sync-hit-reaction-match-ratings*);
     } else {
         var_1 = 0;
     }
     return var_1;
 }
 
-u64? #627BFB0D087A4EA9__character-melee-info@b508
+u64? fist-light-attack-dog-kick-mirror-hit__character-melee-info@b508
 embedded@31cc8(u64? arg_0, f32 arg_1, u64? arg_2, u64? arg_3) {
     if (!(npc-is-dog?(arg_0))) {
         var_2 = flatten-locator(rotate-locator-angle(alloc-bound-frame(
@@ -4137,7 +4137,7 @@ embedded@524c0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
         if (!(gore-clicker-gun-head-l == 0)) {
             var_3 = spawn-gore-piece(gore-clicker-gun-head-l, arg_2, 0, arg_6, 1, 1);
         } else if (!(0 == 0)) {
-            u64? var_8 = %alloc-array(single-frame, 16, 2, 1);
+            u64? var_8 = #%alloc-array(single-frame, 16, 2, 1);
             *(i32*)*var_8[0] = 40;
             *(u64*)(*var_8[0] + 8) = 0;
             *(i32*)(*var_8[0] + 8) = 1;
@@ -4145,19 +4145,19 @@ embedded@524c0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
             *(u64*)(*var_8[1] + 8) = 0;
             *(u8*)(*var_8[1] + 8) = 1;
             animate_(arg_2, gore-finisher-blunt-head-bind, var_8);
-            u64? var_9 = %alloc-array(single-frame, 16, 1, 1);
+            u64? var_9 = #%alloc-array(single-frame, 16, 1, 1);
             *(i32*)*var_9[0] = 40;
             *(u64*)(*var_9[0] + 8) = 0;
             *(i32*)(*var_9[0] + 8) = 1;
             var_3 = animate_(arg_2, 0, var_9);
         } else if (!is-final-build?()) {
-            var_3 = display(#5445173390656D6D("MELEE GORE SPAWN FAILURE"), 19);
+            var_3 = display(dc:format("MELEE GORE SPAWN FAILURE"), 19);
         } else {
             var_3 = 0;
         }
     } else if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 5)) {
         if (!is-final-build?()) {
-            var_3 = display(#5445173390656D6D("INVALID CHARACTERS FOR %s", string-debug(gore-clicker-gun-head-l)), 19);
+            var_3 = display(dc:format("INVALID CHARACTERS FOR %s", string-debug(gore-clicker-gun-head-l)), 19);
         } else {
             var_3 = 0;
         }
@@ -4188,7 +4188,7 @@ embedded@55a08(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
         if (!(gore-stalker-gun-head-l == 0)) {
             var_3 = spawn-gore-piece(gore-stalker-gun-head-l, arg_2, 0, arg_6, 1, 1);
         } else if (!(0 == 0)) {
-            u64? var_8 = %alloc-array(single-frame, 16, 2, 1);
+            u64? var_8 = #%alloc-array(single-frame, 16, 2, 1);
             *(i32*)*var_8[0] = 40;
             *(u64*)(*var_8[0] + 8) = 0;
             *(i32*)(*var_8[0] + 8) = 1;
@@ -4196,19 +4196,19 @@ embedded@55a08(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
             *(u64*)(*var_8[1] + 8) = 0;
             *(u8*)(*var_8[1] + 8) = 1;
             animate_(arg_2, gore-finisher-blunt-head-bind, var_8);
-            u64? var_9 = %alloc-array(single-frame, 16, 1, 1);
+            u64? var_9 = #%alloc-array(single-frame, 16, 1, 1);
             *(i32*)*var_9[0] = 40;
             *(u64*)(*var_9[0] + 8) = 0;
             *(i32*)(*var_9[0] + 8) = 1;
             var_3 = animate_(arg_2, 0, var_9);
         } else if (!is-final-build?()) {
-            var_3 = display(#5445173390656D6D("MELEE GORE SPAWN FAILURE"), 19);
+            var_3 = display(dc:format("MELEE GORE SPAWN FAILURE"), 19);
         } else {
             var_3 = 0;
         }
     } else if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 5)) {
         if (!is-final-build?()) {
-            var_3 = display(#5445173390656D6D("INVALID CHARACTERS FOR %s", string-debug(gore-stalker-gun-head-l)), 19);
+            var_3 = display(dc:format("INVALID CHARACTERS FOR %s", string-debug(gore-stalker-gun-head-l)), 19);
         } else {
             var_3 = 0;
         }
@@ -4230,7 +4230,7 @@ embedded@54568(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
         if (!(0 == 0)) {
             var_3 = spawn-gore-piece(0, arg_2, gore-finisher-blunt-head-l, arg_6, 1, 1);
         } else if (!(gore-finisher-blunt-head-l == 0)) {
-            u64? var_8 = %alloc-array(single-frame, 16, 2, 1);
+            u64? var_8 = #%alloc-array(single-frame, 16, 2, 1);
             *(i32*)*var_8[0] = 40;
             *(u64*)(*var_8[0] + 8) = 0;
             *(i32*)(*var_8[0] + 8) = 1;
@@ -4238,19 +4238,19 @@ embedded@54568(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
             *(u64*)(*var_8[1] + 8) = 0;
             *(u8*)(*var_8[1] + 8) = 1;
             animate_(arg_2, gore-finisher-blunt-head-bind, var_8);
-            u64? var_9 = %alloc-array(single-frame, 16, 1, 1);
+            u64? var_9 = #%alloc-array(single-frame, 16, 1, 1);
             *(i32*)*var_9[0] = 40;
             *(u64*)(*var_9[0] + 8) = 0;
             *(i32*)(*var_9[0] + 8) = 1;
             var_3 = animate_(arg_2, gore-finisher-blunt-head-l, var_9);
         } else if (!is-final-build?()) {
-            var_3 = display(#5445173390656D6D("MELEE GORE SPAWN FAILURE"), 19);
+            var_3 = display(dc:format("MELEE GORE SPAWN FAILURE"), 19);
         } else {
             var_3 = 0;
         }
     } else if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 5)) {
         if (!is-final-build?()) {
-            var_3 = display(#5445173390656D6D("INVALID CHARACTERS FOR %s", string-debug(0)), 19);
+            var_3 = display(dc:format("INVALID CHARACTERS FOR %s", string-debug(0)), 19);
         } else {
             var_3 = 0;
         }
@@ -4466,7 +4466,7 @@ embedded@55208(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 u16 fist-jump-attack-front-kill
 fist-jump-attack-back-kill
 embedded@51038(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
-    broadcast-event(#F5AA9D3A92B4E927);
+    broadcast-event(player-synced-jump-finisher);
     melee-log-player-event("melee-player-synced-tackle", 1);
     u16 var_1;
     if (player-upgrade-purchased?(strike-painkillers)) {
@@ -5104,18 +5104,18 @@ embedded@23c98(u64? arg_0, f32 arg_1, u64? arg_2, u64? arg_3) {
     return var_46;
 }
 
-u16 #AC7DE19943BFC3CF__melee-attack@5a98
+u16 fist-light-attack-dog-kick-sidekick-hit__melee-attack@5a98
 embedded@a098(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
     u16 var_1;
     if (is-npc?(arg_2)) {
-        var_1 = rate-animation-for-melee-impact(arg_2, #208270C167792A42, get-hit-direction(arg_2), get-hit-pos(arg_2), *player-npc-sync-hit-reaction-match-ratings*);
+        var_1 = rate-animation-for-melee-impact(arg_2, abby-kick-combo-1-sidekick-hit-dog, get-hit-direction(arg_2), get-hit-pos(arg_2), *player-npc-sync-hit-reaction-match-ratings*);
     } else {
         var_1 = 0;
     }
     return var_1;
 }
 
-u64? #AC7DE19943BFC3CF__character-melee-info@91b8
+u64? fist-light-attack-dog-kick-sidekick-hit__character-melee-info@91b8
 embedded@316a0(u64? arg_0, f32 arg_1, u64? arg_2, u64? arg_3) {
     if (!(npc-is-dog?(arg_0))) {
         var_2 = flatten-locator(rotate-locator-angle(alloc-bound-frame(

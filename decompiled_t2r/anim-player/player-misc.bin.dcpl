@@ -4,7 +4,7 @@
 // #   listing for file: game_dumps/t2r/dc1/anim-player\player-misc.bin                               #
 // #   filesize: 64614 bytes                                                                          #
 // #   total entries: 7                                                                               #
-// #   functions: 5                                                                                   #
+// #   functions: 53                                                                                  #
 // #   has state script: false                                                                        #
 // #   game type: t2r                                                                                 #
 // #   optimizations enabled: true                                                                    #
@@ -67,6 +67,341 @@ u64?* get-current-ellie-head-material() {
         var_5 = *invalid-symbol*;
     }
     return var_5;
+}
+
+u64 anim-player-misc-character-states__actor-state-list@3900__anim-node-subsystem-ik@a248____anim-node-animation@afd8__
+anim-player-misc-character-states__anim-node-subsystem-ik@99e0__anim-node-animation@b088__
+embedded@b860(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)((*(arg_1 + 8) + 256) + 8);
+}
+
+u8 anim-player-misc-character-states__actor-state-list@3900__anim-node-subsystem-ik@a248__
+anim-player-misc-character-states__anim-node-subsystem-ik@99e0
+anim-player-misc-character-states__anim-node-subsystem-ik@9ce0
+anim-player-misc-character-states__anim-node-subsystem-ik@a100
+embedded@bf40(u64? arg_0, u8 arg_1, u64? arg_2) {
+    return *(u8*)(*(arg_1 + 8) + 381);
+}
+
+u64? anim-player-misc-character-states
+anim-player-misc-character-states
+anim-player-misc-character-states
+anim-player-misc-character-states
+anim-player-misc-states
+anim-player-misc-states
+anim-player-misc-states
+anim-player-misc-states
+anim-player-misc-states
+anim-player-misc-states
+anim-player-misc-states
+anim-player-misc-states
+anim-player-misc-states
+anim-player-misc-states
+anim-player-misc-states
+anim-player-misc-states
+anim-player-misc-states
+anim-player-misc-states
+anim-player-misc-states
+anim-player-misc-states
+anim-player-misc-states
+anim-player-misc-states
+anim-player-misc-states
+embedded@9c58(u64? arg_0, u64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64 arg_5, u64? arg_6) {
+    return arg_2 + ((arg_3 * player-anim-speed-mult(*(u64*)(*(arg_1 + 8) + 384), *(u64*)arg_5)) * arg_4);
+}
+
+u64 anim-player-misc-character-states
+anim-player-misc-character-states
+embedded@9930(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)((*(arg_1 + 8) + 256) + 8);
+}
+
+u64 anim-player-misc-character-states__anim-node-subsystem-ik@9ce0__anim-node-animation@b250__
+anim-player-misc-character-states__anim-node-subsystem-ik@a100__anim-node-animation@b0e8__
+embedded@bdf0(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)((*(arg_1 + 8) + 256) + 16);
+}
+
+u64 anim-player-misc-character-states
+anim-player-misc-character-states
+embedded@9b18(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)((*(arg_1 + 8) + 256) + 16);
+}
+
+u64 anim-player-misc-character-states__anim-node-animation@a190
+embedded@a960(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(*(arg_1 + 8) + 224);
+}
+
+f32 anim-player-misc-character-states
+embedded@9988(u64? arg_0, f32 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    return arg_2 + ((arg_3 * arg_4) * *(f32*)((*(arg_1 + 8) + 224) + 12));
+}
+
+u8 anim-player-misc-character-states
+embedded@a278(u64? arg_0, u8 arg_1) {
+    return *(u8*)((*(arg_1 + 8) + 224) + 16);
+}
+
+u64 anim-player-misc-character-states
+embedded@a018(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(*(arg_1 + 8) + 224);
+}
+
+u64 anim-player-misc-states__actor-state-list@3920__anim-node-subsystem-ik@a130____anim-node-blend@b210____anim-node-blend@b820____anim-node-gesture@d4a8__
+embedded@de80(u64? arg_0, u64 arg_1) {
+    return *(u64*)((*(arg_1 + 8) + 2368) + (0 * 112));
+}
+
+u8 anim-player-misc-states__actor-state-list@3920__anim-node-subsystem-ik@a130____anim-node-blend@b210____anim-node-blend@b820__
+embedded@db20(u64?* arg_0) {
+    return ((*(arg_0 + 8) + 2368) + (0 * 112)) + 40;
+}
+
+u64 anim-player-misc-states__actor-state-list@3920__anim-node-animation@c040__
+anim-player-misc-states__anim-node-subsystem-ik@9cb0__anim-node-animation@c040__
+anim-player-misc-states__anim-node-subsystem-ik@a0a0__anim-node-animation@c040__
+embedded@d0c0(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(((*(arg_1 + 8) + 2368) + (0 * 112)) + 24);
+}
+
+u8 anim-player-misc-states__actor-state-list@3920
+anim-player-misc-states__anim-node-subsystem-ik@9cb0
+anim-player-misc-states__anim-node-subsystem-ik@a0a0
+embedded@c540(u64? arg_0, u8 arg_1, u64? arg_2) {
+    return *(u8*)(((*(arg_1 + 8) + 2368) + (0 * 112)) + 17);
+}
+
+f32 anim-player-misc-states
+anim-player-misc-states
+anim-player-misc-states
+embedded@ba80(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)(((*(arg_0 + 8) + 2368) + (0 * 112)) + 32);
+}
+
+u64 anim-player-misc-states
+anim-player-misc-states
+anim-player-misc-states
+embedded@9e08(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(((*(arg_1 + 8) + 2368) + (0 * 112)) + 8);
+}
+
+u64 anim-player-misc-states__anim-node-subsystem-ik@9b70__anim-node-blend@add8____anim-node-blend@bfd0____anim-node-gesture@c6e8__
+embedded@df30(u64? arg_0, u64 arg_1) {
+    return *(u64*)((*(arg_1 + 8) + 2368) + (1 * 112));
+}
+
+u8 anim-player-misc-states__anim-node-subsystem-ik@9b70__anim-node-blend@add8____anim-node-blend@bfd0__
+embedded@ddd0(u64?* arg_0) {
+    return ((*(arg_0 + 8) + 2368) + (1 * 112)) + 40;
+}
+
+u64 anim-player-misc-states__anim-node-animation@bb18
+anim-player-misc-states__anim-node-subsystem-ik@9e60__anim-node-animation@bb18__
+anim-player-misc-states__anim-node-subsystem-ik@a218__anim-node-animation@bb18__
+embedded@d390(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(((*(arg_1 + 8) + 2368) + (1 * 112)) + 24);
+}
+
+u8 anim-player-misc-states
+anim-player-misc-states__anim-node-subsystem-ik@9e60
+anim-player-misc-states__anim-node-subsystem-ik@a218
+embedded@d1b8(u64? arg_0, u8 arg_1, u64? arg_2) {
+    return *(u8*)(((*(arg_1 + 8) + 2368) + (1 * 112)) + 17);
+}
+
+f32 anim-player-misc-states
+anim-player-misc-states
+anim-player-misc-states
+embedded@bb88(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)(((*(arg_0 + 8) + 2368) + (1 * 112)) + 32);
+}
+
+u64 anim-player-misc-states
+anim-player-misc-states
+anim-player-misc-states
+embedded@9ed0(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(((*(arg_1 + 8) + 2368) + (1 * 112)) + 8);
+}
+
+u64 anim-player-misc-states__anim-node-subsystem-ik@a1e8__anim-node-blend@ace8____anim-node-blend@b8d0____anim-node-gesture@cde8__
+embedded@de28(u64? arg_0, u64 arg_1) {
+    return *(u64*)((*(arg_1 + 8) + 2368) + (2 * 112));
+}
+
+u8 anim-player-misc-states__anim-node-subsystem-ik@a1e8__anim-node-blend@ace8____anim-node-blend@b8d0__
+embedded@dbe8(u64?* arg_0) {
+    return ((*(arg_0 + 8) + 2368) + (2 * 112)) + 40;
+}
+
+u64 anim-player-misc-states__anim-node-animation@bb50
+anim-player-misc-states__anim-node-subsystem-ik@a0d0__anim-node-animation@bb50__
+anim-player-misc-states__anim-node-subsystem-ik@a160__anim-node-animation@bb50__
+embedded@c9a8(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(((*(arg_1 + 8) + 2368) + (2 * 112)) + 24);
+}
+
+u8 anim-player-misc-states
+anim-player-misc-states__anim-node-subsystem-ik@a0d0
+anim-player-misc-states__anim-node-subsystem-ik@a160
+embedded@c720(u64? arg_0, u8 arg_1, u64? arg_2) {
+    return *(u8*)(((*(arg_1 + 8) + 2368) + (2 * 112)) + 17);
+}
+
+f32 anim-player-misc-states
+anim-player-misc-states
+anim-player-misc-states
+embedded@b698(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)(((*(arg_0 + 8) + 2368) + (2 * 112)) + 32);
+}
+
+u64 anim-player-misc-states
+anim-player-misc-states
+anim-player-misc-states
+embedded@9db0(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(((*(arg_1 + 8) + 2368) + (2 * 112)) + 8);
+}
+
+u64 anim-player-misc-states__anim-node-subsystem-ik@a070__anim-node-blend@b120____anim-node-blend@bdb0____anim-node-gesture@d180__
+embedded@ded8(u64? arg_0, u64 arg_1) {
+    return *(u64*)((*(arg_1 + 8) + 2368) + (3 * 112));
+}
+
+u8 anim-player-misc-states__anim-node-subsystem-ik@a070__anim-node-blend@b120____anim-node-blend@bdb0__
+embedded@e068(u64?* arg_0) {
+    return ((*(arg_0 + 8) + 2368) + (3 * 112)) + 40;
+}
+
+u64 anim-player-misc-states__anim-node-animation@bf98
+anim-player-misc-states__anim-node-subsystem-ik@9c08__anim-node-animation@bf98__
+anim-player-misc-states__anim-node-subsystem-ik@a2d0__anim-node-animation@bf98__
+embedded@c778(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(((*(arg_1 + 8) + 2368) + (3 * 112)) + 24);
+}
+
+u8 anim-player-misc-states
+anim-player-misc-states__anim-node-subsystem-ik@9c08
+anim-player-misc-states__anim-node-subsystem-ik@a2d0
+embedded@d210(u64? arg_0, u8 arg_1, u64? arg_2) {
+    return *(u8*)(((*(arg_1 + 8) + 2368) + (3 * 112)) + 17);
+}
+
+f32 anim-player-misc-states
+anim-player-misc-states
+anim-player-misc-states
+embedded@b728(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)(((*(arg_0 + 8) + 2368) + (3 * 112)) + 32);
+}
+
+u64 anim-player-misc-states
+anim-player-misc-states
+anim-player-misc-states
+embedded@9d58(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(((*(arg_1 + 8) + 2368) + (3 * 112)) + 8);
+}
+
+u64 anim-player-misc-states__anim-node-subsystem-ik@9cb0__anim-node-blend@ab88____anim-node-blend@bc58____anim-node-animation@d038__
+anim-player-misc-states__anim-node-subsystem-ik@a0a0__anim-node-blend@b378____anim-node-blend@b9a8____anim-node-animation@d4e0__
+embedded@dd20(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(((*(arg_1 + 8) + 2368) + (0 * 112)) + 8);
+}
+
+u64 anim-player-misc-states__anim-node-subsystem-ik@9e60__anim-node-blend@aa90____anim-node-blend@b780____anim-node-animation@cdb0__
+anim-player-misc-states__anim-node-subsystem-ik@a218__anim-node-blend@b160____anim-node-blend@be48____anim-node-animation@c7d0__
+embedded@e1e0(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(((*(arg_1 + 8) + 2368) + (1 * 112)) + 8);
+}
+
+u64 anim-player-misc-states__anim-node-subsystem-ik@a0d0__anim-node-blend@aee8____anim-node-blend@b968____anim-node-animation@ce58__
+anim-player-misc-states__anim-node-subsystem-ik@a160__anim-node-blend@b508____anim-node-blend@c078____anim-node-animation@ce20__
+embedded@dc90(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(((*(arg_1 + 8) + 2368) + (2 * 112)) + 8);
+}
+
+u64 anim-player-misc-states__anim-node-subsystem-ik@9c08__anim-node-blend@ac58____anim-node-blend@b7e0____anim-node-animation@d518__
+anim-player-misc-states__anim-node-subsystem-ik@a2d0__anim-node-blend@b288____anim-node-blend@b928____anim-node-animation@d148__
+embedded@dfc8(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(((*(arg_1 + 8) + 2368) + (3 * 112)) + 8);
+}
+
+f32 anim-player-misc-states__anim-node-blend@9fd8__anim-node-blend@b010____anim-node-blend@bad8____anim-node-blend@c598____anim-node-blend@e140____anim-node-blend@e9b8____anim-node-blend@ebf8____anim-node-blend@ed50____anim-node-blend@f128____anim-node-blend@f370__
+anim-player-misc-states__anim-node-blend@9ba0__anim-node-blend@b3b8____anim-node-blend@bcb8____anim-node-blend@cbe8____anim-node-blend@dd78____anim-node-blend@ea38____anim-node-blend@eb38____anim-node-blend@edd0____anim-node-blend@f038____anim-node-blend@f2f8__
+anim-player-misc-states__anim-node-blend@9f48__anim-node-blend@aea8____anim-node-blend@bec8____anim-node-blend@d468____anim-node-blend@dab0____anim-node-blend@e8e8____anim-node-blend@eb78____anim-node-blend@ee48____anim-node-blend@eff8____anim-node-blend@f3e8__
+anim-player-misc-states__anim-node-blend@a368__anim-node-blend@abc8____anim-node-blend@be88____anim-node-blend@c500____anim-node-blend@db90____anim-node-blend@e9f8____anim-node-blend@ebb8____anim-node-blend@ed90____anim-node-blend@f0b0____anim-node-blend@f248__
+embedded@f538(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)((*(arg_0 + 8) + 2848) + 32);
+}
+
+f32 anim-player-misc-states__anim-node-blend@9fd8__anim-node-blend@b010____anim-node-blend@bad8____anim-node-blend@c598____anim-node-blend@e140____anim-node-blend@e9b8____anim-node-blend@ebf8____anim-node-blend@ed50__
+anim-player-misc-states__anim-node-blend@9ba0__anim-node-blend@b3b8____anim-node-blend@bcb8____anim-node-blend@cbe8____anim-node-blend@dd78____anim-node-blend@ea38____anim-node-blend@eb38____anim-node-blend@edd0__
+anim-player-misc-states__anim-node-blend@9f48__anim-node-blend@aea8____anim-node-blend@bec8____anim-node-blend@d468____anim-node-blend@dab0____anim-node-blend@e8e8____anim-node-blend@eb78____anim-node-blend@ee48__
+anim-player-misc-states__anim-node-blend@a368__anim-node-blend@abc8____anim-node-blend@be88____anim-node-blend@c500____anim-node-blend@db90____anim-node-blend@e9f8____anim-node-blend@ebb8____anim-node-blend@ed90__
+embedded@f1f0(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)((*(arg_0 + 8) + 2848) + 16);
+}
+
+f32 anim-player-misc-states__anim-node-blend@9fd8__anim-node-blend@b010____anim-node-blend@bad8____anim-node-blend@c598____anim-node-blend@e140____anim-node-blend@e9b8__
+anim-player-misc-states__anim-node-blend@9ba0__anim-node-blend@b3b8____anim-node-blend@bcb8____anim-node-blend@cbe8____anim-node-blend@dd78____anim-node-blend@ea38__
+anim-player-misc-states__anim-node-blend@9f48__anim-node-blend@aea8____anim-node-blend@bec8____anim-node-blend@d468____anim-node-blend@dab0____anim-node-blend@e8e8__
+anim-player-misc-states__anim-node-blend@a368__anim-node-blend@abc8____anim-node-blend@be88____anim-node-blend@c500____anim-node-blend@db90____anim-node-blend@e9f8__
+embedded@efa0(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)((*(arg_0 + 8) + 2848) + 20);
+}
+
+f32 anim-player-misc-states__anim-node-blend@9fd8__anim-node-blend@b010____anim-node-blend@bad8____anim-node-blend@c598__
+anim-player-misc-states__anim-node-blend@9ba0__anim-node-blend@b3b8____anim-node-blend@bcb8____anim-node-blend@cbe8__
+anim-player-misc-states__anim-node-blend@9f48__anim-node-blend@aea8____anim-node-blend@bec8____anim-node-blend@d468__
+anim-player-misc-states__anim-node-blend@a368__anim-node-blend@abc8____anim-node-blend@be88____anim-node-blend@c500__
+embedded@ee88(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)((*(arg_0 + 8) + 2848) + 24);
+}
+
+f32 anim-player-misc-states__anim-node-blend@9fd8__anim-node-blend@b010__
+anim-player-misc-states__anim-node-blend@9ba0__anim-node-blend@b3b8__
+anim-player-misc-states__anim-node-blend@9f48__anim-node-blend@aea8__
+anim-player-misc-states__anim-node-blend@a368__anim-node-blend@abc8__
+embedded@ec70(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)((*(arg_0 + 8) + 2848) + 28);
+}
+
+f32 anim-player-misc-states
+anim-player-misc-states
+anim-player-misc-states
+anim-player-misc-states
+embedded@e960(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)((*(arg_0 + 8) + 2848) + 52);
+}
+
+f32 anim-player-misc-states
+anim-player-misc-states
+anim-player-misc-states
+anim-player-misc-states
+embedded@da58(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)((*(arg_0 + 8) + 2848) + 36);
+}
+
+f32 anim-player-misc-states
+anim-player-misc-states
+anim-player-misc-states
+anim-player-misc-states
+embedded@c840(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)((*(arg_0 + 8) + 2848) + 40);
+}
+
+f32 anim-player-misc-states
+anim-player-misc-states
+anim-player-misc-states
+anim-player-misc-states
+embedded@b9e8(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)((*(arg_0 + 8) + 2848) + 44);
+}
+
+f32 anim-player-misc-states
+anim-player-misc-states
+anim-player-misc-states
+anim-player-misc-states
+embedded@b1b8(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)((*(arg_0 + 8) + 2848) + 48);
 }
 
 sid player-pickup-anim(u16 arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {

@@ -12,7 +12,7 @@
 // ####################################################################################################
 
 f32 switchblade-left-parry-stalker-sync__melee-attack@1e0__character-melee-info@3008__
-#0858AAD8127508E8__melee-attack@3d0__character-melee-info@37f8__
+1h-blade-right-parry-super-stalker-sync__melee-attack@3d0__character-melee-info@37f8__
 switchblade-right-parry-stalker-sync__melee-attack@d80__character-melee-info@30c8__
 1h-blunt-right-parry-stalker-sync__melee-attack@f70__character-melee-info@37f8__
 1h-blunt-left-parry-stalker-sync__melee-attack@1160__character-melee-info@28c0__
@@ -37,7 +37,7 @@ embedded@11288(u64? arg_0, f32 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
 }
 
 u64? switchblade-left-parry-stalker-sync__character-melee-info@38b8
-#0858AAD8127508E8__character-melee-info@36f8
+1h-blade-right-parry-super-stalker-sync__character-melee-info@36f8
 switchblade-right-parry-stalker-sync__character-melee-info@2af8
 1h-blunt-right-parry-stalker-sync__character-melee-info@36f8
 1h-blunt-left-parry-stalker-sync__character-melee-info@3638
@@ -61,7 +61,7 @@ embedded@14ea0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 u64? switchblade-left-parry-stalker-sync
 embedded@169d8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
     if (!is-final-build?()) {
-        display(#5445173390656D6D("current-melee-move: %s comparision name: %s", string-debug(*(u64*)get-current-melee-attack(arg_2)), string-debug(switchblade-left-parry-stalker-enter)), 19);
+        display(dc:format("current-melee-move: %s comparision name: %s", string-debug(*(u64*)get-current-melee-attack(arg_2)), string-debug(switchblade-left-parry-stalker-enter)), 19);
     }
     if (!1) {
         melee-debug-text-file-line-fail("(cond (#t (printf current-melee-move: %s comparision name: %s (string-debug (-> (get-current-melee-attack defender) name)) (string-debug name)) #t) (else #t))", "t2r/src/game/scriptx/melee/player-standing/imports/player-standing-macros.dcx", 5261);
@@ -72,7 +72,7 @@ embedded@169d8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 }
 
 u64? switchblade-left-parry-stalker-sync
-#0858AAD8127508E8
+1h-blade-right-parry-super-stalker-sync
 switchblade-right-parry-stalker-sync
 1h-blunt-right-parry-stalker-sync
 1h-blunt-left-parry-stalker-sync
@@ -86,7 +86,7 @@ embedded@2d38(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
 }
 
 u64? switchblade-left-parry-stalker-sync__melee-event-list@35d8
-#0858AAD8127508E8__melee-event-list@2ec8
+1h-blade-right-parry-super-stalker-sync__melee-event-list@2ec8
 switchblade-right-parry-stalker-sync__melee-event-list@38a0
 1h-blunt-right-parry-stalker-sync__melee-event-list@2eb0
 1h-blunt-left-parry-stalker-sync__melee-event-list@2890
@@ -97,7 +97,7 @@ embedded@14488(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 }
 
 u64? switchblade-left-parry-stalker-sync
-#0858AAD8127508E8
+1h-blade-right-parry-super-stalker-sync
 switchblade-right-parry-stalker-sync
 1h-blunt-right-parry-stalker-sync
 1h-blunt-left-parry-stalker-sync
@@ -108,7 +108,7 @@ embedded@15088(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 }
 
 u16 switchblade-left-parry-stalker-sync
-#0858AAD8127508E8
+1h-blade-right-parry-super-stalker-sync
 switchblade-right-parry-stalker-sync
 1h-blunt-right-parry-stalker-sync
 1h-blunt-left-parry-stalker-sync
@@ -119,7 +119,7 @@ embedded@16ae0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     if (is-player?(arg_1)) {
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("Melee deadened for %f seconds post parry", 0.50), 19);
+                display(dc:format("Melee deadened for %f seconds post parry", 0.50), 19);
             }
         }
         invalidate-single-melee-command-queue(arg_1, melee-attack);
@@ -131,7 +131,7 @@ embedded@16ae0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 }
 
 u64? switchblade-left-parry-stalker-sync
-#0858AAD8127508E8
+1h-blade-right-parry-super-stalker-sync
 switchblade-right-parry-stalker-sync
 1h-blunt-right-parry-stalker-sync
 1h-blunt-left-parry-stalker-sync
@@ -143,7 +143,7 @@ embedded@14368(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 }
 
 u64? switchblade-left-parry-stalker-sync
-#0858AAD8127508E8
+1h-blade-right-parry-super-stalker-sync
 switchblade-right-parry-stalker-enter
 fist-left-parry-stalker-enter
 switchblade-right-parry-stalker-sync
@@ -155,7 +155,7 @@ switchblade-left-parry-stalker-enter
 fist-right-parry-stalker-sync
 fist-right-parry-stalker-enter
 fist-left-parry-stalker-sync
-#E2663E05786538DB
+1h-blade-right-parry-super-stalker-enter
 embedded@14720(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     f32 var_0;
     if (!(0.00 == 0.00)) {
@@ -167,7 +167,7 @@ embedded@14720(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 }
 
 u64? switchblade-left-parry-stalker-sync
-#0858AAD8127508E8
+1h-blade-right-parry-super-stalker-sync
 switchblade-right-parry-stalker-enter
 fist-left-parry-stalker-enter
 switchblade-right-parry-stalker-sync
@@ -179,7 +179,7 @@ switchblade-left-parry-stalker-enter
 fist-right-parry-stalker-sync
 fist-right-parry-stalker-enter
 fist-left-parry-stalker-sync
-#E2663E05786538DB
+1h-blade-right-parry-super-stalker-enter
 embedded@160a0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u64? var_0 = is-player?(arg_2);
     if (!var_0) {
@@ -191,7 +191,7 @@ embedded@160a0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 }
 
 u64? switchblade-left-parry-stalker-sync
-#0858AAD8127508E8
+1h-blade-right-parry-super-stalker-sync
 switchblade-right-parry-stalker-sync
 1h-blunt-right-parry-stalker-sync
 1h-blunt-left-parry-stalker-sync
@@ -210,7 +210,7 @@ embedded@14be8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 }
 
 u64? switchblade-left-parry-stalker-sync
-#0858AAD8127508E8
+1h-blade-right-parry-super-stalker-sync
 switchblade-right-parry-stalker-sync
 1h-blunt-right-parry-stalker-sync
 1h-blunt-left-parry-stalker-sync
@@ -229,7 +229,7 @@ embedded@151d8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 }
 
 u64? switchblade-left-parry-stalker-sync
-#0858AAD8127508E8
+1h-blade-right-parry-super-stalker-sync
 switchblade-right-parry-stalker-sync
 1h-blunt-right-parry-stalker-sync
 1h-blunt-left-parry-stalker-sync
@@ -241,7 +241,7 @@ embedded@149e8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 }
 
 u16 switchblade-left-parry-stalker-sync
-#0858AAD8127508E8
+1h-blade-right-parry-super-stalker-sync
 switchblade-right-parry-stalker-sync
 1h-blunt-right-parry-stalker-sync
 1h-blunt-left-parry-stalker-sync
@@ -252,7 +252,7 @@ embedded@14e10(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 }
 
 u64? switchblade-left-parry-stalker-sync
-#0858AAD8127508E8
+1h-blade-right-parry-super-stalker-sync
 switchblade-right-parry-stalker-sync
 1h-blunt-right-parry-stalker-sync
 1h-blunt-left-parry-stalker-sync
@@ -263,7 +263,7 @@ embedded@15d38(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 }
 
 u64? switchblade-left-parry-stalker-sync
-#0858AAD8127508E8
+1h-blade-right-parry-super-stalker-sync
 switchblade-right-parry-stalker-sync
 1h-blunt-right-parry-stalker-sync
 1h-blunt-left-parry-stalker-sync
@@ -274,7 +274,7 @@ embedded@157c0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 }
 
 u16 switchblade-left-parry-stalker-sync
-#0858AAD8127508E8
+1h-blade-right-parry-super-stalker-sync
 switchblade-right-parry-stalker-sync
 1h-blunt-right-parry-stalker-sync
 1h-blunt-left-parry-stalker-sync
@@ -297,7 +297,7 @@ embedded@13e28(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 }
 
 u16 switchblade-left-parry-stalker-sync
-#0858AAD8127508E8
+1h-blade-right-parry-super-stalker-sync
 switchblade-right-parry-stalker-sync
 1h-blunt-right-parry-stalker-sync
 1h-blunt-left-parry-stalker-sync
@@ -314,7 +314,7 @@ embedded@148d0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 }
 
 u16 switchblade-left-parry-stalker-sync
-#0858AAD8127508E8
+1h-blade-right-parry-super-stalker-sync
 1h-blunt-right-parry-stalker-sync
 fist-right-parry-stalker-sync
 embedded@13f50(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
@@ -329,7 +329,7 @@ embedded@13f50(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 
 u16 switchblade-left-parry-stalker-sync
 switchblade-left-parry-stalker-sync
-#0858AAD8127508E8
+1h-blade-right-parry-super-stalker-sync
 switchblade-right-parry-stalker-sync
 1h-blunt-right-parry-stalker-sync
 fist-right-parry-stalker-sync
@@ -344,7 +344,7 @@ embedded@16ca0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 }
 
 u16 switchblade-left-parry-stalker-sync
-#0858AAD8127508E8
+1h-blade-right-parry-super-stalker-sync
 switchblade-right-parry-stalker-sync
 1h-blunt-right-parry-stalker-sync
 1h-blunt-left-parry-stalker-sync
@@ -361,7 +361,7 @@ embedded@16508(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 }
 
 u16 switchblade-left-parry-stalker-sync
-#0858AAD8127508E8
+1h-blade-right-parry-super-stalker-sync
 1h-blunt-right-parry-stalker-sync
 1h-blunt-left-parry-stalker-sync
 fist-right-parry-stalker-sync
@@ -377,7 +377,7 @@ embedded@16e98(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 }
 
 u16 switchblade-left-parry-stalker-sync
-#0858AAD8127508E8
+1h-blade-right-parry-super-stalker-sync
 switchblade-right-parry-stalker-sync
 1h-blunt-right-parry-stalker-sync
 1h-blunt-left-parry-stalker-sync
@@ -395,8 +395,8 @@ embedded@141d8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 
 u16 switchblade-left-parry-stalker-sync
 switchblade-left-parry-stalker-sync
-#0858AAD8127508E8
-#0858AAD8127508E8
+1h-blade-right-parry-super-stalker-sync
+1h-blade-right-parry-super-stalker-sync
 switchblade-right-parry-stalker-sync
 switchblade-right-parry-stalker-sync
 1h-blunt-right-parry-stalker-sync
@@ -422,7 +422,7 @@ embedded@14a80(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 }
 
 u64? switchblade-left-parry-stalker-sync
-#0858AAD8127508E8
+1h-blade-right-parry-super-stalker-sync
 switchblade-right-parry-stalker-sync
 1h-blunt-right-parry-stalker-sync
 1h-blunt-left-parry-stalker-sync
@@ -441,7 +441,7 @@ embedded@16c08(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 }
 
 u16 switchblade-left-parry-stalker-sync
-#0858AAD8127508E8
+1h-blade-right-parry-super-stalker-sync
 switchblade-right-parry-stalker-sync
 1h-blunt-right-parry-stalker-sync
 1h-blunt-left-parry-stalker-sync
@@ -458,7 +458,7 @@ embedded@15a10(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 }
 
 u64? switchblade-left-parry-stalker-sync
-#0858AAD8127508E8
+1h-blade-right-parry-super-stalker-sync
 switchblade-right-parry-stalker-sync
 1h-blunt-right-parry-stalker-sync
 1h-blunt-left-parry-stalker-sync
@@ -469,7 +469,7 @@ embedded@147a8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 }
 
 bool switchblade-left-parry-stalker-sync
-#0858AAD8127508E8
+1h-blade-right-parry-super-stalker-sync
 switchblade-right-parry-stalker-sync
 1h-blunt-right-parry-stalker-sync
 1h-blunt-left-parry-stalker-sync
@@ -478,13 +478,13 @@ fist-left-parry-stalker-sync
 embedded@15180(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u64? var_0 = random-float-range(0.00, 1.00, 0);
     if (!is-final-build?()) {
-        display(#5445173390656D6D("%f > %f  ?", 1.00, var_0), 19);
+        display(dc:format("%f > %f  ?", 1.00, var_0), 19);
     }
     return 1.00 >= var_0;
 }
 
 u64? switchblade-left-parry-stalker-sync__melee-event-transitions@153d8
-#0858AAD8127508E8__melee-event-transitions@14d80
+1h-blade-right-parry-super-stalker-sync__melee-event-transitions@14d80
 switchblade-right-parry-stalker-sync__melee-event-transitions@14d80
 1h-blunt-right-parry-stalker-sync__melee-event-transitions@14d80
 1h-blunt-left-parry-stalker-sync__melee-event-transitions@153d8
@@ -495,7 +495,7 @@ embedded@2b678(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 }
 
 u64? switchblade-left-parry-stalker-sync
-#0858AAD8127508E8
+1h-blade-right-parry-super-stalker-sync
 switchblade-right-parry-stalker-sync
 1h-blunt-right-parry-stalker-sync
 1h-blunt-left-parry-stalker-sync
@@ -505,23 +505,23 @@ embedded@2b958(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return arg_1;
 }
 
-u64? #0858AAD8127508E8__start-func-array@2d08
-#E2663E05786538DB__start-func-array@28a8
+u64? 1h-blade-right-parry-super-stalker-sync__start-func-array@2d08
+1h-blade-right-parry-super-stalker-enter__start-func-array@28a8
 embedded@14688(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
     return is-rogue-mode?() && npc-super-stalker?(arg_2);
 }
 
-u64? #0858AAD8127508E8
+u64? 1h-blade-right-parry-super-stalker-sync
 embedded@163b0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
     if (!is-final-build?()) {
-        display(#5445173390656D6D("current-melee-move: %s comparision name: %s", string-debug(*(u64*)get-current-melee-attack(arg_2)), string-debug(#E2663E05786538DB)), 19);
+        display(dc:format("current-melee-move: %s comparision name: %s", string-debug(*(u64*)get-current-melee-attack(arg_2)), string-debug(1h-blade-right-parry-super-stalker-enter)), 19);
     }
     if (!1) {
         melee-debug-text-file-line-fail("(cond (#t (printf current-melee-move: %s comparision name: %s (string-debug (-> (get-current-melee-attack defender) name)) (string-debug name)) #t) (else #t))", "t2r/src/game/scriptx/melee/player-standing/imports/player-standing-macros.dcx", 5261);
     }
     u64? var_5 = get-current-melee-attack(arg_2);
     melee-debug-text-file-line-fail("(= (-> (get-current-melee-attack defender) name) name)", "t2r/src/game/scriptx/melee/player-standing/imports/player-standing-macros.dcx", 5273);
-    return 1 && *(u64*)var_5 == #E2663E05786538DB && *(u64*)var_5 == #E2663E05786538DB;
+    return 1 && *(u64*)var_5 == 1h-blade-right-parry-super-stalker-enter && *(u64*)var_5 == 1h-blade-right-parry-super-stalker-enter;
 }
 
 f32 npc-stalker-counter-right-swing__melee-attack@5c0__character-melee-info@29e0__
@@ -1134,7 +1134,7 @@ embedded@31e0(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
                 if (player-in-meatshield?() && player-get-meatshield() == arg_2) {
                     if (is-in-front?(get-object-locator(arg_2), get-object-locator(arg_1), 2, 180.00) && is-in-front?(get-object-locator(arg_1), get-object-locator(arg_2), 2, 180.00)) {
                         if (!is-final-build?()) {
-                            display(#5445173390656D6D("END PLAYER MEATSHIELD DUE TO CLICKER MEATSHIELD CASE"), 19);
+                            display(dc:format("END PLAYER MEATSHIELD DUE TO CLICKER MEATSHIELD CASE"), 19);
                         }
                         log-event("clicker-ate-meatshield-npc", 1, "", 0, 0);
                         player-end-meatshield();
@@ -1639,7 +1639,7 @@ fist-left-parry-stalker-enter
 switchblade-left-parry-stalker-enter
 1h-blunt-left-parry-stalker-enter
 fist-right-parry-stalker-enter
-#E2663E05786538DB
+1h-blade-right-parry-super-stalker-enter
 embedded@3188(i64 arg_0, u64? arg_1, i64 arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
     u16 var_0;
     if (arg_2 == arg_0) {
@@ -1657,7 +1657,7 @@ fist-left-parry-stalker-enter
 switchblade-left-parry-stalker-enter
 1h-blunt-left-parry-stalker-enter
 fist-right-parry-stalker-enter
-#E2663E05786538DB
+1h-blade-right-parry-super-stalker-enter
 embedded@2f98(u64? arg_0, u64? arg_1, u64? arg_2) {
     return 0;
 }
@@ -1668,7 +1668,7 @@ fist-left-parry-stalker-enter__melee-event-list@2dd8
 switchblade-left-parry-stalker-enter__melee-event-list@35a8
 1h-blunt-left-parry-stalker-enter__melee-event-list@3590
 fist-right-parry-stalker-enter__melee-event-list@2da8
-#E2663E05786538DB__melee-event-list@2d90
+1h-blade-right-parry-super-stalker-enter__melee-event-list@2d90
 embedded@15c98(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return set-cache-bound-frame(arg_9, rotate-locator-lookat(get-object-locator(arg_2), get-object-locator(arg_1), 1.00, 0), 1);
 }
@@ -1679,7 +1679,7 @@ fist-left-parry-stalker-enter
 switchblade-left-parry-stalker-enter
 1h-blunt-left-parry-stalker-enter
 fist-right-parry-stalker-enter
-#E2663E05786538DB
+1h-blade-right-parry-super-stalker-enter
 embedded@14538(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     if (npc-1h-hybrid?(arg_2) && npc-2h-hybrid?(arg_2)) {
         npc-unholster-melee-weapon(arg_2, 0);
@@ -1698,7 +1698,7 @@ embedded@14c98(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     u64? var_0 = estimate-frames-til-hit(arg_1);
     if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D("frames to parry hit: %i", var_0), 19);
+            display(dc:format("frames to parry hit: %i", var_0), 19);
         }
     }
     return melee-fact-set-float(arg_2, parry-intro-rate, minmax((f32)sec-to-frames(get-animation-duration(arg_2, inf-stalker-parry-switchblade-forehand-enter--stalker) - frames-to-sec(2)) / (f32)var_0, 0.25, 2.00));
@@ -1716,8 +1716,8 @@ switchblade-left-parry-stalker-enter
 1h-blunt-left-parry-stalker-enter
 fist-right-parry-stalker-enter__melee-event-advanced@14d18
 fist-right-parry-stalker-enter
-#E2663E05786538DB__melee-event-advanced@14d18
-#E2663E05786538DB
+1h-blade-right-parry-super-stalker-enter__melee-event-advanced@14d18
+1h-blade-right-parry-super-stalker-enter
 embedded@2b8e8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return melee-fact-get-float(arg_2, parry-intro-rate);
 }
@@ -1728,7 +1728,7 @@ fist-left-parry-stalker-enter
 switchblade-left-parry-stalker-enter
 1h-blunt-left-parry-stalker-enter
 fist-right-parry-stalker-enter
-#E2663E05786538DB
+1h-blade-right-parry-super-stalker-enter
 embedded@15318(u64? arg_0, u64? arg_1, i64 arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u64? var_0 = melee-fact-get-bool(arg_2, parry-hit);
     if (!var_0) {
@@ -1745,7 +1745,7 @@ fist-left-parry-stalker-enter
 switchblade-left-parry-stalker-enter
 1h-blunt-left-parry-stalker-enter
 fist-right-parry-stalker-enter
-#E2663E05786538DB
+1h-blade-right-parry-super-stalker-enter
 embedded@15b68(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return !character-about-to-be-hit-by-player(arg_2, 30);
 }
@@ -1756,7 +1756,7 @@ fist-left-parry-stalker-enter
 switchblade-left-parry-stalker-enter
 1h-blunt-left-parry-stalker-enter
 fist-right-parry-stalker-enter
-#E2663E05786538DB
+1h-blade-right-parry-super-stalker-enter
 embedded@161f0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return melee-fact-set-bool(arg_2, parry-hit, 0);
 }
@@ -1808,7 +1808,7 @@ embedded@165a0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     u64? var_0 = estimate-frames-til-hit(arg_1);
     if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D("frames to parry hit: %i", var_0), 19);
+            display(dc:format("frames to parry hit: %i", var_0), 19);
         }
     }
     return melee-fact-set-float(arg_2, parry-intro-rate, minmax((f32)sec-to-frames(get-animation-duration(arg_2, inf-stalker-parry-fist-lt-cross-enter--stalker) - frames-to-sec(2)) / (f32)var_0, 0.25, 2.00));
@@ -1817,7 +1817,7 @@ embedded@165a0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 u64? switchblade-right-parry-stalker-sync
 embedded@15e40(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
     if (!is-final-build?()) {
-        display(#5445173390656D6D("current-melee-move: %s comparision name: %s", string-debug(*(u64*)get-current-melee-attack(arg_2)), string-debug(switchblade-right-parry-stalker-enter)), 19);
+        display(dc:format("current-melee-move: %s comparision name: %s", string-debug(*(u64*)get-current-melee-attack(arg_2)), string-debug(switchblade-right-parry-stalker-enter)), 19);
     }
     if (!1) {
         melee-debug-text-file-line-fail("(cond (#t (printf current-melee-move: %s comparision name: %s (string-debug (-> (get-current-melee-attack defender) name)) (string-debug name)) #t) (else #t))", "t2r/src/game/scriptx/melee/player-standing/imports/player-standing-macros.dcx", 5261);
@@ -1852,7 +1852,7 @@ embedded@16a68(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 u64? 1h-blunt-right-parry-stalker-sync
 embedded@15a68(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
     if (!is-final-build?()) {
-        display(#5445173390656D6D("current-melee-move: %s comparision name: %s", string-debug(*(u64*)get-current-melee-attack(arg_2)), string-debug(1h-blunt-right-parry-stalker-enter)), 19);
+        display(dc:format("current-melee-move: %s comparision name: %s", string-debug(*(u64*)get-current-melee-attack(arg_2)), string-debug(1h-blunt-right-parry-stalker-enter)), 19);
     }
     if (!1) {
         melee-debug-text-file-line-fail("(cond (#t (printf current-melee-move: %s comparision name: %s (string-debug (-> (get-current-melee-attack defender) name)) (string-debug name)) #t) (else #t))", "t2r/src/game/scriptx/melee/player-standing/imports/player-standing-macros.dcx", 5261);
@@ -1871,7 +1871,7 @@ embedded@14020(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 u64? 1h-blunt-left-parry-stalker-sync
 embedded@140f8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
     if (!is-final-build?()) {
-        display(#5445173390656D6D("current-melee-move: %s comparision name: %s", string-debug(*(u64*)get-current-melee-attack(arg_2)), string-debug(1h-blunt-left-parry-stalker-enter)), 19);
+        display(dc:format("current-melee-move: %s comparision name: %s", string-debug(*(u64*)get-current-melee-attack(arg_2)), string-debug(1h-blunt-left-parry-stalker-enter)), 19);
     }
     if (!1) {
         melee-debug-text-file-line-fail("(cond (#t (printf current-melee-move: %s comparision name: %s (string-debug (-> (get-current-melee-attack defender) name)) (string-debug name)) #t) (else #t))", "t2r/src/game/scriptx/melee/player-standing/imports/player-standing-macros.dcx", 5261);
@@ -1956,7 +1956,7 @@ embedded@33d8(i64 arg_0, i64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg
     u16 var_2;
     if (arg_0 == arg_1 && ((var_0 * 30.00) - var_1) > 2.00) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D("TELL INTERUPTED: interupted by %f frames", (var_0 * 30.00) - var_1), 19);
+            display(dc:format("TELL INTERUPTED: interupted by %f frames", (var_0 * 30.00) - var_1), 19);
         }
         var_2 = melee-fact-set-time(arg_0, last-time-tell-interupted);
     } else {
@@ -2170,7 +2170,7 @@ embedded@150e0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 
 u64? 1h-blunt-right-parry-stalker-enter__melee-attack@1540__character-melee-info@2e08__
 fist-right-parry-stalker-enter__melee-attack@1d00__character-melee-info@2e08__
-#E2663E05786538DB__melee-attack@20e0__character-melee-info@2e08__
+1h-blade-right-parry-super-stalker-enter__melee-attack@20e0__character-melee-info@2e08__
 embedded@e970(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
     u64? var_2;
     if (get-current-melee-attack(arg_3) && *(get-current-melee-attack(arg_3) + 104)) {
@@ -2183,7 +2183,7 @@ embedded@e970(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
 
 u64? 1h-blunt-right-parry-stalker-enter
 fist-right-parry-stalker-enter
-#E2663E05786538DB
+1h-blade-right-parry-super-stalker-enter
 embedded@155a0(u64? arg_0, bool arg_1, string arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u8 arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
     u64? var_0 = is-character?(arg_2);
     if (!var_0) {
@@ -2195,12 +2195,12 @@ embedded@155a0(u64? arg_0, bool arg_1, string arg_2, u64? arg_3, u64? arg_4, u64
 
 u64? 1h-blunt-right-parry-stalker-enter
 fist-right-parry-stalker-enter
-#E2663E05786538DB
+1h-blade-right-parry-super-stalker-enter
 embedded@168d8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u64? var_0 = estimate-frames-til-hit(arg_1);
     if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D("frames to parry hit: %i", var_0), 19);
+            display(dc:format("frames to parry hit: %i", var_0), 19);
         }
     }
     return melee-fact-set-float(arg_2, parry-intro-rate, minmax((f32)sec-to-frames(get-animation-duration(arg_2, inf-stalker-parry-fist-rt-cross-enter--stalker) - frames-to-sec(2)) / (f32)var_0, 0.25, 2.00));
@@ -2232,7 +2232,7 @@ embedded@14fb8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     u64? var_0 = estimate-frames-til-hit(arg_1);
     if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D("frames to parry hit: %i", var_0), 19);
+            display(dc:format("frames to parry hit: %i", var_0), 19);
         }
     }
     return melee-fact-set-float(arg_2, parry-intro-rate, minmax((f32)sec-to-frames(get-animation-duration(arg_2, inf-stalker-parry-switchblade-backhand-enter--stalker) - frames-to-sec(2)) / (f32)var_0, 0.25, 2.00));
@@ -2241,7 +2241,7 @@ embedded@14fb8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 u64? fist-right-parry-stalker-sync
 embedded@14230(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
     if (!is-final-build?()) {
-        display(#5445173390656D6D("current-melee-move: %s comparision name: %s", string-debug(*(u64*)get-current-melee-attack(arg_2)), string-debug(fist-right-parry-stalker-enter)), 19);
+        display(dc:format("current-melee-move: %s comparision name: %s", string-debug(*(u64*)get-current-melee-attack(arg_2)), string-debug(fist-right-parry-stalker-enter)), 19);
     }
     if (!1) {
         melee-debug-text-file-line-fail("(cond (#t (printf current-melee-move: %s comparision name: %s (string-debug (-> (get-current-melee-attack defender) name)) (string-debug name)) #t) (else #t))", "t2r/src/game/scriptx/melee/player-standing/imports/player-standing-macros.dcx", 5261);
@@ -2266,7 +2266,7 @@ embedded@16048(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 u64? fist-left-parry-stalker-sync
 embedded@16258(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
     if (!is-final-build?()) {
-        display(#5445173390656D6D("current-melee-move: %s comparision name: %s", string-debug(*(u64*)get-current-melee-attack(arg_2)), string-debug(fist-left-parry-stalker-enter)), 19);
+        display(dc:format("current-melee-move: %s comparision name: %s", string-debug(*(u64*)get-current-melee-attack(arg_2)), string-debug(fist-left-parry-stalker-enter)), 19);
     }
     if (!1) {
         melee-debug-text-file-line-fail("(cond (#t (printf current-melee-move: %s comparision name: %s (string-debug (-> (get-current-melee-attack defender) name)) (string-debug name)) #t) (else #t))", "t2r/src/game/scriptx/melee/player-standing/imports/player-standing-macros.dcx", 5261);
@@ -2294,7 +2294,7 @@ embedded@24d8(i64 arg_0, i64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg
     u16 var_2;
     if (arg_0 == arg_1 && ((var_0 * 30.00) - var_1) > 2.00) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D("TELL INTERUPTED: interupted by %f frames", (var_0 * 30.00) - var_1), 19);
+            display(dc:format("TELL INTERUPTED: interupted by %f frames", (var_0 * 30.00) - var_1), 19);
         }
         var_2 = melee-fact-set-time(arg_0, last-time-tell-interupted);
     } else {

@@ -182,7 +182,7 @@ embedded@15228(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
         var_0 = 1 && valid-contextual-dodge?(melee-fact-get-symbol(var_1, contextual-dodge-npc), 18, 63);
     } else {
         if (dc-assert-enabled?() && !1) {
-            display-error(#5445173390656D6D("allow-contextual-dodge-abort: invalid character to abort, provided '%s' please provide 'attacker or 'defender", string-debug(attacker)));
+            display-error(dc:format("allow-contextual-dodge-abort: invalid character to abort, provided '%s' please provide 'attacker or 'defender", string-debug(attacker)));
         }
         var_0 = 0;
     }
@@ -366,7 +366,7 @@ u64? 1h-blade-wall-attack-enter-right
 1h-blade-left-wall-attack-enter
 embedded@14c20(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     if (!is-final-build?()) {
-        display(#5445173390656D6D("bruh"), 19);
+        display(dc:format("bruh"), 19);
     }
     if (!1) {
         melee-debug-text-file-line-fail("(begin (printf bruh) #t)", "t2r/src/game/scriptx/melee/player-standing/imports/player-standing-macros.dcx", 968);
@@ -560,7 +560,7 @@ embedded@14f10(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     if (is-player?(arg_1) || !1 && character-is-dead?(arg_2)) {
         if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("Melee deadened for %f seconds", 0.50), 19);
+                display(dc:format("Melee deadened for %f seconds", 0.50), 19);
             }
         }
         disable-untargeted-melee-attack-timed(0.50);
@@ -852,7 +852,7 @@ i32 1h-blade-low-cover-attack-enter-right-hit__melee-attack@5c0
 embedded@28f8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
     if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D(
+            display(dc:format(
                 "wall dist: %f, ideal dist %f, ranking: %i",
                 get-locator-distance-xz(get-object-locator(arg_2), get-bf-from-cache(arg_7, 0)),
                 0.50,
@@ -1310,7 +1310,7 @@ i32 1h-blade-low-cover-attack-enter-right-far-hit__melee-attack@b90
 embedded@36d0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
     if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D(
+            display(dc:format(
                 "wall dist: %f, ideal dist %f, ranking: %i",
                 get-locator-distance-xz(get-object-locator(arg_2), get-bf-from-cache(arg_7, 0)),
                 1.30,
@@ -1361,7 +1361,7 @@ i32 1h-blade-wall-attack-1-hit__melee-attack@1160
 embedded@3d68(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
     if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D(
+            display(dc:format(
                 "wall dist: %f, ideal dist %f, ranking: %i",
                 get-locator-distance-xz(get-object-locator(arg_2), get-bf-from-cache(arg_7, 0)),
                 0.00,
@@ -1383,7 +1383,7 @@ i32 1h-blade-wall-attack-enter-right-far-hit__melee-attack@1350
 embedded@2eb8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
     if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D(
+            display(dc:format(
                 "wall dist: %f, ideal dist %f, ranking: %i",
                 get-locator-distance-xz(get-object-locator(arg_2), get-bf-from-cache(arg_7, 0)),
                 1.40,
@@ -1543,7 +1543,7 @@ i32 1h-blade-wall-attack-enter-right-hit__melee-attack@1920
 embedded@43e8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
     if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D(
+            display(dc:format(
                 "wall dist: %f, ideal dist %f, ranking: %i",
                 get-locator-distance-xz(get-object-locator(arg_2), get-bf-from-cache(arg_7, 0)),
                 0.80,
@@ -1574,7 +1574,7 @@ i32 1h-blade-low-cover-attack-left-enter-hit__melee-attack@1ef0
 embedded@3370(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
     if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D(
+            display(dc:format(
                 "wall dist: %f, ideal dist %f, ranking: %i",
                 get-locator-distance-xz(get-object-locator(arg_2), get-bf-from-cache(arg_7, 0)),
                 1.00,

@@ -4,14 +4,311 @@
 // #   listing for file: game_dumps/t2r/dc1/level-sets\level-sets-seattlearrival.bin                  #
 // #   filesize: 54860 bytes                                                                          #
 // #   total entries: 52                                                                              #
-// #   functions: 1                                                                                   #
+// #   functions: 60                                                                                  #
 // #   has state script: false                                                                        #
 // #   game type: t2r                                                                                 #
 // #   optimizations enabled: true                                                                    #
 // #                                                                                                  #
 // ####################################################################################################
 
+u64? tsk-sea-hub-hotel__level-set@510__level-scripted-set@18a0__
+embedded@7620() {
+    return sea-hub-load-level?(1) && stat-value?(sea-horse-finding-gas) > 7;
+}
+
+u64? tsk-sea-hub-hotel__level-scripted-set@1750
+embedded@6d50() {
+    return sea-hub-load-level?(9) && sea-hub-load-level?(0) && !(sea-hub-load-level?(20));
+}
+
+u64? tsk-sea-hub-hotel__level-scripted-set@1b70
+embedded@6270() {
+    return !(sea-hub-load-level?(1)) && !(sea-hub-load-level?(20)) && !(sea-hub-load-level?(18));
+}
+
+u64? tsk-sea-hub-cafe-inf__level-set@560__level-scripted-set@1930__
+tsk-sea-hub-inf-anim__level-scripted-set@1a38
+embedded@6c20() {
+    return sea-hub-load-level?(15);
+}
+
+u64? tsk-sea-hub-dome-infected__level-set@5d8__level-scripted-set@1d98__
+embedded@3b08() {
+    return sea-hub-load-level?(22);
+}
+
+u64? tsk-sea-hub-transition__level-set@618__level-scripted-set@1a08__
+embedded@3908() {
+    return sea-hub-load-level?(9);
+}
+
+u64? tsk-sea-ellie-comb-anims__level-set@690__level-scripted-set@1ab0__
+embedded@5768() {
+    return !(!(sea-hub-load-level?(13)) && sea-hub-load-level?(11));
+}
+
+u64? tsk-sea-hub-bank__level-set@6d0__level-scripted-set@1948__
+embedded@7fb0() {
+    return sea-hub-load-level?(0) && sea-hub-load-level?(21);
+}
+
+u64? tsk-sea-hub-bank__level-scripted-set@20f8
+embedded@39c0() {
+    return sea-hub-load-level?(21);
+}
+
+u64? tsk-sea-hub-workbench__level-set@718__level-scripted-set@1e70__
+embedded@4fb0() {
+    return sea-hub-load-level?(17);
+}
+
+u64? tsk-sea-surrounded__level-set@758__level-scripted-set@1c78__
+embedded@40b8() {
+    return !(is-chronological-mode-enabled?());
+}
+
+u64? tsk-sea-surrounded__level-scripted-set@1e88
+embedded@7cd0() {
+    return is-chronological-mode-enabled?();
+}
+
+bool tsk-sea-qz-freeway__level-set@7a0__level-scripted-set@1630__
+embedded@4698() {
+    return stat-value?(sea-qz-freeway-gate) == 0;
+}
+
+bool tsk-sea-qz-freeway__level-scripted-set@1ba0
+embedded@67a0() {
+    return stat-value?(sea-qz-freeway-gate) == 1;
+}
+
 u64? sea-hub-load-level?(u64? arg_0) {
     return get-bit(stat-value?(sea-horse-load-levels), arg_0);
+}
+
+u64? tsk-sea-hub-inf-anim__level-set@8e8__level-scripted-set@18b8__
+embedded@5d90() {
+    return sea-hub-load-level?(16) && stat-value?(sea-horse-court-load) > 3;
+}
+
+u64? tsk-sea-hub-inf-anim__level-scripted-set@1468
+embedded@8180() {
+    return !(sea-hub-load-level?(18)) && sea-hub-load-level?(13);
+}
+
+u64? tsk-sea-hub-inf-anim__level-scripted-set@1960
+embedded@4788() {
+    return sea-hub-load-level?(13);
+}
+
+u64? tsk-sea-hub-inf-anim__level-scripted-set@1810
+tsk-sea-hub-dome-int__level-set@1058__level-scripted-set@1408__
+embedded@55f8() {
+    return sea-hub-load-level?(2);
+}
+
+u64? tsk-sea-hub-inf-anim__level-scripted-set@1bb8
+embedded@3b60() {
+    return sea-hub-load-level?(20) && sea-hub-load-level?(16) && stat-value?(sea-horse-court-load) > 0;
+}
+
+u64? tsk-sea-hub-inf-anim__level-scripted-set@1a98
+embedded@3768() {
+    return sea-hub-load-level?(16);
+}
+
+u64? tsk-sea-hub-hotel-cines__level-set@958__level-scripted-set@1b40__
+embedded@7358() {
+    return sea-hub-load-level?(10) && stat-value?(sea-horse-code-found) == 0 && stat-value?(sea-horse-finding-gas) > 7;
+}
+
+u64? tsk-sea-hub-hotel-cines__level-scripted-set@1918
+embedded@7a58() {
+    return sea-hub-load-level?(10) && stat-value?(sea-horse-code-found) == 0 && stat-value?(sea-horse-finding-gas) < 8;
+}
+
+u64? tsk-sea-hub-hotel-cines__level-scripted-set@1a80
+embedded@72a0() {
+    return stat-value?(sea-horse-left-hotel) > 0 && sea-hub-load-level?(10) && stat-value?(sea-horse-code-found) > 0;
+}
+
+u64? tsk-sea-hub-hotel-cines__level-scripted-set@1360
+embedded@4568() {
+    return sea-hub-load-level?(10) && stat-value?(sea-horse-code-found) > 0;
+}
+
+u64? tsk-sea-hub-hotel-cines__level-scripted-set@1d80
+embedded@4d90() {
+    return sea-hub-load-level?(14) || sea-hub-load-level?(13) || sea-hub-load-level?(2) || sea-hub-load-level?(15) && sea-hub-load-level?(16) || stat-value?(sea-horse-court-load) == 0 || stat-value?(sea-horse-court-load) > 2 && sea-hub-load-level?(17);
+}
+
+u64? tsk-sea-hub-hotel-cines__level-scripted-set@2068
+embedded@8218() {
+    return !(sea-hub-load-level?(10)) || stat-value?(sea-horse-court-load) == 0 && stat-value?(sea-horse-court-load) > 2;
+}
+
+u64? tsk-sea-hub-hotel-approach__level-set@ad8__level-scripted-set@18d0__
+embedded@6eb8() {
+    return !(sea-hub-load-level?(19));
+}
+
+u64? tsk-sea-hub-freeway-water__level-set@b88__level-scripted-set@14f8__
+embedded@6500() {
+    return !(sea-hub-load-level?(13));
+}
+
+u64? tsk-sea-hub-south__level-set@c00__level-scripted-set@1768__
+embedded@6398() {
+    return sea-hub-load-level?(16) && stat-value?(sea-horse-court-load) == 0;
+}
+
+u64? tsk-sea-hub-south__level-scripted-set@1618
+embedded@7530() {
+    return !(sea-hub-load-level?(10)) || stat-value?(sea-horse-court-load) == 0 && stat-value?(sea-horse-court-load) > 3;
+}
+
+u64? tsk-sea-hub-guitar__level-set@c48__level-scripted-set@1d50__
+embedded@5f40() {
+    return sea-hub-load-level?(5);
+}
+
+u64? tsk-sea-hub-cute-beat__level-set@c88__level-scripted-set@1de0__
+embedded@6088() {
+    return sea-hub-load-level?(14);
+}
+
+u64? tsk-sea-hub-cafe__level-set@d00__level-scripted-set@1378__
+embedded@5b78() {
+    return sea-hub-load-level?(7) || stat-value?(sea-horse-court-load) == 0 && stat-value?(sea-horse-court-load) == 5;
+}
+
+u64? tsk-sea-hub-dome__level-set@d40__level-scripted-set@1a68__
+embedded@5d38() {
+    return sea-hub-load-level?(2) && sea-hub-load-level?(13);
+}
+
+bool tsk-sea-hub-skies__level-set@d80__level-scripted-set@1420__
+embedded@8310() {
+    return stat-value?(sea-horse-code-found) > 0;
+}
+
+bool tsk-sea-hub-skies__level-scripted-set@2050
+embedded@6488() {
+    return stat-value?(sea-horse-code-found) == 0;
+}
+
+u64? tsk-sea-hub-hotel-inf-anim__level-set@e00__level-scripted-set@1bd0__
+embedded@7ab0() {
+    return sea-hub-load-level?(10) && stat-value?(sea-horse-code-found) == 0;
+}
+
+bool tsk-sea-arrival-forest-trees__level-set@e40__level-scripted-set@19f0__
+embedded@6f30() {
+    return stat-value?(sea-arrival-forest-trees) == 0;
+}
+
+bool tsk-sea-arrival-forest-trees__level-scripted-set@1fa8
+embedded@7e80() {
+    return stat-value?(sea-arrival-forest-trees) == 1;
+}
+
+bool tsk-sea-arrival-forest-trees__level-scripted-set@1db0
+embedded@41b0() {
+    return stat-value?(sea-arrival-forest-trees) == 2;
+}
+
+bool tsk-sea-arrival-forest-trees__level-scripted-set@1cc0
+embedded@5fb8() {
+    return stat-value?(sea-arrival-forest-trees) == 3;
+}
+
+bool tsk-sea-arrival-forest-trees__level-scripted-set@1c60
+embedded@4d18() {
+    return stat-value?(sea-arrival-forest-trees) == 4;
+}
+
+bool tsk-sea-arrival-forest-trees__level-scripted-set@1438
+embedded@6e60() {
+    return stat-value?(sea-arrival-forest-trees) == 5;
+}
+
+u64? tsk-sea-hub-intro__level-set@ee0__level-scripted-set@1ca8__
+embedded@6928() {
+    return !(sea-hub-load-level?(24));
+}
+
+u64? tsk-sea-hub-intro__level-scripted-set@1dc8
+embedded@7988() {
+    return sea-hub-load-level?(24);
+}
+
+u64? tsk-sea-hub-stores__level-set@f28__level-scripted-set@1d68__
+embedded@5158() {
+    return sea-hub-load-level?(8);
+}
+
+u64? tsk-sea-hub-dome-int-cubes__level-set@fd8__level-scripted-set@18e8__
+embedded@6e08() {
+    return sea-hub-load-level?(2) && get-bit(stat-value?(sea-horse-load-levels), 24);
+}
+
+u64? tsk-sea-hub-transition-script__level-set@1018__level-scripted-set@1fc0__
+embedded@6818() {
+    return !(sea-hub-load-level?(3));
+}
+
+u64? tsk-sea-hub-courthouse__level-set@10d0__level-scripted-set@1600__
+embedded@61c0() {
+    return sea-hub-load-level?(3) && stat-value?(sea-horse-court-load) == 0;
+}
+
+u64? tsk-sea-hub-courthouse__level-scripted-set@1b88
+embedded@4b18() {
+    return sea-hub-load-level?(3) && stat-value?(sea-horse-court-window) > 0 && stat-value?(sea-horse-court-load) == 1;
+}
+
+u64? tsk-sea-hub-courthouse__level-scripted-set@17f8
+embedded@3d68() {
+    return sea-hub-load-level?(3) && stat-value?(sea-horse-court-load) == 1;
+}
+
+u64? tsk-sea-hub-courthouse__level-scripted-set@1a50
+embedded@7130() {
+    return sea-hub-load-level?(3) && stat-value?(sea-horse-court-load) == 2;
+}
+
+u64? tsk-sea-hub-courthouse__level-scripted-set@1738
+embedded@69c0() {
+    return sea-hub-load-level?(3) && stat-value?(sea-horse-court-load) > 4;
+}
+
+u64? tsk-sea-hub-courthouse__level-scripted-set@1b58
+embedded@3f48() {
+    return sea-hub-load-level?(3) && stat-value?(sea-horse-court-load) > 2;
+}
+
+u64? tsk-sea-hub-freeway-body-3__level-set@11a8__level-scripted-set@1c90__
+embedded@8028() {
+    return get-bit(stat-value?(sea-horse-load-bodies), 2);
+}
+
+u64? tsk-sea-hub-freeway-body-2__level-set@11e8__level-scripted-set@1f18__
+embedded@3a18() {
+    return get-bit(stat-value?(sea-horse-load-bodies), 1);
+}
+
+u64? tsk-sea-hub-freeway-body-1__level-set@1228__level-scripted-set@1a20__
+embedded@7460() {
+    return get-bit(stat-value?(sea-horse-load-bodies), 0);
+}
+
+u64? tsk-sea-hub-parking__level-set@1268__level-scripted-set@1900__
+embedded@6ba8() {
+    return sea-hub-load-level?(11);
+}
+
+u64? tsk-sea-hub-court-inf__level-set@12a8__level-scripted-set@1450__
+embedded@3bf8() {
+    return sea-hub-load-level?(16) && stat-value?(sea-horse-court-load) < 2;
 }
 

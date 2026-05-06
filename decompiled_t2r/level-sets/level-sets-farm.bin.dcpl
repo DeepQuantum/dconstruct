@@ -13,12 +13,12 @@
 
 u64? tsk-far-restless__level-set@2b0__level-scripted-set@f20__
 embedded@3df0() {
-    return !is-chronological-mode?() && !get-boolean(#B13A697A01AEF60F, ss-far-restless-igc-guitar-1);
+    return !is-chronological-mode?() && !get-boolean(playing-guitar?, ss-far-restless-igc-guitar-1);
 }
 
 u64? tsk-far-restless__level-scripted-set@bc0
 embedded@2860() {
-    return !is-chronological-mode?() && get-boolean(#B13A697A01AEF60F, ss-far-restless-igc-guitar-1);
+    return !is-chronological-mode?() && get-boolean(playing-guitar?, ss-far-restless-igc-guitar-1);
 }
 
 u64? tsk-far-restless__level-scripted-set@10d0
@@ -28,17 +28,17 @@ embedded@3a98() {
 
 bool tsk-far-abandoned-house__level-set@370__level-scripted-set@1040__
 embedded@2738() {
-    return get-boolean(#C23F75FD89E0203E, ss-far-abandoned-controller-player-1);
+    return get-boolean(load-barn?, ss-far-abandoned-controller-player-1);
 }
 
 u64? tsk-far-abandoned-house__level-scripted-set@e00
 embedded@28b8() {
-    return !get-boolean(#C23F75FD89E0203E, ss-far-abandoned-controller-player-1);
+    return !get-boolean(load-barn?, ss-far-abandoned-controller-player-1);
 }
 
 bool tsk-far-tommy__level-set@3f0__level-scripted-set@bf0__
 embedded@22c0() {
-    return get-boolean(#26B15F628BECA1BB, ss-cin-far-tommy-1);
+    return get-boolean(far-tommy-fade?, ss-cin-far-tommy-1);
 }
 
 u16 tsk-far-tommy__level-scripted-set@fb0
@@ -63,11 +63,11 @@ embedded@3528() {
 
 bool tsk-far-herding__level-set@488__level-scripted-set@bd8__
 embedded@3818() {
-    return get-boolean(#E940B09DB3BA7C38, ss-far-herding-igc-baby-sheep-ptsd-trigger-1);
+    return get-boolean(sheep-scared?, ss-far-herding-igc-baby-sheep-ptsd-trigger-1);
 }
 
 u64? tsk-far-herding__level-scripted-set@d70
 embedded@35d8() {
-    return !get-boolean(#E940B09DB3BA7C38, ss-far-herding-igc-baby-sheep-ptsd-trigger-1);
+    return !get-boolean(sheep-scared?, ss-far-herding-igc-baby-sheep-ptsd-trigger-1);
 }
 

@@ -4,7 +4,7 @@
 // #   listing for file: game_dumps/t2r/dc1/anim-player\player-weapons.bin                            #
 // #   filesize: 60239 bytes                                                                          #
 // #   total entries: 2                                                                               #
-// #   functions: 49                                                                                  #
+// #   functions: 50                                                                                  #
 // #   has state script: false                                                                        #
 // #   game type: t2r                                                                                 #
 // #   optimizations enabled: true                                                                    #
@@ -134,6 +134,8 @@ embedded@c178(bool arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
 
 bool anim-player-weapons-states__anim-transition-condition-lambda@b3e0
 anim-player-weapons-states__anim-transition-condition-lambda@b3e0
+anim-player-weapons-states__anim-transition-group@3b30__anim-transition-condition-lambda@b3e0__
+anim-player-weapons-states__anim-transition-condition-lambda@b3e0
 anim-player-weapons-states__anim-transition-condition-lambda@b3e0
 anim-player-weapons-states__anim-transition-condition-lambda@b3e0
 anim-player-weapons-states__anim-transition-condition-lambda@b3e0
@@ -143,6 +145,8 @@ embedded@cad8(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
 }
 
 bool anim-player-weapons-states__anim-transition-condition-lambda@b640
+anim-player-weapons-states__anim-transition-condition-lambda@b640
+anim-player-weapons-states__anim-transition-condition-lambda@b640
 anim-player-weapons-states__anim-transition-condition-lambda@b640
 embedded@c9d0(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
     return ((1.00 + fact-float(player, holster-speed-bonus, 0, 0.00)) * *(f32*)((*arg_0 + 744) + 56)) < 1.00;
@@ -186,6 +190,11 @@ anim-player-weapons-states
 anim-player-weapons-states
 embedded@38d0(u64? arg_0, f32 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64 arg_5, u64? arg_6) {
     return arg_2 + from-ups(*(f32*)((*(arg_1 + 16) + 576) + 16) * (arg_3 * player-anim-speed-mult(*(u64*)(*(arg_1 + 8) + 384), *(u64*)arg_5)), arg_4);
+}
+
+u16 anim-player-weapons-states__anim-transition-group@4700__anim-transition-condition-lambda@af70__
+embedded@c3e0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return 1;
 }
 
 f32 anim-player-weapons-states

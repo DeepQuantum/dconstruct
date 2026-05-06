@@ -56,7 +56,7 @@ embedded@f40(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? ar
         u16 var_5;
         if ((var_4 / 30.00) > 0.00) {
             if (!is-final-build?()) {
-                display(#5445173390656D6D("Run off i-frames awarded: %f", var_4 / 30.00), 19);
+                display(dc:format("Run off i-frames awarded: %f", var_4 / 30.00), 19);
             }
             var_5 = give-i-frames(arg_0, var_4 / 30.00);
         } else {

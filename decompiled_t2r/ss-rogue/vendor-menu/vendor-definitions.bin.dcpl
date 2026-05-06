@@ -4,7 +4,7 @@
 // #   listing for file: game_dumps/t2r/dc1/ss-rogue\vendor-menu\vendor-definitions.bin               #
 // #   filesize: 58935 bytes                                                                          #
 // #   total entries: 3                                                                               #
-// #   functions: 1                                                                                   #
+// #   functions: 4                                                                                   #
 // #   has state script: false                                                                        #
 // #   game type: t2r                                                                                 #
 // #   optimizations enabled: true                                                                    #
@@ -46,5 +46,113 @@ u64? get-vendor-page-items-available(i64 arg_0, u64? arg_1) {
         i = i + 1;
     }
     return var_2;
+}
+
+u16 *vendor-book-ellie*__array@3d0
+*vendor-book-ellie*
+*vendor-book-ellie*
+*vendor-book-ellie*
+*vendor-book-ellie*
+*vendor-book-ellie*
+*vendor-book-ellie*
+*vendor-book-ellie*
+*vendor-book-ellie*
+*vendor-book-ellie*
+*vendor-book-ellie*
+*vendor-book-ellie*
+*vendor-book-ellie*
+*vendor-book-ellie*
+*vendor-book-ellie*
+*vendor-book-ellie*
+*vendor-book-abby*__array@468
+*vendor-book-abby*
+*vendor-book-abby*
+*vendor-book-abby*
+*vendor-book-abby*
+*vendor-book-abby*
+*vendor-book-abby*
+*vendor-book-abby*
+*vendor-book-abby*
+*vendor-book-abby*
+*vendor-book-abby*
+*vendor-book-abby*
+*vendor-book-abby*
+*vendor-book-abby*
+*vendor-book-abby*
+*vendor-book-abby*
+embedded@5898() {
+    return 1;
+}
+
+u16 *vendor-book-ellie*
+*vendor-book-ellie*
+*vendor-book-ellie*
+*vendor-book-ellie*
+*vendor-book-ellie*
+*vendor-book-ellie*
+*vendor-book-ellie*
+*vendor-book-ellie*
+*vendor-book-ellie*
+*vendor-book-ellie*
+*vendor-book-ellie*
+*vendor-book-ellie*
+*vendor-book-ellie*
+*vendor-book-ellie*
+*vendor-book-ellie*
+*vendor-book-ellie*
+*vendor-book-ellie*
+*vendor-book-ellie*
+*vendor-book-ellie*
+*vendor-book-ellie*
+*vendor-book-ellie*
+*vendor-book-ellie*
+*vendor-book-ellie*
+*vendor-book-ellie*
+*vendor-book-abby*
+*vendor-book-abby*
+*vendor-book-abby*
+*vendor-book-abby*
+*vendor-book-abby*
+*vendor-book-abby*
+*vendor-book-abby*
+*vendor-book-abby*
+*vendor-book-abby*
+*vendor-book-abby*
+*vendor-book-abby*
+*vendor-book-abby*
+*vendor-book-abby*
+*vendor-book-abby*
+*vendor-book-abby*
+*vendor-book-abby*
+*vendor-book-abby*
+*vendor-book-abby*
+*vendor-book-abby*
+*vendor-book-abby*
+*vendor-book-abby*
+*vendor-book-abby*
+*vendor-book-abby*
+*vendor-book-abby*
+embedded@6918() {
+    return 0;
+}
+
+u64? *vendor-book-ellie*
+*vendor-book-ellie*
+*vendor-book-ellie*
+*vendor-book-ellie*
+*vendor-book-ellie*
+*vendor-book-ellie*
+*vendor-book-ellie*
+*vendor-book-ellie*
+*vendor-book-abby*
+*vendor-book-abby*
+*vendor-book-abby*
+*vendor-book-abby*
+*vendor-book-abby*
+*vendor-book-abby*
+*vendor-book-abby*
+*vendor-book-abby*
+embedded@62e8() {
+    return player-inventory-add-item-quantity(parts, 20);
 }
 

@@ -4,14 +4,19 @@
 // #   listing for file: game_dumps/t2r/dc1/anim-player\player-slide.bin                              #
 // #   filesize: 36274 bytes                                                                          #
 // #   total entries: 1                                                                               #
-// #   functions: 6                                                                                   #
+// #   functions: 7                                                                                   #
 // #   has state script: false                                                                        #
 // #   game type: t2r                                                                                 #
 // #   optimizations enabled: true                                                                    #
 // #                                                                                                  #
 // ####################################################################################################
 
-u64? anim-player-slide-states__actor-state-list@48
+u64? anim-player-slide-states__actor-state-list@48__anim-transition-group@2a10____anim-transition-condition-lambda@7a80__
+embedded@7eb8(u8 arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return player-animation-abort-active?(arg_2, arg_1) && *(u8*)(*arg_0 + 208);
+}
+
+u64? anim-player-slide-states
 anim-player-slide-states
 anim-player-slide-states
 anim-player-slide-states

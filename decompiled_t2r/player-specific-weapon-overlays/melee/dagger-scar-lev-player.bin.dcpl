@@ -11,7 +11,7 @@
 // #                                                                                                  #
 // ####################################################################################################
 
-u64? #88CE3067F535C07A__anim-overlay-set@98
+u64? anim-overlay-player-specific-weapon-dagger-scar-lev-player__anim-overlay-set@98
 embedded@a98(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
     return lerp-scale(0.65, 0.70, 0.00, 1.00, arg_1);
 }

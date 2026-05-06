@@ -4,7 +4,7 @@
 // #   listing for file: game_dumps/t2r/dc1/splashers.bin                                             #
 // #   filesize: 1044047 bytes                                                                        #
 // #   total entries: 1106                                                                            #
-// #   functions: 1494                                                                                #
+// #   functions: 1496                                                                                #
 // #   has state script: false                                                                        #
 // #   game type: t2r                                                                                 #
 // #   optimizations enabled: true                                                                    #
@@ -1523,6 +1523,7 @@ embedded@efb68(u64? arg_0) {
 
 f32 splasher-biped-footprints-l__splasher-def@16eb0__splasher-effect-particle@2d9b0____splasher-effect-particle@59fd0____splasher-effect-particle@82d28____splasher-effect-particle@89cc0____splasher-rootvar-array@eff80__
 spawner-biped-footprints-l__splasher-effect-particle@10190__splasher-effect-particle@38840____splasher-effect-particle@5c6e0____splasher-effect-particle@6cef0____splasher-effect-particle@91b88____splasher-effect-particle@a5b88____splasher-effect-particle@bcad0____splasher-rootvar-array@eff80__
+biped-splashers-setlist__splasher-rootvar-array@f0ce0
 embedded@f3060(u64? arg_0) {
     return 0.10;
 }
@@ -2146,6 +2147,13 @@ embedded@7f478(u64? arg_0) {
 sid splasher-biped-water-waist-jump-in-high-underwater__splasher-def@f8c0__splasher-effect-particle@3ecb0__
 embedded@46ee8(u64? arg_0) {
     return nav-water-splash-jump-high-uw-char;
+}
+
+sid splashers-pat-cannabis-mature-setlist__splasher-setlist-info@68f8__splasher-def-info@3ce50____splasher-effect-particle@76928__
+splashers-pat-cannabis-plant-hanging-a-med-setlist__splasher-setlist-info@8290__splasher-def-info@386e0____splasher-effect-particle@78738__
+splashers-pat-cannabis-plant-hanging-a-lg-setlist__splasher-setlist-info@83e8__splasher-def-info@29360____splasher-effect-particle@6c468__
+embedded@980e8(u64? arg_0) {
+    return weed-leaf;
 }
 
 sid splasher-biped-water-waist-jump-in-deep-surface__splasher-def@9b18__splasher-effect-particle@35628____splasher-effect-particle@543b0____splasher-effect-particle@771c8____splasher-effect-particle@948c8__
@@ -3020,7 +3028,7 @@ embedded@94508(u64? arg_0) {
 
 sid spawner-biped-prone-waist-foam__splasher-effect-particle@11c08
 spawner-biped-water-waist-foam
-#6BA8B04BEC08C028__splasher-effect-particle@1e818
+spawner-biped-water-surface-chest__splasher-effect-particle@1e818
 spawner-biped-swim-waist-foam__splasher-effect-particle@21cd8
 spawner-biped-sliding-waist-foam
 embedded@2e0a0(u64? arg_0) {
@@ -7078,12 +7086,12 @@ embedded@5c8c0(u64? arg_0) {
 
 sid spawner-biped-mud-prone-mask__splasher-effect-particle@23620__splasher-effect-particle@3d808____splasher-effect-particle@4a400____splasher-effect-particle@78388__
 embedded@96ed0(u64? arg_0) {
-    return #40137C333713E094;
+    return nav-supine-mud-mask-abby;
 }
 
 sid spawner-biped-mud-prone-mask__splasher-effect-particle@23620__splasher-effect-particle@3d808__
 embedded@6cc38(u64? arg_0) {
-    return #597EA8A3A68594AF;
+    return nav-supine-mud-mask;
 }
 
 sid spawner-biped-mud-prone-mask
@@ -8712,6 +8720,7 @@ embedded@f05c8(u64? arg_0) {
 }
 
 f32 biped-splashers-setlist
+biped-splashers-setlist
 embedded@f2c38(u64? arg_0) {
     return 0.55;
 }
@@ -8960,12 +8969,12 @@ embedded@99358(u64? arg_0) {
 
 sid biped-splashers-setlist__splasher-effect-particle@85118__splasher-effect-particle@8aad8____splasher-effect-particle@a5bf8____splasher-effect-particle@b3538__
 embedded@c40b0(u64? arg_0) {
-    return #40137C333713E094;
+    return nav-supine-mud-mask-abby;
 }
 
 sid biped-splashers-setlist__splasher-effect-particle@85118__splasher-effect-particle@8aad8__
 embedded@b57d8(u64? arg_0) {
-    return #597EA8A3A68594AF;
+    return nav-supine-mud-mask;
 }
 
 sid biped-splashers-setlist
@@ -9009,6 +9018,25 @@ embedded@93df8(u64? arg_0) {
     return wm-mud-player;
 }
 
+f32 biped-splashers-setlist__splasher-rootvar-array@95558
+embedded@b5cb0(u64? arg_0) {
+    return 0.94;
+}
+
+f32 biped-splashers-setlist
+embedded@b3338(u64? arg_0) {
+    return 0.34;
+}
+
+f32 biped-splashers-setlist
+biped-splashers-setlist
+biped-splashers-setlist__splasher-rootvar-array@92468
+biped-splashers-setlist
+biped-splashers-setlist
+embedded@b7ea0(u64? arg_0) {
+    return 0.06;
+}
+
 f32 biped-splashers-setlist__splasher-effect-particle@6aa98__splasher-rootvar-array@a2d80__
 embedded@c9818(u64? arg_0) {
     return 0.07;
@@ -9024,13 +9052,6 @@ embedded@c3798(u64? arg_0) {
 f32 biped-splashers-setlist
 embedded@c7f08(u64? arg_0) {
     return 0.08;
-}
-
-f32 biped-splashers-setlist__splasher-rootvar-array@92468
-biped-splashers-setlist
-biped-splashers-setlist
-embedded@b7ea0(u64? arg_0) {
-    return 0.06;
 }
 
 f32 biped-splashers-setlist
@@ -10489,7 +10510,7 @@ embedded@3d348(u64? arg_0) {
     return mud-splash-footstep;
 }
 
-sid #9BAF96BD6AF619BD__splasher-def@1df10__splasher-effect-particle@3c970__
+sid splasher-biped-water-prone-surface__splasher-def@1df10__splasher-effect-particle@3c970__
 splasher-biped-swim-waist-foam__splasher-def@1ccc8__splasher-effect-particle@32728__
 splasher-biped-water-waist-foam__splasher-def@13488
 splasher-biped-prone-waist-foam__splasher-def@16220__splasher-effect-particle@2a6a8__
@@ -12002,20 +12023,14 @@ embedded@3b620(u64? arg_0) {
     return some-effect;
 }
 
-sid splashers-pat-cannabis-plant-hanging-a-med-setlist__splasher-setlist-info@8290__splasher-def-info@386e0____splasher-effect-particle@78738__
-splashers-pat-cannabis-plant-hanging-a-lg-setlist__splasher-setlist-info@83e8__splasher-def-info@29360____splasher-effect-particle@6c468__
-embedded@980e8(u64? arg_0) {
-    return weed-leaf;
-}
-
 sid splasher-biped-mud-mask-prone__splasher-def@f928__splasher-effect-particle@41048____splasher-effect-particle@4cd70____splasher-effect-particle@7bef0____splasher-effect-particle@92f08__
 embedded@a79e8(u64? arg_0) {
-    return #40137C333713E094;
+    return nav-supine-mud-mask-abby;
 }
 
 sid splasher-biped-mud-mask-prone__splasher-def@f928__splasher-effect-particle@41048____splasher-effect-particle@4cd70__
 embedded@89a38(u64? arg_0) {
-    return #597EA8A3A68594AF;
+    return nav-supine-mud-mask;
 }
 
 sid splasher-biped-mud-mask-prone__splasher-def@f928

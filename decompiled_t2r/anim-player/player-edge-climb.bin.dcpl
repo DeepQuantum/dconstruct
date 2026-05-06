@@ -4,7 +4,7 @@
 // #   listing for file: game_dumps/t2r/dc1/anim-player\player-edge-climb.bin                         #
 // #   filesize: 85999 bytes                                                                          #
 // #   total entries: 1                                                                               #
-// #   functions: 9                                                                                   #
+// #   functions: 10                                                                                  #
 // #   has state script: false                                                                        #
 // #   game type: t2r                                                                                 #
 // #   optimizations enabled: true                                                                    #
@@ -334,6 +334,11 @@ anim-player-edge-climb-states
 anim-player-edge-climb-states
 embedded@4ff8(u64? arg_0, f32 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64 arg_5, u64? arg_6) {
     return arg_2 + from-ups(arg_3 * player-anim-speed-mult(*(u64*)(*(arg_1 + 8) + 384), *(u64*)arg_5), arg_4 * *(f32*)((*(arg_1 + 16) + 240) + 20));
+}
+
+u64? anim-player-edge-climb-states__anim-transition-group@58a0__anim-transition-condition-lambda@12430__
+embedded@13c70(u8 arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return player-animation-abort-active?(arg_2, arg_1) && *(u8*)(*arg_0 + 208);
 }
 
 u64? anim-player-edge-climb-states

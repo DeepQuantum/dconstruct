@@ -16,37 +16,37 @@ npc-dog-prone^supine-left-enter__character-melee-info@8990
 dog-player-running-attack-long-leap-tell__character-melee-info@52a8
 npc-dog-prone^supine-back-enter__melee-attack@9d8__character-melee-info@7668__
 npc-dog-prone^supine-back-enter__character-melee-info@6af8
-#23BFEA11E7B99A8B__melee-attack@bc8__character-melee-info@5510__
+npc-dog-prone-struggle-success-abby__melee-attack@bc8__character-melee-info@5510__
 dog-leap-attack-arch__melee-attack@db8
 dog-leap-attack-left-hit__melee-attack@fa8__character-melee-info@88e8__
 dog-leap-attack-left-hit__character-melee-info@6188
 npc-dog-prone^supine-front-enter__melee-attack@1578__character-melee-info@7910__
 npc-dog-prone^supine-front-enter__character-melee-info@6c98
-#36504E94B8D51B4E__melee-attack@1768__character-melee-info@8780__
-#36504E94B8D51B4E__character-melee-info@8440
+npc-dog-standing^supine-enter-abby__melee-attack@1768__character-melee-info@8780__
+npc-dog-standing^supine-enter-abby__character-melee-info@8440
 dog-leap-attack-back-hit__melee-attack@1958__character-melee-info@7290__
 dog-leap-attack-back-hit__character-melee-info@79b8
-#51AE63346A0B30A7__melee-attack@1d38__character-melee-info@8828__
-#51AE63346A0B30A7__character-melee-info@5be8
+dog-leap-attack-right-hit-abby__melee-attack@1d38__character-melee-info@8828__
+dog-leap-attack-right-hit-abby__character-melee-info@5be8
 dog-attack__melee-attack@2308
 dog-leap-attack-long-arch__melee-attack@26e8
-#74A8F004C4D4A012__melee-attack@28d8__character-melee-info@86a8__
-#74A8F004C4D4A012__character-melee-info@7068
+npc-dog-prone^supine-left-enter-abby__melee-attack@28d8__character-melee-info@86a8__
+npc-dog-prone^supine-left-enter-abby__character-melee-info@7068
 dog-leap-miss-back-l__melee-attack@2ac8__character-melee-info@6f68__
-#810BCF652947E6F2__melee-attack@2cb8__character-melee-info@5db0__
-#810BCF652947E6F2__character-melee-info@5660
-#83DFF7C4CB199CE0__melee-attack@2ea8__character-melee-info@60e0__
-#83DFF7C4CB199CE0__character-melee-info@5d08
-#91E185FCC0279B20__melee-attack@3288__character-melee-info@6878__
-#91E185FCC0279B20__character-melee-info@53c0
+npc-dog-prone^supine-front-enter-abby__melee-attack@2cb8__character-melee-info@5db0__
+npc-dog-prone^supine-front-enter-abby__character-melee-info@5660
+npc-dog-prone^supine-back-enter-abby__melee-attack@2ea8__character-melee-info@60e0__
+npc-dog-prone^supine-back-enter-abby__character-melee-info@5d08
+dog-leap-attack-front-hit-abby__melee-attack@3288__character-melee-info@6878__
+dog-leap-attack-front-hit-abby__character-melee-info@53c0
 npc-dog-standing^supine-enter__melee-attack@3668__character-melee-info@7728__
 npc-dog-standing^supine-enter__character-melee-info@8a50
-#B13B0B2CFDF29D5E__melee-attack@3a48__character-melee-info@75c0__
-#B13B0B2CFDF29D5E__character-melee-info@6d40
+dog-leap-attack-left-hit-abby__melee-attack@3a48__character-melee-info@75c0__
+dog-leap-attack-left-hit-abby__character-melee-info@6d40
 npc-dog-prone^supine-right-enter__melee-attack@3c38__character-melee-info@8198__
 npc-dog-prone^supine-right-enter__character-melee-info@7c20
-#BD87E05438E89D81__melee-attack@3e40__character-melee-info@7338__
-#BD87E05438E89D81__character-melee-info@71d0
+npc-dog-prone^supine-right-enter-abby__melee-attack@3e40__character-melee-info@7338__
+npc-dog-prone^supine-right-enter-abby__character-melee-info@71d0
 dog-player-planted-attack-leap-tell__character-melee-info@7b00
 dog-leap-attack-right-hit__melee-attack@4220__character-melee-info@8dc8__
 dog-leap-attack-right-hit__character-melee-info@55b8
@@ -54,8 +54,8 @@ dog-leap-miss-front__melee-attack@4410__character-melee-info@8600__
 npc-dog-prone-struggle-success__melee-attack@4600__character-melee-info@5200__
 dog-leap-attack-front-hit__melee-attack@47f0__character-melee-info@8f80__
 dog-leap-attack-front-hit__character-melee-info@7e60
-#F2D3A519017BBE3C__melee-attack@49e0__character-melee-info@5708__
-#F2D3A519017BBE3C__character-melee-info@7d88
+dog-leap-attack-back-hit-abby__melee-attack@49e0__character-melee-info@5708__
+dog-leap-attack-back-hit-abby__character-melee-info@7d88
 dog-down-land__melee-attack@4bd0
 dog-leap-long-miss-back-r__melee-attack@4fb0__character-melee-info@67b8__
 embedded@22c18(u64? arg_0, u64? arg_1, u64? arg_2) {
@@ -76,7 +76,7 @@ embedded@329a8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 }
 
 u64? npc-dog-prone^supine-left-enter
-#74A8F004C4D4A012
+npc-dog-prone^supine-left-enter-abby
 embedded@2d690(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
     return player-is-prone?() && !character-is-dead?(arg_1) && is-left?(get-object-locator(arg_2), get-object-locator(arg_1), 90.00) && distance-y-between-objects(arg_1, arg_2) < 1.00;
 }
@@ -84,13 +84,13 @@ embedded@2d690(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 u16 npc-dog-prone^supine-left-enter
 npc-dog-prone^supine-back-enter
 npc-dog-prone^supine-front-enter
-#36504E94B8D51B4E
-#74A8F004C4D4A012
-#810BCF652947E6F2
-#83DFF7C4CB199CE0
+npc-dog-standing^supine-enter-abby
+npc-dog-prone^supine-left-enter-abby
+npc-dog-prone^supine-front-enter-abby
+npc-dog-prone^supine-back-enter-abby
 npc-dog-standing^supine-enter
 npc-dog-prone^supine-right-enter
-#BD87E05438E89D81
+npc-dog-prone^supine-right-enter-abby
 embedded@7010(i64 arg_0, i64 arg_1, i64 arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
     if (0 > 0 && !is-player?(arg_0)) {
         melee-fact-set-bool(arg_0, stunned, 0);
@@ -121,18 +121,18 @@ embedded@7010(i64 arg_0, i64 arg_1, i64 arg_2, u64? arg_3, u64? arg_4, u64? arg_
 u16 npc-dog-prone^supine-left-enter__melee-event-list@59e0
 npc-dog-prone^supine-back-enter__melee-event-list@6de8
 npc-dog-prone^supine-front-enter__melee-event-list@6de8
-#74A8F004C4D4A012__melee-event-list@8428
-#810BCF652947E6F2__melee-event-list@8af8
-#83DFF7C4CB199CE0__melee-event-list@8af8
+npc-dog-prone^supine-left-enter-abby__melee-event-list@8428
+npc-dog-prone^supine-front-enter-abby__melee-event-list@8af8
+npc-dog-prone^supine-back-enter-abby__melee-event-list@8af8
 npc-dog-prone^supine-right-enter__melee-event-list@71b8
-#BD87E05438E89D81__melee-event-list@7bc0
+npc-dog-prone^supine-right-enter-abby__melee-event-list@7bc0
 embedded@2fac8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     if (is-player-ellie?(arg_2)) {
         holster-player-weapon(4, 1.00);
     }
     u16 var_2;
     if (is-rogue-mode?()) {
-        var_2 = send-event(#7D70C7896B7D87D4, ss-reminders);
+        var_2 = send-event(player-grabbed-by-npc, ss-reminders);
     } else {
         var_2 = 0;
     }
@@ -143,20 +143,20 @@ u64? npc-dog-prone^supine-left-enter
 npc-dog-prone^supine-back-enter
 dog-leap-attack-left-hit
 npc-dog-prone^supine-front-enter
-#36504E94B8D51B4E__melee-event-list@5b78
+npc-dog-standing^supine-enter-abby__melee-event-list@5b78
 dog-leap-attack-back-hit
-#51AE63346A0B30A7
-#74A8F004C4D4A012
-#810BCF652947E6F2
-#83DFF7C4CB199CE0
-#91E185FCC0279B20
+dog-leap-attack-right-hit-abby
+npc-dog-prone^supine-left-enter-abby
+npc-dog-prone^supine-front-enter-abby
+npc-dog-prone^supine-back-enter-abby
+dog-leap-attack-front-hit-abby
 npc-dog-standing^supine-enter__melee-event-list@6e00
-#B13B0B2CFDF29D5E
+dog-leap-attack-left-hit-abby
 npc-dog-prone^supine-right-enter
-#BD87E05438E89D81
+npc-dog-prone^supine-right-enter-abby
 dog-leap-attack-right-hit
 dog-leap-attack-front-hit
-#F2D3A519017BBE3C
+dog-leap-attack-back-hit-abby
 embedded@33128(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return character-is-dead?(arg_1);
 }
@@ -164,13 +164,13 @@ embedded@33128(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 u64? npc-dog-prone^supine-left-enter
 npc-dog-prone^supine-back-enter
 npc-dog-prone^supine-front-enter
-#36504E94B8D51B4E
-#74A8F004C4D4A012
-#810BCF652947E6F2
-#83DFF7C4CB199CE0
+npc-dog-standing^supine-enter-abby
+npc-dog-prone^supine-left-enter-abby
+npc-dog-prone^supine-front-enter-abby
+npc-dog-prone^supine-back-enter-abby
 npc-dog-standing^supine-enter
 npc-dog-prone^supine-right-enter
-#BD87E05438E89D81
+npc-dog-prone^supine-right-enter-abby
 embedded@32f10(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     invalidate-single-melee-command-queue(arg_2, melee-attack);
     joypad-disable-commands-timed(0.00, melee-attack);
@@ -184,15 +184,15 @@ embedded@32f10(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 
 u16 npc-dog-prone^supine-left-enter
 npc-dog-prone^supine-back-enter
-#23BFEA11E7B99A8B
+npc-dog-prone-struggle-success-abby
 npc-dog-prone^supine-front-enter
-#36504E94B8D51B4E
-#74A8F004C4D4A012
-#810BCF652947E6F2
-#83DFF7C4CB199CE0
+npc-dog-standing^supine-enter-abby
+npc-dog-prone^supine-left-enter-abby
+npc-dog-prone^supine-front-enter-abby
+npc-dog-prone^supine-back-enter-abby
 npc-dog-standing^supine-enter
 npc-dog-prone^supine-right-enter
-#BD87E05438E89D81
+npc-dog-prone^supine-right-enter-abby
 npc-dog-prone-struggle-success
 embedded@31170(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_1;
@@ -211,21 +211,21 @@ embedded@31170(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 }
 
 u64? npc-dog-prone^supine-left-enter
-#16BAB2E655B23D48
+rogue-dog-prone-kill
 npc-dog-prone^supine-back-enter
 npc-dog-prone^supine-front-enter
-#36504E94B8D51B4E
-#5B523D43EA961815
+npc-dog-standing^supine-enter-abby
+rogue-dog-facebite-kill
 dog-facebite-kill-back
-#74A8F004C4D4A012
-#810BCF652947E6F2
-#83DFF7C4CB199CE0
-#872339CD436BD235
+npc-dog-prone^supine-left-enter-abby
+npc-dog-prone^supine-front-enter-abby
+npc-dog-prone^supine-back-enter-abby
+npc-dog-prone-struggle-abby
 dog-prone-kill
 npc-dog-standing^supine-enter
 npc-dog-prone-struggle
 npc-dog-prone^supine-right-enter
-#BD87E05438E89D81
+npc-dog-prone^supine-right-enter-abby
 dog-facebite-kill
 embedded@31668(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     f32 var_0;
@@ -238,21 +238,21 @@ embedded@31668(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 }
 
 u64? npc-dog-prone^supine-left-enter
-#16BAB2E655B23D48
+rogue-dog-prone-kill
 npc-dog-prone^supine-back-enter
 npc-dog-prone^supine-front-enter
-#36504E94B8D51B4E
-#5B523D43EA961815
+npc-dog-standing^supine-enter-abby
+rogue-dog-facebite-kill
 dog-facebite-kill-back
-#74A8F004C4D4A012
-#810BCF652947E6F2
-#83DFF7C4CB199CE0
-#872339CD436BD235
+npc-dog-prone^supine-left-enter-abby
+npc-dog-prone^supine-front-enter-abby
+npc-dog-prone^supine-back-enter-abby
+npc-dog-prone-struggle-abby
 dog-prone-kill
 npc-dog-standing^supine-enter
 npc-dog-prone-struggle
 npc-dog-prone^supine-right-enter
-#BD87E05438E89D81
+npc-dog-prone^supine-right-enter-abby
 dog-facebite-kill
 embedded@31218(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u64? var_0 = is-player?(arg_2);
@@ -265,22 +265,22 @@ embedded@31218(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 }
 
 u64? npc-dog-prone^supine-left-enter
-#16BAB2E655B23D48
+rogue-dog-prone-kill
 dog-player-running-attack-long-leap-tell
 npc-dog-prone^supine-back-enter
 npc-dog-prone^supine-front-enter
-#36504E94B8D51B4E
-#5B523D43EA961815
+npc-dog-standing^supine-enter-abby
+rogue-dog-facebite-kill
 dog-facebite-kill-back
-#74A8F004C4D4A012
-#810BCF652947E6F2
-#83DFF7C4CB199CE0
-#872339CD436BD235
+npc-dog-prone^supine-left-enter-abby
+npc-dog-prone^supine-front-enter-abby
+npc-dog-prone^supine-back-enter-abby
+npc-dog-prone-struggle-abby
 dog-prone-kill
 npc-dog-standing^supine-enter
 npc-dog-prone-struggle
 npc-dog-prone^supine-right-enter
-#BD87E05438E89D81
+npc-dog-prone^supine-right-enter-abby
 dog-player-planted-attack-leap-tell
 dog-facebite-kill
 embedded@2ed50(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
@@ -294,22 +294,22 @@ embedded@2ed50(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 }
 
 u64? npc-dog-prone^supine-left-enter
-#16BAB2E655B23D48
+rogue-dog-prone-kill
 dog-player-running-attack-long-leap-tell
 npc-dog-prone^supine-back-enter
 npc-dog-prone^supine-front-enter
-#36504E94B8D51B4E
-#5B523D43EA961815
+npc-dog-standing^supine-enter-abby
+rogue-dog-facebite-kill
 dog-facebite-kill-back
-#74A8F004C4D4A012
-#810BCF652947E6F2
-#83DFF7C4CB199CE0
-#872339CD436BD235
+npc-dog-prone^supine-left-enter-abby
+npc-dog-prone^supine-front-enter-abby
+npc-dog-prone^supine-back-enter-abby
+npc-dog-prone-struggle-abby
 dog-prone-kill
 npc-dog-standing^supine-enter
 npc-dog-prone-struggle
 npc-dog-prone^supine-right-enter
-#BD87E05438E89D81
+npc-dog-prone^supine-right-enter-abby
 dog-player-planted-attack-leap-tell
 dog-facebite-kill
 embedded@2e238(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
@@ -326,21 +326,21 @@ u16 npc-dog-prone^supine-left-enter
 npc-dog-prone^supine-left-enter
 npc-dog-prone^supine-back-enter
 npc-dog-prone^supine-back-enter
-#23BFEA11E7B99A8B
+npc-dog-prone-struggle-success-abby
 npc-dog-prone^supine-front-enter
 npc-dog-prone^supine-front-enter
-#36504E94B8D51B4E
-#74A8F004C4D4A012
-#74A8F004C4D4A012
-#810BCF652947E6F2
-#810BCF652947E6F2
-#83DFF7C4CB199CE0
-#83DFF7C4CB199CE0
+npc-dog-standing^supine-enter-abby
+npc-dog-prone^supine-left-enter-abby
+npc-dog-prone^supine-left-enter-abby
+npc-dog-prone^supine-front-enter-abby
+npc-dog-prone^supine-front-enter-abby
+npc-dog-prone^supine-back-enter-abby
+npc-dog-prone^supine-back-enter-abby
 npc-dog-standing^supine-enter
 npc-dog-prone^supine-right-enter
 npc-dog-prone^supine-right-enter
-#BD87E05438E89D81
-#BD87E05438E89D81
+npc-dog-prone^supine-right-enter-abby
+npc-dog-prone^supine-right-enter-abby
 npc-dog-prone-struggle-success
 embedded@31390(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_2;
@@ -356,30 +356,30 @@ embedded@31390(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 u64? npc-dog-prone^supine-left-enter
 npc-dog-prone^supine-back-enter
 npc-dog-prone^supine-front-enter
-#36504E94B8D51B4E
-#74A8F004C4D4A012
-#810BCF652947E6F2
-#83DFF7C4CB199CE0
+npc-dog-standing^supine-enter-abby
+npc-dog-prone^supine-left-enter-abby
+npc-dog-prone^supine-front-enter-abby
+npc-dog-prone^supine-back-enter-abby
 npc-dog-standing^supine-enter
 npc-dog-prone^supine-right-enter
-#BD87E05438E89D81
+npc-dog-prone^supine-right-enter-abby
 embedded@31d18(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return melee-fact-set-bool(arg_1, struggle-set-duration?, 1);
 }
 
 u16 npc-dog-prone^supine-left-enter
 npc-dog-prone^supine-back-enter
-#23BFEA11E7B99A8B
+npc-dog-prone-struggle-success-abby
 npc-dog-prone^supine-front-enter
-#36504E94B8D51B4E
-#74A8F004C4D4A012
-#810BCF652947E6F2
-#83DFF7C4CB199CE0
-#872339CD436BD235
+npc-dog-standing^supine-enter-abby
+npc-dog-prone^supine-left-enter-abby
+npc-dog-prone^supine-front-enter-abby
+npc-dog-prone^supine-back-enter-abby
+npc-dog-prone-struggle-abby
 npc-dog-standing^supine-enter
 npc-dog-prone-struggle
 npc-dog-prone^supine-right-enter
-#BD87E05438E89D81
+npc-dog-prone^supine-right-enter-abby
 npc-dog-prone-struggle-success
 embedded@2e2f8(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u64? var_0;
@@ -406,28 +406,28 @@ embedded@2e2f8(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? 
 u64? npc-dog-prone^supine-left-enter
 npc-dog-prone^supine-back-enter
 npc-dog-prone^supine-front-enter
-#36504E94B8D51B4E
-#74A8F004C4D4A012
-#810BCF652947E6F2
-#83DFF7C4CB199CE0
+npc-dog-standing^supine-enter-abby
+npc-dog-prone^supine-left-enter-abby
+npc-dog-prone^supine-front-enter-abby
+npc-dog-prone^supine-back-enter-abby
 npc-dog-standing^supine-enter
 npc-dog-prone^supine-right-enter
-#BD87E05438E89D81
+npc-dog-prone^supine-right-enter-abby
 embedded@2f828(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return fact-remove(arg_1, looping-struggle);
 }
 
 u16 npc-dog-prone^supine-left-enter
 npc-dog-prone^supine-back-enter
-#23BFEA11E7B99A8B
+npc-dog-prone-struggle-success-abby
 npc-dog-prone^supine-front-enter
-#36504E94B8D51B4E
-#74A8F004C4D4A012
-#810BCF652947E6F2
-#83DFF7C4CB199CE0
+npc-dog-standing^supine-enter-abby
+npc-dog-prone^supine-left-enter-abby
+npc-dog-prone^supine-front-enter-abby
+npc-dog-prone^supine-back-enter-abby
 npc-dog-standing^supine-enter
 npc-dog-prone^supine-right-enter
-#BD87E05438E89D81
+npc-dog-prone^supine-right-enter-abby
 npc-dog-prone-struggle-success
 embedded@30e68(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return 1;
@@ -436,11 +436,11 @@ embedded@30e68(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 f32 npc-dog-prone^supine-left-enter__melee-camera-info@7e30
 npc-dog-prone^supine-back-enter__melee-camera-info@7e30
 npc-dog-prone^supine-front-enter__melee-camera-info@7e30
-#74A8F004C4D4A012__melee-camera-info@7e30
-#810BCF652947E6F2__melee-camera-info@7e30
-#83DFF7C4CB199CE0__melee-camera-info@7e30
+npc-dog-prone^supine-left-enter-abby__melee-camera-info@7e30
+npc-dog-prone^supine-front-enter-abby__melee-camera-info@7e30
+npc-dog-prone^supine-back-enter-abby__melee-camera-info@7e30
 npc-dog-prone^supine-right-enter__melee-camera-info@7e30
-#BD87E05438E89D81__melee-camera-info@7e30
+npc-dog-prone^supine-right-enter-abby__melee-camera-info@7e30
 embedded@28620(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
     f32 var_2;
     if (player-is-prone?() && player-is-aiming?()) {
@@ -451,10 +451,10 @@ embedded@28620(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
     return var_2;
 }
 
-f32 #16BAB2E655B23D48__melee-attack@5f8__character-melee-info@5468__
-#16BAB2E655B23D48__character-melee-info@80c0
-#5B523D43EA961815__melee-attack@2118__character-melee-info@73e0__
-#5B523D43EA961815__character-melee-info@5e58
+f32 rogue-dog-prone-kill__melee-attack@5f8__character-melee-info@5468__
+rogue-dog-prone-kill__character-melee-info@80c0
+rogue-dog-facebite-kill__melee-attack@2118__character-melee-info@73e0__
+rogue-dog-facebite-kill__character-melee-info@5e58
 dog-facebite-kill-back__melee-attack@24f8__character-melee-info@9228__
 dog-facebite-kill-back__character-melee-info@5ab8
 dog-prone-kill__melee-attack@3478__character-melee-info@5468__
@@ -473,8 +473,8 @@ embedded@29e90(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return var_0;
 }
 
-f32 #16BAB2E655B23D48__melee-attack@5f8
-#5B523D43EA961815__melee-attack@2118
+f32 rogue-dog-prone-kill__melee-attack@5f8
+rogue-dog-facebite-kill__melee-attack@2118
 dog-facebite-kill-back__melee-attack@24f8
 dog-prone-kill__melee-attack@3478
 dog-facebite-kill__melee-attack@4dc0
@@ -488,8 +488,8 @@ embedded@293d8(u64? arg_0, u64? arg_1, u64? arg_2) {
     return var_1;
 }
 
-f32 #16BAB2E655B23D48
-#5B523D43EA961815
+f32 rogue-dog-prone-kill
+rogue-dog-facebite-kill
 dog-facebite-kill-back
 dog-prone-kill
 dog-facebite-kill
@@ -503,19 +503,19 @@ embedded@25058(u64? arg_0, u64? arg_1, u64? arg_2) {
     return var_1;
 }
 
-u64? #16BAB2E655B23D48__start-func-array@84e8
+u64? rogue-dog-prone-kill__start-func-array@84e8
 embedded@2f420(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
     u64? var_0 = player-is-prone?();
     if (!var_0) {
         melee-debug-text-file-line-fail("(player-is-prone?)", "t2r/src/game/scriptx/melee/npc-standing/npc-dog.dcx", 2087);
     }
-    u64? var_1 = #329DF6617C39EA76();
+    u64? var_1 = rogue-mode-finisher();
     melee-debug-text-file-line-fail("(rogue-mode-finisher)", "t2r/src/game/scriptx/melee/npc-standing/npc-dog.dcx", 2088);
     return var_0 && var_1 && var_1;
 }
 
-u64? #16BAB2E655B23D48
-#5B523D43EA961815
+u64? rogue-dog-prone-kill
+rogue-dog-facebite-kill
 embedded@2e8a0(u64? arg_0, u64? arg_1, string arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
     u64? var_0 = character-melee-event-active?(arg_2, 211, 0);
     if (!!var_0) {
@@ -525,8 +525,8 @@ embedded@2e8a0(u64? arg_0, u64? arg_1, string arg_2, u64? arg_3, u64? arg_4, u64
     return !var_0 && 1 && 1;
 }
 
-u16 #16BAB2E655B23D48
-#5B523D43EA961815
+u16 rogue-dog-prone-kill
+rogue-dog-facebite-kill
 dog-facebite-kill-back
 dog-prone-kill
 dog-facebite-kill
@@ -570,8 +570,8 @@ embedded@85a8(i64 arg_0, i64 arg_1, i64 arg_2, u64? arg_3, u64? arg_4, u64? arg_
     return var_9;
 }
 
-u16 #16BAB2E655B23D48__melee-event-list@51e8
-#5B523D43EA961815__melee-event-list@7a78
+u16 rogue-dog-prone-kill__melee-event-list@51e8
+rogue-dog-facebite-kill__melee-event-list@7a78
 dog-facebite-kill-back__melee-event-list@8e70
 dog-prone-kill__melee-event-list@9210
 dog-facebite-kill__melee-event-list@51a0
@@ -588,16 +588,16 @@ embedded@2f6d0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return var_1;
 }
 
-u64? #16BAB2E655B23D48
+u64? rogue-dog-prone-kill
 embedded@32368(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     if (is-player?(arg_2)) {
         send-event(synced-finisher-v-player, ss-promote-death-hints, boxed_symbol(arg_1));
     }
-    return log-event("melee-npc-finisher", 1, string-debug(#16BAB2E655B23D48), 0, 0);
+    return log-event("melee-npc-finisher", 1, string-debug(rogue-dog-prone-kill), 0, 0);
 }
 
-u64? #16BAB2E655B23D48
-#5B523D43EA961815
+u64? rogue-dog-prone-kill
+rogue-dog-facebite-kill
 dog-facebite-kill-back
 dog-prone-kill
 dog-facebite-kill
@@ -605,8 +605,8 @@ embedded@2ffa8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return is-player?(arg_2);
 }
 
-u64? #16BAB2E655B23D48
-#5B523D43EA961815
+u64? rogue-dog-prone-kill
+rogue-dog-facebite-kill
 dog-facebite-kill-back
 dog-prone-kill
 dog-facebite-kill
@@ -620,8 +620,8 @@ embedded@2e350(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return play-melee-facial-gesture(arg_2, 8, var_0, 0.10);
 }
 
-u64? #16BAB2E655B23D48
-#5B523D43EA961815
+u64? rogue-dog-prone-kill
+rogue-dog-facebite-kill
 dog-facebite-kill-back
 dog-prone-kill
 dog-facebite-kill
@@ -635,8 +635,8 @@ embedded@30f00(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return var_0 && var_1 && var_1;
 }
 
-u64? #16BAB2E655B23D48
-#5B523D43EA961815
+u64? rogue-dog-prone-kill
+rogue-dog-facebite-kill
 dog-facebite-kill-back
 dog-prone-kill
 dog-facebite-kill
@@ -650,8 +650,8 @@ embedded@2eb60(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return play-melee-facial-gesture(arg_2, 12, var_0, 0.10);
 }
 
-u64? #16BAB2E655B23D48
-#5B523D43EA961815
+u64? rogue-dog-prone-kill
+rogue-dog-facebite-kill
 dog-facebite-kill-back
 dog-prone-kill
 dog-facebite-kill
@@ -665,8 +665,8 @@ embedded@30d60(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return var_0 && var_1 && var_1;
 }
 
-u64? #16BAB2E655B23D48
-#5B523D43EA961815
+u64? rogue-dog-prone-kill
+rogue-dog-facebite-kill
 dog-facebite-kill-back
 dog-prone-kill
 dog-facebite-kill
@@ -680,8 +680,8 @@ embedded@32f68(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return play-melee-facial-gesture(arg_2, 28, var_0, 0.10);
 }
 
-u64? #16BAB2E655B23D48
-#5B523D43EA961815
+u64? rogue-dog-prone-kill
+rogue-dog-facebite-kill
 dog-facebite-kill-back
 dog-prone-kill
 dog-facebite-kill
@@ -695,7 +695,7 @@ embedded@31600(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return var_0 && var_1 && var_1;
 }
 
-u16 #16BAB2E655B23D48
+u16 rogue-dog-prone-kill
 dog-prone-kill
 embedded@30ad8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_3;
@@ -707,8 +707,8 @@ embedded@30ad8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return var_3;
 }
 
-u16 #16BAB2E655B23D48
-#5B523D43EA961815
+u16 rogue-dog-prone-kill
+rogue-dog-facebite-kill
 dog-facebite-kill-back
 dog-prone-kill
 dog-facebite-kill
@@ -723,8 +723,8 @@ embedded@300c0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return var_2;
 }
 
-u16 #16BAB2E655B23D48
-#5B523D43EA961815
+u16 rogue-dog-prone-kill
+rogue-dog-facebite-kill
 dog-facebite-kill-back
 dog-prone-kill
 dog-facebite-kill
@@ -738,8 +738,8 @@ embedded@2ec10(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return var_1;
 }
 
-u16 #16BAB2E655B23D48
-#5B523D43EA961815
+u16 rogue-dog-prone-kill
+rogue-dog-facebite-kill
 dog-facebite-kill-back
 dog-prone-kill
 dog-facebite-kill
@@ -754,8 +754,8 @@ embedded@2fed8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return var_3;
 }
 
-u16 #16BAB2E655B23D48
-#5B523D43EA961815
+u16 rogue-dog-prone-kill
+rogue-dog-facebite-kill
 dog-facebite-kill-back
 dog-prone-kill
 dog-facebite-kill
@@ -770,8 +770,8 @@ embedded@30a80(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return var_3;
 }
 
-u16 #16BAB2E655B23D48
-#5B523D43EA961815
+u16 rogue-dog-prone-kill
+rogue-dog-facebite-kill
 dog-facebite-kill-back
 dog-prone-kill
 dog-facebite-kill
@@ -786,7 +786,7 @@ embedded@30000(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return var_3;
 }
 
-u16 #16BAB2E655B23D48
+u16 rogue-dog-prone-kill
 dog-pulldown-attack-intro
 dog-pulldown-attack
 dog-pulldown-attack
@@ -795,9 +795,9 @@ dog-down-intro
 dog-down-attack
 dog-down-attack
 dog-down-attack
-#5B523D43EA961815
+rogue-dog-facebite-kill
 dog-facebite-kill-back
-#872339CD436BD235
+npc-dog-prone-struggle-abby
 dog-prone-kill
 npc-dog-prone-struggle
 dog-facebite-kill
@@ -811,8 +811,8 @@ embedded@2d6f8(u64? arg_0, u64? arg_1, sid arg_2, u64? arg_3, u64? arg_4, u64? a
     return var_0;
 }
 
-u64? #16BAB2E655B23D48
-#5B523D43EA961815
+u64? rogue-dog-prone-kill
+rogue-dog-facebite-kill
 dog-facebite-kill-back
 dog-prone-kill
 dog-facebite-kill
@@ -825,12 +825,12 @@ embedded@2f9b8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     );
 }
 
-u64? #16BAB2E655B23D48
-#16BAB2E655B23D48
-#16BAB2E655B23D48
-#5B523D43EA961815
-#5B523D43EA961815
-#5B523D43EA961815
+u64? rogue-dog-prone-kill
+rogue-dog-prone-kill
+rogue-dog-prone-kill
+rogue-dog-facebite-kill
+rogue-dog-facebite-kill
+rogue-dog-facebite-kill
 dog-facebite-kill-back
 dog-facebite-kill-back
 dog-facebite-kill-back
@@ -844,8 +844,8 @@ embedded@30470(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return is-npc?(arg_2) && is-npc?(arg_1) && !npc-is-buddy?(arg_1);
 }
 
-u64? #16BAB2E655B23D48
-#5B523D43EA961815
+u64? rogue-dog-prone-kill
+rogue-dog-facebite-kill
 dog-facebite-kill-back
 dog-prone-kill
 dog-facebite-kill
@@ -853,8 +853,8 @@ embedded@2f4d8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return !is-player?(arg_2);
 }
 
-u64? #16BAB2E655B23D48
-#5B523D43EA961815
+u64? rogue-dog-prone-kill
+rogue-dog-facebite-kill
 dog-facebite-kill-back
 dog-prone-kill
 dog-facebite-kill
@@ -862,25 +862,25 @@ embedded@2e750(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return !character-in-melee-move?(arg_11, arg_1) && !is-player?(arg_2);
 }
 
-u64? #16BAB2E655B23D48
+u64? rogue-dog-prone-kill
 dog-leap-attack-left-hit
 dog-leap-attack-back-hit
-#51AE63346A0B30A7
-#5B523D43EA961815
+dog-leap-attack-right-hit-abby
+rogue-dog-facebite-kill
 dog-facebite-kill-back
-#91E185FCC0279B20
+dog-leap-attack-front-hit-abby
 dog-prone-kill
-#B13B0B2CFDF29D5E
+dog-leap-attack-left-hit-abby
 dog-leap-attack-right-hit
 dog-leap-attack-front-hit
-#F2D3A519017BBE3C
+dog-leap-attack-back-hit-abby
 dog-facebite-kill
 embedded@30f58(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return !character-in-melee-move?(arg_11, arg_2);
 }
 
-u16 #16BAB2E655B23D48
-#5B523D43EA961815
+u16 rogue-dog-prone-kill
+rogue-dog-facebite-kill
 dog-facebite-kill-back
 dog-prone-kill
 dog-facebite-kill
@@ -895,8 +895,8 @@ embedded@2d928(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return var_1;
 }
 
-u64? #16BAB2E655B23D48
-#5B523D43EA961815
+u64? rogue-dog-prone-kill
+rogue-dog-facebite-kill
 dog-facebite-kill-back
 dog-prone-kill
 dog-facebite-kill
@@ -904,8 +904,8 @@ embedded@32c00(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return !is-npc?(arg_2) && is-npc?(arg_1) && !npc-is-buddy?(arg_1);
 }
 
-u16 #16BAB2E655B23D48
-#5B523D43EA961815
+u16 rogue-dog-prone-kill
+rogue-dog-facebite-kill
 dog-facebite-kill-back
 dog-prone-kill
 dog-facebite-kill
@@ -919,13 +919,13 @@ embedded@32a28(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return var_1;
 }
 
-u64? #16BAB2E655B23D48
-#23BFEA11E7B99A8B__melee-event-list@7710
-#23BFEA11E7B99A8B
-#5B523D43EA961815
+u64? rogue-dog-prone-kill
+npc-dog-prone-struggle-success-abby__melee-event-list@7710
+npc-dog-prone-struggle-success-abby
+rogue-dog-facebite-kill
 dog-facebite-kill-back
-#872339CD436BD235
-#872339CD436BD235
+npc-dog-prone-struggle-abby
+npc-dog-prone-struggle-abby
 dog-prone-kill
 npc-dog-prone-struggle
 npc-dog-prone-struggle
@@ -936,8 +936,8 @@ embedded@2dd58(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return !is-camera-animated?();
 }
 
-u64? #16BAB2E655B23D48
-#5B523D43EA961815
+u64? rogue-dog-prone-kill
+rogue-dog-facebite-kill
 dog-facebite-kill-back
 dog-prone-kill
 dog-facebite-kill
@@ -1020,7 +1020,7 @@ embedded@7a90(i64 arg_0, i64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg
     u16 var_2;
     if (arg_0 == arg_1 && ((var_0 * 30.00) - var_1) > 2.00) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D("TELL INTERUPTED: interupted by %f frames", (var_0 * 30.00) - var_1), 19);
+            display(dc:format("TELL INTERUPTED: interupted by %f frames", (var_0 * 30.00) - var_1), 19);
         }
         var_2 = melee-fact-set-time(arg_0, last-time-tell-interupted);
     } else {
@@ -1390,13 +1390,13 @@ embedded@2df40(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return player-is-prone?() && !character-is-dead?(arg_1) && is-behind?(get-object-locator(arg_2), get-object-locator(arg_1), 2, 90.00) && distance-y-between-objects(arg_1, arg_2) < 1.00;
 }
 
-f32 #23BFEA11E7B99A8B__character-melee-info@8368
+f32 npc-dog-prone-struggle-success-abby__character-melee-info@8368
 npc-dog-prone-struggle-success__character-melee-info@65c0
 embedded@20b38(u64? arg_0, u64? arg_1, u64? arg_2) {
     return 0.50;
 }
 
-u64? #23BFEA11E7B99A8B__start-func-array@8a38
+u64? npc-dog-prone-struggle-success-abby__start-func-array@8a38
 npc-dog-prone-struggle-success__start-func-array@8a38
 embedded@30118(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
     u64? var_0 = has-hyper-armor?(arg_2);
@@ -1406,7 +1406,7 @@ embedded@30118(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return !var_0 || 0 && 0 && against-wall-relative?(arg_8, point-sub(get-object-position(arg_2), get-object-position(arg_1)), 0, 2.00, 0.00, arg_13, 0, 1);
 }
 
-u16 #23BFEA11E7B99A8B
+u16 npc-dog-prone-struggle-success-abby
 npc-dog-prone-struggle-success
 embedded@62a0(i64 arg_0, i64 arg_1, i64 arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
     if (0 > 0 && !is-player?(arg_0)) {
@@ -1436,14 +1436,14 @@ embedded@62a0(i64 arg_0, i64 arg_1, i64 arg_2, u64? arg_3, u64? arg_4, u64? arg_
     return var_2;
 }
 
-u64? #23BFEA11E7B99A8B
+u64? npc-dog-prone-struggle-success-abby
 npc-dog-prone-struggle-success
 embedded@2fd80(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     melee-fact-set-time(arg_1, dog-last-hit);
     return melee-fact-set-bool(arg_1, dog-valid-to-strafe-outer-wait, 1);
 }
 
-u16 #23BFEA11E7B99A8B
+u16 npc-dog-prone-struggle-success-abby
 npc-dog-prone-struggle-success
 embedded@2d1e8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_1;
@@ -1455,7 +1455,7 @@ embedded@2d1e8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return var_1;
 }
 
-u64? #23BFEA11E7B99A8B
+u64? npc-dog-prone-struggle-success-abby
 npc-dog-prone-struggle-success
 embedded@2eff0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     invalidate-single-melee-command-queue(arg_2, melee-attack);
@@ -1468,13 +1468,13 @@ embedded@2eff0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return joypad-disable-commands-timed(0.00, evade, evade-start, evade-pre, evade-release, evade-climb);
 }
 
-u64? #23BFEA11E7B99A8B
+u64? npc-dog-prone-struggle-success-abby
 npc-dog-prone-struggle-success
 embedded@2dac8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return melee-fact-set-time(arg_2, last-struggle-success);
 }
 
-u64? #23BFEA11E7B99A8B
+u64? npc-dog-prone-struggle-success-abby
 npc-dog-prone-struggle-success
 embedded@331d0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     foreach (u64? var_2 : all-buddy-npcs) {
@@ -1808,13 +1808,13 @@ dog-leap-attack-long-arch
 embedded@306b8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_1;
     if (fact-exists?(arg_1, hit-reaction-abort-frame)) {
-        if (!(*(i32*)(*(lookup-symbol(#91E185FCC0279B20, melee-attack) + 296) + 128) == 0)) {
-            var_1 = melee-fact-set-int(arg_1, hit-reaction-abort-frame, (i32)round-float-up(((f32)melee-fact-get-int(arg_1, hit-reaction-abort-frame) + (f32)*(i32*)(*(lookup-symbol(#91E185FCC0279B20, melee-attack) + 296) + 128)) / 2.00));
+        if (!(*(i32*)(*(lookup-symbol(dog-leap-attack-front-hit-abby, melee-attack) + 296) + 128) == 0)) {
+            var_1 = melee-fact-set-int(arg_1, hit-reaction-abort-frame, (i32)round-float-up(((f32)melee-fact-get-int(arg_1, hit-reaction-abort-frame) + (f32)*(i32*)(*(lookup-symbol(dog-leap-attack-front-hit-abby, melee-attack) + 296) + 128)) / 2.00));
         } else {
             var_1 = 0;
         }
     } else {
-        var_1 = melee-fact-set-int(arg_1, hit-reaction-abort-frame, *(i32*)(*(lookup-symbol(#91E185FCC0279B20, melee-attack) + 296) + 128));
+        var_1 = melee-fact-set-int(arg_1, hit-reaction-abort-frame, *(i32*)(*(lookup-symbol(dog-leap-attack-front-hit-abby, melee-attack) + 296) + 128));
     }
     return var_1;
 }
@@ -1824,13 +1824,13 @@ dog-leap-attack-long-arch
 embedded@30710(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_1;
     if (fact-exists?(arg_1, hit-reaction-abort-frame)) {
-        if (!(*(i32*)(*(lookup-symbol(#B13B0B2CFDF29D5E, melee-attack) + 296) + 128) == 0)) {
-            var_1 = melee-fact-set-int(arg_1, hit-reaction-abort-frame, (i32)round-float-up(((f32)melee-fact-get-int(arg_1, hit-reaction-abort-frame) + (f32)*(i32*)(*(lookup-symbol(#B13B0B2CFDF29D5E, melee-attack) + 296) + 128)) / 2.00));
+        if (!(*(i32*)(*(lookup-symbol(dog-leap-attack-left-hit-abby, melee-attack) + 296) + 128) == 0)) {
+            var_1 = melee-fact-set-int(arg_1, hit-reaction-abort-frame, (i32)round-float-up(((f32)melee-fact-get-int(arg_1, hit-reaction-abort-frame) + (f32)*(i32*)(*(lookup-symbol(dog-leap-attack-left-hit-abby, melee-attack) + 296) + 128)) / 2.00));
         } else {
             var_1 = 0;
         }
     } else {
-        var_1 = melee-fact-set-int(arg_1, hit-reaction-abort-frame, *(i32*)(*(lookup-symbol(#B13B0B2CFDF29D5E, melee-attack) + 296) + 128));
+        var_1 = melee-fact-set-int(arg_1, hit-reaction-abort-frame, *(i32*)(*(lookup-symbol(dog-leap-attack-left-hit-abby, melee-attack) + 296) + 128));
     }
     return var_1;
 }
@@ -1840,13 +1840,13 @@ dog-leap-attack-long-arch
 embedded@30cd8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_1;
     if (fact-exists?(arg_1, hit-reaction-abort-frame)) {
-        if (!(*(i32*)(*(lookup-symbol(#51AE63346A0B30A7, melee-attack) + 296) + 128) == 0)) {
-            var_1 = melee-fact-set-int(arg_1, hit-reaction-abort-frame, (i32)round-float-up(((f32)melee-fact-get-int(arg_1, hit-reaction-abort-frame) + (f32)*(i32*)(*(lookup-symbol(#51AE63346A0B30A7, melee-attack) + 296) + 128)) / 2.00));
+        if (!(*(i32*)(*(lookup-symbol(dog-leap-attack-right-hit-abby, melee-attack) + 296) + 128) == 0)) {
+            var_1 = melee-fact-set-int(arg_1, hit-reaction-abort-frame, (i32)round-float-up(((f32)melee-fact-get-int(arg_1, hit-reaction-abort-frame) + (f32)*(i32*)(*(lookup-symbol(dog-leap-attack-right-hit-abby, melee-attack) + 296) + 128)) / 2.00));
         } else {
             var_1 = 0;
         }
     } else {
-        var_1 = melee-fact-set-int(arg_1, hit-reaction-abort-frame, *(i32*)(*(lookup-symbol(#51AE63346A0B30A7, melee-attack) + 296) + 128));
+        var_1 = melee-fact-set-int(arg_1, hit-reaction-abort-frame, *(i32*)(*(lookup-symbol(dog-leap-attack-right-hit-abby, melee-attack) + 296) + 128));
     }
     return var_1;
 }
@@ -1856,13 +1856,13 @@ dog-leap-attack-long-arch
 embedded@2fcb0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_1;
     if (fact-exists?(arg_1, hit-reaction-abort-frame)) {
-        if (!(*(i32*)(*(lookup-symbol(#F2D3A519017BBE3C, melee-attack) + 296) + 128) == 0)) {
-            var_1 = melee-fact-set-int(arg_1, hit-reaction-abort-frame, (i32)round-float-up(((f32)melee-fact-get-int(arg_1, hit-reaction-abort-frame) + (f32)*(i32*)(*(lookup-symbol(#F2D3A519017BBE3C, melee-attack) + 296) + 128)) / 2.00));
+        if (!(*(i32*)(*(lookup-symbol(dog-leap-attack-back-hit-abby, melee-attack) + 296) + 128) == 0)) {
+            var_1 = melee-fact-set-int(arg_1, hit-reaction-abort-frame, (i32)round-float-up(((f32)melee-fact-get-int(arg_1, hit-reaction-abort-frame) + (f32)*(i32*)(*(lookup-symbol(dog-leap-attack-back-hit-abby, melee-attack) + 296) + 128)) / 2.00));
         } else {
             var_1 = 0;
         }
     } else {
-        var_1 = melee-fact-set-int(arg_1, hit-reaction-abort-frame, *(i32*)(*(lookup-symbol(#F2D3A519017BBE3C, melee-attack) + 296) + 128));
+        var_1 = melee-fact-set-int(arg_1, hit-reaction-abort-frame, *(i32*)(*(lookup-symbol(dog-leap-attack-back-hit-abby, melee-attack) + 296) + 128));
     }
     return var_1;
 }
@@ -1952,13 +1952,13 @@ dog-leap-attack-long-arch
 embedded@30058(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_1;
     if (fact-exists?(arg_1, hit-reaction-abort-frame)) {
-        if (!(*(i32*)(*(lookup-symbol(#810BCF652947E6F2, melee-attack) + 296) + 128) == 0)) {
-            var_1 = melee-fact-set-int(arg_1, hit-reaction-abort-frame, (i32)round-float-up(((f32)melee-fact-get-int(arg_1, hit-reaction-abort-frame) + (f32)*(i32*)(*(lookup-symbol(#810BCF652947E6F2, melee-attack) + 296) + 128)) / 2.00));
+        if (!(*(i32*)(*(lookup-symbol(npc-dog-prone^supine-front-enter-abby, melee-attack) + 296) + 128) == 0)) {
+            var_1 = melee-fact-set-int(arg_1, hit-reaction-abort-frame, (i32)round-float-up(((f32)melee-fact-get-int(arg_1, hit-reaction-abort-frame) + (f32)*(i32*)(*(lookup-symbol(npc-dog-prone^supine-front-enter-abby, melee-attack) + 296) + 128)) / 2.00));
         } else {
             var_1 = 0;
         }
     } else {
-        var_1 = melee-fact-set-int(arg_1, hit-reaction-abort-frame, *(i32*)(*(lookup-symbol(#810BCF652947E6F2, melee-attack) + 296) + 128));
+        var_1 = melee-fact-set-int(arg_1, hit-reaction-abort-frame, *(i32*)(*(lookup-symbol(npc-dog-prone^supine-front-enter-abby, melee-attack) + 296) + 128));
     }
     return var_1;
 }
@@ -1968,13 +1968,13 @@ dog-leap-attack-long-arch
 embedded@32108(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_1;
     if (fact-exists?(arg_1, hit-reaction-abort-frame)) {
-        if (!(*(i32*)(*(lookup-symbol(#83DFF7C4CB199CE0, melee-attack) + 296) + 128) == 0)) {
-            var_1 = melee-fact-set-int(arg_1, hit-reaction-abort-frame, (i32)round-float-up(((f32)melee-fact-get-int(arg_1, hit-reaction-abort-frame) + (f32)*(i32*)(*(lookup-symbol(#83DFF7C4CB199CE0, melee-attack) + 296) + 128)) / 2.00));
+        if (!(*(i32*)(*(lookup-symbol(npc-dog-prone^supine-back-enter-abby, melee-attack) + 296) + 128) == 0)) {
+            var_1 = melee-fact-set-int(arg_1, hit-reaction-abort-frame, (i32)round-float-up(((f32)melee-fact-get-int(arg_1, hit-reaction-abort-frame) + (f32)*(i32*)(*(lookup-symbol(npc-dog-prone^supine-back-enter-abby, melee-attack) + 296) + 128)) / 2.00));
         } else {
             var_1 = 0;
         }
     } else {
-        var_1 = melee-fact-set-int(arg_1, hit-reaction-abort-frame, *(i32*)(*(lookup-symbol(#83DFF7C4CB199CE0, melee-attack) + 296) + 128));
+        var_1 = melee-fact-set-int(arg_1, hit-reaction-abort-frame, *(i32*)(*(lookup-symbol(npc-dog-prone^supine-back-enter-abby, melee-attack) + 296) + 128));
     }
     return var_1;
 }
@@ -1984,13 +1984,13 @@ dog-leap-attack-long-arch
 embedded@31490(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_1;
     if (fact-exists?(arg_1, hit-reaction-abort-frame)) {
-        if (!(*(i32*)(*(lookup-symbol(#BD87E05438E89D81, melee-attack) + 296) + 128) == 0)) {
-            var_1 = melee-fact-set-int(arg_1, hit-reaction-abort-frame, (i32)round-float-up(((f32)melee-fact-get-int(arg_1, hit-reaction-abort-frame) + (f32)*(i32*)(*(lookup-symbol(#BD87E05438E89D81, melee-attack) + 296) + 128)) / 2.00));
+        if (!(*(i32*)(*(lookup-symbol(npc-dog-prone^supine-right-enter-abby, melee-attack) + 296) + 128) == 0)) {
+            var_1 = melee-fact-set-int(arg_1, hit-reaction-abort-frame, (i32)round-float-up(((f32)melee-fact-get-int(arg_1, hit-reaction-abort-frame) + (f32)*(i32*)(*(lookup-symbol(npc-dog-prone^supine-right-enter-abby, melee-attack) + 296) + 128)) / 2.00));
         } else {
             var_1 = 0;
         }
     } else {
-        var_1 = melee-fact-set-int(arg_1, hit-reaction-abort-frame, *(i32*)(*(lookup-symbol(#BD87E05438E89D81, melee-attack) + 296) + 128));
+        var_1 = melee-fact-set-int(arg_1, hit-reaction-abort-frame, *(i32*)(*(lookup-symbol(npc-dog-prone^supine-right-enter-abby, melee-attack) + 296) + 128));
     }
     return var_1;
 }
@@ -2000,13 +2000,13 @@ dog-leap-attack-long-arch
 embedded@30528(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_1;
     if (fact-exists?(arg_1, hit-reaction-abort-frame)) {
-        if (!(*(i32*)(*(lookup-symbol(#74A8F004C4D4A012, melee-attack) + 296) + 128) == 0)) {
-            var_1 = melee-fact-set-int(arg_1, hit-reaction-abort-frame, (i32)round-float-up(((f32)melee-fact-get-int(arg_1, hit-reaction-abort-frame) + (f32)*(i32*)(*(lookup-symbol(#74A8F004C4D4A012, melee-attack) + 296) + 128)) / 2.00));
+        if (!(*(i32*)(*(lookup-symbol(npc-dog-prone^supine-left-enter-abby, melee-attack) + 296) + 128) == 0)) {
+            var_1 = melee-fact-set-int(arg_1, hit-reaction-abort-frame, (i32)round-float-up(((f32)melee-fact-get-int(arg_1, hit-reaction-abort-frame) + (f32)*(i32*)(*(lookup-symbol(npc-dog-prone^supine-left-enter-abby, melee-attack) + 296) + 128)) / 2.00));
         } else {
             var_1 = 0;
         }
     } else {
-        var_1 = melee-fact-set-int(arg_1, hit-reaction-abort-frame, *(i32*)(*(lookup-symbol(#74A8F004C4D4A012, melee-attack) + 296) + 128));
+        var_1 = melee-fact-set-int(arg_1, hit-reaction-abort-frame, *(i32*)(*(lookup-symbol(npc-dog-prone^supine-left-enter-abby, melee-attack) + 296) + 128));
     }
     return var_1;
 }
@@ -2016,13 +2016,13 @@ dog-leap-attack-long-arch
 embedded@31540(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_1;
     if (fact-exists?(arg_1, hit-reaction-abort-frame)) {
-        if (!(*(i32*)(*(lookup-symbol(#36504E94B8D51B4E, melee-attack) + 296) + 128) == 0)) {
-            var_1 = melee-fact-set-int(arg_1, hit-reaction-abort-frame, (i32)round-float-up(((f32)melee-fact-get-int(arg_1, hit-reaction-abort-frame) + (f32)*(i32*)(*(lookup-symbol(#36504E94B8D51B4E, melee-attack) + 296) + 128)) / 2.00));
+        if (!(*(i32*)(*(lookup-symbol(npc-dog-standing^supine-enter-abby, melee-attack) + 296) + 128) == 0)) {
+            var_1 = melee-fact-set-int(arg_1, hit-reaction-abort-frame, (i32)round-float-up(((f32)melee-fact-get-int(arg_1, hit-reaction-abort-frame) + (f32)*(i32*)(*(lookup-symbol(npc-dog-standing^supine-enter-abby, melee-attack) + 296) + 128)) / 2.00));
         } else {
             var_1 = 0;
         }
     } else {
-        var_1 = melee-fact-set-int(arg_1, hit-reaction-abort-frame, *(i32*)(*(lookup-symbol(#36504E94B8D51B4E, melee-attack) + 296) + 128));
+        var_1 = melee-fact-set-int(arg_1, hit-reaction-abort-frame, *(i32*)(*(lookup-symbol(npc-dog-standing^supine-enter-abby, melee-attack) + 296) + 128));
     }
     return var_1;
 }
@@ -2351,7 +2351,7 @@ embedded@57b0(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
                 if (player-in-meatshield?() && player-get-meatshield() == arg_2) {
                     if (is-in-front?(get-object-locator(arg_2), get-object-locator(arg_1), 2, 180.00) && is-in-front?(get-object-locator(arg_1), get-object-locator(arg_2), 2, 180.00)) {
                         if (!is-final-build?()) {
-                            display(#5445173390656D6D("END PLAYER MEATSHIELD DUE TO CLICKER MEATSHIELD CASE"), 19);
+                            display(dc:format("END PLAYER MEATSHIELD DUE TO CLICKER MEATSHIELD CASE"), 19);
                         }
                         log-event("clicker-ate-meatshield-npc", 1, "", 0, 0);
                         player-end-meatshield();
@@ -2811,12 +2811,12 @@ embedded@2db78(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 
 u64? dog-leap-attack-left-hit
 dog-leap-attack-back-hit
-#51AE63346A0B30A7
-#91E185FCC0279B20
-#B13B0B2CFDF29D5E
+dog-leap-attack-right-hit-abby
+dog-leap-attack-front-hit-abby
+dog-leap-attack-left-hit-abby
 dog-leap-attack-right-hit
 dog-leap-attack-front-hit
-#F2D3A519017BBE3C
+dog-leap-attack-back-hit-abby
 embedded@31700(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
     u64? var_0 = has-hyper-armor?(arg_2);
     if (!!var_0) {
@@ -2829,12 +2829,12 @@ embedded@31700(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 
 u16 dog-leap-attack-left-hit__melee-event-list@8750
 dog-leap-attack-back-hit__melee-event-list@5cf0
-#51AE63346A0B30A7__melee-event-list@8750
-#91E185FCC0279B20__melee-event-list@8750
-#B13B0B2CFDF29D5E__melee-event-list@8750
+dog-leap-attack-right-hit-abby__melee-event-list@8750
+dog-leap-attack-front-hit-abby__melee-event-list@8750
+dog-leap-attack-left-hit-abby__melee-event-list@8750
 dog-leap-attack-right-hit__melee-event-list@8750
 dog-leap-attack-front-hit__melee-event-list@8750
-#F2D3A519017BBE3C__melee-event-list@5cf0
+dog-leap-attack-back-hit-abby__melee-event-list@5cf0
 embedded@2e7b8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_3;
     if (!(1) && 1 || is-player?(arg_1) && is-player?(arg_2)) {
@@ -2847,12 +2847,12 @@ embedded@2e7b8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 
 u16 dog-leap-attack-left-hit
 dog-leap-attack-back-hit
-#51AE63346A0B30A7
-#91E185FCC0279B20
-#B13B0B2CFDF29D5E
+dog-leap-attack-right-hit-abby
+dog-leap-attack-front-hit-abby
+dog-leap-attack-left-hit-abby
 dog-leap-attack-right-hit
 dog-leap-attack-front-hit
-#F2D3A519017BBE3C
+dog-leap-attack-back-hit-abby
 embedded@2fa70(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_3;
     if (!(1) && 1 || is-player?(arg_1) && is-player?(arg_2)) {
@@ -2865,12 +2865,12 @@ embedded@2fa70(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 
 u16 dog-leap-attack-left-hit
 dog-leap-attack-back-hit
-#51AE63346A0B30A7
-#91E185FCC0279B20
-#B13B0B2CFDF29D5E
+dog-leap-attack-right-hit-abby
+dog-leap-attack-front-hit-abby
+dog-leap-attack-left-hit-abby
 dog-leap-attack-right-hit
 dog-leap-attack-front-hit
-#F2D3A519017BBE3C
+dog-leap-attack-back-hit-abby
 embedded@2e6b8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_3;
     if (!(1) && 1 || is-player?(arg_1) && is-player?(arg_2)) {
@@ -2883,12 +2883,12 @@ embedded@2e6b8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 
 u16 dog-leap-attack-left-hit
 dog-leap-attack-back-hit
-#51AE63346A0B30A7
-#91E185FCC0279B20
-#B13B0B2CFDF29D5E
+dog-leap-attack-right-hit-abby
+dog-leap-attack-front-hit-abby
+dog-leap-attack-left-hit-abby
 dog-leap-attack-right-hit
 dog-leap-attack-front-hit
-#F2D3A519017BBE3C
+dog-leap-attack-back-hit-abby
 embedded@2f358(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_3;
     if (!(1) && 1 || is-player?(arg_1) && is-player?(arg_2)) {
@@ -2901,12 +2901,12 @@ embedded@2f358(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 
 u16 dog-leap-attack-left-hit
 dog-leap-attack-back-hit
-#51AE63346A0B30A7
-#91E185FCC0279B20
-#B13B0B2CFDF29D5E
+dog-leap-attack-right-hit-abby
+dog-leap-attack-front-hit-abby
+dog-leap-attack-left-hit-abby
 dog-leap-attack-right-hit
 dog-leap-attack-front-hit
-#F2D3A519017BBE3C
+dog-leap-attack-back-hit-abby
 embedded@30418(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_3;
     if (!(1) && 1 || is-player?(arg_1) && is-player?(arg_2)) {
@@ -2919,12 +2919,12 @@ embedded@30418(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 
 u16 dog-leap-attack-left-hit
 dog-leap-attack-back-hit
-#51AE63346A0B30A7
-#91E185FCC0279B20
-#B13B0B2CFDF29D5E
+dog-leap-attack-right-hit-abby
+dog-leap-attack-front-hit-abby
+dog-leap-attack-left-hit-abby
 dog-leap-attack-right-hit
 dog-leap-attack-front-hit
-#F2D3A519017BBE3C
+dog-leap-attack-back-hit-abby
 embedded@32808(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_3;
     if (!(1) && 1 || is-player?(arg_1) && is-player?(arg_2)) {
@@ -2937,12 +2937,12 @@ embedded@32808(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 
 u16 dog-leap-attack-left-hit
 dog-leap-attack-back-hit
-#51AE63346A0B30A7
-#91E185FCC0279B20
-#B13B0B2CFDF29D5E
+dog-leap-attack-right-hit-abby
+dog-leap-attack-front-hit-abby
+dog-leap-attack-left-hit-abby
 dog-leap-attack-right-hit
 dog-leap-attack-front-hit
-#F2D3A519017BBE3C
+dog-leap-attack-back-hit-abby
 embedded@313f8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_3;
     if (!(1) && 1 || is-player?(arg_1) && is-player?(arg_2)) {
@@ -2955,12 +2955,12 @@ embedded@313f8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 
 u16 dog-leap-attack-left-hit
 dog-leap-attack-back-hit
-#51AE63346A0B30A7
-#91E185FCC0279B20
-#B13B0B2CFDF29D5E
+dog-leap-attack-right-hit-abby
+dog-leap-attack-front-hit-abby
+dog-leap-attack-left-hit-abby
 dog-leap-attack-right-hit
 dog-leap-attack-front-hit
-#F2D3A519017BBE3C
+dog-leap-attack-back-hit-abby
 embedded@32758(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_1;
     if (is-player?(arg_2)) {
@@ -2974,24 +2974,24 @@ embedded@32758(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 
 u64? dog-leap-attack-left-hit
 dog-leap-attack-back-hit
-#51AE63346A0B30A7
-#91E185FCC0279B20
-#B13B0B2CFDF29D5E
+dog-leap-attack-right-hit-abby
+dog-leap-attack-front-hit-abby
+dog-leap-attack-left-hit-abby
 dog-leap-attack-right-hit
 dog-leap-attack-front-hit
-#F2D3A519017BBE3C
+dog-leap-attack-back-hit-abby
 embedded@2ef30(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return debug-draw-locator(get-bf-from-cache(arg_9, 0), 1.00, 1.00, 0, 2.00, 0);
 }
 
 u64? dog-leap-attack-left-hit
 dog-leap-attack-back-hit
-#51AE63346A0B30A7
-#91E185FCC0279B20
-#B13B0B2CFDF29D5E
+dog-leap-attack-right-hit-abby
+dog-leap-attack-front-hit-abby
+dog-leap-attack-left-hit-abby
 dog-leap-attack-right-hit
 dog-leap-attack-front-hit
-#F2D3A519017BBE3C
+dog-leap-attack-back-hit-abby
 embedded@31db0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     log-event("dog-maul-no-struggle", 1, "", 0, 0);
     return melee-fact-set-time(arg_1, dog-last-hit);
@@ -2999,12 +2999,12 @@ embedded@31db0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 
 u64? dog-leap-attack-left-hit
 dog-leap-attack-back-hit
-#51AE63346A0B30A7
-#91E185FCC0279B20
-#B13B0B2CFDF29D5E
+dog-leap-attack-right-hit-abby
+dog-leap-attack-front-hit-abby
+dog-leap-attack-left-hit-abby
 dog-leap-attack-right-hit
 dog-leap-attack-front-hit
-#F2D3A519017BBE3C
+dog-leap-attack-back-hit-abby
 embedded@2e290(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     invalidate-single-melee-command-queue(arg_2, melee-attack);
     return joypad-disable-commands-timed(0.40, melee-attack);
@@ -3012,12 +3012,12 @@ embedded@2e290(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 
 u64? dog-leap-attack-left-hit
 dog-leap-attack-back-hit
-#51AE63346A0B30A7
-#91E185FCC0279B20
-#B13B0B2CFDF29D5E
+dog-leap-attack-right-hit-abby
+dog-leap-attack-front-hit-abby
+dog-leap-attack-left-hit-abby
 dog-leap-attack-right-hit
 dog-leap-attack-front-hit
-#F2D3A519017BBE3C
+dog-leap-attack-back-hit-abby
 embedded@2d560(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return holster-player-weapon(4, 1.00);
 }
@@ -3145,15 +3145,15 @@ embedded@312c0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 }
 
 u64? npc-dog-prone^supine-front-enter
-#810BCF652947E6F2
+npc-dog-prone^supine-front-enter-abby
 embedded@2dee8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
     return player-is-prone?() && !character-is-dead?(arg_1) && is-in-front?(get-object-locator(arg_2), get-object-locator(arg_1), 2, 90.00) && distance-y-between-objects(arg_1, arg_2) < 1.00;
 }
 
-u64? #36504E94B8D51B4E__start-func-array@7278
-#74A8F004C4D4A012__start-func-array@5ca8
-#810BCF652947E6F2__start-func-array@92e8
-#BD87E05438E89D81__start-func-array@8258
+u64? npc-dog-standing^supine-enter-abby__start-func-array@7278
+npc-dog-prone^supine-left-enter-abby__start-func-array@5ca8
+npc-dog-prone^supine-front-enter-abby__start-func-array@92e8
+npc-dog-prone^supine-right-enter-abby__start-func-array@8258
 embedded@30890(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
     u64? var_0 = has-hyper-armor?(arg_2);
     if (!!var_0) {
@@ -3162,7 +3162,7 @@ embedded@30890(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return !var_0 || 0 && 0 && against-wall-relative?(arg_8, point-sub(get-object-position(arg_2), get-object-position(arg_1)), 0, 2.00, 0.00, arg_13, 0, 1);
 }
 
-u64? #36504E94B8D51B4E
+u64? npc-dog-standing^supine-enter-abby
 embedded@32a80(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
     u64? var_1 = !(player-is-prone?());
     if (!var_1) {
@@ -3173,7 +3173,7 @@ embedded@32a80(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return var_1 && !var_2 && !var_2;
 }
 
-u16 #36504E94B8D51B4E
+u16 npc-dog-standing^supine-enter-abby
 npc-dog-standing^supine-enter
 embedded@319c8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     vignette-notify-complete(arg_2, 4);
@@ -3182,7 +3182,7 @@ embedded@319c8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     }
     u16 var_2;
     if (is-rogue-mode?()) {
-        var_2 = send-event(#7D70C7896B7D87D4, ss-reminders);
+        var_2 = send-event(player-grabbed-by-npc, ss-reminders);
     } else {
         var_2 = 0;
     }
@@ -3205,7 +3205,7 @@ embedded@2f8d8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return 1;
 }
 
-u64? #51AE63346A0B30A7__start-func-array@6260
+u64? dog-leap-attack-right-hit-abby__start-func-array@6260
 embedded@2e010(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
     return is-player-abby?(player) && !melee-fact-get-bool(arg_2, bayonet-finisher) && is-right?(get-object-locator(arg_2), get-object-locator(arg_1), 90.00) && not-on-slope?(arg_1, arg_2, 25.00) && set-cache-bound-frame(arg_13, alloc-bound-frame(
         get-object-position(arg_2),
@@ -3216,20 +3216,20 @@ embedded@2e010(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     ), 0);
 }
 
-u64? #5B523D43EA961815__start-func-array@8270
+u64? rogue-dog-facebite-kill__start-func-array@8270
 embedded@330c0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
-    return !player-is-prone?() && #329DF6617C39EA76();
+    return !player-is-prone?() && rogue-mode-finisher();
 }
 
-u64? #5B523D43EA961815
+u64? rogue-dog-facebite-kill
 embedded@2db20(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     if (is-player?(arg_2)) {
         send-event(synced-finisher-v-player, ss-promote-death-hints, boxed_symbol(arg_1));
     }
-    return log-event("melee-npc-finisher", 1, string-debug(#5B523D43EA961815), 0, 0);
+    return log-event("melee-npc-finisher", 1, string-debug(rogue-dog-facebite-kill), 0, 0);
 }
 
-u16 #5B523D43EA961815
+u16 rogue-dog-facebite-kill
 dog-facebite-kill-back
 dog-facebite-kill
 embedded@2e498(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
@@ -3551,7 +3551,7 @@ embedded@6550(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
                 if (player-in-meatshield?() && player-get-meatshield() == arg_2) {
                     if (is-in-front?(get-object-locator(arg_2), get-object-locator(arg_1), 2, 180.00) && is-in-front?(get-object-locator(arg_1), get-object-locator(arg_2), 2, 180.00)) {
                         if (!is-final-build?()) {
-                            display(#5445173390656D6D("END PLAYER MEATSHIELD DUE TO CLICKER MEATSHIELD CASE"), 19);
+                            display(dc:format("END PLAYER MEATSHIELD DUE TO CLICKER MEATSHIELD CASE"), 19);
                         }
                         log-event("clicker-ate-meatshield-npc", 1, "", 0, 0);
                         player-end-meatshield();
@@ -4001,7 +4001,7 @@ embedded@6550(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
 u64? dog-facebite-kill-back__start-func-array@7f08
 dog-facebite-kill__start-func-array@8f68
 embedded@32c58(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
-    return !player-is-prone?() && #BCC56A0BCEA8CC56();
+    return !player-is-prone?() && not-rogue-mode-finisher();
 }
 
 u64? dog-facebite-kill-back
@@ -4044,13 +4044,13 @@ embedded@2d4f8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return melee-fact-set-bool(arg_1, dog-valid-to-strafe-outer-wait, 1);
 }
 
-u64? #872339CD436BD235__melee-attack@3098__start-func-array@6860__
+u64? npc-dog-prone-struggle-abby__melee-attack@3098__start-func-array@6860__
 npc-dog-prone-struggle__melee-attack@3858__start-func-array@6860__
 embedded@2e168(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
     return set-cache-bound-frame(arg_13, get-object-locator(arg_2), 0);
 }
 
-u64? #872339CD436BD235__melee-attack@3098
+u64? npc-dog-prone-struggle-abby__melee-attack@3098
 npc-dog-prone-struggle__melee-attack@3858
 embedded@31b48(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
     u64? var_0 = get-object-distance(arg_1, arg_2);
@@ -4076,7 +4076,7 @@ embedded@31b48(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? 
     return var_1 && !var_8 && !var_8;
 }
 
-u16 #872339CD436BD235
+u16 npc-dog-prone-struggle-abby
 npc-dog-prone-struggle
 embedded@7568(i64 arg_0, i64 arg_1, i64 arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
     player-reset-button-mash();
@@ -4097,13 +4097,13 @@ embedded@7568(i64 arg_0, i64 arg_1, i64 arg_2, u64? arg_3, u64? arg_4, u64? arg_
     return var_0;
 }
 
-u64? #872339CD436BD235__melee-event-list@7ba8
+u64? npc-dog-prone-struggle-abby__melee-event-list@7ba8
 npc-dog-prone-struggle__melee-event-list@9028
 embedded@2e558(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return melee-fact-set-int(arg_1, mash-count, 0);
 }
 
-u64? #872339CD436BD235
+u64? npc-dog-prone-struggle-abby
 npc-dog-prone-struggle
 embedded@2d070(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     if (!0) {
@@ -4114,8 +4114,8 @@ embedded@2d070(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return 0 && var_0 && var_0;
 }
 
-u16 #872339CD436BD235
-#872339CD436BD235
+u16 npc-dog-prone-struggle-abby
+npc-dog-prone-struggle-abby
 npc-dog-prone-struggle
 npc-dog-prone-struggle
 embedded@31ba0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
@@ -4130,15 +4130,15 @@ embedded@31ba0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return var_1;
 }
 
-u64? #872339CD436BD235
-#872339CD436BD235
+u64? npc-dog-prone-struggle-abby
+npc-dog-prone-struggle-abby
 npc-dog-prone-struggle
 npc-dog-prone-struggle
 embedded@30c10(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return joypad-command-active?(melee-repeat, 6);
 }
 
-u64? #872339CD436BD235
+u64? npc-dog-prone-struggle-abby
 npc-dog-prone-struggle
 embedded@2f300(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u64? var_1;
@@ -4152,12 +4152,12 @@ embedded@2f300(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return var_1;
 }
 
-u64? #872339CD436BD235
+u64? npc-dog-prone-struggle-abby
 embedded@2ecf8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
-    return log-event("melee-npc-standing-grab", 1, string-debug(#872339CD436BD235), 0, 0);
+    return log-event("melee-npc-standing-grab", 1, string-debug(npc-dog-prone-struggle-abby), 0, 0);
 }
 
-u16 #872339CD436BD235
+u16 npc-dog-prone-struggle-abby
 npc-dog-prone-struggle
 embedded@2d298(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_1;
@@ -4169,7 +4169,7 @@ embedded@2d298(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return var_1;
 }
 
-u64? #872339CD436BD235
+u64? npc-dog-prone-struggle-abby
 npc-dog-prone-struggle
 embedded@2de18(u64? arg_0, u64? arg_1, i64 arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     if (0 && 0) {
@@ -4182,7 +4182,7 @@ embedded@2de18(u64? arg_0, u64? arg_1, i64 arg_2, u64? arg_3, u64? arg_4, u64? a
     }
 }
 
-u16 #872339CD436BD235
+u16 npc-dog-prone-struggle-abby
 npc-dog-prone-struggle
 embedded@32950(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_1;
@@ -4194,7 +4194,7 @@ embedded@32950(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return var_1;
 }
 
-u16 #872339CD436BD235
+u16 npc-dog-prone-struggle-abby
 npc-dog-prone-struggle
 embedded@32af8(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_1;
@@ -4226,24 +4226,24 @@ embedded@32af8(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
     return var_1;
 }
 
-u16 #872339CD436BD235
+u16 npc-dog-prone-struggle-abby
 embedded@323c0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_3;
     if (0 && clicker-struggle-mashable?(arg_1, arg_2) && is-player?(arg_2) && !melee-fact-get-bool(arg_2, forced-struggle-death)) {
-        var_3 = melee-struggle-hud-placement(#872339CD436BD235, arg_1, arg_2, interact-attack-mash);
+        var_3 = melee-struggle-hud-placement(npc-dog-prone-struggle-abby, arg_1, arg_2, interact-attack-mash);
     } else {
         var_3 = 0;
     }
     return var_3;
 }
 
-u64? #872339CD436BD235
+u64? npc-dog-prone-struggle-abby
 npc-dog-prone-struggle
 embedded@31e18(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return request-dialog(ai-enemy-melee-grab-player, arg_1, arg_2, 0, 0, 0, 0);
 }
 
-u16 #872339CD436BD235
+u16 npc-dog-prone-struggle-abby
 npc-dog-prone-struggle
 embedded@2fc48(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_3;
@@ -4255,16 +4255,16 @@ embedded@2fc48(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return var_3;
 }
 
-u64? #872339CD436BD235
+u64? npc-dog-prone-struggle-abby
 npc-dog-prone-struggle
 embedded@32300(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return melee-fact-set-int(arg_1, falloff-to-kill-health-delta, get-player-health());
 }
 
-u64? #872339CD436BD235
+u64? npc-dog-prone-struggle-abby
 embedded@308f8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u64? var_1 = melee-fact-get-int(arg_1, falloff-to-kill-health-delta);
-    u64? var_5 = pow-float(2.00, 10.00 * (((get-layer-animation-frame(arg_1, base) - 60.00) / ((f32)sec-to-frames(get-animation-duration(arg_1, #684D998303684D30)) - 60.00)) - 1.00));
+    u64? var_5 = pow-float(2.00, 10.00 * (((get-layer-animation-frame(arg_1, base) - 60.00) / ((f32)sec-to-frames(get-animation-duration(arg_1, abby-dog-supine-struggle-loop--abby)) - 60.00)) - 1.00));
     if (!melee-fact-get-bool(arg_2, prevent-struggle-success)) {
         deal-melee-damage-simple(
             arg_1,
@@ -4276,7 +4276,7 @@ embedded@308f8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return melee-fact-set-float(arg_1, last-frame-damage-dealt, ((f32)var_1 * var_5) + 0.00);
 }
 
-u16 #872339CD436BD235
+u16 npc-dog-prone-struggle-abby
 npc-dog-prone-struggle
 embedded@31820(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_4;
@@ -4314,7 +4314,7 @@ embedded@31820(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return var_4;
 }
 
-u16 #872339CD436BD235
+u16 npc-dog-prone-struggle-abby
 npc-dog-prone-struggle
 embedded@309d8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_1;
@@ -4327,27 +4327,27 @@ embedded@309d8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return var_1;
 }
 
-u64? #872339CD436BD235
+u64? npc-dog-prone-struggle-abby
 npc-dog-prone-struggle
 embedded@2d4a0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return is-npc?(arg_2) && melee-fact-get-time-since(arg_2, grab-duration) < 5.00;
 }
 
-u64? #872339CD436BD235
+u64? npc-dog-prone-struggle-abby
 npc-dog-prone-struggle
 embedded@2d9f8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return is-npc?(arg_2) || melee-fact-get-time-since(arg_1, grab-duration) > 5.00 && npc-on-screen-and-visible?(arg_2, -1, 0) && melee-fact-get-time-since(arg_1, grab-duration) > 1.50;
 }
 
-u64? #872339CD436BD235
-#872339CD436BD235
+u64? npc-dog-prone-struggle-abby
+npc-dog-prone-struggle-abby
 npc-dog-prone-struggle
 npc-dog-prone-struggle
 embedded@31a20(u64? arg_0, u64? arg_1, sid arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return !is-npc?(arg_2) || 0 && clicker-struggle-mashable?(arg_1, arg_2) && !0 && !0 && !melee-fact-get-bool(arg_2, prevent-struggle-success) && net-is-active?() && !(player == arg_2) && net-player-mash-success?(arg_2);
 }
 
-u64? #872339CD436BD235
+u64? npc-dog-prone-struggle-abby
 npc-dog-prone-struggle
 embedded@2f7c0(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     if (!!(arg_2 == 0)) {
@@ -4358,7 +4358,7 @@ embedded@2f7c0(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? 
     return !(arg_2 == 0) || melee-fact-get-bool(arg_2, forced-struggle-death) && var_1 <= 0 && var_1 <= 0 && var_1 <= 0;
 }
 
-u64? #872339CD436BD235
+u64? npc-dog-prone-struggle-abby
 npc-dog-prone-struggle
 embedded@2d408(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return broadcast-event(
@@ -4369,32 +4369,32 @@ embedded@2d408(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     );
 }
 
-bool #872339CD436BD235
+bool npc-dog-prone-struggle-abby
 npc-dog-prone-struggle
 embedded@31118(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return -1 < 0;
 }
 
-u64? #872339CD436BD235
+u64? npc-dog-prone-struggle-abby
 npc-dog-prone-struggle
 embedded@321f8(u64? arg_0, u64? arg_1, u16 arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return arg_2 == 0 && character-is-dead?(arg_2);
 }
 
-u64? #872339CD436BD235
+u64? npc-dog-prone-struggle-abby
 npc-dog-prone-struggle
 embedded@314e8(u64? arg_0, u16 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return arg_1 == 0 && character-is-dead?(arg_1);
 }
 
-u64? #872339CD436BD235
+u64? npc-dog-prone-struggle-abby
 npc-dog-prone-struggle
 embedded@32038(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     melee-fact-set-bool(arg_1, in-synced-grab-struggle, 1);
     return melee-fact-set-bool(arg_2, in-synced-grab-struggle, 1);
 }
 
-f32 #872339CD436BD235__melee-camera-info@8410
+f32 npc-dog-prone-struggle-abby__melee-camera-info@8410
 npc-dog-prone-struggle__melee-camera-info@8410
 embedded@20ae0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
     f32 var_1;
@@ -4406,7 +4406,7 @@ embedded@20ae0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
     return var_1;
 }
 
-u64? #91E185FCC0279B20__start-func-array@7a60
+u64? dog-leap-attack-front-hit-abby__start-func-array@7a60
 embedded@32698(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
     return is-player-abby?(player) && !melee-fact-get-bool(arg_2, bayonet-finisher) && is-in-front?(get-object-locator(arg_2), get-object-locator(arg_1), 2, 90.00) && not-on-slope?(arg_1, arg_2, 25.00) && set-cache-bound-frame(arg_13, alloc-bound-frame(
         get-object-position(arg_2),
@@ -4419,7 +4419,7 @@ embedded@32698(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 
 u64? dog-prone-kill__start-func-array@7bf0
 embedded@2fe80(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
-    return player-is-prone?() && #BCC56A0BCEA8CC56();
+    return player-is-prone?() && not-rogue-mode-finisher();
 }
 
 u64? dog-prone-kill
@@ -4482,7 +4482,7 @@ embedded@2fb30(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     return melee-fact-set-float(arg_1, last-frame-damage-dealt, ((f32)var_1 * var_5) + 0.00);
 }
 
-u64? #B13B0B2CFDF29D5E__start-func-array@6230
+u64? dog-leap-attack-left-hit-abby__start-func-array@6230
 embedded@31010(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
     return is-player-abby?(player) && !melee-fact-get-bool(arg_2, bayonet-finisher) && is-left?(get-object-locator(arg_2), get-object-locator(arg_1), 90.00) && not-on-slope?(arg_1, arg_2, 25.00) && set-cache-bound-frame(arg_13, alloc-bound-frame(
         get-object-position(arg_2),
@@ -4494,7 +4494,7 @@ embedded@31010(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 }
 
 u64? npc-dog-prone^supine-right-enter
-#BD87E05438E89D81
+npc-dog-prone^supine-right-enter-abby
 embedded@30348(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
     return player-is-prone?() && !character-is-dead?(arg_1) && is-right?(get-object-locator(arg_2), get-object-locator(arg_1), 90.00) && distance-y-between-objects(arg_1, arg_2) < 1.00;
 }
@@ -4511,7 +4511,7 @@ embedded@5350(i64 arg_0, i64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg
     u16 var_2;
     if (arg_0 == arg_1 && ((var_0 * 30.00) - var_1) > 2.00) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D("TELL INTERUPTED: interupted by %f frames", (var_0 * 30.00) - var_1), 19);
+            display(dc:format("TELL INTERUPTED: interupted by %f frames", (var_0 * 30.00) - var_1), 19);
         }
         var_2 = melee-fact-set-time(arg_0, last-time-tell-interupted);
     } else {
@@ -4629,7 +4629,7 @@ embedded@2fe28(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     ), 0);
 }
 
-u64? #F2D3A519017BBE3C__start-func-array@62f8
+u64? dog-leap-attack-back-hit-abby__start-func-array@62f8
 embedded@326f0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
     return is-player-abby?(player) && is-behind?(get-object-locator(arg_2), get-object-locator(arg_1), 2, 90.00) && not-on-slope?(arg_1, arg_2, 25.00) && set-cache-bound-frame(arg_13, get-object-locator(arg_2), 1) && set-cache-bound-frame(arg_13, alloc-bound-frame(
         get-object-position(arg_2),
@@ -4892,7 +4892,7 @@ embedded@6e18(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
                 if (player-in-meatshield?() && player-get-meatshield() == arg_2) {
                     if (is-in-front?(get-object-locator(arg_2), get-object-locator(arg_1), 2, 180.00) && is-in-front?(get-object-locator(arg_1), get-object-locator(arg_2), 2, 180.00)) {
                         if (!is-final-build?()) {
-                            display(#5445173390656D6D("END PLAYER MEATSHIELD DUE TO CLICKER MEATSHIELD CASE"), 19);
+                            display(dc:format("END PLAYER MEATSHIELD DUE TO CLICKER MEATSHIELD CASE"), 19);
                         }
                         log-event("clicker-ate-meatshield-npc", 1, "", 0, 0);
                         player-end-meatshield();

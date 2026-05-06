@@ -4,7 +4,7 @@
 // #   listing for file: game_dumps/t2r/dc1/ss-rogue\score-definitions.bin                            #
 // #   filesize: 19850 bytes                                                                          #
 // #   total entries: 13                                                                              #
-// #   functions: 10                                                                                  #
+// #   functions: 46                                                                                  #
 // #   has state script: false                                                                        #
 // #   game type: t2r                                                                                 #
 // #   optimizations enabled: true                                                                    #
@@ -96,6 +96,238 @@ u16 cal-difficulti-multiplier(u16 arg_0) {
     };
 }
 
+u16 *t2r-score-info-array*__array@ab8
+*t2r-score-info-array*
+*t2r-score-info-array*
+*t2r-score-info-array*
+*t2r-score-info-array*
+*t2r-score-info-array*
+*t2r-score-info-array*
+*t2r-bonus-score-info-array*__array@f08
+*t2r-bonus-score-info-array*
+*t2r-bonus-score-info-array*
+*t2r-bonus-score-info-array*
+*t2r-bonus-score-info-array*
+*t2r-bonus-score-info-array*
+*t2r-bonus-score-info-array*
+*t2r-bonus-score-info-array*
+*t2r-bonus-score-info-array*
+*t2r-bonus-score-info-array*
+*t2r-bonus-score-info-array*
+*t2r-bonus-score-info-array*
+*t2r-bonus-score-info-array*
+*t2r-bonus-score-info-array*
+*t2r-bonus-score-info-array*
+*t2r-bonus-score-info-array*
+*t2r-bonus-score-info-array*
+*t2r-bonus-score-info-array*
+*t2r-bonus-score-info-array*
+*t2r-bonus-score-info-array*
+*t2r-bonus-score-info-array*
+*t2r-bonus-score-info-array*
+*t2r-bonus-score-info-array*
+*t2r-bonus-score-info-array*
+embedded@2080() {
+    return 0;
+}
+
+u16 *t2r-score-info-array*
+embedded@2568(u16 arg_0) {
+    u16 var_0;
+    if (arg_0 > 0) {
+        var_0 = 1;
+    } else {
+        var_0 = 0;
+    }
+    return var_0;
+}
+
+u16 *t2r-score-info-array*
+embedded@1fb8(u64? arg_0) {
+    i32 var_0 = get-int32(encounter-completion-type, self);
+    u16 var_1;
+    if (var_0 == 2) {
+        var_1 = 200;
+    } else {
+        var_1 = match (var_0) {
+            1    -> 100,
+            0    -> 0,
+            else -> 0
+        };
+    }
+    return var_1;
+}
+
+u16 *t2r-score-info-array*
+embedded@2960(u64? arg_0) {
+    u16 var_1;
+    if (get-int32(encounter-completion-type, self) == 0) {
+        var_1 = 0;
+    } else {
+        var_1 = 1;
+    }
+    return var_1;
+}
+
+i32 *t2r-score-info-array*
+embedded@1e40() {
+    return (i32)get-float(encounter-time, self);
+}
+
+u16 *t2r-score-info-array*
+embedded@2510(u64? arg_0) {
+    u16 var_1;
+    if (get-int32(encounter-completion-type, self) == 0) {
+        var_1 = 0;
+    } else {
+        var_1 = cal-time-score(arg_0, 0, 100);
+    }
+    return var_1;
+}
+
+u16 *t2r-score-info-array*
+embedded@2238(u64? arg_0) {
+    return 1;
+}
+
+i32 *t2r-score-info-array*
+embedded@2688() {
+    return get-int32(encounter-enemy-kill-count, self);
+}
+
+u16 *t2r-score-info-array*
+*t2r-bonus-score-info-array*
+*t2r-bonus-score-info-array*
+embedded@1ef0(u64? arg_0) {
+    return 10 * arg_0;
+}
+
+u16 *t2r-score-info-array*
+*t2r-score-info-array*
+*t2r-score-info-array*
+*t2r-bonus-score-info-array*
+*t2r-bonus-score-info-array*
+*t2r-bonus-score-info-array*
+*t2r-bonus-score-info-array*
+*t2r-bonus-score-info-array*
+*t2r-bonus-score-info-array*
+*t2r-bonus-score-info-array*
+*t2r-bonus-score-info-array*
+*t2r-bonus-score-info-array*
+*t2r-bonus-score-info-array*
+*t2r-bonus-score-info-array*
+*t2r-bonus-score-info-array*
+*t2r-bonus-score-info-array*
+*t2r-bonus-score-info-array*
+*t2r-bonus-score-info-array*
+*t2r-bonus-score-info-array*
+embedded@1e98() {
+    return 1;
+}
+
+i32 *t2r-score-info-array*
+embedded@2630() {
+    i32 var_1;
+    if (get-int32(encounter-completion-type, self) == 0) {
+        if (!is-final-build?()) {
+            display(dc:format("DEB-SCORE: Buddy damage - failed - damage: %i", get-int32(def-wounded-health-max, ss-defense-manager-1)), 19);
+        }
+        var_1 = get-int32(def-wounded-health-max, ss-defense-manager-1);
+    } else {
+        i32 var_6 = get-int32(def-wounded-health-max, ss-defense-manager-1);
+        i32 var_7 = get-int32(def-wounded-health-current, ss-defense-manager-1);
+        if (!is-final-build?()) {
+            display(dc:format("DEB-SCORE: Buddy damage - success - %i-current: %i - damage: %i", var_7, var_6 - var_7), 19);
+        }
+        var_1 = var_6 - var_7;
+    }
+    return var_1;
+}
+
+u64? *t2r-score-info-array*
+embedded@25d8(u64? arg_0) {
+    return cal-buddy-damage-score(arg_0, 0, 100);
+}
+
+i32 *t2r-score-info-array*
+embedded@2188() {
+    return get-int32(total-damage, self);
+}
+
+u64? *t2r-score-info-array*
+embedded@21e0(u64? arg_0) {
+    return cal-damage-score(arg_0, 0, 100);
+}
+
+i32 *t2r-score-info-array*
+embedded@2300() {
+    i32 var_0 = get-int32(total-resource-spent, self);
+    i32 var_1 = get-int32(flamethrower-ammo-used, self);
+    i32 var_2 = get-int32(missed-shots, self);
+    i32 var_3 = get-int32(flamethrower-projectile-hit-enemy-count, self);
+    i32 var_4 = get-int32(flamethrower-projectile-fired-count, self);
+    i32 var_5 = get-int32(molotov-used-count, self);
+    u64? var_6 = darray-count(molotovs-attacked-enemy);
+    i32 var_7 = get-int32(trap-bomb-used-count, self);
+    i32 var_8 = get-int32(trap-bomb-exploded-count, self);
+    i32 var_9 = get-int32(pipe-bomb-used-count, self);
+    i32 var_10 = get-int32(pipe-bomb-hits-count, self);
+    f32 var_11;
+    if ((((f32)var_3 / (f32)var_4) / 0.50) > 0.00) {
+        var_11 = ((f32)var_3 / (f32)var_4) / 0.50;
+    } else {
+        var_11 = 0.00;
+    }
+    f32 var_12;
+    if (var_11 < 1.00) {
+        if ((((f32)var_3 / (f32)var_4) / 0.50) > 0.00) {
+            var_12 = ((f32)var_3 / (f32)var_4) / 0.50;
+        } else {
+            var_12 = 0.00;
+        }
+    } else {
+        var_12 = 1.00;
+    }
+    if (!is-final-build?()) {
+        display(dc:format("DEB-SCORE: flamethrower projectile accuracy %.2f; scaled accuracy %.2f", (f32)var_3 / (f32)var_4, var_12), 19);
+    }
+    if (!is-final-build?()) {
+        display(dc:format("DEB-SCORE:  flamethrower missed shot %.2f; total missed shot %.2f", (f32)var_1 * (1.00 - var_12), (f32)var_2 + ((f32)var_1 * (1.00 - var_12))), 19);
+    }
+    if (!is-final-build?()) {
+        display(dc:format("DEB-SCORE:  flamethrower ammo used %.2f; total resource %.2f", (f32)var_1, (f32)var_0 + (f32)var_1), 19);
+    }
+    f32 var_23;
+    if (((f32)var_0 + (f32)var_1) > 0.00) {
+        f32 var_24;
+        if (((((f32)var_0 + (f32)var_1) - (((f32)var_2 + ((f32)var_1 * (1.00 - var_12))) + (((f32)(var_5 - var_6) + (f32)(var_7 - var_8)) + (f32)(var_9 - var_10)))) / ((f32)var_0 + (f32)var_1)) > 0.00) {
+            var_24 = (((f32)var_0 + (f32)var_1) - (((f32)var_2 + ((f32)var_1 * (1.00 - var_12))) + (((f32)(var_5 - var_6) + (f32)(var_7 - var_8)) + (f32)(var_9 - var_10)))) / ((f32)var_0 + (f32)var_1);
+        } else {
+            var_24 = 0.00;
+        }
+        f32 var_25;
+        if (var_24 < 1.00) {
+            if (((((f32)var_0 + (f32)var_1) - (((f32)var_2 + ((f32)var_1 * (1.00 - var_12))) + (((f32)(var_5 - var_6) + (f32)(var_7 - var_8)) + (f32)(var_9 - var_10)))) / ((f32)var_0 + (f32)var_1)) > 0.00) {
+                var_25 = (((f32)var_0 + (f32)var_1) - (((f32)var_2 + ((f32)var_1 * (1.00 - var_12))) + (((f32)(var_5 - var_6) + (f32)(var_7 - var_8)) + (f32)(var_9 - var_10)))) / ((f32)var_0 + (f32)var_1);
+            } else {
+                var_25 = 0.00;
+            }
+        } else {
+            var_25 = 1.00;
+        }
+        var_23 = var_25;
+    }
+    if (!is-final-build?()) {
+        display(dc:format("DEB-SCORE:  accuracy %.2f", var_23), 19);
+    }
+    return (i32)(var_23 * 10000.00);
+}
+
+u64? *t2r-score-info-array*
+embedded@2130(u64? arg_0) {
+    return cal-resource-score(arg_0, 0, 100);
+}
+
 u64? cal-score-linear(f32 arg_0, f32 arg_1, f32 arg_2, f32 arg_3, f32 arg_4) {
     u64? var_0 = lerp-scale(
         (f32)arg_1,
@@ -121,6 +353,169 @@ u64? cal-score-linear(f32 arg_0, f32 arg_1, f32 arg_2, f32 arg_3, f32 arg_4) {
         var_2 = arg_4;
     }
     return var_2;
+}
+
+u64? *t2r-multiplier-info-array*__array@e90
+embedded@27a8() {
+    return cal-difficulti-multiplier(get-lowest-custom-difficulty-setting());
+}
+
+u64? *t2r-multiplier-info-array*
+embedded@1f60() {
+    return cal-mode-multiplier(rogue-get-current-task-game-mode());
+}
+
+u64? *t2r-multiplier-info-array*
+embedded@2028() {
+    u64? var_0 = encounter--get-current-encounter-ddict();
+    u64? var_2;
+    if (encounter--has-skulls?(var_0)) {
+        var_2 = encounter--get-skulls(var_0);
+    }
+    return cal-skulls-multiplier(var_2);
+}
+
+u16 *t2r-bonus-score-info-array*
+embedded@2460(u64? arg_0) {
+    u16 var_1;
+    if (is-rogue-safe-opened?()) {
+        var_1 = 50;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 *t2r-bonus-score-info-array*
+embedded@29b8(u64? arg_0) {
+    u16 var_2;
+    if (get-boolean(buddy-already-spawned, self) && get-int32(encounter-completion-type, self) == 0) {
+        var_2 = 0;
+    } else {
+        var_2 = 20;
+    }
+    return var_2;
+}
+
+u16 *t2r-bonus-score-info-array*
+embedded@26e0(u64? arg_0) {
+    rogue-get-current-task-game-mode();
+    return match (get-int32(enemy-perception, self)) {
+        0    -> 0,
+        1    -> 20,
+        else -> 0
+    };
+}
+
+i32 *t2r-bonus-score-info-array*
+embedded@2800() {
+    return get-int32(encounter-challenge-count, self);
+}
+
+i32 *t2r-bonus-score-info-array*
+embedded@28b0() {
+    return get-int32(encounter-multi-kill-count, self);
+}
+
+i32 *t2r-bonus-score-info-array*
+embedded@1de8() {
+    return get-int32(encounter-stun-count, self);
+}
+
+u16 *t2r-bonus-score-info-array*
+*t2r-bonus-score-info-array*
+*t2r-bonus-score-info-array*
+*t2r-bonus-score-info-array*
+*t2r-bonus-score-info-array*
+embedded@2908(u64? arg_0) {
+    return 5 * arg_0;
+}
+
+i32 *t2r-bonus-score-info-array*
+embedded@20d8() {
+    return get-int32(encounter-stealth-kill-count, self);
+}
+
+i32 *t2r-bonus-score-info-array*
+embedded@2408() {
+    return get-int32(encounter-melee-kill-count, self);
+}
+
+i32 *t2r-bonus-score-info-array*
+embedded@2290() {
+    return get-int32(encounter-headshot-count, self);
+}
+
+i32 *t2r-bonus-score-info-array*
+*t2r-bonus-score-info-array*
+embedded@2738() {
+    return get-int32(encounter-meatshield-kill-count, self);
+}
+
+u16 *t2r-bonus-score-info-array*
+embedded@2358(u64? arg_0) {
+    u16 var_4;
+    if (get-int32(encounter-completion-type, self) != 0 && get-int32(encounter-headshot-count, self) == get-int32(encounter-enemy-kill-count, self) && get-int32(encounter-headshot-count, self) > 0) {
+        var_4 = 30;
+    } else {
+        var_4 = 0;
+    }
+    return var_4;
+}
+
+u16 *t2r-bonus-score-info-array*
+embedded@23b0(u64? arg_0) {
+    u16 var_2;
+    if (get-int32(encounter-completion-type, self) != 0 && get-int32(weapon-fired-count, self) == 0) {
+        var_2 = 50;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u16 *t2r-bonus-score-info-array*
+embedded@2a80(u64? arg_0) {
+    u16 var_4;
+    if (get-int32(encounter-completion-type, self) != 0 && get-svar(rogue-wave-faction) == 1 && !(get-boolean(player-spotted?, self))) {
+        var_4 = 50;
+    } else {
+        var_4 = 0;
+    }
+    return var_4;
+}
+
+u16 *t2r-bonus-score-info-array*
+embedded@2a10(u64? arg_0) {
+    u16 var_4;
+    if (get-int32(encounter-completion-type, self) != 0 && get-svar(rogue-wave-faction) == 0 && !(get-boolean(player-spotted?, self))) {
+        var_4 = 50;
+    } else {
+        var_4 = 0;
+    }
+    return var_4;
+}
+
+u16 *t2r-bonus-score-info-array*
+embedded@2858(u64? arg_0) {
+    u16 var_4;
+    if (get-int32(encounter-completion-type, self) != 0 && get-svar(rogue-wave-faction) == 2 && !(get-boolean(player-spotted?, self))) {
+        var_4 = 50;
+    } else {
+        var_4 = 0;
+    }
+    return var_4;
+}
+
+u16 *t2r-bonus-score-info-array*
+embedded@24b8(u64? arg_0) {
+    u16 var_4;
+    if (get-int32(encounter-completion-type, self) != 0 && get-svar(rogue-wave-faction) == 3 && !(get-boolean(player-spotted?, self))) {
+        var_4 = 50;
+    } else {
+        var_4 = 0;
+    }
+    return var_4;
 }
 
 f32 cal-skulls-multiplier(bool arg_0) {

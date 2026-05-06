@@ -11,12 +11,12 @@
 // #                                                                                                  #
 // ####################################################################################################
 
-f32 #0BC996D6FAB3816D__melee-attack@198__character-melee-info@3ba0__
-#0BC996D6FAB3816D__character-melee-info@35d8
-#D0A7D92CF5B56A3D__melee-attack@14f8__character-melee-info@2fc8__
-#D0A7D92CF5B56A3D__character-melee-info@2898
-#EA001D97492D22E3__melee-attack@1ac8__character-melee-info@39f8__
-#EA001D97492D22E3__character-melee-info@34c0
+f32 npc-boar-standing-struggle-fail__melee-attack@198__character-melee-info@3ba0__
+npc-boar-standing-struggle-fail__character-melee-info@35d8
+npc-boar-wall-struggle-fail__melee-attack@14f8__character-melee-info@2fc8__
+npc-boar-wall-struggle-fail__character-melee-info@2898
+npc-boar-wall-pin-struggle-fail__melee-attack@1ac8__character-melee-info@39f8__
+npc-boar-wall-pin-struggle-fail__character-melee-info@34c0
 embedded@a720(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
     f32 var_0;
     if (-1 > -1) {
@@ -29,9 +29,9 @@ embedded@a720(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
     return var_0;
 }
 
-f32 #0BC996D6FAB3816D__melee-attack@198
-#D0A7D92CF5B56A3D__melee-attack@14f8
-#EA001D97492D22E3__melee-attack@1ac8
+f32 npc-boar-standing-struggle-fail__melee-attack@198
+npc-boar-wall-struggle-fail__melee-attack@14f8
+npc-boar-wall-pin-struggle-fail__melee-attack@1ac8
 embedded@7fb8(u64? arg_0, u64? arg_1, u64? arg_2) {
     f32 var_1;
     if (is-npc?(arg_2)) {
@@ -42,9 +42,9 @@ embedded@7fb8(u64? arg_0, u64? arg_1, u64? arg_2) {
     return var_1;
 }
 
-f32 #0BC996D6FAB3816D
-#D0A7D92CF5B56A3D
-#EA001D97492D22E3
+f32 npc-boar-standing-struggle-fail
+npc-boar-wall-struggle-fail
+npc-boar-wall-pin-struggle-fail
 embedded@5160(u64? arg_0, u64? arg_1, u64? arg_2) {
     f32 var_1;
     if (is-npc?(arg_1)) {
@@ -55,8 +55,8 @@ embedded@5160(u64? arg_0, u64? arg_1, u64? arg_2) {
     return var_1;
 }
 
-u64? #0BC996D6FAB3816D__start-func-array@1f68
-#EA001D97492D22E3__start-func-array@1f68
+u64? npc-boar-standing-struggle-fail__start-func-array@1f68
+npc-boar-wall-pin-struggle-fail__start-func-array@1f68
 embedded@fa10(u64? arg_0, u64? arg_1, string arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
     u64? var_0 = character-melee-event-active?(arg_2, 211, 0);
     if (!!var_0) {
@@ -66,9 +66,9 @@ embedded@fa10(u64? arg_0, u64? arg_1, string arg_2, u64? arg_3, u64? arg_4, u64?
     return !var_0 && 1 && 1;
 }
 
-u16 #0BC996D6FAB3816D
-#D0A7D92CF5B56A3D
-#EA001D97492D22E3
+u16 npc-boar-standing-struggle-fail
+npc-boar-wall-struggle-fail
+npc-boar-wall-pin-struggle-fail
 embedded@2db0(i64 arg_0, i64 arg_1, i64 arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
     if (arg_0 == arg_2) {
         if (is-player?(arg_2)) {
@@ -109,9 +109,9 @@ embedded@2db0(i64 arg_0, i64 arg_1, i64 arg_2, u64? arg_3, u64? arg_4, u64? arg_
     return var_9;
 }
 
-u16 #0BC996D6FAB3816D__melee-event-list@26c8
-#D0A7D92CF5B56A3D__melee-event-list@2438
-#EA001D97492D22E3__melee-event-list@2b60
+u16 npc-boar-standing-struggle-fail__melee-event-list@26c8
+npc-boar-wall-struggle-fail__melee-event-list@2438
+npc-boar-wall-pin-struggle-fail__melee-event-list@2b60
 embedded@f4b0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_1;
     if (is-player?(arg_2)) {
@@ -125,26 +125,26 @@ embedded@f4b0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
     return var_1;
 }
 
-u64? #0BC996D6FAB3816D
+u64? npc-boar-standing-struggle-fail
 embedded@ea58(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     if (is-player?(arg_2)) {
         send-event(synced-finisher-v-player, ss-promote-death-hints, boxed_symbol(arg_1));
     }
-    return log-event("melee-npc-finisher", 1, string-debug(#0BC996D6FAB3816D), 0, 0);
+    return log-event("melee-npc-finisher", 1, string-debug(npc-boar-standing-struggle-fail), 0, 0);
 }
 
-u64? #0BC996D6FAB3816D
-#D0A7D92CF5B56A3D
-#EA001D97492D22E3
+u64? npc-boar-standing-struggle-fail
+npc-boar-wall-struggle-fail
+npc-boar-wall-pin-struggle-fail
 embedded@cb90(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return is-player?(arg_2);
 }
 
-u64? #0BC996D6FAB3816D
-#449F15066FF1D12B
-#449F15066FF1D12B
-#D0A7D92CF5B56A3D
-#EA001D97492D22E3
+u64? npc-boar-standing-struggle-fail
+npc-boar-standing-struggle-loop
+npc-boar-standing-struggle-loop
+npc-boar-wall-struggle-fail
+npc-boar-wall-pin-struggle-fail
 embedded@e098(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     f32 var_0;
     if (!(0.00 == 0.00)) {
@@ -155,11 +155,11 @@ embedded@e098(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
     return play-melee-facial-gesture(arg_2, 8, var_0, 0.10);
 }
 
-u64? #0BC996D6FAB3816D
-#449F15066FF1D12B
-#449F15066FF1D12B
-#D0A7D92CF5B56A3D
-#EA001D97492D22E3
+u64? npc-boar-standing-struggle-fail
+npc-boar-standing-struggle-loop
+npc-boar-standing-struggle-loop
+npc-boar-wall-struggle-fail
+npc-boar-wall-pin-struggle-fail
 embedded@dcc0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u64? var_0 = is-player?(arg_2);
     if (!var_0) {
@@ -170,14 +170,14 @@ embedded@dcc0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
     return var_0 && var_1 && var_1;
 }
 
-u64? #0BC996D6FAB3816D
-#3229B75DA382E01B
-#449F15066FF1D12B
-#449F15066FF1D12B
-#A3B9B7EAEC8731DD
-#D0A7D92CF5B56A3D
-#DCC5884A172F1FED
-#EA001D97492D22E3
+u64? npc-boar-standing-struggle-fail
+npc-boar-wall-struggle-loop
+npc-boar-standing-struggle-loop
+npc-boar-standing-struggle-loop
+npc-boar-wall-pin-struggle-loop
+npc-boar-wall-struggle-fail
+npc-boar-standing-struggle-enter
+npc-boar-wall-pin-struggle-fail
 embedded@e2b0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     f32 var_0;
     if (!(0.00 == 0.00)) {
@@ -188,14 +188,14 @@ embedded@e2b0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
     return play-melee-facial-gesture(arg_2, 14, var_0, 0.10);
 }
 
-u64? #0BC996D6FAB3816D
-#3229B75DA382E01B
-#449F15066FF1D12B
-#449F15066FF1D12B
-#A3B9B7EAEC8731DD
-#D0A7D92CF5B56A3D
-#DCC5884A172F1FED
-#EA001D97492D22E3
+u64? npc-boar-standing-struggle-fail
+npc-boar-wall-struggle-loop
+npc-boar-standing-struggle-loop
+npc-boar-standing-struggle-loop
+npc-boar-wall-pin-struggle-loop
+npc-boar-wall-struggle-fail
+npc-boar-standing-struggle-enter
+npc-boar-wall-pin-struggle-fail
 embedded@df28(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u64? var_0 = is-player?(arg_2);
     if (!var_0) {
@@ -206,9 +206,9 @@ embedded@df28(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
     return var_0 && var_1 && var_1;
 }
 
-u64? #0BC996D6FAB3816D
-#D0A7D92CF5B56A3D
-#EA001D97492D22E3
+u64? npc-boar-standing-struggle-fail
+npc-boar-wall-struggle-fail
+npc-boar-wall-pin-struggle-fail
 embedded@f3e0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     f32 var_0;
     if (!(0.00 == 0.00)) {
@@ -219,9 +219,9 @@ embedded@f3e0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
     return play-melee-facial-gesture(arg_2, 12, var_0, 0.10);
 }
 
-u64? #0BC996D6FAB3816D
-#D0A7D92CF5B56A3D
-#EA001D97492D22E3
+u64? npc-boar-standing-struggle-fail
+npc-boar-wall-struggle-fail
+npc-boar-wall-pin-struggle-fail
 embedded@e950(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u64? var_0 = is-player?(arg_2);
     if (!var_0) {
@@ -232,9 +232,9 @@ embedded@e950(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
     return var_0 && var_1 && var_1;
 }
 
-u64? #0BC996D6FAB3816D
-#D0A7D92CF5B56A3D
-#EA001D97492D22E3
+u64? npc-boar-standing-struggle-fail
+npc-boar-wall-struggle-fail
+npc-boar-wall-pin-struggle-fail
 embedded@f960(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     f32 var_0;
     if (!(0.00 == 0.00)) {
@@ -245,9 +245,9 @@ embedded@f960(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
     return play-melee-facial-gesture(arg_2, 28, var_0, 0.10);
 }
 
-u64? #0BC996D6FAB3816D
-#D0A7D92CF5B56A3D
-#EA001D97492D22E3
+u64? npc-boar-standing-struggle-fail
+npc-boar-wall-struggle-fail
+npc-boar-wall-pin-struggle-fail
 embedded@e258(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u64? var_0 = is-player?(arg_2);
     if (!var_0) {
@@ -258,17 +258,17 @@ embedded@e258(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
     return var_0 && var_1 && var_1;
 }
 
-u64? #0BC996D6FAB3816D
-#15E8E595B82D5C03
-#3229B75DA382E01B
-#33F41705F7B0E06B
-#449F15066FF1D12B
-#857C4163E23E6A36
-#A3B9B7EAEC8731DD
-#D0A7D92CF5B56A3D
-#DCC5884A172F1FED
-#EA001D97492D22E3
-#FF444A1FE2D948DD
+u64? npc-boar-standing-struggle-fail
+npc-boar-wall-pin-struggle-enter
+npc-boar-wall-struggle-loop
+npc-boar-wall-bump-sync
+npc-boar-standing-struggle-loop
+npc-boar-wall-bump-enter
+npc-boar-wall-pin-struggle-loop
+npc-boar-wall-struggle-fail
+npc-boar-standing-struggle-enter
+npc-boar-wall-pin-struggle-fail
+npc-boar-wall-struggle-enter
 embedded@eb88(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     f32 var_0;
     if (!(0.00 == 0.00)) {
@@ -279,17 +279,17 @@ embedded@eb88(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
     return play-melee-facial-gesture(arg_1, 25, var_0, 0.10);
 }
 
-u64? #0BC996D6FAB3816D
-#15E8E595B82D5C03
-#3229B75DA382E01B
-#33F41705F7B0E06B
-#449F15066FF1D12B
-#857C4163E23E6A36
-#A3B9B7EAEC8731DD
-#D0A7D92CF5B56A3D
-#DCC5884A172F1FED
-#EA001D97492D22E3
-#FF444A1FE2D948DD
+u64? npc-boar-standing-struggle-fail
+npc-boar-wall-pin-struggle-enter
+npc-boar-wall-struggle-loop
+npc-boar-wall-bump-sync
+npc-boar-standing-struggle-loop
+npc-boar-wall-bump-enter
+npc-boar-wall-pin-struggle-loop
+npc-boar-wall-struggle-fail
+npc-boar-standing-struggle-enter
+npc-boar-wall-pin-struggle-fail
+npc-boar-wall-struggle-enter
 embedded@e308(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u64? var_0 = is-player?(arg_1);
     if (!var_0) {
@@ -300,9 +300,9 @@ embedded@e308(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
     return var_0 && var_1 && var_1;
 }
 
-u16 #0BC996D6FAB3816D
-#D0A7D92CF5B56A3D
-#EA001D97492D22E3
+u16 npc-boar-standing-struggle-fail
+npc-boar-wall-struggle-fail
+npc-boar-wall-pin-struggle-fail
 embedded@fc38(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_3;
     if (is-npc?(arg_2) && is-npc?(arg_1) && !npc-is-buddy?(arg_1)) {
@@ -314,9 +314,9 @@ embedded@fc38(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
     return var_3;
 }
 
-u16 #0BC996D6FAB3816D
-#D0A7D92CF5B56A3D
-#EA001D97492D22E3
+u16 npc-boar-standing-struggle-fail
+npc-boar-wall-struggle-fail
+npc-boar-wall-pin-struggle-fail
 embedded@d7b0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_3;
     if (is-npc?(arg_2) && is-npc?(arg_1) && !npc-is-buddy?(arg_1)) {
@@ -328,9 +328,9 @@ embedded@d7b0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
     return var_3;
 }
 
-u16 #0BC996D6FAB3816D
-#D0A7D92CF5B56A3D
-#EA001D97492D22E3
+u16 npc-boar-standing-struggle-fail
+npc-boar-wall-struggle-fail
+npc-boar-wall-pin-struggle-fail
 embedded@d3d0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_3;
     if (is-npc?(arg_2) && is-npc?(arg_1) && !npc-is-buddy?(arg_1)) {
@@ -342,12 +342,12 @@ embedded@d3d0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
     return var_3;
 }
 
-u16 #0BC996D6FAB3816D
-#3229B75DA382E01B
-#449F15066FF1D12B
-#A3B9B7EAEC8731DD
-#D0A7D92CF5B56A3D
-#EA001D97492D22E3
+u16 npc-boar-standing-struggle-fail
+npc-boar-wall-struggle-loop
+npc-boar-standing-struggle-loop
+npc-boar-wall-pin-struggle-loop
+npc-boar-wall-struggle-fail
+npc-boar-wall-pin-struggle-fail
 embedded@d220(u64? arg_0, u64? arg_1, sid arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_0;
     if (player == arg_2) {
@@ -358,9 +358,9 @@ embedded@d220(u64? arg_0, u64? arg_1, sid arg_2, u64? arg_3, u64? arg_4, u64? ar
     return var_0;
 }
 
-u64? #0BC996D6FAB3816D
-#D0A7D92CF5B56A3D
-#EA001D97492D22E3
+u64? npc-boar-standing-struggle-fail
+npc-boar-wall-struggle-fail
+npc-boar-wall-pin-struggle-fail
 embedded@f798(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return broadcast-event(
         melee-damage,
@@ -370,43 +370,43 @@ embedded@f798(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
     );
 }
 
-u64? #0BC996D6FAB3816D
-#0BC996D6FAB3816D
-#0BC996D6FAB3816D
-#D0A7D92CF5B56A3D
-#D0A7D92CF5B56A3D
-#D0A7D92CF5B56A3D
-#EA001D97492D22E3
-#EA001D97492D22E3
-#EA001D97492D22E3
+u64? npc-boar-standing-struggle-fail
+npc-boar-standing-struggle-fail
+npc-boar-standing-struggle-fail
+npc-boar-wall-struggle-fail
+npc-boar-wall-struggle-fail
+npc-boar-wall-struggle-fail
+npc-boar-wall-pin-struggle-fail
+npc-boar-wall-pin-struggle-fail
+npc-boar-wall-pin-struggle-fail
 embedded@e518(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return is-npc?(arg_2) && is-npc?(arg_1) && !npc-is-buddy?(arg_1);
 }
 
-u64? #0BC996D6FAB3816D
-#D0A7D92CF5B56A3D
-#EA001D97492D22E3
+u64? npc-boar-standing-struggle-fail
+npc-boar-wall-struggle-fail
+npc-boar-wall-pin-struggle-fail
 embedded@f2a0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return !is-player?(arg_2);
 }
 
-u64? #0BC996D6FAB3816D
-#D0A7D92CF5B56A3D
-#EA001D97492D22E3
+u64? npc-boar-standing-struggle-fail
+npc-boar-wall-struggle-fail
+npc-boar-wall-pin-struggle-fail
 embedded@eb30(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return !character-in-melee-move?(arg_11, arg_1) && !is-player?(arg_2);
 }
 
-u64? #0BC996D6FAB3816D
-#D0A7D92CF5B56A3D
-#EA001D97492D22E3
+u64? npc-boar-standing-struggle-fail
+npc-boar-wall-struggle-fail
+npc-boar-wall-pin-struggle-fail
 embedded@ce48(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return !character-in-melee-move?(arg_11, arg_2);
 }
 
-u16 #0BC996D6FAB3816D
-#D0A7D92CF5B56A3D
-#EA001D97492D22E3
+u16 npc-boar-standing-struggle-fail
+npc-boar-wall-struggle-fail
+npc-boar-wall-pin-struggle-fail
 embedded@d438(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_1;
     if (is-player?(arg_2)) {
@@ -418,16 +418,16 @@ embedded@d438(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
     return var_1;
 }
 
-u64? #0BC996D6FAB3816D
-#D0A7D92CF5B56A3D
-#EA001D97492D22E3
+u64? npc-boar-standing-struggle-fail
+npc-boar-wall-struggle-fail
+npc-boar-wall-pin-struggle-fail
 embedded@d0f0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return !is-npc?(arg_2) && is-npc?(arg_1) && !npc-is-buddy?(arg_1);
 }
 
-u16 #0BC996D6FAB3816D
-#D0A7D92CF5B56A3D
-#EA001D97492D22E3
+u16 npc-boar-standing-struggle-fail
+npc-boar-wall-struggle-fail
+npc-boar-wall-pin-struggle-fail
 embedded@f518(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_1;
     if (is-player?(arg_2)) {
@@ -438,40 +438,40 @@ embedded@f518(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
     return var_1;
 }
 
-u64? #0BC996D6FAB3816D
-#D0A7D92CF5B56A3D
-#EA001D97492D22E3
+u64? npc-boar-standing-struggle-fail
+npc-boar-wall-struggle-fail
+npc-boar-wall-pin-struggle-fail
 embedded@d9f0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return !is-camera-animated?();
 }
 
-u16 #0BC996D6FAB3816D
-#45DF9EB4DB242FCA__melee-event-list@2b78
-#68C20BA3A21E3D10__melee-event-list@2b78
-#77CF609002BAAF4D__melee-event-list@3070
-#D0A7D92CF5B56A3D
-#D16CD1A194968F40__melee-event-list@3858
-#EA001D97492D22E3
+u16 npc-boar-standing-struggle-fail
+npc-boar-wall-pin-struggle-success__melee-event-list@2b78
+npc-boar-standing-struggle-success__melee-event-list@2b78
+npc-boar-standing-bump__melee-event-list@3070
+npc-boar-wall-struggle-fail
+npc-boar-wall-struggle-success__melee-event-list@3858
+npc-boar-wall-pin-struggle-fail
 embedded@cf10(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
-    broadcast-event(#349C1AECD520B2B0);
+    broadcast-event(boar-attack-end);
     u16 var_1;
     if (!is-final-build?()) {
-        var_1 = display(#5445173390656D6D("BOAR ATTACK END"), 19);
+        var_1 = display(dc:format("BOAR ATTACK END"), 19);
     } else {
         var_1 = 0;
     }
     return var_1;
 }
 
-u64? #0BC996D6FAB3816D
-#D0A7D92CF5B56A3D
-#EA001D97492D22E3
+u64? npc-boar-standing-struggle-fail
+npc-boar-wall-struggle-fail
+npc-boar-wall-pin-struggle-fail
 embedded@e380(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return melee-fact-set-bool(arg_2, melee-killed, 1);
 }
 
-u64? #15E8E595B82D5C03__melee-attack@388__start-func-array@25d8__
-#FF444A1FE2D948DD__melee-attack@1cb8__start-func-array@25d8__
+u64? npc-boar-wall-pin-struggle-enter__melee-attack@388__start-func-array@25d8__
+npc-boar-wall-struggle-enter__melee-attack@1cb8__start-func-array@25d8__
 embedded@daa0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
     return !character-in-struggle?(arg_2, 16) && 1 && 1 || against-wall-relative?(
         arg_8,
@@ -485,28 +485,28 @@ embedded@daa0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
     ) || against-wall-relative?(arg_8, point-sub(get-object-position(arg_2), get-object-position(arg_1)), 0, 2.00, 0.00, arg_13, 0, 1) && get-locator-distance-xz(npc-get-last-target-against-wall-bound-frame(arg_1, 1), get-object-locator(arg_2)) < 2.00 && set-cache-bound-frame(arg_13, npc-get-last-target-against-wall-bound-frame(arg_1, 1), 0);
 }
 
-bool #15E8E595B82D5C03__melee-attack@388
-#DCC5884A172F1FED
-#FF444A1FE2D948DD__melee-attack@1cb8
+bool npc-boar-wall-pin-struggle-enter__melee-attack@388
+npc-boar-standing-struggle-enter
+npc-boar-wall-struggle-enter__melee-attack@1cb8
 embedded@ded0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
     return get-locator-distance(get-object-locator(arg_1), get-object-locator(arg_2)) < 2.00;
 }
 
-u64? #15E8E595B82D5C03
-#33F41705F7B0E06B
-#FF444A1FE2D948DD
+u64? npc-boar-wall-pin-struggle-enter
+npc-boar-wall-bump-sync
+npc-boar-wall-struggle-enter
 embedded@3aa0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
     return set-character-force-contact-with-big-collision(arg_2, 0, 0);
 }
 
-u16 #15E8E595B82D5C03__melee-event-list@29b0
-#33F41705F7B0E06B__melee-event-list@3c48
-#45DF9EB4DB242FCA
-#68C20BA3A21E3D10
-#77CF609002BAAF4D
-#D16CD1A194968F40
-#DCC5884A172F1FED
-#FF444A1FE2D948DD__melee-event-list@2b48
+u16 npc-boar-wall-pin-struggle-enter__melee-event-list@29b0
+npc-boar-wall-bump-sync__melee-event-list@3c48
+npc-boar-wall-pin-struggle-success
+npc-boar-standing-struggle-success
+npc-boar-standing-bump
+npc-boar-wall-struggle-success
+npc-boar-standing-struggle-enter
+npc-boar-wall-struggle-enter__melee-event-list@2b48
 embedded@ddf0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_1;
     if (joypad-command-active?(aim, 6)) {
@@ -523,16 +523,16 @@ embedded@ddf0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
     return var_1;
 }
 
-u64? #15E8E595B82D5C03
-#33F41705F7B0E06B
-#FF444A1FE2D948DD
+u64? npc-boar-wall-pin-struggle-enter
+npc-boar-wall-bump-sync
+npc-boar-wall-struggle-enter
 embedded@ee70(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return set-character-force-contact-with-big-collision(arg_2, 1, 0);
 }
 
-u64? #15E8E595B82D5C03
-#33F41705F7B0E06B
-#FF444A1FE2D948DD
+u64? npc-boar-wall-pin-struggle-enter
+npc-boar-wall-bump-sync
+npc-boar-wall-struggle-enter
 embedded@d490(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     f32 var_0;
     if (!(0.00 == 0.00)) {
@@ -543,9 +543,9 @@ embedded@d490(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
     return play-melee-facial-gesture(arg_2, 25, var_0, 0.10);
 }
 
-u64? #15E8E595B82D5C03
-#33F41705F7B0E06B
-#FF444A1FE2D948DD
+u64? npc-boar-wall-pin-struggle-enter
+npc-boar-wall-bump-sync
+npc-boar-wall-struggle-enter
 embedded@e4c0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u64? var_0 = is-player?(arg_2);
     if (!var_0) {
@@ -556,15 +556,15 @@ embedded@e4c0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
     return var_0 && var_1 && var_1;
 }
 
-u16 #15E8E595B82D5C03
-#33F41705F7B0E06B
-#449F15066FF1D12B
-#449F15066FF1D12B
-#449F15066FF1D12B
-#449F15066FF1D12B
-#449F15066FF1D12B
-#449F15066FF1D12B
-#FF444A1FE2D948DD
+u16 npc-boar-wall-pin-struggle-enter
+npc-boar-wall-bump-sync
+npc-boar-standing-struggle-loop
+npc-boar-standing-struggle-loop
+npc-boar-standing-struggle-loop
+npc-boar-standing-struggle-loop
+npc-boar-standing-struggle-loop
+npc-boar-standing-struggle-loop
+npc-boar-wall-struggle-enter
 embedded@d900(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     if (is-player?(arg_1) && is-player?(arg_2)) {
         start-rumble(melee-standing-finisher-strong-rumble-settings, 0);
@@ -579,9 +579,9 @@ embedded@d900(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
     return var_4;
 }
 
-u16 #15E8E595B82D5C03
-#33F41705F7B0E06B
-#FF444A1FE2D948DD
+u16 npc-boar-wall-pin-struggle-enter
+npc-boar-wall-bump-sync
+npc-boar-wall-struggle-enter
 embedded@ec00(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_3;
     if (!(1) && 1 || is-player?(arg_1) && is-player?(arg_2)) {
@@ -592,23 +592,23 @@ embedded@ec00(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
     return var_3;
 }
 
-u64? #15E8E595B82D5C03
-#DCC5884A172F1FED
-#FF444A1FE2D948DD
+u64? npc-boar-wall-pin-struggle-enter
+npc-boar-standing-struggle-enter
+npc-boar-wall-struggle-enter
 embedded@ea00(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return melee-fact-set-bool(arg_1, struggle-set-duration?, 1);
 }
 
-u16 #15E8E595B82D5C03
-#3229B75DA382E01B
-#449F15066FF1D12B
-#45DF9EB4DB242FCA
-#68C20BA3A21E3D10
-#77CF609002BAAF4D
-#A3B9B7EAEC8731DD
-#D16CD1A194968F40
-#DCC5884A172F1FED
-#FF444A1FE2D948DD
+u16 npc-boar-wall-pin-struggle-enter
+npc-boar-wall-struggle-loop
+npc-boar-standing-struggle-loop
+npc-boar-wall-pin-struggle-success
+npc-boar-standing-struggle-success
+npc-boar-standing-bump
+npc-boar-wall-pin-struggle-loop
+npc-boar-wall-struggle-success
+npc-boar-standing-struggle-enter
+npc-boar-wall-struggle-enter
 embedded@dfe8(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u64? var_0;
     if (defender == defender) {
@@ -631,51 +631,51 @@ embedded@dfe8(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
     return var_4;
 }
 
-u16 #15E8E595B82D5C03
-#15E8E595B82D5C03
-#15E8E595B82D5C03
-#15E8E595B82D5C03
-#33F41705F7B0E06B
-#33F41705F7B0E06B
-#45DF9EB4DB242FCA
-#68C20BA3A21E3D10
-#77CF609002BAAF4D
-#D16CD1A194968F40
-#DCC5884A172F1FED
-#FF444A1FE2D948DD
-#FF444A1FE2D948DD
-#FF444A1FE2D948DD
-#FF444A1FE2D948DD
+u16 npc-boar-wall-pin-struggle-enter
+npc-boar-wall-pin-struggle-enter
+npc-boar-wall-pin-struggle-enter
+npc-boar-wall-pin-struggle-enter
+npc-boar-wall-bump-sync
+npc-boar-wall-bump-sync
+npc-boar-wall-pin-struggle-success
+npc-boar-standing-struggle-success
+npc-boar-standing-bump
+npc-boar-wall-struggle-success
+npc-boar-standing-struggle-enter
+npc-boar-wall-struggle-enter
+npc-boar-wall-struggle-enter
+npc-boar-wall-struggle-enter
+npc-boar-wall-struggle-enter
 embedded@dc68(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return 1;
 }
 
-u16 #15E8E595B82D5C03
-#33F41705F7B0E06B
-#33F41705F7B0E06B
-#33F41705F7B0E06B
-#FF444A1FE2D948DD
+u16 npc-boar-wall-pin-struggle-enter
+npc-boar-wall-bump-sync
+npc-boar-wall-bump-sync
+npc-boar-wall-bump-sync
+npc-boar-wall-struggle-enter
 embedded@d998(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return 0;
 }
 
-u64? #15E8E595B82D5C03
-#33F41705F7B0E06B
-#FF444A1FE2D948DD
+u64? npc-boar-wall-pin-struggle-enter
+npc-boar-wall-bump-sync
+npc-boar-wall-struggle-enter
 embedded@f9b8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return set-character-force-contact-with-big-collision(arg_2, 0, 0);
 }
 
-u64? #15E8E595B82D5C03
-#33F41705F7B0E06B
-#FF444A1FE2D948DD
+u64? npc-boar-wall-pin-struggle-enter
+npc-boar-wall-bump-sync
+npc-boar-wall-struggle-enter
 embedded@e6b0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return joypad-disable-commands-timed(0.00, melee-attack);
 }
 
-f32 #15E8E595B82D5C03__melee-camera-info@2b30
-#33F41705F7B0E06B__melee-camera-info@2b30
-#FF444A1FE2D948DD__melee-camera-info@2b30
+f32 npc-boar-wall-pin-struggle-enter__melee-camera-info@2b30
+npc-boar-wall-bump-sync__melee-camera-info@2b30
+npc-boar-wall-struggle-enter__melee-camera-info@2b30
 embedded@6908(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
     f32 var_1;
     if (player-is-aiming?()) {
@@ -686,9 +686,9 @@ embedded@6908(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
     return var_1;
 }
 
-u64? #3229B75DA382E01B__melee-attack@578__start-func-array@32e8__
-#449F15066FF1D12B__melee-attack@958__start-func-array@32e8__
-#A3B9B7EAEC8731DD__melee-attack@1308__start-func-array@32e8__
+u64? npc-boar-wall-struggle-loop__melee-attack@578__start-func-array@32e8__
+npc-boar-standing-struggle-loop__melee-attack@958__start-func-array@32e8__
+npc-boar-wall-pin-struggle-loop__melee-attack@1308__start-func-array@32e8__
 embedded@e040(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
     u64? var_0 = get-object-distance(arg_1, arg_2);
     bool var_1 = !(arg_1 == 0) && !(arg_2 == 0) && var_0 < 3.00 && var_0 > 0.00;
@@ -713,9 +713,9 @@ embedded@e040(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
     return var_1 && !var_8 && !var_8;
 }
 
-u16 #3229B75DA382E01B
-#449F15066FF1D12B
-#A3B9B7EAEC8731DD
+u16 npc-boar-wall-struggle-loop
+npc-boar-standing-struggle-loop
+npc-boar-wall-pin-struggle-loop
 embedded@1f80(i64 arg_0, i64 arg_1, i64 arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
     player-reset-button-mash();
     melee-fact-set-bool(arg_0, in-synced-grab-struggle, 0);
@@ -735,16 +735,16 @@ embedded@1f80(i64 arg_0, i64 arg_1, i64 arg_2, u64? arg_3, u64? arg_4, u64? arg_
     return var_0;
 }
 
-u64? #3229B75DA382E01B__melee-event-list@26b0
-#449F15066FF1D12B__melee-event-list@2e08
-#A3B9B7EAEC8731DD__melee-event-list@36d8
+u64? npc-boar-wall-struggle-loop__melee-event-list@26b0
+npc-boar-standing-struggle-loop__melee-event-list@2e08
+npc-boar-wall-pin-struggle-loop__melee-event-list@36d8
 embedded@da48(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return melee-fact-set-int(arg_1, mash-count, 0);
 }
 
-u64? #3229B75DA382E01B
-#449F15066FF1D12B
-#A3B9B7EAEC8731DD
+u64? npc-boar-wall-struggle-loop
+npc-boar-standing-struggle-loop
+npc-boar-wall-pin-struggle-loop
 embedded@cbe8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     if (!0) {
         melee-debug-text-file-line-fail("force-struggle-mash", "t2r/src/game/scriptx/melee/npc-standing/imports/npc-standing-macros.dcx", 5693);
@@ -754,12 +754,12 @@ embedded@cbe8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
     return 0 && var_0 && var_0;
 }
 
-u16 #3229B75DA382E01B
-#3229B75DA382E01B
-#449F15066FF1D12B
-#449F15066FF1D12B
-#A3B9B7EAEC8731DD
-#A3B9B7EAEC8731DD
+u16 npc-boar-wall-struggle-loop
+npc-boar-wall-struggle-loop
+npc-boar-standing-struggle-loop
+npc-boar-standing-struggle-loop
+npc-boar-wall-pin-struggle-loop
+npc-boar-wall-pin-struggle-loop
 embedded@e848(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_1;
     if (joypad-command-active?(melee-attack, 6)) {
@@ -772,19 +772,19 @@ embedded@e848(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
     return var_1;
 }
 
-u64? #3229B75DA382E01B
-#3229B75DA382E01B
-#449F15066FF1D12B
-#449F15066FF1D12B
-#A3B9B7EAEC8731DD
-#A3B9B7EAEC8731DD
+u64? npc-boar-wall-struggle-loop
+npc-boar-wall-struggle-loop
+npc-boar-standing-struggle-loop
+npc-boar-standing-struggle-loop
+npc-boar-wall-pin-struggle-loop
+npc-boar-wall-pin-struggle-loop
 embedded@d8a8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return joypad-command-active?(melee-repeat, 6);
 }
 
-u64? #3229B75DA382E01B
-#449F15066FF1D12B
-#A3B9B7EAEC8731DD
+u64? npc-boar-wall-struggle-loop
+npc-boar-standing-struggle-loop
+npc-boar-wall-pin-struggle-loop
 embedded@dd18(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u64? var_1;
     if (button-mashes-are-holds?()) {
@@ -797,14 +797,14 @@ embedded@dd18(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
     return var_1;
 }
 
-u64? #3229B75DA382E01B
+u64? npc-boar-wall-struggle-loop
 embedded@d278(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
-    return log-event("melee-npc-contextual-low-cover-grab", 1, string-debug(#3229B75DA382E01B), 0, 0);
+    return log-event("melee-npc-contextual-low-cover-grab", 1, string-debug(npc-boar-wall-struggle-loop), 0, 0);
 }
 
-u16 #3229B75DA382E01B
-#449F15066FF1D12B
-#A3B9B7EAEC8731DD
+u16 npc-boar-wall-struggle-loop
+npc-boar-standing-struggle-loop
+npc-boar-wall-pin-struggle-loop
 embedded@cdf0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_1;
     if (!melee-fact-get-bool(arg_1, looping-struggle)) {
@@ -815,8 +815,8 @@ embedded@cdf0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
     return var_1;
 }
 
-u64? #3229B75DA382E01B
-#A3B9B7EAEC8731DD
+u64? npc-boar-wall-struggle-loop
+npc-boar-wall-pin-struggle-loop
 embedded@e658(u64? arg_0, u64? arg_1, i64 arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     if (0 && 1) {
         camera-override-near-clip/f(0.01);
@@ -828,9 +828,9 @@ embedded@e658(u64? arg_0, u64? arg_1, i64 arg_2, u64? arg_3, u64? arg_4, u64? ar
     }
 }
 
-u16 #3229B75DA382E01B
-#449F15066FF1D12B
-#A3B9B7EAEC8731DD
+u16 npc-boar-wall-struggle-loop
+npc-boar-standing-struggle-loop
+npc-boar-wall-pin-struggle-loop
 embedded@f448(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_1;
     if (is-player?(arg_2)) {
@@ -841,8 +841,8 @@ embedded@f448(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
     return var_1;
 }
 
-u16 #3229B75DA382E01B
-#A3B9B7EAEC8731DD
+u16 npc-boar-wall-struggle-loop
+npc-boar-wall-pin-struggle-loop
 embedded@f190(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_1;
     if (is-player?(arg_2)) {
@@ -873,27 +873,27 @@ embedded@f190(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? ar
     return var_1;
 }
 
-u16 #3229B75DA382E01B
+u16 npc-boar-wall-struggle-loop
 embedded@fa78(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_3;
     if (0 && clicker-struggle-mashable?(arg_1, arg_2) && is-player?(arg_2) && !melee-fact-get-bool(arg_2, forced-struggle-death)) {
-        var_3 = melee-struggle-hud-placement(#3229B75DA382E01B, arg_1, arg_2, interact-attack-mash);
+        var_3 = melee-struggle-hud-placement(npc-boar-wall-struggle-loop, arg_1, arg_2, interact-attack-mash);
     } else {
         var_3 = 0;
     }
     return var_3;
 }
 
-u64? #3229B75DA382E01B
-#449F15066FF1D12B
-#A3B9B7EAEC8731DD
+u64? npc-boar-wall-struggle-loop
+npc-boar-standing-struggle-loop
+npc-boar-wall-pin-struggle-loop
 embedded@d170(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return request-dialog(ai-enemy-melee-grab-player, arg_1, arg_2, 0, 0, 0, 0);
 }
 
-u16 #3229B75DA382E01B
-#449F15066FF1D12B
-#A3B9B7EAEC8731DD
+u16 npc-boar-wall-struggle-loop
+npc-boar-standing-struggle-loop
+npc-boar-wall-pin-struggle-loop
 embedded@f2f8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_3;
     if (!(1) && 1 || is-player?(arg_1) && is-player?(arg_2)) {
@@ -904,14 +904,14 @@ embedded@f2f8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
     return var_3;
 }
 
-u64? #3229B75DA382E01B
-#449F15066FF1D12B
-#A3B9B7EAEC8731DD
+u64? npc-boar-wall-struggle-loop
+npc-boar-standing-struggle-loop
+npc-boar-wall-pin-struggle-loop
 embedded@ef98(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return melee-fact-set-int(arg_1, falloff-to-kill-health-delta, get-player-health());
 }
 
-u64? #3229B75DA382E01B
+u64? npc-boar-wall-struggle-loop
 embedded@df90(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u64? var_1 = melee-fact-get-int(arg_1, falloff-to-kill-health-delta);
     u64? var_5 = pow-float(2.00, 10.00 * (((get-layer-animation-frame(arg_1, base) - 120.00) / ((f32)sec-to-frames(get-animation-duration(arg_1, ellie-boar-wall-struggle--ellie)) - 120.00)) - 1.00));
@@ -926,8 +926,8 @@ embedded@df90(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
     return melee-fact-set-float(arg_1, last-frame-damage-dealt, ((f32)var_1 * var_5) + 0.00);
 }
 
-u16 #3229B75DA382E01B
-#A3B9B7EAEC8731DD
+u16 npc-boar-wall-struggle-loop
+npc-boar-wall-pin-struggle-loop
 embedded@d700(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_4;
     if (is-player-base?(arg_2) || !net-is-active?() && net-is-player-local?(net-get-net-id-from-player(arg_2))) {
@@ -964,8 +964,8 @@ embedded@d700(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
     return var_4;
 }
 
-u16 #3229B75DA382E01B
-#A3B9B7EAEC8731DD
+u16 npc-boar-wall-struggle-loop
+npc-boar-wall-pin-struggle-loop
 embedded@cc90(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_0;
     if (defender == defender) {
@@ -1007,16 +1007,16 @@ embedded@cc90(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
             var_0 = 0;
         }
     } else if (dc-assert-enabled?() && !1) {
-        var_0 = display-error(#5445173390656D6D("melee-simple-damage-event: incorrect character '%s'", string-debug(defender)));
+        var_0 = display-error(dc:format("melee-simple-damage-event: incorrect character '%s'", string-debug(defender)));
     } else {
         var_0 = 0;
     }
     return var_0;
 }
 
-u16 #3229B75DA382E01B
-#449F15066FF1D12B
-#A3B9B7EAEC8731DD
+u16 npc-boar-wall-struggle-loop
+npc-boar-standing-struggle-loop
+npc-boar-wall-pin-struggle-loop
 embedded@d6a8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_1;
     if (melee-fact-get-bool(arg_1, struggle-set-duration?)) {
@@ -1028,33 +1028,33 @@ embedded@d6a8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
     return var_1;
 }
 
-u64? #3229B75DA382E01B
-#449F15066FF1D12B
-#A3B9B7EAEC8731DD
+u64? npc-boar-wall-struggle-loop
+npc-boar-standing-struggle-loop
+npc-boar-wall-pin-struggle-loop
 embedded@d018(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return is-npc?(arg_2) && melee-fact-get-time-since(arg_2, grab-duration) < 5.00;
 }
 
-u64? #3229B75DA382E01B
-#449F15066FF1D12B
-#A3B9B7EAEC8731DD
+u64? npc-boar-wall-struggle-loop
+npc-boar-standing-struggle-loop
+npc-boar-wall-pin-struggle-loop
 embedded@d4e8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return is-npc?(arg_2) || melee-fact-get-time-since(arg_1, grab-duration) > 5.00 && npc-on-screen-and-visible?(arg_2, -1, 0) && melee-fact-get-time-since(arg_1, grab-duration) > 1.50;
 }
 
-u64? #3229B75DA382E01B
-#3229B75DA382E01B
-#449F15066FF1D12B
-#449F15066FF1D12B
-#A3B9B7EAEC8731DD
-#A3B9B7EAEC8731DD
+u64? npc-boar-wall-struggle-loop
+npc-boar-wall-struggle-loop
+npc-boar-standing-struggle-loop
+npc-boar-standing-struggle-loop
+npc-boar-wall-pin-struggle-loop
+npc-boar-wall-pin-struggle-loop
 embedded@f128(u64? arg_0, u64? arg_1, sid arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return !is-npc?(arg_2) || 0 && clicker-struggle-mashable?(arg_1, arg_2) && !0 && !0 && !melee-fact-get-bool(arg_2, prevent-struggle-success) && net-is-active?() && !(player == arg_2) && net-player-mash-success?(arg_2);
 }
 
-u64? #3229B75DA382E01B
-#449F15066FF1D12B
-#A3B9B7EAEC8731DD
+u64? npc-boar-wall-struggle-loop
+npc-boar-standing-struggle-loop
+npc-boar-wall-pin-struggle-loop
 embedded@f0d0(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     if (!!(arg_2 == 0)) {
         melee-debug-text-file-line-fail("(valid-symbol? defender)", "t2r/src/game/scriptx/melee/npc-standing/imports/npc-standing-macros.dcx", 6102);
@@ -1064,9 +1064,9 @@ embedded@f0d0(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
     return !(arg_2 == 0) || melee-fact-get-bool(arg_2, forced-struggle-death) && var_1 <= 0 && var_1 <= 0 && var_1 <= 0;
 }
 
-u64? #3229B75DA382E01B
-#449F15066FF1D12B
-#A3B9B7EAEC8731DD
+u64? npc-boar-wall-struggle-loop
+npc-boar-standing-struggle-loop
+npc-boar-wall-pin-struggle-loop
 embedded@f7f0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return broadcast-event(
         melee-damage,
@@ -1076,38 +1076,38 @@ embedded@f7f0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
     );
 }
 
-bool #3229B75DA382E01B
-#449F15066FF1D12B
-#A3B9B7EAEC8731DD
+bool npc-boar-wall-struggle-loop
+npc-boar-standing-struggle-loop
+npc-boar-wall-pin-struggle-loop
 embedded@dd98(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return -1 < 0;
 }
 
-u64? #3229B75DA382E01B
-#449F15066FF1D12B
-#A3B9B7EAEC8731DD
+u64? npc-boar-wall-struggle-loop
+npc-boar-standing-struggle-loop
+npc-boar-wall-pin-struggle-loop
 embedded@f058(u64? arg_0, u64? arg_1, u16 arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return arg_2 == 0 && character-is-dead?(arg_2);
 }
 
-u64? #3229B75DA382E01B
-#449F15066FF1D12B
-#A3B9B7EAEC8731DD
+u64? npc-boar-wall-struggle-loop
+npc-boar-standing-struggle-loop
+npc-boar-wall-pin-struggle-loop
 embedded@e198(u64? arg_0, u16 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return arg_1 == 0 && character-is-dead?(arg_1);
 }
 
-u64? #3229B75DA382E01B
-#449F15066FF1D12B
-#A3B9B7EAEC8731DD
+u64? npc-boar-wall-struggle-loop
+npc-boar-standing-struggle-loop
+npc-boar-wall-pin-struggle-loop
 embedded@ed08(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     melee-fact-set-bool(arg_1, in-synced-grab-struggle, 1);
     return melee-fact-set-bool(arg_2, in-synced-grab-struggle, 1);
 }
 
-f32 #3229B75DA382E01B__melee-camera-info@2b18
-#449F15066FF1D12B__melee-camera-info@2b18
-#A3B9B7EAEC8731DD__melee-camera-info@2b18
+f32 npc-boar-wall-struggle-loop__melee-camera-info@2b18
+npc-boar-standing-struggle-loop__melee-camera-info@2b18
+npc-boar-wall-pin-struggle-loop__melee-camera-info@2b18
 embedded@7010(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
     f32 var_1;
     if (is-camera-animated?()) {
@@ -1118,7 +1118,7 @@ embedded@7010(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
     return var_1;
 }
 
-u64? #33F41705F7B0E06B__melee-attack@768__start-func-array@2698__
+u64? npc-boar-wall-bump-sync__melee-attack@768__start-func-array@2698__
 embedded@e9a8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
     return !character-in-struggle?(arg_2, 16) && 1 && 1 || against-wall-relative?(
         arg_8,
@@ -1132,7 +1132,7 @@ embedded@e9a8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
     ) || against-wall-relative?(arg_8, point-sub(get-object-position(arg_2), get-object-position(arg_1)), 0, 4.00, 0.00, arg_13, 0, 1) && get-locator-distance-xz(npc-get-last-target-against-wall-bound-frame(arg_1, 1), get-object-locator(arg_2)) < 2.00 && set-cache-bound-frame(arg_13, npc-get-last-target-against-wall-bound-frame(arg_1, 1), 0);
 }
 
-u64? #33F41705F7B0E06B__melee-attack@768
+u64? npc-boar-wall-bump-sync__melee-attack@768
 embedded@e5c0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
     u64? var_2 = get-locator-distance(get-object-locator(arg_1), get-object-locator(arg_2));
     if (!(var_2 < 2.00)) {
@@ -1143,12 +1143,12 @@ embedded@e5c0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
     return var_2 < 2.00 && var_5 && var_5;
 }
 
-u64? #449F15066FF1D12B
+u64? npc-boar-standing-struggle-loop
 embedded@ef40(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
-    return log-event("melee-npc-standing-grab", 1, string-debug(#449F15066FF1D12B), 0, 0);
+    return log-event("melee-npc-standing-grab", 1, string-debug(npc-boar-standing-struggle-loop), 0, 0);
 }
 
-u64? #449F15066FF1D12B
+u64? npc-boar-standing-struggle-loop
 embedded@daf8(u64? arg_0, u64? arg_1, i64 arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     if (0 && 0) {
         camera-override-near-clip/f(0.01);
@@ -1160,7 +1160,7 @@ embedded@daf8(u64? arg_0, u64? arg_1, i64 arg_2, u64? arg_3, u64? arg_4, u64? ar
     }
 }
 
-u16 #449F15066FF1D12B
+u16 npc-boar-standing-struggle-loop
 embedded@e798(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_1;
     if (is-player?(arg_2)) {
@@ -1191,18 +1191,18 @@ embedded@e798(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? ar
     return var_1;
 }
 
-u16 #449F15066FF1D12B
+u16 npc-boar-standing-struggle-loop
 embedded@fb68(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_3;
     if (0 && clicker-struggle-mashable?(arg_1, arg_2) && is-player?(arg_2) && !melee-fact-get-bool(arg_2, forced-struggle-death)) {
-        var_3 = melee-struggle-hud-placement(#449F15066FF1D12B, arg_1, arg_2, interact-attack-mash);
+        var_3 = melee-struggle-hud-placement(npc-boar-standing-struggle-loop, arg_1, arg_2, interact-attack-mash);
     } else {
         var_3 = 0;
     }
     return var_3;
 }
 
-u64? #449F15066FF1D12B
+u64? npc-boar-standing-struggle-loop
 embedded@f350(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u64? var_1 = melee-fact-get-int(arg_1, falloff-to-kill-health-delta);
     u64? var_5 = pow-float(2.00, 10.00 * (((get-layer-animation-frame(arg_1, base) - 130.00) / ((f32)sec-to-frames(get-animation-duration(arg_1, ellie-boar-supine-struggle-loop--ellie)) - 130.00)) - 1.00));
@@ -1217,7 +1217,7 @@ embedded@f350(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
     return melee-fact-set-float(arg_1, last-frame-damage-dealt, ((f32)var_1 * var_5) + 0.00);
 }
 
-u16 #449F15066FF1D12B
+u16 npc-boar-standing-struggle-loop
 embedded@e468(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_4;
     if (is-player-base?(arg_2) || !net-is-active?() && net-is-player-local?(net-get-net-id-from-player(arg_2))) {
@@ -1254,12 +1254,12 @@ embedded@e468(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
     return var_4;
 }
 
-u16 #449F15066FF1D12B
-#449F15066FF1D12B
-#449F15066FF1D12B
-#449F15066FF1D12B
-#449F15066FF1D12B
-#449F15066FF1D12B
+u16 npc-boar-standing-struggle-loop
+npc-boar-standing-struggle-loop
+npc-boar-standing-struggle-loop
+npc-boar-standing-struggle-loop
+npc-boar-standing-struggle-loop
+npc-boar-standing-struggle-loop
 embedded@ecb0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_0;
     if (defender == defender) {
@@ -1301,31 +1301,31 @@ embedded@ecb0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
             var_0 = 0;
         }
     } else if (dc-assert-enabled?() && !1) {
-        var_0 = display-error(#5445173390656D6D("melee-simple-damage-event: incorrect character '%s'", string-debug(defender)));
+        var_0 = display-error(dc:format("melee-simple-damage-event: incorrect character '%s'", string-debug(defender)));
     } else {
         var_0 = 0;
     }
     return var_0;
 }
 
-f32 #45DF9EB4DB242FCA__melee-attack@b48__character-melee-info@25f0__
-#45DF9EB4DB242FCA__character-melee-info@1ec0
-#68C20BA3A21E3D10__melee-attack@d38__character-melee-info@3c78__
-#68C20BA3A21E3D10__character-melee-info@29c8
-#77CF609002BAAF4D__melee-attack@f28__character-melee-info@3148__
-#77CF609002BAAF4D__character-melee-info@36f0
-#857C4163E23E6A36__character-melee-info@2e20
-#D16CD1A194968F40__melee-attack@16e8__character-melee-info@37b0__
-#D16CD1A194968F40__character-melee-info@2f20
-#DCC5884A172F1FED__melee-attack@18d8__character-melee-info@2cf8__
-#DCC5884A172F1FED__character-melee-info@1fd8
+f32 npc-boar-wall-pin-struggle-success__melee-attack@b48__character-melee-info@25f0__
+npc-boar-wall-pin-struggle-success__character-melee-info@1ec0
+npc-boar-standing-struggle-success__melee-attack@d38__character-melee-info@3c78__
+npc-boar-standing-struggle-success__character-melee-info@29c8
+npc-boar-standing-bump__melee-attack@f28__character-melee-info@3148__
+npc-boar-standing-bump__character-melee-info@36f0
+npc-boar-wall-bump-enter__character-melee-info@2e20
+npc-boar-wall-struggle-success__melee-attack@16e8__character-melee-info@37b0__
+npc-boar-wall-struggle-success__character-melee-info@2f20
+npc-boar-standing-struggle-enter__melee-attack@18d8__character-melee-info@2cf8__
+npc-boar-standing-struggle-enter__character-melee-info@1fd8
 embedded@ad78(u64? arg_0, u64? arg_1, u64? arg_2) {
     return 0.20;
 }
 
-u64? #45DF9EB4DB242FCA__start-func-array@3088
-#77CF609002BAAF4D__start-func-array@27d8
-#D16CD1A194968F40__start-func-array@3088
+u64? npc-boar-wall-pin-struggle-success__start-func-array@3088
+npc-boar-standing-bump__start-func-array@27d8
+npc-boar-wall-struggle-success__start-func-array@3088
 embedded@fad0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
     u64? var_0 = has-hyper-armor?(arg_2);
     if (!!var_0) {
@@ -1334,10 +1334,10 @@ embedded@fad0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
     return !var_0 || 0 && 0 && against-wall-relative?(arg_8, point-sub(get-object-position(arg_2), get-object-position(arg_1)), 0, 2.00, 0.00, arg_13, 0, 1);
 }
 
-u16 #45DF9EB4DB242FCA
-#68C20BA3A21E3D10
-#77CF609002BAAF4D
-#D16CD1A194968F40
+u16 npc-boar-wall-pin-struggle-success
+npc-boar-standing-struggle-success
+npc-boar-standing-bump
+npc-boar-wall-struggle-success
 embedded@2ec8(i64 arg_0, i64 arg_1, i64 arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
     if (0 > 0 && !is-player?(arg_0)) {
         melee-fact-set-bool(arg_0, stunned, 0);
@@ -1366,11 +1366,11 @@ embedded@2ec8(i64 arg_0, i64 arg_1, i64 arg_2, u64? arg_3, u64? arg_4, u64? arg_
     return var_2;
 }
 
-u64? #45DF9EB4DB242FCA
-#68C20BA3A21E3D10
-#77CF609002BAAF4D
-#D16CD1A194968F40
-#DCC5884A172F1FED__melee-event-list@27c0
+u64? npc-boar-wall-pin-struggle-success
+npc-boar-standing-struggle-success
+npc-boar-standing-bump
+npc-boar-wall-struggle-success
+npc-boar-standing-struggle-enter__melee-event-list@27c0
 embedded@f8f8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     invalidate-single-melee-command-queue(arg_2, melee-attack);
     joypad-disable-commands-timed(0.00, melee-attack);
@@ -1382,11 +1382,11 @@ embedded@f8f8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
     return joypad-disable-commands-timed(0.00, evade, evade-start, evade-pre, evade-release, evade-climb);
 }
 
-u16 #45DF9EB4DB242FCA
-#68C20BA3A21E3D10
-#77CF609002BAAF4D
-#D16CD1A194968F40
-#DCC5884A172F1FED
+u16 npc-boar-wall-pin-struggle-success
+npc-boar-standing-struggle-success
+npc-boar-standing-bump
+npc-boar-wall-struggle-success
+npc-boar-standing-struggle-enter
 embedded@e130(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_2;
     if (is-player?(arg_1) && is-player?(arg_2)) {
@@ -1398,18 +1398,18 @@ embedded@e130(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
     return var_2;
 }
 
-u64? #45DF9EB4DB242FCA
-#68C20BA3A21E3D10
-#77CF609002BAAF4D
-#D16CD1A194968F40
+u64? npc-boar-wall-pin-struggle-success
+npc-boar-standing-struggle-success
+npc-boar-standing-bump
+npc-boar-wall-struggle-success
 embedded@d610(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return melee-fact-set-time(arg_2, last-struggle-success);
 }
 
-u64? #45DF9EB4DB242FCA
-#68C20BA3A21E3D10
-#77CF609002BAAF4D
-#D16CD1A194968F40
+u64? npc-boar-wall-pin-struggle-success
+npc-boar-standing-struggle-success
+npc-boar-standing-bump
+npc-boar-wall-struggle-success
 embedded@fbe0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     foreach (u64? var_2 : all-buddy-npcs) {
         if (npc-buddy-should-play-aborted-save-jumpback?(var_2) && !get-current-melee-attack(var_2)) {
@@ -1424,7 +1424,7 @@ embedded@fbe0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
     }
 }
 
-u64? #68C20BA3A21E3D10__start-func-array@1ea8
+u64? npc-boar-standing-struggle-success__start-func-array@1ea8
 embedded@dbb8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
     u64? var_0 = has-hyper-armor?(arg_2);
     if (!!var_0) {
@@ -1433,7 +1433,7 @@ embedded@dbb8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
     return !var_0 || 0 && 0 && against-wall-relative?(arg_8, point-sub(get-object-position(arg_2), get-object-position(arg_1)), 0, 2.00, 0.00, arg_13, 0, 1);
 }
 
-u64? #77CF609002BAAF4D
+u64? npc-boar-standing-bump
 embedded@e3d8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
     u64? var_2 = get-locator-distance(get-object-locator(arg_1), get-object-locator(arg_2));
     if (!(var_2 < 2.00)) {
@@ -1444,10 +1444,10 @@ embedded@e3d8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
     return var_2 < 2.00 && var_5 && var_5;
 }
 
-u16 #857C4163E23E6A36__melee-attack@1118
+u16 npc-boar-wall-bump-enter__melee-attack@1118
 embedded@2958(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
     u16 var_4;
-    if (0 && lookup-symbol(#33F41705F7B0E06B, melee-attack) && check-valid-swing-type(arg_1, *(u32*)(*(lookup-symbol(#33F41705F7B0E06B, melee-attack) + 296) + 40))) {
+    if (0 && lookup-symbol(npc-boar-wall-bump-sync, melee-attack) && check-valid-swing-type(arg_1, *(u32*)(*(lookup-symbol(npc-boar-wall-bump-sync, melee-attack) + 296) + 40))) {
         var_4 = 2;
     } else {
         var_4 = 1;
@@ -1455,7 +1455,7 @@ embedded@2958(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
     return var_4;
 }
 
-u64? #857C4163E23E6A36__start-func-array@31f0
+u64? npc-boar-wall-bump-enter__start-func-array@31f0
 embedded@d2d0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
     u64? var_2 = get-locator-distance(get-object-locator(arg_1), get-object-locator(arg_2));
     if (!(var_2 < 2.00)) {
@@ -1466,7 +1466,7 @@ embedded@d2d0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
     return var_2 < 2.00 && var_5 && var_5;
 }
 
-u64? #857C4163E23E6A36
+u64? npc-boar-wall-bump-enter
 embedded@d328(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
     u64? var_1;
     if (npc-is-melee-behavior-condition-active?(arg_1, 19, 0.50)) {
@@ -1510,14 +1510,14 @@ embedded@d328(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
     return var_1 && !(15 == 15) && melee-direction-check-locator-90s(get-object-locator(arg_1), get-object-locator(arg_2), 15, 90.00);
 }
 
-u16 #857C4163E23E6A36
+u16 npc-boar-wall-bump-enter
 embedded@3680(i64 arg_0, i64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
     u64? var_0 = get-animation-duration(arg_0, boar-hit-wall-melee-bump-180-r-intro--boar);
     u64? var_1 = get-animation-frame(arg_0, 2, boar-hit-wall-melee-bump-180-r-intro--boar);
     u16 var_2;
     if (arg_0 == arg_1 && ((var_0 * 30.00) - var_1) > 2.00) {
         if (!is-final-build?()) {
-            display(#5445173390656D6D("TELL INTERUPTED: interupted by %f frames", (var_0 * 30.00) - var_1), 19);
+            display(dc:format("TELL INTERUPTED: interupted by %f frames", (var_0 * 30.00) - var_1), 19);
         }
         var_2 = melee-fact-set-time(arg_0, last-time-tell-interupted);
     } else {
@@ -1526,12 +1526,12 @@ embedded@3680(i64 arg_0, i64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg
     return var_2;
 }
 
-u64? #857C4163E23E6A36__melee-event-list@2940
+u64? npc-boar-wall-bump-enter__melee-event-list@2940
 embedded@e8a0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return disable-vox-melee-death-callout(arg_1, arg_2);
 }
 
-u16 #857C4163E23E6A36
+u16 npc-boar-wall-bump-enter
 embedded@cf68(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_0;
     if (!(0 == 0)) {
@@ -1550,17 +1550,17 @@ embedded@cf68(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
     return var_0;
 }
 
-u64? #857C4163E23E6A36
+u64? npc-boar-wall-bump-enter
 embedded@f248(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return is-player?(arg_2) && !(player-is-crouched?()) && !(player-is-prone?());
 }
 
-u64? #857C4163E23E6A36
+u64? npc-boar-wall-bump-enter
 embedded@f848(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return melee-fact-set-int(arg_1, current-combo-swing, 0);
 }
 
-u16 #857C4163E23E6A36
+u16 npc-boar-wall-bump-enter
 embedded@d840(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     if (is-combat-audio-cues?() && arg_2 == player && is-npc?(arg_1) && 1) {
         u64? var_3;
@@ -1619,7 +1619,7 @@ embedded@d840(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
     return var_10;
 }
 
-u16 #857C4163E23E6A36
+u16 npc-boar-wall-bump-enter
 embedded@e7f0(u64? arg_0, u64? arg_1, sid arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_2;
     if (is-combat-vibration?() && arg_2 == player && is-npc?(arg_1)) {
@@ -1630,8 +1630,8 @@ embedded@e7f0(u64? arg_0, u64? arg_1, sid arg_2, u64? arg_3, u64? arg_4, u64? ar
     return var_2;
 }
 
-u16 #857C4163E23E6A36
-#857C4163E23E6A36
+u16 npc-boar-wall-bump-enter
+npc-boar-wall-bump-enter
 embedded@e718(u64? arg_0, u64? arg_1, sid arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_2;
     if (is-combat-vibration?() && arg_2 == player && is-npc?(arg_1)) {
@@ -1642,9 +1642,9 @@ embedded@e718(u64? arg_0, u64? arg_1, sid arg_2, u64? arg_3, u64? arg_4, u64? ar
     return var_2;
 }
 
-u16 #857C4163E23E6A36
+u16 npc-boar-wall-bump-enter
 embedded@db60(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
-    log-event("melee-npc-swing-tell", 1, string-debug(#857C4163E23E6A36), 0, 0);
+    log-event("melee-npc-swing-tell", 1, string-debug(npc-boar-wall-bump-enter), 0, 0);
     u16 var_2;
     if (npc-brute?(arg_1)) {
         var_2 = melee-fact-set-bool(arg_1, hit-during-swing, 0);
@@ -1654,10 +1654,10 @@ embedded@db60(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
     return var_2;
 }
 
-u64? #857C4163E23E6A36
+u64? npc-boar-wall-bump-enter
 embedded@ee18(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     melee-fact-set-time(arg_1, last-tell);
-    melee-fact-set-symbol(arg_1, last-tell-symbol, #857C4163E23E6A36);
+    melee-fact-set-symbol(arg_1, last-tell-symbol, npc-boar-wall-bump-enter);
     u16 var_1;
     if (get-current-melee-attack(arg_2)) {
         var_1 = *(u64*)get-current-melee-attack(arg_2);
@@ -1667,24 +1667,24 @@ embedded@ee18(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
     return melee-fact-set-symbol(arg_1, tell-init-defender-move, var_1);
 }
 
-u64? #857C4163E23E6A36
+u64? npc-boar-wall-bump-enter
 embedded@f5d8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return !*cwohlwend-test* && !(*(u8*)(*cwohlwend-test* + 26));
 }
 
-u64? #857C4163E23E6A36__melee-event-advanced@cfc8
-#857C4163E23E6A36
+u64? npc-boar-wall-bump-enter__melee-event-advanced@cfc8
+npc-boar-wall-bump-enter
 embedded@1fbc8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return npc-swing-speed-flex(arg_1, arg_2, (f32)estimate-frames-til-hit(arg_1), 1);
 }
 
-u64? #857C4163E23E6A36
+u64? npc-boar-wall-bump-enter
 embedded@d550(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     melee-fact-set-time(arg_1, last-early-aborted-tell);
     return 1 && is-player?(arg_2) && melee-fact-get-time-since(arg_1, last-early-aborted-tell) > 3.00 && player-is-prone?() || !npc-is-melee-behavior-condition-active?(arg_1, 19, 0.00) && character-in-brute-throw?(arg_2) && 1;
 }
 
-u16 #857C4163E23E6A36
+u16 npc-boar-wall-bump-enter
 embedded@d098(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_0;
     if (1 && 1) {
@@ -1695,39 +1695,39 @@ embedded@d098(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
     return var_0;
 }
 
-u64? #857C4163E23E6A36
+u64? npc-boar-wall-bump-enter
 embedded@f8a0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return !offscreen-sprint-tracking-logic(arg_1, arg_2) && !(rogue-get-player-character() == 5) && !(rogue-get-player-character() == 3) && !(rogue-get-player-character() == 11);
 }
 
-u64? #857C4163E23E6A36__melee-event-advanced@fb28
-#857C4163E23E6A36__melee-event-advanced@e618
+u64? npc-boar-wall-bump-enter__melee-event-advanced@fb28
+npc-boar-wall-bump-enter__melee-event-advanced@e618
 embedded@1fac0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u64? var_4 = get-current-melee-attack(arg_2);
     return 0 || npc-enemy-ellie?(arg_1) && character-in-unsynced-melee-attack-as-attacker?(arg_2) && character-in-melee-attack-of-other-character?(arg_1, arg_2) && get-current-melee-attack(arg_2) && *(u64*)(var_4 + 16) == melee-player-contextual-dodge && !(*(u64*)(var_4 + 16) == melee-player-contextual-dodge);
 }
 
-u64? #857C4163E23E6A36
+u64? npc-boar-wall-bump-enter
 embedded@ccf8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return offscreen-sprint-tracking-logic(arg_1, arg_2) || rogue-get-player-character() == 5 || rogue-get-player-character() == 3 && rogue-get-player-character() == 11;
 }
 
-u64? #857C4163E23E6A36
+u64? npc-boar-wall-bump-enter
 embedded@ec58(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return !(arg_1 == 0) && !(arg_2 == 0) && character-in-finisher?(arg_2) && character-in-uninterruptible-melee-move?(arg_2) && character-has-surprised-at-finisher?(arg_1, arg_2);
 }
 
-sid #857C4163E23E6A36__melee-event-transitions@cec0
+sid npc-boar-wall-bump-enter__melee-event-transitions@cec0
 embedded@1fc28(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
     return npc-execution-surprises;
 }
 
-u64? #857C4163E23E6A36
+u64? npc-boar-wall-bump-enter
 embedded@e200(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return melee-weapon-type-precedence(arg_1, arg_2) && npc-enemy-ellie?(arg_1);
 }
 
-u16 #857C4163E23E6A36
+u16 npc-boar-wall-bump-enter
 embedded@f688(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_1;
     if (npc-enemy-ellie?(arg_1)) {
@@ -1738,23 +1738,23 @@ embedded@f688(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
     return var_1;
 }
 
-u64? #A3B9B7EAEC8731DD
+u64? npc-boar-wall-pin-struggle-loop
 embedded@f000(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
-    return log-event("melee-npc-contextual-low-cover-grab", 1, string-debug(#A3B9B7EAEC8731DD), 0, 0);
+    return log-event("melee-npc-contextual-low-cover-grab", 1, string-debug(npc-boar-wall-pin-struggle-loop), 0, 0);
 }
 
-u16 #A3B9B7EAEC8731DD
+u16 npc-boar-wall-pin-struggle-loop
 embedded@d5b8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_3;
     if (0 && clicker-struggle-mashable?(arg_1, arg_2) && is-player?(arg_2) && !melee-fact-get-bool(arg_2, forced-struggle-death)) {
-        var_3 = melee-struggle-hud-placement(#A3B9B7EAEC8731DD, arg_1, arg_2, interact-attack-mash);
+        var_3 = melee-struggle-hud-placement(npc-boar-wall-pin-struggle-loop, arg_1, arg_2, interact-attack-mash);
     } else {
         var_3 = 0;
     }
     return var_3;
 }
 
-u64? #A3B9B7EAEC8731DD
+u64? npc-boar-wall-pin-struggle-loop
 embedded@ed60(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u64? var_1 = melee-fact-get-int(arg_1, falloff-to-kill-health-delta);
     u64? var_5 = pow-float(2.00, 10.00 * (((get-layer-animation-frame(arg_1, base) - 120.00) / ((f32)sec-to-frames(get-animation-duration(arg_1, ellie-boar-wall-pin-struggle--ellie)) - 120.00)) - 1.00));
@@ -1769,15 +1769,15 @@ embedded@ed60(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
     return melee-fact-set-float(arg_1, last-frame-damage-dealt, ((f32)var_1 * var_5) + 0.00);
 }
 
-u64? #D0A7D92CF5B56A3D
+u64? npc-boar-wall-struggle-fail
 embedded@d758(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     if (is-player?(arg_2)) {
         send-event(synced-finisher-v-player, ss-promote-death-hints, boxed_symbol(arg_1));
     }
-    return log-event("melee-npc-finisher", 1, string-debug(#D0A7D92CF5B56A3D), 0, 0);
+    return log-event("melee-npc-finisher", 1, string-debug(npc-boar-wall-struggle-fail), 0, 0);
 }
 
-u64? #DCC5884A172F1FED__start-func-array@2ce0
+u64? npc-boar-standing-struggle-enter__start-func-array@2ce0
 embedded@f580(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
     u64? var_0 = has-hyper-armor?(arg_2);
     if (!!var_0) {
@@ -1786,7 +1786,7 @@ embedded@f580(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
     return !var_0 || 0 && 0 && against-wall-relative?(arg_8, point-sub(get-object-position(arg_2), get-object-position(arg_1)), 0, 2.00, 0.00, arg_13, 0, 1);
 }
 
-u16 #DCC5884A172F1FED
+u16 npc-boar-standing-struggle-enter
 embedded@3568(i64 arg_0, i64 arg_1, i64 arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
     if (0 > 0 && !is-player?(arg_0)) {
         melee-fact-set-bool(arg_0, stunned, 0);
@@ -1814,16 +1814,16 @@ embedded@3568(i64 arg_0, i64 arg_1, i64 arg_2, u64? arg_3, u64? arg_4, u64? arg_
     return var_2;
 }
 
-u64? #DCC5884A172F1FED
+u64? npc-boar-standing-struggle-enter
 embedded@f630(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return fact-remove(arg_1, looping-struggle);
 }
 
-u64? #EA001D97492D22E3
+u64? npc-boar-wall-pin-struggle-fail
 embedded@f6f0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     if (is-player?(arg_2)) {
         send-event(synced-finisher-v-player, ss-promote-death-hints, boxed_symbol(arg_1));
     }
-    return log-event("melee-npc-finisher", 1, string-debug(#EA001D97492D22E3), 0, 0);
+    return log-event("melee-npc-finisher", 1, string-debug(npc-boar-wall-pin-struggle-fail), 0, 0);
 }
 

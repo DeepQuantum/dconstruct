@@ -23,11 +23,11 @@ embedded@3178() {
 
 bool tsk-tra-we-should-turn-back__level-set@5c0__level-scripted-set@6d0__
 embedded@3248() {
-    return get-boolean(#8FECA173AA95DC53, ss-cin-tra-we-should-turn-back-1);
+    return get-boolean(show-level, ss-cin-tra-we-should-turn-back-1);
 }
 
 u64? tsk-tra-we-should-turn-back__level-scripted-set@d18
 embedded@27b8() {
-    return !get-boolean(#8FECA173AA95DC53, ss-cin-tra-we-should-turn-back-1);
+    return !get-boolean(show-level, ss-cin-tra-we-should-turn-back-1);
 }
 

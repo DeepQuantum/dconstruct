@@ -277,7 +277,7 @@ infected-clicker-frenzy-announce-intro-180-l
 infected-clicker-frenzy-announce-intro-180-r
 infected-clicker-frenzy-phantom
 embedded@12c80(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
-    return melee-fact-get-bool(arg_2, #0A38E8AE5A91B7D9);
+    return melee-fact-get-bool(arg_2, extended-melee);
 }
 
 u64? infected-clicker-frenzy-announce
@@ -853,7 +853,7 @@ embedded@fc0(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? ar
                 if (player-in-meatshield?() && player-get-meatshield() == arg_2) {
                     if (is-in-front?(get-object-locator(arg_2), get-object-locator(arg_1), 2, 180.00) && is-in-front?(get-object-locator(arg_1), get-object-locator(arg_2), 2, 180.00)) {
                         if (!is-final-build?()) {
-                            display(#5445173390656D6D("END PLAYER MEATSHIELD DUE TO CLICKER MEATSHIELD CASE"), 19);
+                            display(dc:format("END PLAYER MEATSHIELD DUE TO CLICKER MEATSHIELD CASE"), 19);
                         }
                         log-event("clicker-ate-meatshield-npc", 1, "", 0, 0);
                         player-end-meatshield();
@@ -1759,7 +1759,7 @@ embedded@e58(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? ar
                 if (player-in-meatshield?() && player-get-meatshield() == arg_2) {
                     if (is-in-front?(get-object-locator(arg_2), get-object-locator(arg_1), 2, 180.00) && is-in-front?(get-object-locator(arg_1), get-object-locator(arg_2), 2, 180.00)) {
                         if (!is-final-build?()) {
-                            display(#5445173390656D6D("END PLAYER MEATSHIELD DUE TO CLICKER MEATSHIELD CASE"), 19);
+                            display(dc:format("END PLAYER MEATSHIELD DUE TO CLICKER MEATSHIELD CASE"), 19);
                         }
                         log-event("clicker-ate-meatshield-npc", 1, "", 0, 0);
                         player-end-meatshield();

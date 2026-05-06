@@ -289,32 +289,32 @@ embedded@67748() {
 
 bool ls-wait-for-layers__level-set@f138__level-scripted-set@25e00__
 embedded@61950() {
-    return get-int32(load-enum, #ED35A1D4B2346BBD) == 2;
+    return get-int32(load-enum, loading-script) == 2;
 }
 
 bool ls-wait-for-layers__level-scripted-set@1d7f0
 embedded@682a0() {
-    return get-int32(load-enum, #ED35A1D4B2346BBD) == 3;
+    return get-int32(load-enum, loading-script) == 3;
 }
 
 bool ls-wait-for-layers__level-scripted-set@277c8
 embedded@5b9b8() {
-    return get-int32(load-enum, #ED35A1D4B2346BBD) == 4;
+    return get-int32(load-enum, loading-script) == 4;
 }
 
 bool ls-wait-for-layers__level-scripted-set@24768
 embedded@63650() {
-    return get-int32(load-enum, #ED35A1D4B2346BBD) == 5;
+    return get-int32(load-enum, loading-script) == 5;
 }
 
 bool ls-wait-for-layers__level-scripted-set@18558
 embedded@5cb68() {
-    return get-int32(load-enum, #ED35A1D4B2346BBD) == 6;
+    return get-int32(load-enum, loading-script) == 6;
 }
 
 bool ls-wait-for-layers__level-scripted-set@2bc68
 embedded@66268() {
-    return get-int32(load-enum, #ED35A1D4B2346BBD) == 7;
+    return get-int32(load-enum, loading-script) == 7;
 }
 
 u64? character-lineup-plane__level-set@f478__level-scripted-set@1b168__

@@ -4,7 +4,7 @@
 // #   listing for file: game_dumps/t2r/dc1/anim-player\player-carry.bin                              #
 // #   filesize: 22921 bytes                                                                          #
 // #   total entries: 1                                                                               #
-// #   functions: 6                                                                                   #
+// #   functions: 7                                                                                   #
 // #   has state script: false                                                                        #
 // #   game type: t2r                                                                                 #
 // #   optimizations enabled: true                                                                    #
@@ -88,5 +88,10 @@ embedded@28d8(u64? arg_0, u64 arg_1, u64? arg_2) {
 u64? anim-player-carry-states
 embedded@21c0(u64? arg_0, u64? arg_1, u64?* arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
     return calc-ankle-match-phase(*arg_2 + 32, arg_1, 1, arg_3, 1.00, 0);
+}
+
+u64? anim-player-carry-states__anim-transition-group@20f0__anim-transition-condition-lambda@4e00__
+embedded@5290(u8 arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return player-animation-abort-active?(arg_2, arg_1) && *(u8*)(*arg_0 + 208);
 }
 

@@ -25,14 +25,14 @@ bool t2r-lvl-shipyard-survival__level-set@1380__level-scripted-set@5228__
 t2r-lvl-capitol-hill-assault-layouts__level-set@3a68__level-scripted-set@8e10__
 t2r-lvl-logging-camp-siege__level-set@3f58__level-scripted-set@8600__
 embedded@12b10() {
-    return (get-svar(#5E4ECC2D991AFC57) % 2) == 0;
+    return (get-svar(encounter-layout-variant) % 2) == 0;
 }
 
 bool t2r-lvl-shipyard-survival__level-scripted-set@50f0
 t2r-lvl-capitol-hill-assault-layouts__level-scripted-set@8b70
 t2r-lvl-logging-camp-siege__level-scripted-set@61d0
 embedded@fdb0() {
-    return (get-svar(#5E4ECC2D991AFC57) % 2) == 1;
+    return (get-svar(encounter-layout-variant) % 2) == 1;
 }
 
 bool t2r-lvl-res-houses-survival__level-set@1400__level-scripted-set@68c0__
@@ -41,7 +41,7 @@ t2r-lvl-res-houses-assault__level-set@3040__level-scripted-set@6a10__
 t2r-lvl-res-houses-siege__level-set@3cb8__level-scripted-set@6980__
 t2r-lvl-pat-jackson-assault-layouts-scripted__level-set@4218__level-scripted-set@5240__
 embedded@1c198() {
-    return (get-svar(#5E4ECC2D991AFC57) % 3) == 0;
+    return (get-svar(encounter-layout-variant) % 3) == 0;
 }
 
 bool t2r-lvl-res-houses-survival__level-scripted-set@7940
@@ -50,7 +50,7 @@ t2r-lvl-res-houses-assault__level-scripted-set@5210
 t2r-lvl-res-houses-siege__level-scripted-set@81c8
 t2r-lvl-pat-jackson-assault-layouts-scripted__level-scripted-set@63f8
 embedded@1c3d8() {
-    return (get-svar(#5E4ECC2D991AFC57) % 3) == 1;
+    return (get-svar(encounter-layout-variant) % 3) == 1;
 }
 
 bool t2r-lvl-res-houses-survival__level-scripted-set@9b48
@@ -59,27 +59,27 @@ t2r-lvl-res-houses-assault__level-scripted-set@7c70
 t2r-lvl-res-houses-siege__level-scripted-set@86c0
 t2r-lvl-pat-jackson-assault-layouts-scripted__level-scripted-set@68f0
 embedded@14990() {
-    return (get-svar(#5E4ECC2D991AFC57) % 3) == 2;
+    return (get-svar(encounter-layout-variant) % 3) == 2;
 }
 
 bool t2r-lvl-wave-manager-enemy-npcs__level-set@14c0__level-scripted-set@4610__
 embedded@1b9e0() {
-    return get-svar(#B588F9BE19063DAC) == 0;
+    return get-svar(rogue-wave-faction) == 0;
 }
 
 bool t2r-lvl-wave-manager-enemy-npcs__level-scripted-set@8e40
 embedded@f058() {
-    return get-svar(#B588F9BE19063DAC) == 1;
+    return get-svar(rogue-wave-faction) == 1;
 }
 
 bool t2r-lvl-wave-manager-enemy-npcs__level-scripted-set@47f0
 embedded@17c18() {
-    return get-svar(#B588F9BE19063DAC) == 2;
+    return get-svar(rogue-wave-faction) == 2;
 }
 
 bool t2r-lvl-wave-manager-enemy-npcs__level-scripted-set@8270
 embedded@12618() {
-    return get-svar(#B588F9BE19063DAC) == 3;
+    return get-svar(rogue-wave-faction) == 3;
 }
 
 u64? t2r-lvl-main-menu-preload__level-set@15c0__level-scripted-set@5d08__
@@ -89,9 +89,9 @@ embedded@1cc40() {
     if (var_1 == 12 || var_1 == 13 && var_1 == 14) {
         var_3 = 0;
     } else {
-        var_3 = #F50639C38501226F(rogue-get-most-recent-character());
+        var_3 = rogue-hub-for-character(rogue-get-most-recent-character());
     }
-    return !get-boolean(#1A46A293A497F115, ss-main-menu-boat-1) && var_3 && aquarium == *(u64*)var_3;
+    return !get-boolean(transitioned-to-rogue?, ss-main-menu-boat-1) && var_3 && aquarium == *(u64*)var_3;
 }
 
 u64? t2r-lvl-main-menu-preload__level-scripted-set@95f0
@@ -101,9 +101,9 @@ embedded@13010() {
     if (var_1 == 12 || var_1 == 13 && var_1 == 14) {
         var_3 = 0;
     } else {
-        var_3 = #F50639C38501226F(rogue-get-most-recent-character());
+        var_3 = rogue-hub-for-character(rogue-get-most-recent-character());
     }
-    return !get-boolean(#1A46A293A497F115, ss-main-menu-boat-1) || !var_3 && theater == *(u64*)var_3;
+    return !get-boolean(transitioned-to-rogue?, ss-main-menu-boat-1) || !var_3 && theater == *(u64*)var_3;
 }
 
 u64? t2r-lvl-main-menu__level-set@1608__level-scripted-set@5108__
@@ -113,9 +113,9 @@ embedded@108e8() {
     if (var_1 == 12 || var_1 == 13 && var_1 == 14) {
         var_3 = 0;
     } else {
-        var_3 = #F50639C38501226F(rogue-get-most-recent-character());
+        var_3 = rogue-hub-for-character(rogue-get-most-recent-character());
     }
-    return get-boolean(#1A46A293A497F115, ss-main-menu-boat-1) && var_3 && aquarium == *(u64*)var_3;
+    return get-boolean(transitioned-to-rogue?, ss-main-menu-boat-1) && var_3 && aquarium == *(u64*)var_3;
 }
 
 u64? t2r-lvl-main-menu__level-scripted-set@4fe8
@@ -125,9 +125,9 @@ embedded@fa20() {
     if (var_1 == 12 || var_1 == 13 && var_1 == 14) {
         var_3 = 0;
     } else {
-        var_3 = #F50639C38501226F(rogue-get-most-recent-character());
+        var_3 = rogue-hub-for-character(rogue-get-most-recent-character());
     }
-    return get-boolean(#1A46A293A497F115, ss-main-menu-boat-1) || !var_3 && theater == *(u64*)var_3;
+    return get-boolean(transitioned-to-rogue?, ss-main-menu-boat-1) || !var_3 && theater == *(u64*)var_3;
 }
 
 u64? t2r-lvl-logging-camp-assault__level-set@1650__level-scripted-set@6f98__
@@ -135,7 +135,7 @@ t2r-lvl-logging-camp-survival__level-set@2628__level-scripted-set@6f98__
 t2r-lvl-hospital-survival__level-set@3250__level-scripted-set@5678__
 t2r-lvl-hospital-assault__level-set@3e20__level-scripted-set@5678__
 embedded@16c18() {
-    return (get-svar(#5E4ECC2D991AFC57) % 2) == 0 && get-svar(#B588F9BE19063DAC) == 3;
+    return (get-svar(encounter-layout-variant) % 2) == 0 && get-svar(rogue-wave-faction) == 3;
 }
 
 u64? t2r-lvl-logging-camp-assault__level-scripted-set@5660
@@ -143,7 +143,7 @@ t2r-lvl-logging-camp-survival__level-scripted-set@5660
 t2r-lvl-hospital-survival__level-scripted-set@a4d8
 t2r-lvl-hospital-assault__level-scripted-set@a4d8
 embedded@1ad78() {
-    return (get-svar(#5E4ECC2D991AFC57) % 2) == 1 && get-svar(#B588F9BE19063DAC) == 3;
+    return (get-svar(encounter-layout-variant) % 2) == 1 && get-svar(rogue-wave-faction) == 3;
 }
 
 u64? t2r-lvl-logging-camp-assault__level-scripted-set@a010
@@ -151,7 +151,7 @@ t2r-lvl-logging-camp-survival__level-scripted-set@a010
 t2r-lvl-hospital-survival__level-scripted-set@7af0
 t2r-lvl-hospital-assault__level-scripted-set@7af0
 embedded@163c0() {
-    return (get-svar(#5E4ECC2D991AFC57) % 2) == 0 && !(get-svar(#B588F9BE19063DAC) == 3);
+    return (get-svar(encounter-layout-variant) % 2) == 0 && !(get-svar(rogue-wave-faction) == 3);
 }
 
 u64? t2r-lvl-logging-camp-assault__level-scripted-set@5cf0
@@ -159,35 +159,35 @@ t2r-lvl-logging-camp-survival__level-scripted-set@5cf0
 t2r-lvl-hospital-survival__level-scripted-set@49a0
 t2r-lvl-hospital-assault__level-scripted-set@49a0
 embedded@f920() {
-    return (get-svar(#5E4ECC2D991AFC57) % 2) == 1 && !(get-svar(#B588F9BE19063DAC) == 3);
+    return (get-svar(encounter-layout-variant) % 2) == 1 && !(get-svar(rogue-wave-faction) == 3);
 }
 
 u64? t2r-lvl-abby-player-anims-combat-infected__level-set@1718__level-scripted-set@85e8__
 t2r-lvl-ellie-player-all-rogue__level-set@2d10__level-scripted-set@6038__
 embedded@141e8() {
-    return get-svar(#B588F9BE19063DAC) == 2 || get-svar(#B588F9BE19063DAC) == 3 && #C496EBC950765A56(task-get-current-subnode-id()) == 1;
+    return get-svar(rogue-wave-faction) == 2 || get-svar(rogue-wave-faction) == 3 && boss--subtask-is-boss-encounter(task-get-current-subnode-id()) == 1;
 }
 
 bool t2r-lvl-shipyard-assault__level-set@18a8__level-scripted-set@6a28__
 embedded@10858() {
-    return (get-svar(#5E4ECC2D991AFC57) % 4) == 0;
+    return (get-svar(encounter-layout-variant) % 4) == 0;
 }
 
 bool t2r-lvl-shipyard-assault__level-scripted-set@93f8
 embedded@19da8() {
-    return (get-svar(#5E4ECC2D991AFC57) % 4) == 1;
+    return (get-svar(encounter-layout-variant) % 4) == 1;
 }
 
 bool t2r-lvl-shipyard-assault__level-scripted-set@8618
 t2r-lvl-capitol-hill-assault-layouts__level-scripted-set@8d08
 embedded@19a50() {
-    return (get-svar(#5E4ECC2D991AFC57) % 4) == 2;
+    return (get-svar(encounter-layout-variant) % 4) == 2;
 }
 
 bool t2r-lvl-shipyard-assault__level-scripted-set@86a8
 t2r-lvl-capitol-hill-assault-layouts__level-scripted-set@6410
 embedded@17f48() {
-    return (get-svar(#5E4ECC2D991AFC57) % 4) == 3;
+    return (get-svar(encounter-layout-variant) % 4) == 3;
 }
 
 u64? t2r-lvl-rogue-playable-characters__level-set@1a50__level-scripted-set@6e48__
@@ -209,52 +209,52 @@ embedded@13a60() {
 
 u64? t2r-lvl-buddy-anims__level-set@2df8__level-scripted-set@5ae0__
 embedded@19570() {
-    return get-svar-as-boolean(buddy-dina) && #B96C7EEF7ACAB122 && *(i32*)(#B96C7EEF7ACAB122 + 4) == 0;
+    return get-svar-as-boolean(buddy-dina) && *encounter-tweaks* && *(i32*)(*encounter-tweaks* + 4) == 0;
 }
 
 u64? t2r-lvl-buddy-anims__level-scripted-set@61e8
 embedded@f6c8() {
-    return get-svar-as-boolean(buddy-jesse) && #B96C7EEF7ACAB122 && *(i32*)(#B96C7EEF7ACAB122 + 4) == 1;
+    return get-svar-as-boolean(buddy-jesse) && *encounter-tweaks* && *(i32*)(*encounter-tweaks* + 4) == 1;
 }
 
 u64? t2r-lvl-buddy-anims__level-scripted-set@5690
 embedded@f9a8() {
-    return rogue-get-player-character-look() == yara-player && #B96C7EEF7ACAB122 && *(i32*)(#B96C7EEF7ACAB122 + 4) == 3;
+    return rogue-get-player-character-look() == yara-player && *encounter-tweaks* && *(i32*)(*encounter-tweaks* + 4) == 3;
 }
 
 u64? t2r-lvl-buddy-anims__level-scripted-set@8c78
 embedded@19620() {
-    return rogue-get-player-character-look() == yara-player-walk-zipped && #B96C7EEF7ACAB122 && *(i32*)(#B96C7EEF7ACAB122 + 4) == 3;
+    return rogue-get-player-character-look() == yara-player-walk-zipped && *encounter-tweaks* && *(i32*)(*encounter-tweaks* + 4) == 3;
 }
 
 u64? t2r-lvl-buddy-anims__level-scripted-set@4808
 embedded@15f88() {
-    return get-svar-as-boolean(buddy-lev) || rogue-get-player-character() == 6 && #B96C7EEF7ACAB122 && *(i32*)(#B96C7EEF7ACAB122 + 4) == 3;
+    return get-svar-as-boolean(buddy-lev) || rogue-get-player-character() == 6 && *encounter-tweaks* && *(i32*)(*encounter-tweaks* + 4) == 3;
 }
 
 u64? t2r-lvl-buddy-anims__level-scripted-set@72b0
 embedded@1b068() {
-    return get-svar-as-boolean(buddy-manny) && #B96C7EEF7ACAB122 && *(i32*)(#B96C7EEF7ACAB122 + 4) == 2;
+    return get-svar-as-boolean(buddy-manny) && *encounter-tweaks* && *(i32*)(*encounter-tweaks* + 4) == 2;
 }
 
 u64? t2r-lvl-buddy-anims__level-scripted-set@46e8
 embedded@1c380() {
-    return get-svar-as-boolean(buddy-yara) && #B96C7EEF7ACAB122 && *(i32*)(#B96C7EEF7ACAB122 + 4) == 4;
+    return get-svar-as-boolean(buddy-yara) && *encounter-tweaks* && *(i32*)(*encounter-tweaks* + 4) == 4;
 }
 
 u64? t2r-lvl-buddy-anims__level-scripted-set@81b0
 embedded@1b358() {
-    return get-svar-as-boolean(buddy-tommy) && #B96C7EEF7ACAB122 && *(i32*)(#B96C7EEF7ACAB122 + 4) == 6;
+    return get-svar-as-boolean(buddy-tommy) && *encounter-tweaks* && *(i32*)(*encounter-tweaks* + 4) == 6;
 }
 
 u64? t2r-lvl-buddy-anims__level-scripted-set@5eb8
 embedded@18f38() {
-    return get-svar-as-boolean(buddy-joel) && #B96C7EEF7ACAB122 && *(i32*)(#B96C7EEF7ACAB122 + 4) == 5;
+    return get-svar-as-boolean(buddy-joel) && *encounter-tweaks* && *(i32*)(*encounter-tweaks* + 4) == 5;
 }
 
 u64? t2r-lvl-buddy-anims__level-scripted-set@89d8
 embedded@17600() {
-    return get-svar-as-boolean(buddy-mel) && #B96C7EEF7ACAB122 && *(i32*)(#B96C7EEF7ACAB122 + 4) == 7;
+    return get-svar-as-boolean(buddy-mel) && *encounter-tweaks* && *(i32*)(*encounter-tweaks* + 4) == 7;
 }
 
 bool t2r-lvl-rogue-playable-character-looks__level-set@3778__level-scripted-set@7358__
@@ -529,7 +529,7 @@ embedded@184f8() {
 
 bool t2r-lvl-rogue-playable-character-looks__level-scripted-set@6b60
 embedded@ff18() {
-    return rogue-get-player-character-look() == #5C4B3556A5E7687A;
+    return rogue-get-player-character-look() == joel-player-uncharted;
 }
 
 bool t2r-lvl-rogue-playable-character-looks__level-scripted-set@6fb0
@@ -574,7 +574,7 @@ embedded@1d180() {
 
 bool t2r-lvl-rogue-playable-character-looks__level-scripted-set@6f08
 embedded@18930() {
-    return rogue-get-player-character-look() == #1FA38A229A026F90;
+    return rogue-get-player-character-look() == tommy-player-uncharted;
 }
 
 bool t2r-lvl-rogue-playable-character-looks__level-scripted-set@6428

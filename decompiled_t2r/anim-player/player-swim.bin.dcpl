@@ -4,7 +4,7 @@
 // #   listing for file: game_dumps/t2r/dc1/anim-player\player-swim.bin                               #
 // #   filesize: 43225 bytes                                                                          #
 // #   total entries: 4                                                                               #
-// #   functions: 3                                                                                   #
+// #   functions: 39                                                                                  #
 // #   has state script: false                                                                        #
 // #   game type: t2r                                                                                 #
 // #   optimizations enabled: true                                                                    #
@@ -40,6 +40,245 @@ sid get-swim-idle^swim-breast-phase-anim(u64?* arg_0) {
         var_9 = swim-idle^loop-surface-fw-start-fw;
     }
     return var_9;
+}
+
+u64? anim-player-swim-states__actor-state-list@5f0
+anim-player-swim-states
+anim-player-swim-states
+anim-player-swim-states
+anim-player-swim-states
+anim-player-swim-states
+anim-player-swim-states
+anim-player-swim-states
+anim-player-swim-states
+anim-player-swim-states
+anim-player-swim-states
+anim-player-swim-states
+anim-player-swim-states
+anim-player-swim-states
+anim-player-swim-states
+anim-player-swim-states
+anim-player-swim-states
+anim-player-swim-states
+anim-player-swim-states
+anim-player-swim-states
+anim-player-swim-states
+anim-player-swim-states
+anim-player-swim-states
+anim-player-swim-states
+anim-player-swim-states
+anim-player-swim-states
+anim-player-swim-states
+anim-player-swim-states
+embedded@2728(u64? arg_0, u64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64 arg_5, u64? arg_6) {
+    return arg_2 + ((arg_3 * player-anim-speed-mult(*(u64*)(*(arg_1 + 8) + 384), *(u64*)arg_5)) * arg_4);
+}
+
+u64 anim-player-swim-states__anim-node-blend@2b88__anim-node-blend@5280____anim-node-animation@8138__
+embedded@8e00(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)((*(arg_1 + 16) + 2064) + 32);
+}
+
+f32 anim-player-swim-states
+anim-player-swim-states
+anim-player-swim-states__anim-node-blend@2c88
+anim-player-swim-states
+anim-player-swim-states__anim-node-blend@2670
+anim-player-swim-states
+anim-player-swim-states__anim-node-blend@28f0
+anim-player-swim-states
+embedded@3eb0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return 1.00;
+}
+
+u64 anim-player-swim-states
+embedded@25a0(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)((*(arg_1 + 16) + 2064) + 32);
+}
+
+u64? anim-player-swim-states__anim-node-blend@3220__anim-node-blend@46c0____anim-node-animation@7170__
+embedded@8670(u64? arg_0, u64? arg_1, u64? arg_2) {
+    return get-swim-surface-enter-phase-anim(arg_1);
+}
+
+u64? anim-player-swim-states
+embedded@24b8(u64? arg_0, u64? arg_1, u64? arg_2) {
+    return get-swim-surface-enter-phase-anim(arg_1);
+}
+
+u64? anim-player-swim-states__anim-node-blend@2dc0__anim-node-blend@5468____anim-node-animation@7a40__
+embedded@88b0(u64? arg_0, u64? arg_1, u64? arg_2) {
+    return get-swim-idle^swim-breast-phase-anim(arg_1);
+}
+
+u64? anim-player-swim-states
+embedded@2e78(u64? arg_0, u64? arg_1, u64? arg_2) {
+    return get-swim-idle^swim-breast-phase-anim(arg_1);
+}
+
+u64? anim-player-swim-states__anim-transition-group@2c30__anim-transition-condition-lambda@8060__
+embedded@8ca8(u8 arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return player-animation-abort-active?(arg_2, arg_1) && *(u8*)(*arg_0 + 208);
+}
+
+f32 anim-player-swim-states__anim-node-blend@30b8__anim-node-blend@3a28____anim-node-blend@7950____anim-node-blend@8be0__
+anim-player-swim-states__anim-node-blend@3040__anim-node-blend@4c68____anim-node-blend@7a78____anim-node-blend@8a20__
+embedded@9810(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)(*(arg_0 + 16) + 2064);
+}
+
+f32 anim-player-swim-states__anim-node-blend@30b8__anim-node-blend@3a28__
+anim-player-swim-states__anim-node-blend@3040__anim-node-blend@4c68__
+embedded@86c8(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)((*(arg_0 + 16) + 2064) + 4);
+}
+
+u64? anim-player-swim-states
+embedded@2a90(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return get-transition-start-phase-eff(arg_1, arg_5);
+}
+
+f32 anim-player-swim-states
+anim-player-swim-states
+anim-player-swim-states
+anim-player-swim-states
+anim-player-swim-states
+anim-player-swim-states
+anim-player-swim-states
+embedded@2fb0(u64? arg_0, u64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64 arg_5, u64? arg_6) {
+    return arg_2 + ((arg_4 * (arg_3 * player-anim-speed-mult(*(u64*)(*(arg_1 + 8) + 384), *(u64*)arg_5))) * *(f32*)((*(arg_1 + 16) + 2064) + 8));
+}
+
+f32 anim-player-swim-states__anim-node-blend@23d8__anim-node-blend@51c0__
+embedded@7438(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)(*(arg_0 + 16) + 2064);
+}
+
+f32 anim-player-swim-states
+embedded@3f18(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)((*(arg_0 + 16) + 2064) + 4);
+}
+
+f32 anim-player-swim-states
+anim-player-swim-states
+anim-player-swim-states
+embedded@2780(u64? arg_0, u64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64 arg_5, u64? arg_6) {
+    return arg_2 + ((arg_4 * (arg_3 * player-anim-speed-mult(*(u64*)(*(arg_1 + 8) + 384), *(u64*)arg_5))) * 1.00);
+}
+
+u8 anim-player-swim-states
+embedded@2218(u64? arg_0, u8 arg_1) {
+    return *(u8*)((*(arg_1 + 16) + 2064) + 13);
+}
+
+f32 anim-player-swim-states__anim-node-blend@2478__anim-node-blend@6648____anim-node-blend@79c8____anim-node-blend@8b90____anim-node-blend@98f8__
+anim-player-swim-states__anim-node-blend@2478__anim-node-blend@6648____anim-node-blend@79c8____anim-node-blend@9788__
+embedded@9bb0(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)((*(arg_0 + 16) + 2064) + 40);
+}
+
+f32 anim-player-swim-states__anim-node-blend@2478__anim-node-blend@6648__
+embedded@96e0(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)(((*(arg_0 + 16) + 2064) + 40) + 4);
+}
+
+f32 anim-player-swim-states__anim-node-blend@8eb0
+embedded@9868(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)((*(arg_0 + 16) + 2064) + 40);
+}
+
+f32 anim-player-swim-states
+embedded@8d70(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)(((*(arg_0 + 16) + 2064) + 40) + 8);
+}
+
+f32 anim-player-swim-states__anim-node-blend@8190
+embedded@8c20(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)((*(arg_0 + 16) + 2064) + 40);
+}
+
+f32 anim-player-swim-states
+embedded@7eb8(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)(((*(arg_0 + 16) + 2064) + 40) + 12);
+}
+
+f32 anim-player-swim-states__anim-node-blend@5e28
+embedded@7490(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)((*(arg_0 + 16) + 2064) + 40);
+}
+
+f32 anim-player-swim-states
+embedded@62f8(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)(((*(arg_0 + 16) + 2064) + 40) + 16);
+}
+
+f32 anim-player-swim-states__anim-node-blend@2630__anim-node-blend@4ef8____anim-node-blend@7e38____anim-node-blend@8e70____anim-node-blend@95a0____anim-node-blend@9c78____anim-node-blend@9f70____anim-node-blend@a048__
+embedded@a220(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)(((*(arg_0 + 16) + 2064) + 40) + 28);
+}
+
+f32 anim-player-swim-states__anim-node-blend@2630__anim-node-blend@4ef8____anim-node-blend@7e38____anim-node-blend@8e70____anim-node-blend@95a0____anim-node-blend@9c78__
+embedded@a088(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)(((*(arg_0 + 16) + 2064) + 40) + 16);
+}
+
+f32 anim-player-swim-states__anim-node-blend@2630__anim-node-blend@4ef8____anim-node-blend@7e38____anim-node-blend@8e70__
+embedded@9ee0(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)(((*(arg_0 + 16) + 2064) + 40) + 32);
+}
+
+f32 anim-player-swim-states__anim-node-blend@2630__anim-node-blend@4ef8__
+embedded@9cb8(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)(((*(arg_0 + 16) + 2064) + 40) + 8);
+}
+
+f32 anim-player-swim-states
+embedded@9688(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)(((*(arg_0 + 16) + 2064) + 40) + 24);
+}
+
+f32 anim-player-swim-states
+embedded@8b20(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)(((*(arg_0 + 16) + 2064) + 40) + 12);
+}
+
+f32 anim-player-swim-states
+embedded@7740(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)(((*(arg_0 + 16) + 2064) + 40) + 20);
+}
+
+f32 anim-player-swim-states
+embedded@5228(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)(((*(arg_0 + 16) + 2064) + 40) + 4);
+}
+
+u8 anim-player-swim-states
+anim-player-swim-states
+anim-player-swim-states
+embedded@2f58(u64? arg_0, u8 arg_1) {
+    return *(u8*)((*(arg_1 + 16) + 2064) + 12);
+}
+
+u64? anim-player-swim-states__anim-node-blend@2ef8__anim-node-blend@5530__
+embedded@7118(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return lerp-scale(
+        0.00,
+        1.00,
+        0.00,
+        1.00,
+        *(f32*)(*(arg_0 + 16) + 2912)
+    );
+}
+
+u64? anim-player-swim-states
+embedded@4e38(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return lerp-scale(
+        -1.00,
+        0.00,
+        0.00,
+        1.00,
+        *(f32*)(*(arg_0 + 16) + 2912)
+    );
 }
 
 sid get-swim-surface-enter-phase-anim(u64?* arg_0) {

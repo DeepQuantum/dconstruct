@@ -195,7 +195,7 @@ embedded@d60(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? ar
 u64? buddy-manny-hatchet-vs-inf-left-neck-hack-finisher__start-func-array@e58
 buddy-manny-hatchet-vs-inf-right-neck-hack-finisher__start-func-array@850
 embedded@2f48(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
-    return !is-rogue-mode?() && is-rogue-mode?() && !melee-fact-get-bool(arg_2, #C5AC6809F76060D9);
+    return !is-rogue-mode?() && is-rogue-mode?() && !melee-fact-get-bool(arg_2, is-boss);
 }
 
 u64? buddy-manny-hatchet-vs-inf-left-neck-hack-finisher

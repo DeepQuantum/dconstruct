@@ -30,7 +30,7 @@ embedded@91d0() {
 
 bool tsk-med-hidden-ascent__level-set@700__level-scripted-set@d78__
 embedded@7980() {
-    return get-boolean(#D9C6F63A44AE6DEC, ss-med-hidden-ascent-lantern-igc-1);
+    return get-boolean(lamp-on?, ss-med-hidden-ascent-lantern-igc-1);
 }
 
 u64? tsk-med-hospital-escape__level-set@7b8__level-scripted-set@11b0__
