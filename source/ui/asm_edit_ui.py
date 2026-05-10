@@ -285,7 +285,9 @@ def build_disasm_command(
 
 
 def run_dconstruct(command: list[str]) -> subprocess.CompletedProcess[str]:
-    return subprocess.run(command, capture_output=True, text=True, check=False)
+    if not isinstance(command, list):
+        raise TypeError("command must be a list of strings, not a shell string")
+    return subprocess.run(command, capture_output=True, text=True, check=False, shell=False)
 
 
 def format_process_failure(result: subprocess.CompletedProcess[str]) -> str:
