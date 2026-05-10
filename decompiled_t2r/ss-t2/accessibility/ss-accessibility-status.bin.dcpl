@@ -223,33 +223,33 @@ statescript {
                             1
                         )), 0);
                     } else {
-                        darray-append(tts-status-frames, boxed_u64(speak-text-to-speech-formatted(new-boxed-value(7, get-symbol(state, self)), 1, 0, 1)), 0);
+                        darray-append(tts-status-frames, boxed_u64(speak-text-to-speech-formatted(boxed_symbol(get-symbol(state, self)), 1, 0, 1)), 0);
                     }
                 }
                 lambda {
                     u64? var_0 = player-get-stealth-vegetation-height(player);
                     if (var_0 == 3) {
-                        var_1 = darray-append(tts-status-frames, boxed_u64(speak-text-to-speech-formatted(new-boxed-value(7, ACCESSIBILITY_STATUS_GRASS_STAND), 1, 0, 1)), 0);
+                        var_1 = darray-append(tts-status-frames, boxed_u64(speak-text-to-speech-formatted(boxed_symbol(ACCESSIBILITY_STATUS_GRASS_STAND), 1, 0, 1)), 0);
                     } else if (var_0 == 2) {
-                        var_1 = darray-append(tts-status-frames, boxed_u64(speak-text-to-speech-formatted(new-boxed-value(7, ACCESSIBILITY_STATUS_GRASS_CROUCH), 1, 0, 1)), 0);
+                        var_1 = darray-append(tts-status-frames, boxed_u64(speak-text-to-speech-formatted(boxed_symbol(ACCESSIBILITY_STATUS_GRASS_CROUCH), 1, 0, 1)), 0);
                     } else if (var_0 == 1) {
-                        var_1 = darray-append(tts-status-frames, boxed_u64(speak-text-to-speech-formatted(new-boxed-value(7, ACCESSIBILITY_STATUS_GRASS_PRONE), 1, 0, 1)), 0);
+                        var_1 = darray-append(tts-status-frames, boxed_u64(speak-text-to-speech-formatted(boxed_symbol(ACCESSIBILITY_STATUS_GRASS_PRONE), 1, 0, 1)), 0);
                     }
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 1, 2, 0);
                     *(u64*)var_0[0] = boxed_symbol(ACCESSIBILITY_STATUS_HEALTH);
                     *(u64*)var_0[1] = boxed_i32(get-player-health());
-                    darray-append(tts-status-frames, boxed_u64(speak-text-to-speech-formatted(new-boxed-value(21, var_0), 1, 0, 1)), 0);
+                    darray-append(tts-status-frames, boxed_u64(speak-text-to-speech-formatted(boxed_array(var_0), 1, 0, 1)), 0);
                 }
                 lambda {
                     if (player-is-arrow-stuck?()) {
-                        darray-append(tts-status-frames, boxed_u64(speak-text-to-speech-formatted(new-boxed-value(7, REMINDER_ARROW_IMPALEMENT), 1, 0, 1)), 0);
+                        darray-append(tts-status-frames, boxed_u64(speak-text-to-speech-formatted(boxed_symbol(REMINDER_ARROW_IMPALEMENT), 1, 0, 1)), 0);
                     }
                 }
                 lambda {
                     if (!(get-player-carry-object-id() == 0)) {
-                        darray-append(tts-status-frames, boxed_u64(speak-text-to-speech-formatted(new-boxed-value(7, ACCESSIBILITY_STATUS_CARRY_ROPE), 1, 0, 1)), 0);
+                        darray-append(tts-status-frames, boxed_u64(speak-text-to-speech-formatted(boxed_symbol(ACCESSIBILITY_STATUS_CARRY_ROPE), 1, 0, 1)), 0);
                     }
                 }
                 lambda {
@@ -323,9 +323,9 @@ statescript {
                             darray-append(tts-status-frames, boxed_u64(var_10), 0);
                             u16 var_67;
                             if (var_2 == rifle-vepr && player-has-weapon-upgrade?(rifle-vepr, burst-fire-kit) && player-has-weapon-upgrade?(rifle-vepr, burst-fire-active)) {
-                                var_67 = darray-append(tts-status-frames, boxed_u64(speak-text-to-speech-formatted(new-boxed-value(7, ACCESSIBILITY_STATUS_BURSTFIRE_ON), 1, 0, 1)), 0);
+                                var_67 = darray-append(tts-status-frames, boxed_u64(speak-text-to-speech-formatted(boxed_symbol(ACCESSIBILITY_STATUS_BURSTFIRE_ON), 1, 0, 1)), 0);
                             } else if (get-player-weapon-have-silencer?(var_2)) {
-                                var_67 = darray-append(tts-status-frames, boxed_u64(speak-text-to-speech-formatted(new-boxed-value(7, A11Y_WEAPON_CROSS_SILENCER_ON), 1, 0, 1)), 0);
+                                var_67 = darray-append(tts-status-frames, boxed_u64(speak-text-to-speech-formatted(boxed_symbol(A11Y_WEAPON_CROSS_SILENCER_ON), 1, 0, 1)), 0);
                             } else {
                                 var_67 = 0;
                             }
@@ -391,7 +391,7 @@ statescript {
                         *(u64*)var_2[0] = boxed_symbol(HUD_COLLECT_TEXT_ITEM_TOTAL);
                         *(u64*)var_2[1] = boxed_symbol(HUD_CRAFTING_SHIV);
                         *(u64*)var_2[2] = boxed_i32(var_0);
-                        var_1 = darray-append(tts-status-frames, boxed_u64(speak-text-to-speech-formatted(new-boxed-value(21, var_2), 1, 0, 1)), 0);
+                        var_1 = darray-append(tts-status-frames, boxed_u64(speak-text-to-speech-formatted(boxed_array(var_2), 1, 0, 1)), 0);
                     }
                 }
                 lambda {
@@ -424,13 +424,13 @@ statescript {
                     set-int32(use-count-stat, 1 + get-int32(use-count-stat, self), self);
                 }
                 lambda {
-                    darray-append(tts-status-frames, boxed_u64(speak-text-to-speech-formatted(new-boxed-value(7, ACCESSIBILITY_STATUS_WORKBENCH), 1, 0, 1)), 0);
+                    darray-append(tts-status-frames, boxed_u64(speak-text-to-speech-formatted(boxed_symbol(ACCESSIBILITY_STATUS_WORKBENCH), 1, 0, 1)), 0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 1, 2, 0);
                     *(u64*)var_0[0] = boxed_symbol(ACCESSIBILITY_STATUS_WEAPON_PARTS);
                     *(u64*)var_0[1] = boxed_i32(get-inventory-item-quantity(parts));
-                    darray-append(tts-status-frames, boxed_u64(speak-text-to-speech-formatted(new-boxed-value(21, var_0), 1, 0, 1)), 0);
+                    darray-append(tts-status-frames, boxed_u64(speak-text-to-speech-formatted(boxed_array(var_0), 1, 0, 1)), 0);
                 }
                 lambda {
                     wait-one-frame();
@@ -451,7 +451,7 @@ statescript {
                     set-int32(use-count-stat, 1 + get-int32(use-count-stat, self), self);
                 }
                 lambda {
-                    darray-append(tts-status-frames, boxed_u64(speak-text-to-speech-formatted(new-boxed-value(7, ACCESSIBILITY_STATUS_CRAFTING_MENU), 1, 0, 1)), 0);
+                    darray-append(tts-status-frames, boxed_u64(speak-text-to-speech-formatted(boxed_symbol(ACCESSIBILITY_STATUS_CRAFTING_MENU), 1, 0, 1)), 0);
                 }
                 lambda {
                     darray-append(tts-status-frames, boxed_u64(a11y-speak-ingredient-inventory()), 0);
@@ -475,13 +475,13 @@ statescript {
                     set-int32(use-count-stat, 1 + get-int32(use-count-stat, self), self);
                 }
                 lambda {
-                    darray-append(tts-status-frames, boxed_u64(speak-text-to-speech-formatted(new-boxed-value(7, ACCESSIBILITY_STATUS_UPGRADE_MENU), 1, 0, 1)), 0);
+                    darray-append(tts-status-frames, boxed_u64(speak-text-to-speech-formatted(boxed_symbol(ACCESSIBILITY_STATUS_UPGRADE_MENU), 1, 0, 1)), 0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 1, 2, 0);
                     *(u64*)var_0[0] = boxed_symbol(ACCESSIBILITY_STATUS_SUPPLEMENTS);
                     *(u64*)var_0[1] = boxed_i32(get-inventory-item-quantity(player-upgrade-supplements));
-                    darray-append(tts-status-frames, boxed_u64(speak-text-to-speech-formatted(new-boxed-value(21, var_0), 1, 0, 1)), 0);
+                    darray-append(tts-status-frames, boxed_u64(speak-text-to-speech-formatted(boxed_array(var_0), 1, 0, 1)), 0);
                 }
                 lambda {
                     wait-one-frame();
@@ -511,15 +511,15 @@ statescript {
                         *(u64*)var_5[2] = boxed_i32((i32)(var_1 / 100.00) % 10);
                         *(u64*)var_5[3] = boxed_i32((i32)(var_1 / 10.00) % 10);
                         *(u64*)var_5[4] = boxed_i32((i32)var_1 % 10);
-                        var_4 = darray-append(tts-status-frames, boxed_u64(speak-text-to-speech-formatted(new-boxed-value(21, var_5), 1, 0, 1)), 0);
+                        var_4 = darray-append(tts-status-frames, boxed_u64(speak-text-to-speech-formatted(boxed_array(var_5), 1, 0, 1)), 0);
                     } else if (var_3 == 2) {
                         u64? var_18 = #%alloc-array(single-frame, 1, 3, 0);
                         *(u64*)var_18[0] = boxed_symbol(ACCESSIBILITY_STATUS_SAFE_2);
                         *(u64*)var_18[1] = boxed_i32((i32)(var_1 / 10.00) % 10);
                         *(u64*)var_18[2] = boxed_i32((i32)var_1 % 10);
-                        var_4 = darray-append(tts-status-frames, boxed_u64(speak-text-to-speech-formatted(new-boxed-value(21, var_18), 1, 0, 1)), 0);
+                        var_4 = darray-append(tts-status-frames, boxed_u64(speak-text-to-speech-formatted(boxed_array(var_18), 1, 0, 1)), 0);
                     } else {
-                        var_4 = darray-append(tts-status-frames, boxed_u64(speak-text-to-speech-formatted(new-boxed-value(7, ACCESSIBILITY_STATUS_SAFE), 1, 0, 1)), 0);
+                        var_4 = darray-append(tts-status-frames, boxed_u64(speak-text-to-speech-formatted(boxed_symbol(ACCESSIBILITY_STATUS_SAFE), 1, 0, 1)), 0);
                     }
                 }
                 lambda {
