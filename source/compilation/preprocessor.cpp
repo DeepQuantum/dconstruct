@@ -42,13 +42,12 @@ namespace dconstruct::compilation {
     stripped_source.reserve(source.size());
 
     for (std::string line; std::getline(iss, line);) {
-        if (!line.empty() && line.back() == '\r') {
-            line.pop_back();
-        }
         if (!line.starts_with("@")) {
             stripped_source += line;
             stripped_source += '\n';
             continue;
+        } else {
+            stripped_source += "\n";
         }
 
         if (line == "@standalone") {

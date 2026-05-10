@@ -42,6 +42,7 @@ namespace dconstruct::compilation {
             if (err.m_expr) {
                 std::cerr << " checking expression " << err.m_expr->to_c_string();
             }
+            std::cerr << "\n";
         }
         return std::nullopt;
     }

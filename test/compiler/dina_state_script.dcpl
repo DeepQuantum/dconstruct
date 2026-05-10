@@ -38,11 +38,13 @@ using #get-gas-mask-setting-id as far (u64) -> u64;
 using #lookup-symbol as far (u64, u64) -> u64;
 using #dc:format as far (string, u64, u64) -> string;
 using #wait-equip-gas-mask as near (u64, u64, u64) -> u64;
+using #wait-remove-gas-mask as near (u64, u64, u64) -> u64;
 using #wait as far (f32) -> u0;
 using #spawn-gas-mask as near (u64) -> u64;
 using #keyboard-button-pressed? as far (u64) -> bool;
 
 using #is-final-build? as far () -> bool;
+using #go as far (u64, u64) -> u0;
 
 statescript #test-script-qntm {
     options {
@@ -52,12 +54,31 @@ statescript #test-script-qntm {
         block start {
             track #main {
                 lambda {
-                    bool test = #is-final-build?(); 
-                    if (test) {
-                        #display("is_final_build true", 19);
-                    } else {
-                        #display("is_final_build false", 19);
+                    #display("launched qntm script", 19);
+                    #set-gas-mask-setting-id(#player, #*ellie-gas-mask-setup*);
+                    #go(#wait-keyboard-input-qntm, 1);
+                }
+            }
+        }
+    }
+    state #wait-keyboard-input-qntm {
+        block update {
+            track #main {
+                lambda {
+                    if (#keyboard-button-pressed?(158)) {
+                        #display("pressed, moving to custom-put-on-mask", 19);
+                        #go(#custom-put-on-mask, 1);
                     }
+                }
+            }
+        }
+    }
+    state #custom-put-on-mask {
+        block start {
+            track #main {
+                lambda {
+                    #display("arrived in custom-put-on-mask", 19);
+                    #wait-equip-gas-mask(#player, 0, 0);
                 }
             }
         }
@@ -65,14 +86,29 @@ statescript #test-script-qntm {
             track #main {
                 lambda {
                     if (#keyboard-button-pressed?(158)) {
-                        #display("pressed", 19);
-                        // u64 test = #get-gas-mask-setting-id(#player);
-                        // u64 test1 = #lookup-symbol(test, #gas-mask-setup);
-                        // #display(#dc:format("set gas mask setting id with params: %016llx %016llx", test, test1), 8);
-                        
-                        // u64 gas_mask = #wait-equip-gas-mask(#player, 0, 1);
+                        #display("pressed inside put on gas mask, moving to #custom-remove-mask", 19);
+                        #go(#custom-remove-mask, 1);
+                    }
+                }
+            }
+        }
+    }
+    state #custom-remove-mask {
+        block start {
+            track #main {
+                lambda {
+                    #display("arrived in remove-gas-mask", 19);
 
-                        // #display(#dc:format("gas mask: %016llx %d", gas_mask, 0), 19);    
+                    #wait-remove-gas-mask(#player, 0, 0);
+                }
+            }
+        }
+        block update {
+            track #main {
+                lambda {
+                    if (#keyboard-button-pressed?(158)) {
+                        #display("pressed inside remove gas mask, moving to #custom-put-on-mask", 19);
+                        #go(#custom-put-on-mask, 1);
                     }
                 }
             }

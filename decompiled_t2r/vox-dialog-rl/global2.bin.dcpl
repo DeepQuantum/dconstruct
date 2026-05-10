@@ -4,7 +4,7 @@
 // #   listing for file: game_dumps/t2r/dc1/vox-dialog-rl\global2.bin                                 #
 // #   filesize: 2156355 bytes                                                                        #
 // #   total entries: 131                                                                             #
-// #   functions: 29                                                                                  #
+// #   functions: 28                                                                                  #
 // #   has state script: false                                                                        #
 // #   game type: t2r                                                                                 #
 // #   optimizations enabled: true                                                                    #
@@ -93,30 +93,6 @@ u64? militia-investigating?() {
     return !(faction-investigating?(3));
 }
 
-u64? vox-remap-global-enemy-story-santa-barbara__vox-remap-module-def@2918__vox-remap-def@15630____vox-link-def@69c10__
-vox-remap-global-enemy-story-santa-barbara__vox-remap-def@15630__vox-link-def@69c10__
-vox-remap-global-enemy-story-santa-barbara__vox-remap-def@15630__vox-link-def@69c10__
-vox-remap-global-enemy-story-santa-barbara__vox-remap-def@15630__vox-link-def@69c10__
-embedded@125488() {
-    return gesture_(role(speaker), npc-talk-head-strong-gesture, alloc-gesture-play-params());
-}
-
-u64? vox-remap-global-enemy-story-santa-barbara__vox-remap-def@16070__vox-link-def@6b8f0__
-vox-remap-global-enemy-story-santa-barbara__vox-remap-def@16070__vox-link-def@6b8f0__
-vox-remap-global-enemy-story-santa-barbara__vox-remap-def@16070__vox-link-def@6b8f0__
-vox-remap-global-enemy-story-santa-barbara__vox-remap-def@16070__vox-link-def@6b8f0__
-embedded@126640() {
-    return gesture_(role(speaker), npc-talk-head-strong-2-gesture, alloc-gesture-play-params());
-}
-
-u64? vox-remap-global-enemy-story-santa-barbara__vox-remap-def@16ef0__vox-link-def@6e0d0__
-vox-remap-global-enemy-story-santa-barbara__vox-remap-def@16ef0__vox-link-def@6e0d0__
-vox-remap-global-enemy-story-santa-barbara__vox-remap-def@16ef0__vox-link-def@6e0d0__
-vox-remap-global-enemy-story-santa-barbara__vox-remap-def@16ef0__vox-link-def@6e0d0__
-embedded@127e28() {
-    return gesture_(role(speaker), npc-talk-head-right-strong-gesture, alloc-gesture-play-params());
-}
-
 u64? fight-ruins-combat?() {
     return get-svar-as-boolean(vox-res-neighborhood-fight-houses-street-patrol-combat);
 }
@@ -135,6 +111,30 @@ u64? joe-school-first-spotted-trespasser?() {
 
 u64? med-crane?() {
     return task-range-active?(medicine, med-crane-traverse-first-start, medicine, med-crane-traverse-fall);
+}
+
+u64? vox-remap-global-enemy-story-jordan-escape__vox-remap-module-def@2eb8__vox-remap-def@321f0____vox-link-def@111290__
+vox-remap-global-enemy-story-jordan-escape__vox-remap-def@321f0__vox-link-def@111290__
+vox-remap-global-enemy-story-jordan-escape__vox-remap-def@321f0__vox-link-def@111290__
+vox-remap-global-enemy-story-jordan-escape__vox-remap-def@321f0__vox-link-def@111290__
+vox-remap-global-enemy-story-jordan-escape__vox-remap-def@321f0__vox-link-def@111290__
+vox-remap-global-enemy-story-jordan-escape__vox-remap-def@321f0__vox-link-def@111290__
+vox-remap-global-enemy-story-jordan-escape__vox-remap-def@321f0__vox-link-def@111290__
+vox-remap-global-enemy-story-jordan-escape__vox-remap-def@321f0__vox-link-def@111290__
+embedded@1ac3b8() {
+    return set-boolean(clear-courtyard-convo-done?, 1, ss-joe-school-fight-courtyard-combat-1);
+}
+
+u64? vox-remap-global-enemy-story-jordan-escape__vox-remap-def@32670__vox-link-def@111ef0__
+vox-remap-global-enemy-story-jordan-escape__vox-remap-def@32670__vox-link-def@111ef0__
+vox-remap-global-enemy-story-jordan-escape__vox-remap-def@32670__vox-link-def@111ef0__
+vox-remap-global-enemy-story-jordan-escape__vox-remap-def@32670__vox-link-def@111ef0__
+vox-remap-global-enemy-story-jordan-escape__vox-remap-def@32670__vox-link-def@111ef0__
+vox-remap-global-enemy-story-jordan-escape__vox-remap-def@32670__vox-link-def@111ef0__
+vox-remap-global-enemy-story-jordan-escape__vox-remap-def@32670__vox-link-def@111ef0__
+vox-remap-global-enemy-story-jordan-escape__vox-remap-def@32670__vox-link-def@111ef0__
+embedded@1ace80() {
+    return send-event(vox-roof-convo-over, ss-joe-school-roof-fight-1);
 }
 
 u64? enemy-name-suppression?() {

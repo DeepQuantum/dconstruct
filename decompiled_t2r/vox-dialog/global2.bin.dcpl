@@ -4,12 +4,44 @@
 // #   listing for file: game_dumps/t2r/dc1/vox-dialog\global2.bin                                    #
 // #   filesize: 2072416 bytes                                                                        #
 // #   total entries: 129                                                                             #
-// #   functions: 33                                                                                  #
+// #   functions: 28                                                                                  #
 // #   has state script: false                                                                        #
 // #   game type: t2r                                                                                 #
 // #   optimizations enabled: true                                                                    #
 // #                                                                                                  #
 // ####################################################################################################
+
+u64? vox-remap-global-enemy-story-abby-fights-militia__vox-remap-module-def@c98__vox-remap-def@2f080____vox-link-def@f3cc8__
+vox-remap-global-enemy-story-abby-fights-militia__vox-remap-def@2f080__vox-link-def@f3cc8__
+vox-remap-global-enemy-story-abby-fights-militia__vox-remap-def@2f080__vox-link-def@f3cc8__
+vox-remap-global-enemy-story-abby-fights-militia__vox-remap-def@2f080__vox-link-def@f3cc8__
+embedded@18d448() {
+    return set-boolean(vox-wlf-checkpoint-done, 1, ss-vox-afm-overpass-cavalry-combat-1);
+}
+
+u64? vox-remap-global-enemy-story-abby-fights-militia__vox-remap-def@2f200__vox-link-def@f40e8__
+vox-remap-global-enemy-story-abby-fights-militia__vox-remap-def@2f200__vox-link-def@f40e8__
+vox-remap-global-enemy-story-abby-fights-militia__vox-remap-def@2f200__vox-link-def@f40e8__
+vox-remap-global-enemy-story-abby-fights-militia__vox-remap-def@2f200__vox-link-def@f40e8__
+embedded@18d710() {
+    return set-boolean(vox-enemy-vox-done, 1, ss-vox-afm-brewery-outside-1);
+}
+
+u64? vox-remap-global-enemy-story-abby-fights-militia__vox-remap-def@2f240__vox-link-def@f4198__
+vox-remap-global-enemy-story-abby-fights-militia__vox-remap-def@2f240__vox-link-def@f4198__
+vox-remap-global-enemy-story-abby-fights-militia__vox-remap-def@2f240__vox-link-def@f4198__
+vox-remap-global-enemy-story-abby-fights-militia__vox-remap-def@2f240__vox-link-def@f4198__
+embedded@18d7d0() {
+    return set-boolean(vox-scars-checkpoint-done, 1, ss-vox-afm-overpass-cavalry-combat-1);
+}
+
+u64? vox-remap-global-enemy-story-abby-fights-militia__vox-remap-def@30a80__vox-link-def@f8658__
+vox-remap-global-enemy-story-abby-fights-militia__vox-remap-def@30a80__vox-link-def@f8658__
+vox-remap-global-enemy-story-abby-fights-militia__vox-remap-def@30a80__vox-link-def@f8658__
+vox-remap-global-enemy-story-abby-fights-militia__vox-remap-def@30a80__vox-link-def@f8658__
+embedded@190028() {
+    return set-boolean(vox-taqueria-done, 1, ss-vox-afm-overpass-cavalry-combat-1);
+}
 
 bool all-spawned-enemies-dead?() {
     return npc-group-alive-count(all-enemy-npcs) == 0;
@@ -29,55 +61,6 @@ u64? bonded-with-abby?() {
 
 u64? vox-res-dog-tut-investigate-played?() {
     return !(get-svar-as-boolean(vox-res-dog-tut-investigate-played));
-}
-
-u64? vox-remap-global-enemy-story-watchtower__vox-remap-module-def@1688__vox-remap-def@27f40____vox-link-def@d51e8__
-vox-remap-global-enemy-story-watchtower__vox-remap-def@27f40__vox-link-def@d51e8__
-embedded@177080() {
-    return fact-set(global, infected-spotted-first?, boxed_bool(1));
-}
-
-u64? vox-remap-global-enemy-story-watchtower__vox-remap-def@28000__vox-link-def@d54a8__
-embedded@1772f0() {
-    return send-event(wlf-cut-down-turn, ss-wat-watchtower-escape-1);
-}
-
-u64? vox-remap-global-enemy-story-watchtower__vox-remap-def@28680__vox-link-def@d6688__
-vox-remap-global-enemy-story-watchtower__vox-remap-def@28680__vox-link-def@d6688__
-embedded@177e38() {
-    return fact-set(faction-enemy, restrict-attack-infected, boxed_timeframePOD(get-current-timeframe(0)));
-}
-
-u64? vox-remap-global-enemy-story-watchtower__vox-remap-def@28e80__vox-link-def@d7e58__
-embedded@178c10() {
-    return send-event(wlf-cut-down-skip, ss-wat-watchtower-escape-1);
-}
-
-u64? vox-remap-global-enemy-story-watchtower__vox-remap-def@295c0__vox-link-def@d9288__
-embedded@179910() {
-    return send-event(wlf-convo-done, ss-vox-wat-infected-tunnels-escape-tunnel-1);
-}
-
-u64? vox-remap-global-enemy-story-watchtower__vox-remap-def@29a80__vox-link-def@d9f98__
-embedded@17a160() {
-    return send-event(vox-mid-point, ss-vox-wat-watchtower-escape-street-1);
-}
-
-u64? vox-remap-global-enemy-story-watchtower__vox-remap-def@29ec0__vox-link-def@dab48__
-vox-remap-global-enemy-story-watchtower__vox-remap-def@29ec0__vox-link-def@dab48__
-embedded@17a8e0() {
-    return fact-set(global, infected-spotted-first?, boxed_bool(1));
-}
-
-u64? vox-remap-global-enemy-story-watchtower__vox-remap-def@2a140__vox-link-def@db2d8__
-vox-remap-global-enemy-story-watchtower__vox-remap-def@2a140__vox-link-def@db2d8__
-embedded@17adf8() {
-    return send-event(wlf-cut-down-end, ss-wat-watchtower-escape-1);
-}
-
-u64? vox-remap-global-enemy-story-watchtower__vox-remap-def@2a1c0__vox-link-def@db438__
-embedded@17af40() {
-    return send-event(wlf-cut-down-start, ss-wat-watchtower-escape-1);
 }
 
 u64? dog-tut-street-patrol-search-convo-played?() {

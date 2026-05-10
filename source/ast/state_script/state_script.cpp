@@ -85,6 +85,9 @@ void state_script::pseudo_racket(std::ostream& os) const {
             errors.push_back(semantic_check_error{"duplicate state name: '" + state.m_name + "'"});
         }
 
+        decl_scope.define("#" + state.m_name, make_type_from_prim(ast::primitive_kind::U64));
+        decl_scope.m_sidAliases[state.m_name] = {SID(state.m_name.c_str()), state.m_name};
+
         std::unordered_set<std::string> block_names;
         for (const auto& block : state.m_blocks) {
             if (!block_names.insert(block.block_type_to_string()).second) {
@@ -99,6 +102,7 @@ void state_script::pseudo_racket(std::ostream& os) const {
             }
         }
     }
+
 
     for (const auto& state : m_states) {
         for (const auto& block : state.m_blocks) {
