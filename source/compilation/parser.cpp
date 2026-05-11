@@ -284,12 +284,32 @@ const token* Parser::consume(const std::initializer_list<token_type> types, cons
     ast::enum_type enum_t;
     enum_t.m_name = enum_name->m_lexeme;
 
+    u64 counter = 0;
+    bool has_assignments = false;
     do {
         const token* enum_value = consume(token_type::IDENTIFIER, "expected enumeration name");
         if (!enum_value) {
             return std::nullopt;
         }
-        enum_t.m_enumerators.push_back(enum_value->m_lexeme);
+
+        u64 value = counter;
+        if (match({token_type::EQUAL})) {
+            if (!has_assignments && counter > 0) {
+                m_errors.emplace_back(peek(), "expected all enums to have an assigned value, but the previous ones don't");
+                return std::nullopt;
+            }
+            has_assignments = true;
+            const auto *literal_token = consume(token_type::INT, "expected integer literal");
+            if (!literal_token) { 
+                return std::nullopt;
+            }
+            value = std::get<u16>(literal_token->m_literal);
+        } else if (has_assignments) {
+            m_errors.emplace_back(peek(), "expected either all enums to have an assigned value but " + enum_value->m_lexeme + " doesn't");
+            return std::nullopt;
+        }
+        counter++;
+        enum_t.m_enumerators[enum_value->m_lexeme] = value;
     } while (match({token_type::COMMA}));
 
     if (!consume(token_type::RIGHT_BRACE, "expected '}' after enum definition")) {
@@ -849,7 +869,18 @@ const token* Parser::consume(const std::initializer_list<token_type> types, cons
 }
 
 [[nodiscard]] expr_uptr Parser::make_unary() {
-    if (match({token_type::BANG, token_type::PLUS, token_type::MINUS, token_type::TILDE, token_type::PLUS_PLUS, token_type::MINUS_MINUS, token_type::STAR, token_type::AMPERSAND})) {
+    if (match({
+        token_type::BANG, 
+        token_type::PLUS, 
+        token_type::MINUS, 
+        token_type::TILDE, 
+        token_type::PLUS_PLUS, 
+        token_type::MINUS_MINUS, 
+        token_type::STAR, 
+        token_type::AMPERSAND, 
+        token_type::GREATER_GREATER, 
+        token_type::EQUAL_GREATER
+    })) {
         const token& op = previous();
         expr_uptr right = make_unary();
         if (!right) {
@@ -880,6 +911,12 @@ const token* Parser::consume(const std::initializer_list<token_type> types, cons
             case token_type::AMPERSAND: {
                 //return std::make_unique<ast::address_of_expr>(op, std::move(right));
             }
+            case token_type::GREATER_GREATER: {
+                return make_call_from_operator(op, "#display", std::move(right), 19);
+            }
+            case token_type::EQUAL_GREATER: {
+                return make_call_from_operator(op, "#go", std::move(right), 1);
+            }
             default: {
                 m_errors.emplace_back(op, "expected expression or operand but got '" + op.m_lexeme + "'");
                 return nullptr;
@@ -887,6 +924,25 @@ const token* Parser::consume(const std::initializer_list<token_type> types, cons
         }
     }
     return make_call();
+}
+
+template<typename ...Args> requires (std::constructible_from<ast::literal, Args> && ...)
+[[nodiscard]] std::unique_ptr<ast::call_expr> Parser::make_call_from_operator(const token& op, const std::string& func_name, expr_uptr primary_operand, Args ...extra_function_args) {
+    expr_uptr callee = std::make_unique<ast::sid_identifier>(func_name);
+
+    std::vector<expr_uptr> args;
+    args.reserve(1 + sizeof...(extra_function_args));
+
+    args.push_back(std::move(primary_operand));
+
+    for (const auto& arg : {extra_function_args...}) {
+        expr_uptr lit = std::make_unique<ast::literal>(arg);
+        args.push_back(std::move(lit));
+    }
+
+    std::unique_ptr call = std::make_unique<ast::call_expr>(op, std::move(callee), std::move(args));
+
+    return call;
 }
 
 [[nodiscard]] expr_uptr Parser::make_call() {

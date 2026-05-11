@@ -168,12 +168,8 @@ ptr_type::ptr_type(const ast::primitive_kind& kind) noexcept
             std::ostringstream os;
             os << "enum " << arg.m_name << " // size: " << get_size(type) << "\n";
             os << "{\n";
-            for (u32 i = 0; i < arg.m_enumerators.size(); ++i) {
-                os << "    " << arg.m_enumerators[i];
-                if (i < arg.m_enumerators.size() - 1) {
-                    os << ',';
-                }
-                os << "\n";
+            for (const auto& [name, value] : arg.m_enumerators) {
+                os << "    " << name << " " << value << ";\n";
             }
             os << "};";
             return os.str();

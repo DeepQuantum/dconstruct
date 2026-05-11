@@ -4,12 +4,754 @@
 // #   listing for file: game_dumps/t2r/dc1/melee\melee-lisurgeonguild.bin                            #
 // #   filesize: 90866 bytes                                                                          #
 // #   total entries: 76                                                                              #
-// #   functions: 2                                                                                   #
+// #   functions: 74                                                                                  #
 // #   has state script: false                                                                        #
 // #   game type: t2r                                                                                 #
 // #   optimizations enabled: true                                                                    #
 // #                                                                                                  #
 // ####################################################################################################
+
+u64? *online-melee-lists*__hash-table@1268__melee-attack-list@3168____array*@5fb0____melee-attack-list@8d10__
+*online-melee-lists*__hash-table@1268__melee-attack-list@3168____melee-attack-list@8d10__
+*default-melee-lists*__hash-table@1268__melee-attack-list@3168____array*@5fb0____melee-attack-list@8d10__
+*default-melee-lists*__hash-table@1268__melee-attack-list@3168____melee-attack-list@8d10__
+embedded@c5e8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    return is-player-ellie?(player) && npc-clicker?(arg_1);
+}
+
+u64? *online-melee-lists*__hash-table@1268__melee-attack-list@8d48__
+*default-melee-lists*__hash-table@1268__melee-attack-list@8d48__
+embedded@d4e8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    return !(net-is-active?());
+}
+
+u64? *online-melee-lists*__melee-attack-list@31d8__array*@5190____melee-attack-list@6818__
+*online-melee-lists*__melee-attack-list@31d8__melee-attack-list@6818__
+*online-melee-lists*__melee-attack-list@3830__array*@5c40____melee-attack-list@7ed8__
+*online-melee-lists*__melee-attack-list@3830__melee-attack-list@7ed8__
+*online-melee-lists*__melee-attack-list@3948__array*@53e0____melee-attack-list@6e38__
+*online-melee-lists*__melee-attack-list@3948__melee-attack-list@6e38__
+*online-melee-lists*__melee-attack-list@3c58__array*@5f58____net-is-active?@6738____melee-attack-list@8990__
+*online-melee-lists*__melee-attack-list@45f8__array*@58c0____melee-attack-list@7b58__
+*online-melee-lists*__melee-attack-list@45f8__melee-attack-list@7b58__
+*default-melee-lists*__melee-attack-list@31d8__array*@5190____melee-attack-list@6818__
+*default-melee-lists*__melee-attack-list@31d8__melee-attack-list@6818__
+*default-melee-lists*__melee-attack-list@3830__array*@5c40____melee-attack-list@7ed8__
+*default-melee-lists*__melee-attack-list@3830__melee-attack-list@7ed8__
+*default-melee-lists*__melee-attack-list@3948__array*@53e0____melee-attack-list@6e38__
+*default-melee-lists*__melee-attack-list@3948__melee-attack-list@6e38__
+*default-melee-lists*__melee-attack-list@3c58__array*@5f58____net-is-active?@6738____melee-attack-list@8990__
+*default-melee-lists*__melee-attack-list@45f8__array*@58c0____melee-attack-list@7b58__
+*default-melee-lists*__melee-attack-list@45f8__melee-attack-list@7b58__
+embedded@9400(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    return npc-1h-blunt-fast?(lookup-weapon-gameplay-def(npc-get-weapon(arg_0), 0));
+}
+
+u64? *online-melee-lists*__melee-attack-list@6850
+*online-melee-lists*__melee-attack-list@7f10
+*online-melee-lists*__melee-attack-list@6e70
+*online-melee-lists*__melee-attack-list@3c58__array*@5f58____melee-attack-list@89c8__
+*online-melee-lists*__melee-attack-list@7b90
+*default-melee-lists*__melee-attack-list@6850
+*default-melee-lists*__melee-attack-list@7f10
+*default-melee-lists*__melee-attack-list@6e70
+*default-melee-lists*__melee-attack-list@3c58__array*@5f58____melee-attack-list@89c8__
+*default-melee-lists*__melee-attack-list@7b90
+embedded@bf30(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    return npc-1h-blade-fast?(lookup-weapon-gameplay-def(npc-get-weapon(arg_0), 0));
+}
+
+u64? *online-melee-lists*__melee-attack-list@6888
+*online-melee-lists*__melee-attack-list@7340
+*online-melee-lists*__melee-attack-list@7f48
+*online-melee-lists*__melee-attack-list@6ea8
+*online-melee-lists*__melee-attack-list@6bd0
+*online-melee-lists*__melee-attack-list@3c58__melee-attack-list@8a00__
+*online-melee-lists*__melee-attack-list@7bc8
+*online-melee-lists*__melee-attack-list@78b8
+*online-melee-lists*__melee-attack-list@7768
+*default-melee-lists*__melee-attack-list@6888
+*default-melee-lists*__melee-attack-list@7340
+*default-melee-lists*__melee-attack-list@7f48
+*default-melee-lists*__melee-attack-list@6ea8
+*default-melee-lists*__melee-attack-list@6bd0
+*default-melee-lists*__melee-attack-list@3c58__melee-attack-list@8a00__
+*default-melee-lists*__melee-attack-list@7bc8
+*default-melee-lists*__melee-attack-list@78b8
+*default-melee-lists*__melee-attack-list@7768
+embedded@a340(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    return npc-2h-blunt-fast?(lookup-weapon-gameplay-def(npc-get-weapon(arg_0), 0));
+}
+
+u64? *online-melee-lists*__melee-attack-list@68c0
+*online-melee-lists*__melee-attack-list@7378
+*online-melee-lists*__melee-attack-list@7378
+*online-melee-lists*__melee-attack-list@7f80
+*online-melee-lists*__melee-attack-list@6ee0
+*online-melee-lists*__melee-attack-list@6c08
+*online-melee-lists*__melee-attack-list@6c08
+*online-melee-lists*__melee-attack-list@8a38
+*online-melee-lists*__melee-attack-list@7c00
+*online-melee-lists*__melee-attack-list@78f0
+*online-melee-lists*__melee-attack-list@78f0
+*online-melee-lists*__melee-attack-list@77a0
+*online-melee-lists*__melee-attack-list@77a0
+*default-melee-lists*__melee-attack-list@68c0
+*default-melee-lists*__melee-attack-list@7378
+*default-melee-lists*__melee-attack-list@7378
+*default-melee-lists*__melee-attack-list@7f80
+*default-melee-lists*__melee-attack-list@6ee0
+*default-melee-lists*__melee-attack-list@6c08
+*default-melee-lists*__melee-attack-list@6c08
+*default-melee-lists*__melee-attack-list@8a38
+*default-melee-lists*__melee-attack-list@7c00
+*default-melee-lists*__melee-attack-list@78f0
+*default-melee-lists*__melee-attack-list@78f0
+*default-melee-lists*__melee-attack-list@77a0
+*default-melee-lists*__melee-attack-list@77a0
+embedded@cd10(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    return npc-2h-blade-fast?(lookup-weapon-gameplay-def(npc-get-weapon(arg_0), 0));
+}
+
+u64? *online-melee-lists*__melee-attack-list@3210__array*@5da0____melee-attack-list@8530__
+*online-melee-lists*__melee-attack-list@3210__melee-attack-list@8530__
+*online-melee-lists*__melee-attack-list@34e8__array*@5408____melee-attack-list@6f50__
+*online-melee-lists*__melee-attack-list@34e8__melee-attack-list@6f50__
+*online-melee-lists*__melee-attack-list@4400__array*@5f70____melee-attack-list@8aa8__
+*online-melee-lists*__melee-attack-list@4400__melee-attack-list@8aa8__
+*online-melee-lists*__melee-attack-list@46d8__array*@59f0____melee-attack-list@7ce0__
+*online-melee-lists*__melee-attack-list@46d8__melee-attack-list@7ce0__
+*default-melee-lists*__melee-attack-list@3210__array*@5da0____melee-attack-list@8530__
+*default-melee-lists*__melee-attack-list@3210__melee-attack-list@8530__
+*default-melee-lists*__melee-attack-list@34e8__array*@5408____melee-attack-list@6f50__
+*default-melee-lists*__melee-attack-list@34e8__melee-attack-list@6f50__
+*default-melee-lists*__melee-attack-list@4400__array*@5f70____melee-attack-list@8aa8__
+*default-melee-lists*__melee-attack-list@4400__melee-attack-list@8aa8__
+*default-melee-lists*__melee-attack-list@46d8__array*@59f0____melee-attack-list@7ce0__
+*default-melee-lists*__melee-attack-list@46d8__melee-attack-list@7ce0__
+embedded@a090(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    return is-player-ellie?(player);
+}
+
+u64? *online-melee-lists*__melee-attack-list@3248__array*@5d70____melee-attack-list@8290__
+*online-melee-lists*__melee-attack-list@3248__melee-attack-list@8290__
+*default-melee-lists*__melee-attack-list@3248__array*@5d70____melee-attack-list@8290__
+*default-melee-lists*__melee-attack-list@3248__melee-attack-list@8290__
+embedded@a610(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    u64? var_1 = lookup-weapon-gameplay-def(npc-get-weapon(arg_1), 0);
+    return npc-1h-blunt-fast?(var_1) || npc-1h-blade-fast?(var_1) || npc-2h-blunt-fast?(var_1) || npc-2h-blade-fast?(var_1) || npc-enemy-ellie?(arg_1) || npc-enemy-abby?(arg_1) || npc-short-gun-fast?(var_1) || npc-long-gun-fast?(var_1) && npc-brute?(arg_1) && !npc-is-buddy?(arg_1) && !(npc-is-infected?(arg_1)) && is-in-front?(get-object-locator(arg_1), get-object-locator(arg_0), 2, 120.00) || !(npc-in-tap?(arg_1)) && npc-in-melee-vulnerable-tap?(arg_1);
+}
+
+u64? *online-melee-lists*__melee-attack-list@82c8
+*default-melee-lists*__melee-attack-list@82c8
+embedded@bfe0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    u64? var_1 = lookup-weapon-gameplay-def(npc-get-weapon(arg_1), 0);
+    return npc-1h-blunt-fast?(var_1) || npc-1h-blade-fast?(var_1) || npc-2h-blunt-fast?(var_1) || npc-2h-blade-fast?(var_1) || npc-enemy-ellie?(arg_1) || npc-enemy-abby?(arg_1) || npc-short-gun-fast?(var_1) || npc-long-gun-fast?(var_1) && npc-brute?(arg_1) && !npc-is-buddy?(arg_1) && !(npc-is-infected?(arg_1)) && is-behind?(get-object-locator(arg_1), get-object-locator(arg_0), 2, 120.00) || !(npc-in-tap?(arg_1)) && npc-in-melee-vulnerable-tap?(arg_1);
+}
+
+u64? *online-melee-lists*__melee-attack-list@8300
+*default-melee-lists*__melee-attack-list@8300
+embedded@9e90(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    u64? var_1 = lookup-weapon-gameplay-def(npc-get-weapon(arg_1), 0);
+    return npc-1h-blunt-fast?(var_1) || npc-1h-blade-fast?(var_1) || npc-2h-blunt-fast?(var_1) || npc-2h-blade-fast?(var_1) || npc-enemy-ellie?(arg_1) || npc-enemy-abby?(arg_1) || npc-short-gun-fast?(var_1) || npc-long-gun-fast?(var_1) && npc-brute?(arg_1) && !npc-is-buddy?(arg_1) && !(npc-is-infected?(arg_1)) || is-left?(get-object-locator(arg_1), get-object-locator(arg_0), 60.00) && is-right?(get-object-locator(arg_1), get-object-locator(arg_0), 60.00) || !(npc-in-tap?(arg_1)) && npc-in-melee-vulnerable-tap?(arg_1);
+}
+
+u64? *online-melee-lists*__melee-attack-list@8338
+*default-melee-lists*__melee-attack-list@8338
+embedded@a268(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    return npc-is-buddy?(arg_1) && is-in-front?(get-object-locator(arg_1), get-object-locator(arg_0), 2, 120.00) || !(npc-in-tap?(arg_1)) && npc-in-melee-vulnerable-tap?(arg_1);
+}
+
+u64? *online-melee-lists*__melee-attack-list@8370
+*default-melee-lists*__melee-attack-list@8370
+embedded@96b8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    return npc-is-buddy?(arg_1) && is-behind?(get-object-locator(arg_1), get-object-locator(arg_0), 2, 120.00) || !(npc-in-tap?(arg_1)) && npc-in-melee-vulnerable-tap?(arg_1);
+}
+
+u64? *online-melee-lists*__melee-attack-list@83a8
+*default-melee-lists*__melee-attack-list@83a8
+embedded@9470(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    return npc-is-buddy?(arg_1) || is-left?(get-object-locator(arg_1), get-object-locator(arg_0), 60.00) && is-right?(get-object-locator(arg_1), get-object-locator(arg_0), 60.00) || !(npc-in-tap?(arg_1)) && npc-in-melee-vulnerable-tap?(arg_1);
+}
+
+u64? *online-melee-lists*__melee-attack-list@83e0
+*default-melee-lists*__melee-attack-list@83e0
+embedded@d338(u64? arg_0, bool arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    return !(arg_1 == 0) && is-npc?(arg_1) && npc-is-dog?(arg_1) || !(npc-in-tap?(arg_1)) && npc-in-melee-vulnerable-tap?(arg_1);
+}
+
+u64? *online-melee-lists*__melee-attack-list@8418
+*online-melee-lists*__melee-attack-list@8418
+*default-melee-lists*__melee-attack-list@8418
+*default-melee-lists*__melee-attack-list@8418
+embedded@ce18(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    return npc-is-infected?(arg_1) && is-in-front?(get-object-locator(arg_1), get-object-locator(arg_0), 2, 120.00) || !(npc-in-tap?(arg_1)) && npc-in-melee-vulnerable-tap?(arg_1);
+}
+
+u64? *online-melee-lists*__melee-attack-list@3280__array*@5898____melee-attack-list@7ae8__
+*online-melee-lists*__melee-attack-list@3280__melee-attack-list@7ae8__
+*online-melee-lists*__melee-attack-list@4a90__array*@5e78____melee-attack-list@8728__
+*online-melee-lists*__melee-attack-list@4a90__melee-attack-list@8728__
+*default-melee-lists*__melee-attack-list@3280__array*@5898____melee-attack-list@7ae8__
+*default-melee-lists*__melee-attack-list@3280__melee-attack-list@7ae8__
+*default-melee-lists*__melee-attack-list@4a90__array*@5e78____melee-attack-list@8728__
+*default-melee-lists*__melee-attack-list@4a90__melee-attack-list@8728__
+embedded@d2e0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    return !npc-is-buddy?(arg_0);
+}
+
+u64? *online-melee-lists*__melee-attack-list@3398__array*@5b78____melee-attack-list@7dc0__
+*online-melee-lists*__melee-attack-list@3398__melee-attack-list@7dc0__
+*online-melee-lists*__melee-attack-list@49b0__array*@5d10____melee-attack-list@8060__
+*online-melee-lists*__melee-attack-list@49b0__melee-attack-list@8060__
+*online-melee-lists*__melee-attack-list@4cf8__array*@57c8____melee-attack-list@7a08__
+*online-melee-lists*__melee-attack-list@4cf8__melee-attack-list@7a08__
+*online-melee-lists*__melee-attack-list@4e80__array*@5a80____melee-attack-list@7dc0__
+*default-melee-lists*__melee-attack-list@3398__array*@5b78____melee-attack-list@7dc0__
+*default-melee-lists*__melee-attack-list@3398__melee-attack-list@7dc0__
+*default-melee-lists*__melee-attack-list@49b0__array*@5d10____melee-attack-list@8060__
+*default-melee-lists*__melee-attack-list@49b0__melee-attack-list@8060__
+*default-melee-lists*__melee-attack-list@4cf8__array*@57c8____melee-attack-list@7a08__
+*default-melee-lists*__melee-attack-list@4cf8__melee-attack-list@7a08__
+*default-melee-lists*__melee-attack-list@4e80__array*@5a80____melee-attack-list@7dc0__
+embedded@9110(sid arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    return arg_0 == dina || arg_0 == mel && arg_0 == lev;
+}
+
+u64? *online-melee-lists*__melee-attack-list@3478__array*@5630____melee-attack-list@7420__
+*online-melee-lists*__melee-attack-list@3478__melee-attack-list@7420__
+*default-melee-lists*__melee-attack-list@3478__array*@5630____melee-attack-list@7420__
+*default-melee-lists*__melee-attack-list@3478__melee-attack-list@7420__
+embedded@d0b0(sid arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    return arg_0 == dina && arg_0 == lev;
+}
+
+u64? *online-melee-lists*__melee-attack-list@3520__array*@5440____melee-attack-list@6fc0__
+*online-melee-lists*__melee-attack-list@3520__melee-attack-list@6fc0__
+*online-melee-lists*__melee-attack-list@71b8
+*default-melee-lists*__melee-attack-list@3520__array*@5440____melee-attack-list@6fc0__
+*default-melee-lists*__melee-attack-list@3520__melee-attack-list@6fc0__
+*default-melee-lists*__melee-attack-list@71b8
+embedded@cbf0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    return !npc-enemy-abby?(arg_1) || npc-get-faction(arg_1, 1) == Militia && npc-get-faction(arg_1, 1) == Slaver;
+}
+
+u64? *online-melee-lists*__melee-attack-list@3558__array*@5eb0____melee-attack-list@8798__
+*online-melee-lists*__melee-attack-list@3558__melee-attack-list@8798__
+*default-melee-lists*__melee-attack-list@3558__array*@5eb0____melee-attack-list@8798__
+*default-melee-lists*__melee-attack-list@3558__melee-attack-list@8798__
+embedded@9be0(sid arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    u64? var_0;
+    if (arg_0 == dina || arg_0 == mel && arg_0 == lev) {
+        var_0 = npc-is-infected?(arg_1);
+    }
+    return var_0;
+}
+
+u64? *online-melee-lists*__melee-attack-list@87d0
+*default-melee-lists*__melee-attack-list@87d0
+embedded@93a8(sid arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    return is-rogue-mode?() && arg_0 == yara && npc-is-infected?(arg_1);
+}
+
+u64? *online-melee-lists*__melee-attack-list@8808
+*default-melee-lists*__melee-attack-list@8808
+embedded@91c0(sid arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    u64? var_3;
+    if (arg_0 == dina || arg_0 == mel && arg_0 == lev && !npc-is-infected?(arg_1) && !npc-short-gun?(arg_1) && !npc-long-gun?(arg_1)) {
+        var_3 = !npc-1h-blade?(arg_1) && melee-weapon-bit-check(arg_1, #0000000001800000, 1, 0);
+    }
+    return var_3;
+}
+
+u64? *online-melee-lists*__melee-attack-list@8840
+*default-melee-lists*__melee-attack-list@8840
+embedded@b9e0(sid arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    return is-rogue-mode?() && arg_0 == yara && !npc-is-infected?(arg_1) && !npc-short-gun?(arg_1) && !npc-long-gun?(arg_1) || !npc-1h-blade?(arg_1) && melee-weapon-bit-check(arg_1, #0000000001800000, 1, 0);
+}
+
+u64? *online-melee-lists*__melee-attack-list@8878
+*default-melee-lists*__melee-attack-list@8878
+embedded@ccb8(sid arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    u64? var_1;
+    if (arg_0 == dina || arg_0 == mel && arg_0 == lev && !npc-is-infected?(arg_1)) {
+        var_1 = npc-short-gun?(arg_1) || npc-long-gun?(arg_1) && npc-1h-blade?(arg_1) && !melee-weapon-bit-check(arg_1, #0000000001800000, 1, 0);
+    }
+    return var_1;
+}
+
+u64? *online-melee-lists*__melee-attack-list@88b0
+*default-melee-lists*__melee-attack-list@88b0
+embedded@dc50(sid arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    u64? var_1;
+    if (arg_0 == joel && arg_0 == tommy && npc-is-infected?(arg_1)) {
+        var_1 = !npc-1h-blade?(arg_0);
+    }
+    return var_1;
+}
+
+u64? *online-melee-lists*__melee-attack-list@88e8
+*default-melee-lists*__melee-attack-list@88e8
+embedded@a668(sid arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    u64? var_1;
+    if (arg_0 == joel || arg_0 == tommy || arg_0 == jesse && arg_0 == manny && npc-is-infected?(arg_1)) {
+        var_1 = npc-1h-blade?(arg_0);
+    }
+    return var_1;
+}
+
+u64? *online-melee-lists*__melee-attack-list@8920
+*default-melee-lists*__melee-attack-list@8920
+embedded@c7a8(sid arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    u64? var_3;
+    if (arg_0 == joel || arg_0 == tommy || arg_0 == jesse && arg_0 == manny && !npc-is-infected?(arg_1) && !npc-short-gun?(arg_1) && !npc-long-gun?(arg_1)) {
+        var_3 = !npc-1h-blade?(arg_1) && melee-weapon-bit-check(arg_1, #0000000001800000, 1, 0);
+    }
+    return var_3;
+}
+
+u64? *online-melee-lists*__melee-attack-list@35c8__array*@55d0____melee-attack-list@72d0__
+*online-melee-lists*__melee-attack-list@35c8__melee-attack-list@72d0__
+*online-melee-lists*__melee-attack-list@3be8__array*@5250____melee-attack-list@6b60__
+*online-melee-lists*__melee-attack-list@3be8__melee-attack-list@6b60__
+*online-melee-lists*__melee-attack-list@4d68__array*@5740____melee-attack-list@7848__
+*online-melee-lists*__melee-attack-list@4d68__melee-attack-list@7848__
+*online-melee-lists*__melee-attack-list@5040__array*@5710____melee-attack-list@76f8__
+*online-melee-lists*__melee-attack-list@5040__melee-attack-list@76f8__
+*default-melee-lists*__melee-attack-list@35c8__array*@55d0____melee-attack-list@72d0__
+*default-melee-lists*__melee-attack-list@35c8__melee-attack-list@72d0__
+*default-melee-lists*__melee-attack-list@3be8__array*@5250____melee-attack-list@6b60__
+*default-melee-lists*__melee-attack-list@3be8__melee-attack-list@6b60__
+*default-melee-lists*__melee-attack-list@4d68__array*@5740____melee-attack-list@7848__
+*default-melee-lists*__melee-attack-list@4d68__melee-attack-list@7848__
+*default-melee-lists*__melee-attack-list@5040__array*@5710____melee-attack-list@76f8__
+*default-melee-lists*__melee-attack-list@5040__melee-attack-list@76f8__
+embedded@c190(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    return npc-1h-blunt-fast?(lookup-weapon-gameplay-def(npc-get-weapon(arg_0), 0)) && melee-weapon-bit-check(arg_0, #0000000001800000, 1, 0);
+}
+
+u64? *online-melee-lists*__melee-attack-list@7308
+*online-melee-lists*__melee-attack-list@6b98
+*online-melee-lists*__melee-attack-list@7880
+*online-melee-lists*__melee-attack-list@7730
+*default-melee-lists*__melee-attack-list@7308
+*default-melee-lists*__melee-attack-list@6b98
+*default-melee-lists*__melee-attack-list@7880
+*default-melee-lists*__melee-attack-list@7730
+embedded@bea0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    return npc-1h-blade-fast?(lookup-weapon-gameplay-def(npc-get-weapon(arg_0), 0)) && !melee-weapon-bit-check(arg_0, #0000000001800000, 1, 0);
+}
+
+u64? *online-melee-lists*__melee-attack-list@3600
+*online-melee-lists*__melee-attack-list@3b08
+*default-melee-lists*__melee-attack-list@3600
+*default-melee-lists*__melee-attack-list@3b08
+embedded@5840(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    return melee-character-bit-check(arg_0, #000000000B000000);
+}
+
+u64? *online-melee-lists*__melee-attack-list@3788__array*@6040____melee-attack-list@8e28__
+*default-melee-lists*__melee-attack-list@3788__array*@6040____melee-attack-list@8e28__
+embedded@b330(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    determine-dodge-npc-target(arg_1);
+    u64? var_0 = is-player?(arg_0);
+    if (!var_0) {
+        melee-debug-text-file-line-fail("(is-player? attacker)", "t2r/src/game/scriptx/melee/melee-lists.dcx", 553);
+    }
+    u64? var_3 = character-melee-event-active?(arg_0, 38, 0);
+    melee-debug-text-file-line-fail("(or (and (player-is-prone?) (not (player-is-supine?))) (character-melee-event-active? attacker (melee-event-type pretend-prone)))", "t2r/src/game/scriptx/melee/melee-lists.dcx", 554);
+    return var_0 && player-is-prone?() || !player-is-supine?() && var_3 && var_3 && var_3;
+}
+
+u64? *online-melee-lists*__melee-attack-list@3788__melee-attack-list@8e60__
+*default-melee-lists*__melee-attack-list@3788__melee-attack-list@8e60__
+embedded@b168(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    determine-dodge-npc-target(arg_1);
+    u64? var_0 = is-player?(arg_0);
+    if (!var_0) {
+        melee-debug-text-file-line-fail("(is-player? attacker)", "t2r/src/game/scriptx/melee/melee-lists.dcx", 576);
+    }
+    u64? var_2 = character-melee-event-active?(arg_0, 39, 0);
+    melee-debug-text-file-line-fail("(or (player-is-supine?) (character-melee-event-active? attacker (melee-event-type pretend-supine)))", "t2r/src/game/scriptx/melee/melee-lists.dcx", 577);
+    return var_0 || player-is-supine?() && var_2 && var_2 && var_2;
+}
+
+u64? *online-melee-lists*__melee-attack-list@8e98
+*default-melee-lists*__melee-attack-list@8e98
+embedded@d390(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    determine-dodge-npc-target(arg_1);
+    if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
+        if (!is-final-build?()) {
+            display(dc:format("Frames-til-hit: %i", estimate-frames-til-hit(melee-fact-get-symbol(player, contextual-dodge-npc))), 19);
+        }
+        if (!is-final-build?()) {
+            display(dc:format("ANGLE BETWEEN DEFENDER AND EVADE DIR : %f", get-object-facing-angle-plus(
+                alloc-bound-frame(get-object-position(arg_0), quat-from-look-at(get-melee-evade-dir(arg_0), alloc-vector(0.00, 1.00, 0.00, 1.00, 0)), 0, 0, 0),
+                rotate-locator-lookat(get-object-locator(melee-fact-get-symbol(player, contextual-dodge-npc)), get-object-locator(arg_0), 1.00, 0),
+                2,
+                1
+            )), 19);
+        }
+    }
+    u64? var_16 = is-player?(arg_0);
+    if (!var_16) {
+        melee-debug-text-file-line-fail("(is-player? attacker)", "t2r/src/game/scriptx/melee/melee-lists.dcx", 616);
+    }
+    u64? var_17 = melee-weapon-bit-check(arg_0, #0300008410000000, 1, 0);
+    melee-debug-text-file-line-fail("(not (melee-weapon-bit-check attacker (target-weapon-type 2h-blunt-all 2h-blade-all 2h-superheavy-all shotgun rifle)))", "t2r/src/game/scriptx/melee/melee-lists.dcx", 617);
+    return var_16 && !var_17 && !var_17;
+}
+
+u64? *online-melee-lists*__melee-attack-list@8ed0
+*default-melee-lists*__melee-attack-list@8ed0
+embedded@cd68(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    determine-dodge-npc-target(arg_1);
+    invalidate-melee-command-queue(arg_0);
+    return is-player?(arg_0) && melee-weapon-bit-check(arg_0, #0300008410000000, 1, 0) && !(npc-enemy-abby?(arg_1)) && !(net-is-active?()) && !(melee-fact-get-time-since(arg_0, mosh-pit-ended) < 1.00) && !character-melee-event-active?(arg_0, 220, 0) && !player-is-prone?() && !player-is-supine?() && !character-melee-event-active?(arg_0, 38, 0) && !character-melee-event-active?(arg_0, 39, 0) && 1;
+}
+
+u64? *online-melee-lists*__melee-attack-list@8f08
+*default-melee-lists*__melee-attack-list@8f08
+embedded@c868(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    determine-dodge-npc-target(arg_1);
+    if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
+        if (!is-final-build?()) {
+            display(dc:format("Frames-til-hit: %i", estimate-frames-til-hit(melee-fact-get-symbol(player, contextual-dodge-npc))), 19);
+        }
+    }
+    return npc-enemy-abby?(arg_1) && !player-is-prone?() && !player-is-supine?() && !character-melee-event-active?(arg_0, 38, 0) && !character-melee-event-active?(arg_0, 39, 0);
+}
+
+u64? *online-melee-lists*__melee-attack-list@8f40
+*default-melee-lists*__melee-attack-list@8f40
+embedded@9660(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    determine-dodge-npc-target(arg_1);
+    if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1)) {
+        if (!is-final-build?()) {
+            display(dc:format("Frames-til-hit: %i", estimate-frames-til-hit(melee-fact-get-symbol(player, contextual-dodge-npc))), 19);
+        }
+    }
+    return net-is-active?();
+}
+
+u64? *online-melee-lists*__melee-attack-list@37f8__array*@55b8____melee-attack-list@7260__
+*online-melee-lists*__melee-attack-list@37f8__melee-attack-list@7260__
+*default-melee-lists*__melee-attack-list@37f8__array*@55b8____melee-attack-list@7260__
+*default-melee-lists*__melee-attack-list@37f8__melee-attack-list@7260__
+embedded@da40(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    determine-dodge-npc-target(arg_1);
+    if (!1) {
+        melee-debug-text-file-line-fail("(begin (determine-dodge-npc-target defender) #t)", "t2r/src/game/scriptx/melee/melee-lists.dcx", 1117);
+    }
+    u64? var_0 = supine-auto-stand-frame-check(arg_0, 30);
+    melee-debug-text-file-line-fail("(supine-auto-stand-frame-check attacker)", "t2r/src/game/scriptx/melee/melee-lists.dcx", 1118);
+    return 1 && var_0 && var_0;
+}
+
+u64? *online-melee-lists*__melee-attack-list@3868__array*@53b0____melee-attack-list@6d90__
+*online-melee-lists*__melee-attack-list@3868__melee-attack-list@6d90__
+*online-melee-lists*__melee-attack-list@3c20__array*@5648____melee-attack-list@7490__
+*online-melee-lists*__melee-attack-list@3c20__melee-attack-list@7490__
+*online-melee-lists*__melee-attack-list@3ef8__array*@5b90____melee-attack-list@7e30__
+*online-melee-lists*__melee-attack-list@3ef8__melee-attack-list@7e30__
+*default-melee-lists*__melee-attack-list@3868__array*@53b0____melee-attack-list@6d90__
+*default-melee-lists*__melee-attack-list@3868__melee-attack-list@6d90__
+*default-melee-lists*__melee-attack-list@3c20__array*@5648____melee-attack-list@7490__
+*default-melee-lists*__melee-attack-list@3c20__melee-attack-list@7490__
+*default-melee-lists*__melee-attack-list@3ef8__array*@5b90____melee-attack-list@7e30__
+*default-melee-lists*__melee-attack-list@3ef8__melee-attack-list@7e30__
+embedded@b5c8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    return npc-enemy-abby-phase-1?(arg_0);
+}
+
+u64? *online-melee-lists*__melee-attack-list@6dc8
+*online-melee-lists*__melee-attack-list@74c8
+*online-melee-lists*__melee-attack-list@7e68
+*default-melee-lists*__melee-attack-list@6dc8
+*default-melee-lists*__melee-attack-list@74c8
+*default-melee-lists*__melee-attack-list@7e68
+embedded@9f10(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    return npc-enemy-abby-phase-2?(arg_0);
+}
+
+u64? *online-melee-lists*__melee-attack-list@3910
+*online-melee-lists*__melee-attack-list@3b78
+*online-melee-lists*__melee-attack-list@4710
+*online-melee-lists*__melee-attack-list@4e48
+*default-melee-lists*__melee-attack-list@3910
+*default-melee-lists*__melee-attack-list@3b78
+*default-melee-lists*__melee-attack-list@4710
+*default-melee-lists*__melee-attack-list@4e48
+embedded@5a18(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    return net-is-active?();
+}
+
+u64? *online-melee-lists*__melee-attack-list@39b8__array*@5d58____melee-attack-list@8220__
+*online-melee-lists*__melee-attack-list@39b8__melee-attack-list@8220__
+*online-melee-lists*__melee-attack-list@4080__array*@6000____melee-attack-list@8db8__
+*online-melee-lists*__melee-attack-list@4080__melee-attack-list@8db8__
+*default-melee-lists*__melee-attack-list@39b8__array*@5d58____melee-attack-list@8220__
+*default-melee-lists*__melee-attack-list@39b8__melee-attack-list@8220__
+*default-melee-lists*__melee-attack-list@4080__array*@6000____melee-attack-list@8db8__
+*default-melee-lists*__melee-attack-list@4080__melee-attack-list@8db8__
+embedded@c0d0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    return !npc-brute?(arg_1);
+}
+
+bool *online-melee-lists*__melee-attack-list@3a60__array*@5e60____melee-attack-list@85a0__
+*online-melee-lists*__melee-attack-list@3a60__melee-attack-list@85a0__
+*online-melee-lists*__melee-attack-list@7570
+*online-melee-lists*__melee-attack-list@4ac8__array*@5238____melee-attack-list@69d8__
+*default-melee-lists*__melee-attack-list@3a60__array*@5e60____melee-attack-list@85a0__
+*default-melee-lists*__melee-attack-list@3a60__melee-attack-list@85a0__
+*default-melee-lists*__melee-attack-list@7570
+*default-melee-lists*__melee-attack-list@4ac8__array*@5238____melee-attack-list@69d8__
+embedded@b778(sid arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    return arg_0 == dina;
+}
+
+bool *online-melee-lists*__melee-attack-list@85d8
+*online-melee-lists*__melee-attack-list@75a8
+*online-melee-lists*__melee-attack-list@4ac8__melee-attack-list@6a10__
+*online-melee-lists*__melee-attack-list@7a78
+*default-melee-lists*__melee-attack-list@85d8
+*default-melee-lists*__melee-attack-list@75a8
+*default-melee-lists*__melee-attack-list@4ac8__melee-attack-list@6a10__
+*default-melee-lists*__melee-attack-list@7a78
+embedded@97b8(sid arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    return arg_0 == jesse;
+}
+
+bool *online-melee-lists*__melee-attack-list@8610
+*online-melee-lists*__melee-attack-list@75e0
+*online-melee-lists*__melee-attack-list@6a48
+*default-melee-lists*__melee-attack-list@8610
+*default-melee-lists*__melee-attack-list@75e0
+*default-melee-lists*__melee-attack-list@6a48
+embedded@b090(sid arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    return arg_0 == manny;
+}
+
+bool *online-melee-lists*__melee-attack-list@8648
+*online-melee-lists*__melee-attack-list@8648
+*online-melee-lists*__melee-attack-list@7618
+*online-melee-lists*__melee-attack-list@6a80
+*default-melee-lists*__melee-attack-list@8648
+*default-melee-lists*__melee-attack-list@8648
+*default-melee-lists*__melee-attack-list@7618
+*default-melee-lists*__melee-attack-list@6a80
+embedded@b620(sid arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    return arg_0 == mel;
+}
+
+bool *online-melee-lists*__melee-attack-list@8680
+*online-melee-lists*__melee-attack-list@7650
+*online-melee-lists*__melee-attack-list@6ab8
+*default-melee-lists*__melee-attack-list@8680
+*default-melee-lists*__melee-attack-list@7650
+*default-melee-lists*__melee-attack-list@6ab8
+embedded@d598(sid arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    return arg_0 == lev;
+}
+
+u64? *online-melee-lists*__melee-attack-list@3bb0__array*@54d0____melee-attack-list@7030__
+*online-melee-lists*__melee-attack-list@3bb0__melee-attack-list@7030__
+*online-melee-lists*__melee-attack-list@4a58__array*@5d28____melee-attack-list@80d0__
+*online-melee-lists*__melee-attack-list@4a58__melee-attack-list@80d0__
+*default-melee-lists*__melee-attack-list@3bb0__array*@54d0____melee-attack-list@7030__
+*default-melee-lists*__melee-attack-list@3bb0__melee-attack-list@7030__
+*default-melee-lists*__melee-attack-list@4a58__array*@5d28____melee-attack-list@80d0__
+*default-melee-lists*__melee-attack-list@4a58__melee-attack-list@80d0__
+embedded@99e0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    return melee-weapon-bit-check(arg_0, 4, 1, 0);
+}
+
+u64? *online-melee-lists*__melee-attack-list@7068
+*online-melee-lists*__melee-attack-list@8108
+*default-melee-lists*__melee-attack-list@7068
+*default-melee-lists*__melee-attack-list@8108
+embedded@9888(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    return melee-weapon-bit-check(arg_0, 32, 1, 0);
+}
+
+u64? *online-melee-lists*__melee-attack-list@70a0
+*online-melee-lists*__melee-attack-list@8140
+*default-melee-lists*__melee-attack-list@70a0
+*default-melee-lists*__melee-attack-list@8140
+embedded@a518(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    return melee-weapon-bit-check(arg_0, 1024, 1, 0);
+}
+
+u64? *online-melee-lists*__melee-attack-list@70d8
+*online-melee-lists*__melee-attack-list@70d8
+*online-melee-lists*__melee-attack-list@8178
+*online-melee-lists*__melee-attack-list@8178
+*default-melee-lists*__melee-attack-list@70d8
+*default-melee-lists*__melee-attack-list@70d8
+*default-melee-lists*__melee-attack-list@8178
+*default-melee-lists*__melee-attack-list@8178
+embedded@d058(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    return melee-weapon-bit-check(arg_0, #0000000000100000, 1, 0);
+}
+
+u64? *online-melee-lists*__melee-attack-list@3da8__array*@59b0____melee-attack-list@7c70__
+*online-melee-lists*__melee-attack-list@3da8__melee-attack-list@7c70__
+*default-melee-lists*__melee-attack-list@3da8__array*@59b0____melee-attack-list@7c70__
+*default-melee-lists*__melee-attack-list@3da8__melee-attack-list@7c70__
+embedded@dcb8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    return melee-character-bit-check(arg_0, 1920);
+}
+
+bool *online-melee-lists*__melee-attack-list@4048__array*@5cb0____melee-attack-list@7ff0__
+*online-melee-lists*__melee-attack-list@4048__melee-attack-list@7ff0__
+*default-melee-lists*__melee-attack-list@4048__array*@5cb0____melee-attack-list@7ff0__
+*default-melee-lists*__melee-attack-list@4048__melee-attack-list@7ff0__
+embedded@c370(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    return npc-get-faction(arg_1, 1) == Militia;
+}
+
+u64? *online-melee-lists*__melee-attack-list@8ae0
+*default-melee-lists*__melee-attack-list@8ae0
+embedded@a6c0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    return is-player-abby?(player);
+}
+
+u64? *online-melee-lists*__melee-attack-list@4518__array*@51a8____melee-attack-list@6930__
+*online-melee-lists*__melee-attack-list@4518__melee-attack-list@6930__
+*online-melee-lists*__melee-attack-list@4f28__array*@5d88____melee-attack-list@84c0__
+*online-melee-lists*__melee-attack-list@4f28__melee-attack-list@84c0__
+*default-melee-lists*__melee-attack-list@4518__array*@51a8____melee-attack-list@6930__
+*default-melee-lists*__melee-attack-list@4518__melee-attack-list@6930__
+*default-melee-lists*__melee-attack-list@4f28__array*@5d88____melee-attack-list@84c0__
+*default-melee-lists*__melee-attack-list@4f28__melee-attack-list@84c0__
+embedded@cdc0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    return melee-character-bit-check(arg_0, #0000000000100000);
+}
+
+u64? *online-melee-lists*__melee-attack-list@7d18
+*default-melee-lists*__melee-attack-list@7d18
+embedded@b818(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    return is-player-abby?(player) && !npc-enemy-ellie?(arg_1);
+}
+
+u64? *online-melee-lists*__melee-attack-list@4860__array*@5268____melee-attack-list@6cb0__
+*online-melee-lists*__melee-attack-list@4860__melee-attack-list@6cb0__
+*default-melee-lists*__melee-attack-list@4860__array*@5268____melee-attack-list@6cb0__
+*default-melee-lists*__melee-attack-list@4860__melee-attack-list@6cb0__
+embedded@b570(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    return !task-range-active?(santa-barbara, san-free-abby-fight, santa-barbara, san-abby-boats-away) && !(net-is-active?());
+}
+
+u64? *online-melee-lists*__melee-attack-list@6ce8
+*default-melee-lists*__melee-attack-list@6ce8
+embedded@b710(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    return task-range-active?(santa-barbara, san-free-abby-fight, santa-barbara, san-abby-boats-away);
+}
+
+u64? *online-melee-lists*__melee-attack-list@4978__array*@56e0____melee-attack-list@7538__
+*online-melee-lists*__melee-attack-list@4978__melee-attack-list@7538__
+*online-melee-lists*__melee-attack-list@4ac8__array*@5238____determine-dodge-npc-target@6110____melee-attack-list@69a0__
+*default-melee-lists*__melee-attack-list@4978__array*@56e0____melee-attack-list@7538__
+*default-melee-lists*__melee-attack-list@4978__melee-attack-list@7538__
+*default-melee-lists*__melee-attack-list@4ac8__array*@5238____determine-dodge-npc-target@6110____melee-attack-list@69a0__
+embedded@c800(sid arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    return is-rogue-mode?() && arg_0 == yara;
+}
+
+bool *online-melee-lists*__melee-attack-list@7688
+*online-melee-lists*__melee-attack-list@6af0
+*default-melee-lists*__melee-attack-list@7688
+*default-melee-lists*__melee-attack-list@6af0
+embedded@cb98(sid arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    return arg_0 == joel;
+}
+
+u16 *online-melee-lists*__melee-attack-list@49e8
+*default-melee-lists*__melee-attack-list@49e8
+embedded@51e0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    determine-dodge-npc-target(arg_1);
+    return 1;
+}
+
+u64? *online-melee-lists*__melee-attack-list@7a40
+*default-melee-lists*__melee-attack-list@7a40
+embedded@a2e8(sid arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    return arg_0 == tommy && arg_0 == manny;
+}
+
+u64? *online-melee-lists*__melee-attack-list@4d30
+*default-melee-lists*__melee-attack-list@4d30
+embedded@5ec8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    return !(net-is-active?());
+}
+
+u64? *online-melee-lists*__melee-attack-list@4e80__array*@5a80____net-is-active?@64f0____melee-attack-list@7d88__
+*default-melee-lists*__melee-attack-list@4e80__array*@5a80____net-is-active?@64f0____melee-attack-list@7d88__
+embedded@a1b8(u64? arg_0, sid arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    return arg_1 == dina || arg_1 == lev && arg_1 == mel;
+}
+
+u64? *online-melee-lists*__melee-attack-list@50b0__array*@5f88____melee-attack-list@8b50__
+*online-melee-lists*__melee-attack-list@50b0__melee-attack-list@8b50__
+*default-melee-lists*__melee-attack-list@50b0__array*@5f88____melee-attack-list@8b50__
+*default-melee-lists*__melee-attack-list@50b0__melee-attack-list@8b50__
+embedded@dd10(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    return !melee-weapon-bit-check(arg_1, #0300008410000000, 1, 0) && is-in-front?(get-object-locator(arg_1), get-object-locator(arg_0), 2, 120.00) || is-player?(arg_1) && is-player-base?(arg_1) && !character-is-prone?(arg_1) && !player-is-supine?();
+}
+
+u64? *online-melee-lists*__melee-attack-list@8b88
+*default-melee-lists*__melee-attack-list@8b88
+embedded@c680(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    return !melee-weapon-bit-check(arg_1, #0300008410000000, 1, 0) && is-behind?(get-object-locator(arg_1), get-object-locator(arg_0), 2, 120.00) || is-player?(arg_1) && is-player-base?(arg_1) && !character-is-prone?(arg_1) && !player-is-supine?();
+}
+
+u64? *online-melee-lists*__melee-attack-list@8bc0
+*default-melee-lists*__melee-attack-list@8bc0
+embedded@a570(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    return !melee-weapon-bit-check(arg_1, #0300008410000000, 1, 0) || is-left?(get-object-locator(arg_1), get-object-locator(arg_0), 60.00) && is-right?(get-object-locator(arg_1), get-object-locator(arg_0), 60.00) || is-player?(arg_1) && is-player-base?(arg_1) && !character-is-prone?(arg_1) && !player-is-supine?();
+}
+
+u64? *online-melee-lists*__melee-attack-list@8bf8
+*default-melee-lists*__melee-attack-list@8bf8
+embedded@9168(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    return melee-weapon-bit-check(arg_1, #0300008410000000, 1, 0) && is-in-front?(get-object-locator(arg_1), get-object-locator(arg_0), 2, 120.00) || is-player?(arg_1) && is-player-base?(arg_1) && !character-is-prone?(arg_1) && !player-is-supine?();
+}
+
+u64? *online-melee-lists*__melee-attack-list@8c30
+*default-melee-lists*__melee-attack-list@8c30
+embedded@b400(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    return melee-weapon-bit-check(arg_1, #0300008410000000, 1, 0) && is-behind?(get-object-locator(arg_1), get-object-locator(arg_0), 2, 120.00) || is-player?(arg_1) && is-player-base?(arg_1) && !character-is-prone?(arg_1) && !player-is-supine?();
+}
+
+u64? *online-melee-lists*__melee-attack-list@8c68
+*default-melee-lists*__melee-attack-list@8c68
+embedded@bc78(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    return melee-weapon-bit-check(arg_1, #0300008410000000, 1, 0) || is-left?(get-object-locator(arg_1), get-object-locator(arg_0), 60.00) && is-right?(get-object-locator(arg_1), get-object-locator(arg_0), 60.00) || is-player?(arg_1) && is-player-base?(arg_1) && !character-is-prone?(arg_1) && !player-is-supine?();
+}
+
+u64? *online-melee-lists*__melee-attack-list@8ca0
+*default-melee-lists*__melee-attack-list@8ca0
+embedded@9350(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    u64? var_3;
+    if (is-player?(arg_1) && is-player-base?(arg_1) && character-is-prone?(arg_1)) {
+        var_3 = !player-is-supine?();
+    }
+    return var_3;
+}
+
+u64? *online-melee-lists*__melee-attack-list@5158__array*@54e8____melee-attack-list@7180__
+*online-melee-lists*__melee-attack-list@5158__melee-attack-list@7180__
+*default-melee-lists*__melee-attack-list@5158__array*@54e8____melee-attack-list@7180__
+*default-melee-lists*__melee-attack-list@5158__melee-attack-list@7180__
+embedded@b6b8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    return npc-enemy-abby?(arg_1);
+}
+
+u64? *online-melee-lists*__melee-attack-list@71f0
+*default-melee-lists*__melee-attack-list@71f0
+embedded@ab00(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    return npc-get-faction(arg_1, 1) == Scar && !npc-brute?(arg_1);
+}
 
 u16 supine-auto-stand-frame-check(u64? arg_0, i32 arg_1) {
     u16 var_1;

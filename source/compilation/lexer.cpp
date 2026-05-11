@@ -204,9 +204,9 @@ char Lexer::advance() {
         case '-': return make_current_token(match('=') ? token_type::MINUS_EQUAL : match('-') ? token_type::MINUS_MINUS : match('>') ? token_type::ARROW : token_type::MINUS); 
         case '*': return make_current_token(match('=') ? token_type::STAR_EQUAL : token_type::STAR);
         case '!': return make_current_token(match('=') ? token_type::BANG_EQUAL : token_type::BANG);
-        case '=': return make_current_token(match('=') ? token_type::EQUAL_EQUAL : token_type::EQUAL);
+        case '=': return make_current_token(match('=') ? token_type::EQUAL_EQUAL : match('>') ? token_type::EQUAL_GREATER : token_type::EQUAL);
         case '<': return make_current_token(match('=') ? token_type::LESS_EQUAL : token_type::LESS);
-        case '>': return make_current_token(match('=') ? token_type::GREATER_EQUAL : token_type::GREATER);
+        case '>': return make_current_token(match('=') ? token_type::GREATER_EQUAL : match('>') ? token_type::GREATER_GREATER : token_type::GREATER);
         case '|': return make_current_token(match('|') ? token_type::PIPE_PIPE : token_type::PIPE);
         case '^': return make_current_token(match('^') ? token_type::CARET_CARET : token_type::CARET);
         case '&': return make_current_token(match('&') ? token_type::AMPERSAND_AMPERSAND : token_type::AMPERSAND);

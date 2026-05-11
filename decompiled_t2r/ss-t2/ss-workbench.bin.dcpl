@@ -467,17 +467,7 @@ u64? ss-workbench--update-list-of-weapons() {
 }
 
 u64? ss-workbench--spawn-all-acquired-weapons() {
-    foreach (u64? var_2 : all-weapons-acquired) {
-        u16 var_6;
-        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-            var_6 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-            var_6 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-            var_6 = *(u64*)var_1;
-        } else {
-            var_6 = 0;
-        }
+    foreach (u64? var_6 : all-weapons-acquired) {
         u64? var_10 = spawn-weapon-process(
             var_2,
             offset-locator(get-spawner-locator(self, 1), alloc-vector(0.00, -5.00, 0.00, 1.00, 0)),

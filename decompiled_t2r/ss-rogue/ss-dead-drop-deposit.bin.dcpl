@@ -29,7 +29,7 @@ u64? start-dead-drop-tts-timer() {
 u64? speak-items-missing() {
     start-dead-drop-tts-timer();
     darray-clear(tts-dead-drop-deposit-frames);
-    darray-append(tts-dead-drop-deposit-frames, boxed_u64(speak-text-to-speech-formatted(new-boxed-value(7, HUD_TUTORIAL_ROGUE_TITLE_DEAD_DROP), 2, 0, 1)), 0);
+    darray-append(tts-dead-drop-deposit-frames, boxed_u64(speak-text-to-speech-formatted(boxed_symbol(HUD_TUTORIAL_ROGUE_TITLE_DEAD_DROP), 2, 0, 1)), 0);
     if (darray-count(grp-missing-deposit-item-index) == 1) {
         u64? var_4 = darray-at(grp-missing-deposit-item-index, 0);
         u16 var_5;
@@ -98,9 +98,9 @@ u64? speak-items-missing() {
             1
         )), 0);
     }
-    darray-append(tts-dead-drop-deposit-frames, boxed_u64(speak-text-to-speech-formatted(new-boxed-value(7, HUD_ROGUE_DEAD_DROP_DEPOSIT_REQUIRE), 2, 0, 1)), 0);
+    darray-append(tts-dead-drop-deposit-frames, boxed_u64(speak-text-to-speech-formatted(boxed_symbol(HUD_ROGUE_DEAD_DROP_DEPOSIT_REQUIRE), 2, 0, 1)), 0);
     speak-items-required();
-    darray-append(tts-dead-drop-deposit-frames, boxed_u64(speak-text-to-speech-formatted(new-boxed-value(7, A11Y_HUD_CRAFTING_INGREDIENT_COUNT_YOU_HAVE), 2, 0, 1)), 0);
+    darray-append(tts-dead-drop-deposit-frames, boxed_u64(speak-text-to-speech-formatted(boxed_symbol(A11Y_HUD_CRAFTING_INGREDIENT_COUNT_YOU_HAVE), 2, 0, 1)), 0);
     return speak-items-have();
 }
 
@@ -130,12 +130,12 @@ u64? speak-items-have() {
 u64? speak-items-enough() {
     start-dead-drop-tts-timer();
     darray-clear(tts-dead-drop-deposit-frames);
-    darray-append(tts-dead-drop-deposit-frames, boxed_u64(speak-text-to-speech-formatted(new-boxed-value(7, CHALLENGE_DEPOSIT_TO_DEAD_DROP), 2, 0, 1)), 0);
-    darray-append(tts-dead-drop-deposit-frames, boxed_u64(speak-text-to-speech-formatted(new-boxed-value(7, HUD_ROGUE_DEAD_DROP_DEPOSIT_REQUIRE), 2, 0, 1)), 0);
+    darray-append(tts-dead-drop-deposit-frames, boxed_u64(speak-text-to-speech-formatted(boxed_symbol(CHALLENGE_DEPOSIT_TO_DEAD_DROP), 2, 0, 1)), 0);
+    darray-append(tts-dead-drop-deposit-frames, boxed_u64(speak-text-to-speech-formatted(boxed_symbol(HUD_ROGUE_DEAD_DROP_DEPOSIT_REQUIRE), 2, 0, 1)), 0);
     speak-items-required();
-    darray-append(tts-dead-drop-deposit-frames, boxed_u64(speak-text-to-speech-formatted(new-boxed-value(7, A11Y_HUD_CRAFTING_INGREDIENT_COUNT_YOU_HAVE), 2, 0, 1)), 0);
+    darray-append(tts-dead-drop-deposit-frames, boxed_u64(speak-text-to-speech-formatted(boxed_symbol(A11Y_HUD_CRAFTING_INGREDIENT_COUNT_YOU_HAVE), 2, 0, 1)), 0);
     speak-items-have();
-    return darray-append(tts-dead-drop-deposit-frames, boxed_u64(speak-text-to-speech-formatted(new-boxed-value(7, HUD_ROGUE_DEAD_DROP_PRESS_DEPOSIT), 2, 0, 1)), 0);
+    return darray-append(tts-dead-drop-deposit-frames, boxed_u64(speak-text-to-speech-formatted(boxed_symbol(HUD_ROGUE_DEAD_DROP_PRESS_DEPOSIT), 2, 0, 1)), 0);
 }
 
 u64? speak-items-required() {

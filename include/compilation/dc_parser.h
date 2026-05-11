@@ -64,6 +64,9 @@ namespace dconstruct::compilation {
         [[nodiscard]] std::optional<ast::full_type> peek_type();
         [[nodiscard]] std::optional<ast::function_type> match_function_type();
 
+        template<typename ...Args> requires (std::constructible_from<ast::literal, Args> && ...)
+        [[nodiscard]] std::unique_ptr<ast::call_expr> make_call_from_operator(const token& token, const std::string& func_name, expr_uptr right, Args ...extra_function_args);
+
 
         [[nodiscard]] std::unique_ptr<ast::variable_declaration> make_var_declaration();
         [[nodiscard]] std::unique_ptr<ast::variable_declaration> make_var_declaration(ast::full_type type);

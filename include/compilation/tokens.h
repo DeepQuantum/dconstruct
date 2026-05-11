@@ -19,7 +19,7 @@ namespace dconstruct::compilation {
         SLASH, SLASH_EQUAL,
         PERCENT, PERCENT_EQUAL,
         BANG, BANG_EQUAL,
-        EQUAL, EQUAL_EQUAL,
+        EQUAL, EQUAL_EQUAL, EQUAL_GREATER,
         GREATER, GREATER_EQUAL, GREATER_GREATER,
         LESS, LESS_EQUAL, LESS_LESS,
         TILDE,
@@ -46,6 +46,7 @@ namespace dconstruct::compilation {
         STATESCRIPT, DECLARATIONS, OPTIONS, STATE, BLOCK, TRACK, LAMBDA,
 
         START, END, EVENT, UPDATE, VIRTUAL,
+
 
         _EOF, EMPTY
     };

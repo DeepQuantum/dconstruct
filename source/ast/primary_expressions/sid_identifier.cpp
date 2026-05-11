@@ -51,7 +51,7 @@ void sid_identifier::pseudo_racket(std::ostream& os) const {
 [[nodiscard]] semantic_check_res sid_identifier::compute_type_checked(compilation::scope& scope) const noexcept {
     const full_type *type = scope.lookup(m_name.m_lexeme);
     if (!type) {
-        return std::unexpected{semantic_check_error{"undeclared identifier: " + m_name.m_lexeme, this}};
+        return make_type_from_prim(ast::primitive_kind::U64);
     }
     return *type;
 }
