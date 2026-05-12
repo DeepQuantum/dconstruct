@@ -1,0 +1,4 @@
+@include "../include_a.dcpl"
+u32 included_b() {
+    return 2;
+}

@@ -10,12 +10,55 @@
 #include <sstream>
 #include <filesystem>
 #include <unordered_map>
+#include <array>
+#include <string_view>
 
 namespace dconstruct::compilation {
 
-[[nodiscard]] static std::optional<std::vector<compilation::program_binary_element>> run_compilation(const std::string& source_code, global_state& global) {
+struct global_function {
+    std::string_view m_name;
+    ast::function_type m_type;
+};
+
+[[nodiscard]] static ast::function_type make_far_function(
+    const ast::full_type& return_type,
+    const std::initializer_list<std::pair<std::string, ast::full_type>>& args) {
+    ast::function_type type = ast::make_function(return_type, args);
+    type.m_isFarCall = true;
+    return type;
+}
+
+const std::array global_functions = {
+    global_function{
+        "#display",
+        make_far_function(ast::make_type_from_prim(ast::primitive_kind::NOTHING), {
+            {"message", ast::make_type_from_prim(ast::primitive_kind::STRING)},
+            {"channel", ast::make_type_from_prim(ast::primitive_kind::U64)}
+        })
+    },
+    global_function{
+        "#go",
+        make_far_function(ast::make_type_from_prim(ast::primitive_kind::NOTHING), {
+            {"target", ast::make_type_from_prim(ast::primitive_kind::U64)},
+            {"mode", ast::make_type_from_prim(ast::primitive_kind::U64)}
+        })
+    }
+};
+
+void add_global_functions(compilation::scope& scope) {
+    for (const auto& function : global_functions) {
+        const std::string name{function.m_name};
+        scope.define(name, function.m_type);
+        scope.m_sidAliases[name] = {SID(name.c_str() + 1), name};
+    }
+}
+
+[[nodiscard]] static std::optional<std::vector<compilation::program_binary_element>> run_compilation(
+    const std::string& source_code,
+    global_state& global,
+    const std::vector<source_location>& line_map) {
     const auto start_time = std::chrono::high_resolution_clock::now();
-    Lexer lexer{source_code};
+    Lexer lexer{source_code, &line_map};
     const auto& [tokens, lex_errors] = lexer.get_results();
 
     if (!lex_errors.empty()) {
@@ -29,12 +72,15 @@ namespace dconstruct::compilation {
     const auto& [program, types, parse_errors] = parser.get_results();
     if (!parse_errors.empty()) {
         for (const auto& err : parse_errors) {
-            std::cerr << "[parsing error] " << err.m_message << " at line " << err.m_token.m_line << '\n';
+            std::cerr << "[parsing error] " << err.m_message << " at " << format_source_location({err.m_token.m_file, err.m_token.m_line}) << '\n';
         }
         return std::nullopt;
     }
 
     scope base_scope{types};
+
+    add_global_functions(base_scope);
+
     const std::vector<ast::semantic_check_error> semantic_errors = program.check_semantics(base_scope);
     if (!semantic_errors.empty()) {
         for (const auto& err : semantic_errors) {
@@ -53,6 +99,11 @@ namespace dconstruct::compilation {
         return std::nullopt;
     }
     return std::move(*compile_res);
+}
+
+[[nodiscard]] static std::optional<std::vector<compilation::program_binary_element>> run_compilation(const std::string& source_code, global_state& global) {
+    const std::vector<source_location> line_map;
+    return run_compilation(source_code, global, line_map);
 }
 
 [[nodiscard]] static std::expected<std::pair<std::unique_ptr<std::byte[]>, u64>, std::string> disassemble_target(

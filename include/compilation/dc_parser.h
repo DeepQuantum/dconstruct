@@ -59,7 +59,10 @@ namespace dconstruct::compilation {
         [[nodiscard]] const token& previous() const;
         [[nodiscard]] bool is_at_end() const;
         [[nodiscard]] bool check(const token_type) const;
-        [[nodiscard]] bool match(const std::initializer_list<token_type>& types);
+
+        template<typename... Args> requires (std::same_as<Args, token_type> && ...)
+        [[nodiscard]] bool match(Args ...token_types);
+
         [[nodiscard]] std::optional<ast::full_type> make_type();
         [[nodiscard]] std::optional<ast::full_type> peek_type();
         [[nodiscard]] std::optional<ast::function_type> match_function_type();
@@ -93,11 +96,12 @@ namespace dconstruct::compilation {
         [[nodiscard]] expr_uptr make_primary();
         [[nodiscard]] expr_uptr make_literal();
         [[nodiscard]] expr_uptr make_match();
-        [[nodiscard]] expr_uptr make_call();
+        [[nodiscard]] expr_uptr make_postfix();
         [[nodiscard]] std::unique_ptr<ast::sizeof_expr> make_sizeof();
         [[nodiscard]] std::optional<std::unique_ptr<ast::cast_expr>> make_cast();
         [[nodiscard]] std::unique_ptr<ast::call_expr> finish_call(expr_uptr&& expr);
         [[nodiscard]] std::unique_ptr<ast::subscript_expr> finish_subscript(expr_uptr&& expr);
+        [[nodiscard]] expr_uptr make_enum_access(const token& enum_name);
         [[nodiscard]] std::optional<ast::struct_type> make_struct_type();
         [[nodiscard]] std::optional<std::unique_ptr<ast::using_declaration>> make_using_declaration(); 
         [[nodiscard]] std::optional<ast::enum_type> make_enum_type();

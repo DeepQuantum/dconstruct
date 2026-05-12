@@ -4,7 +4,7 @@
 @sidbase "C:/Users/damix/Documents/GitHub/TLOU2Modding/dconstruct/test/dc_test_files/sidbase_new_fixed.bin"
 @repackage "C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/mods/ProjectFEDRA_unpacked"
 
-using #display as far (string, u64) -> u0;
+@include "keycodes.dcpl"
 
 using #set-gas-mask-setting-id as far (u64, u64) -> u0;
 using #dc:format as far (string, u64, u64) -> string;
@@ -12,85 +12,6 @@ using #wait-equip-gas-mask as near (u64, u64, u64) -> u64;
 using #wait-remove-gas-mask as near (u64, u64, u64) -> u64;
 using #spawn-gas-mask as near (u64) -> u64;
 using #keyboard-button-pressed? as far (u64) -> bool;
-
-using #go as far (u64, u64) -> u0;
-
-// enum Keycodes {
-//     SPACE = 32,
-//     ZERO = 48,
-//     ONE = 49,
-//     TWO = 50,
-//     THREE = 51,
-//     FOUR = 52,
-//     FIVE = 53,
-//     SIX = 54,
-//     SEVEN = 55,
-//     EIGHT = 56,
-//     NINE = 57,
-//     A_UPPER = 65,
-//     B_UPPER = 66,
-//     C_UPPER = 67,
-//     D_UPPER = 68,
-//     E_UPPER = 69,
-//     F_UPPER = 70,
-//     G_UPPER = 71,
-//     H_UPPER = 72,
-//     I_UPPER = 73,
-//     J_UPPER = 74,
-//     K_UPPER = 75,
-//     L_UPPER = 76,
-//     M_UPPER = 77,
-//     N_UPPER = 78,
-//     O_UPPER = 79,
-//     P_UPPER = 80,
-//     Q_UPPER = 81,
-//     R_UPPER = 82,
-//     S_UPPER = 83,
-//     T_UPPER = 84,
-//     U_UPPER = 85,
-//     V_UPPER = 86,
-//     W_UPPER = 87,
-//     X_UPPER = 88,
-//     Y_UPPER = 89,
-//     Z_UPPER = 90,
-//     BACKTICK = 96,
-//     A_LOWER = 97,
-//     B_LOWER = 98,
-//     C_LOWER = 99,
-//     D_LOWER = 100,
-//     E_LOWER = 101,
-//     F_LOWER = 102,
-//     G_LOWER = 103,
-//     H_LOWER = 104,
-//     I_LOWER = 105,
-//     J_LOWER = 106,
-//     K_LOWER = 107,
-//     L_LOWER = 108,
-//     M_LOWER = 109,
-//     N_LOWER = 110,
-//     O_LOWER = 111,
-//     P_LOWER = 112,
-//     Q_LOWER = 113,
-//     R_LOWER = 114,
-//     S_LOWER = 115,
-//     T_LOWER = 116,
-//     U_LOWER = 117,
-//     V_LOWER = 118,
-//     W_LOWER = 119,
-//     X_LOWER = 120,
-//     Y_LOWER = 121,
-//     Z_LOWER = 122,
-//     NUMPAD_ONE  = 128,
-//     NUMPAD_TWO = 129,
-//     NUMPAD_THREE = 130,
-//     NUMPAD_FOUR = 131,
-//     NUMPAD_FIVE = 132,
-//     NUMPAD_SIX = 133,
-//     NUMPAD_SEVEN = 134,
-//     NUMPAD_EIGHT = 135,
-//     NUMPAD_NINE = 136,
-//     BACKSPACE = 171
-// }
 
 statescript #test-script-qntm {
     options {
@@ -100,7 +21,7 @@ statescript #test-script-qntm {
         block start {
             track #main {
                 lambda {
-                    >> "launched qntm script";
+                    >> "launched custom gas mask script";
 
                     #set-gas-mask-setting-id(#player, #*ellie-gas-mask-setup*);
 
@@ -113,7 +34,7 @@ statescript #test-script-qntm {
         block update {
             track #main {
                 lambda {
-                    if (#keyboard-button-pressed?(124)) {
+                    if (#keyboard-button-pressed?(Keycodes.NINE)) {
                         >> "pressed, moving to custom-put-on-mask";
                         => #custom-put-on-mask;
                     }
@@ -133,7 +54,7 @@ statescript #test-script-qntm {
         block update {
             track #main {
                 lambda {
-                    if (#keyboard-button-pressed?(1)) {
+                    if (#keyboard-button-pressed?(Keycodes.NINE)) {
                         >> "pressed inside put on gas mask, moving to #custom-remove-mask";
                         => #custom-remove-mask;
                     }
@@ -153,7 +74,7 @@ statescript #test-script-qntm {
         block update {
             track #main {
                 lambda {
-                    if (#keyboard-button-pressed?(1)) {
+                    if (#keyboard-button-pressed?(Keycodes.NINE)) {
                         >> "pressed inside remove gas mask, moving to #custom-put-on-mask";
                         => #custom-put-on-mask;
                     }

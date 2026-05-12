@@ -11,7 +11,14 @@
 namespace dconstruct::compilation {
 
 struct lexing_error {
+    lexing_error(u32 line, std::string message)
+        : m_line(line), m_message(std::move(message)) {}
+
+    lexing_error(u32 line, std::filesystem::path file, std::string message)
+        : m_line(line), m_file(std::move(file)), m_message(std::move(message)) {}
+
     u32 m_line;
+    std::filesystem::path m_file;
     std::string m_message;
 
     [[nodiscard]] bool operator==(const lexing_error &rhs) const noexcept;
@@ -25,7 +32,8 @@ std::ostream& operator<<(std::ostream& os, const token &t);
 
 class Lexer {
 public:
-    Lexer(std::string source) : m_source(std::move(source)) {};
+    Lexer(std::string source, const std::vector<source_location>* line_map = nullptr)
+        : m_source(std::move(source)), m_lineMap(line_map) {};
     [[nodiscard]] const std::vector<token>& scan_tokens();
     [[nodiscard]] std::pair<std::vector<token>, std::vector<lexing_error>> get_results();
 
@@ -72,6 +80,7 @@ private:
     std::vector<token> m_tokens;
     std::vector<lexing_error> m_errors;
     std::string m_source;
+    const std::vector<source_location>* m_lineMap = nullptr;
 
     u32 m_start = 0;
     u32 m_current = 0;
@@ -83,6 +92,7 @@ private:
     [[nodiscard]] bool reached_eof() const noexcept;
     char advance();
     [[nodiscard]] std::string make_current_lexeme() const;
+    [[nodiscard]] source_location current_source_location() const;
     [[nodiscard]] token make_current_token(const token_type, const ast::primitive_value& = 0) const;
     [[nodiscard]] token make_string();
     [[nodiscard]] token make_number();

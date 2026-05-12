@@ -18,9 +18,16 @@ namespace dconstruct::compilation {
     return SID(identifier.c_str() + 1);
 }
 
+[[nodiscard]] std::string format_source_location(const source_location& location) {
+    if (location.m_file.empty()) {
+        return "line " + std::to_string(location.m_line);
+    }
+    return location.m_file.string() + ":" + std::to_string(location.m_line);
+}
+
 
 [[nodiscard]] bool token::operator==(const token &rhs) const {
-    return m_type == rhs.m_type && m_lexeme == rhs.m_lexeme && m_literal == rhs.m_literal && m_line == rhs.m_line;
+    return m_type == rhs.m_type && m_lexeme == rhs.m_lexeme && m_literal == rhs.m_literal && m_line == rhs.m_line && m_file == rhs.m_file;
 }
 
 }

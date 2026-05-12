@@ -4,11 +4,11 @@
 namespace dconstruct::compilation {
 
 [[nodiscard]] bool lexing_error::operator==(const lexing_error &rhs) const noexcept {
-    return m_line == rhs.m_line && m_message == rhs.m_message;
+    return m_line == rhs.m_line && m_file == rhs.m_file && m_message == rhs.m_message;
 }
 
 std::ostream& operator<<(std::ostream& os, const lexing_error &l) {
-    return os << "line: " << l.m_line << " message: " << l.m_message;
+    return os << format_source_location({l.m_file, l.m_line}) << ": " << l.m_message;
 }
 
 std::ostream& operator<<(std::ostream& os, const token &t) {
@@ -17,7 +17,7 @@ std::ostream& operator<<(std::ostream& os, const token &t) {
     return os
         << " lexeme: " << t.m_lexeme
         << " literal: " << literal_type << ' ' << literal_value
-        << " line: " << t.m_line;
+        << " location: " << format_source_location({t.m_file, t.m_line});
 }
 
 
@@ -39,7 +39,8 @@ std::ostream& operator<<(std::ostream& os, const token &t) {
         }
     }
 
-    m_tokens.emplace_back(token_type::_EOF, "", 0, m_line);
+    const source_location eof_loc = current_source_location();
+    m_tokens.emplace_back(token_type::_EOF, "", 0, eof_loc.m_line, eof_loc.m_file);
 
     return m_tokens;
 }
@@ -52,11 +53,22 @@ std::ostream& operator<<(std::ostream& os, const token &t) {
 
 [[nodiscard]] token Lexer::make_current_token(const token_type type, const ast::primitive_value& literal) const {
     const std::string text = make_current_lexeme();
-    return token(type, text, literal, m_line);
+    const source_location loc = current_source_location();
+    return token(type, text, literal, loc.m_line, loc.m_file);
 }
 
 [[nodiscard]] std::string Lexer::make_current_lexeme() const {
     return m_source.substr(m_start, m_current - m_start);
+}
+
+[[nodiscard]] source_location Lexer::current_source_location() const {
+    if (m_lineMap && m_line > 0 && m_line <= m_lineMap->size()) {
+        return (*m_lineMap)[m_line - 1];
+    }
+    if (m_lineMap && !m_lineMap->empty()) {
+        return m_lineMap->back();
+    }
+    return {{}, m_line};
 }
 
 char Lexer::advance() {
@@ -96,13 +108,15 @@ char Lexer::advance() {
         advance();
     }
     if (reached_eof()) {
-        m_errors.emplace_back(m_line, "expected '\"' to close string literal but got end of file");
+        const source_location loc = current_source_location();
+        m_errors.push_back({loc.m_line, loc.m_file, "expected '\"' to close string literal but got end of file"});
         return token(token_type::EMPTY, "");
     }
     advance();
     const std::string lexeme = make_current_lexeme();
     const std::string literal = m_source.substr(m_start + 1, m_current - m_start - 2);
-    return token(token_type::STRING, lexeme, literal, m_line);
+    const source_location loc = current_source_location();
+    return token(token_type::STRING, lexeme, literal, loc.m_line, loc.m_file);
 }
 
 [[nodiscard]] bool Lexer::is_valid_sid_char(const char c) const noexcept {
@@ -242,7 +256,8 @@ char Lexer::advance() {
             } else if (std::isalpha(c) || c == '_') {
                 return make_identifier();
             }
-            m_errors.emplace_back(m_line, std::string("invalid token '") + c + '\'');
+            const source_location loc = current_source_location();
+            m_errors.push_back({loc.m_line, loc.m_file, std::string("invalid token '") + c + '\''});
             break;
         }
     }

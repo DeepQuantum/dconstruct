@@ -22,6 +22,7 @@
 #include "primary_expressions/call.h"
 #include "primary_expressions/grouping.h"
 #include "primary_expressions/literal.h"
+#include "primary_expressions/enum_access.h"
 #include "primary_expressions/identifier.h"
 #include "primary_expressions/sid_identifier.h"
 #include "primary_expressions/match.h"

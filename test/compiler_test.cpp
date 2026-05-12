@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 #include "compilation/lexer.h"
 #include "compilation/dc_parser.h"
+#include "compilation/preprocessor.h"
 #include "compilation/function.h"
 #include "disassembly/file_disassembler.h"
 #include "disassembly/instructions.h"
@@ -24,6 +25,16 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
         dconstruct::compilation::Lexer lexer = dconstruct::compilation::Lexer(string);
         return { lexer.scan_tokens(), lexer.get_errors() };
     } 
+
+    static cxxopts::ParseResult get_empty_options() {
+        cxxopts::Options options("compiler_test", "");
+        const char* argv[] = {"compiler_test"};
+        return options.parse(1, argv);
+    }
+
+    static std::string dcpl_prelude() {
+        return "@standalone\n@output \"test/compiler/include_out.bin\"\n@sidbase \"" + TEST_DIR + "test_sidbase.bin\"\n";
+    }
 
     static std::tuple<ast::program, std::unordered_map<std::string, ast::full_type>, std::vector<compilation::parsing_error>> get_parse_results(const std::vector<compilation::token> &tokens) {
         compilation::Parser parser{tokens};
@@ -215,6 +226,72 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
 
         EXPECT_EQ(tokens, expected);
         EXPECT_EQ(errors, expected_errors);
+    }
+
+    TEST(COMPILER, IncludeExpandsRecursivelyAndOnlyOnce) {
+        std::string source = dcpl_prelude() +
+            "@include \"include_a.dcpl\"\n"
+            "@include \"include_a.dcpl\"\n"
+            "u32 main() { return included_b(); }\n";
+        std::vector<compilation::source_location> line_map;
+
+        auto options = compilation::compiler_options::parse(get_empty_options(), source, "test/compiler/include_main.dcpl", line_map);
+        ASSERT_TRUE(options) << options.error();
+
+        compilation::Lexer lexer{source, &line_map};
+        const auto [tokens, lex_errors] = lexer.get_results();
+        ASSERT_TRUE(lex_errors.empty());
+
+        const auto count_identifier = [&](const std::string& name) {
+            return std::ranges::count_if(tokens, [&](const compilation::token& token) {
+                return token.m_type == compilation::token_type::IDENTIFIER && token.m_lexeme == name;
+            });
+        };
+
+        EXPECT_EQ(count_identifier("included_a"), 1);
+        EXPECT_EQ(count_identifier("included_b"), 2);
+    }
+
+    TEST(COMPILER, IncludeMapsErrorsToIncludedFile) {
+        std::string source = dcpl_prelude() +
+            "@include \"include_error.dcpl\"\n"
+            "u32 main() {\n"
+            "    return 0;\n"
+            "}\n";
+        std::vector<compilation::source_location> line_map;
+
+        auto options = compilation::compiler_options::parse(get_empty_options(), source, "test/compiler/include_main.dcpl", line_map);
+        ASSERT_TRUE(options) << options.error();
+
+        compilation::Lexer lexer{source, &line_map};
+        const auto [tokens, lex_errors] = lexer.get_results();
+        ASSERT_TRUE(lex_errors.empty());
+
+        auto [program, types, parse_errors] = get_parse_results(tokens);
+        ASSERT_FALSE(parse_errors.empty());
+        EXPECT_EQ(parse_errors.front().m_token.m_file.filename(), "include_error.dcpl");
+        EXPECT_EQ(parse_errors.front().m_token.m_line, 3);
+    }
+
+    TEST(COMPILER, IncludeDoesNotShiftOriginalFileErrors) {
+        std::string source = dcpl_prelude() +
+            "@include \"include_a.dcpl\"\n"
+            "u32 main() {\n"
+            "    return 0\n"
+            "}\n";
+        std::vector<compilation::source_location> line_map;
+
+        auto options = compilation::compiler_options::parse(get_empty_options(), source, "test/compiler/include_main_error.dcpl", line_map);
+        ASSERT_TRUE(options) << options.error();
+
+        compilation::Lexer lexer{source, &line_map};
+        const auto [tokens, lex_errors] = lexer.get_results();
+        ASSERT_TRUE(lex_errors.empty());
+
+        auto [program, types, parse_errors] = get_parse_results(tokens);
+        ASSERT_FALSE(parse_errors.empty());
+        EXPECT_EQ(parse_errors.front().m_token.m_file.filename(), "include_main_error.dcpl");
+        EXPECT_EQ(parse_errors.front().m_token.m_line, 7);
     }
 
     TEST(COMPILER, LexerComment) {
@@ -1175,13 +1252,53 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
         EXPECT_EQ(program.m_declarations.size(), 0);
         ast::enum_type expected_type;
         expected_type.m_name = "Color";
-        expected_type.m_enumerators.push_back("Red");
-        expected_type.m_enumerators.push_back("Green");
-        expected_type.m_enumerators.push_back("Blue");
+        expected_type.m_enumerators["Red"] = 0;
+        expected_type.m_enumerators["Green"] = 1;
+        expected_type.m_enumerators["Blue"] = 2;
         EXPECT_TRUE(types.contains("Color"));
         EXPECT_TRUE(std::holds_alternative<ast::enum_type>(types.at("Color")));
         auto type = std::get<ast::enum_type>(types.at("Color"));
         EXPECT_EQ(type, expected_type);
+    }
+
+    TEST(COMPILER, ParseEnumAccess) {
+        const std::string code = "enum Keycodes { SPACE = 20 } u64 main() { return Keycodes.SPACE; }";
+
+        auto [tokens, lex_errors] = get_tokens(code);
+        auto [program, types, parse_errors] = get_parse_results(tokens);
+        EXPECT_EQ(lex_errors.size(), 0);
+        EXPECT_EQ(parse_errors.size(), 0);
+        ASSERT_EQ(program.m_declarations.size(), 1);
+
+        const auto* function = dynamic_cast<const ast::function_definition*>(program.m_declarations[0].get());
+        ASSERT_NE(function, nullptr);
+        ASSERT_EQ(function->m_body.m_statements.size(), 1);
+        const auto* ret = dynamic_cast<const ast::return_stmt*>(function->m_body.m_statements.front().get());
+        ASSERT_NE(ret, nullptr);
+        const auto* access = dynamic_cast<const ast::enum_access*>(ret->m_expr.get());
+        ASSERT_NE(access, nullptr);
+        EXPECT_EQ(access->m_token.m_lexeme, "SPACE");
+        EXPECT_EQ(access->m_enumName, "Keycodes");
+        EXPECT_EQ(access->m_memberName, "SPACE");
+        EXPECT_EQ(access->to_c_string(), "Keycodes.SPACE");
+        EXPECT_EQ(std::get<u64>(access->m_value.m_value), 20);
+
+        compilation::scope scope{types};
+        const auto semantic_errors = program.check_semantics(scope);
+        EXPECT_EQ(semantic_errors.size(), 0);
+
+        const auto functions = compile_to_functions(code);
+        EXPECT_TRUE(functions) << (functions ? "" : functions.error());
+    }
+
+    TEST(COMPILER, ParseEnumAccessUnknownMemberNamesAccess) {
+        const std::string code = "enum Keycodes { SPACE = 20 } u64 main() { return Keycodes.ENTER; }";
+
+        auto [tokens, lex_errors] = get_tokens(code);
+        const auto [program, types, parse_errors] = get_parse_results(tokens);
+        EXPECT_EQ(lex_errors.size(), 0);
+        ASSERT_EQ(parse_errors.size(), 1);
+        EXPECT_EQ(parse_errors[0].m_message, "unknown enum member Keycodes.ENTER");
     }
 
     TEST(COMPILER, FullFunc1) {

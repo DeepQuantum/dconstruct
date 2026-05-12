@@ -2,10 +2,18 @@
 
 #include "base.h"
 #include "ast/type.h"
+#include <filesystem>
 #include <variant>
 
 namespace dconstruct::compilation {
     [[nodiscard]] sid64 get_identifier_sid(const std::string& identifier);
+
+    struct source_location {
+        std::filesystem::path m_file;
+        u32 m_line = INT_MAX;
+    };
+
+    [[nodiscard]] std::string format_source_location(const source_location& location);
 
     enum class token_type {
         LEFT_PAREN, RIGHT_PAREN, 
@@ -54,11 +62,13 @@ namespace dconstruct::compilation {
     struct token {
         token(token_type type, std::string lexeme,
             ast::primitive_value literal = 0,
-            u32 line = INT_MAX) noexcept
+            u32 line = INT_MAX,
+            std::filesystem::path file = {}) noexcept
             :m_literal(std::move(literal)),
             m_lexeme(std::move(lexeme)),
             m_type(type),
-            m_line(line) {}
+            m_line(line),
+            m_file(std::move(file)) {}
 
         [[nodiscard]] bool operator==(const token &rhs) const;
 
@@ -66,5 +76,6 @@ namespace dconstruct::compilation {
         std::string m_lexeme;
         token_type m_type;
         u32 m_line;
+        std::filesystem::path m_file;
     };
 }

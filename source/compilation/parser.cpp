@@ -117,8 +117,9 @@ const token* Parser::consume(const std::initializer_list<token_type> types, cons
     return peek().m_type == type;
 }
 
-[[nodiscard]] bool Parser::match(const std::initializer_list<token_type>& types) {
-    for (const token_type tt : types) {
+template<typename... Args> requires (std::same_as<Args, token_type> && ...)
+[[nodiscard]] bool Parser::match(Args ...token_types) {
+    for (const token_type tt : {token_types...}) {
         if (check(tt)) {
             advance();
             return true;
@@ -137,7 +138,7 @@ const token* Parser::consume(const std::initializer_list<token_type> types, cons
     m_current = temp_current + 1;
     std::vector<ast::full_type> param_types;
 
-    if (!match({token_type::RIGHT_PAREN})) {
+    if (!match(token_type::RIGHT_PAREN)) {
         do {
             std::optional<ast::full_type> param_type = peek_type();
             if (!param_type) {
@@ -146,7 +147,7 @@ const token* Parser::consume(const std::initializer_list<token_type> types, cons
             }
             param_types.push_back(*param_type); // starting here we can be sure we're parsing a function type because there's no other construct like '(type...'
         }
-        while (match({token_type::COMMA}) && !is_at_end());
+        while (match(token_type::COMMA) && !is_at_end());
 
         if (!consume(token_type::RIGHT_PAREN, "expected ')' after function parameter types")) {
             return std::nullopt;
@@ -183,7 +184,7 @@ const token* Parser::consume(const std::initializer_list<token_type> types, cons
 
     ast::full_type res = m_knownTypes.at(type_name);
 
-    while (match({token_type::STAR}) && !is_at_end()) {
+    while (match(token_type::STAR) && !is_at_end()) {
         res = ast::ptr_type{std::make_unique<ast::full_type>(std::move(res))};
     }
 
@@ -210,7 +211,7 @@ const token* Parser::consume(const std::initializer_list<token_type> types, cons
 
     ast::full_type res = m_knownTypes.at(type_name);
 
-    while (match({token_type::STAR}) && !is_at_end()) {
+    while (match(token_type::STAR) && !is_at_end()) {
         res = ast::ptr_type{std::make_unique<ast::full_type>(std::move(res))};
     }
     
@@ -219,13 +220,13 @@ const token* Parser::consume(const std::initializer_list<token_type> types, cons
 
 [[nodiscard]] std::optional<global> Parser::make_global() {
     std::optional<global> res;
-    if (match({token_type::STRUCT})) {
+    if (match(token_type::STRUCT)) {
         res = make_struct_type();
-    } else if (match({token_type::ENUM})) {
+    } else if (match(token_type::ENUM)) {
         res = make_enum_type();
-    } else if (match({token_type::USING})) {
+    } else if (match(token_type::USING)) {
         res = make_using_declaration();
-    } else if (match({token_type::STATESCRIPT})) {
+    } else if (match(token_type::STATESCRIPT)) {
         res = make_state_script();
     } else if (std::unique_ptr<ast::function_definition> func_def = make_function_definition()) {
         res = std::move(func_def);
@@ -293,7 +294,7 @@ const token* Parser::consume(const std::initializer_list<token_type> types, cons
         }
 
         u64 value = counter;
-        if (match({token_type::EQUAL})) {
+        if (match(token_type::EQUAL)) {
             if (!has_assignments && counter > 0) {
                 m_errors.emplace_back(peek(), "expected all enums to have an assigned value, but the previous ones don't");
                 return std::nullopt;
@@ -310,7 +311,7 @@ const token* Parser::consume(const std::initializer_list<token_type> types, cons
         }
         counter++;
         enum_t.m_enumerators[enum_value->m_lexeme] = value;
-    } while (match({token_type::COMMA}));
+    } while (match(token_type::COMMA));
 
     if (!consume(token_type::RIGHT_BRACE, "expected '}' after enum definition")) {
         return std::nullopt;
@@ -328,9 +329,9 @@ const token* Parser::consume(const std::initializer_list<token_type> types, cons
     }
 
     std::string func_name;
-    if (match({token_type::IDENTIFIER})) {
+    if (match(token_type::IDENTIFIER)) {
         func_name = previous().m_lexeme;
-    } else if (match({token_type::SID})) {
+    } else if (match(token_type::SID)) {
         func_name = previous().m_lexeme.substr(1, peek().m_lexeme.size() - 2);
     } else {
         m_errors.emplace_back(previous(), "expected function name or sid");
@@ -391,7 +392,7 @@ const token* Parser::consume(const std::initializer_list<token_type> types, cons
     }
 
     const token* far_spec = nullptr;
-    if (match({token_type::FAR, token_type::NEAR})) {
+    if (match(token_type::FAR, token_type::NEAR)) {
         far_spec = &previous();
     }
 
@@ -415,7 +416,7 @@ const token* Parser::consume(const std::initializer_list<token_type> types, cons
     }
 
     std::string new_name = "";
-    if (match({token_type::IDENTIFIER})) {
+    if (match(token_type::IDENTIFIER)) {
         new_name = previous().m_lexeme;
     }
 
@@ -457,7 +458,7 @@ const token* Parser::consume(const std::initializer_list<token_type> types, cons
     }
 
     expr_uptr init = nullptr;
-    if (match({token_type::EQUAL})) {
+    if (match(token_type::EQUAL)) {
         init = make_expression();
     }
     if (!consume(token_type::SEMICOLON, "expected ';' after variable declaration")) {
@@ -478,7 +479,7 @@ const token* Parser::consume(const std::initializer_list<token_type> types, cons
     }
 
     expr_uptr init = nullptr;
-    if (match({token_type::EQUAL})) {
+    if (match(token_type::EQUAL)) {
         init = make_expression();
     }
     if (!consume(token_type::SEMICOLON, "expected ';' after variable declaration")) {
@@ -530,7 +531,7 @@ const token* Parser::consume(const std::initializer_list<token_type> types, cons
         return nullptr;
     }
     stmnt_uptr initializer = nullptr;
-    if (match({token_type::SEMICOLON})) {
+    if (match(token_type::SEMICOLON)) {
         initializer = nullptr;
     } else if (std::optional<ast::full_type> type = peek_type()) {
         initializer = make_var_declaration(std::move(*type));
@@ -618,19 +619,19 @@ const token* Parser::consume(const std::initializer_list<token_type> types, cons
 }
 
 [[nodiscard]] stmnt_uptr Parser::make_statement() {
-    if (match({token_type::IF})) {
+    if (match(token_type::IF)) {
         return make_if();
-    } else if (match({token_type::WHILE})) {
+    } else if (match(token_type::WHILE)) {
         return make_while();
-    } else if (match({token_type::FOR})) {
+    } else if (match(token_type::FOR)) {
         return make_for();
-    } else if (match({token_type::FOREACH})) {
+    } else if (match(token_type::FOREACH)) {
         return make_foreach();
-    } else if (match({token_type::LEFT_BRACE})) {
+    } else if (match(token_type::LEFT_BRACE)) {
         return make_block();
-    } else if (match({token_type::RETURN})) {
+    } else if (match(token_type::RETURN)) {
         return make_return();
-    } else if (match({token_type::BREAKPOINT})) {
+    } else if (match(token_type::BREAKPOINT)) {
         return make_breakpoint();
     } else {
         return make_expression_statement();
@@ -661,7 +662,7 @@ const token* Parser::consume(const std::initializer_list<token_type> types, cons
         return nullptr;
     }
     stmnt_uptr else_branch = nullptr;
-    if (match({token_type::ELSE})) {
+    if (match(token_type::ELSE)) {
         else_branch = make_statement();
         if (!else_branch) {
             return nullptr;
@@ -684,7 +685,7 @@ const token* Parser::consume(const std::initializer_list<token_type> types, cons
 }
 
 [[nodiscard]] std::unique_ptr<ast::return_stmt> Parser::make_return() {
-    if (match({token_type::SEMICOLON})) {
+    if (match(token_type::SEMICOLON)) {
         return std::make_unique<ast::return_stmt>(nullptr); 
     }
     expr_uptr expression = make_expression();
@@ -712,7 +713,7 @@ const token* Parser::consume(const std::initializer_list<token_type> types, cons
     if (!expr) {
         return nullptr;
     }
-    while (match({token_type::OR, token_type::PIPE_PIPE})) {
+    while (match(token_type::OR, token_type::PIPE_PIPE)) {
         const token op = previous();
         expr_uptr right = make_and();
         if (!right) {
@@ -728,7 +729,7 @@ const token* Parser::consume(const std::initializer_list<token_type> types, cons
     if (!expr) {
         return nullptr;
     }
-    while (match({token_type::AND, token_type::AMPERSAND_AMPERSAND})) {
+    while (match(token_type::AND, token_type::AMPERSAND_AMPERSAND)) {
         const token op = previous();
         expr_uptr right = make_equality();
         if (!right) {
@@ -744,7 +745,7 @@ const token* Parser::consume(const std::initializer_list<token_type> types, cons
     if (!expr) {
         return nullptr;
     }
-    if (match({token_type::EQUAL})) {
+    if (match(token_type::EQUAL)) {
         const token equals = previous();
         expr_uptr value = make_assignment();
         return std::make_unique<ast::assign_expr>(std::move(expr), std::move(value));
@@ -761,7 +762,7 @@ const token* Parser::consume(const std::initializer_list<token_type> types, cons
     if (!expr) {
         return nullptr;
     }
-    while (match({token_type::BANG_EQUAL, token_type::EQUAL_EQUAL})) {
+    while (match(token_type::BANG_EQUAL, token_type::EQUAL_EQUAL)) {
         const token& op = previous();
         expr_uptr right = make_comparison();
         if (!right) {
@@ -787,7 +788,7 @@ const token* Parser::consume(const std::initializer_list<token_type> types, cons
     if (!expr) {
         return nullptr;
     }
-    while (match({token_type::GREATER, token_type::GREATER_EQUAL, token_type::LESS, token_type::LESS_EQUAL})) {
+    while (match(token_type::GREATER, token_type::GREATER_EQUAL, token_type::LESS, token_type::LESS_EQUAL)) {
         const token& op = previous();
         expr_uptr right = make_term();
         if (!right) {
@@ -815,7 +816,7 @@ const token* Parser::consume(const std::initializer_list<token_type> types, cons
     if (!expr) {
         return nullptr;
     }
-    while (match({token_type::MINUS, token_type::PLUS})) {
+    while (match(token_type::MINUS, token_type::PLUS)) {
         const token& op = previous();
         expr_uptr right = make_factor();
         if (!right) {
@@ -844,7 +845,7 @@ const token* Parser::consume(const std::initializer_list<token_type> types, cons
     if (!expr) {
         return nullptr;
     }
-    while (match({token_type::SLASH, token_type::STAR})) {
+    while (match(token_type::SLASH, token_type::STAR)) {
         const token& op = previous();
         expr_uptr right = make_unary();
         if (!right) {
@@ -869,7 +870,7 @@ const token* Parser::consume(const std::initializer_list<token_type> types, cons
 }
 
 [[nodiscard]] expr_uptr Parser::make_unary() {
-    if (match({
+    if (match(
         token_type::BANG, 
         token_type::PLUS, 
         token_type::MINUS, 
@@ -880,7 +881,7 @@ const token* Parser::consume(const std::initializer_list<token_type> types, cons
         token_type::AMPERSAND, 
         token_type::GREATER_GREATER, 
         token_type::EQUAL_GREATER
-    })) {
+    )) {
         const token& op = previous();
         expr_uptr right = make_unary();
         if (!right) {
@@ -923,7 +924,7 @@ const token* Parser::consume(const std::initializer_list<token_type> types, cons
             }
         }
     }
-    return make_call();
+    return make_postfix();
 }
 
 template<typename ...Args> requires (std::constructible_from<ast::literal, Args> && ...)
@@ -945,7 +946,7 @@ template<typename ...Args> requires (std::constructible_from<ast::literal, Args>
     return call;
 }
 
-[[nodiscard]] expr_uptr Parser::make_call() {
+[[nodiscard]] expr_uptr Parser::make_postfix() {
     expr_uptr expr = make_primary();
 
     if (!expr) {
@@ -953,13 +954,13 @@ template<typename ...Args> requires (std::constructible_from<ast::literal, Args>
     }
 
     while (true) {
-        if (match({token_type::LEFT_PAREN})) {
+        if (match(token_type::LEFT_PAREN)) {
             expr = finish_call(std::move(expr));
-        } else if (match({token_type::PLUS_PLUS})) {
+        } else if (match(token_type::PLUS_PLUS)) {
             expr = std::make_unique<ast::post_arithmetic_expression>(previous(), std::move(expr));
-        } else if (match({token_type::MINUS_MINUS})) {
+        } else if (match(token_type::MINUS_MINUS)) {
             expr = std::make_unique<ast::post_arithmetic_expression>(previous(), std::move(expr));
-        } else if (match({token_type::LEFT_SQUARE})) {
+        } else if (match(token_type::LEFT_SQUARE)) {
             expr = finish_subscript(std::move(expr));
         } else {
             break;
@@ -975,7 +976,7 @@ template<typename ...Args> requires (std::constructible_from<ast::literal, Args>
     if (!check(token_type::RIGHT_PAREN)) {
         do {
             args.push_back(make_expression());
-        } while (match({token_type::COMMA}));
+        } while (match(token_type::COMMA));
     }
 
     if (const token* t = consume({token_type::RIGHT_PAREN}, "expcected ')' at end of function call")) {
@@ -998,6 +999,34 @@ template<typename ...Args> requires (std::constructible_from<ast::literal, Args>
     return nullptr;
 }
 
+[[nodiscard]] expr_uptr Parser::make_enum_access(const token& enum_name_token) {
+    if (!consume(token_type::DOT, "expected '.' after enum name")) {
+        return nullptr;
+    }
+
+    const token* member_name = consume(token_type::IDENTIFIER, "expected enum member name after '.'");
+    if (!member_name) {
+        return nullptr;
+    }
+
+    const std::string& enum_name = enum_name_token.m_lexeme;
+    const std::string qualified_name = enum_name + "." + member_name->m_lexeme;
+    const auto enum_it = m_knownTypes.find(enum_name);
+    if (enum_it == m_knownTypes.end() || !std::holds_alternative<ast::enum_type>(enum_it->second)) {
+        m_errors.emplace_back(enum_name_token, "unknown enum '" + enum_name + "' in enum member access " + qualified_name);
+        return nullptr;
+    }
+
+    const ast::enum_type& enum_type = std::get<ast::enum_type>(enum_it->second);
+    const auto member_it = enum_type.m_enumerators.find(member_name->m_lexeme);
+    if (member_it == enum_type.m_enumerators.end()) {
+        m_errors.emplace_back(*member_name, "unknown enum member " + qualified_name);
+        return nullptr;
+    }
+
+    return std::make_unique<ast::enum_access>(*member_name, enum_name, member_name->m_lexeme, ast::literal{member_it->second});
+}
+
 [[nodiscard]] expr_uptr Parser::make_match() {
     if (!consume(token_type::LEFT_PAREN, "expected '(' after match")) {
         return nullptr;
@@ -1007,7 +1036,7 @@ template<typename ...Args> requires (std::constructible_from<ast::literal, Args>
 
     while (expr_uptr cond = make_expression()) {
         conditions.push_back(std::move(cond));
-        if (!match({token_type::SEMICOLON})) {
+        if (!match(token_type::SEMICOLON)) {
             break;
         }
     }
@@ -1026,7 +1055,7 @@ template<typename ...Args> requires (std::constructible_from<ast::literal, Args>
     bool default_pattern_reached = false;
     while (!default_pattern) {
         do {
-            if (match({token_type::ELSE})) {
+            if (match(token_type::ELSE)) {
                 default_pattern_reached = true;
             } else {
                 expr_uptr literal = make_literal();
@@ -1037,7 +1066,7 @@ template<typename ...Args> requires (std::constructible_from<ast::literal, Args>
                     patterns.push_back(std::move(literal)); 
                 }
             }
-        } while (match({token_type::COMMA}));
+        } while (match(token_type::COMMA));
 
         if (!consume({token_type::ARROW}, "expected '->' after pattern list")) {
             return nullptr;
@@ -1068,17 +1097,17 @@ template<typename ...Args> requires (std::constructible_from<ast::literal, Args>
 }
 
 [[nodiscard]] expr_uptr Parser::make_literal() {
-    if (match({token_type::TRUE})) {
+    if (match(token_type::TRUE)) {
         return std::make_unique<ast::literal>(true);
-    } else if (match({token_type::FALSE})) {
+    } else if (match(token_type::FALSE)) {
         return std::make_unique<ast::literal>(false);
-    } else if (match({token_type::_NULL})) {
+    } else if (match(token_type::_NULL)) {
         return std::make_unique<ast::literal>(nullptr);
-    } else if (match({token_type::INT})) {
+    } else if (match(token_type::INT)) {
         return std::make_unique<ast::literal>(previous().m_literal);
-    } else if (match({token_type::DOUBLE})) {
+    } else if (match(token_type::DOUBLE)) {
         return std::make_unique<ast::literal>(previous().m_literal);
-    } else if (match({token_type::STRING})) {
+    } else if (match(token_type::STRING)) {
         const std::string str = std::get<std::string>(previous().m_literal);
         return std::make_unique<ast::literal>(str);
     }
@@ -1128,15 +1157,19 @@ template<typename ...Args> requires (std::constructible_from<ast::literal, Args>
 [[nodiscard]] expr_uptr Parser::make_primary() {
     if (expr_uptr literal = make_literal()) {
         return literal;
-    } else if (match({token_type::IDENTIFIER})) {
-        return std::make_unique<ast::identifier>(previous());
-    } else if (match({token_type::SID})) {
+    } else if (match(token_type::IDENTIFIER)) {
+        const token identifier = previous();
+        if (m_knownTypes.contains(identifier.m_lexeme)) {
+            return make_enum_access(identifier);
+        }
+        return std::make_unique<ast::identifier>(identifier);
+    } else if (match(token_type::SID)) {
         return std::make_unique<ast::sid_identifier>(previous());
-    } else if (match({token_type::MATCH})) {
+    } else if (match(token_type::MATCH)) {
         return make_match();
-    } else if (match({token_type::SIZEOF})) {
+    } else if (match(token_type::SIZEOF)) {
         return make_sizeof();
-    } else if (match({token_type::LEFT_PAREN})) {
+    } else if (match(token_type::LEFT_PAREN)) {
         if (std::optional<std::unique_ptr<ast::cast_expr>> cast = make_cast()) {
             return std::move(*cast);
         } else {
@@ -1187,7 +1220,7 @@ template<typename ...Args> requires (std::constructible_from<ast::literal, Args>
     }
 
     std::vector<ast::variable_declaration> declarations;
-    if (match({token_type::DECLARATIONS})) {
+    if (match(token_type::DECLARATIONS)) {
         if (!consume(token_type::LEFT_BRACE, "expected '{' after 'declarations' in statescript definition")) {
             return nullptr;
         }
@@ -1221,7 +1254,7 @@ template<typename ...Args> requires (std::constructible_from<ast::literal, Args>
 
 [[nodiscard]] std::vector<ast::state_script_state> Parser::make_statescript_states() {
     std::vector<ast::state_script_state> states;
-    while (match({token_type::STATE}) && !is_at_end()) {
+    while (match(token_type::STATE) && !is_at_end()) {
         const token* state_name = consume({token_type::SID, token_type::IDENTIFIER}, "expected state name after 'state' in statescript definition");
         if (!state_name) {
             return {};
@@ -1258,7 +1291,7 @@ template<typename ...Args> requires (std::constructible_from<ast::literal, Args>
     }
 
     expr_uptr init = nullptr;
-    if (match({token_type::EQUAL})) {
+    if (match(token_type::EQUAL)) {
         init = make_expression();
     }
     if (!consume(token_type::SEMICOLON, "expected ';' after variable declaration in statescript declaration section")) {
@@ -1274,24 +1307,24 @@ template<typename ...Args> requires (std::constructible_from<ast::literal, Args>
 
 [[nodiscard]] std::vector<ast::state_script_block> Parser::make_statescript_blocks() {
     std::vector<ast::state_script_block> blocks;
-    while (match({token_type::BLOCK}) && !is_at_end()) {
+    while (match(token_type::BLOCK) && !is_at_end()) {
 
         BLOCK_TYPE block_type;
         std::string event_name = "";
-        if (match({token_type::START})) {
+        if (match(token_type::START)) {
             block_type = BLOCK_TYPE::START;
-        } else if (match({token_type::END})) {
+        } else if (match(token_type::END)) {
             block_type = BLOCK_TYPE::END;
-        } else if (match({token_type::EVENT})) {
+        } else if (match(token_type::EVENT)) {
             block_type = BLOCK_TYPE::EVENT;
             const token* block_name = consume({token_type::SID, token_type::IDENTIFIER}, "expected name after 'event'");
             if (!block_name) {
                 return {};
             }
             event_name = statescript_name_from_token(*block_name);
-        } else if (match({token_type::UPDATE})) {
+        } else if (match(token_type::UPDATE)) {
             block_type = BLOCK_TYPE::UPDATE;
-        } else if (match({token_type::VIRTUAL})) {
+        } else if (match(token_type::VIRTUAL)) {
             block_type = BLOCK_TYPE::VIRTUAL;
         } else {
             m_errors.emplace_back(peek(), "expected one of 'start', 'end', 'event', 'update' or 'virtual' but got " + peek().m_lexeme);
@@ -1323,7 +1356,7 @@ template<typename ...Args> requires (std::constructible_from<ast::literal, Args>
 
 [[nodiscard]] std::vector<ast::state_script_track> Parser::make_statescript_tracks() {
     std::vector<ast::state_script_track> tracks;
-    while (match({token_type::TRACK}) && !is_at_end()) {
+    while (match(token_type::TRACK) && !is_at_end()) {
         const token* track_name = consume({token_type::SID, token_type::IDENTIFIER}, "expected track name after 'track' in statescript definition");
         if (!track_name) {
             return {};
@@ -1350,7 +1383,7 @@ template<typename ...Args> requires (std::constructible_from<ast::literal, Args>
 
 [[nodiscard]] std::vector<ast::function_definition> Parser::make_statescript_lambdas() {
     std::vector<ast::function_definition> lambdas;
-    while (match({token_type::LAMBDA}) && !is_at_end()) {
+    while (match(token_type::LAMBDA) && !is_at_end()) {
         stmnt_uptr body = make_statement();
         if (!body) {
             m_errors.emplace_back(peek(), "expected lambda body statement but got '" + peek().m_lexeme + "'");

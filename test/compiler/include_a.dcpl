@@ -1,0 +1,4 @@
+@include "nested/include_b.dcpl"
+u32 included_a() {
+    return 1;
+}

@@ -29,8 +29,10 @@ int main(int argc, char* argv[]) {
     input << file_in.rdbuf();
     
     std::string source = input.str();
+    std::vector<dconstruct::compilation::source_location> line_map;
 
-    const std::expected<dconstruct::compilation::compiler_options, std::string> compiler_options_res = dconstruct::compilation::compiler_options::parse(opts, source);
+    const std::expected<dconstruct::compilation::compiler_options, std::string> compiler_options_res =
+        dconstruct::compilation::compiler_options::parse(opts, source, source_code_filepath, line_map);
     if (!compiler_options_res) {
         std::cerr << compiler_options_res.error() << "\n";
         return -1;
@@ -46,7 +48,7 @@ int main(int argc, char* argv[]) {
 
     dconstruct::compilation::global_state global;
 
-    const auto function_res = dconstruct::compilation::run_compilation(source, global);
+    const auto function_res = dconstruct::compilation::run_compilation(source, global, line_map);
     if (!function_res) {
         return -1;
     }
