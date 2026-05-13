@@ -12,6 +12,8 @@
 #include <unordered_map>
 #include <array>
 #include <string_view>
+#include <chrono>
+#include <algorithm>
 
 namespace dconstruct::compilation {
 
@@ -20,28 +22,26 @@ struct global_function {
     ast::function_type m_type;
 };
 
-[[nodiscard]] static ast::function_type make_far_function(
-    const ast::full_type& return_type,
-    const std::initializer_list<std::pair<std::string, ast::full_type>>& args) {
-    ast::function_type type = ast::make_function(return_type, args);
-    type.m_isFarCall = true;
-    return type;
-}
-
 const std::array global_functions = {
     global_function{
         "#display",
-        make_far_function(ast::make_type_from_prim(ast::primitive_kind::NOTHING), {
+        ast::make_function(ast::make_type_from_prim(ast::primitive_kind::NOTHING), ast::function_type::DISTANCE::FAR, {
             {"message", ast::make_type_from_prim(ast::primitive_kind::STRING)},
-            {"channel", ast::make_type_from_prim(ast::primitive_kind::U64)}
+            {"channel", ast::make_type_from_prim(ast::primitive_kind::U16)}
         })
     },
     global_function{
         "#go",
-        make_far_function(ast::make_type_from_prim(ast::primitive_kind::NOTHING), {
-            {"target", ast::make_type_from_prim(ast::primitive_kind::U64)},
-            {"mode", ast::make_type_from_prim(ast::primitive_kind::U64)}
+        ast::make_function(ast::make_type_from_prim(ast::primitive_kind::NOTHING), ast::function_type::DISTANCE::FAR, {
+            {"target", ast::make_type_from_prim(ast::primitive_kind::U16)},
+            {"mode", ast::make_type_from_prim(ast::primitive_kind::U16)}
         })
+    },
+    global_function{
+        "#dc:format",
+        ast::make_function(ast::make_type_from_prim(ast::primitive_kind::STRING), ast::function_type::DISTANCE::FAR, {
+            {"format", ast::make_type_from_prim(ast::primitive_kind::STRING)}
+        }, true)
     }
 };
 
@@ -53,7 +53,13 @@ void add_global_functions(compilation::scope& scope) {
     }
 }
 
-[[nodiscard]] static std::optional<std::vector<compilation::program_binary_element>> run_compilation(
+struct compilation_run_result {
+    std::vector<compilation::program_binary_element> m_elements;
+    std::chrono::milliseconds m_duration{};
+    std::vector<std::string> m_stateScriptNames;
+};
+
+[[nodiscard]] static std::optional<compilation_run_result> run_compilation_detailed(
     const std::string& source_code,
     global_state& global,
     const std::vector<source_location>& line_map) {
@@ -93,12 +99,35 @@ void add_global_functions(compilation::scope& scope) {
         return std::nullopt;
     }
 
+    std::vector<std::string> state_script_names;
+    for (const ast::global_decl_uptr& declaration : program.m_declarations) {
+        if (const auto* state_script = dynamic_cast<const ast::state_script*>(declaration.get())) {
+            state_script_names.push_back(state_script->m_name);
+        }
+    }
+
     std::expected<std::vector<compilation::program_binary_element>, std::string> compile_res = program.compile_binary_elements(base_scope, global);
     if (!compile_res) {
         std::cerr << "[compilation error] " << compile_res.error() << "\n";
         return std::nullopt;
     }
-    return std::move(*compile_res);
+    const auto end_time = std::chrono::high_resolution_clock::now();
+    return compilation_run_result{
+        std::move(*compile_res),
+        std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time),
+        std::move(state_script_names)
+    };
+}
+
+[[nodiscard]] static std::optional<std::vector<compilation::program_binary_element>> run_compilation(
+    const std::string& source_code,
+    global_state& global,
+    const std::vector<source_location>& line_map) {
+    std::optional<compilation_run_result> detailed = run_compilation_detailed(source_code, global, line_map);
+    if (!detailed) {
+        return std::nullopt;
+    }
+    return std::move(detailed->m_elements);
 }
 
 [[nodiscard]] static std::optional<std::vector<compilation::program_binary_element>> run_compilation(const std::string& source_code, global_state& global) {
@@ -186,9 +215,8 @@ void add_global_functions(compilation::scope& scope) {
     options.add_options("input/output")
         ("i,input",  "input DCPL file that will be compiled", cxxopts::value<std::string>(), "<path>")
         ("t,target",  "the original binary file that will be recompiled", cxxopts::value<std::string>(), "<path>")
-        ("o,output",  "output location of the recompiled binary", cxxopts::value<std::string>(), "<path>")
-        ("m,modules",  "the modules.bin file that maps this file (either from the original game or from a mod that you're using, like starlight)", cxxopts::value<std::string>(), "<path>")
-        ("r,repackage", "path to a the directory containing the .bin files. if provided, the compiler will automatically repackage the directory into a new .psarc file.", cxxopts::value<std::string>(), "<path>")
+        ("o,output",  "output location of the recompiled binary; relative to <mod>/bin/dc1 when --mod is provided", cxxopts::value<std::string>(), "<path>")
+        ("mod", "path to the mod directory; derives output, modules.bin, pak68.txt, and repackage location", cxxopts::value<std::string>(), "<path>")
         ("s,sidbase",  "path to the sidbase", cxxopts::value<std::string>(), "sidbase.bin");
 
     options.parse_positional({"i"});
@@ -202,46 +230,83 @@ void add_global_functions(compilation::scope& scope) {
     return opts;
 }
 
-[[nodiscard]] static std::optional<std::string> patch_modules_size(const std::filesystem::path& modules, const std::filesystem::path& output, const u64 new_size) {
-    constexpr std::string_view needle = "/dc1/";
-    const auto pos = output.string().find(needle);
+struct modules_patch_summary {
+    std::filesystem::path m_path;
+    std::string m_targetName;
+    u64 m_oldSize = 0;
+    u64 m_newSize = 0;
+    u64 m_offset = 0;
+};
+
+struct compiler_output_summary {
+    std::filesystem::path m_output;
+    u64 m_size = 0;
+    std::optional<modules_patch_summary> m_modulesPatch;
+};
+
+[[nodiscard]] static std::vector<pak68_edit_request> pak68_edits_for_compile(
+    const compiler_options& options,
+    const std::vector<std::string>& state_script_names) {
+
+    std::vector<pak68_edit_request> edits = options.m_pak68Edits;
+    for (const std::string& state_script_name : state_script_names) {
+        edits.push_back(pak68_edit_request{
+            "sp-all",
+            {pak68_entry{pak68_type::SYMBOL, state_script_name}},
+            {}
+        });
+    }
+    return edits;
+}
+
+[[nodiscard]] static std::string normalized_generic_path_string(const std::filesystem::path& path) {
+    std::string normalized = path.generic_string();
+    std::ranges::replace(normalized, '\\', '/');
+    return normalized;
+}
+
+[[nodiscard]] static std::expected<modules_patch_summary, std::string> patch_modules_size(const std::filesystem::path& modules, const std::filesystem::path& output, const u64 new_size) {
+    constexpr std::string_view needle = "/bin/dc1/";
+    const std::string normalized_output = normalized_generic_path_string(output);
+    const auto pos = normalized_output.find(needle);
     if (pos == std::string_view::npos) {
-        return "the path provided needs to have a 'dc1' directory in it, so that the program can figure out the relative path to the modules.";
+        return std::unexpected{"the path provided needs to have a 'bin/dc1' directory in it, so that the program can figure out the relative path to the modules."};
     }
 
-    std::filesystem::path result = output.string().substr(pos + needle.size());
+    std::filesystem::path result = normalized_output.substr(pos + needle.size());
 
-    const std::string target_name = result.replace_extension("").string();
+    const std::string target_name = result.replace_extension("").generic_string();
     const sid64 target_sid = SID(target_name.c_str());
 
     std::fstream modules_file{modules, std::ios::in | std::ios::out | std::ios::binary};
     if (!modules_file.is_open()) {
-        return "couldn't open " + modules.string();
+        return std::unexpected{"couldn't open " + modules.string()};
     }
 
     const u64 modules_size = std::filesystem::file_size(modules);
     std::unique_ptr<std::byte[]> bytes = std::make_unique<std::byte[]>(modules_size);
     modules_file.read(reinterpret_cast<char*>(bytes.get()), modules_size);
     
-    bool found = false;
-    for (u64 i = 0; i < modules_size && !found; i += 8) {
+    std::optional<modules_patch_summary> summary;
+    for (u64 i = 0; i + 16 <= modules_size && !summary; i += 8) {
         const u64 byte_pack = *reinterpret_cast<const u64*>(bytes.get() + i);
         if (byte_pack == target_sid) {
+            const u64 old_size = *reinterpret_cast<const u64*>(bytes.get() + i + 8);
             *reinterpret_cast<u64*>(bytes.get() + i + 8) = new_size;
-            found = true;
+            summary = modules_patch_summary{modules, target_name, old_size, new_size, i + 8};
         }
     }
-    if (!found) {
-        return "couldn't replace the target name " + target_name + " in the modules.bin file";
+    if (!summary) {
+        return std::unexpected{"couldn't replace the target name " + target_name + " in the modules.bin file"};
     }
     
     modules_file.seekg(0);
     modules_file.write(reinterpret_cast<const char*>(bytes.get()), modules_size);
 
-    return std::nullopt;
+    return *summary;
 }
 
-static i32 create_output(
+static std::expected<compiler_output_summary, std::string> create_output(
     const std::expected<dconstruct::compilation::compiler_options, std::string> &filepaths, 
     const dconstruct::SIDBase &sidbase, 
     const std::vector<dconstruct::compilation::program_binary_element> &functions, 
@@ -252,41 +317,46 @@ static i32 create_output(
         : dconstruct::compilation::disassemble_target(filepaths->m_target, sidbase, functions, global);
         
     if (!binary_res) {
-        std::cerr << binary_res.error() << "\n";
-        return -1;
+        return std::unexpected{binary_res.error()};
     }
     const auto &[bytes, size] = *binary_res;
     std::filesystem::create_directories(filepaths->m_output.parent_path());
     std::ofstream of(filepaths->m_output, std::ios::binary);
     if (!of.is_open()) {
-        std::cerr << "couldn't open filepath " << filepaths->m_output << "\n";
-        return -1;
+        return std::unexpected{"couldn't open filepath " + filepaths->m_output.string()};
     }
     of.write(reinterpret_cast<const char*>(bytes.get()), size);
     of.flush();
 
+    compiler_output_summary summary;
+    summary.m_output = filepaths->m_output;
+    summary.m_size = size;
+
     if (!filepaths->m_modules.empty()) {
-        const std::optional<std::string> patch_err = patch_modules_size(filepaths->m_modules, filepaths->m_output, size);
-        if (patch_err) {
-            std::cerr << *patch_err << "\n";
-            return -1;
+        std::expected<modules_patch_summary, std::string> patch = patch_modules_size(filepaths->m_modules, filepaths->m_output, size);
+        if (!patch) {
+            return std::unexpected{patch.error()};
         }
+        summary.m_modulesPatch = std::move(*patch);
     }
 
-    return 0;
+    return summary;
 }
 
-[[nodiscard]] static std::optional<std::string> repackage_psarc(const std::filesystem::path& directory_path) {
+[[nodiscard]] static std::expected<std::filesystem::path, std::string> repackage_psarc(const std::filesystem::path& directory_path) {
     if (!directory_path.string().ends_with("_unpacked/") && !directory_path.string().ends_with("_unpacked")) {
-        return "the unpacked directory must end with '_unpacked'";
+        return std::unexpected{"the unpacked directory must end with '_unpacked'"};
     }
 
     std::filesystem::path psarc_path = directory_path.string().substr(0, directory_path.string().size() - sizeof("_unpacked") + 1) + ".psarc"; 
 
 
     const std::string command = "ndarc -c \"" + directory_path.string() + "\" -o \"" + psarc_path.string() + "\"";
-    std::system(command.c_str());
-    return std::nullopt;
+    const int result = std::system(command.c_str());
+    if (result != 0) {
+        return std::unexpected{"ndarc failed while producing " + psarc_path.string()};
+    }
+    return psarc_path;
 }
 
 }

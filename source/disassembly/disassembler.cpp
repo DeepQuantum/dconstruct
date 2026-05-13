@@ -211,6 +211,8 @@ void Disassembler::insert_array(const location array, const u32 array_size, cons
 
     const u8 type_id_padding = m_currentFile->is_string(member + member_offset) ? 0 : 8;
     u32 struct_size = (member_offset - type_id_padding) / array_size;
+    struct_size &= ~(sizeof(sid64) - 1);
+    
 
     for (u32 array_entry_count = 0; array_entry_count < array_size; ++array_entry_count) {
         member_offset = member_count = 0;

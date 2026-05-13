@@ -142,6 +142,15 @@ namespace dconstruct {
         u64    m_sidGlobal;       // either SID("global") if in global scope or something else if inside state-script
         u64    m_always0_3;
     };
+
+    struct ModulesEntry 
+    {
+        const char* m_name;
+        sid64 m_nameSid;
+        u64 m_size;
+        SymbolArray* m_imports;
+        SymbolArray* m_exports;
+    };
     
 
 #endif // DCSCRIPT_H

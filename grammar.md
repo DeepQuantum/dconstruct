@@ -255,36 +255,36 @@ Precompiler directives are line-based instructions that begin with `@` and are c
 
 ```ebnf
 precompiler_directive ::= "@" path_directive_name " " quoted_path
-                        | "@standalone"
+                        | "@add_pak" level_name "{" pak_entry+ "}"
 
 path_directive_name   ::= "target"
                         | "include"
                         | "output"
-                        | "modules"
                         | "sidbase"
-                        | "repackage"
+                        | "mod"
 
 quoted_path           ::= '"' path_char* '"'
+pak_entry             ::= pak_type sid_identifier newline
 ```
 
 Currently supported directives:
 
 - `@target "<path>"` — path to the original game binary being edited/recompiled (for adding new functions and hooking existing ones).
 - `@include "<relative-path>"` — include another DCPL file at this location. Each resolved file is included at most once.
-- `@standalone` — compile only the functions in this file into a new binary and write them to `@output`, without requiring or reading `@target`.
-- `@output "<path>"` — destination path for the newly compiled binary.
-- `@modules "<path>"` — path to `modules.bin`, which maps script files in the game; the compiler updates the recompiled script size there. Required for target-based compiles and optional for `@standalone`.
+- If no `@target` is provided, the compiler runs in standalone mode and writes only the declarations in the input file to `@output`.
+- `@mod "<path>"` — path to the mod directory. When present, relative `@output` paths are resolved below `<path>/bin/dc1`, `modules.bin` is resolved as `<path>/bin/dc1/modules.bin`, and pak68 is resolved as `<path>/pak68.txt`.
+- Providing `@mod` also repackages that mod directory into a `.psarc` archive after compilation.
+- `@output "<relative-path>"` — destination path for the newly compiled binary. With `@mod`, a missing `.bin` extension is added automatically.
 - `@sidbase "<path>"` — path to the SID base map (`hash -> string`) used to resolve string IDs.
-- `@repackage "<path>"` — path to a mod directory that is repacked into a `.psarc` archive; this automates the repackaging step as part of compile flow.
+- `@add_pak <target_level_name> { <type> #sid ... }` — add pak68 entries to an existing `level-name` section. The compiler validates the pak68 path, target level, and entry type before compiling.
 
 Example:
 
 ```dcpl
 @target "C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/rogue/script-callbacks.bin"
-@output "C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/mods/bin_unpacked/bin/dc1/rogue/script-callbacks.bin"
-@modules "C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/mods/bin_unpacked/bin/dc1/modules.bin"
+@mod "C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/mods/bin_unpacked"
+@output "rogue/script-callbacks"
 @sidbase "C:/Program Files/dconstruct-518-1-52-0-1768320617/bin/sidbase.bin"
-@repackage "C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/mods/bin_unpacked"
 ```
 
 > [!IMPORTANT]

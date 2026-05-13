@@ -65,6 +65,7 @@ namespace dconstruct::compilation {
 
         [[nodiscard]] std::optional<ast::full_type> make_type();
         [[nodiscard]] std::optional<ast::full_type> peek_type();
+        [[nodiscard]] std::optional<std::variant<ast::full_type, ast::ellipse>> peek_type_or_ellipse();
         [[nodiscard]] std::optional<ast::function_type> match_function_type();
 
         template<typename ...Args> requires (std::constructible_from<ast::literal, Args> && ...)
@@ -87,6 +88,7 @@ namespace dconstruct::compilation {
         [[nodiscard]] expr_uptr make_or();
         [[nodiscard]] expr_uptr make_and();
         [[nodiscard]] expr_uptr make_assignment();
+        [[nodiscard]] expr_uptr make_format();
         [[nodiscard]] expr_uptr make_expression();
         [[nodiscard]] expr_uptr make_equality();
         [[nodiscard]] expr_uptr make_comparison();

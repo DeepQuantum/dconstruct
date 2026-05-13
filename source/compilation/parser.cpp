@@ -128,8 +128,16 @@ template<typename... Args> requires (std::same_as<Args, token_type> && ...)
     return false;
 }
 
+[[nodiscard]] std::optional<std::variant<ast::full_type, ast::ellipse>> Parser::peek_type_or_ellipse() {
+    if (match(token_type::DOT_DOT_DOT)) {
+        return ast::ellipse{};
+    } else {
+        return peek_type();
+    }
+}
+
 [[nodiscard]] std::optional<ast::function_type> Parser::match_function_type() {
-    // e.g. (u32, f32*) -> bool
+    // e.g. (u32, f32*, ...) -> bool
     if (!check(token_type::LEFT_PAREN)) {
         return std::nullopt;
     }
@@ -137,15 +145,24 @@ template<typename... Args> requires (std::same_as<Args, token_type> && ...)
     u32 temp_current = m_current;
     m_current = temp_current + 1;
     std::vector<ast::full_type> param_types;
+    bool has_ellipse = false;
 
     if (!match(token_type::RIGHT_PAREN)) {
         do {
-            std::optional<ast::full_type> param_type = peek_type();
+            if (has_ellipse) {
+                m_errors.emplace_back(peek(), "ellipse must be last paramter inside function type");
+                return std::nullopt;
+            }
+            auto param_type = peek_type_or_ellipse();
             if (!param_type) {
                 m_current = temp_current;
                 return std::nullopt;
             }
-            param_types.push_back(*param_type); // starting here we can be sure we're parsing a function type because there's no other construct like '(type...'
+            if (std::holds_alternative<ast::ellipse>(*param_type)) {
+                has_ellipse = true;
+            } else {
+                param_types.push_back(std::get<ast::full_type>(*param_type)); // starting here we can be sure we're parsing a function type because there's no other construct like '(type...'
+            }
         }
         while (match(token_type::COMMA) && !is_at_end());
 
@@ -167,6 +184,7 @@ template<typename... Args> requires (std::same_as<Args, token_type> && ...)
     for (auto& param_type : param_types) {
         func_type.m_arguments.emplace_back("", std::make_unique<ast::full_type>(std::move(param_type)));
     }
+    func_type.m_isVariadic = has_ellipse;
     return func_type;
 }
 
@@ -406,7 +424,9 @@ template<typename... Args> requires (std::same_as<Args, token_type> && ...)
             m_errors.emplace_back(previous(), "expected either 'near' or 'far' specification after 'using' when defining a function alias but got neither");
             return std::nullopt;
         } else {
-            std::get<ast::function_type>(*new_type).m_isFarCall = far_spec->m_type == token_type::FAR;
+            std::get<ast::function_type>(*new_type).m_distanceType = far_spec->m_type == token_type::FAR
+                ? ast::function_type::DISTANCE::FAR
+                : ast::function_type::DISTANCE::NEAR;
         }
     } else { 
         if (far_spec) {
@@ -753,6 +773,36 @@ template<typename... Args> requires (std::same_as<Args, token_type> && ...)
     return expr;
 }
 
+[[nodiscard]] expr_uptr Parser::make_format() {
+    expr_uptr expr = make_postfix();
+    if (!expr) {
+        return nullptr;
+    }
+
+    while (match(token_type::DOLLAR)) {
+        const token op = previous();
+
+        std::vector<expr_uptr> args;
+        args.push_back(std::move(expr));
+
+        do {
+            expr_uptr replacement = make_assignment();
+            if (!replacement) {
+                return nullptr;
+            }
+            args.push_back(std::move(replacement));
+        } while (match(token_type::COMMA));
+
+        expr = std::make_unique<ast::call_expr>(
+            op,
+            std::make_unique<ast::sid_identifier>("#dc:format"),
+            std::move(args)
+        );
+    }
+
+    return expr;
+}
+
 [[nodiscard]] expr_uptr Parser::make_expression() {
     return make_assignment();
 }
@@ -913,10 +963,10 @@ template<typename... Args> requires (std::same_as<Args, token_type> && ...)
                 //return std::make_unique<ast::address_of_expr>(op, std::move(right));
             }
             case token_type::GREATER_GREATER: {
-                return make_call_from_operator(op, "#display", std::move(right), 19);
+                return make_call_from_operator(op, "#display", std::move(right), (u16)19);
             }
             case token_type::EQUAL_GREATER: {
-                return make_call_from_operator(op, "#go", std::move(right), 1);
+                return make_call_from_operator(op, "#go", std::move(right), (u16)1);
             }
             default: {
                 m_errors.emplace_back(op, "expected expression or operand but got '" + op.m_lexeme + "'");
@@ -924,7 +974,7 @@ template<typename... Args> requires (std::same_as<Args, token_type> && ...)
             }
         }
     }
-    return make_postfix();
+    return make_format();
 }
 
 template<typename ...Args> requires (std::constructible_from<ast::literal, Args> && ...)

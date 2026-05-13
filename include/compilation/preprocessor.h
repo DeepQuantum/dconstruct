@@ -1,6 +1,7 @@
 #pragma once
 
 #include "base.h"
+#include "compilation/pak68.h"
 #include "compilation/tokens.h"
 
 #include <filesystem>
@@ -11,10 +12,13 @@
 namespace dconstruct::compilation {
     struct compiler_options {
         std::filesystem::path m_target;
+        std::optional<std::filesystem::path> m_mod;
         std::filesystem::path m_output;
         std::filesystem::path m_modules;
         std::filesystem::path m_sidbase;
         std::optional<std::filesystem::path> m_repackage;
+        std::optional<std::filesystem::path> m_pak68;
+        std::vector<pak68_edit_request> m_pak68Edits;
         bool m_standalone = false;
 
         

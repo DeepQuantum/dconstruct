@@ -86,8 +86,6 @@ private:
     u32 m_current = 0;
     u32 m_line = 1;
 
-    bool m_hadError = false;
-
     [[nodiscard]] token scan_token();
     [[nodiscard]] bool reached_eof() const noexcept;
     char advance();

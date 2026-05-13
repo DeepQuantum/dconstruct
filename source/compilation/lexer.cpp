@@ -212,7 +212,16 @@ char Lexer::advance() {
         case ']': return make_current_token(token_type::RIGHT_SQUARE); 
         case ',': return make_current_token(token_type::COMMA); 
         case ':': return make_current_token(token_type::COLON);
-        case '.': return make_current_token(token_type::DOT); 
+        case '$': return make_current_token(token_type::DOLLAR);
+        case '.': {
+            if (peek() == '.' && peek_next() == '.') {
+                advance();
+                advance();
+                return make_current_token(token_type::DOT_DOT_DOT);
+            } else {
+                return make_current_token(token_type::DOT);
+            }
+        }
         case ';': return make_current_token(token_type::SEMICOLON); 
         case '+': return make_current_token(match('=') ? token_type::PLUS_EQUAL : match('+') ? token_type::PLUS_PLUS : token_type::PLUS); 
         case '-': return make_current_token(match('=') ? token_type::MINUS_EQUAL : match('-') ? token_type::MINUS_MINUS : match('>') ? token_type::ARROW : token_type::MINUS); 

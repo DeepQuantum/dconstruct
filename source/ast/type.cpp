@@ -4,10 +4,12 @@
 
 namespace dconstruct::ast {
 
-function_type::function_type() noexcept : m_return{ std::make_shared<ast::full_type>(std::monostate()) } {}
+function_type::function_type() noexcept :
+    m_return{ std::make_shared<ast::full_type>(std::monostate()) },
+    m_distanceType{DISTANCE::NEAR} {}
 
 function_type::function_type(ref_full_type return_type, t_arg_list args) noexcept
-    : m_return{ std::move(return_type) }, m_arguments{ std::move(args) } {}
+    : m_return{ std::move(return_type) }, m_arguments{ std::move(args) }, m_distanceType{DISTANCE::NEAR} {}
 
 ptr_type::ptr_type() noexcept : m_pointedAt{ std::make_shared<ast::full_type>(std::monostate()) } {}
 
@@ -24,12 +26,19 @@ ptr_type::ptr_type(const ast::primitive_kind& kind) noexcept
     return std::holds_alternative<std::monostate>(type);
 }
 
-[[nodiscard]] function_type make_function(const ast::full_type& return_arg, const std::initializer_list<std::pair<std::string, full_type>>& args) {
+[[nodiscard]] function_type make_function(
+    const ast::full_type& return_arg,
+    function_type::DISTANCE distance,
+    const std::initializer_list<std::pair<std::string, full_type>>& args,
+    const bool is_variadic) {
     ast::function_type::t_arg_list arg_types;
     for (const auto& [name, type] : args) {
         arg_types.emplace_back(name, std::make_shared<full_type>(type));
     }
-    return function_type{ std::make_shared<ast::full_type>(return_arg), std::move(arg_types) };
+    function_type type{ std::make_shared<ast::full_type>(return_arg), std::move(arg_types) };
+    type.m_distanceType = distance;
+    type.m_isVariadic = is_variadic;
+    return type;
 }
 
 [[nodiscard]] primitive_kind kind_from_primitive_value(const primitive_value& prim) noexcept {

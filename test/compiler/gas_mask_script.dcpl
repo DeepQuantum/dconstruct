@@ -1,13 +1,15 @@
-@standalone
-@output "C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/mods/ProjectFEDRA_unpacked/bin/dc1/ss-rogue/test-script-qntm.bin"
-@modules "C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/mods/ProjectFEDRA_unpacked/bin/dc1/modules.bin"
+@mod "C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/mods/ProjectFEDRA_unpacked"
+@output "ss-rogue/test-script-qntm"
 @sidbase "C:/Users/damix/Documents/GitHub/TLOU2Modding/dconstruct/test/dc_test_files/sidbase_new_fixed.bin"
-@repackage "C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/mods/ProjectFEDRA_unpacked"
 
 @include "keycodes.dcpl"
 
+@add_pak sp-all {
+    actor #gas-mask-base
+    actor #gas-mask-ellie
+}
+
 using #set-gas-mask-setting-id as far (u64, u64) -> u0;
-using #dc:format as far (string, u64, u64) -> string;
 using #wait-equip-gas-mask as near (u64, u64, u64) -> u64;
 using #wait-remove-gas-mask as near (u64, u64, u64) -> u64;
 using #spawn-gas-mask as near (u64) -> u64;
@@ -21,7 +23,9 @@ statescript #test-script-qntm {
         block start {
             track #main {
                 lambda {
-                    >> "launched custom gas mask script";
+                    u16 version_major = 1;
+                    u16 version_minor = 1;
+                    >> "launched custom gas mask script, version %d.$d" $ version_major, version_minor;
 
                     #set-gas-mask-setting-id(#player, #*ellie-gas-mask-setup*);
 

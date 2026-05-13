@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 #include "compilation/lexer.h"
 #include "compilation/dc_parser.h"
+#include "compilation/compiler_funcs.h"
 #include "compilation/preprocessor.h"
 #include "compilation/function.h"
 #include "disassembly/file_disassembler.h"
@@ -33,7 +34,7 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
     }
 
     static std::string dcpl_prelude() {
-        return "@standalone\n@output \"test/compiler/include_out.bin\"\n@sidbase \"" + TEST_DIR + "test_sidbase.bin\"\n";
+        return "@output \"test/compiler/include_out.bin\"\n@sidbase \"" + TEST_DIR + "test_sidbase.bin\"\n";
     }
 
     static std::tuple<ast::program, std::unordered_map<std::string, ast::full_type>, std::vector<compilation::parsing_error>> get_parse_results(const std::vector<compilation::token> &tokens) {
@@ -78,6 +79,7 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
             return std::unexpected{"parse errors: " + parse_errors.front().m_message};
         }
         compilation::scope scope{types};
+        compilation::add_global_functions(scope);
         const auto semantic_errors = program.check_semantics(scope);
         if (!semantic_errors.empty()) {
             return std::unexpected{"semantic errors: " + semantic_errors.front().m_message};
@@ -181,7 +183,7 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
     }
 
     TEST(COMPILER, LexerBasicChars) {
-        const std::string chars = "+.{)";
+        const std::string chars = "+.{)$";
         const auto [tokens, errors] = get_tokens(chars);
 
         const std::vector<compilation::token> expected = {
@@ -189,6 +191,7 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
             compilation::token(compilation::token_type::DOT, ".", 0, 1),
             compilation::token(compilation::token_type::LEFT_BRACE, "{", 0, 1),
             compilation::token(compilation::token_type::RIGHT_PAREN, ")", 0, 1),
+            compilation::token(compilation::token_type::DOLLAR, "$", 0, 1),
             compilation::token(compilation::token_type::_EOF, "", 0, 1),
         };
         EXPECT_EQ(tokens, expected);
@@ -291,7 +294,213 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
         auto [program, types, parse_errors] = get_parse_results(tokens);
         ASSERT_FALSE(parse_errors.empty());
         EXPECT_EQ(parse_errors.front().m_token.m_file.filename(), "include_main_error.dcpl");
-        EXPECT_EQ(parse_errors.front().m_token.m_line, 7);
+        EXPECT_EQ(parse_errors.front().m_token.m_line, 6);
+    }
+
+    TEST(COMPILER, Pak68TypesCoverRepoPak68) {
+        std::ifstream in{"pak68.txt"};
+        ASSERT_TRUE(in.is_open());
+
+        for (std::string line; std::getline(in, line);) {
+            if (!line.empty() && line.back() == '\r') {
+                line.pop_back();
+            }
+            if (line.empty()) {
+                continue;
+            }
+            std::istringstream iss{line};
+            std::string type;
+            iss >> type;
+            EXPECT_TRUE(compilation::pak68_type_from_string(type)) << "missing pak68 type enum entry for " << type;
+        }
+    }
+
+    TEST(COMPILER, AddPakParsesAndAppliesMultilineEntries) {
+        const std::filesystem::path mod_path = "test/compiler/pak68_macro_mod";
+        const std::filesystem::path pak_path = mod_path / "pak68.txt";
+        std::filesystem::create_directories(mod_path);
+        {
+            std::ofstream out{pak_path};
+            out << "level-name sp-all\n"
+                << "symbol existing-entry\n"
+                << "level-name other-level\n"
+                << "actor other-actor\n";
+        }
+
+        std::string source = dcpl_prelude() +
+            "@mod \"test/compiler/pak68_macro_mod\"\n"
+            "@add_pak sp-all {\n"
+            "  symbol #gas-mask-ellie\n"
+            "  actor dina\n"
+            "}\n"
+            "u32 main() { return 0; }\n";
+        std::vector<compilation::source_location> line_map;
+
+        auto options = compilation::compiler_options::parse(get_empty_options(), source, "test/compiler/pak68_macro_test.dcpl", line_map);
+        ASSERT_TRUE(options) << options.error();
+        ASSERT_TRUE(options->m_pak68);
+        EXPECT_EQ(*options->m_pak68, pak_path);
+        ASSERT_EQ(options->m_pak68Edits.size(), 1);
+        ASSERT_EQ(options->m_pak68Edits[0].m_entries.size(), 2);
+        EXPECT_EQ(options->m_pak68Edits[0].m_entries[0], (compilation::pak68_entry{compilation::pak68_type::SYMBOL, "gas-mask-ellie"}));
+        EXPECT_EQ(options->m_pak68Edits[0].m_entries[1], (compilation::pak68_entry{compilation::pak68_type::ACTOR, "dina"}));
+        EXPECT_EQ(source.find("@add_pak"), std::string::npos);
+
+        auto apply_res = compilation::apply_pak68_edits(*options->m_pak68, options->m_pak68Edits);
+        ASSERT_TRUE(apply_res) << apply_res.error();
+        ASSERT_EQ(apply_res->size(), 1);
+        EXPECT_EQ((*apply_res)[0].m_added.size(), 2);
+
+        std::ifstream in{pak_path};
+        ASSERT_TRUE(in.is_open());
+        std::stringstream contents;
+        contents << in.rdbuf();
+        EXPECT_NE(contents.str().find("symbol gas-mask-ellie\nactor dina\nlevel-name other-level"), std::string::npos);
+    }
+
+    TEST(COMPILER, AddPakRejectsUnknownType) {
+        const std::filesystem::path mod_path = "test/compiler/pak68_unknown_type_mod";
+        const std::filesystem::path pak_path = mod_path / "pak68.txt";
+        std::filesystem::create_directories(mod_path);
+        {
+            std::ofstream out{pak_path};
+            out << "level-name sp-all\n";
+        }
+
+        std::string source = dcpl_prelude() +
+            "@mod \"test/compiler/pak68_unknown_type_mod\"\n"
+            "@add_pak sp-all { nope #gas-mask-ellie }\n"
+            "u32 main() { return 0; }\n";
+        std::vector<compilation::source_location> line_map;
+
+        auto options = compilation::compiler_options::parse(get_empty_options(), source, "test/compiler/pak68_unknown_type_test.dcpl", line_map);
+        ASSERT_FALSE(options);
+        EXPECT_NE(options.error().find("unknown pak68 type: nope"), std::string::npos);
+    }
+
+    TEST(COMPILER, AddPakRejectsMissingLevel) {
+        const std::filesystem::path mod_path = "test/compiler/pak68_missing_level_mod";
+        const std::filesystem::path pak_path = mod_path / "pak68.txt";
+        std::filesystem::create_directories(mod_path);
+        {
+            std::ofstream out{pak_path};
+            out << "level-name sp-all\n";
+        }
+
+        std::string source = dcpl_prelude() +
+            "@mod \"test/compiler/pak68_missing_level_mod\"\n"
+            "@add_pak missing-level { symbol #gas-mask-ellie }\n"
+            "u32 main() { return 0; }\n";
+        std::vector<compilation::source_location> line_map;
+
+        auto options = compilation::compiler_options::parse(get_empty_options(), source, "test/compiler/pak68_missing_level_test.dcpl", line_map);
+        ASSERT_FALSE(options);
+        EXPECT_NE(options.error().find("pak68 level-name does not exist: missing-level"), std::string::npos);
+    }
+
+    TEST(COMPILER, ModDerivesRelativeOutputModulesPakAndRepackage) {
+        const std::filesystem::path mod_path = "test/compiler/derived_mod";
+        std::filesystem::create_directories(mod_path / "bin" / "dc1");
+        {
+            std::ofstream modules{mod_path / "bin" / "dc1" / "modules.bin", std::ios::binary};
+            modules << "placeholder";
+        }
+        {
+            std::ofstream pak{mod_path / "pak68.txt"};
+            pak << "level-name sp-all\n";
+        }
+
+        std::string source =
+            "@mod \"test/compiler/derived_mod\"\n"
+            "@output \"ss-rogue/test-script-qntm\"\n"
+            "@sidbase \"" + TEST_DIR + "test_sidbase.bin\"\n"
+            "u32 main() { return 0; }\n";
+        std::vector<compilation::source_location> line_map;
+
+        auto options = compilation::compiler_options::parse(get_empty_options(), source, "test/compiler/derived_mod_test.dcpl", line_map);
+        ASSERT_TRUE(options) << options.error();
+        EXPECT_TRUE(options->m_standalone);
+        EXPECT_EQ(options->m_output, mod_path / "bin" / "dc1" / "ss-rogue" / "test-script-qntm.bin");
+        EXPECT_EQ(options->m_modules, mod_path / "bin" / "dc1" / "modules.bin");
+        ASSERT_TRUE(options->m_pak68);
+        EXPECT_EQ(*options->m_pak68, mod_path / "pak68.txt");
+        ASSERT_TRUE(options->m_repackage);
+        EXPECT_EQ(*options->m_repackage, mod_path);
+    }
+
+    TEST(COMPILER, PatchModulesSizeHandlesMixedPathSeparators) {
+        const std::filesystem::path modules_path = "test/compiler/modules_mixed_separators.bin";
+        std::error_code cleanup_ec;
+        std::filesystem::remove(modules_path, cleanup_ec);
+
+        constexpr sid64 target_sid = SID("ss-rogue/test-script-qntm");
+        constexpr u64 old_size = 0x1234;
+        constexpr u64 new_size = 0x5678;
+        {
+            std::ofstream modules{modules_path, std::ios::binary};
+            ASSERT_TRUE(modules.is_open());
+            modules.write(reinterpret_cast<const char*>(&target_sid), sizeof(target_sid));
+            modules.write(reinterpret_cast<const char*>(&old_size), sizeof(old_size));
+        }
+
+        const std::filesystem::path output_path =
+            R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/mods/ProjectFEDRA_unpacked\bin\dc1\ss-rogue/test-script-qntm.bin)";
+        auto patch = compilation::patch_modules_size(modules_path, output_path, new_size);
+        ASSERT_TRUE(patch) << patch.error();
+        EXPECT_EQ(patch->m_targetName, "ss-rogue/test-script-qntm");
+        EXPECT_EQ(patch->m_oldSize, old_size);
+        EXPECT_EQ(patch->m_newSize, new_size);
+
+        {
+            std::ifstream modules{modules_path, std::ios::binary};
+            ASSERT_TRUE(modules.is_open());
+            u64 sid = 0;
+            u64 patched_size = 0;
+            modules.read(reinterpret_cast<char*>(&sid), sizeof(sid));
+            modules.read(reinterpret_cast<char*>(&patched_size), sizeof(patched_size));
+            EXPECT_EQ(sid, target_sid);
+            EXPECT_EQ(patched_size, new_size);
+        }
+
+        std::filesystem::remove(modules_path, cleanup_ec);
+    }
+
+    TEST(COMPILER, RemovedPathDirectivesSuggestMod) {
+        std::string source = dcpl_prelude() +
+            "@modules \"test/compiler/modules.bin\"\n"
+            "u32 main() { return 0; }\n";
+        std::vector<compilation::source_location> line_map;
+
+        auto options = compilation::compiler_options::parse(get_empty_options(), source, "test/compiler/removed_modules_test.dcpl", line_map);
+        ASSERT_FALSE(options);
+        EXPECT_NE(options.error().find("@modules has been removed"), std::string::npos);
+
+        source = dcpl_prelude() +
+            "@repackage\n"
+            "u32 main() { return 0; }\n";
+        line_map.clear();
+        options = compilation::compiler_options::parse(get_empty_options(), source, "test/compiler/removed_repackage_test.dcpl", line_map);
+        ASSERT_FALSE(options);
+        EXPECT_NE(options.error().find("@repackage has been removed"), std::string::npos);
+
+        source = dcpl_prelude() +
+            "@standalone\n"
+            "u32 main() { return 0; }\n";
+        line_map.clear();
+        options = compilation::compiler_options::parse(get_empty_options(), source, "test/compiler/removed_standalone_test.dcpl", line_map);
+        ASSERT_FALSE(options);
+        EXPECT_NE(options.error().find("@standalone has been removed"), std::string::npos);
+    }
+
+    TEST(COMPILER, StateScriptsAddAutomaticSpAllPakEntry) {
+        compilation::compiler_options options;
+        std::vector<std::string> state_scripts{"ss-test-script"};
+
+        const auto edits = compilation::pak68_edits_for_compile(options, state_scripts);
+        ASSERT_EQ(edits.size(), 1);
+        EXPECT_EQ(edits[0].m_levelName, "sp-all");
+        ASSERT_EQ(edits[0].m_entries.size(), 1);
+        EXPECT_EQ(edits[0].m_entries[0], (compilation::pak68_entry{compilation::pak68_type::SYMBOL, "ss-test-script"}));
     }
 
     TEST(COMPILER, LexerComment) {
@@ -937,6 +1146,91 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
         EXPECT_EQ(expected, statements);
     }
 
+    TEST(COMPILER, FormatOperatorParsesAsDcFormatCall) {
+        const std::string code = "\"launched custom gas mask %s %s script\" $ test_string, replacement2;";
+        auto [tokens, lex_errors] = get_tokens(code);
+        const auto [statements, parse_errors] = get_statements(tokens);
+        EXPECT_EQ(lex_errors.size(), 0);
+        EXPECT_EQ(parse_errors.size(), 0);
+        EXPECT_EQ(statements.size(), 1);
+
+        std::vector<expr_uptr> args;
+        args.push_back(std::make_unique<ast::literal>("launched custom gas mask %s %s script"));
+        args.push_back(std::make_unique<ast::identifier>("test_string"));
+        args.push_back(std::make_unique<ast::identifier>("replacement2"));
+
+        std::list<stmnt_uptr> expected;
+        expected.push_back(std::make_unique<ast::expression_stmt>(
+            std::make_unique<ast::call_expr>(
+                compilation::token(compilation::token_type::DOLLAR, "$", 0, 1),
+                std::make_unique<ast::sid_identifier>("#dc:format"),
+                std::move(args)
+            )
+        ));
+
+        EXPECT_EQ(expected, statements);
+    }
+
+    TEST(COMPILER, FormatOperatorBindsBeforeDisplayOperator) {
+        const std::string code = ">> \"launched custom gas mask script, version %d\" $ 1;";
+        auto [tokens, lex_errors] = get_tokens(code);
+        const auto [statements, parse_errors] = get_statements(tokens);
+        EXPECT_EQ(lex_errors.size(), 0);
+        EXPECT_EQ(parse_errors.size(), 0);
+        EXPECT_EQ(statements.size(), 1);
+
+        std::vector<expr_uptr> format_args;
+        format_args.push_back(std::make_unique<ast::literal>("launched custom gas mask script, version %d"));
+        format_args.push_back(std::make_unique<ast::literal>((u16)1));
+
+        std::vector<expr_uptr> display_args;
+        display_args.push_back(std::make_unique<ast::call_expr>(
+            compilation::token(compilation::token_type::DOLLAR, "$", 0, 1),
+            std::make_unique<ast::sid_identifier>("#dc:format"),
+            std::move(format_args)
+        ));
+        display_args.push_back(std::make_unique<ast::literal>(19));
+
+        std::list<stmnt_uptr> expected;
+        expected.push_back(std::make_unique<ast::expression_stmt>(
+            std::make_unique<ast::call_expr>(
+                compilation::token(compilation::token_type::GREATER_GREATER, ">>", 0, 1),
+                std::make_unique<ast::sid_identifier>("#display"),
+                std::move(display_args)
+            )
+        ));
+
+        EXPECT_EQ(expected, statements);
+    }
+
+    TEST(COMPILER, FormatOperatorUsesGlobalDcFormat) {
+        const std::string code =
+            "u32 main(string test_string) {"
+            "    string message = \"launched custom gas mask %s script\" $ test_string;"
+            "    return 0;"
+            "}";
+
+        auto [tokens, lex_errors] = get_tokens(code);
+        ASSERT_EQ(lex_errors.size(), 0) << (lex_errors.empty() ? "" : lex_errors[0].m_message);
+
+        auto [program, types, parse_errors] = get_parse_results(tokens);
+        ASSERT_EQ(parse_errors.size(), 0) << (parse_errors.empty() ? "" : parse_errors[0].m_message);
+
+        compilation::scope scope{types};
+        compilation::add_global_functions(scope);
+
+        const ast::full_type* format_type = scope.lookup("#dc:format");
+        ASSERT_NE(format_type, nullptr);
+        ASSERT_TRUE(std::holds_alternative<ast::function_type>(*format_type));
+        EXPECT_TRUE(std::get<ast::function_type>(*format_type).m_isVariadic);
+
+        const std::vector<ast::semantic_check_error> semantic_errors = program.check_semantics(scope);
+        ASSERT_EQ(semantic_errors.size(), 0) << (semantic_errors.empty() ? "" : semantic_errors[0].m_message);
+
+        const auto functions = compile_to_functions(code);
+        EXPECT_TRUE(functions) << (functions ? "" : functions.error());
+    }
+
     TEST(COMPILER, Semantics1) {
         const std::string code = "if (1) { 2 / 1; }";
         auto [tokens, lex_errors] = get_tokens(code);
@@ -1352,6 +1646,43 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
 
         std::vector<ast::semantic_check_error> empty{};
         EXPECT_EQ(semantic_errors, empty);
+    }
+
+    TEST(COMPILER, UsingVariadicFormat) {
+        const std::string code =
+            "using #dc:format as far(string, ...) -> string;"
+            "u32 main() {"
+            "    string message1 = #dc:format(\"gas mask %16X %16X\", 1, 2);"
+            "    string message2 = #dc:format(\"gas mask %16X %16X %s\", 1, 2, \"test\");"
+            "    return 0;"
+            "}";
+
+        auto [tokens, lex_errors] = get_tokens(code);
+        ASSERT_EQ(lex_errors.size(), 0) << (lex_errors.empty() ? "" : lex_errors[0].m_message);
+
+        auto [program, types, parse_errors] = get_parse_results(tokens);
+        ASSERT_EQ(parse_errors.size(), 0) << (parse_errors.empty() ? "" : parse_errors[0].m_message);
+        ASSERT_EQ(program.m_declarations.size(), 2);
+
+        const auto* using_decl = dynamic_cast<const ast::using_declaration*>(program.m_declarations[0].get());
+        ASSERT_NE(using_decl, nullptr);
+        ASSERT_TRUE(std::holds_alternative<ast::function_type>(using_decl->m_newIdentifier.m_type));
+
+        const auto& format_type = std::get<ast::function_type>(using_decl->m_newIdentifier.m_type);
+        EXPECT_EQ(format_type.m_distanceType, ast::function_type::DISTANCE::FAR);
+        EXPECT_TRUE(format_type.m_isVariadic);
+        ASSERT_EQ(format_type.m_arguments.size(), 1);
+        EXPECT_EQ(*format_type.m_arguments[0].second, ast::make_type_from_prim(ast::primitive_kind::STRING));
+        EXPECT_EQ(*format_type.m_return, ast::make_type_from_prim(ast::primitive_kind::STRING));
+
+        compilation::scope scope{types};
+        std::vector<ast::semantic_check_error> semantic_errors = program.check_semantics(scope);
+        ASSERT_EQ(semantic_errors.size(), 0) << (semantic_errors.empty() ? "" : semantic_errors[0].m_message);
+
+        const ast::full_type* alias_type = scope.lookup("#dc:format");
+        ASSERT_NE(alias_type, nullptr);
+        ASSERT_TRUE(std::holds_alternative<ast::function_type>(*alias_type));
+        EXPECT_TRUE(std::get<ast::function_type>(*alias_type).m_isVariadic);
     }
 
     TEST(COMPILER, FullCompile1) {

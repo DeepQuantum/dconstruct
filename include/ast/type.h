@@ -51,6 +51,9 @@ namespace dconstruct::ast {
     struct function_type;
     struct darray;
 
+    
+    struct ellipse {};
+
     using full_type = std::variant<std::monostate, primitive_type, struct_type, enum_type, ptr_type, function_type>;
 
     using ref_full_type = std::shared_ptr<full_type>;
@@ -81,9 +84,14 @@ namespace dconstruct::ast {
     struct function_type {
         using t_arg_list = std::vector<std::pair<std::string, ref_full_type>>;
 
+        enum class DISTANCE : u8 {
+            NEAR,
+            FAR
+        };
+
         ref_full_type m_return;
         t_arg_list m_arguments;
-        bool m_isFarCall = false;
+        DISTANCE m_distanceType;
         bool m_isVariadic = false;
 
         explicit function_type() noexcept;
@@ -120,7 +128,12 @@ namespace dconstruct::ast {
     [[nodiscard]] bool is_signed(const full_type& type) noexcept; 
 
 
-    [[nodiscard]] function_type make_function(const ast::full_type& return_arg, const std::initializer_list<std::pair<std::string, full_type>>& args);
+    [[nodiscard]] function_type make_function(
+        const ast::full_type& return_arg,
+        function_type::DISTANCE distance,
+        const std::initializer_list<std::pair<std::string, full_type>>& args,
+        bool is_variadic = false
+    );
 
     struct typed_value;
 

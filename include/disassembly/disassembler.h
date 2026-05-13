@@ -128,11 +128,11 @@ namespace dconstruct {
     };
 
     const static std::unordered_map<sid64, ast::function_type> builtinFunctions = {
-        {SID("get-int32"), ast::make_function(make_type_from_prim(ast::primitive_kind::I32), {
+        {SID("get-int32"), ast::make_function(make_type_from_prim(ast::primitive_kind::I32), ast::function_type::DISTANCE::NEAR, {
             {"symbol", make_type_from_prim(ast::primitive_kind::SID)},
             {"location", make_type_from_prim(ast::primitive_kind::SID)}
         })},
-        {SID("get-boolean"), ast::make_function(make_type_from_prim(ast::primitive_kind::BOOL), {
+        {SID("get-boolean"), ast::make_function(make_type_from_prim(ast::primitive_kind::BOOL), ast::function_type::DISTANCE::NEAR, {
             {"symbol", make_type_from_prim(ast::primitive_kind::SID)},
             {"location", make_type_from_prim(ast::primitive_kind::SID)}
         })}
