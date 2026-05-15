@@ -68,16 +68,6 @@ constexpr pak68_type_name pak68_type_names[] = {
     return std::nullopt;
 }
 
-[[nodiscard]] std::unordered_set<std::string> collect_level_names(const std::vector<std::string>& lines) {
-    std::unordered_set<std::string> levels;
-    for (const std::string& line : lines) {
-        if (const std::optional<std::string> level_name = level_name_from_line(line)) {
-            levels.insert(*level_name);
-        }
-    }
-    return levels;
-}
-
 [[nodiscard]] std::optional<u64> find_level_start(const std::vector<std::string>& lines, const std::string& level_name) {
     for (u64 i = 0; i < lines.size(); ++i) {
         if (level_name_from_line(lines[i]) == level_name) {
@@ -137,12 +127,6 @@ constexpr pak68_type_name pak68_type_names[] = {
         return lines.error();
     }
 
-    const std::unordered_set<std::string> levels = collect_level_names(*lines);
-    for (const pak68_edit_request& request : requests) {
-        if (!levels.contains(request.m_levelName)) {
-            return format_source_location(request.m_location) + ": pak68 level-name does not exist: " + request.m_levelName;
-        }
-    }
     return std::nullopt;
 }
 
@@ -171,14 +155,17 @@ constexpr pak68_type_name pak68_type_names[] = {
 
     std::vector<pak68_edit_summary> summaries;
     for (const auto& [level_name, entries] : entries_by_level) {
-        const std::optional<u64> level_start = find_level_start(*lines, level_name);
-        if (!level_start) {
-            return std::unexpected{"pak68 level-name does not exist: " + level_name};
+        u64 level_start = 0;
+        if (const std::optional<u64> existing_level_start = find_level_start(*lines, level_name)) {
+            level_start = *existing_level_start;
+        } else {
+            lines->push_back("level-name " + level_name);
+            level_start = lines->size() - 1;
         }
 
-        const u64 level_end = find_level_end(*lines, *level_start);
+        const u64 level_end = find_level_end(*lines, level_start);
         std::unordered_set<std::string> existing_lines;
-        for (u64 i = *level_start + 1; i < level_end; ++i) {
+        for (u64 i = level_start + 1; i < level_end; ++i) {
             existing_lines.insert((*lines)[i]);
         }
 

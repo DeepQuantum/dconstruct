@@ -445,7 +445,7 @@ namespace dconstruct::compilation {
 
     std::optional<std::filesystem::path> pak68_res = std::nullopt;
     if (mod) {
-        pak68_res = *mod / "pak68.txt";
+        pak68_res = *mod / "mod_pak68.txt";
     } else if (!from_dcpl->m_pak68Edits.empty()) {
         return std::unexpected{"@add_pak requires @mod so pak68.txt can be resolved"};
     }

@@ -276,7 +276,7 @@ Currently supported directives:
 - Providing `@mod` also repackages that mod directory into a `.psarc` archive after compilation.
 - `@output "<relative-path>"` — destination path for the newly compiled binary. With `@mod`, a missing `.bin` extension is added automatically.
 - `@sidbase "<path>"` — path to the SID base map (`hash -> string`) used to resolve string IDs.
-- `@add_pak <target_level_name> { <type> #sid ... }` — add pak68 entries to an existing `level-name` section. The compiler validates the pak68 path, target level, and entry type before compiling.
+- `@add_pak <target_level_name> { <type> #sid ... }` — add pak68 entries to a `level-name` section. If the section does not exist, it is added to pak68.txt. The compiler validates the pak68 path and entry type before compiling.
 
 Example:
 

@@ -14,6 +14,7 @@
 #include <string_view>
 #include <chrono>
 #include <algorithm>
+#include <cstring>
 
 namespace dconstruct::compilation {
 
@@ -244,6 +245,189 @@ struct compiler_output_summary {
     std::optional<modules_patch_summary> m_modulesPatch;
 };
 
+struct ModuleInfoArray {
+    u32 m_numEntries = 0;
+    u32 m_unk = 0;
+    ModulesEntry* m_entries = nullptr;
+};
+
+[[nodiscard]] static std::string filename_without_parent(const std::string& module_path) {
+    const auto slash_pos = module_path.find_last_of('/');
+    return slash_pos == std::string::npos ? module_path : module_path.substr(slash_pos + 1);
+}
+
+[[nodiscard]] static std::vector<sid64> default_module_imports() {
+    return {
+        SID("nd-state-script-syntax"),
+        SID("script-funcs-upgrades"),
+        SID("script-user-externs"),
+        SID("npc-script-funcs"),
+        SID("ss-rogue/rogue-misc-defines"),
+        SID("script-funcs"),
+        SID("nd-script-funcs"),
+        SID("game-types"),
+        SID("dc-types"),
+        SID("state-script-defines"),
+    };
+}
+
+[[nodiscard]] static std::vector<sid64> copy_modules_symbol_array(const SymbolArray* symbol_array) {
+    std::vector<sid64> symbols;
+    if (symbol_array == nullptr) {
+        return symbols;
+    }
+    symbols.reserve(symbol_array->m_numEntries);
+    for (u32 i = 0; i < symbol_array->m_numEntries; ++i) {
+        symbols.push_back(symbol_array->m_pSymbols[i]);
+    }
+    return symbols;
+}
+
+static void patch_element_u64(program_binary_element& element, const u64 offset, const u64 value) {
+    std::memcpy(element.m_rawData.data() + offset, &value, sizeof(value));
+}
+
+struct modules_symbol_array_payload {
+    u64 m_symbolArrayOffset = 0;
+    const std::vector<sid64>* m_symbols = nullptr;
+};
+
+[[nodiscard]] static u64 emit_modules_symbol_array_struct(program_binary_element& element, const std::vector<sid64>& symbols) {
+    constexpr sid64 symbol_array_sid = SID("symbol-array");
+
+    element.push_bytes(symbol_array_sid, 0b0);
+    const u64 symbol_array_offset = element.m_rawData.size();
+    const SymbolArray symbol_array {
+        static_cast<u32>(symbols.size()),
+        0,
+        nullptr,
+    };
+    element.push_bytes(symbol_array, 0b010);
+    return symbol_array_offset;
+}
+
+static void emit_modules_symbol_array_payload(program_binary_element& element, const modules_symbol_array_payload& payload) {
+    constexpr sid64 array_sid = SID("array");
+
+    element.push_bytes(array_sid, 0b0);
+    const u64 symbols_offset = element.m_rawData.size();
+    patch_element_u64(element, payload.m_symbolArrayOffset + offsetof(SymbolArray, m_pSymbols), symbols_offset);
+    for (const sid64 symbol : *payload.m_symbols) {
+        element.push_bytes(symbol, 0b0);
+    }
+}
+
+struct module_entry_source {
+    std::string m_name;
+    sid64 m_nameSid = 0;
+    u64 m_size = 0;
+    std::vector<sid64> m_imports;
+    std::vector<sid64> m_exports;
+    u64 m_rawEntryOffset = 0;
+};
+
+[[nodiscard]] static std::expected<modules_patch_summary, std::string> recompile_modules_with_entry(
+    const ModuleInfoArray& module_array,
+    const std::filesystem::path& modules,
+    const std::string& target_name,
+    const sid64 target_sid,
+    const u64 new_size) {
+
+    constexpr sid64 modules_sid = SID("*modules*");
+    constexpr sid64 module_info_array_sid = SID("module-info-array");
+    constexpr sid64 array_sid = SID("array");
+    constexpr u8 modules_entry_reloc_bits = 0b11001;
+
+    std::vector<module_entry_source> entries;
+    entries.reserve(static_cast<u64>(module_array.m_numEntries) + 1);
+    for (u32 i = 0; i < module_array.m_numEntries; ++i) {
+        const ModulesEntry& old_entry = module_array.m_entries[i];
+        if (old_entry.m_name == nullptr) {
+            return std::unexpected{"modules.bin contains a module entry with a null name"};
+        }
+        entries.push_back(module_entry_source{
+            old_entry.m_name,
+            old_entry.m_nameSid,
+            old_entry.m_size,
+            copy_modules_symbol_array(old_entry.m_imports),
+            copy_modules_symbol_array(old_entry.m_exports),
+            0,
+        });
+    }
+    entries.push_back(module_entry_source{
+        target_name,
+        target_sid,
+        new_size,
+        default_module_imports(),
+        {SID(filename_without_parent(target_name).c_str())},
+        0,
+    });
+
+    program_binary_element element{entries.size() * sizeof(ModulesEntry)};
+    global_state global{};
+    element.m_entry = Entry{modules_sid, module_info_array_sid, nullptr};
+
+    element.push_bytes(module_info_array_sid, 0b0);
+    const u64 module_array_offset = element.m_rawData.size();
+    const ModuleInfoArray new_array {
+        static_cast<u32>(entries.size()),
+        module_array.m_unk,
+        nullptr,
+    };
+    element.push_bytes(new_array, 0b010);
+    element.push_bytes(array_sid, 0b0);
+    const u64 entries_offset = element.m_rawData.size();
+    patch_element_u64(element, module_array_offset + offsetof(ModuleInfoArray, m_entries), entries_offset);
+
+    for (module_entry_source& source : entries) {
+        source.m_rawEntryOffset = element.m_rawData.size();
+        const u64 name_index = global.add_string(source.m_name);
+        element.insert_string_offset(offsetof(ModulesEntry, m_name));
+        const ModulesEntry entry {
+            reinterpret_cast<const char*>(name_index),
+            source.m_nameSid,
+            source.m_size,
+            nullptr,
+            nullptr,
+        };
+        element.push_bytes(entry, modules_entry_reloc_bits);
+    }
+
+    std::vector<modules_symbol_array_payload> symbol_array_payloads;
+    symbol_array_payloads.reserve(entries.size() * 2);
+    for (const module_entry_source& source : entries) {
+        const u64 imports_offset = emit_modules_symbol_array_struct(element, source.m_imports);
+        patch_element_u64(element, source.m_rawEntryOffset + offsetof(ModulesEntry, m_imports), imports_offset);
+        symbol_array_payloads.push_back(modules_symbol_array_payload{imports_offset, &source.m_imports});
+
+        const u64 exports_offset = emit_modules_symbol_array_struct(element, source.m_exports);
+        patch_element_u64(element, source.m_rawEntryOffset + offsetof(ModulesEntry, m_exports), exports_offset);
+        symbol_array_payloads.push_back(modules_symbol_array_payload{exports_offset, &source.m_exports});
+    }
+
+    for (const modules_symbol_array_payload& payload : symbol_array_payloads) {
+        emit_modules_symbol_array_payload(element, payload);
+    }
+
+    std::vector<program_binary_element> elements;
+    elements.push_back(std::move(element));
+    auto binary = ast::program::make_binary(std::move(elements), global);
+    if (!binary) {
+        return std::unexpected{binary.error()};
+    }
+
+    const auto& [bytes, size] = *binary;
+    std::ofstream modules_file{modules, std::ios::binary | std::ios::trunc};
+    if (!modules_file.is_open()) {
+        return std::unexpected{"couldn't open " + modules.string()};
+    }
+    modules_file.write(reinterpret_cast<const char*>(bytes.get()), size);
+
+    constexpr u64 raw_data_start = sizeof(DC_Header) + sizeof(sid64) + sizeof(Entry);
+    const u64 size_offset = raw_data_start + entries.back().m_rawEntryOffset + offsetof(ModulesEntry, m_size);
+    return modules_patch_summary{modules, target_name, 0, new_size, size_offset};
+}
+
 [[nodiscard]] static std::vector<pak68_edit_request> pak68_edits_for_compile(
     const compiler_options& options,
     const std::vector<std::string>& state_script_names) {
@@ -278,30 +462,48 @@ struct compiler_output_summary {
     const std::string target_name = result.replace_extension("").generic_string();
     const sid64 target_sid = SID(target_name.c_str());
 
-    std::fstream modules_file{modules, std::ios::in | std::ios::out | std::ios::binary};
-    if (!modules_file.is_open()) {
-        return std::unexpected{"couldn't open " + modules.string()};
+    std::expected<BinaryFile, std::string> file_res = BinaryFile::from_path(modules);
+    if (!file_res) {
+        return std::unexpected{file_res.error()};
+    }
+    BinaryFile& file = *file_res;
+
+    constexpr sid64 module_info_array_sid = SID("module-info-array");
+    if (file.m_dcheader->m_numEntries != 1) {
+        return std::unexpected{"modules.bin is expected to contain exactly one entry"};
     }
 
-    const u64 modules_size = std::filesystem::file_size(modules);
-    std::unique_ptr<std::byte[]> bytes = std::make_unique<std::byte[]>(modules_size);
-    modules_file.read(reinterpret_cast<char*>(bytes.get()), modules_size);
+    Entry* file_entry = file.m_dcheader->m_pStartOfData;
+    if (file_entry == nullptr || file_entry->m_typeId != module_info_array_sid || file_entry->m_entryPtr == nullptr) {
+        return std::unexpected{"modules.bin does not contain a module-info-array entry"};
+    }
+
+    auto* module_array = const_cast<ModuleInfoArray*>(reinterpret_cast<const ModuleInfoArray*>(file_entry->m_entryPtr));
+    if (module_array->m_entries == nullptr) {
+        return std::unexpected{"modules.bin module-info-array does not point to a ModulesEntry array"};
+    }
     
     std::optional<modules_patch_summary> summary;
-    for (u64 i = 0; i + 16 <= modules_size && !summary; i += 8) {
-        const u64 byte_pack = *reinterpret_cast<const u64*>(bytes.get() + i);
-        if (byte_pack == target_sid) {
-            const u64 old_size = *reinterpret_cast<const u64*>(bytes.get() + i + 8);
-            *reinterpret_cast<u64*>(bytes.get() + i + 8) = new_size;
-            summary = modules_patch_summary{modules, target_name, old_size, new_size, i + 8};
+    for (u32 i = 0; i < module_array->m_numEntries && !summary; ++i) {
+        ModulesEntry& modules_entry = module_array->m_entries[i];
+        if (modules_entry.m_nameSid == target_sid) {
+            const u64 old_size = modules_entry.m_size;
+            modules_entry.m_size = new_size;
+            const auto base = reinterpret_cast<p64>(file.m_bytes.get());
+            const u64 size_offset = reinterpret_cast<p64>(&modules_entry.m_size) - base;
+            summary = modules_patch_summary{modules, target_name, old_size, new_size, size_offset};
         }
     }
     if (!summary) {
-        return std::unexpected{"couldn't replace the target name " + target_name + " in the modules.bin file"};
+        return recompile_modules_with_entry(*module_array, modules, target_name, target_sid, new_size);
     }
-    
-    modules_file.seekg(0);
-    modules_file.write(reinterpret_cast<const char*>(bytes.get()), modules_size);
+
+    auto unmapped_bytes = file.get_unmapped();
+    std::ofstream modules_file{modules, std::ios::binary | std::ios::trunc};
+    if (!modules_file.is_open()) {
+        return std::unexpected{"couldn't open " + modules.string()};
+    }
+    modules_file.write(reinterpret_cast<const char*>(unmapped_bytes.get()), file.m_size);
 
     return *summary;
 }

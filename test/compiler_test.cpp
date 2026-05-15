@@ -378,7 +378,7 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
         EXPECT_NE(options.error().find("unknown pak68 type: nope"), std::string::npos);
     }
 
-    TEST(COMPILER, AddPakRejectsMissingLevel) {
+    TEST(COMPILER, AddPakCreatesMissingLevel) {
         const std::filesystem::path mod_path = "test/compiler/pak68_missing_level_mod";
         const std::filesystem::path pak_path = mod_path / "pak68.txt";
         std::filesystem::create_directories(mod_path);
@@ -394,8 +394,20 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
         std::vector<compilation::source_location> line_map;
 
         auto options = compilation::compiler_options::parse(get_empty_options(), source, "test/compiler/pak68_missing_level_test.dcpl", line_map);
-        ASSERT_FALSE(options);
-        EXPECT_NE(options.error().find("pak68 level-name does not exist: missing-level"), std::string::npos);
+        ASSERT_TRUE(options) << options.error();
+
+        auto apply_res = compilation::apply_pak68_edits(*options->m_pak68, options->m_pak68Edits);
+        ASSERT_TRUE(apply_res) << apply_res.error();
+        ASSERT_EQ(apply_res->size(), 1);
+        EXPECT_EQ((*apply_res)[0].m_levelName, "missing-level");
+        ASSERT_EQ((*apply_res)[0].m_added.size(), 1);
+        EXPECT_EQ((*apply_res)[0].m_added[0], (compilation::pak68_entry{compilation::pak68_type::SYMBOL, "gas-mask-ellie"}));
+
+        std::ifstream in{pak_path};
+        ASSERT_TRUE(in.is_open());
+        std::stringstream contents;
+        contents << in.rdbuf();
+        EXPECT_NE(contents.str().find("level-name missing-level\nsymbol gas-mask-ellie\n"), std::string::npos);
     }
 
     TEST(COMPILER, ModDerivesRelativeOutputModulesPakAndRepackage) {
@@ -432,35 +444,84 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
         const std::filesystem::path modules_path = "test/compiler/modules_mixed_separators.bin";
         std::error_code cleanup_ec;
         std::filesystem::remove(modules_path, cleanup_ec);
+        std::filesystem::copy_file("test/modules.bin", modules_path, std::filesystem::copy_options::overwrite_existing);
 
         constexpr sid64 target_sid = SID("ss-rogue/test-script-qntm");
-        constexpr u64 old_size = 0x1234;
         constexpr u64 new_size = 0x5678;
-        {
-            std::ofstream modules{modules_path, std::ios::binary};
-            ASSERT_TRUE(modules.is_open());
-            modules.write(reinterpret_cast<const char*>(&target_sid), sizeof(target_sid));
-            modules.write(reinterpret_cast<const char*>(&old_size), sizeof(old_size));
-        }
 
         const std::filesystem::path output_path =
             R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/mods/ProjectFEDRA_unpacked\bin\dc1\ss-rogue/test-script-qntm.bin)";
         auto patch = compilation::patch_modules_size(modules_path, output_path, new_size);
         ASSERT_TRUE(patch) << patch.error();
         EXPECT_EQ(patch->m_targetName, "ss-rogue/test-script-qntm");
-        EXPECT_EQ(patch->m_oldSize, old_size);
         EXPECT_EQ(patch->m_newSize, new_size);
 
-        {
-            std::ifstream modules{modules_path, std::ios::binary};
-            ASSERT_TRUE(modules.is_open());
-            u64 sid = 0;
-            u64 patched_size = 0;
-            modules.read(reinterpret_cast<char*>(&sid), sizeof(sid));
-            modules.read(reinterpret_cast<char*>(&patched_size), sizeof(patched_size));
-            EXPECT_EQ(sid, target_sid);
-            EXPECT_EQ(patched_size, new_size);
+        auto patched_file = BinaryFile::from_path(modules_path);
+        ASSERT_TRUE(patched_file) << patched_file.error();
+        const auto* module_array = reinterpret_cast<const compilation::ModuleInfoArray*>(patched_file->m_dcheader->m_pStartOfData->m_entryPtr);
+        bool found = false;
+        for (u32 i = 0; i < module_array->m_numEntries; ++i) {
+            const ModulesEntry& entry = module_array->m_entries[i];
+            if (entry.m_nameSid == target_sid) {
+                found = true;
+                EXPECT_EQ(entry.m_size, new_size);
+            }
         }
+        EXPECT_TRUE(found);
+
+        std::filesystem::remove(modules_path, cleanup_ec);
+    }
+
+    TEST(COMPILER, PatchModulesSizeCreatesMissingEntry) {
+        const std::filesystem::path modules_path = "test/compiler/modules_missing_entry.bin";
+        std::error_code cleanup_ec;
+        std::filesystem::remove(modules_path, cleanup_ec);
+        std::filesystem::copy_file("test/modules.bin", modules_path, std::filesystem::copy_options::overwrite_existing);
+
+        constexpr u64 new_size = 0x9876;
+        const std::string target_name = "ss-rogue/generated-module-test";
+        const sid64 target_sid = SID(target_name.c_str());
+        const std::filesystem::path output_path =
+            R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/mods/ProjectFEDRA_unpacked\bin\dc1\ss-rogue/generated-module-test.bin)";
+
+        const auto before_file = BinaryFile::from_path(modules_path);
+        ASSERT_TRUE(before_file) << before_file.error();
+        const auto* before_array = reinterpret_cast<const compilation::ModuleInfoArray*>(before_file->m_dcheader->m_pStartOfData->m_entryPtr);
+        const u32 old_count = before_array->m_numEntries;
+
+        auto patch = compilation::patch_modules_size(modules_path, output_path, new_size);
+        ASSERT_TRUE(patch) << patch.error();
+        EXPECT_EQ(patch->m_targetName, target_name);
+        EXPECT_EQ(patch->m_oldSize, 0);
+        EXPECT_EQ(patch->m_newSize, new_size);
+
+        auto patched_file = BinaryFile::from_path(modules_path);
+        ASSERT_TRUE(patched_file) << patched_file.error();
+        const auto* module_array = reinterpret_cast<const compilation::ModuleInfoArray*>(patched_file->m_dcheader->m_pStartOfData->m_entryPtr);
+        EXPECT_EQ(module_array->m_numEntries, old_count + 1);
+        EXPECT_EQ(
+            reinterpret_cast<p64>(module_array->m_entries) - reinterpret_cast<p64>(module_array),
+            sizeof(compilation::ModuleInfoArray) + sizeof(sid64)
+        );
+        bool found = false;
+        for (u32 i = 0; i < module_array->m_numEntries; ++i) {
+            const ModulesEntry& entry = module_array->m_entries[i];
+            if (entry.m_nameSid == target_sid) {
+                found = true;
+                EXPECT_STREQ(entry.m_name, target_name.c_str());
+                EXPECT_EQ(entry.m_size, new_size);
+                ASSERT_NE(entry.m_imports, nullptr);
+                ASSERT_NE(entry.m_exports, nullptr);
+                EXPECT_EQ(entry.m_imports->m_numEntries, 10);
+                EXPECT_EQ(entry.m_exports->m_numEntries, 1);
+                const p64 imports_struct = reinterpret_cast<p64>(entry.m_imports);
+                const p64 exports_struct = reinterpret_cast<p64>(entry.m_exports);
+                EXPECT_EQ(exports_struct - imports_struct, sizeof(sid64) + sizeof(SymbolArray));
+                EXPECT_GT(reinterpret_cast<p64>(entry.m_imports->m_pSymbols), exports_struct + sizeof(SymbolArray));
+                EXPECT_GT(reinterpret_cast<p64>(entry.m_exports->m_pSymbols), exports_struct + sizeof(SymbolArray));
+            }
+        }
+        EXPECT_TRUE(found);
 
         std::filesystem::remove(modules_path, cleanup_ec);
     }

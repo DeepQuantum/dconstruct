@@ -1,5 +1,8 @@
 #pragma endian little
 
+#pragma array_limit 99999999
+#pragma pattern_limit 99999999
+
 #include "std/string"
 
 using sid64 = u64;
@@ -25,6 +28,7 @@ enum TypeId : u64 {
     Symbol = to_sid64("symbol"),
     Boolean = to_sid64("boolean"),
     ScriptLambda = to_sid64("script-lambda"),
+    ModuleInfoArray = to_sid64("module-info-array"),
 };
 
 enum Opcode : u8 {
@@ -213,6 +217,37 @@ struct SsState {
     SsOnBlock onBlocks[m_numSsOnBlocks] @ m_pSsOnBlocks;
 };
 
+using SymbolArray;
+
+struct ModuleEntry {
+    u64 m_name;
+    u64 m_nameSid;
+    u64 m_size;
+    u64 m_imports;
+    u64 m_exports;
+    
+    if (m_name) {
+        char name[] @ m_name;
+    }
+    
+    if (m_imports) {
+        SymbolArray imports @ m_imports;
+    }
+    
+    if (m_exports) {
+        SymbolArray exports @ m_exports;
+    }
+};
+
+struct ModuleInfoArray {
+    u64 m_size;
+    u64 m_array;
+    
+    if (m_array) {
+        ModuleEntry modules[m_size] @ m_array;
+    }
+};
+
 using StateScript;
 
 struct TypedValue {
@@ -225,6 +260,7 @@ struct TypedValue {
         (TypeId::Symbol): sid64 value;
         (TypeId::Boolean): bool value;
         (TypeId::ScriptLambda): ScriptLambda value;
+        (TypeId::ModuleInfoArray): ModuleInfoArray value;
     }
 };
 

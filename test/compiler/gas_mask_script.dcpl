@@ -1,10 +1,15 @@
-@mod "C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/mods/ProjectFEDRA_unpacked"
-@output "ss-rogue/test-script-qntm"
+@mod "C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/mods/gas_mask_toggle_unpacked"
+@output "gas-mask-toggle"
 @sidbase "C:/Users/damix/Documents/GitHub/TLOU2Modding/dconstruct/test/dc_test_files/sidbase_new_fixed.bin"
 
 @include "keycodes.dcpl"
 
-@add_pak sp-all {
+@add_pak ellie-player-fundamentals {
+    actor #gas-mask-base
+    actor #gas-mask-ellie
+}
+
+@add_pak ellie-player-fundamentals-rogue-hub {
     actor #gas-mask-base
     actor #gas-mask-ellie
 }
@@ -15,7 +20,7 @@ using #wait-remove-gas-mask as near (u64, u64, u64) -> u64;
 using #spawn-gas-mask as near (u64) -> u64;
 using #keyboard-button-pressed? as far (u64) -> bool;
 
-statescript #test-script-qntm {
+statescript #gas-mask-toggle {
     options {
         #player
     }
