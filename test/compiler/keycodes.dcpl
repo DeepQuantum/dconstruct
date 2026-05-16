@@ -72,5 +72,6 @@ enum Keycodes {
     NUMPAD_SEVEN = 134,
     NUMPAD_EIGHT = 135,
     NUMPAD_NINE = 136,
+    FUNCTION_2 = 158,
     BACKSPACE = 171
 }

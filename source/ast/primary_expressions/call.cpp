@@ -116,15 +116,15 @@ void call_expr::pseudo_racket(std::ostream& os) const {
         return callee_type;
     }
     if (!std::holds_alternative<function_type>(*callee_type)) {
-        return std::unexpected{semantic_check_error{"expected callable type but got " + type_to_declaration_string(*callee_type)}};
+        return std::unexpected{semantic_check_error{"expected callable type but got " + type_to_declaration_string(*callee_type), this}};
     }
     const function_type func_type = std::get<function_type>(*callee_type);
 
     if (!func_type.m_isVariadic && func_type.m_arguments.size() != m_arguments.size()) {
-        return std::unexpected{semantic_check_error{"expected " + std::to_string(func_type.m_arguments.size()) + " arguments but got " + std::to_string(m_arguments.size())}};
+        return std::unexpected{semantic_check_error{"expected " + std::to_string(func_type.m_arguments.size()) + " arguments but got " + std::to_string(m_arguments.size()), this}};
     }
     if (func_type.m_isVariadic && m_arguments.size() < func_type.m_arguments.size()) {
-        return std::unexpected{semantic_check_error{"expected at least " + std::to_string(func_type.m_arguments.size()) + " arguments but got " + std::to_string(m_arguments.size())}};
+        return std::unexpected{semantic_check_error{"expected at least " + std::to_string(func_type.m_arguments.size()) + " arguments but got " + std::to_string(m_arguments.size()), this}};
     }
 
     for (u32 i = 0; i < func_type.m_arguments.size(); ++i) {

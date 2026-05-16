@@ -329,7 +329,7 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
 
         std::string source = dcpl_prelude() +
             "@mod \"test/compiler/pak68_macro_mod\"\n"
-            "@add_pak sp-all {\n"
+            "@add_pak level-set sp-all {\n"
             "  symbol #gas-mask-ellie\n"
             "  actor dina\n"
             "}\n"
@@ -341,6 +341,8 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
         ASSERT_TRUE(options->m_pak68);
         EXPECT_EQ(*options->m_pak68, pak_path);
         ASSERT_EQ(options->m_pak68Edits.size(), 1);
+        EXPECT_EQ(options->m_pak68Edits[0].m_categoryType, "level-set");
+        EXPECT_EQ(options->m_pak68Edits[0].m_levelName, "sp-all");
         ASSERT_EQ(options->m_pak68Edits[0].m_entries.size(), 2);
         EXPECT_EQ(options->m_pak68Edits[0].m_entries[0], (compilation::pak68_entry{compilation::pak68_type::SYMBOL, "gas-mask-ellie"}));
         EXPECT_EQ(options->m_pak68Edits[0].m_entries[1], (compilation::pak68_entry{compilation::pak68_type::ACTOR, "dina"}));
@@ -369,7 +371,7 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
 
         std::string source = dcpl_prelude() +
             "@mod \"test/compiler/pak68_unknown_type_mod\"\n"
-            "@add_pak sp-all { nope #gas-mask-ellie }\n"
+            "@add_pak level-set sp-all { nope #gas-mask-ellie }\n"
             "u32 main() { return 0; }\n";
         std::vector<compilation::source_location> line_map;
 
@@ -389,7 +391,7 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
 
         std::string source = dcpl_prelude() +
             "@mod \"test/compiler/pak68_missing_level_mod\"\n"
-            "@add_pak missing-level { symbol #gas-mask-ellie }\n"
+            "@add_pak level-set missing-level { symbol #gas-mask-ellie }\n"
             "u32 main() { return 0; }\n";
         std::vector<compilation::source_location> line_map;
 
@@ -438,6 +440,33 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
         EXPECT_EQ(*options->m_pak68, mod_path / "pak68.txt");
         ASSERT_TRUE(options->m_repackage);
         EXPECT_EQ(*options->m_repackage, mod_path);
+    }
+
+    TEST(COMPILER, ModOutputRootDirectoryRelativeToMod) {
+        const std::filesystem::path mod_path = "test/compiler/rooted_output_mod";
+        std::filesystem::create_directories(mod_path);
+
+        std::string source =
+            "@mod \"test/compiler/rooted_output_mod\"\n"
+            "@output \"/bin/dc1/script-callbacks\"\n"
+            "@sidbase \"" + TEST_DIR + "test_sidbase.bin\"\n"
+            "u32 main() { return 0; }\n";
+        std::vector<compilation::source_location> line_map;
+
+        auto options = compilation::compiler_options::parse(get_empty_options(), source, "test/compiler/rooted_output_mod_test.dcpl", line_map);
+        ASSERT_TRUE(options) << options.error();
+        EXPECT_EQ(options->m_output, mod_path / "bin" / "dc1" / "script-callbacks.bin");
+
+        std::string source_without_leading_slash =
+            "@mod \"test/compiler/rooted_output_mod\"\n"
+            "@output \"bin/dc1/script-callbacks\"\n"
+            "@sidbase \"" + TEST_DIR + "test_sidbase.bin\"\n"
+            "u32 main() { return 0; }\n";
+        line_map.clear();
+
+        options = compilation::compiler_options::parse(get_empty_options(), source_without_leading_slash, "test/compiler/rooted_output_mod_test.dcpl", line_map);
+        ASSERT_TRUE(options) << options.error();
+        EXPECT_EQ(options->m_output, mod_path / "bin" / "dc1" / "script-callbacks.bin");
     }
 
     TEST(COMPILER, PatchModulesSizeHandlesMixedPathSeparators) {
@@ -1686,6 +1715,58 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
         EXPECT_EQ(semantic_errors, empty) << semantic_errors[0].m_message;
     }
 
+    TEST(COMPILER, NullptrAssignableToAnyType) {
+        const std::string code =
+            "using #takes-string as near (string) -> u0;"
+            "using #takes-u64 as near (u64) -> u0;"
+            "u64 main() {"
+            "    string text = nullptr;"
+            "    u64 value = nullptr;"
+            "    u64* pointer = nullptr;"
+            "    text = nullptr;"
+            "    value = nullptr;"
+            "    pointer = nullptr;"
+            "    #takes-string(nullptr);"
+            "    #takes-u64(nullptr);"
+            "    return nullptr;"
+            "}";
+
+        auto [tokens, lex_errors] = get_tokens(code);
+        ASSERT_EQ(lex_errors.size(), 0) << (lex_errors.empty() ? "" : lex_errors[0].m_message);
+
+        const auto [program, types, parse_errors] = get_parse_results(tokens);
+        ASSERT_EQ(parse_errors.size(), 0) << (parse_errors.empty() ? "" : parse_errors[0].m_message);
+
+        compilation::scope scope{types};
+        const std::vector<ast::semantic_check_error> semantic_errors = program.check_semantics(scope);
+        ASSERT_EQ(semantic_errors.size(), 0) << (semantic_errors.empty() ? "" : semantic_errors[0].m_message);
+    }
+
+    TEST(COMPILER, NonCallableCallSemanticErrorHasSourceLine) {
+        const std::string code =
+            "u64 main() {\n"
+            "    u64 not_func = 1;\n"
+            "    not_func();\n"
+            "    return 0;\n"
+            "}";
+
+        auto [tokens, lex_errors] = get_tokens(code);
+        ASSERT_EQ(lex_errors.size(), 0) << (lex_errors.empty() ? "" : lex_errors[0].m_message);
+
+        const auto [program, types, parse_errors] = get_parse_results(tokens);
+        ASSERT_EQ(parse_errors.size(), 0) << (parse_errors.empty() ? "" : parse_errors[0].m_message);
+
+        compilation::scope scope{types};
+        const std::vector<ast::semantic_check_error> semantic_errors = program.check_semantics(scope);
+        ASSERT_EQ(semantic_errors.size(), 1);
+        EXPECT_EQ(semantic_errors[0].m_message, "expected callable type but got u64");
+        ASSERT_NE(semantic_errors[0].m_expr, nullptr);
+
+        const std::optional<compilation::source_location> loc = semantic_errors[0].m_expr->source_location();
+        ASSERT_TRUE(loc);
+        EXPECT_EQ(loc->m_line, 3);
+    }
+
     TEST(COMPILER, Using1) {
         const std::string code = 
         "using #display as far (string, u32) -> u0;"
@@ -1823,6 +1904,13 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
     TEST(COMPILER, ReturnLiteral) {
         expect_instructions("i32 main() { return 1; }", {
             Instruction{Opcode::LoadU16Imm, 0, 1, 0},
+            Instruction{Opcode::Return, 0, 0, 0},
+        });
+    }
+
+    TEST(COMPILER, ReturnNullptrLoadsZero) {
+        expect_instructions("u64 main() { return nullptr; }", {
+            Instruction{Opcode::LoadU16Imm, 0, 0, 0},
             Instruction{Opcode::Return, 0, 0, 0},
         });
     }

@@ -57,29 +57,47 @@ constexpr pak68_type_name pak68_type_names[] = {
     return token;
 }
 
-[[nodiscard]] std::optional<std::string> level_name_from_line(const std::string& line) {
+[[nodiscard]] std::string category_header_type(const std::string& category_type) {
+    if (category_type == "level-set") {
+        return "level-name";
+    }
+    return category_type + "-name";
+}
+
+[[nodiscard]] std::optional<std::string> category_name_from_line(
+    const std::string& line,
+    const std::string& category_type) {
+
     std::istringstream iss{line};
     std::string type;
-    std::string level_name;
-    iss >> type >> level_name;
-    if (type == "level-name" && !level_name.empty()) {
-        return level_name;
+    std::string category_name;
+    iss >> type >> category_name;
+    if (type == category_header_type(category_type) && !category_name.empty()) {
+        return category_name;
     }
     return std::nullopt;
 }
 
-[[nodiscard]] std::optional<u64> find_level_start(const std::vector<std::string>& lines, const std::string& level_name) {
+[[nodiscard]] std::optional<u64> find_category_start(
+    const std::vector<std::string>& lines,
+    const std::string& category_type,
+    const std::string& category_name) {
+
     for (u64 i = 0; i < lines.size(); ++i) {
-        if (level_name_from_line(lines[i]) == level_name) {
+        if (category_name_from_line(lines[i], category_type) == category_name) {
             return i;
         }
     }
     return std::nullopt;
 }
 
-[[nodiscard]] u64 find_level_end(const std::vector<std::string>& lines, const u64 level_start) {
-    for (u64 i = level_start + 1; i < lines.size(); ++i) {
-        if (level_name_from_line(lines[i])) {
+[[nodiscard]] u64 find_category_end(
+    const std::vector<std::string>& lines,
+    const std::string& category_type,
+    const u64 category_start) {
+
+    for (u64 i = category_start + 1; i < lines.size(); ++i) {
+        if (category_name_from_line(lines[i], category_type)) {
             return i;
         }
     }
@@ -147,29 +165,44 @@ constexpr pak68_type_name pak68_type_names[] = {
         return std::unexpected{lines.error()};
     }
 
-    std::unordered_map<std::string, std::vector<pak68_entry>> entries_by_level;
+    struct category_key {
+        std::string m_type;
+        std::string m_name;
+
+        [[nodiscard]] bool operator==(const category_key&) const noexcept = default;
+    };
+
+    struct category_key_hash {
+        [[nodiscard]] u64 operator()(const category_key& key) const noexcept {
+            const u64 type_hash = std::hash<std::string>{}(key.m_type);
+            const u64 name_hash = std::hash<std::string>{}(key.m_name);
+            return type_hash ^ (name_hash + 0x9e3779b97f4a7c15ULL + (type_hash << 6) + (type_hash >> 2));
+        }
+    };
+
+    std::unordered_map<category_key, std::vector<pak68_entry>, category_key_hash> entries_by_category;
     for (const pak68_edit_request& request : requests) {
-        auto& entries = entries_by_level[request.m_levelName];
+        auto& entries = entries_by_category[category_key{request.m_categoryType, request.m_levelName}];
         entries.insert(entries.end(), request.m_entries.begin(), request.m_entries.end());
     }
 
     std::vector<pak68_edit_summary> summaries;
-    for (const auto& [level_name, entries] : entries_by_level) {
+    for (const auto& [category, entries] : entries_by_category) {
         u64 level_start = 0;
-        if (const std::optional<u64> existing_level_start = find_level_start(*lines, level_name)) {
+        if (const std::optional<u64> existing_level_start = find_category_start(*lines, category.m_type, category.m_name)) {
             level_start = *existing_level_start;
         } else {
-            lines->push_back("level-name " + level_name);
+            lines->push_back(category_header_type(category.m_type) + " " + category.m_name);
             level_start = lines->size() - 1;
         }
 
-        const u64 level_end = find_level_end(*lines, level_start);
+        const u64 level_end = find_category_end(*lines, category.m_type, level_start);
         std::unordered_set<std::string> existing_lines;
         for (u64 i = level_start + 1; i < level_end; ++i) {
             existing_lines.insert((*lines)[i]);
         }
 
-        pak68_edit_summary summary{path, level_name};
+        pak68_edit_summary summary{path, category.m_name};
         std::vector<std::string> lines_to_insert;
         for (const pak68_entry& entry : entries) {
             const std::string line = entry_to_line(entry);

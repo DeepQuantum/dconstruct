@@ -92,7 +92,6 @@ MATCH_OPTIMIZATION_ACTION literal::match_optimization_pass(match_optimization_en
     return primitive_type{type};
 }
 
-
 [[nodiscard]] emission_res literal::emit_dc(compilation::function& fn, compilation::global_state& global, const std::optional<reg_idx> destination) const noexcept {
     return std::visit([&](auto&& lit) -> emission_res {
         using T = std::decay_t<decltype(lit)>;
@@ -132,6 +131,8 @@ MATCH_OPTIMIZATION_ACTION literal::match_optimization_pass(match_optimization_en
                 const u8 table_idx = fn.add_to_symbol_table(value);
                 fn.emit_instruction(Opcode::LoadStaticFloatImm, *literal_dest, table_idx);
             }
+        } else if constexpr (std::is_same_v<T, std::nullptr_t>) {
+            fn.emit_instruction(Opcode::LoadU16Imm, *literal_dest, 0, 0);
         } else {
             return std::unexpected{"can't compile " + to_c_string()};
         }

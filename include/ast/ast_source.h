@@ -1,6 +1,8 @@
 #pragma once
 
+#include "compilation/tokens.h"
 #include "compilation/environment.h"
+#include <optional>
 #include <ostream>
 
 namespace dconstruct::ast {
@@ -42,6 +44,7 @@ namespace dconstruct::ast {
         virtual void pseudo_py(std::ostream&) const = 0;
         virtual void pseudo_racket(std::ostream&) const = 0;
         virtual bool is_dead_code() const noexcept { return false; }
+        [[nodiscard]] virtual std::optional<compilation::source_location> source_location() const noexcept { return std::nullopt; }
 
         [[nodiscard]] std::string to_c_string() const noexcept {
             std::ostringstream oss;

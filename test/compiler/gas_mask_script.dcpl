@@ -4,12 +4,12 @@
 
 @include "keycodes.dcpl"
 
-@add_pak ellie-player-fundamentals {
+@add_pak level-set ellie-player-fundamentals {
     actor #gas-mask-base
     actor #gas-mask-ellie
 }
 
-@add_pak ellie-player-fundamentals-rogue-hub {
+@add_pak level-set ellie-player-fundamentals-rogue-hub {
     actor #gas-mask-base
     actor #gas-mask-ellie
 }
@@ -43,7 +43,7 @@ statescript #gas-mask-toggle {
         block update {
             track #main {
                 lambda {
-                    if (#keyboard-button-pressed?(Keycodes.NINE)) {
+                    if (#keyboard-button-pressed?(Keycodes.FUNCTION_2)) {
                         >> "pressed, moving to custom-put-on-mask";
                         => #custom-put-on-mask;
                     }
@@ -63,7 +63,7 @@ statescript #gas-mask-toggle {
         block update {
             track #main {
                 lambda {
-                    if (#keyboard-button-pressed?(Keycodes.NINE)) {
+                    if (#keyboard-button-pressed?(Keycodes.FUNCTION_2)) {
                         >> "pressed inside put on gas mask, moving to #custom-remove-mask";
                         => #custom-remove-mask;
                     }
@@ -83,7 +83,7 @@ statescript #gas-mask-toggle {
         block update {
             track #main {
                 lambda {
-                    if (#keyboard-button-pressed?(Keycodes.NINE)) {
+                    if (#keyboard-button-pressed?(Keycodes.FUNCTION_2)) {
                         >> "pressed inside remove gas mask, moving to #custom-put-on-mask";
                         => #custom-put-on-mask;
                     }

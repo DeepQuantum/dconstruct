@@ -89,7 +89,13 @@ namespace dconstruct::compilation {
     return pak68_entry{*type, std::move(sid_name)};
 }
 
-[[nodiscard]] static std::expected<std::pair<std::string, std::string_view>, std::string> parse_add_pak_header(
+struct add_pak_header {
+    std::string m_categoryType;
+    std::string m_categoryName;
+    std::string_view m_afterOpen;
+};
+
+[[nodiscard]] static std::expected<add_pak_header, std::string> parse_add_pak_header(
     const std::string& line,
     const source_location& loc) noexcept {
 
@@ -103,13 +109,18 @@ namespace dconstruct::compilation {
         return std::unexpected{location_error(loc, "malformed @add_pak macro; expected '{'")};
     }
 
-    const std::string_view target_level = trim(rest.substr(0, open_brace));
-    if (target_level.empty() || target_level.find_first_of(" \t\r\n") != std::string_view::npos) {
-        return std::unexpected{location_error(loc, "malformed @add_pak macro; expected target level name before '{'")};
+    const std::string_view header = trim(rest.substr(0, open_brace));
+    std::istringstream header_iss{std::string{header}};
+    std::string category_type;
+    std::string category_name;
+    std::string extra;
+    header_iss >> category_type >> category_name >> extra;
+    if (category_type.empty() || category_name.empty() || !extra.empty()) {
+        return std::unexpected{location_error(loc, "malformed @add_pak macro; expected '<category-type> <category-name>' before '{'")};
     }
 
     std::string_view after_open = rest.substr(open_brace + 1);
-    return std::pair{std::string{target_level}, after_open};
+    return add_pak_header{std::move(category_type), std::move(category_name), after_open};
 }
 
 [[nodiscard]] static std::optional<std::string> parse_add_pak_entries_from_segment(
@@ -182,16 +193,17 @@ namespace dconstruct::compilation {
             stripped_source += '\n';
             line_map.push_back(loc);
 
-            std::expected<std::pair<std::string, std::string_view>, std::string> header = parse_add_pak_header(line, loc);
+            std::expected<add_pak_header, std::string> header = parse_add_pak_header(line, loc);
             if (!header) {
                 return header.error();
             }
 
             pak68_edit_request request;
-            request.m_levelName = std::move(header->first);
+            request.m_categoryType = std::move(header->m_categoryType);
+            request.m_levelName = std::move(header->m_categoryName);
             request.m_location = loc;
 
-            std::string_view segment = header->second;
+            std::string_view segment = header->m_afterOpen;
             bool closes_block = segment.find('}') != std::string_view::npos;
             if (std::optional<std::string> err = parse_add_pak_entries_from_segment(segment, closes_block, loc, request)) {
                 return err;
@@ -376,6 +388,39 @@ namespace dconstruct::compilation {
     return path;
 }
 
+[[nodiscard]] static bool path_component_equals(const std::filesystem::path& lhs, const char* rhs) {
+    const std::string lhs_str = lhs.string();
+    const std::string_view rhs_str{rhs};
+    if (lhs_str.size() != rhs_str.size()) {
+        return false;
+    }
+    for (u32 i = 0; i < lhs_str.size(); ++i) {
+        if (std::tolower(static_cast<unsigned char>(lhs_str[i])) != std::tolower(static_cast<unsigned char>(rhs_str[i]))) {
+            return false;
+        }
+    }
+    return true;
+}
+
+[[nodiscard]] static bool path_starts_with_bin_dc1(const std::filesystem::path& path) {
+    auto iter = path.begin();
+    if (iter == path.end() || !path_component_equals(*iter, "bin")) {
+        return false;
+    }
+    ++iter;
+    return iter != path.end() && path_component_equals(*iter, "dc1");
+}
+
+[[nodiscard]] static std::filesystem::path resolve_mod_output_path(const std::filesystem::path& mod, std::filesystem::path output) {
+    if (output.has_root_directory()) {
+        output = output.relative_path();
+    }
+    if (path_starts_with_bin_dc1(output)) {
+        return append_bin_extension_if_missing(mod / output);
+    }
+    return append_bin_extension_if_missing(mod / "bin" / "dc1" / output);
+}
+
 [[nodiscard]] std::expected<compiler_options, std::string> compiler_options::parse(
     const cxxopts::ParseResult& args,
     std::string& source,
@@ -417,10 +462,10 @@ namespace dconstruct::compilation {
 
     std::filesystem::path output = std::move(*output_res);
     if (mod) {
-        if (output.is_absolute()) {
+        if (output.is_absolute() || output.has_root_name()) {
             return std::unexpected{"@output must be relative when @mod is provided"};
         }
-        output = append_bin_extension_if_missing(*mod / "bin" / "dc1" / output);
+        output = resolve_mod_output_path(*mod, std::move(output));
     }
 
     std::filesystem::path modules;
@@ -445,7 +490,8 @@ namespace dconstruct::compilation {
 
     std::optional<std::filesystem::path> pak68_res = std::nullopt;
     if (mod) {
-        pak68_res = *mod / "mod_pak68.txt";
+        const std::filesystem::path mod_pak68 = *mod / "mod_pak68.txt";
+        pak68_res = std::filesystem::exists(mod_pak68) ? mod_pak68 : *mod / "pak68.txt";
     } else if (!from_dcpl->m_pak68Edits.empty()) {
         return std::unexpected{"@add_pak requires @mod so pak68.txt can be resolved"};
     }

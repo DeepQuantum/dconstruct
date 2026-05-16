@@ -76,6 +76,7 @@ private:
         {"event", token_type::EVENT},
         {"update", token_type::UPDATE},
         {"virtual", token_type::VIRTUAL},
+        {"nullptr", token_type::_NULL}
     };
     std::vector<token> m_tokens;
     std::vector<lexing_error> m_errors;

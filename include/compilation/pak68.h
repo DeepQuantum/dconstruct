@@ -34,6 +34,7 @@ namespace dconstruct::compilation {
     };
 
     struct pak68_edit_request {
+        std::string m_categoryType;
         std::string m_levelName;
         std::vector<pak68_entry> m_entries;
         source_location m_location;

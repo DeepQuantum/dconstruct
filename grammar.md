@@ -255,7 +255,7 @@ Precompiler directives are line-based instructions that begin with `@` and are c
 
 ```ebnf
 precompiler_directive ::= "@" path_directive_name " " quoted_path
-                        | "@add_pak" level_name "{" pak_entry+ "}"
+                        | "@add_pak" pak_category_type pak_category_name "{" pak_entry+ "}"
 
 path_directive_name   ::= "target"
                         | "include"
@@ -264,6 +264,8 @@ path_directive_name   ::= "target"
                         | "mod"
 
 quoted_path           ::= '"' path_char* '"'
+pak_category_type     ::= identifier
+pak_category_name     ::= identifier
 pak_entry             ::= pak_type sid_identifier newline
 ```
 
@@ -276,7 +278,7 @@ Currently supported directives:
 - Providing `@mod` also repackages that mod directory into a `.psarc` archive after compilation.
 - `@output "<relative-path>"` — destination path for the newly compiled binary. With `@mod`, a missing `.bin` extension is added automatically.
 - `@sidbase "<path>"` — path to the SID base map (`hash -> string`) used to resolve string IDs.
-- `@add_pak <target_level_name> { <type> #sid ... }` — add pak68 entries to a `level-name` section. If the section does not exist, it is added to pak68.txt. The compiler validates the pak68 path and entry type before compiling.
+- `@add_pak <category_type> <category_name> { <type> #sid ... }` — add pak68 entries to a category section. Use `level-set` for pak68 `level-name` sections, for example `@add_pak level-set sp-all { ... }`. If the section does not exist, it is added to pak68.txt. The compiler validates the pak68 path and entry type before compiling.
 
 Example:
 

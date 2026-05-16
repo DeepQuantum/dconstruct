@@ -360,6 +360,11 @@ ptr_type::ptr_type(const ast::primitive_kind& kind) noexcept
     return std::visit([](auto&& lhs, auto&& rhs) -> std::optional<std::string> {
         using lhs_t = std::decay_t<decltype(lhs)>;
         using rhs_t = std::decay_t<decltype(rhs)>;
+        if constexpr (std::is_same_v<rhs_t, primitive_type>) {
+            if (rhs.m_type == primitive_kind::NULLPTR) {
+                return std::nullopt;
+            }
+        }
         if constexpr (std::is_same_v<lhs_t, primitive_type>) {
             if constexpr (!std::is_same_v<rhs_t, primitive_type>) {
                 return "expected type " + type_to_declaration_string(lhs) + " for assignment but got " + type_to_declaration_string(rhs);

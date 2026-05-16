@@ -93,6 +93,9 @@ struct compilation_run_result {
         for (const auto& err : semantic_errors) {
             std::cerr << "[semantic error] " << err.m_message;   
             if (err.m_expr) {
+                if (const std::optional<source_location> loc = err.m_expr->source_location()) {
+                    std::cerr << " at " << format_source_location(*loc);
+                }
                 std::cerr << " checking expression " << err.m_expr->to_c_string();
             }
             std::cerr << "\n";
@@ -435,6 +438,7 @@ struct module_entry_source {
     std::vector<pak68_edit_request> edits = options.m_pak68Edits;
     for (const std::string& state_script_name : state_script_names) {
         edits.push_back(pak68_edit_request{
+            "level-set",
             "sp-all",
             {pak68_entry{pak68_type::SYMBOL, state_script_name}},
             {}
