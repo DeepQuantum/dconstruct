@@ -274,11 +274,11 @@ Currently supported directives:
 - `@target "<path>"` — path to the original game binary being edited/recompiled (for adding new functions and hooking existing ones).
 - `@include "<relative-path>"` — include another DCPL file at this location. Each resolved file is included at most once.
 - If no `@target` is provided, the compiler runs in standalone mode and writes only the declarations in the input file to `@output`.
-- `@mod "<path>"` — path to the mod directory. When present, relative `@output` paths are resolved below `<path>/bin/dc1`, `modules.bin` is resolved as `<path>/bin/dc1/modules.bin`, and pak68 is resolved as `<path>/pak68.txt`.
-- Providing `@mod` also repackages that mod directory into a `.psarc` archive after compilation.
+- `@mod "<path>"` — path to the mod directory. When present, relative `@output` paths are resolved below `<path>/bin/dc1`, `modules.bin` is resolved as `<path>/bin/dc1/modules.bin`, and pak68 is resolved as `<path>/<mod-folder-name>-pak68.txt`.
+- Providing `@mod` also repackages that mod directory into a `.psarc` archive after compilation. The mod folder no longer needs an `_unpacked` suffix; the folder name is used exactly for the archive prefix.
 - `@output "<relative-path>"` — destination path for the newly compiled binary. With `@mod`, a missing `.bin` extension is added automatically.
 - `@sidbase "<path>"` — path to the SID base map (`hash -> string`) used to resolve string IDs.
-- `@add_pak <category_type> <category_name> { <type> #sid ... }` — add pak68 entries to a category section. Use `level-set` for pak68 `level-name` sections, for example `@add_pak level-set sp-all { ... }`. If the section does not exist, it is added to pak68.txt. The compiler validates the pak68 path and entry type before compiling.
+- `@add_pak <category_type> <category_name> { <type> #sid ... }` — add pak68 entries to a category section. Use the pak68 first-column category token, for example `@add_pak level-name sp-all { ... }`. If the section does not exist, it is added to pak68.txt. The compiler validates the pak68 path, category type, and entry type before compiling.
 
 Example:
 

@@ -317,8 +317,8 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
 
     TEST(COMPILER, AddPakParsesAndAppliesMultilineEntries) {
         const std::filesystem::path mod_path = "test/compiler/pak68_macro_mod";
-        const std::filesystem::path pak_path = mod_path / "pak68.txt";
-        std::filesystem::create_directories(mod_path);
+        const std::filesystem::path pak_path = mod_path / "pak68_macro_mod-pak68.txt";
+        std::filesystem::create_directories(pak_path.parent_path());
         {
             std::ofstream out{pak_path};
             out << "level-name sp-all\n"
@@ -327,9 +327,11 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
                 << "actor other-actor\n";
         }
 
-        std::string source = dcpl_prelude() +
+        std::string source =
             "@mod \"test/compiler/pak68_macro_mod\"\n"
-            "@add_pak level-set sp-all {\n"
+            "@output \"pak68-macro\"\n"
+            "@sidbase \"" + TEST_DIR + "test_sidbase.bin\"\n"
+            "@add_pak level-name sp-all {\n"
             "  symbol #gas-mask-ellie\n"
             "  actor dina\n"
             "}\n"
@@ -341,7 +343,7 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
         ASSERT_TRUE(options->m_pak68);
         EXPECT_EQ(*options->m_pak68, pak_path);
         ASSERT_EQ(options->m_pak68Edits.size(), 1);
-        EXPECT_EQ(options->m_pak68Edits[0].m_categoryType, "level-set");
+        EXPECT_EQ(options->m_pak68Edits[0].m_categoryType, "level-name");
         EXPECT_EQ(options->m_pak68Edits[0].m_levelName, "sp-all");
         ASSERT_EQ(options->m_pak68Edits[0].m_entries.size(), 2);
         EXPECT_EQ(options->m_pak68Edits[0].m_entries[0], (compilation::pak68_entry{compilation::pak68_type::SYMBOL, "gas-mask-ellie"}));
@@ -362,16 +364,13 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
 
     TEST(COMPILER, AddPakRejectsUnknownType) {
         const std::filesystem::path mod_path = "test/compiler/pak68_unknown_type_mod";
-        const std::filesystem::path pak_path = mod_path / "pak68.txt";
         std::filesystem::create_directories(mod_path);
-        {
-            std::ofstream out{pak_path};
-            out << "level-name sp-all\n";
-        }
 
-        std::string source = dcpl_prelude() +
+        std::string source =
             "@mod \"test/compiler/pak68_unknown_type_mod\"\n"
-            "@add_pak level-set sp-all { nope #gas-mask-ellie }\n"
+            "@output \"pak68-unknown-type\"\n"
+            "@sidbase \"" + TEST_DIR + "test_sidbase.bin\"\n"
+            "@add_pak level-name sp-all { nope #gas-mask-ellie }\n"
             "u32 main() { return 0; }\n";
         std::vector<compilation::source_location> line_map;
 
@@ -382,16 +381,15 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
 
     TEST(COMPILER, AddPakCreatesMissingLevel) {
         const std::filesystem::path mod_path = "test/compiler/pak68_missing_level_mod";
-        const std::filesystem::path pak_path = mod_path / "pak68.txt";
+        const std::filesystem::path pak_path = mod_path / "pak68_missing_level_mod-pak68.txt";
         std::filesystem::create_directories(mod_path);
-        {
-            std::ofstream out{pak_path};
-            out << "level-name sp-all\n";
-        }
+        std::filesystem::remove(pak_path);
 
-        std::string source = dcpl_prelude() +
+        std::string source =
             "@mod \"test/compiler/pak68_missing_level_mod\"\n"
-            "@add_pak level-set missing-level { symbol #gas-mask-ellie }\n"
+            "@output \"pak68-missing-level\"\n"
+            "@sidbase \"" + TEST_DIR + "test_sidbase.bin\"\n"
+            "@add_pak level-name missing-level { symbol #gas-mask-ellie }\n"
             "u32 main() { return 0; }\n";
         std::vector<compilation::source_location> line_map;
 
@@ -437,9 +435,18 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
         EXPECT_EQ(options->m_output, mod_path / "bin" / "dc1" / "ss-rogue" / "test-script-qntm.bin");
         EXPECT_EQ(options->m_modules, mod_path / "bin" / "dc1" / "modules.bin");
         ASSERT_TRUE(options->m_pak68);
-        EXPECT_EQ(*options->m_pak68, mod_path / "pak68.txt");
+        EXPECT_EQ(*options->m_pak68, mod_path / "derived_mod-pak68.txt");
         ASSERT_TRUE(options->m_repackage);
         EXPECT_EQ(*options->m_repackage, mod_path);
+    }
+
+    TEST(COMPILER, RepackagePathUsesExactModFolderName) {
+        EXPECT_EQ(
+            compilation::repackage_psarc_path("test/compiler/derived_mod"),
+            std::filesystem::path{"test/compiler/derived_mod.psarc"});
+        EXPECT_EQ(
+            compilation::repackage_psarc_path("test/compiler/derived_mod_unpacked"),
+            std::filesystem::path{"test/compiler/derived_mod_unpacked.psarc"});
     }
 
     TEST(COMPILER, ModOutputRootDirectoryRelativeToMod) {
@@ -588,9 +595,40 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
 
         const auto edits = compilation::pak68_edits_for_compile(options, state_scripts);
         ASSERT_EQ(edits.size(), 1);
+        EXPECT_EQ(edits[0].m_categoryType, "level-name");
         EXPECT_EQ(edits[0].m_levelName, "sp-all");
         ASSERT_EQ(edits[0].m_entries.size(), 1);
         EXPECT_EQ(edits[0].m_entries[0], (compilation::pak68_entry{compilation::pak68_type::SYMBOL, "ss-test-script"}));
+    }
+
+    TEST(COMPILER, ExplicitAndAutomaticSpAllPakEntriesShareSection) {
+        const std::filesystem::path mod_path = "test/compiler/pak68_combined_mod";
+        const std::filesystem::path pak_path = mod_path / "pak68.txt";
+        std::filesystem::create_directories(mod_path);
+        {
+            std::ofstream out{pak_path};
+            out << "level-name sp-all\n";
+        }
+
+        compilation::compiler_options options;
+        options.m_pak68Edits.push_back(compilation::pak68_edit_request{
+            "level-name",
+            "sp-all",
+            {compilation::pak68_entry{compilation::pak68_type::ACTOR, "gas-mask-ellie"}},
+            {}
+        });
+
+        const auto edits = compilation::pak68_edits_for_compile(options, {"gas-mask-toggle"});
+        auto apply_res = compilation::apply_pak68_edits(pak_path, edits);
+        ASSERT_TRUE(apply_res) << apply_res.error();
+        ASSERT_EQ(apply_res->size(), 1);
+        ASSERT_EQ((*apply_res)[0].m_added.size(), 2);
+
+        std::ifstream in{pak_path};
+        ASSERT_TRUE(in.is_open());
+        std::stringstream contents;
+        contents << in.rdbuf();
+        EXPECT_EQ(contents.str(), "level-name sp-all\nactor gas-mask-ellie\nsymbol gas-mask-toggle\n");
     }
 
     TEST(COMPILER, LexerComment) {

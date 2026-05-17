@@ -1,17 +1,12 @@
-@mod "C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/mods/gas_mask_toggle_unpacked"
+@mod "C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/mods/gas-mask-toggle"
 @output "gas-mask-toggle"
 @sidbase "C:/Users/damix/Documents/GitHub/TLOU2Modding/dconstruct/test/dc_test_files/sidbase_new_fixed.bin"
 
 @include "keycodes.dcpl"
 
-@add_pak level-set ellie-player-fundamentals {
-    actor #gas-mask-base
-    actor #gas-mask-ellie
-}
-
-@add_pak level-set ellie-player-fundamentals-rogue-hub {
-    actor #gas-mask-base
-    actor #gas-mask-ellie
+@add_pak level-name sp-all {
+    actor gas-mask-base
+    actor gas-mask-ellie
 }
 
 using #set-gas-mask-setting-id as far (u64, u64) -> u0;
@@ -30,7 +25,7 @@ statescript #gas-mask-toggle {
                 lambda {
                     u16 version_major = 1;
                     u16 version_minor = 1;
-                    >> "launched custom gas mask script, version %d.$d" $ version_major, version_minor;
+                    >> "launched custom gas mask script, version %d.%d" $ version_major, version_minor;
 
                     #set-gas-mask-setting-id(#player, #*ellie-gas-mask-setup*);
 

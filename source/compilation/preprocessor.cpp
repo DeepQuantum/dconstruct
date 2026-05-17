@@ -118,6 +118,9 @@ struct add_pak_header {
     if (category_type.empty() || category_name.empty() || !extra.empty()) {
         return std::unexpected{location_error(loc, "malformed @add_pak macro; expected '<category-type> <category-name>' before '{'")};
     }
+    if (!pak68_type_from_string(category_type)) {
+        return std::unexpected{location_error(loc, "unknown pak68 category type: " + category_type)};
+    }
 
     std::string_view after_open = rest.substr(open_brace + 1);
     return add_pak_header{std::move(category_type), std::move(category_name), after_open};
@@ -421,6 +424,17 @@ struct add_pak_header {
     return append_bin_extension_if_missing(mod / "bin" / "dc1" / output);
 }
 
+[[nodiscard]] static std::string mod_folder_name(const std::filesystem::path& mod) {
+    if (!mod.filename().empty()) {
+        return mod.filename().string();
+    }
+    return mod.parent_path().filename().string();
+}
+
+[[nodiscard]] static std::filesystem::path resolve_mod_pak68_path(const std::filesystem::path& mod) {
+    return mod / (mod_folder_name(mod) + "-pak68.txt");
+}
+
 [[nodiscard]] std::expected<compiler_options, std::string> compiler_options::parse(
     const cxxopts::ParseResult& args,
     std::string& source,
@@ -460,7 +474,8 @@ struct add_pak_header {
     }
     const bool standalone = target.empty();
 
-    std::filesystem::path output = std::move(*output_res);
+    const std::filesystem::path output_directive = *output_res;
+    std::filesystem::path output = output_directive;
     if (mod) {
         if (output.is_absolute() || output.has_root_name()) {
             return std::unexpected{"@output must be relative when @mod is provided"};
@@ -490,10 +505,9 @@ struct add_pak_header {
 
     std::optional<std::filesystem::path> pak68_res = std::nullopt;
     if (mod) {
-        const std::filesystem::path mod_pak68 = *mod / "mod_pak68.txt";
-        pak68_res = std::filesystem::exists(mod_pak68) ? mod_pak68 : *mod / "pak68.txt";
+        pak68_res = resolve_mod_pak68_path(*mod);
     } else if (!from_dcpl->m_pak68Edits.empty()) {
-        return std::unexpected{"@add_pak requires @mod so pak68.txt can be resolved"};
+        return std::unexpected{"@add_pak requires @mod so the pak68 file can be resolved"};
     }
 
     if (pak68_res && !from_dcpl->m_pak68Edits.empty()) {

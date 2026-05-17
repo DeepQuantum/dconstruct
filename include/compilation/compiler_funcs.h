@@ -220,7 +220,7 @@ struct compilation_run_result {
         ("i,input",  "input DCPL file that will be compiled", cxxopts::value<std::string>(), "<path>")
         ("t,target",  "the original binary file that will be recompiled", cxxopts::value<std::string>(), "<path>")
         ("o,output",  "output location of the recompiled binary; relative to <mod>/bin/dc1 when --mod is provided", cxxopts::value<std::string>(), "<path>")
-        ("mod", "path to the mod directory; derives output, modules.bin, pak68.txt, and repackage location", cxxopts::value<std::string>(), "<path>")
+        ("mod", "path to the mod directory; derives output, modules.bin, mod-named pak68 file, and repackage location", cxxopts::value<std::string>(), "<path>")
         ("s,sidbase",  "path to the sidbase", cxxopts::value<std::string>(), "sidbase.bin");
 
     options.parse_positional({"i"});
@@ -438,7 +438,7 @@ struct module_entry_source {
     std::vector<pak68_edit_request> edits = options.m_pak68Edits;
     for (const std::string& state_script_name : state_script_names) {
         edits.push_back(pak68_edit_request{
-            "level-set",
+            "level-name",
             "sp-all",
             {pak68_entry{pak68_type::SYMBOL, state_script_name}},
             {}
@@ -549,14 +549,14 @@ static std::expected<compiler_output_summary, std::string> create_output(
     return summary;
 }
 
+[[nodiscard]] static std::filesystem::path repackage_psarc_path(const std::filesystem::path& directory_path) {
+    std::filesystem::path psarc_path = directory_path;
+    psarc_path += ".psarc";
+    return psarc_path;
+}
+
 [[nodiscard]] static std::expected<std::filesystem::path, std::string> repackage_psarc(const std::filesystem::path& directory_path) {
-    if (!directory_path.string().ends_with("_unpacked/") && !directory_path.string().ends_with("_unpacked")) {
-        return std::unexpected{"the unpacked directory must end with '_unpacked'"};
-    }
-
-    std::filesystem::path psarc_path = directory_path.string().substr(0, directory_path.string().size() - sizeof("_unpacked") + 1) + ".psarc"; 
-
-
+    const std::filesystem::path psarc_path = repackage_psarc_path(directory_path);
     const std::string command = "ndarc -c \"" + directory_path.string() + "\" -o \"" + psarc_path.string() + "\"";
     const int result = std::system(command.c_str());
     if (result != 0) {

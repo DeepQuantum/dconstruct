@@ -38,6 +38,11 @@ constexpr pak68_type_name pak68_type_names[] = {
 }
 
 [[nodiscard]] std::expected<std::vector<std::string>, std::string> load_lines(const std::filesystem::path& path) noexcept {
+    std::error_code ec;
+    if (!std::filesystem::exists(path, ec)) {
+        return std::vector<std::string>{};
+    }
+
     std::ifstream in{path};
     if (!in.is_open()) {
         return std::unexpected{"couldn't open pak68 file " + path.string()};
@@ -58,10 +63,7 @@ constexpr pak68_type_name pak68_type_names[] = {
 }
 
 [[nodiscard]] std::string category_header_type(const std::string& category_type) {
-    if (category_type == "level-set") {
-        return "level-name";
-    }
-    return category_type + "-name";
+    return category_type;
 }
 
 [[nodiscard]] std::optional<std::string> category_name_from_line(
@@ -133,10 +135,7 @@ constexpr pak68_type_name pak68_type_names[] = {
     const std::vector<pak68_edit_request>& requests) noexcept {
 
     std::error_code ec;
-    if (!std::filesystem::exists(path, ec)) {
-        return "expected pak68 file to exist but got missing path " + path.string();
-    }
-    if (!std::filesystem::is_regular_file(path, ec)) {
+    if (std::filesystem::exists(path, ec) && !std::filesystem::is_regular_file(path, ec)) {
         return "expected pak68 path to be a file but got " + path.string();
     }
 
@@ -182,7 +181,7 @@ constexpr pak68_type_name pak68_type_names[] = {
 
     std::unordered_map<category_key, std::vector<pak68_entry>, category_key_hash> entries_by_category;
     for (const pak68_edit_request& request : requests) {
-        auto& entries = entries_by_category[category_key{request.m_categoryType, request.m_levelName}];
+        auto& entries = entries_by_category[category_key{category_header_type(request.m_categoryType), request.m_levelName}];
         entries.insert(entries.end(), request.m_entries.begin(), request.m_entries.end());
     }
 
@@ -217,6 +216,14 @@ constexpr pak68_type_name pak68_type_names[] = {
 
         lines->insert(lines->begin() + static_cast<std::ptrdiff_t>(level_end), lines_to_insert.begin(), lines_to_insert.end());
         summaries.push_back(std::move(summary));
+    }
+
+    std::error_code ec;
+    if (path.has_parent_path()) {
+        std::filesystem::create_directories(path.parent_path(), ec);
+        if (ec) {
+            return std::unexpected{"couldn't create pak68 directory " + path.parent_path().string()};
+        }
     }
 
     std::ofstream out{path, std::ios::trunc};
