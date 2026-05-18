@@ -228,7 +228,10 @@ add_dependencies(dconstruct generate_buildinfo)
 
 add_subdirectory(${SOURCE_DIR}/minhook)
 
-add_library(dconstruct_hooking SHARED "${SOURCE_DIR}/hooking/hooking.cpp")
+add_library(dconstruct_hooking SHARED
+    "${SOURCE_DIR}/hooking/hooking.cpp"
+    "${SOURCE_DIR}/base/sidbase.cpp"
+)
 
 target_include_directories(dconstruct_hooking PRIVATE "${SOURCE_DIR}/minhook/include")
 
