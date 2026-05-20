@@ -50,6 +50,7 @@ Thumbs.db
 *.qbs.user*
 CMakeLists.txt.user*
 *.asm
+!source/hooking/extended_opcodes.asm
 *.txt
 !CMakeLists.txt
 !requirements.txt

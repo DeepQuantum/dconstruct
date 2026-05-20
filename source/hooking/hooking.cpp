@@ -1,4 +1,5 @@
 #include "base.h"
+#include "extended_opcodes.h"
 #include "sidbase.h"
 #include <windows.h>
 #include "MinHook.h"
@@ -11,6 +12,7 @@
 #include <string>
 #include <system_error>
 #include <utility>
+#include <array>
 
 
 namespace dconstruct::hooking {
@@ -106,37 +108,6 @@ namespace dconstruct::hooking {
         out = IMAGE_BASE + (address - module_base);
         return true;
     }
-    
-
-    // QWORD* __fastcall hook(QWORD* a1, QWORD* a2, i64* a3) {
-    //     std::ofstream out("hook.log", std::ios::out | std::ios::app);
-
-    //     const p64 instruction_idx_ptr = *(a1 + 1);
-    //     const Instruction* instruction_ptr = *(Instruction**)instruction_idx_ptr;
-    //     u64 i = 0;
-    //     do {
-    //         const Instruction& istr = instruction_ptr[i++];
-    //         std::println(out, "{}, {}, {:x}, {:x}, {:x}" , i, istr.opcode_to_string(), istr.destination, istr.operand1, istr.operand2);
-    //     } while(instruction_ptr[i].opcode != Opcode::Return);
-        
-        
-    //     const Instruction first_instruction = instruction_ptr[0];
-
-
-    //     // u64** v9 = (u64 **)(test + 8);
-
-    //     // std::println(out, "v9: {:x}" , p64(v9));
-
-    //     //const u64 op2 = (u64)*(u32*)*start_ptr;
-
-    //     //out <<  "here2" << "\n";
-
-    //     //const Opcode opcode = *(Opcode *)(local_2c8 + op2 * 8);
-
-    //     //const std::string log_msg = std::format("{}\n",(u8)opcode);
-    //     //out << log_msg << "\n";
-    //     return original_fn(a1, a2, a3);
-    // }
 
     QWORD* __fastcall is_final_build_hook(QWORD* a1) {
        // log("called is_final_build?");
@@ -151,11 +122,6 @@ namespace dconstruct::hooking {
         return a1;
     }
 
-    // stack size: 0x40
-    // a5 location: rbp + 0x28
-    // at breakpoint, SID is located at rsp + 0x80
-    // at hook, rsp will be 0x40 smaller -> SID will be at rsp + 0x40
-    // if a5 = rsp + 0xA0 and 
     char __fastcall invoke_function_hook(i64 a1, i64 a2, u32 a3, QWORD *a4, i64 a5) {
         p64 function_address = 0;
         if (!try_ida_address(*(p64*)(a1 + 0x8), function_address)) {
@@ -191,19 +157,68 @@ namespace dconstruct::hooking {
         return res;
     }
     
+    static constexpr p64 STORE_ARRAY_RUN_SCRIPT           = 0x1413566EE - IMAGE_BASE;
+    static constexpr u64 NOP_LENGTH_RUN_SCRIPT            = 0x141356709 - 0x1413566EE;
+
+
+    static constexpr p64 STORE_ARRAY_PARSE_INSTRUCTION    = 0x1414B7084 - IMAGE_BASE;
+    static constexpr u64 NOP_LENGTH_PARSE_INSTRUCTION     = 0x1414B70A1 - 0x1414B7084;
+
+    static constexpr p64 DEFAULT_CASE_RUN_SCRIPT = 0x141356969 - IMAGE_BASE;
+
+    static constexpr p64 CONTINUE_ADDRESS = 0x1413560A0 - IMAGE_BASE;
 
     static constexpr p64 IS_FINAL_BUILD_OFFSET      = 0x140D4B800 - IMAGE_BASE;
     static constexpr p64 DISPLAY_OFFSET             = 0x140D3DA40 - IMAGE_BASE;
     static constexpr p64 INVOKE_FUNCTION_OFFSET     = 0x141613510 - IMAGE_BASE;
     static constexpr p64 LOOKUP_OFFSET              = 0x141356D60 - IMAGE_BASE;
 
+    void create_opcode_default_switch_override(p64 start_default_block, p64 target_location, p64 continue_location) {
+        log("target_location: {:x}, start_default_block: {:x}", target_location, start_default_block);
+
+        constexpr std::array patch_bytes = {
+            0xFF_b, 0x35_b, 0x06_b, 0x00_b, 0x00_b, 0x00_b,
+            0xFF_b, 0x25_b, 0x08_b, 0x00_b, 0x00_b, 0x00_b,
+            0x00_b, 0x00_b, 0x00_b, 0x00_b, 0x00_b, 0x00_b, 0x00_b, 0x00_b,
+            0x00_b, 0x00_b, 0x00_b, 0x00_b, 0x00_b, 0x00_b, 0x00_b, 0x00_b,
+        };
+
+        DWORD old_protect;
+        VirtualProtect((void*)start_default_block, patch_bytes.size(), PAGE_EXECUTE_READWRITE, &old_protect);
+        std::memcpy((void*)start_default_block, patch_bytes.data(), patch_bytes.size());
+        std::memcpy((void*)(start_default_block + 12), &continue_location, sizeof(p64));
+        std::memcpy((void*)(start_default_block + 20), &target_location, sizeof(p64));
+        VirtualProtect((void*)start_default_block, patch_bytes.size(), old_protect, &old_protect);
+        FlushInstructionCache(GetCurrentProcess(), (void*)start_default_block, patch_bytes.size());
+    }
+
+    void create_breakpoint_entry(p64 start_loc, u64 length) {
+        std::vector<std::byte> nops{length, 0x90_b};
+        nops.back() = 0xCC_b;
+        
+        DWORD old_protect;
+        VirtualProtect((void*)start_loc, length, PAGE_EXECUTE_READWRITE, &old_protect);
+        std::memcpy((void*)start_loc, &nops, length);
+        VirtualProtect((void*)start_loc, length, old_protect, &old_protect);
+        FlushInstructionCache(GetCurrentProcess(), (void*)start_loc, length);
+    }
+
     DWORD WINAPI init_thread(void*) {
+
         MH_Initialize();
         HMODULE executable_module = GetModuleHandle(nullptr);
         module_base = reinterpret_cast<p64>(executable_module);
         module_end = image_end(executable_module);
-        load_sidbase();
-        log("module base: {:016X}, ida image base: {:016X}", module_base, IMAGE_BASE);
+
+        create_breakpoint_entry(module_base + STORE_ARRAY_RUN_SCRIPT, NOP_LENGTH_RUN_SCRIPT);
+        create_breakpoint_entry(module_base + STORE_ARRAY_PARSE_INSTRUCTION, NOP_LENGTH_PARSE_INSTRUCTION);
+
+
+        const p64 extended_opcode_switch_location = (p64)&extended_opcode_switch;
+        create_opcode_default_switch_override(module_base + DEFAULT_CASE_RUN_SCRIPT, extended_opcode_switch_location, module_base + CONTINUE_ADDRESS);
+
+        //load_sidbase();
+       // log("module base: {:016X}, ida image base: {:016X}", module_base, IMAGE_BASE);
 
         // void* display_target = (void*)(base + DISPLAY_OFFSET);
         // MH_CreateHook(display_target, &display_hook, reinterpret_cast<void**>(&display_orig));
@@ -213,9 +228,9 @@ namespace dconstruct::hooking {
         // MH_CreateHook(invoke_function_target, &invoke_function_hook, reinterpret_cast<void**>(&invoke_function_orig));
         // MH_EnableHook(invoke_function_target);
 
-        void* lookup_target = (void*)(module_base + LOOKUP_OFFSET);
-        MH_CreateHook(lookup_target, &lookup_hook, reinterpret_cast<void**>(&lookup_orig));
-        MH_EnableHook(lookup_target);
+        // void* lookup_target = (void*)(module_base + LOOKUP_OFFSET);
+        // MH_CreateHook(lookup_target, &lookup_hook, reinterpret_cast<void**>(&lookup_orig));
+        // MH_EnableHook(lookup_target);
         return 0;
     }
 }

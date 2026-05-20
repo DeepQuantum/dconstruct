@@ -14,6 +14,20 @@ using #wait-equip-gas-mask as near (u64, u64, u64) -> u64;
 using #wait-remove-gas-mask as near (u64, u64, u64) -> u64;
 using #spawn-gas-mask as near (u64) -> u64;
 using #keyboard-button-pressed? as far (u64) -> bool;
+using #audio-set-gas-mask-flag as far (u64, u64) -> u0;
+using #audio-clear-gas-mask-flag as far (u64) -> u0;
+
+
+// u64 get_gas_mask_setup(u64 current_character) {
+//     return match (current_character) {
+//         #ellie -> #*ellie-gas-mask-setup*,
+//         #abby -> #*abby-gas-mask-setup*,
+//         #joel -> #*joel-gas-mask-setup*,
+//         #dina -> #*dina-gas-mask-setup*, 
+//         #lev -> #*lev-gas-mask-setup*,
+//         else -> 0
+//     }
+// }
 
 statescript #gas-mask-toggle {
     options {
@@ -25,7 +39,28 @@ statescript #gas-mask-toggle {
                 lambda {
                     u16 version_major = 1;
                     u16 version_minor = 1;
+                    breakpoint;
                     >> "launched custom gas mask script, version %d.%d" $ version_major, version_minor;
+
+                    // u64 current_character = 0;
+
+                    // if (is-rogue-mode?()) {
+                    //     >> "in rogue, getting character";
+                    //     current_character = rogue-get-player-character();
+                    // } else if (is-player-ellie?()) {
+                    //     current_character = 0;
+                    // } else if (is-player-abby?()) {
+                    //     current_character = 1;
+                    // }
+                    // >> "got character: %d" $ current_character;
+
+                    // >> "getting gas mask setup...";
+                    // u64 gas_mask_setup = get_gas_mask_setup(current_character);
+                    // >> "got gas mask setup: %d" $ gas_mask_setup;
+                    // if (gas_mask_setup == 0) {
+                    //     >> "invalid gas mask setup, defaulting to ellie";
+                    //     gas_mask_setup = #*ellie-gas-mask-setup*;
+                    // }
 
                     #set-gas-mask-setting-id(#player, #*ellie-gas-mask-setup*);
 
@@ -52,6 +87,7 @@ statescript #gas-mask-toggle {
                 lambda {
                     >> "arrived in custom-put-on-mask";
                     #wait-equip-gas-mask(#player, 0, 0);
+                    #audio-set-gas-mask-flag(#player, 0);
                 }
             }
         }
@@ -72,6 +108,7 @@ statescript #gas-mask-toggle {
                 lambda {
                     >> "arrived in remove-gas-mask";
                     #wait-remove-gas-mask(#player, 0, 0);
+                    #audio-clear-gas-mask-flag(#player);
                 }
             }
         }

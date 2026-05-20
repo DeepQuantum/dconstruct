@@ -212,6 +212,10 @@ namespace dconstruct {
 		return u8(v);
 	}
 
+	constexpr std::byte operator"" _b(u64 v) {
+		return std::byte(v);
+	}
+
 	// once C++26 is added to MSVC....
 	/*
 	

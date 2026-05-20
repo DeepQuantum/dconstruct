@@ -82,7 +82,7 @@ set(MSVC_FLAGS "/MP")
 # Apply flags based on compiler
 if(MSVC)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")
-    add_compile_options(/wd4624)
+    add_compile_options($<$<COMPILE_LANGUAGE:CXX>:/wd4624>)
 else()
     message("Not applying MSVC")
 endif()
@@ -228,8 +228,13 @@ add_dependencies(dconstruct generate_buildinfo)
 
 add_subdirectory(${SOURCE_DIR}/minhook)
 
+if(MSVC)
+    enable_language(ASM_MASM)
+endif()
+
 add_library(dconstruct_hooking SHARED
     "${SOURCE_DIR}/hooking/hooking.cpp"
+    "${SOURCE_DIR}/hooking/extended_opcodes.asm"
     "${SOURCE_DIR}/base/sidbase.cpp"
 )
 
@@ -238,7 +243,7 @@ target_include_directories(dconstruct_hooking PRIVATE "${SOURCE_DIR}/minhook/inc
 target_link_libraries(dconstruct_hooking PRIVATE minhook)
 
 target_compile_options(dconstruct_hooking PRIVATE 
-    $<$<CONFIG:Release>:/GL>
+    $<$<AND:$<CONFIG:Release>,$<COMPILE_LANGUAGE:CXX>>:/GL>
 )
 
 target_link_options(dconstruct_hooking PRIVATE
