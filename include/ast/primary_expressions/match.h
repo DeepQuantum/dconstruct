@@ -8,7 +8,7 @@
 
 namespace dconstruct::ast {
     struct match_expr : public expression {
-        using matches_t = std::pair<std::vector<expr_uptr>, expr_uptr>;
+        using matches_t = std::pair<expr_uptr, expr_uptr>;
 
         match_expr(std::vector<matches_t>&& match_pairs) noexcept : 
         m_matchPairs(std::move(match_pairs)) {};
@@ -33,6 +33,8 @@ namespace dconstruct::ast {
         [[nodiscard]] full_type compute_type_unchecked(const compilation::scope& env) const noexcept final;
         [[nodiscard]] semantic_check_res compute_type_checked(compilation::scope& env) const noexcept final;
         [[nodiscard]] u16 calc_complexity() const noexcept final;
+        [[nodiscard]] emission_res emit_dc(compilation::function& fn, compilation::global_state& global, const std::optional<reg_idx> destination = std::nullopt) const noexcept final;
+
         //[[nodiscard]] llvm_res emit_llvm(llvm::LLVMContext&, llvm::IRBuilder<>&, llvm::Module&, const compiler::scope&) const noexcept final {return std::};
         VAR_OPTIMIZATION_ACTION var_optimization_pass(var_optimization_env& env) noexcept final;
         FOREACH_OPTIMIZATION_ACTION foreach_optimization_pass(foreach_optimization_env& env) noexcept final;
@@ -42,5 +44,6 @@ namespace dconstruct::ast {
         expr_uptr m_default;
     private:
         [[nodiscard]] std::vector<std::pair<std::vector<const expr_uptr*>, const expr_uptr*>> group_patterns() const noexcept;
+        [[nodiscard]] u64 calc_density() const noexcept;
     };
 }

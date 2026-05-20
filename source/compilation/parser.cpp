@@ -1125,6 +1125,7 @@ template<typename ...Args> requires (std::constructible_from<ast::literal, Args>
         expr_uptr matched_expression = make_expression();
         if (!matched_expression) {
             m_errors.emplace_back(peek(), "expected expression after '->' but got '" + peek().m_lexeme + "'");
+            return nullptr;
         }
 
         if (!default_pattern_reached && !consume({token_type::COMMA}, "expected ',' at end of pattern-match expression")) {
@@ -1134,7 +1135,11 @@ template<typename ...Args> requires (std::constructible_from<ast::literal, Args>
         if (default_pattern_reached) {
             default_pattern = std::move(matched_expression);
         } else {
-            matches.emplace_back(std::move(patterns), std::move(matched_expression));
+            for (u64 i = 0; i < patterns.size(); ++i) {
+                expr_uptr case_expression =
+                    i + 1 == patterns.size() ? std::move(matched_expression) : matched_expression->clone();
+                matches.emplace_back(std::move(patterns[i]), std::move(case_expression));
+            }
         }
         patterns.clear();
     }

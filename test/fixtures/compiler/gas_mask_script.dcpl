@@ -18,16 +18,16 @@ using #audio-set-gas-mask-flag as far (u64, u64) -> u0;
 using #audio-clear-gas-mask-flag as far (u64) -> u0;
 
 
-// u64 get_gas_mask_setup(u64 current_character) {
-//     return match (current_character) {
-//         #ellie -> #*ellie-gas-mask-setup*,
-//         #abby -> #*abby-gas-mask-setup*,
-//         #joel -> #*joel-gas-mask-setup*,
-//         #dina -> #*dina-gas-mask-setup*, 
-//         #lev -> #*lev-gas-mask-setup*,
-//         else -> 0
-//     }
-// }
+i64 get_gas_mask_setup(u64 current_character) {
+    return match (current_character) {
+        0 -> #*ellie-gas-mask-setup*,
+        1 -> #*abby-gas-mask-setup*,
+        2 -> #*joel-gas-mask-setup*,
+        3 -> #*dina-gas-mask-setup*, 
+        4 -> #*lev-gas-mask-setup*,
+        else -> -1
+    }
+}
 
 statescript #gas-mask-toggle {
     options {

@@ -1,10 +1,34 @@
 #include "ast/primary_expressions/match.h"
 
+#include <algorithm>
 #include <iomanip>
 #include <numeric>
 #include <sstream>
 
 namespace dconstruct::ast {
+
+namespace {
+    using grouped_patterns_t = std::vector<std::pair<std::vector<const expr_uptr*>, const expr_uptr*>>;
+
+    [[nodiscard]] std::string pattern_list_string(const std::vector<const expr_uptr*>& patterns) {
+        std::stringstream ss;
+        for (u64 i = 0; i < patterns.size(); ++i) {
+            if (i != 0) {
+                ss << ", ";
+            }
+            ss << **patterns[i];
+        }
+        return ss.str();
+    }
+
+    [[nodiscard]] u64 max_pattern_width(const grouped_patterns_t& grouped) {
+        u64 max_size = sizeof("else") - 1;
+        for (const auto& [patterns, _] : grouped) {
+            max_size = std::max<u64>(max_size, pattern_list_string(patterns).length());
+        }
+        return max_size;
+    }
+}
 
 
 void match_expr::pseudo_c(std::ostream& os) const {
@@ -21,31 +45,11 @@ void match_expr::pseudo_c(std::ostream& os) const {
     os << indent_more;
 
     const auto grouped = group_patterns();
-    std::vector<u64> pattern_lengths;
-    pattern_lengths.resize(grouped.size());
-
-    std::transform(grouped.cbegin(), grouped.cend(), pattern_lengths.begin(), [](const auto& pair) -> u64 {
-        std::stringstream os;
-        for (const auto& pattern : pair.first) {
-            os << **pattern;
-        }
-        return std::max(os.str().length() + 2 * (pair.first.size() - 1), sizeof("else") - 1);
-    });
-
-    const auto max_size_iter = std::max_element(pattern_lengths.begin(), pattern_lengths.end());
-
-    const u64 max_size = *max_size_iter;
+    const u64 max_size = max_pattern_width(grouped);
 
     for (const auto& [patterns, expression] : grouped) {
-        bool first = true;
         os << indent;
-        for (const auto& pattern : patterns) {
-            if (!first) {
-                os << ", ";
-            }
-            first = false;
-            os << std::left << std::setw(max_size) << **pattern;
-        }
+        os << std::left << std::setw(max_size) << pattern_list_string(patterns);
         os << " -> " << **expression << ",\n";
     }
     os << indent << std::left << std::setw(max_size) << "else" << " -> " << *m_default << "\n";
@@ -55,16 +59,13 @@ void match_expr::pseudo_c(std::ostream& os) const {
 [[nodiscard]] std::vector<std::pair<std::vector<const expr_uptr*>, const expr_uptr*>> match_expr::group_patterns() const noexcept {
     std::vector<std::pair<std::vector<const expr_uptr*>, const expr_uptr*>> res;
 
-    for (const auto& [patterns, match] : m_matchPairs) {
-        
-        auto match_exists = [&match](const auto& pair) -> bool { return *pair.second == match; };
-        
-        for (const auto& pattern : patterns) {
-            if (auto match_group = std::find_if(res.begin(), res.end(), match_exists); match_group != res.end()) {
+    for (const auto& [pattern, match] : m_matchPairs) {
+        auto match_exists = [&match](const auto& pair) -> bool { return **pair.second == *match; };
+
+        if (auto match_group = std::find_if(res.begin(), res.end(), match_exists); match_group != res.end()) {
             match_group->first.push_back(&pattern);
-            } else {
-                res.emplace_back(std::vector<const expr_uptr*>{&pattern}, &match);
-            }
+        } else {
+            res.emplace_back(std::vector<const expr_uptr*>{&pattern}, &match);
         }
     }
 
@@ -86,30 +87,11 @@ void match_expr::pseudo_py(std::ostream& os) const {
     os << indent_more;
 
     const auto grouped = group_patterns();
-    std::vector<u64> pattern_lengths;
-    pattern_lengths.resize(grouped.size());
-
-    std::transform(grouped.cbegin(), grouped.cend(), pattern_lengths.begin(), [](const auto& pair) -> u64 {
-        std::stringstream ss;
-        for (const auto& pattern : pair.first) {
-            ss << **pattern;
-        }
-        return std::max(ss.str().length() + 2 * (pair.first.size() - 1), sizeof("else") - 1);
-    });
-
-    const auto max_size_iter = std::max_element(pattern_lengths.begin(), pattern_lengths.end());
-    const u64 max_size = *max_size_iter;
+    const u64 max_size = max_pattern_width(grouped);
 
     for (const auto& [patterns, expression] : grouped) {
-        bool first = true;
         os << indent;
-        for (const auto& pattern : patterns) {
-            if (!first) {
-                os << ", ";
-            }
-            first = false;
-            os << std::left << std::setw(max_size) << **pattern;
-        }
+        os << std::left << std::setw(max_size) << pattern_list_string(patterns);
         os << " -> " << **expression << ",\n";
     }
     os << indent << std::left << std::setw(static_cast<std::streamsize>(max_size)) << "else" << " -> " << *m_default << "\n";
@@ -126,19 +108,8 @@ void match_expr::pseudo_racket(std::ostream& os) const {
 
     const auto grouped = group_patterns();
     for (const auto& [patterns, expression] : grouped) {
-        const u64 n = m_conditions.size();
-        for (u64 r = 0; r + n <= patterns.size(); r += n) {
-            os << indent << "[";
-            if (n > 1) {
-                os << "(list";
-                for (u64 i = 0; i < n; ++i) {
-                    os << " " << **patterns[r + i];
-                }
-                os << ")";
-            } else {
-                os << **patterns[r];
-            }
-            os << " " << *expression << "]\n";
+        for (const auto& pattern : patterns) {
+            os << indent << "[" << **pattern << " " << *expression << "]\n";
         }
     }
     os << indent << "[_ " << *m_default << "]\n";
@@ -175,7 +146,7 @@ void match_expr::pseudo_racket(std::ostream& os) const {
             m_matchPairs.end(),
             u16{0},
             [](u16 acc, const auto& pair) {
-                return static_cast<u16>(acc + static_cast<u16>(pair.first.size()) + pair.second->get_complexity());
+                return static_cast<u16>(acc + pair.first->get_complexity() + pair.second->get_complexity());
             }
         );
 
@@ -190,21 +161,14 @@ void match_expr::pseudo_racket(std::ostream& os) const {
     for (const auto& condition : m_conditions) {
         new_conditions.emplace_back(condition->clone());
     }
-    for (const auto& [patterns, expression] : m_matchPairs) {
-        std::vector<expr_uptr> new_patterns;
-        new_patterns.reserve(patterns.size());
-
-        for (const auto& pattern : patterns) {
-            new_patterns.emplace_back(pattern->clone());
-        }
-
-        new_matchpairs.emplace_back(std::move(new_patterns), expression->clone());
+    for (const auto& [pattern, expression] : m_matchPairs) {
+        new_matchpairs.emplace_back(pattern->clone(), expression->clone());
     }
     return std::make_unique<match_expr>(std::move(new_conditions), std::move(new_matchpairs), m_default->clone());
 }
 
 [[nodiscard]] full_type match_expr::compute_type_unchecked(const compilation::scope& env) const noexcept {
-    for (const auto& [patterns, expression] : m_matchPairs) {
+    for (const auto& [pattern, expression] : m_matchPairs) {
         if (const auto type_res = expression->get_type_unchecked(env); !is_unknown(type_res)) {
             return type_res;
         }
@@ -226,7 +190,7 @@ void match_expr::pseudo_racket(std::ostream& os) const {
             using T = std::decay_t<decltype(cond)>;
 
             if constexpr (is_primitive<T>) {
-                if (is_arithmetic(cond.m_type)) {
+                if (is_integral(cond.m_type)) {
                     return std::nullopt;
                 }
                 return "expected arithmetic type for precondition but got " + type_to_declaration_string(cond);
@@ -264,19 +228,17 @@ void match_expr::pseudo_racket(std::ostream& os) const {
     bool result_type_set = false;
     full_type result_type = std::monostate();
 
-    for (const auto& [patterns, expression] : m_matchPairs) {
-        for (const auto& pattern : patterns) {
-            const semantic_check_res pattern_type = pattern->get_type_checked(env);
+    for (const auto& [pattern, expression] : m_matchPairs) {
+        const semantic_check_res pattern_type = pattern->get_type_checked(env);
 
-            if (!pattern_type) {
-                return pattern_type;
-            }
+        if (!pattern_type) {
+            return pattern_type;
+        }
 
-            if (*pattern_type != *match_var_type) {
-                return std::unexpected{semantic_check_error{
-                    "expected pattern type " + type_to_declaration_string(*match_var_type) + " but got " + type_to_declaration_string(*pattern_type), pattern.get()
-                }};
-            }
+        if (*pattern_type != *match_var_type) {
+            return std::unexpected{semantic_check_error{
+                "expected pattern type " + type_to_declaration_string(*match_var_type) + " but got " + type_to_declaration_string(*pattern_type), pattern.get()
+            }};
         }
 
         const semantic_check_res expr_type = expression->get_type_checked(env);
@@ -310,12 +272,29 @@ void match_expr::pseudo_racket(std::ostream& os) const {
     return result_type;
 }
 
+[[nodiscard]] u64 match_expr::calc_density() const noexcept {
+    
+}
+
+[[nodiscard]] emission_res match_expr::emit_dc(compilation::function& fn, compilation::global_state& global, const std::optional<reg_idx> destination) const noexcept {
+    const emission_res condition = m_conditions.back()->emit_dc(fn, global);
+    if (!condition) {
+        return condition;
+    }
+
+    const u64 density = calc_density();
+
+    for (const auto& [patterns, expression] : m_matchPairs) {
+
+    }
+}
 
 VAR_OPTIMIZATION_ACTION match_expr::var_optimization_pass(var_optimization_env& env) noexcept {
     for (auto& condition : m_conditions) {
         env.check_action(&condition);
     }
     for (auto& [pattern, expression] : m_matchPairs) {
+        env.check_action(&pattern);
         env.check_action(&expression);
     }
     return VAR_OPTIMIZATION_ACTION::NONE;
@@ -326,6 +305,7 @@ FOREACH_OPTIMIZATION_ACTION match_expr::foreach_optimization_pass(foreach_optimi
         env.check_action(&condition);
     }
     for (auto& [pattern, expression] : m_matchPairs) {
+        env.check_action(&pattern);
         env.check_action(&expression);
     }
     return FOREACH_OPTIMIZATION_ACTION::NONE;

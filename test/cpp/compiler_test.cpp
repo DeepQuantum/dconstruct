@@ -1225,16 +1225,10 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
         vars.push_back(std::make_unique<ast::identifier>("var_1"));
         vars.push_back(std::make_unique<ast::identifier>("var_2"));
 
-        std::vector<expr_uptr> case1_vals;
-        case1_vals.push_back(std::make_unique<ast::literal>((u16)0));
-        case1_vals.push_back(std::make_unique<ast::literal>((u16)1));
-
-        std::vector<expr_uptr> case2_vals;
-        case2_vals.push_back(std::make_unique<ast::literal>((u16)2));
-
         std::vector<ast::match_expr::matches_t> outer;
-        outer.emplace_back(std::move(case1_vals), std::make_unique<ast::literal>("Cool"));
-        outer.emplace_back(std::move(case2_vals), std::make_unique<ast::literal>("Not cool"));
+        outer.emplace_back(std::make_unique<ast::literal>((u16)0), std::make_unique<ast::literal>("Cool"));
+        outer.emplace_back(std::make_unique<ast::literal>((u16)1), std::make_unique<ast::literal>("Cool"));
+        outer.emplace_back(std::make_unique<ast::literal>((u16)2), std::make_unique<ast::literal>("Not cool"));
 
         std::list<stmnt_uptr> expected;
         expected.push_back(std::make_unique<ast::return_stmt>(

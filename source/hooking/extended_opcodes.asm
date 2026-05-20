@@ -3,9 +3,8 @@
 PUBLIC extended_opcode_switch
 
 extended_opcode_switch PROC
-    push rax
-    pop rax
-    ret
+    ; switch(r14d)
+    ; case 5E:
 extended_opcode_switch ENDP
 
 END

@@ -214,7 +214,8 @@ namespace dconstruct::hooking {
         create_breakpoint_entry(module_base + STORE_ARRAY_PARSE_INSTRUCTION, NOP_LENGTH_PARSE_INSTRUCTION);
 
 
-        const p64 extended_opcode_switch_location = (p64)&extended_opcode_switch;
+        const p64 jump_extended_opcode_switch_location = (p64)&extended_opcode_switch;
+        const p64 extended_opcode_switch_location = (jump_extended_opcode_switch_location + 5) + (*(i32*)(jump_extended_opcode_switch_location + 1));
         create_opcode_default_switch_override(module_base + DEFAULT_CASE_RUN_SCRIPT, extended_opcode_switch_location, module_base + CONTINUE_ADDRESS);
 
         //load_sidbase();
