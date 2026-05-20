@@ -132,10 +132,10 @@ enable_testing()
 
 add_executable(
     dconstruct_test
-    ${CMAKE_CURRENT_TEST_DIR}/disassembler_test.cpp
-    ${CMAKE_CURRENT_TEST_DIR}/compiler_test.cpp
-    ${CMAKE_CURRENT_TEST_DIR}/decompiler_test.cpp
-    ${CMAKE_CURRENT_TEST_DIR}/binaryfile_test.cpp
+    ${CMAKE_CURRENT_TEST_DIR}/cpp/disassembler_test.cpp
+    ${CMAKE_CURRENT_TEST_DIR}/cpp/compiler_test.cpp
+    ${CMAKE_CURRENT_TEST_DIR}/cpp/decompiler_test.cpp
+    ${CMAKE_CURRENT_TEST_DIR}/cpp/binaryfile_test.cpp
 )
 
 if(MSVC)
@@ -145,9 +145,10 @@ else()
 endif()
 
 target_link_libraries(dconstruct_test PRIVATE dconstruct_lib GTest::gtest_main)
+target_compile_definitions(dconstruct_test PRIVATE DCONSTRUCT_TEST_ROOT="${CMAKE_CURRENT_TEST_DIR}")
 
 include(GoogleTest)
-gtest_discover_tests(dconstruct_test)
+gtest_discover_tests(dconstruct_test WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
 
 add_executable(
     dconstruct
@@ -168,11 +169,11 @@ target_link_libraries(dconstruct PRIVATE dconstruct_lib)
 set(BUILDINFO_H "${CMAKE_CURRENT_BINARY_DIR}/buildinfo.h")
 add_custom_command(
     OUTPUT ${BUILDINFO_H}
-    COMMAND python ${PROJECT_SOURCE_DIR}/buildinfo.py "${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION};${VERSION_NUMBER}"
+    COMMAND python ${PROJECT_SOURCE_DIR}/scripts/buildinfo.py "${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION};${VERSION_NUMBER}"
     DEPENDS
     ${BASE_SOURCE_FILES}
     "${SOURCE_DIR}/main_cli.cpp"
-    COMMENT "Generating build info header by running buildinfo.py with compiler version"
+    COMMENT "Generating build info header by running scripts/buildinfo.py with compiler version"
 )
 
 
@@ -205,14 +206,19 @@ add_executable(
 
 target_link_libraries(dcc PRIVATE dconstruct_lib)
 
+add_executable(
+    decode_sidbase
+    ${SOURCE_DIR}/sidbase/tools/decode_sidbase.cpp
+)
+
 set(BUILDINFO_H "${CMAKE_CURRENT_BINARY_DIR}/buildinfo.h")
 add_custom_command(
     OUTPUT ${BUILDINFO_H}
-    COMMAND python ${PROJECT_SOURCE_DIR}/buildinfo.py "${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION};${VERSION_NUMBER}"
+    COMMAND python ${PROJECT_SOURCE_DIR}/scripts/buildinfo.py "${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION};${VERSION_NUMBER}"
     DEPENDS
     ${BASE_SOURCE_FILES}
     "${SOURCE_DIR}/main_cli.cpp"
-    COMMENT "Generating build info header by running buildinfo.py with compiler version"
+    COMMENT "Generating build info header by running scripts/buildinfo.py with compiler version"
 )
 
 target_compile_options(dcc PRIVATE 

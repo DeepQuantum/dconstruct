@@ -1,0 +1,3 @@
+level-name sp-all
+actor gas-mask-ellie
+symbol gas-mask-toggle

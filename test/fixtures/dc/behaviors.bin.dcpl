@@ -1,0 +1,32 @@
+u64? buddy-attack-behavior-start-func(u64? arg_0, () -> u64? arg_1) {
+    u64? var_0 = character-melee-event-active?(arg_1, 188, 0);
+    u64? var_1 = melee-fact-get-symbol(arg_0, buddy-desired-melee-target);
+    u64? var_2 = characters-in-melee?(player, arg_1, 1);
+    u64? var_3 = in-knee-stun?(arg_1);
+    u64? var_4 = npc-in-tap?(arg_1);
+    u64? var_5 = melee-fact-get-time-since(arg_0, last-counter);
+    u64? var_6 = melee-fact-get-float(arg_0, buddy-rebuttal-cooldown);
+    bool var_7 = var_5 > var_6 && !var_4 && !var_3 && !var_2 && var_1 == arg_1 && !var_0;
+    return var_7;
+}
+
+u64? buddy-attack-behavior-end-func(u64? arg_0, () -> u64? arg_1) {
+    u64? var_0 = character-melee-event-active?(arg_1, 188, 0);
+    u64? var_1 = melee-fact-get-symbol(arg_0, buddy-desired-melee-target);
+    u64? var_2 = characters-in-melee?(player, arg_1, 1);
+    u64? var_3 = in-knee-stun?(arg_1);
+    u64? var_4 = npc-in-tap?(arg_1);
+    u64? var_5 = melee-fact-get-time-since(arg_0, last-counter);
+    u64? var_6 = melee-fact-get-float(arg_0, buddy-rebuttal-cooldown);
+    bool var_7 = var_5 < var_6 && var_4 || var_3 || var_2 || !(var_1 == arg_1) || var_0;
+    return var_7;
+}
+
+u64? abby-OoB-grab(u64? arg_0, u64? arg_1) {
+    get-object-locator(arg_1);
+    u64? var_0 = locator-in-region?(get-object-locator, rgn-orient-to-center-1, player);
+    u64? var_1 = npc-struggle-cooldown-func(arg_0, arg_1, 3.00, 10.00, 0);
+    bool var_2 = var_1 && var_0;
+    return var_2;
+}
+

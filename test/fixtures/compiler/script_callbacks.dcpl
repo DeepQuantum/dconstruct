@@ -1,0 +1,104 @@
+@target "C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/script-callbacks.bin"
+@mod "C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/mods/gas-mask-toggle"
+@output "script-callbacks.bin"
+@sidbase "C:/Users/damix/Documents/GitHub/TLOU2Modding/dconstruct/test/fixtures/dc/sidbase_new_fixed.bin"
+
+
+using #spawn-script as far (string, string, u64, u64) -> u0;
+using #pc-build? as far () -> bool;
+using #send-event as far (u64, u64, u64) -> u0;
+
+u0 #spawned-player-callback(u64 arg_0) {
+
+    >> "hooked spawned-player-callback";
+    >> "runnning #send-event";
+    breakpoint;
+    >> "hooking display";
+
+    u64 player = #player;
+
+    #spawn-script("ss-player-hud-manager", nullptr, 0, 0);
+    #spawn-script("ss-character-material-controller", nullptr, 0, 0);
+    #spawn-script("ss-player-melee-controller", nullptr, player, 0);
+    #spawn-script("ss-melee-dodge-attack-spam", nullptr, player, 0);
+    #spawn-script("ss-player-blind-listen-mode", nullptr, player, 0);
+    #spawn-script("ss-accessibility-pathfind", nullptr, player, 0);
+    #spawn-script("ss-accessibility-invisible-prone", nullptr, player, 0);
+    #spawn-script("ss-accessibility-break-glass", nullptr, player, 0);
+    #spawn-script("ss-accessibility-status", nullptr, player, 0);
+    #spawn-script("ss-accessibility-horse-jump", nullptr, player, 0);
+    #spawn-script("ss-accessibility-clamber", nullptr, player, 0);
+    #spawn-script("ss-accessibility-lockon-aim", nullptr, player, 0);
+    #spawn-script("ss-accessibility-lost-control-sound", nullptr, player, 0);
+    #spawn-script("ss-dynamic-checkpoint-manager", nullptr, player, 0);
+    #spawn-script("ss-player-hold-breath-aim-controller", nullptr, player, 0);
+    #spawn-script("ss-player-pull-out-arrow-controller", nullptr, player, 0);
+    #spawn-script("ss-player-quickswap-aim-controller", nullptr, player, 0);
+    #spawn-script("ss-crafting-stats", nullptr, player, 0);
+    #spawn-script("ss-crafting-recipe-from-pickup", nullptr, player, 0);
+    #spawn-script("ss-promote-death-hints", nullptr, player, 0);
+    #spawn-script("ss-player-melee-moveset-controller", nullptr, player, 0);
+    #spawn-script("player-survive-with-one-health", nullptr, player, 0);
+    #spawn-script("ss-weapon-stats", nullptr, player, 0);
+    #spawn-script("ss-revolver-bullet-counter", nullptr, player, 0);
+    #spawn-script("ss-pistol-xcaliber-manager", nullptr, player, 0);
+    #spawn-script("ss-shotgun-baserri-bullet-counter", nullptr, player, 0);
+    #spawn-script("ss-reminders", nullptr, player, 0);
+    #spawn-script("ss-npc-begs-for-life", nullptr, player, 0);
+    #spawn-script("ss-hud2-buddy-status", nullptr, player, 0);
+    #spawn-script("ss-hud2-buddy-callout-icons", nullptr, player, 0);
+    #spawn-script("ss-hud2-reminder-manager", nullptr, player, 0);
+    #spawn-script("ss-idle-controller", "ss-idle-controller--player", player, 0);
+    #spawn-script("ss-emotional-fade-controller", "ss-emotional-fade-controller--player", player, 0);
+    #spawn-script("ss-waterfall-reaction", nullptr, player, 0);
+    #spawn-script("ss-player-messy-hair-manager", nullptr, player, 0);
+    #spawn-script("ss-prone-aim-grass-pusher", nullptr, player, 0);
+    #spawn-script("ss-hud2-proto-stealth-vignette", nullptr, player, 0);
+    #spawn-script("ss-pain-killers", nullptr, player, 0);
+    #spawn-script("ss-explosive-arrow", nullptr, player, 0);
+    #spawn-script("ss-proto-swap-pickaxe-pickup", nullptr, player, 0);
+    #spawn-script("ss-flashlight-dimming", nullptr, player, 0);
+    #spawn-script("ss-horse-rumble", nullptr, player, 0);
+    #spawn-script("ss-dumpster-rumble", nullptr, player, 0);
+    #spawn-script("ss-rope-swing-haptics", nullptr, player, 0);
+    #spawn-script("ss-weather-haptics", nullptr, player, 0);
+    #spawn-script("ss-cinematic-haptics-controller", nullptr, player, 0);
+    #spawn-script("ss-meatshield-haptics", nullptr, player, 0);
+    #spawn-script("ss-debug-draw-controller", nullptr, player, 0);
+    #spawn-script("ss-weapon-drop-manager", nullptr, player, 0);
+    #spawn-script("ss-player-reload-gameplay-audio", nullptr, player, 0);
+    #spawn-script("ss-grounded-pickup-despawn", nullptr, player, 0);
+    #spawn-script("ss-adaptive-trigger-controller", nullptr, player, 0);
+    #spawn-script("ss-player-skel-fact", nullptr, player, 0);
+    if (#pc-build?()) {
+        #spawn-script("ss-pc-partial-movement-controller", nullptr, player, 0);
+        #spawn-script("ss-hud2-toggle-all", nullptr, player, 0);
+    } else {
+        0;
+    }
+    if (arg_0) {
+        #spawn-script("ss-player-peek-mode", nullptr, player, 0);
+        #spawn-script("ss-melee-rumble-listener", nullptr, player, 0);
+        #spawn-script("ss-moshpit-debug", nullptr, player, 0);
+        #spawn-script("ss-dodge-cooldown-debug", nullptr, player, 0);
+        #spawn-script("ss-melee-metrics", nullptr, player, 0);
+        #spawn-script("ss-hud2-stealth-meter-asymetric", nullptr, player, 0);
+        #spawn-script("ss-cover-camera-prototype", nullptr, player, 0);
+        #spawn-script("ss-debug-infinite-throwables", nullptr, player, 0);
+        #spawn-script("ss-debug-rule-of-thirds", nullptr, player, 0);
+        #spawn-script("ss-player-stat-jump-to-dodge", nullptr, player, 0);
+        #spawn-script("ss-proto-player-upgrades", nullptr, player, 0);
+        #spawn-script("ss-buddy-targeting-debug", nullptr, player, 0);
+        #spawn-script("ss-buddy-infected-danger-debug", nullptr, player, 0);
+        #spawn-script("ss-debug-poi-placer", nullptr, player, 0);
+        #spawn-script("ss-buddy-downed", nullptr, player, 0);
+        #spawn-script("ss-debug-thirds-grid", nullptr, player, 0);
+        #spawn-script("ss-debug-screen-dot-controller", nullptr, player, 0);
+        #spawn-script("ss-player-responsiveness-graph", nullptr, player, 0);
+    } else {
+        0;
+    }
+
+    >> "launching custom script gas-mask-toggle";
+    #spawn-script("gas-mask-toggle", nullptr, player, 0);
+}

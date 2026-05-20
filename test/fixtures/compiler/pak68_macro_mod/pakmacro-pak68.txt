@@ -1,0 +1,6 @@
+level-name sp-all
+symbol existing-entry
+symbol gas-mask-ellie
+actor dina
+level-name other-level
+actor other-actor

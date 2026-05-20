@@ -54,6 +54,14 @@ CMakeLists.txt.user*
 *.txt
 !CMakeLists.txt
 !requirements.txt
+!decompiled/
+!decompiled/**
+!test/fixtures/
+!test/fixtures/**
+!test/images/
+!test/images/**
+/decompiled/t2r_racket/dc1/explosions.bin.asm
+/test/fixtures/dc/test_sidbase.bin
 # xemacs temporary files
 *.flc
 vs_proj
@@ -99,3 +107,4 @@ vs_proj
 lib/*
 include/ll*
 include/clang*
+**/__pycache__

@@ -62,7 +62,7 @@ namespace dconstruct::hooking {
     std::unique_ptr<SIDBase> sidbase;
 
     void load_sidbase() {
-        const std::filesystem::path sidbase_path = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dconstruct/test/dc_test_files/sidbase_new_fixed.bin";
+        const std::filesystem::path sidbase_path = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dconstruct/test/fixtures/dc/sidbase_new_fixed.bin";
         auto sidbase_res = SIDBase::from_binary(sidbase_path);
         if (!sidbase_res) {
             log("failed to load sidbase '{}': {}", sidbase_path.string(), sidbase_res.error());

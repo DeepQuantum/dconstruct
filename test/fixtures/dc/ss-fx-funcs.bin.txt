@@ -1,0 +1,134 @@
+####################################################################################################
+#                                                                                                  #
+#   DeepQuantum's DC Disassembler ver. beta_2                                                      #
+#   DeepQuantum's DC Disassembler ver. beta_2                                                      #
+#   Listing for file: ss-fx-funcs.bin                                                              #
+#   Filesize: 1061 bytes                                                                           #
+#                                                                                                  #
+####################################################################################################
+
+
+
+##############################  ENTRY 0  ##############################
+
+spawn-molotov-gameplay-fire = script-lambda [0x00060] {
+    0000   0x0000B0   43 00 00 00   Move                 r0, r0        r0 = 0x0
+    0001   0x0000B8   00 00 00 00   Return               r0            Return 0x0
+    0002   0x0000C0   43 02 33 00   Move                 r2, r51       r2 = arg_2
+    0003   0x0000C8   43 03 34 00   Move                 r3, r52       r3 = arg_3
+    0004   0x0000D0   43 04 01 00   Move                 r4, r1        r4 = 0x0
+    0005   0x0000D8   4A 05 00 00   LoadStaticU64Imm     r5, 0         r5 = ST[0] -> <molotov-cocktail-wall/smoke_event_emitter>
+    0006   0x0000E0   1D 04 04 05   IEqual               r4, r4, r5    r4 = 0x0 == molotov-cocktail-wall/smoke_event_emitter
+    0007   0x0000E8   2E 0B 04 00   BranchIf             r4, 0xB       IF r4 [0x0] => L_0
+    0008   0x0000F0   43 04 01 00   Move                 r4, r1        r4 = 0x0
+    0009   0x0000F8   4A 05 01 00   LoadStaticU64Imm     r5, 1         r5 = ST[1] -> <molotov-cocktail-ceiling/smoke_event_emitter>
+    000A   0x000100   1D 04 04 05   IEqual               r4, r4, r5    r4 = 0x0 == molotov-cocktail-ceiling/smoke_event_emitter
+  L_0:
+    000B   0x000108   2E 0F 04 00   BranchIf             r4, 0xF       IF r4 [0x0] => L_1
+    000C   0x000110   43 04 01 00   Move                 r4, r1        r4 = 0x0
+    000D   0x000118   4A 05 02 00   LoadStaticU64Imm     r5, 2         r5 = ST[2] -> <molotov-cocktail-floor/smoke_event_emitter>
+    000E   0x000120   1D 04 04 05   IEqual               r4, r4, r5    r4 = 0x0 == molotov-cocktail-floor/smoke_event_emitter
+  L_1:
+    000F   0x000128   2F 1B 04 00   BranchIfNot          r4, 0x1B      IF NOT r4 [0x0] => L_RETURN_0
+    0010   0x000130   15 04 03 00   LookupPointer        r4, 3         r4 = ST[3] -> <add-molotov-flame>
+    0011   0x000138   43 05 00 00   Move                 r5, r0        r5 = 0x0
+    0012   0x000140   40 06 04 00   LoadStaticFloatImm   r6, 4         r6 = ST[4] -> <14.00>
+    0013   0x000148   43 07 02 00   Move                 r7, r2        r7 = arg_2
+    0014   0x000150   43 08 03 00   Move                 r8, r3        r8 = arg_3
+    0015   0x000158   43 31 05 00   Move                 r49, r5       r49 = 0x0
+    0016   0x000160   43 32 06 00   Move                 r50, r6       r50 = 14.00
+    0017   0x000168   43 33 07 00   Move                 r51, r7       r51 = arg_2
+    0018   0x000170   43 34 08 00   Move                 r52, r8       r52 = arg_3
+    0019   0x000178   1B 04 04 04   Call                 r4, r4, 4     r4 = add-molotov-flame(0x0, 14.00, arg_2, arg_3)
+    001A   0x000180   2D 1C 00 00   Branch               0x1C          GOTO => L_RETURN
+  L_RETURN_0:
+    001B   0x000188   0C 04 00 00   LoadU16Imm           r4, 0         r4 = 0
+  L_RETURN:
+    001C   0x000190   00 04 04 00   Return               r4            Return 0
+
+    SYMBOL TABLE: 
+    0000   0x000198    sid: <molotov-cocktail-wall/smoke_event_emitter>
+    0001   0x0001A0    sid: <molotov-cocktail-ceiling/smoke_event_emitter>
+    0002   0x0001A8    sid: <molotov-cocktail-floor/smoke_event_emitter>
+    0003   0x0001B0    pointer: <add-molotov-flame>
+    0004   0x0001B8    float: <14.000000>
+}
+
+
+##############################  ENTRY 1  ##############################
+
+add-molotov-flame = script-lambda [0x001C8] {
+    [4 args]
+    0000   0x000218   43 00 31 00   Move                 r0, r49       r0 = arg_0
+    0001   0x000220   43 01 32 00   Move                 r1, r50       r1 = arg_1
+    0002   0x000228   43 02 33 00   Move                 r2, r51       r2 = arg_2
+    0003   0x000230   43 03 34 00   Move                 r3, r52       r3 = arg_3
+    0004   0x000238   15 04 00 00   LookupPointer        r4, 0         r4 = ST[0] -> <add-flame>
+    0005   0x000240   43 05 00 00   Move                 r5, r0        r5 = arg_0
+    0006   0x000248   43 06 02 00   Move                 r6, r2        r6 = arg_2
+    0007   0x000250   4A 07 01 00   LoadStaticU64Imm     r7, 1         r7 = ST[1] -> <player>
+    0008   0x000258   5A 06 06 07   INotEqual            r6, r6, r7    r6 = arg_2 != player
+    0009   0x000260   2F 11 06 00   BranchIfNot          r6, 0x11      IF NOT r6 [0x1] => L_0
+    000A   0x000268   15 06 02 00   LookupPointer        r6, 2         r6 = ST[2] -> <!>
+    000B   0x000270   15 07 03 00   LookupPointer        r7, 3         r7 = ST[3] -> <npc-enemy-ellie?>
+    000C   0x000278   43 08 02 00   Move                 r8, r2        r8 = arg_2
+    000D   0x000280   43 31 08 00   Move                 r49, r8       r49 = arg_2
+    000E   0x000288   1B 07 07 01   Call                 r7, r7, 1     r7 = npc-enemy-ellie?(arg_2)
+    000F   0x000290   43 31 07 00   Move                 r49, r7       r49 = RET_npc-enemy-ellie?
+    0010   0x000298   1B 06 06 01   Call                 r6, r6, 1     r6 = !(RET_#0000000000000000)
+  L_0:
+    0011   0x0002A0   2F 14 06 00   BranchIfNot          r6, 0x14      IF NOT r6 [RET_!] => L_1
+    0012   0x0002A8   4A 06 04 00   LoadStaticU64Imm     r6, 4         r6 = ST[4] -> <*molotov-flame-damage-enemy*>
+    0013   0x0002B0   2D 2A 00 00   Branch               0x2A          GOTO => L_2
+  L_1:
+    0014   0x0002B8   15 06 05 00   LookupPointer        r6, 5         r6 = ST[5] -> <player-upgrade-active?>
+    0015   0x0002C0   4A 07 06 00   LoadStaticU64Imm     r7, 6         r7 = ST[6] -> <molotov-radius-increase>
+    0016   0x0002C8   43 31 07 00   Move                 r49, r7       r49 = molotov-radius-increase
+    0017   0x0002D0   1C 06 06 01   CallFf               r6, r6, 1     r6 = player-upgrade-active?(molotov-radius-increase)
+    0018   0x0002D8   2F 22 06 00   BranchIfNot          r6, 0x22      IF NOT r6 [RET_player-upgrade-active?] => L_3
+    0019   0x0002E0   15 06 03 00   LookupPointer        r6, 3         r6 = ST[3] -> <npc-enemy-ellie?>
+    001A   0x0002E8   43 07 02 00   Move                 r7, r2        r7 = arg_2
+    001B   0x0002F0   43 31 07 00   Move                 r49, r7       r49 = arg_2
+    001C   0x0002F8   1B 06 06 01   Call                 r6, r6, 1     r6 = npc-enemy-ellie?(arg_2)
+    001D   0x000300   2F 20 06 00   BranchIfNot          r6, 0x20      IF NOT r6 [RET_npc-enemy-ellie?] => L_4
+    001E   0x000308   4A 06 07 00   LoadStaticU64Imm     r6, 7         r6 = ST[7] -> <*molotov-flame-damage-upgrade-npc-ellie*>
+    001F   0x000310   2D 21 00 00   Branch               0x21          GOTO => L_5
+  L_4:
+    0020   0x000318   4A 06 08 00   LoadStaticU64Imm     r6, 8         r6 = ST[8] -> <*molotov-flame-damage-upgrade*>
+  L_5:
+    0021   0x000320   2D 2A 00 00   Branch               0x2A          GOTO => L_2
+  L_3:
+    0022   0x000328   15 06 03 00   LookupPointer        r6, 3         r6 = ST[3] -> <npc-enemy-ellie?>
+    0023   0x000330   43 07 02 00   Move                 r7, r2        r7 = arg_2
+    0024   0x000338   43 31 07 00   Move                 r49, r7       r49 = arg_2
+    0025   0x000340   1B 06 06 01   Call                 r6, r6, 1     r6 = npc-enemy-ellie?(arg_2)
+    0026   0x000348   2F 29 06 00   BranchIfNot          r6, 0x29      IF NOT r6 [RET_npc-enemy-ellie?] => L_6
+    0027   0x000350   4A 06 09 00   LoadStaticU64Imm     r6, 9         r6 = ST[9] -> <*molotov-flame-damage-npc-ellie*>
+    0028   0x000358   2D 2A 00 00   Branch               0x2A          GOTO => L_2
+  L_6:
+    0029   0x000360   4A 06 0A 00   LoadStaticU64Imm     r6, 10        r6 = ST[10] -> <*molotov-flame-damage*>
+  L_2:
+    002A   0x000368   43 07 01 00   Move                 r7, r1        r7 = arg_1
+    002B   0x000370   43 08 02 00   Move                 r8, r2        r8 = arg_2
+    002C   0x000378   43 09 03 00   Move                 r9, r3        r9 = arg_3
+    002D   0x000380   43 31 05 00   Move                 r49, r5       r49 = arg_0
+    002E   0x000388   43 32 06 00   Move                 r50, r6       r50 = *molotov-flame-damage*
+    002F   0x000390   43 33 07 00   Move                 r51, r7       r51 = arg_1
+    0030   0x000398   43 34 08 00   Move                 r52, r8       r52 = arg_2
+    0031   0x0003A0   43 35 09 00   Move                 r53, r9       r53 = arg_3
+    0032   0x0003A8   1C 04 04 05   CallFf               r4, r4, 5     r4 = add-flame(arg_0, *molotov-flame-damage*, arg_1, arg_2, arg_3)
+    0033   0x0003B0   00 04 04 00   Return               r4            Return RET_add-flame
+
+    SYMBOL TABLE: 
+    0000   0x0003B8    pointer: <add-flame>
+    0001   0x0003C0    sid: <player>
+    0002   0x0003C8    pointer: <!>
+    0003   0x0003D0    pointer: <npc-enemy-ellie?>
+    0004   0x0003D8    sid: <*molotov-flame-damage-enemy*>
+    0005   0x0003E0    pointer: <player-upgrade-active?>
+    0006   0x0003E8    sid: <molotov-radius-increase>
+    0007   0x0003F0    sid: <*molotov-flame-damage-upgrade-npc-ellie*>
+    0008   0x0003F8    sid: <*molotov-flame-damage-upgrade*>
+    0009   0x000400    sid: <*molotov-flame-damage-npc-ellie*>
+    000A   0x000408    sid: <*molotov-flame-damage*>
+}

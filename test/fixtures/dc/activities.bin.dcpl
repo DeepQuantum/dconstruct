@@ -1,0 +1,85 @@
+u16 #0E764148D8265FF9(u16 arg_0, u64? arg_1) {
+    u16 var_0;
+    if (arg_1) {
+        var_0 = 3;
+    } else if (arg_0) {
+        var_0 = 2;
+    } else {
+        var_0 = 0;
+    }
+    return var_0;
+}
+
+u16 #13B32A07AE7F5009(u64? arg_0, u64? arg_1) {
+    u16 var_0;
+    if (arg_1) {
+        var_0 = 0;
+    } else if (arg_0) {
+        var_0 = 1;
+    } else {
+        var_0 = 0;
+    }
+    return var_0;
+}
+
+u64? #451EEFDC085298B4() {
+    u64? var_0 = #CD3AB99702F53DC4(1);
+    u64? var_1 = #EE49148374E0CACA();
+    bool var_2 = !var_1 && var_0;
+    return var_2;
+}
+
+u64? #6B44518153572030() {
+    u64? var_0 = task-active?(seattle-arrival, sea-hub-explore);
+    return var_0;
+}
+
+u64? #9811B43668E13FDC() {
+    u64? var_0 = #CD3AB99702F53DC4(0);
+    u64? var_1 = #B17F0E78E84400FE();
+    bool var_2 = !var_1 && var_0;
+    return var_2;
+}
+
+u64? #B17F0E78E84400FE() {
+    u64? var_0 = task-continue-active?(seattle-arrival, sea-hub-explore, courthouse-entry);
+    u64? var_1 = task-continue-active?(seattle-arrival, sea-hub-explore, courthouse-entry-checkpoint);
+    u64? var_2 = task-continue-active?(seattle-arrival, sea-hub-explore, courthouse-stairwell);
+    u64? var_3 = task-continue-active?(seattle-arrival, sea-hub-explore, courthouse-front);
+    u64? var_4 = task-continue-active?(seattle-arrival, sea-hub-explore, courthouse-fight);
+    u64? var_5 = task-continue-active?(seattle-arrival, sea-hub-explore, courthouse-post-fight);
+    u64? var_6 = task-continue-active?(seattle-arrival, sea-hub-explore, courthouse-post-fight-with-gas);
+    bool var_7 = var_6 && var_5 || var_4 || var_3 || var_2 || var_1 || var_0;
+    return var_7;
+}
+
+u64? #C8D3BAD302B43BD9() {
+    u64? var_0 = task-active?(seattle-arrival, sea-hub-explore);
+    u64? var_1 = get-svar(sea-horse-finding-gas);
+    u64? var_2 = #B17F0E78E84400FE();
+    u64? var_3 = #EE49148374E0CACA();
+    bool var_4 = !var_3 && !var_2 && var_1 > 4 && var_0;
+    return var_4;
+}
+
+u64? #CD3AB99702F53DC4(u64? arg_0) {
+    u64? var_0 = task-complete?(seattle-arrival, sea-hub-explore);
+    u64? var_1 = task-active?(seattle-arrival, sea-hub-explore);
+    u64? var_2 = get-svar(sea-horse-finding-gas);
+    u64? var_3 = get-svar(sea-horse-finding-gas);
+    bool var_4 = var_3 == 3 && arg_0 && var_2 >= 5 || var_1 && var_0;
+    return var_4;
+}
+
+u64? #EE49148374E0CACA() {
+    u64? var_0 = task-continue-active?(seattle-arrival, sea-hub-explore, sanctuary-infected);
+    u64? var_1 = task-continue-active?(seattle-arrival, sea-hub-explore, sanctuary-construction);
+    u64? var_2 = task-continue-active?(seattle-arrival, sea-hub-explore, sanctuary-boost);
+    u64? var_3 = task-continue-active?(seattle-arrival, sea-hub-explore, sanctuary-first-floor);
+    u64? var_4 = task-continue-active?(seattle-arrival, sea-hub-explore, sanctuary-first-floor-with-gas);
+    u64? var_5 = task-continue-active?(seattle-arrival, sea-hub-explore, sanctuary-near-rope);
+    u64? var_6 = task-continue-active?(seattle-arrival, sea-hub-explore, sanctuary-second-floor);
+    bool var_7 = var_6 && var_5 || var_4 || var_3 || var_2 || var_1 || var_0;
+    return var_7;
+}
+
