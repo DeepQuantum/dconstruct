@@ -62,6 +62,8 @@ void literal::pseudo_racket(std::ostream& os) const {
         using T = std::decay_t<decltype(lit)>;
         if constexpr (std::is_arithmetic_v<T>) {
             return static_cast<u16>(lit != 0);
+        } else if constexpr (std::is_same_v<T, std::nullptr_t>) {
+            return 0;
         } else {
             return 1;
         }
@@ -92,11 +94,42 @@ MATCH_OPTIMIZATION_ACTION literal::match_optimization_pass(match_optimization_en
     return primitive_type{type};
 }
 
+[[nodiscard]] std::optional<i64> literal::raw_pattern_number() const noexcept {
+    return get_raw_number(m_value);
+}
+
+[[nodiscard]] std::expected<u16, std::string> literal::emit_to_symbol_table(compilation::function& fn, compilation::global_state& global) const noexcept {
+    return std::visit([&](auto&& lit) -> std::expected<u16, std::string> {
+        using T = std::decay_t<decltype(lit)>;
+
+        if constexpr (std::is_same_v<T, std::string>) {
+            if (m_type && std::holds_alternative<primitive_type>(*m_type)) {
+                const primitive_kind kind = std::get<primitive_type>(*m_type).m_type;
+                if (kind == primitive_kind::SID || kind == primitive_kind::SID32) {
+                    return fn.add_to_symbol_table(SID(lit.c_str()));
+                }
+            }
+            const u64 size = global.add_string(std::move(lit));
+            return fn.add_to_symbol_table(size, compilation::function::SYMBOL_TABLE_POINTER_KIND::STRING);
+        } else if constexpr (std::is_integral_v<T>) {
+            return fn.add_to_symbol_table(static_cast<u64>(lit));
+        } else if constexpr (std::is_same_v<T, f32>) {
+            return fn.add_to_symbol_table(static_cast<u64>(std::bit_cast<u32>(lit)));
+        } else if constexpr (std::is_same_v<T, f64>) {
+            return fn.add_to_symbol_table(std::bit_cast<u64>(lit));
+        } else if constexpr (std::is_same_v<T, std::nullptr_t>) {
+            return fn.add_to_symbol_table(0);
+        } else {
+            return std::unexpected{"can't add " + to_c_string() + " to symbol table"};
+        }
+    }, m_value);
+}
+
 [[nodiscard]] emission_res literal::emit_dc(compilation::function& fn, compilation::global_state& global, const std::optional<reg_idx> destination) const noexcept {
     return std::visit([&](auto&& lit) -> emission_res {
         using T = std::decay_t<decltype(lit)>;
 
-        emission_res literal_dest = fn.get_destination(destination);
+        emission_res literal_dest = fn.fix_destination(destination);
         if (!literal_dest) {
             return literal_dest;
         }

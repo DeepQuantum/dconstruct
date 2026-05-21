@@ -152,6 +152,8 @@ namespace dconstruct::dcompiler {
         [[nodiscard]] std::unique_ptr<ast::call_expr> make_shift(const Instruction& istr);
 
         [[nodiscard]] std::unique_ptr<ast::call_expr> make_load_symbol_table(const Instruction& istr);
+
+        [[nodiscard]] std::unique_ptr<ast::call_expr> make_in_range(const Instruction& istr);
         
     };
 

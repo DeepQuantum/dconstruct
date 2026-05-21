@@ -126,3 +126,259 @@ bool tsk-flo-into-the-city__level-scripted-set@1fc8() {
     return var_0 > 0;
 }
 
+u64? tsk-flo-flooded-street-skybridge__level-set@500__level-scripted-set@2238__() {
+    bool var_0 = get-boolean(#D90FE4EAE88CC732, ss-flo-flooded-street-jesse-points-igc-1);
+    return !var_0;
+}
+
+u16 tsk-flo-flooded-street-skybridge__level-scripted-set@1b48() {
+    return 1;
+}
+
+u64? tsk-flo-into-the-city-tunnel-militia-fight__level-set@580__level-scripted-set@1ba8__() {
+    bool var_0 = *fpark-test* && *(u8*)(*fpark-test* + 7);
+    return var_0;
+}
+
+u64? flo-boat-explore-load-arcade-pre-load__level-set@668__level-scripted-set@1320__() {
+    u64? var_0 = stat-value?(flo-boat-explore-load-levels);
+    u64? var_1 = get-bit(var_0, 4);
+    return var_1;
+}
+
+u64? flo-boat-explore-load-arcade-transition__level-set@6e8__level-scripted-set@1998__() {
+    u64? var_0 = stat-value?(flo-boat-explore-load-levels);
+    u64? var_1 = get-bit(var_0, 5);
+    return var_1;
+}
+
+u64? flo-boat-explore-load-ruins-detail__level-set@728__level-scripted-set@1680__() {
+    u64? var_0 = stat-value?(flo-boat-explore-load-levels);
+    u64? var_1 = get-bit(var_0, 3);
+    return var_1;
+}
+
+u64? tsk-flo-stormy-seas__level-set@7a8__level-scripted-set@1c68__() {
+    u64? var_0 = task-active?(flooded-city, flo-stormy-seas-boat-sink);
+    bool var_1 = get-boolean(#4D45C491561C8B9A, ss-flo-approach-bay-wreck-1);
+    u64? var_2 = time-since-last-checkpoint?();
+    bool var_3 = var_0 && !var_1 && var_2 < 5.00;
+    return var_3;
+}
+
+u64? tsk-flo-mall__level-set@860__level-scripted-set@1920__() {
+    u64? var_0 = task-not-complete?(flooded-city, flo-aquarium-plans);
+    u64? var_1 = cinematic-playing?(cin-flo-aquarium-plans);
+    bool var_2 = var_0 && var_1;
+    return var_2;
+}
+
+bool tsk-flo-flooded-street-militia-fight__level-set@8e0__level-scripted-set@1938__() {
+    bool var_0 = get-boolean(#E6EE815545074A83, ss-flo-flooded-street-bookstore-explore-1);
+    return var_0;
+}
+
+bool tsk-flo-into-the-city-ferris-wheel-vista__level-set@928__level-scripted-set@1bc0__() {
+    u64? var_0 = stat-value?(flo-convention-center-low-loaded);
+    return var_0 == 0;
+}
+
+bool tsk-flo-into-the-city-ferris-wheel-vista__level-scripted-set@1b90() {
+    u64? var_0 = stat-value?(flo-convention-center-low-loaded);
+    return var_0 > 0;
+}
+
+u64? flo-boat-explore-load-ruins-exterior__level-set@9a8__level-scripted-set@1c80__() {
+    u64? var_0 = stat-value?(flo-boat-explore-load-levels);
+    u64? var_1 = get-bit(var_0, 2);
+    return var_1;
+}
+
+bool tsk-flo-approach-bay__level-set@9e8__level-scripted-set@1b78__() {
+    u64? var_0 = stat-value?(flo-approach-bay-coastline-loaded);
+    return var_0 == 0;
+}
+
+bool tsk-flo-approach-bay__level-scripted-set@1b30() {
+    u64? var_0 = stat-value?(flo-approach-bay-coastline-loaded);
+    return var_0 > 0;
+}
+
+u64? tsk-flo-boat-explore-rapids-gate__level-set@a30__level-scripted-set@1c98__() {
+    u64? var_0 = task-not-complete?(flooded-city, flo-boat-explore-gate);
+    return var_0;
+}
+
+u64? tsk-flo-boat-explore-rapids-gate__level-scripted-set@1b60() {
+    u64? var_0 = task-not-complete?(flooded-city, flo-boat-explore-gate-done);
+    return var_0;
+}
+
+bool tsk-flo-mall-combat__level-set@ae8__level-scripted-set@1950__() {
+    bool var_0;
+    if (!*fpark-test* && !*(u8*)(*fpark-test* + 7)) {
+        u64? var_1 = stat-value?(flo-mall-load-underwater-detail);
+        var_0 = var_1 > 0;
+    }
+    return var_0;
+}
+
+bool tsk-flo-mall-combat__level-scripted-set@1e90() {
+    bool var_0;
+    if (!*fpark-test* && !*(u8*)(*fpark-test* + 7)) {
+        u64? var_1 = stat-value?(flo-mall-load-underwater-detail);
+        var_0 = var_1 == 0;
+    }
+    return var_0;
+}
+
+u64? flo-boat-explore-load-entrance__level-set@c18__level-scripted-set@1f38__() {
+    u64? var_0 = stat-value?(flo-boat-explore-load-levels);
+    u64? var_1 = get-bit(var_0, 0);
+    return var_1;
+}
+
+u64? flo-boat-explore-load-parking-lot__level-set@d08__level-scripted-set@1698__() {
+    u64? var_0 = stat-value?(flo-boat-explore-load-levels);
+    u64? var_1 = get-bit(var_0, 1);
+    return var_1;
+}
+
+bool tsk-flo-into-the-city__level-set@df8__level-scripted-set@1968__() {
+    u64? var_0 = stat-value?(flo-tunnel-fg-visible);
+    return var_0 == 0;
+}
+
+bool tsk-flo-into-the-city__level-scripted-set@1fc8() {
+    u64? var_0 = stat-value?(flo-tunnel-fg-visible);
+    return var_0 > 0;
+}
+
+u64? tsk-flo-flooded-street-skybridge__level-set@500__level-scripted-set@2238__() {
+    bool var_0 = get-boolean(#D90FE4EAE88CC732, ss-flo-flooded-street-jesse-points-igc-1);
+    return !var_0;
+}
+
+u16 tsk-flo-flooded-street-skybridge__level-scripted-set@1b48() {
+    return 1;
+}
+
+u64? tsk-flo-into-the-city-tunnel-militia-fight__level-set@580__level-scripted-set@1ba8__() {
+    bool var_0 = *fpark-test* && *(u8*)(*fpark-test* + 7);
+    return var_0;
+}
+
+u64? flo-boat-explore-load-arcade-pre-load__level-set@668__level-scripted-set@1320__() {
+    u64? var_0 = stat-value?(flo-boat-explore-load-levels);
+    u64? var_1 = get-bit(var_0, 4);
+    return var_1;
+}
+
+u64? flo-boat-explore-load-arcade-transition__level-set@6e8__level-scripted-set@1998__() {
+    u64? var_0 = stat-value?(flo-boat-explore-load-levels);
+    u64? var_1 = get-bit(var_0, 5);
+    return var_1;
+}
+
+u64? flo-boat-explore-load-ruins-detail__level-set@728__level-scripted-set@1680__() {
+    u64? var_0 = stat-value?(flo-boat-explore-load-levels);
+    u64? var_1 = get-bit(var_0, 3);
+    return var_1;
+}
+
+u64? tsk-flo-stormy-seas__level-set@7a8__level-scripted-set@1c68__() {
+    u64? var_0 = task-active?(flooded-city, flo-stormy-seas-boat-sink);
+    bool var_1 = get-boolean(#4D45C491561C8B9A, ss-flo-approach-bay-wreck-1);
+    u64? var_2 = time-since-last-checkpoint?();
+    bool var_3 = var_0 && !var_1 && var_2 < 5.00;
+    return var_3;
+}
+
+u64? tsk-flo-mall__level-set@860__level-scripted-set@1920__() {
+    u64? var_0 = task-not-complete?(flooded-city, flo-aquarium-plans);
+    u64? var_1 = cinematic-playing?(cin-flo-aquarium-plans);
+    bool var_2 = var_0 && var_1;
+    return var_2;
+}
+
+bool tsk-flo-flooded-street-militia-fight__level-set@8e0__level-scripted-set@1938__() {
+    bool var_0 = get-boolean(#E6EE815545074A83, ss-flo-flooded-street-bookstore-explore-1);
+    return var_0;
+}
+
+bool tsk-flo-into-the-city-ferris-wheel-vista__level-set@928__level-scripted-set@1bc0__() {
+    u64? var_0 = stat-value?(flo-convention-center-low-loaded);
+    return var_0 == 0;
+}
+
+bool tsk-flo-into-the-city-ferris-wheel-vista__level-scripted-set@1b90() {
+    u64? var_0 = stat-value?(flo-convention-center-low-loaded);
+    return var_0 > 0;
+}
+
+u64? flo-boat-explore-load-ruins-exterior__level-set@9a8__level-scripted-set@1c80__() {
+    u64? var_0 = stat-value?(flo-boat-explore-load-levels);
+    u64? var_1 = get-bit(var_0, 2);
+    return var_1;
+}
+
+bool tsk-flo-approach-bay__level-set@9e8__level-scripted-set@1b78__() {
+    u64? var_0 = stat-value?(flo-approach-bay-coastline-loaded);
+    return var_0 == 0;
+}
+
+bool tsk-flo-approach-bay__level-scripted-set@1b30() {
+    u64? var_0 = stat-value?(flo-approach-bay-coastline-loaded);
+    return var_0 > 0;
+}
+
+u64? tsk-flo-boat-explore-rapids-gate__level-set@a30__level-scripted-set@1c98__() {
+    u64? var_0 = task-not-complete?(flooded-city, flo-boat-explore-gate);
+    return var_0;
+}
+
+u64? tsk-flo-boat-explore-rapids-gate__level-scripted-set@1b60() {
+    u64? var_0 = task-not-complete?(flooded-city, flo-boat-explore-gate-done);
+    return var_0;
+}
+
+bool tsk-flo-mall-combat__level-set@ae8__level-scripted-set@1950__() {
+    bool var_0;
+    if (*fpark-test* == nullptr && *(u8*)(*fpark-test* + 7) == nullptr) {
+        u64? var_1 = stat-value?(flo-mall-load-underwater-detail);
+        var_0 = var_1 > 0;
+    }
+    return var_0;
+}
+
+bool tsk-flo-mall-combat__level-scripted-set@1e90() {
+    bool var_0;
+    if (*fpark-test* == nullptr && *(u8*)(*fpark-test* + 7) == nullptr) {
+        u64? var_1 = stat-value?(flo-mall-load-underwater-detail);
+        var_0 = var_1 == 0;
+    }
+    return var_0;
+}
+
+u64? flo-boat-explore-load-entrance__level-set@c18__level-scripted-set@1f38__() {
+    u64? var_0 = stat-value?(flo-boat-explore-load-levels);
+    u64? var_1 = get-bit(var_0, 0);
+    return var_1;
+}
+
+u64? flo-boat-explore-load-parking-lot__level-set@d08__level-scripted-set@1698__() {
+    u64? var_0 = stat-value?(flo-boat-explore-load-levels);
+    u64? var_1 = get-bit(var_0, 1);
+    return var_1;
+}
+
+bool tsk-flo-into-the-city__level-set@df8__level-scripted-set@1968__() {
+    u64? var_0 = stat-value?(flo-tunnel-fg-visible);
+    return var_0 == 0;
+}
+
+bool tsk-flo-into-the-city__level-scripted-set@1fc8() {
+    u64? var_0 = stat-value?(flo-tunnel-fg-visible);
+    return var_0 > 0;
+}
+

@@ -7,3 +7,21 @@ u16 rs-sub-world-theater-1__level-scripted-set@1a8() {
     return 1;
 }
 
+u64? rs-sub-world-theater-1__level-set@78__level-scripted-set@2b0__() {
+    u64? var_0 = task-not-complete?(seattle-ellie-towers, sub-neighborhood-cul-de-sac);
+    return var_0;
+}
+
+u16 rs-sub-world-theater-1__level-scripted-set@1a8() {
+    return 1;
+}
+
+u64? rs-sub-world-theater-1__level-set@78__level-scripted-set@2b0__() {
+    u64? var_0 = task-not-complete?(seattle-ellie-towers, sub-neighborhood-cul-de-sac);
+    return var_0;
+}
+
+u16 rs-sub-world-theater-1__level-scripted-set@1a8() {
+    return 1;
+}
+

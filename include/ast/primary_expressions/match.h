@@ -10,19 +10,26 @@ namespace dconstruct::ast {
     struct match_expr : public expression {
         using matches_t = std::pair<expr_uptr, expr_uptr>;
 
-        match_expr(std::vector<matches_t>&& match_pairs) noexcept : 
-        m_matchPairs(std::move(match_pairs)) {};
+        match_expr(std::vector<matches_t>&& match_pairs) noexcept :
+        m_matchPairs(std::move(match_pairs)) {
+            init_match_metrics();
+        };
 
-        match_expr(std::vector<matches_t>&& match_pairs, expr_uptr&& _default) noexcept : 
-        m_matchPairs(std::move(match_pairs)), m_default(std::move(_default)) {};
+        match_expr(std::vector<matches_t>&& match_pairs, expr_uptr&& _default) noexcept :
+        m_matchPairs(std::move(match_pairs)), m_default(std::move(_default)) {
+            init_match_metrics();
+        };
 
         match_expr(expr_uptr&& condition, std::vector<matches_t>&& match_pairs, expr_uptr&& _default) noexcept : 
         m_conditions(1), m_matchPairs(std::move(match_pairs)), m_default(std::move(_default)) {
             m_conditions[0] = std::move(condition);
+            init_match_metrics();
         };
 
         match_expr(std::vector<expr_uptr>&& conditions, std::vector<matches_t>&& match_pairs, expr_uptr&& _default) : 
-        m_conditions(std::move(conditions)), m_matchPairs(std::move(match_pairs)), m_default(std::move(_default)) {};
+        m_conditions(std::move(conditions)), m_matchPairs(std::move(match_pairs)), m_default(std::move(_default)) {
+            init_match_metrics();
+        };
 
         void pseudo_c(std::ostream& os) const final;
         void pseudo_py(std::ostream& os) const final;
@@ -39,11 +46,30 @@ namespace dconstruct::ast {
         VAR_OPTIMIZATION_ACTION var_optimization_pass(var_optimization_env& env) noexcept final;
         FOREACH_OPTIMIZATION_ACTION foreach_optimization_pass(foreach_optimization_env& env) noexcept final;
 
+        [[nodiscard]] const std::vector<matches_t>& get_match_pairs() const noexcept { return m_matchPairs; }
+
         std::vector<expr_uptr> m_conditions;
-        std::vector<matches_t> m_matchPairs;
         expr_uptr m_default;
     private:
+        std::vector<matches_t> m_matchPairs;
+        bool m_hasDensity = false;
+        u32 m_R = 0;
+        f32 m_density = 0;
+        i64 m_min = 0;
+        i64 m_max = 0;
+
+        mutable std::optional<Opcode> m_loadOpcode;
+
         [[nodiscard]] std::vector<std::pair<std::vector<const expr_uptr*>, const expr_uptr*>> group_patterns() const noexcept;
-        [[nodiscard]] u64 calc_density() const noexcept;
+        void init_match_metrics() noexcept;
+        void sort_matches() noexcept;
+        void calc_density_R() noexcept;
+
+        [[nodiscard]] emission_res emit_dc_array_approach(
+            compilation::function& fn,
+            compilation::global_state& global,
+            reg_idx condition,
+            const std::optional<reg_idx> destination = std::nullopt
+        ) const noexcept;
     };
 }

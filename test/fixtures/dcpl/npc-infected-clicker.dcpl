@@ -160,3 +160,327 @@ u64? infected-clicker-frenzy-phantom__melee-event-list@a58(u64? arg_0, u64? arg_
     return var_3;
 }
 
+f32 infected-clicker-frenzy-announce__melee-attack@90__character-melee-info@c68__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    f32 var_0;
+    if (0 && 1) {
+        var_0 = 0.60;
+    } else {
+        f32 var_1 = *(f32*)(*(arg_0 + 296) + 52);
+        u64? var_2 = minmax(var_1, 0.00, 6.00);
+        u64? var_3 = frames-to-sec((i32)var_2);
+        var_0 = var_3;
+    }
+    return var_0;
+}
+
+f32 infected-clicker-frenzy-announce__melee-attack@90(u64? arg_0, u64? arg_1, u64? arg_2) {
+    return 0.20;
+}
+
+u64? infected-clicker-frenzy-announce__start-func-array@bf8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = melee-fact-get-bool(arg_1, frenzy-announce-ready);
+    u64? var_1 = get-object-locator(arg_1);
+    u64? var_2 = set-cache-bound-frame(arg_13, var_1, 0);
+    u64? var_3 = get-object-locator(arg_1);
+    u64? var_4 = get-object-locator(arg_2);
+    u64? var_5 = rotate-locator-lookat(var_3, var_4, 1.00, 0);
+    u64? var_6 = set-cache-bound-frame(arg_13, var_5, 1);
+    bool var_7 = var_0 && var_2 && var_6;
+    return var_7;
+}
+
+u16 infected-clicker-frenzy-announce(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    return 1;
+}
+
+u16 infected-clicker-frenzy-announce__melee-event-list@eb0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = get-character-weapon-id(arg_1);
+    u64? var_1 = string-debug(var_0);
+    log-event("melee-npc-swing", 1, var_1, 0, 0);
+    set-swing-type-fact(arg_1, 27);
+    u64? var_2 = npc-brute?(arg_1);
+    if (var_2) {
+        melee-fact-set-int(arg_1, brute-melee-hit-count, 0);
+    }
+    u64? var_3 = npc-enemy-abby?(arg_1);
+    u16 var_4;
+    if (var_3) {
+        u64? var_5 = melee-fact-set-int(arg_1, abby-melee-hit-count, 0);
+        var_4 = var_5;
+    } else {
+        var_4 = 0;
+    }
+    return var_4;
+}
+
+u64? infected-clicker-frenzy-announce__melee-event-advanced@12550(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = estimate-frames-til-hit(arg_1);
+    u64? var_1 = npc-swing-speed-flex(arg_1, arg_2, (f32)var_0, 1);
+    return var_1;
+}
+
+u64? infected-clicker-frenzy-announce__melee-event-advanced@12ab0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = character-in-unsynced-melee-attack-as-attacker?(arg_2);
+    u64? var_1 = character-in-melee-attack-of-other-character?(arg_1, arg_2);
+    u64? var_2 = get-current-melee-attack(arg_2);
+    u64? var_3 = get-current-melee-attack(arg_2);
+    bool var_4 = var_0 && var_1 && var_2 && *(u64*)(var_3 + 16) == melee-player-contextual-dodge;
+    return !var_4;
+}
+
+sid infected-clicker-frenzy-announce__melee-event-transitions@117c8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return npc-execution-surprises;
+}
+
+u64? infected-clicker-frenzy-announce__melee-event-advanced@11eb0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = melee-fact-get-bool(arg_1, npc-enemy-abby-punish-dodge);
+    return var_0;
+}
+
+u64? infected-clicker-frenzy-announce-intro-180-l__start-func-array@1018(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = melee-fact-get-bool(arg_1, frenzy-announce-ready);
+    u64? var_1 = get-object-locator(arg_1);
+    u64? var_2 = get-object-locator(arg_2);
+    u64? var_3 = is-behind?(var_1, var_2, 2, 180.00);
+    u64? var_4 = get-object-locator(arg_1);
+    u64? var_5 = get-object-locator(arg_2);
+    u64? var_6 = is-left?(var_4, var_5, 180.00);
+    bool var_7 = var_0 && var_3 && var_6;
+    return var_7;
+}
+
+u16 infected-clicker-frenzy-announce-intro-180-l__melee-event-list@dd0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = get-character-weapon-id(arg_1);
+    u64? var_1 = string-debug(var_0);
+    log-event("melee-npc-swing", 1, var_1, 0, 0);
+    set-swing-type-fact(arg_1, 4);
+    u64? var_2 = npc-brute?(arg_1);
+    if (var_2) {
+        melee-fact-set-int(arg_1, brute-melee-hit-count, 0);
+    }
+    u64? var_3 = npc-enemy-abby?(arg_1);
+    u16 var_4;
+    if (var_3) {
+        u64? var_5 = melee-fact-set-int(arg_1, abby-melee-hit-count, 0);
+        var_4 = var_5;
+    } else {
+        var_4 = 0;
+    }
+    return var_4;
+}
+
+u16 infected-clicker-frenzy-announce-intro-180-r__melee-event-list@db8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = get-character-weapon-id(arg_1);
+    u64? var_1 = string-debug(var_0);
+    log-event("melee-npc-swing", 1, var_1, 0, 0);
+    set-swing-type-fact(arg_1, 32);
+    u64? var_2 = npc-brute?(arg_1);
+    if (var_2) {
+        melee-fact-set-int(arg_1, brute-melee-hit-count, 0);
+    }
+    u64? var_3 = npc-enemy-abby?(arg_1);
+    u16 var_4;
+    if (var_3) {
+        u64? var_5 = melee-fact-set-int(arg_1, abby-melee-hit-count, 0);
+        var_4 = var_5;
+    } else {
+        var_4 = 0;
+    }
+    return var_4;
+}
+
+u64? infected-clicker-frenzy-announce-intro-180-r(u64? arg_0, i64 arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    if (!!(arg_2 == 0)) {
+        melee-debug-text-file-line-fail("(valid-symbol? defender)", "t2r/src/game/scriptx/melee/imports/melee-events.dcx", 2745);
+    }
+    melee-debug-text-file-line-fail("(if ellie-only? (is-player-ellie?) #t)", "t2r/src/game/scriptx/melee/imports/melee-events.dcx", 2746);
+    bool var_0 = !(arg_2 == 0) && 1 && 1;
+    return var_0;
+}
+
+u16 infected-clicker-frenzy-phantom__melee-attack@660(i64 arg_0, i64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    u16 var_0;
+    if (arg_0 == arg_1) {
+        u64? var_1 = fact-remove(arg_1, frenzy-abort-vox);
+        var_0 = var_1;
+    } else {
+        var_0 = 0;
+    }
+    return var_0;
+}
+
+u64? infected-clicker-frenzy-phantom(u64? arg_0, u64? arg_1, u64? arg_2) {
+    u64? var_0 = melee-fact-set-int(player, successful-clicker-dodge, 0);
+    return var_0;
+}
+
+u64? infected-clicker-frenzy-phantom__melee-event-list@a58(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = npc-in-tap?(arg_1);
+    u64? var_1 = clicker-bail-on-struggle(arg_1, arg_2);
+    u64? var_2 = clicker-bail-on-finisher(arg_1, arg_2);
+    bool var_3 = !var_0 && !var_1 && !var_2;
+    return var_3;
+}
+
+f32 infected-clicker-frenzy-announce__melee-attack@90__character-melee-info@c68__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    f32 var_0;
+    if (0 != nullptr && 1 != nullptr) {
+        var_0 = 0.60;
+    } else {
+        f32 var_1 = *(f32*)(*(arg_0 + 296) + 52);
+        u64? var_2 = minmax(var_1, 0.00, 6.00);
+        u64? var_3 = frames-to-sec((i32)var_2);
+        var_0 = var_3;
+    }
+    return var_0;
+}
+
+f32 infected-clicker-frenzy-announce__melee-attack@90(u64? arg_0, u64? arg_1, u64? arg_2) {
+    return 0.20;
+}
+
+u64? infected-clicker-frenzy-announce__start-func-array@bf8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = melee-fact-get-bool(arg_1, frenzy-announce-ready);
+    u64? var_1 = get-object-locator(arg_1);
+    u64? var_2 = set-cache-bound-frame(arg_13, var_1, 0);
+    u64? var_3 = get-object-locator(arg_1);
+    u64? var_4 = get-object-locator(arg_2);
+    u64? var_5 = rotate-locator-lookat(var_3, var_4, 1.00, 0);
+    u64? var_6 = set-cache-bound-frame(arg_13, var_5, 1);
+    bool var_7 = var_0 && var_2 && var_6;
+    return var_7;
+}
+
+u16 infected-clicker-frenzy-announce(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    return 1;
+}
+
+u16 infected-clicker-frenzy-announce__melee-event-list@eb0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = get-character-weapon-id(arg_1);
+    u64? var_1 = string-debug(var_0);
+    log-event("melee-npc-swing", 1, var_1, 0, 0);
+    set-swing-type-fact(arg_1, 27);
+    u64? var_2 = npc-brute?(arg_1);
+    if (var_2 != nullptr) {
+        melee-fact-set-int(arg_1, brute-melee-hit-count, 0);
+    }
+    u64? var_3 = npc-enemy-abby?(arg_1);
+    u16 var_4;
+    if (var_3 != nullptr) {
+        u64? var_5 = melee-fact-set-int(arg_1, abby-melee-hit-count, 0);
+        var_4 = var_5;
+    } else {
+        var_4 = 0;
+    }
+    return var_4;
+}
+
+u64? infected-clicker-frenzy-announce__melee-event-advanced@12550(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = estimate-frames-til-hit(arg_1);
+    u64? var_1 = npc-swing-speed-flex(arg_1, arg_2, (f32)var_0, 1);
+    return var_1;
+}
+
+u64? infected-clicker-frenzy-announce__melee-event-advanced@12ab0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = character-in-unsynced-melee-attack-as-attacker?(arg_2);
+    u64? var_1 = character-in-melee-attack-of-other-character?(arg_1, arg_2);
+    u64? var_2 = get-current-melee-attack(arg_2);
+    u64? var_3 = get-current-melee-attack(arg_2);
+    bool var_4 = var_0 && var_1 && var_2 && *(u64*)(var_3 + 16) == melee-player-contextual-dodge;
+    return !var_4;
+}
+
+sid infected-clicker-frenzy-announce__melee-event-transitions@117c8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return npc-execution-surprises;
+}
+
+u64? infected-clicker-frenzy-announce__melee-event-advanced@11eb0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = melee-fact-get-bool(arg_1, npc-enemy-abby-punish-dodge);
+    return var_0;
+}
+
+u64? infected-clicker-frenzy-announce-intro-180-l__start-func-array@1018(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = melee-fact-get-bool(arg_1, frenzy-announce-ready);
+    u64? var_1 = get-object-locator(arg_1);
+    u64? var_2 = get-object-locator(arg_2);
+    u64? var_3 = is-behind?(var_1, var_2, 2, 180.00);
+    u64? var_4 = get-object-locator(arg_1);
+    u64? var_5 = get-object-locator(arg_2);
+    u64? var_6 = is-left?(var_4, var_5, 180.00);
+    bool var_7 = var_0 && var_3 && var_6;
+    return var_7;
+}
+
+u16 infected-clicker-frenzy-announce-intro-180-l__melee-event-list@dd0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = get-character-weapon-id(arg_1);
+    u64? var_1 = string-debug(var_0);
+    log-event("melee-npc-swing", 1, var_1, 0, 0);
+    set-swing-type-fact(arg_1, 4);
+    u64? var_2 = npc-brute?(arg_1);
+    if (var_2 != nullptr) {
+        melee-fact-set-int(arg_1, brute-melee-hit-count, 0);
+    }
+    u64? var_3 = npc-enemy-abby?(arg_1);
+    u16 var_4;
+    if (var_3 != nullptr) {
+        u64? var_5 = melee-fact-set-int(arg_1, abby-melee-hit-count, 0);
+        var_4 = var_5;
+    } else {
+        var_4 = 0;
+    }
+    return var_4;
+}
+
+u16 infected-clicker-frenzy-announce-intro-180-r__melee-event-list@db8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = get-character-weapon-id(arg_1);
+    u64? var_1 = string-debug(var_0);
+    log-event("melee-npc-swing", 1, var_1, 0, 0);
+    set-swing-type-fact(arg_1, 32);
+    u64? var_2 = npc-brute?(arg_1);
+    if (var_2 != nullptr) {
+        melee-fact-set-int(arg_1, brute-melee-hit-count, 0);
+    }
+    u64? var_3 = npc-enemy-abby?(arg_1);
+    u16 var_4;
+    if (var_3 != nullptr) {
+        u64? var_5 = melee-fact-set-int(arg_1, abby-melee-hit-count, 0);
+        var_4 = var_5;
+    } else {
+        var_4 = 0;
+    }
+    return var_4;
+}
+
+u64? infected-clicker-frenzy-announce-intro-180-r(u64? arg_0, i64 arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    if (!(arg_2 == 0) == nullptr) {
+        melee-debug-text-file-line-fail("(valid-symbol? defender)", "t2r/src/game/scriptx/melee/imports/melee-events.dcx", 2745);
+    }
+    melee-debug-text-file-line-fail("(if ellie-only? (is-player-ellie?) #t)", "t2r/src/game/scriptx/melee/imports/melee-events.dcx", 2746);
+    bool var_0 = !(arg_2 == 0) && 1 && 1;
+    return var_0;
+}
+
+u16 infected-clicker-frenzy-phantom__melee-attack@660(i64 arg_0, i64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    u16 var_0;
+    if (arg_0 == arg_1) {
+        u64? var_1 = fact-remove(arg_1, frenzy-abort-vox);
+        var_0 = var_1;
+    } else {
+        var_0 = 0;
+    }
+    return var_0;
+}
+
+u64? infected-clicker-frenzy-phantom(u64? arg_0, u64? arg_1, u64? arg_2) {
+    u64? var_0 = melee-fact-set-int(player, successful-clicker-dodge, 0);
+    return var_0;
+}
+
+u64? infected-clicker-frenzy-phantom__melee-event-list@a58(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = npc-in-tap?(arg_1);
+    u64? var_1 = clicker-bail-on-struggle(arg_1, arg_2);
+    u64? var_2 = clicker-bail-on-finisher(arg_1, arg_2);
+    bool var_3 = !var_0 && !var_1 && !var_2;
+    return var_3;
+}
+

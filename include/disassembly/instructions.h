@@ -168,6 +168,7 @@ const char* UP_Instruction<padding>::opcode_to_string() const noexcept {
         case Opcode::AssertPointer: return "AssertPointer";
         case Opcode::BreakFlag: return "BreakFlag";
         case Opcode::Breakpoint: return "Breakpoint";
+        case Opcode::QEX_InRangeI: return "QEX_InRangeI";
         default: return "Unknown Opcode";
     }
 }
@@ -207,7 +208,7 @@ template<u8 padding>
     return opcode == Opcode::Call || opcode == Opcode::CallFf
         || opcode == Opcode::IAddImm || opcode == Opcode::IMulImm
         || opcode == Opcode::ISubImm || opcode == Opcode::IDivImm
-        || opcode == Opcode::LoadU16Imm;
+        || opcode == Opcode::LoadU16Imm || opcode == Opcode::QEX_InRangeI;
 }
 template<u8 padding>
 [[nodiscard]] bool UP_Instruction<padding>::operand1_is_used() const noexcept {
@@ -222,7 +223,8 @@ template<u8 padding>
     bool is_bit = opcode == Opcode::OpBitAnd || (num >= static_cast<u32>(Opcode::OpBitOr) && num <= static_cast<u32>(Opcode::OpLogOr));
     bool is_arithmetic_imm = num >= static_cast<u32>(Opcode::IAddImm) && num <= static_cast<u32>(Opcode::IDivImm);
     bool is_store = num >= static_cast<u32>(Opcode::StoreI8) && num <= static_cast<u32>(Opcode::FNotEqual) || num >= static_cast<u32>(Opcode::StoreInt) && num <= static_cast<u32>(Opcode::StorePointer);
-    return is_arithmetic || is_call || is_comp || is_bit || is_arithmetic_imm || is_store;
+    bool is_in_range = opcode == Opcode::QEX_InRangeI;
+    return is_arithmetic || is_call || is_comp || is_bit || is_arithmetic_imm || is_store || is_in_range;
 }
 template<u8 padding>
 [[nodiscard]] bool UP_Instruction<padding>::op1_is_reg() const noexcept {

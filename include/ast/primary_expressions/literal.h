@@ -32,6 +32,8 @@ namespace dconstruct::ast {
         [[nodiscard]] const literal* as_literal() const noexcept final;
         [[nodiscard]] bool is_dead_code() const noexcept final { return true; }
         [[nodiscard]] semantic_check_res compute_type_checked(compilation::scope& env) const noexcept final;
+        [[nodiscard]] std::optional<i64> raw_pattern_number() const noexcept final;
+        [[nodiscard]] std::expected<u16, std::string> emit_to_symbol_table(compilation::function& fn, compilation::global_state& global) const noexcept final;
         [[nodiscard]] emission_res emit_dc(compilation::function& fn, compilation::global_state& global, const std::optional<reg_idx> destination) const noexcept final;
         
         VAR_OPTIMIZATION_ACTION var_optimization_pass(var_optimization_env& env) noexcept final;

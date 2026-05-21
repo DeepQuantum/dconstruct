@@ -60,7 +60,7 @@ void identifier::pseudo_racket(std::ostream& os) const {
     const reg_idx* var_location = fn.m_varsToRegs.lookup(m_name.m_lexeme);
 
     if (!var_location) {
-        return std::unexpected{"variable " + m_name.m_lexeme + "doesn't have a register."};
+        return std::unexpected{"variable " + m_name.m_lexeme + " doesn't have a register."};
     }
 
     return std::tuple{*var_location, Opcode::Move};
@@ -71,7 +71,7 @@ void identifier::pseudo_racket(std::ostream& os) const {
     if (function_sid != global.m_sidAliases.end()) {
         const u8 index = fn.add_to_symbol_table(function_sid->second.second);
 
-        emission_res true_destination = fn.get_destination(destination);
+        emission_res true_destination = fn.fix_destination(destination);
         if (!true_destination) {
             return true_destination;
         }
@@ -86,7 +86,7 @@ void identifier::pseudo_racket(std::ostream& os) const {
     const reg_idx* var_location = fn.m_varsToRegs.lookup(m_name.m_lexeme);
 
     if (!var_location) {
-        return std::unexpected{"variable " + m_name.m_lexeme + "doesn't have a register."};
+        return std::unexpected{"variable " + m_name.m_lexeme + " doesn't have a register."};
     }
     return *var_location;
 }

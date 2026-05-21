@@ -107,7 +107,7 @@ void cast_expr::pseudo_racket(std::ostream& os) const {
         return *expr_res;
     }
 
-    const emission_res cast_destination = fn.get_destination(destination);
+    const emission_res cast_destination = fn.fix_destination(destination);
     if (!cast_destination) {
         return cast_destination;
     }

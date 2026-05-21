@@ -1066,3 +1066,2139 @@ u64?* #E71DE494AA1E0CB6() {
     return var_18;
 }
 
+u64?* #01997CFBFACFDD5D() {
+    u64? var_0 = get-object-look(player, 0);
+    u64? var_1 = get-object-look(player, 0);
+    u64? var_2 = get-object-look(player, 0);
+    u64? var_3 = get-object-look(player, 0);
+    u64?* var_4;
+    if (var_0 == ellie-santabarbara-skin-no-backpack || var_1 == ellie-santabarbara-no-backpack || var_2 == ellie-santabarbara-pride-no-backpack && var_3 == ellie-swim-alt-no-backpack) {
+        var_4 = ellie-santabarbara-explore-wrap;
+    } else {
+        u64? var_5 = get-object-look(player, 0);
+        u64? var_6 = get-object-look(player, 0);
+        u64? var_7 = get-object-look(player, 0);
+        u64? var_8 = get-object-look(player, 0);
+        u64? var_9 = get-object-look(player, 0);
+        u64? var_10 = get-object-look(player, 0);
+        u64? var_11 = get-object-look(player, 0);
+        u64? var_12 = get-object-look(player, 0);
+        u64? var_13 = get-object-look(player, 0);
+        u64? var_14 = get-object-look(player, 0);
+        u64? var_15 = get-object-look(player, 0);
+        u64? var_16 = get-object-look(player, 0);
+        if (var_5 == ellie-farm-explore-wrap || var_6 == ellie-iconic14-alt-no-backpack || var_7 == ellie-iconic14-ps-no-backpack || var_8 == ellie-iconic14-arc-lad-no-backpack || var_9 == ellie-iconic14-killzone-no-backpack || var_10 == ellie-iconic14-wipeout-no-backpack || var_11 == ellie-iconic14-fantavision-no-backpack || var_12 == ellie-iconic14-siren-no-backpack || var_13 == ellie-iconic14-destiny-no-backpack || var_14 == ellie-iconic14-mortal-kombat-no-backpack || var_15 == ellie-iconic14-hotline-miami-no-backpack && var_16 == ellie-iconic14-death-stranding-no-backpack) {
+            var_4 = ellie-farm-explore-wrap;
+        } else {
+            u64? var_17 = get-object-look(player, 0);
+            u64? var_18 = get-object-look(player, 0);
+            u64? var_19 = get-object-look(player, 0);
+            u64? var_20 = get-object-look(player, 0);
+            u64? var_21 = get-object-look(player, 0);
+            if (var_17 == ellie-seattle-skin-no-backpack || var_18 == ellie-no-backpack || var_19 == ellie-seattle-no-backpack || var_20 == ellie-seattle-yellow-no-backpack && var_21 == ellie-plaid-no-backpack) {
+                var_4 = ellie-seattle-explore-wrap;
+            } else {
+                u64? var_22 = get-object-look(player, 0);
+                u64? var_23 = get-object-look(player, 0);
+                u64? var_24 = get-object-look(player, 0);
+                if (var_22 == ellie-patrol-no-backpack || var_23 == #3459203006DBB8A8 && var_24 == ellie-patrol-embroider-no-backpack) {
+                    var_4 = ellie-patrol-explore-wrap;
+                } else {
+                    u64? var_25 = get-object-look(player, 0);
+                    u64? var_26 = get-object-look(player, 0);
+                    if (var_25 == ellie-astro-no-backpack && var_26 == ellie-astro-no-helmet-no-backpack) {
+                        var_4 = ellie-astro-explore-wrap;
+                    } else {
+                        u64? var_27 = get-object-look(player, 0);
+                        if (var_27 == ellie-savage-starlight-no-backpack) {
+                            var_4 = ellie-star-explore-wrap;
+                        } else {
+                            u64? var_28 = get-object-look(player, 0);
+                            if (var_28 == ellie-intergalactic-no-backpack) {
+                                var_4 = ellie-intergalactic-wrap;
+                            } else {
+                                var_4 = *invalid-symbol*;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return var_4;
+}
+
+u64?* #03AF56D0EEB221F5() {
+    u64? var_0 = get-object-look(player, 0);
+    u64? var_1 = get-object-look(player, 0);
+    u64? var_2 = get-object-look(player, 0);
+    u64? var_3 = get-object-look(player, 0);
+    u64? var_4 = get-object-look(player, 0);
+    u64? var_5 = get-object-look(player, 0);
+    u64? var_6 = get-object-look(player, 0);
+    u64? var_7 = get-object-look(player, 0);
+    u64? var_8 = get-object-look(player, 0);
+    u64? var_9 = get-object-look(player, 0);
+    u64? var_10 = get-object-look(player, 0);
+    u64? var_11 = get-object-look(player, 0);
+    u64? var_12 = get-object-look(player, 0);
+    u64? var_13 = get-object-look(player, 0);
+    u64? var_14 = get-object-look(player, 0);
+    u64? var_15 = get-object-look(player, 0);
+    u64? var_16 = get-object-look(player, 0);
+    u64? var_17 = get-object-look(player, 0);
+    u64? var_18 = get-object-look(player, 0);
+    u64? var_19 = get-object-look(player, 0);
+    u64? var_20 = get-object-look(player, 0);
+    u64? var_21 = get-object-look(player, 0);
+    u64? var_22 = get-object-look(player, 0);
+    u64? var_23 = get-object-look(player, 0);
+    u64? var_24 = get-object-look(player, 0);
+    u64? var_25 = get-object-look(player, 0);
+    u64? var_26 = get-object-look(player, 0);
+    u64? var_27 = get-object-look(player, 0);
+    u64? var_28 = get-object-look(player, 0);
+    u64? var_29 = get-object-look(player, 0);
+    u64?* var_30;
+    if (var_0 == abby || var_1 == abby-holster || var_2 == abby-no-backpack || var_3 == abby-holster-no-backpack || var_4 == abby-jacket || var_5 == abby-jacket-holster || var_6 == abby-jacket-no-backpack || var_7 == abby-jacket-holster-no-backpack || var_8 == abby-nd || var_9 == abby-nd-holster || var_10 == abby-nd-no-backpack || var_11 == abby-nd-holster-no-backpack || var_12 == abby-jacket-orange || var_13 == abby-jacket-orange-holster || var_14 == abby-jacket-orange-no-backpack || var_15 == abby-jacket-holster-no-backpack || var_16 == abby-zoo || var_17 == abby-zoo-holster || var_18 == abby-zoo-no-backpack || var_19 == abby-zoo-holster-no-backpack || var_20 == abby-swim || var_21 == abby-swim-holster || var_22 == abby-swim-no-backpack || var_23 == abby-swim-holster-no-backpack || var_24 == abby-seattle-cafe || var_25 == #1C1BAAE71BC5B20E || var_26 == abby-seattle-cafe-no-backpack || var_27 == #ED2C1636BC21E4EF || var_28 == abby-santabarbara-no-backpack && var_29 == abby-santabarbara-holster-no-backpack) {
+        var_30 = #F984D79D454DF93C;
+    } else {
+        u64? var_31 = get-object-look(player, 0);
+        u64? var_32 = get-object-look(player, 0);
+        u64? var_33 = get-object-look(player, 0);
+        u64? var_34 = get-object-look(player, 0);
+        u64? var_35 = get-object-look(player, 0);
+        u64? var_36 = get-object-look(player, 0);
+        u64? var_37 = get-object-look(player, 0);
+        u64? var_38 = get-object-look(player, 0);
+        if (var_31 == abby-tracking || var_32 == #69443F9B88C97D21 || var_33 == abby-tracking-no-backpack || var_34 == abby-tracking-holster-no-backpack || var_35 == abby-tracking-patch || var_36 == abby-tracking-patch-holster || var_37 == abby-tracking-patch-no-backpack && var_38 == abby-tracking-patch-holster-no-backpack) {
+            var_30 = #D7E10C1B0B3D6481;
+        } else {
+            u64? var_39 = get-object-look(player, 0);
+            u64? var_40 = get-object-look(player, 0);
+            u64? var_41 = get-object-look(player, 0);
+            u64? var_42 = get-object-look(player, 0);
+            u64? var_43 = get-object-look(player, 0);
+            u64? var_44 = get-object-look(player, 0);
+            u64? var_45 = get-object-look(player, 0);
+            u64? var_46 = get-object-look(player, 0);
+            u64? var_47 = get-object-look(player, 0);
+            u64? var_48 = get-object-look(player, 0);
+            u64? var_49 = get-object-look(player, 0);
+            u64? var_50 = get-object-look(player, 0);
+            u64? var_51 = get-object-look(player, 0);
+            u64? var_52 = get-object-look(player, 0);
+            u64? var_53 = get-object-look(player, 0);
+            u64? var_54 = get-object-look(player, 0);
+            u64? var_55 = get-object-look(player, 0);
+            u64? var_56 = get-object-look(player, 0);
+            u64? var_57 = get-object-look(player, 0);
+            u64? var_58 = get-object-look(player, 0);
+            u64? var_59 = get-object-look(player, 0);
+            u64? var_60 = get-object-look(player, 0);
+            u64? var_61 = get-object-look(player, 0);
+            u64? var_62 = get-object-look(player, 0);
+            u64? var_63 = get-object-look(player, 0);
+            u64? var_64 = get-object-look(player, 0);
+            u64? var_65 = get-object-look(player, 0);
+            u64? var_66 = get-object-look(player, 0);
+            u64? var_67 = get-object-look(player, 0);
+            u64? var_68 = get-object-look(player, 0);
+            u64? var_69 = get-object-look(player, 0);
+            u64? var_70 = get-object-look(player, 0);
+            u64? var_71 = get-object-look(player, 0);
+            u64? var_72 = get-object-look(player, 0);
+            u64? var_73 = get-object-look(player, 0);
+            u64? var_74 = get-object-look(player, 0);
+            u64? var_75 = get-object-look(player, 0);
+            u64? var_76 = get-object-look(player, 0);
+            if (var_39 == abby-santabarbara || var_40 == abby-santabarbara-holster || var_41 == abby-santabarbara-ps || var_42 == abby-santabarbara-ps-holster || var_43 == abby-santabarbara-ps-no-backpack || var_44 == abby-santabarbara-ps-holster-no-backpack || var_45 == abby-santabarbara-syphon || var_46 == abby-santabarbara-syphon-holster || var_47 == abby-santabarbara-syphon-no-backpack || var_48 == abby-santabarbara-syphon-holster-no-backpack || var_49 == abby-santabarbara-jd || var_50 == abby-santabarbara-jd-holster || var_51 == abby-santabarbara-jd-no-backpack || var_52 == abby-santabarbara-jd-holster-no-backpack || var_53 == abby-santabarbara-twisted-metal || var_54 == abby-santabarbara-twisted-metal-holster || var_55 == abby-santabarbara-twisted-metal-no-backpack || var_56 == abby-santabarbara-twisted-metal-holster-no-backpack || var_57 == abby-santabarbara-mark-kri || var_58 == abby-santabarbara-mark-kri-holster || var_59 == abby-santabarbara-mark-kri-no-backpack || var_60 == abby-santabarbara-mark-kri-holster-no-backpack || var_61 == abby-santabarbara-war-monsters || var_62 == abby-santabarbara-war-monsters-holster || var_63 == abby-santabarbara-war-monsters-no-backpack || var_64 == abby-santabarbara-war-monsters-holster-no-backpack || var_65 == abby-santabarbara-getaway || var_66 == abby-santabarbara-getaway-holster || var_67 == abby-santabarbara-getaway-no-backpack || var_68 == abby-santabarbara-getaway-holster-no-backpack || var_69 == abby-santabarbara-genji || var_70 == abby-santabarbara-genji-holster || var_71 == abby-santabarbara-genji-no-backpack || var_72 == abby-santabarbara-genji-holster-no-backpack || var_73 == abby-santabarbara-skin || var_74 == abby-santabarbara-skin-holster || var_75 == abby-santabarbara-skin-no-backpack && var_76 == abby-santabarbara-skin-holster-no-backpack) {
+                var_30 = #0787422C1D8790CD;
+            } else {
+                u64? var_77 = get-object-look(player, 0);
+                u64? var_78 = get-object-look(player, 0);
+                u64? var_79 = get-object-look(player, 0);
+                u64? var_80 = get-object-look(player, 0);
+                if (var_77 == abby-badlands || var_78 == abby-badlands-holster || var_79 == abby-badlands-no-backpack && var_80 == abby-badlands-holster-no-backpack) {
+                    var_30 = #DC5565C55EF2A8A3;
+                } else {
+                    u64? var_81 = get-object-look(player, 0);
+                    u64? var_82 = get-object-look(player, 0);
+                    u64? var_83 = get-object-look(player, 0);
+                    u64? var_84 = get-object-look(player, 0);
+                    if (var_81 == abby-80s || var_82 == abby-80s-holster || var_83 == abby-80s-no-backpack && var_84 == abby-80s-holster-no-backpack) {
+                        var_30 = #E62CC12E4C31A295;
+                    } else {
+                        var_30 = *invalid-symbol*;
+                    }
+                }
+            }
+        }
+    }
+    return var_30;
+}
+
+u64?* #2143BD9D094445B6() {
+    u64? var_0 = get-object-look(player, 0);
+    u64? var_1 = get-object-look(player, 0);
+    u64? var_2 = get-object-look(player, 0);
+    u64? var_3 = get-object-look(player, 0);
+    u64? var_4 = get-object-look(player, 0);
+    u64?* var_5;
+    if (var_0 == ellie-santabarbara-alt || var_1 == ellie-santabarbara-skin || var_2 == ellie-santabarbara-skin-no-backpack || var_3 == ellie-santabarbara && var_4 == ellie-santabarbara-no-backpack) {
+        var_5 = #CBEC1A8578583435;
+    } else {
+        u64? var_6 = get-object-look(player, 0);
+        u64? var_7 = get-object-look(player, 0);
+        if (var_6 == ellie-santabarbara-pride && var_7 == ellie-santabarbara-pride-no-backpack) {
+            var_5 = #ECA87BE27F318CAF;
+        } else {
+            u64? var_8 = get-object-look(player, 0);
+            u64? var_9 = get-object-look(player, 0);
+            u64? var_10 = get-object-look(player, 0);
+            u64? var_11 = get-object-look(player, 0);
+            u64? var_12 = get-object-look(player, 0);
+            u64? var_13 = get-object-look(player, 0);
+            u64? var_14 = get-object-look(player, 0);
+            u64? var_15 = get-object-look(player, 0);
+            u64? var_16 = get-object-look(player, 0);
+            u64? var_17 = get-object-look(player, 0);
+            u64? var_18 = get-object-look(player, 0);
+            u64? var_19 = get-object-look(player, 0);
+            u64? var_20 = get-object-look(player, 0);
+            u64? var_21 = get-object-look(player, 0);
+            u64? var_22 = get-object-look(player, 0);
+            u64? var_23 = get-object-look(player, 0);
+            u64? var_24 = get-object-look(player, 0);
+            u64? var_25 = get-object-look(player, 0);
+            u64? var_26 = get-object-look(player, 0);
+            u64? var_27 = get-object-look(player, 0);
+            u64? var_28 = get-object-look(player, 0);
+            u64? var_29 = get-object-look(player, 0);
+            u64? var_30 = get-object-look(player, 0);
+            u64? var_31 = get-object-look(player, 0);
+            u64? var_32 = get-object-look(player, 0);
+            u64? var_33 = get-object-look(player, 0);
+            u64? var_34 = get-object-look(player, 0);
+            u64? var_35 = get-object-look(player, 0);
+            u64? var_36 = get-object-look(player, 0);
+            u64? var_37 = get-object-look(player, 0);
+            u64? var_38 = get-object-look(player, 0);
+            u64? var_39 = get-object-look(player, 0);
+            u64? var_40 = get-object-look(player, 0);
+            u64? var_41 = get-object-look(player, 0);
+            u64? var_42 = get-object-look(player, 0);
+            u64? var_43 = get-object-look(player, 0);
+            u64? var_44 = get-object-look(player, 0);
+            u64? var_45 = get-object-look(player, 0);
+            u64? var_46 = get-object-look(player, 0);
+            u64? var_47 = get-object-look(player, 0);
+            if (var_8 == ellie-seattle-alt || var_9 == ellie-seattle-skin || var_10 == ellie-seattle-skin-no-backpack || var_11 == ellie || var_12 == ellie-no-backpack || var_13 == ellie-seattle || var_14 == ellie-seattle-no-backpack || var_15 == ellie-iconic14-alt || var_16 == ellie-iconic14-alt-no-backpack || var_17 == ellie-iconic14-alt-skin || var_18 == ellie-iconic14-ps || var_19 == ellie-iconic14-ps-no-backpack || var_20 == ellie-iconic14-arc-lad || var_21 == ellie-iconic14-arc-lad-no-backpack || var_22 == ellie-iconic14-killzone || var_23 == ellie-iconic14-killzone-no-backpack || var_24 == ellie-iconic14-wipeout || var_25 == ellie-iconic14-wipeout-no-backpack || var_26 == ellie-iconic14-fantavision || var_27 == ellie-iconic14-fantavision-no-backpack || var_28 == ellie-iconic14-siren || var_29 == ellie-iconic14-siren-no-backpack || var_30 == ellie-iconic14-destiny || var_31 == ellie-iconic14-destiny-no-backpack || var_32 == ellie-iconic14-mortal-kombat || var_33 == ellie-iconic14-mortal-kombat-no-backpack || var_34 == ellie-iconic14-hotline-miami || var_35 == ellie-iconic14-hotline-miami-no-backpack || var_36 == ellie-iconic14-death-stranding || var_37 == ellie-iconic14-death-stranding-no-backpack || var_38 == ellie-swim-alt || var_39 == ellie-swim-alt-no-backpack || var_40 == ellie-plaid || var_41 == ellie-plaid-no-backpack || var_42 == ellie-intergalactic || var_43 == ellie-intergalactic-no-backpack || var_44 == ellie-seattle-yellow || var_45 == ellie-seattle-yellow-no-backpack || var_46 == ellie-savage-starlight && var_47 == ellie-savage-starlight-no-backpack) {
+                var_5 = #B0A5DE1B51190866;
+            } else {
+                u64? var_48 = get-object-look(player, 0);
+                u64? var_49 = get-object-look(player, 0);
+                u64? var_50 = get-object-look(player, 0);
+                u64? var_51 = get-object-look(player, 0);
+                u64? var_52 = get-object-look(player, 0);
+                u64? var_53 = get-object-look(player, 0);
+                u64? var_54 = get-object-look(player, 0);
+                if (var_48 == ellie-patrol || var_49 == ellie-patrol-no-backpack || var_50 == ellie-patrol-home || var_51 == #3459203006DBB8A8 || var_52 == ellie-patrol-embroider || var_53 == ellie-patrol-embroider-no-backpack && var_54 == ellie-grave) {
+                    var_5 = #B6AE07AFBB50E652;
+                } else {
+                    u64? var_55 = get-object-look(player, 0);
+                    u64? var_56 = get-object-look(player, 0);
+                    u64? var_57 = get-object-look(player, 0);
+                    u64? var_58 = get-object-look(player, 0);
+                    if (var_55 == ellie-astro || var_56 == ellie-astro-no-backpack || var_57 == ellie-astro-no-helmet && var_58 == ellie-astro-no-helmet-no-backpack) {
+                        var_5 = #19254F7D970ED089;
+                    } else {
+                        var_5 = *invalid-symbol*;
+                    }
+                }
+            }
+        }
+    }
+    return var_5;
+}
+
+u64 anim-player-misc-character-states__actor-state-list@3900__anim-node-subsystem-ik@a248____anim-node-animation@afd8__(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)((*(arg_1 + 8) + 256) + 8);
+}
+
+u8 anim-player-misc-character-states__actor-state-list@3900__anim-node-subsystem-ik@a248__(u64? arg_0, u8 arg_1, u64? arg_2) {
+    return *(u8*)(*(arg_1 + 8) + 381);
+}
+
+u64? anim-player-misc-character-states(u64? arg_0, u64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64 arg_5, u64? arg_6) {
+    u64 var_0 = *(u64*)(*(arg_1 + 8) + 384);
+    u64? var_1 = player-anim-speed-mult(var_0, *(u64*)arg_5);
+    return arg_2 + ((arg_3 * var_1) * arg_4);
+}
+
+u64 anim-player-misc-character-states__anim-node-subsystem-ik@9ce0__anim-node-animation@b250__(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)((*(arg_1 + 8) + 256) + 16);
+}
+
+u64 anim-player-misc-character-states__anim-node-animation@a190(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(*(arg_1 + 8) + 224);
+}
+
+u64 anim-player-misc-states__actor-state-list@3920__anim-node-subsystem-ik@a130____anim-node-blend@b210____anim-node-blend@b820____anim-node-gesture@d4a8__(u64? arg_0, u64 arg_1) {
+    return *(u64*)((*(arg_1 + 8) + 2368) + (0 * 112));
+}
+
+u8 anim-player-misc-states__actor-state-list@3920__anim-node-subsystem-ik@a130____anim-node-blend@b210____anim-node-blend@b820__(u64?* arg_0) {
+    return ((*(arg_0 + 8) + 2368) + (0 * 112)) + 40;
+}
+
+u64 anim-player-misc-states__actor-state-list@3920__anim-node-animation@c040__(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(((*(arg_1 + 8) + 2368) + (0 * 112)) + 24);
+}
+
+u8 anim-player-misc-states__actor-state-list@3920(u64? arg_0, u8 arg_1, u64? arg_2) {
+    return *(u8*)(((*(arg_1 + 8) + 2368) + (0 * 112)) + 17);
+}
+
+f32 anim-player-misc-states(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)(((*(arg_0 + 8) + 2368) + (0 * 112)) + 32);
+}
+
+u64 anim-player-misc-states__anim-node-subsystem-ik@9b70__anim-node-blend@add8____anim-node-blend@bfd0____anim-node-gesture@c6e8__(u64? arg_0, u64 arg_1) {
+    return *(u64*)((*(arg_1 + 8) + 2368) + (1 * 112));
+}
+
+u8 anim-player-misc-states__anim-node-subsystem-ik@9b70__anim-node-blend@add8____anim-node-blend@bfd0__(u64?* arg_0) {
+    return ((*(arg_0 + 8) + 2368) + (1 * 112)) + 40;
+}
+
+u64 anim-player-misc-states__anim-node-animation@bb18(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(((*(arg_1 + 8) + 2368) + (1 * 112)) + 24);
+}
+
+u64 anim-player-misc-states__anim-node-subsystem-ik@a1e8__anim-node-blend@ace8____anim-node-blend@b8d0____anim-node-gesture@cde8__(u64? arg_0, u64 arg_1) {
+    return *(u64*)((*(arg_1 + 8) + 2368) + (2 * 112));
+}
+
+u8 anim-player-misc-states__anim-node-subsystem-ik@a1e8__anim-node-blend@ace8____anim-node-blend@b8d0__(u64?* arg_0) {
+    return ((*(arg_0 + 8) + 2368) + (2 * 112)) + 40;
+}
+
+u64 anim-player-misc-states__anim-node-animation@bb50(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(((*(arg_1 + 8) + 2368) + (2 * 112)) + 24);
+}
+
+u64 anim-player-misc-states__anim-node-subsystem-ik@a070__anim-node-blend@b120____anim-node-blend@bdb0____anim-node-gesture@d180__(u64? arg_0, u64 arg_1) {
+    return *(u64*)((*(arg_1 + 8) + 2368) + (3 * 112));
+}
+
+u8 anim-player-misc-states__anim-node-subsystem-ik@a070__anim-node-blend@b120____anim-node-blend@bdb0__(u64?* arg_0) {
+    return ((*(arg_0 + 8) + 2368) + (3 * 112)) + 40;
+}
+
+u64 anim-player-misc-states__anim-node-animation@bf98(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(((*(arg_1 + 8) + 2368) + (3 * 112)) + 24);
+}
+
+u64 anim-player-misc-states__anim-node-subsystem-ik@9cb0__anim-node-blend@ab88____anim-node-blend@bc58____anim-node-animation@d038__(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(((*(arg_1 + 8) + 2368) + (0 * 112)) + 8);
+}
+
+u64 anim-player-misc-states__anim-node-subsystem-ik@9e60__anim-node-blend@aa90____anim-node-blend@b780____anim-node-animation@cdb0__(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(((*(arg_1 + 8) + 2368) + (1 * 112)) + 8);
+}
+
+u64 anim-player-misc-states__anim-node-subsystem-ik@a0d0__anim-node-blend@aee8____anim-node-blend@b968____anim-node-animation@ce58__(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(((*(arg_1 + 8) + 2368) + (2 * 112)) + 8);
+}
+
+u64 anim-player-misc-states__anim-node-subsystem-ik@9c08__anim-node-blend@ac58____anim-node-blend@b7e0____anim-node-animation@d518__(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(((*(arg_1 + 8) + 2368) + (3 * 112)) + 8);
+}
+
+f32 anim-player-misc-states__anim-node-blend@9fd8__anim-node-blend@b010____anim-node-blend@bad8____anim-node-blend@c598____anim-node-blend@e140____anim-node-blend@e9b8____anim-node-blend@ebf8____anim-node-blend@ed50____anim-node-blend@f128____anim-node-blend@f370__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)((*(arg_0 + 8) + 2848) + 32);
+}
+
+f32 anim-player-misc-states__anim-node-blend@9fd8__anim-node-blend@b010____anim-node-blend@bad8____anim-node-blend@c598____anim-node-blend@e140____anim-node-blend@e9b8____anim-node-blend@ebf8____anim-node-blend@ed50__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)((*(arg_0 + 8) + 2848) + 16);
+}
+
+f32 anim-player-misc-states__anim-node-blend@9fd8__anim-node-blend@b010____anim-node-blend@bad8____anim-node-blend@c598____anim-node-blend@e140____anim-node-blend@e9b8__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)((*(arg_0 + 8) + 2848) + 20);
+}
+
+f32 anim-player-misc-states__anim-node-blend@9fd8__anim-node-blend@b010____anim-node-blend@bad8____anim-node-blend@c598__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)((*(arg_0 + 8) + 2848) + 24);
+}
+
+f32 anim-player-misc-states__anim-node-blend@9fd8__anim-node-blend@b010__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)((*(arg_0 + 8) + 2848) + 28);
+}
+
+sid player-pickup-anim(u16 arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_0 = get-locator-position(arg_3);
+    u64? var_1 = get-locator-position(arg_1);
+    u64? var_2 = point-subtract(var_0, var_1);
+    u64? var_3 = get-object-facing-angle-plus(arg_1, arg_3, 2, 1);
+    u64? var_4 = get-locator-rotation(arg_1);
+    u64? var_5 = get-local-z(var_4);
+    u64? var_6 = get-locator-rotation(arg_1);
+    u64? var_7 = get-local-y(var_6);
+    u64? var_8 = dot-product(var_7, var_2);
+    u64? var_9 = angle-in-between-vectors(var_5, arg_2);
+    u64? var_10 = vector-magnitude(arg_2);
+    u64? var_11 = get-tension-mode();
+    u64? var_12 = get-locator-distance-xz(arg_1, arg_3);
+    u64? var_13 = is-player-ellie?(player);
+    u64? var_14 = player-is-crouched?();
+    f32 var_15;
+    if (var_14) {
+        var_15 = 1.40;
+    } else {
+        var_15 = 2.00;
+    }
+    u64? var_16 = player-is-crouched?();
+    f32 var_17;
+    if (var_16) {
+        var_17 = 0.80;
+    } else {
+        var_17 = 0.10;
+    }
+    u64? var_18 = player-swimming?();
+    u16 var_19;
+    if (var_18) {
+        var_19 = 0;
+    } else {
+        var_19 = 1;
+    }
+    u64? var_20 = get-current-player-movement-anim-settings();
+    u64? var_21 = get-tension-mode();
+    u16 var_22;
+    if (!(var_20 == 0) || *(u64*)(var_20 + 512) == *ellie-mm-uneasy-run* || *(u64*)(var_20 + 512) == *ellie-mm-uneasy-walk* || var_21 == 2) {
+        u64? var_23 = get-tension-mode();
+        if (var_23 == 4) {
+            var_22 = 1;
+        } else {
+            var_22 = 0;
+        }
+    }
+    u64? var_24 = get-joypad-stick-intensity(move, 0.20, 1.00);
+    u16 var_25;
+    if (*(u64*)(var_20 + 512) == *ellie-mm-tense-sprint* && var_24 > 0.20) {
+        var_25 = 1;
+    } else {
+        var_25 = 0;
+    }
+    u16 var_26;
+    if (var_19) {
+        bool var_27;
+        if (var_25) {
+            var_27 = var_10 >= 0.80;
+        } else {
+            var_27 = var_10 >= var_15;
+        }
+        u64? var_28 = get-joypad-stick-intensity(move, 0.20, 1.00);
+        if (var_27 && var_28 >= var_17) {
+            var_26 = 1;
+        } else {
+            var_26 = 0;
+        }
+    } else {
+        var_26 = 1;
+    }
+    u64? var_29 = alloc-point(1000.00, 260.00, 0.00, 0);
+    u64? var_30 = float-to-string(var_8, 6);
+    u64? var_31 = #5445173390656D6D("Obj. height: %s ", var_30);
+    debug-draw-string-2d(
+        var_29,
+        var_31,
+        7,
+        1.00,
+        0.50,
+        0,
+        0,
+        0,
+        1.00
+    );
+    u64? var_32 = alloc-point(1000.00, 290.00, 0.00, 0);
+    u64? var_33 = float-to-string(var_10, 6);
+    u64? var_34 = #5445173390656D6D("PLR Velocity: %s ", var_33);
+    debug-draw-string-2d(
+        var_32,
+        var_34,
+        7,
+        1.00,
+        0.50,
+        0,
+        0,
+        0,
+        1.00
+    );
+    if (var_22) {
+        u64? var_35 = alloc-point(1000.00, 340.00, 0.00, 0);
+        debug-draw-string-2d(
+            var_35,
+            "player-is-uneasy: True ",
+            7,
+            1.00,
+            0.50,
+            0,
+            0,
+            0,
+            1.00
+        );
+    } else {
+        u64? var_36 = alloc-point(1000.00, 340.00, 0.00, 0);
+        debug-draw-string-2d(
+            var_36,
+            "player-is-uneasy: False ",
+            7,
+            1.00,
+            0.50,
+            0,
+            0,
+            0,
+            1.00
+        );
+    }
+    if (var_25) {
+        u64? var_37 = alloc-point(1000.00, 440.00, 0.00, 0);
+        debug-draw-string-2d(
+            var_37,
+            "player-is-combat-sprint: True ",
+            7,
+            1.00,
+            0.50,
+            0,
+            0,
+            0,
+            1.00
+        );
+    } else {
+        u64? var_38 = alloc-point(1000.00, 440.00, 0.00, 0);
+        debug-draw-string-2d(
+            var_38,
+            "player-is-combat-sprint: False ",
+            7,
+            1.00,
+            0.50,
+            0,
+            0,
+            0,
+            1.00
+        );
+    }
+    u64? var_39 = player-is-supine?();
+    sid var_40;
+    if (var_39) {
+        if (arg_0 == 0) {
+            var_40 = ellie-scav-tense-pickup-110cm-left-arm--move-fw-part--gesture;
+        } else {
+            var_40 = ellie-scav-tense-pickup-110cm-right-arm--move-fw-part--gesture;
+        }
+    } else {
+        u64? var_41 = player-is-prone?();
+        if (var_41) {
+            if (arg_0 == 0 || var_3 < -135.00) {
+                if (var_3 > 90.00) {
+                    var_40 = ellie-pickup-prone-idle-10cm-back-l-hand-gesture;
+                } else if (var_3 < -45.00) {
+                    var_40 = ellie-pickup-prone-idle-10cm-left-l-hand-gesture;
+                } else {
+                    var_40 = ellie-pickup-prone-idle-10cm-forward-l-hand-gesture;
+                }
+            }
+        } else {
+            u64? var_42 = player-is-crouched?();
+            if (var_42) {
+                if (var_26) {
+                    if (arg_0 == 0) {
+                        if (var_9 <= 90.00) {
+                            if (var_8 < 0.35) {
+                                var_40 = ellie-scav-tense-crouch-pickup-0cm-left-arm--move-fw-part--gesture;
+                            } else if (var_8 < 0.75) {
+                                var_40 = ellie-scav-tense-crouch-pickup-60cm-left-arm--move-fw-part--gesture;
+                            } else {
+                                var_40 = ellie-scav-tense-crouch-pickup-100cm-left-arm--move-fw-part--gesture;
+                            }
+                        } else if (var_8 < 0.35) {
+                            var_40 = ellie-pickup-crouch-idle-floor-left-l-hand-gesture;
+                        } else if (var_8 < 0.75) {
+                            var_40 = ellie-pickup-crouch-idle-high-left-l-hand-gesture;
+                        } else {
+                            var_40 = ellie-pickup-crouch-idle-mid-left-l-hand-gesture;
+                        }
+                    } else if (var_9 <= 90.00) {
+                        if (var_8 < 0.35) {
+                            var_40 = ellie-scav-tense-crouch-pickup-0cm-right-arm--move-fw-part--gesture;
+                        } else if (var_8 < 0.75) {
+                            var_40 = ellie-scav-tense-crouch-pickup-60cm-right-arm--move-fw-part--gesture;
+                        } else {
+                            var_40 = ellie-scav-tense-crouch-pickup-100cm-right-arm--move-fw-part--gesture;
+                        }
+                    } else if (var_8 < 0.35) {
+                        var_40 = ellie-pickup-crouch-idle-floor-right-r-hand-gesture;
+                    } else if (var_8 < 0.75) {
+                        var_40 = ellie-pickup-crouch-idle-high-right-r-hand-gesture;
+                    } else {
+                        var_40 = ellie-pickup-crouch-idle-mid-right-r-hand-gesture;
+                    }
+                } else if (var_13) {
+                    if (arg_0 == 0) {
+                        if (var_8 < 0.35 || var_3 < -135.00) {
+                            if (var_3 > 165.00) {
+                                var_40 = ellie-pickup-crouch-idle-floor-back-l-hand-gesture;
+                            } else if (var_3 < -45.00) {
+                                var_40 = ellie-pickup-crouch-idle-floor-left-l-hand-gesture;
+                            } else {
+                                var_40 = ellie-pickup-crouch-idle-floor-forward-l-hand-gesture;
+                            }
+                        }
+                    } else if (var_8 < 0.35 || var_3 > 135.00) {
+                        if (var_3 < -135.00) {
+                            var_40 = ellie-pickup-crouch-idle-floor-back-r-hand-gesture;
+                        } else if (var_3 > 45.00) {
+                            var_40 = ellie-pickup-crouch-idle-floor-right-r-hand-gesture;
+                        } else {
+                            var_40 = ellie-pickup-crouch-idle-floor-forward-r-hand-gesture;
+                        }
+                    }
+                } else if (arg_0 == 0) {
+                    if (var_8 < 0.35 || var_3 < -135.00) {
+                        if (var_3 > 165.00) {
+                            var_40 = abby-pickup-crouch-idle-floor-back-l-hand-gesture;
+                        } else if (var_3 < -45.00) {
+                            var_40 = abby-pickup-crouch-idle-floor-left-l-hand-gesture;
+                        } else {
+                            var_40 = abby-pickup-crouch-idle-floor-forward-l-hand-gesture;
+                        }
+                    }
+                } else if (var_8 < 0.35 || var_3 > 135.00) {
+                    if (var_3 < -135.00) {
+                        var_40 = abby-pickup-crouch-idle-floor-back-r-hand-gesture;
+                    } else if (var_3 > 45.00) {
+                        var_40 = abby-pickup-crouch-idle-floor-right-r-hand-gesture;
+                    } else {
+                        var_40 = abby-pickup-crouch-idle-floor-forward-r-hand-gesture;
+                    }
+                }
+            } else if (var_26) {
+                if (arg_0 == 0) {
+                    if (var_9 > 90.00) {
+                        if (var_8 < 0.75) {
+                            var_40 = ellie-scav-tense-pickup-50cm-left-arm--move-bw-part--gesture;
+                        } else if (var_8 < 1.35) {
+                            var_40 = ellie-scav-tense-pickup-110cm-left-arm--move-bw-part--gesture;
+                        } else {
+                            var_40 = ellie-scav-tense-pickup-160cm-left-arm--move-bw-part--gesture;
+                        }
+                    } else if (!var_25) {
+                        if (var_8 < 0.75) {
+                            var_40 = ellie-scav-tense-pickup-50cm-left-arm--move-fw-part--gesture;
+                        } else if (var_8 < 1.35) {
+                            var_40 = ellie-scav-tense-pickup-110cm-left-arm--move-fw-part--gesture;
+                        } else {
+                            var_40 = ellie-scav-tense-pickup-160cm-left-arm--move-fw-part--gesture;
+                        }
+                    } else if (var_8 < 0.75) {
+                        var_40 = ellie-scav-tense-sprint-pickup-70cm-left-arm--move-fw-part--gesture;
+                    } else if (var_8 < 1.35) {
+                        var_40 = ellie-scav-tense-sprint-pickup-110cm-left-arm--move-fw-part--gesture;
+                    } else {
+                        var_40 = ellie-scav-tense-sprint-pickup-160cm-left-arm--move-fw-part--gesture;
+                    }
+                } else if (var_9 > 90.00) {
+                    if (var_8 < 0.75) {
+                        var_40 = ellie-scav-tense-pickup-50cm-right-arm--move-bw-part--gesture;
+                    } else if (var_8 < 1.35) {
+                        var_40 = ellie-scav-tense-pickup-110cm-right-arm--move-bw-part--gesture;
+                    } else {
+                        var_40 = ellie-scav-tense-pickup-160cm-right-arm--move-bw-part--gesture;
+                    }
+                } else if (!var_25) {
+                    if (var_8 < 0.75) {
+                        var_40 = ellie-scav-tense-pickup-50cm-right-arm--move-fw-part--gesture;
+                    } else if (var_8 < 1.35) {
+                        var_40 = ellie-scav-tense-pickup-110cm-right-arm--move-fw-part--gesture;
+                    } else {
+                        var_40 = ellie-scav-tense-pickup-160cm-right-arm--move-fw-part--gesture;
+                    }
+                } else if (var_8 < 0.75) {
+                    var_40 = ellie-scav-tense-sprint-pickup-70cm-right-arm--move-fw-part--gesture;
+                } else if (var_8 < 1.35) {
+                    var_40 = ellie-scav-tense-sprint-pickup-110cm-right-arm--move-fw-part--gesture;
+                } else {
+                    var_40 = ellie-scav-tense-sprint-pickup-160cm-right-arm--move-fw-part--gesture;
+                }
+            } else if (var_13) {
+                if (var_11 == 3) {
+                    if (arg_0 == 0) {
+                        if (var_12 > 0.60) {
+                            if (var_3 > -45.00 && var_3 < 135.00) {
+                                if (var_8 > 1.21) {
+                                    var_40 = ellie-pickup-tense-idle-high-forward-l-hand-gesture;
+                                } else {
+                                    var_40 = ellie-pickup-tense-idle-mid-forward-l-hand-gesture;
+                                }
+                            } else if (var_8 > 1.21) {
+                                var_40 = ellie-pickup-tense-idle-high-left-l-hand-gesture;
+                            } else {
+                                var_40 = ellie-pickup-tense-idle-mid-left-l-hand-gesture;
+                            }
+                        } else if (var_3 > -45.00 && var_3 < 135.00) {
+                            if (var_8 > 1.21) {
+                                var_40 = ellie-pickup-tense-idle-high-forward-close-l-hand-gesture;
+                            } else {
+                                var_40 = ellie-pickup-tense-idle-mid-forward-close-l-hand-gesture;
+                            }
+                        } else if (var_8 > 1.21) {
+                            var_40 = ellie-pickup-tense-idle-high-left-close-l-hand-gesture;
+                        } else {
+                            var_40 = ellie-pickup-tense-idle-mid-left-close-l-hand-gesture;
+                        }
+                    } else if (var_12 > 0.60) {
+                        if (var_3 <= 45.00 && var_3 > -135.00) {
+                            if (var_8 > 1.21) {
+                                var_40 = ellie-pickup-tense-idle-high-forward-r-hand-gesture;
+                            } else {
+                                var_40 = ellie-pickup-tense-idle-mid-forward-r-hand-gesture;
+                            }
+                        } else if (var_8 > 1.21) {
+                            var_40 = ellie-pickup-tense-idle-high-right-r-hand-gesture;
+                        } else {
+                            var_40 = ellie-pickup-tense-idle-mid-right-r-hand-gesture;
+                        }
+                    } else if (var_3 <= 45.00 && var_3 > -135.00) {
+                        if (var_8 > 1.21) {
+                            var_40 = ellie-pickup-tense-idle-high-forward-close-r-hand-gesture;
+                        } else {
+                            var_40 = ellie-pickup-tense-idle-mid-forward-close-r-hand-gesture;
+                        }
+                    } else if (var_8 > 1.21) {
+                        var_40 = ellie-pickup-tense-idle-high-right-close-r-hand-gesture;
+                    } else {
+                        var_40 = ellie-pickup-tense-idle-mid-right-close-r-hand-gesture;
+                    }
+                } else if (var_22) {
+                    if (arg_0 == 0) {
+                        if (var_3 > -45.00 && var_3 < 135.00) {
+                            if (var_8 <= 0.71) {
+                                var_40 = ellie-pickup-uneasy-idle-low-forward-l-hand-gesture;
+                            } else if (var_8 < 1.35) {
+                                var_40 = ellie-pickup-uneasy-idle-mid-forward-l-hand-gesture;
+                            } else {
+                                var_40 = ellie-pickup-uneasy-idle-high-forward-l-hand-gesture;
+                            }
+                        } else if (var_8 <= 0.71) {
+                            var_40 = ellie-pickup-uneasy-idle-low-left-l-hand-gesture;
+                        } else if (var_8 < 1.35) {
+                            var_40 = ellie-pickup-uneasy-idle-mid-left-l-hand-gesture;
+                        } else {
+                            var_40 = ellie-pickup-uneasy-idle-high-left-l-hand-gesture;
+                        }
+                    } else if (var_3 <= 45.00 && var_3 > -135.00) {
+                        if (var_8 <= 0.71) {
+                            var_40 = ellie-pickup-uneasy-idle-low-forward-r-hand-gesture;
+                        } else if (var_8 < 1.35) {
+                            var_40 = ellie-pickup-uneasy-idle-mid-forward-r-hand-gesture;
+                        } else {
+                            var_40 = ellie-pickup-uneasy-idle-high-forward-r-hand-gesture;
+                        }
+                    } else if (var_8 <= 0.71) {
+                        var_40 = ellie-pickup-uneasy-idle-low-right-r-hand-gesture;
+                    } else if (var_8 < 1.35) {
+                        var_40 = ellie-pickup-uneasy-idle-mid-right-r-hand-gesture;
+                    } else {
+                        var_40 = ellie-pickup-uneasy-idle-high-right-r-hand-gesture;
+                    }
+                } else if (arg_0 == 0) {
+                    if (var_12 > 0.60) {
+                        if (var_3 > -45.00 && var_3 < 135.00) {
+                            if (var_8 <= 0.71) {
+                                var_40 = ellie-pickup-relaxed-idle-low-forward-l-hand-gesture;
+                            } else if (var_8 < 0.95) {
+                                var_40 = ellie-pickup-relaxed-idle-80cm-forward-l-hand-gesture;
+                            } else if (var_8 < 1.35) {
+                                var_40 = ellie-pickup-relaxed-idle-mid-forward-l-hand-gesture;
+                            } else {
+                                var_40 = ellie-pickup-relaxed-idle-high-forward-l-hand-gesture;
+                            }
+                        } else if (var_8 <= 0.71) {
+                            var_40 = ellie-pickup-relaxed-idle-low-left-l-hand-gesture;
+                        } else if (var_8 < 0.95) {
+                            var_40 = ellie-pickup-relaxed-idle-80cm-left-l-hand-gesture;
+                        } else if (var_8 < 1.35) {
+                            var_40 = ellie-pickup-relaxed-idle-mid-left-l-hand-gesture;
+                        } else {
+                            var_40 = ellie-pickup-relaxed-idle-high-left-l-hand-gesture;
+                        }
+                    } else if (var_3 > -45.00 && var_3 < 135.00) {
+                        if (var_8 <= 0.71) {
+                            var_40 = ellie-pickup-relaxed-idle-low-forward-close-l-hand-gesture;
+                        } else if (var_8 < 0.95) {
+                            var_40 = ellie-pickup-relaxed-idle-80cm-forward-l-hand-gesture;
+                        } else if (var_8 < 1.35) {
+                            var_40 = ellie-pickup-relaxed-idle-mid-forward-close-l-hand-gesture;
+                        } else {
+                            var_40 = ellie-pickup-relaxed-idle-high-forward-close-l-hand-gesture;
+                        }
+                    } else if (var_8 <= 0.71) {
+                        var_40 = ellie-pickup-relaxed-idle-low-left-close-l-hand-gesture;
+                    } else if (var_8 < 0.95) {
+                        var_40 = ellie-pickup-relaxed-idle-80cm-left-l-hand-gesture;
+                    } else if (var_8 < 1.35) {
+                        var_40 = ellie-pickup-relaxed-idle-mid-left-close-l-hand-gesture;
+                    } else {
+                        var_40 = ellie-pickup-relaxed-idle-high-left-close-l-hand-gesture;
+                    }
+                } else if (var_12 > 0.60) {
+                    if (var_3 <= 45.00 && var_3 > -135.00) {
+                        if (var_8 <= 0.71) {
+                            var_40 = ellie-pickup-relaxed-idle-low-forward-r-hand-gesture;
+                        } else if (var_8 < 0.95) {
+                            var_40 = ellie-pickup-relaxed-idle-80cm-forward-r-hand-gesture;
+                        } else if (var_8 < 1.35) {
+                            var_40 = ellie-pickup-relaxed-idle-mid-forward-r-hand-gesture;
+                        } else {
+                            var_40 = ellie-pickup-relaxed-idle-high-forward-r-hand-gesture;
+                        }
+                    } else if (var_8 <= 0.71) {
+                        var_40 = ellie-pickup-relaxed-idle-low-right-r-hand-gesture;
+                    } else if (var_8 < 0.95) {
+                        var_40 = ellie-pickup-relaxed-idle-80cm-right-r-hand-gesture;
+                    } else if (var_8 < 1.35) {
+                        var_40 = ellie-pickup-relaxed-idle-mid-right-r-hand-gesture;
+                    } else {
+                        var_40 = ellie-pickup-relaxed-idle-high-right-r-hand-gesture;
+                    }
+                } else if (var_3 <= 45.00 && var_3 > -135.00) {
+                    if (var_8 <= 0.71) {
+                        var_40 = ellie-pickup-relaxed-idle-low-forward-close-r-hand-gesture;
+                    } else if (var_8 < 0.95) {
+                        var_40 = ellie-pickup-relaxed-idle-80cm-forward-r-hand-gesture;
+                    } else if (var_8 < 1.35) {
+                        var_40 = ellie-pickup-relaxed-idle-mid-forward-close-r-hand-gesture;
+                    } else {
+                        var_40 = ellie-pickup-relaxed-idle-high-forward-close-r-hand-gesture;
+                    }
+                } else if (var_8 <= 0.71) {
+                    var_40 = ellie-pickup-relaxed-idle-low-right-close-r-hand-gesture;
+                } else if (var_8 < 0.95) {
+                    var_40 = ellie-pickup-relaxed-idle-80cm-right-r-hand-gesture;
+                } else if (var_8 < 1.35) {
+                    var_40 = ellie-pickup-relaxed-idle-mid-right-close-r-hand-gesture;
+                } else {
+                    var_40 = ellie-pickup-relaxed-idle-high-right-close-r-hand-gesture;
+                }
+            } else if (var_11 == 3) {
+                if (arg_0 == 0) {
+                    if (var_12 > 0.60) {
+                        if (var_3 > -45.00 && var_3 < 135.00) {
+                            if (var_8 > 1.21) {
+                                var_40 = abby-pickup-tense-idle-high-forward-l-hand-gesture;
+                            } else {
+                                var_40 = abby-pickup-tense-idle-mid-forward-l-hand-gesture;
+                            }
+                        } else if (var_8 > 1.21) {
+                            var_40 = abby-pickup-tense-idle-high-left-l-hand-gesture;
+                        } else {
+                            var_40 = abby-pickup-tense-idle-mid-left-l-hand-gesture;
+                        }
+                    } else if (var_3 > -45.00 && var_3 < 135.00) {
+                        if (var_8 > 1.21) {
+                            var_40 = abby-pickup-tense-idle-high-forward-close-l-hand-gesture;
+                        } else {
+                            var_40 = abby-pickup-tense-idle-mid-forward-close-l-hand-gesture;
+                        }
+                    } else if (var_8 > 1.21) {
+                        var_40 = abby-pickup-tense-idle-high-left-close-l-hand-gesture;
+                    } else {
+                        var_40 = abby-pickup-tense-idle-mid-left-close-l-hand-gesture;
+                    }
+                } else if (var_12 > 0.60) {
+                    if (var_3 <= 45.00 && var_3 > -135.00) {
+                        if (var_8 > 1.21) {
+                            var_40 = abby-pickup-tense-idle-high-forward-r-hand-gesture;
+                        } else {
+                            var_40 = abby-pickup-tense-idle-mid-forward-r-hand-gesture;
+                        }
+                    } else if (var_8 > 1.21) {
+                        var_40 = abby-pickup-tense-idle-high-right-r-hand-gesture;
+                    } else {
+                        var_40 = abby-pickup-tense-idle-mid-right-r-hand-gesture;
+                    }
+                } else if (var_3 <= 45.00 && var_3 > -135.00) {
+                    if (var_8 > 1.21) {
+                        var_40 = abby-pickup-tense-idle-high-forward-close-r-hand-gesture;
+                    } else {
+                        var_40 = abby-pickup-tense-idle-mid-forward-close-r-hand-gesture;
+                    }
+                } else if (var_8 > 1.21) {
+                    var_40 = abby-pickup-tense-idle-high-right-close-r-hand-gesture;
+                } else {
+                    var_40 = abby-pickup-tense-idle-mid-right-close-r-hand-gesture;
+                }
+            } else if (var_22) {
+                if (arg_0 == 0) {
+                    if (var_3 > -45.00 && var_3 < 135.00) {
+                        if (var_8 <= 0.71) {
+                            var_40 = abby-pickup-uneasy-idle-low-forward-l-hand-gesture;
+                        } else if (var_8 < 1.21) {
+                            var_40 = abby-pickup-uneasy-idle-mid-forward-l-hand-gesture;
+                        } else {
+                            var_40 = abby-pickup-uneasy-idle-high-forward-l-hand-gesture;
+                        }
+                    } else if (var_8 <= 0.71) {
+                        var_40 = abby-pickup-uneasy-idle-low-left-l-hand-gesture;
+                    } else if (var_8 < 1.21) {
+                        var_40 = abby-pickup-uneasy-idle-mid-left-l-hand-gesture;
+                    } else {
+                        var_40 = abby-pickup-uneasy-idle-high-left-l-hand-gesture;
+                    }
+                } else if (var_3 <= 45.00 && var_3 > -135.00) {
+                    if (var_8 <= 0.71) {
+                        var_40 = abby-pickup-uneasy-idle-low-forward-r-hand-gesture;
+                    } else if (var_8 < 1.21) {
+                        var_40 = abby-pickup-uneasy-idle-mid-forward-r-hand-gesture;
+                    } else {
+                        var_40 = abby-pickup-uneasy-idle-high-forward-r-hand-gesture;
+                    }
+                } else if (var_8 <= 0.71) {
+                    var_40 = abby-pickup-uneasy-idle-low-right-r-hand-gesture;
+                } else if (var_8 < 1.21) {
+                    var_40 = abby-pickup-uneasy-idle-mid-right-r-hand-gesture;
+                } else {
+                    var_40 = abby-pickup-uneasy-idle-high-right-r-hand-gesture;
+                }
+            } else if (arg_0 == 0) {
+                if (var_12 > 0.60) {
+                    if (var_3 > -45.00 && var_3 < 135.00) {
+                        if (var_8 <= 0.71) {
+                            var_40 = abby-pickup-relaxed-idle-low-forward-l-hand-gesture;
+                        } else if (var_8 < 0.95) {
+                            var_40 = abby-pickup-relaxed-idle-80cm-forward-l-hand-gesture;
+                        } else if (var_8 < 1.35) {
+                            var_40 = abby-pickup-relaxed-idle-mid-forward-l-hand-gesture;
+                        } else {
+                            var_40 = abby-pickup-relaxed-idle-high-forward-l-hand-gesture;
+                        }
+                    } else if (var_8 <= 0.71) {
+                        var_40 = abby-pickup-relaxed-idle-low-left-l-hand-gesture;
+                    } else if (var_8 < 0.95) {
+                        var_40 = abby-pickup-relaxed-idle-80cm-left-l-hand-gesture;
+                    } else if (var_8 < 1.35) {
+                        var_40 = abby-pickup-relaxed-idle-mid-left-l-hand-gesture;
+                    } else {
+                        var_40 = abby-pickup-relaxed-idle-high-left-l-hand-gesture;
+                    }
+                } else if (var_3 > -45.00 && var_3 < 135.00) {
+                    if (var_8 <= 0.71) {
+                        var_40 = abby-pickup-relaxed-idle-low-forward-close-l-hand-gesture;
+                    } else if (var_8 < 0.95) {
+                        var_40 = abby-pickup-relaxed-idle-80cm-forward-l-hand-gesture;
+                    } else if (var_8 < 1.35) {
+                        var_40 = abby-pickup-relaxed-idle-mid-forward-close-l-hand-gesture;
+                    } else {
+                        var_40 = abby-pickup-relaxed-idle-high-forward-close-l-hand-gesture;
+                    }
+                } else if (var_8 <= 0.71) {
+                    var_40 = abby-pickup-relaxed-idle-low-left-close-l-hand-gesture;
+                } else if (var_8 < 0.95) {
+                    var_40 = abby-pickup-relaxed-idle-80cm-left-l-hand-gesture;
+                } else if (var_8 < 1.35) {
+                    var_40 = abby-pickup-relaxed-idle-mid-left-close-l-hand-gesture;
+                } else {
+                    var_40 = abby-pickup-relaxed-idle-high-left-close-l-hand-gesture;
+                }
+            } else if (var_12 > 0.60) {
+                if (var_3 <= 45.00 && var_3 > -135.00) {
+                    if (var_8 <= 0.71) {
+                        var_40 = abby-pickup-relaxed-idle-low-forward-r-hand-gesture;
+                    } else if (var_8 < 0.95) {
+                        var_40 = abby-pickup-relaxed-idle-80cm-forward-r-hand-gesture;
+                    } else if (var_8 < 1.35) {
+                        var_40 = abby-pickup-relaxed-idle-mid-forward-r-hand-gesture;
+                    } else {
+                        var_40 = abby-pickup-relaxed-idle-high-forward-r-hand-gesture;
+                    }
+                } else if (var_8 <= 0.71) {
+                    var_40 = abby-pickup-relaxed-idle-low-right-r-hand-gesture;
+                } else if (var_8 < 0.95) {
+                    var_40 = abby-pickup-relaxed-idle-80cm-right-r-hand-gesture;
+                } else if (var_8 < 1.35) {
+                    var_40 = abby-pickup-relaxed-idle-mid-right-r-hand-gesture;
+                } else {
+                    var_40 = abby-pickup-relaxed-idle-high-right-r-hand-gesture;
+                }
+            } else if (var_3 <= 45.00 && var_3 > -135.00) {
+                if (var_8 <= 0.71) {
+                    var_40 = abby-pickup-relaxed-idle-low-forward-close-r-hand-gesture;
+                } else if (var_8 < 0.95) {
+                    var_40 = abby-pickup-relaxed-idle-80cm-forward-r-hand-gesture;
+                } else if (var_8 < 1.35) {
+                    var_40 = abby-pickup-relaxed-idle-mid-forward-close-r-hand-gesture;
+                } else {
+                    var_40 = abby-pickup-relaxed-idle-high-forward-close-r-hand-gesture;
+                }
+            } else if (var_8 <= 0.71) {
+                var_40 = abby-pickup-relaxed-idle-low-right-close-r-hand-gesture;
+            } else if (var_8 < 0.95) {
+                var_40 = abby-pickup-relaxed-idle-80cm-right-r-hand-gesture;
+            } else if (var_8 < 1.35) {
+                var_40 = abby-pickup-relaxed-idle-mid-right-close-r-hand-gesture;
+            } else {
+                var_40 = abby-pickup-relaxed-idle-high-right-close-r-hand-gesture;
+            }
+        }
+    }
+    return var_40;
+}
+
+u64?* #E71DE494AA1E0CB6() {
+    u64? var_0 = get-object-look(player, 0);
+    u64? var_1 = get-object-look(player, 0);
+    u64? var_2 = get-object-look(player, 0);
+    u64? var_3 = get-object-look(player, 0);
+    u64? var_4 = get-object-look(player, 0);
+    u64? var_5 = get-object-look(player, 0);
+    u64? var_6 = get-object-look(player, 0);
+    u64? var_7 = get-object-look(player, 0);
+    u64? var_8 = get-object-look(player, 0);
+    u64? var_9 = get-object-look(player, 0);
+    u64? var_10 = get-object-look(player, 0);
+    u64? var_11 = get-object-look(player, 0);
+    u64? var_12 = get-object-look(player, 0);
+    u64? var_13 = get-object-look(player, 0);
+    u64? var_14 = get-object-look(player, 0);
+    u64? var_15 = get-object-look(player, 0);
+    u64? var_16 = get-object-look(player, 0);
+    u64? var_17 = get-object-look(player, 0);
+    u64?* var_18;
+    if (var_0 == abby || var_1 == abby-holster || var_2 == abby-no-backpack || var_3 == abby-holster-no-backpack || var_4 == abby-nd || var_5 == abby-nd-holster || var_6 == abby-nd-no-backpack || var_7 == abby-nd-holster-no-backpack || var_8 == abby-zoo || var_9 == abby-zoo-holster || var_10 == abby-zoo-no-backpack || var_11 == abby-zoo-holster-no-backpack || var_12 == abby-swim || var_13 == abby-swim-holster || var_14 == abby-swim-no-backpack || var_15 == abby-swim-holster-no-backpack || var_16 == abby-santabarbara-no-backpack && var_17 == abby-santabarbara-skin-no-backpack) {
+        var_18 = #2C3C156490C2DC45;
+    } else {
+        u64? var_19 = get-object-look(player, 0);
+        u64? var_20 = get-object-look(player, 0);
+        u64? var_21 = get-object-look(player, 0);
+        u64? var_22 = get-object-look(player, 0);
+        u64? var_23 = get-object-look(player, 0);
+        u64? var_24 = get-object-look(player, 0);
+        u64? var_25 = get-object-look(player, 0);
+        u64? var_26 = get-object-look(player, 0);
+        u64? var_27 = get-object-look(player, 0);
+        u64? var_28 = get-object-look(player, 0);
+        u64? var_29 = get-object-look(player, 0);
+        u64? var_30 = get-object-look(player, 0);
+        u64? var_31 = get-object-look(player, 0);
+        u64? var_32 = get-object-look(player, 0);
+        u64? var_33 = get-object-look(player, 0);
+        u64? var_34 = get-object-look(player, 0);
+        u64? var_35 = get-object-look(player, 0);
+        u64? var_36 = get-object-look(player, 0);
+        u64? var_37 = get-object-look(player, 0);
+        u64? var_38 = get-object-look(player, 0);
+        u64? var_39 = get-object-look(player, 0);
+        u64? var_40 = get-object-look(player, 0);
+        u64? var_41 = get-object-look(player, 0);
+        u64? var_42 = get-object-look(player, 0);
+        u64? var_43 = get-object-look(player, 0);
+        u64? var_44 = get-object-look(player, 0);
+        u64? var_45 = get-object-look(player, 0);
+        u64? var_46 = get-object-look(player, 0);
+        u64? var_47 = get-object-look(player, 0);
+        u64? var_48 = get-object-look(player, 0);
+        u64? var_49 = get-object-look(player, 0);
+        u64? var_50 = get-object-look(player, 0);
+        u64? var_51 = get-object-look(player, 0);
+        u64? var_52 = get-object-look(player, 0);
+        u64? var_53 = get-object-look(player, 0);
+        u64? var_54 = get-object-look(player, 0);
+        u64? var_55 = get-object-look(player, 0);
+        u64? var_56 = get-object-look(player, 0);
+        u64? var_57 = get-object-look(player, 0);
+        if (var_19 == abby-santabarbara || var_20 == abby-santabarbara-holster || var_21 == abby-santabarbara-holster-no-backpack || var_22 == abby-santabarbara-ps || var_23 == abby-santabarbara-ps-holster || var_24 == abby-santabarbara-ps-no-backpack || var_25 == abby-santabarbara-ps-holster-no-backpack || var_26 == abby-santabarbara-syphon || var_27 == abby-santabarbara-syphon-holster || var_28 == abby-santabarbara-syphon-no-backpack || var_29 == abby-santabarbara-syphon-holster-no-backpack || var_30 == abby-santabarbara-jd || var_31 == abby-santabarbara-jd-holster || var_32 == abby-santabarbara-jd-no-backpack || var_33 == abby-santabarbara-jd-holster-no-backpack || var_34 == abby-santabarbara-twisted-metal || var_35 == abby-santabarbara-twisted-metal-holster || var_36 == abby-santabarbara-twisted-metal-no-backpack || var_37 == abby-santabarbara-twisted-metal-holster-no-backpack || var_38 == abby-santabarbara-mark-kri || var_39 == abby-santabarbara-mark-kri-holster || var_40 == abby-santabarbara-mark-kri-no-backpack || var_41 == abby-santabarbara-mark-kri-holster-no-backpack || var_42 == abby-santabarbara-war-monsters || var_43 == abby-santabarbara-war-monsters-holster || var_44 == abby-santabarbara-war-monsters-no-backpack || var_45 == abby-santabarbara-war-monsters-holster-no-backpack || var_46 == abby-santabarbara-getaway || var_47 == abby-santabarbara-getaway-holster || var_48 == abby-santabarbara-getaway-no-backpack || var_49 == abby-santabarbara-getaway-holster-no-backpack || var_50 == abby-santabarbara-genji || var_51 == abby-santabarbara-genji-holster || var_52 == abby-santabarbara-genji-no-backpack || var_53 == abby-santabarbara-genji-holster-no-backpack || var_54 == abby-santabarbara-skin || var_55 == abby-santabarbara-skin-holster || var_56 == abby-santabarbara-skin-no-backpack && var_57 == abby-santabarbara-skin-holster-no-backpack) {
+            var_18 = #AF69BBB9C76CCB26;
+        } else {
+            u64? var_58 = get-object-look(player, 0);
+            u64? var_59 = get-object-look(player, 0);
+            u64? var_60 = get-object-look(player, 0);
+            u64? var_61 = get-object-look(player, 0);
+            if (var_58 == abby-badlands || var_59 == abby-badlands-holster || var_60 == abby-badlands-no-backpack && var_61 == abby-badlands-holster-no-backpack) {
+                var_18 = #445D21A117DBC732;
+            } else {
+                var_18 = *invalid-symbol*;
+            }
+        }
+    }
+    return var_18;
+}
+
+u64?* #01997CFBFACFDD5D() {
+    u64? var_0 = get-object-look(player, 0);
+    u64? var_1 = get-object-look(player, 0);
+    u64? var_2 = get-object-look(player, 0);
+    u64? var_3 = get-object-look(player, 0);
+    u64?* var_4;
+    if (var_0 == ellie-santabarbara-skin-no-backpack || var_1 == ellie-santabarbara-no-backpack || var_2 == ellie-santabarbara-pride-no-backpack && var_3 == ellie-swim-alt-no-backpack) {
+        var_4 = ellie-santabarbara-explore-wrap;
+    } else {
+        u64? var_5 = get-object-look(player, 0);
+        u64? var_6 = get-object-look(player, 0);
+        u64? var_7 = get-object-look(player, 0);
+        u64? var_8 = get-object-look(player, 0);
+        u64? var_9 = get-object-look(player, 0);
+        u64? var_10 = get-object-look(player, 0);
+        u64? var_11 = get-object-look(player, 0);
+        u64? var_12 = get-object-look(player, 0);
+        u64? var_13 = get-object-look(player, 0);
+        u64? var_14 = get-object-look(player, 0);
+        u64? var_15 = get-object-look(player, 0);
+        u64? var_16 = get-object-look(player, 0);
+        if (var_5 == ellie-farm-explore-wrap || var_6 == ellie-iconic14-alt-no-backpack || var_7 == ellie-iconic14-ps-no-backpack || var_8 == ellie-iconic14-arc-lad-no-backpack || var_9 == ellie-iconic14-killzone-no-backpack || var_10 == ellie-iconic14-wipeout-no-backpack || var_11 == ellie-iconic14-fantavision-no-backpack || var_12 == ellie-iconic14-siren-no-backpack || var_13 == ellie-iconic14-destiny-no-backpack || var_14 == ellie-iconic14-mortal-kombat-no-backpack || var_15 == ellie-iconic14-hotline-miami-no-backpack && var_16 == ellie-iconic14-death-stranding-no-backpack) {
+            var_4 = ellie-farm-explore-wrap;
+        } else {
+            u64? var_17 = get-object-look(player, 0);
+            u64? var_18 = get-object-look(player, 0);
+            u64? var_19 = get-object-look(player, 0);
+            u64? var_20 = get-object-look(player, 0);
+            u64? var_21 = get-object-look(player, 0);
+            if (var_17 == ellie-seattle-skin-no-backpack || var_18 == ellie-no-backpack || var_19 == ellie-seattle-no-backpack || var_20 == ellie-seattle-yellow-no-backpack && var_21 == ellie-plaid-no-backpack) {
+                var_4 = ellie-seattle-explore-wrap;
+            } else {
+                u64? var_22 = get-object-look(player, 0);
+                u64? var_23 = get-object-look(player, 0);
+                u64? var_24 = get-object-look(player, 0);
+                if (var_22 == ellie-patrol-no-backpack || var_23 == #3459203006DBB8A8 && var_24 == ellie-patrol-embroider-no-backpack) {
+                    var_4 = ellie-patrol-explore-wrap;
+                } else {
+                    u64? var_25 = get-object-look(player, 0);
+                    u64? var_26 = get-object-look(player, 0);
+                    if (var_25 == ellie-astro-no-backpack && var_26 == ellie-astro-no-helmet-no-backpack) {
+                        var_4 = ellie-astro-explore-wrap;
+                    } else {
+                        u64? var_27 = get-object-look(player, 0);
+                        if (var_27 == ellie-savage-starlight-no-backpack) {
+                            var_4 = ellie-star-explore-wrap;
+                        } else {
+                            u64? var_28 = get-object-look(player, 0);
+                            if (var_28 == ellie-intergalactic-no-backpack) {
+                                var_4 = ellie-intergalactic-wrap;
+                            } else {
+                                var_4 = *invalid-symbol*;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return var_4;
+}
+
+u64?* #03AF56D0EEB221F5() {
+    u64? var_0 = get-object-look(player, 0);
+    u64? var_1 = get-object-look(player, 0);
+    u64? var_2 = get-object-look(player, 0);
+    u64? var_3 = get-object-look(player, 0);
+    u64? var_4 = get-object-look(player, 0);
+    u64? var_5 = get-object-look(player, 0);
+    u64? var_6 = get-object-look(player, 0);
+    u64? var_7 = get-object-look(player, 0);
+    u64? var_8 = get-object-look(player, 0);
+    u64? var_9 = get-object-look(player, 0);
+    u64? var_10 = get-object-look(player, 0);
+    u64? var_11 = get-object-look(player, 0);
+    u64? var_12 = get-object-look(player, 0);
+    u64? var_13 = get-object-look(player, 0);
+    u64? var_14 = get-object-look(player, 0);
+    u64? var_15 = get-object-look(player, 0);
+    u64? var_16 = get-object-look(player, 0);
+    u64? var_17 = get-object-look(player, 0);
+    u64? var_18 = get-object-look(player, 0);
+    u64? var_19 = get-object-look(player, 0);
+    u64? var_20 = get-object-look(player, 0);
+    u64? var_21 = get-object-look(player, 0);
+    u64? var_22 = get-object-look(player, 0);
+    u64? var_23 = get-object-look(player, 0);
+    u64? var_24 = get-object-look(player, 0);
+    u64? var_25 = get-object-look(player, 0);
+    u64? var_26 = get-object-look(player, 0);
+    u64? var_27 = get-object-look(player, 0);
+    u64? var_28 = get-object-look(player, 0);
+    u64? var_29 = get-object-look(player, 0);
+    u64?* var_30;
+    if (var_0 == abby || var_1 == abby-holster || var_2 == abby-no-backpack || var_3 == abby-holster-no-backpack || var_4 == abby-jacket || var_5 == abby-jacket-holster || var_6 == abby-jacket-no-backpack || var_7 == abby-jacket-holster-no-backpack || var_8 == abby-nd || var_9 == abby-nd-holster || var_10 == abby-nd-no-backpack || var_11 == abby-nd-holster-no-backpack || var_12 == abby-jacket-orange || var_13 == abby-jacket-orange-holster || var_14 == abby-jacket-orange-no-backpack || var_15 == abby-jacket-holster-no-backpack || var_16 == abby-zoo || var_17 == abby-zoo-holster || var_18 == abby-zoo-no-backpack || var_19 == abby-zoo-holster-no-backpack || var_20 == abby-swim || var_21 == abby-swim-holster || var_22 == abby-swim-no-backpack || var_23 == abby-swim-holster-no-backpack || var_24 == abby-seattle-cafe || var_25 == #1C1BAAE71BC5B20E || var_26 == abby-seattle-cafe-no-backpack || var_27 == #ED2C1636BC21E4EF || var_28 == abby-santabarbara-no-backpack && var_29 == abby-santabarbara-holster-no-backpack) {
+        var_30 = #F984D79D454DF93C;
+    } else {
+        u64? var_31 = get-object-look(player, 0);
+        u64? var_32 = get-object-look(player, 0);
+        u64? var_33 = get-object-look(player, 0);
+        u64? var_34 = get-object-look(player, 0);
+        u64? var_35 = get-object-look(player, 0);
+        u64? var_36 = get-object-look(player, 0);
+        u64? var_37 = get-object-look(player, 0);
+        u64? var_38 = get-object-look(player, 0);
+        if (var_31 == abby-tracking || var_32 == #69443F9B88C97D21 || var_33 == abby-tracking-no-backpack || var_34 == abby-tracking-holster-no-backpack || var_35 == abby-tracking-patch || var_36 == abby-tracking-patch-holster || var_37 == abby-tracking-patch-no-backpack && var_38 == abby-tracking-patch-holster-no-backpack) {
+            var_30 = #D7E10C1B0B3D6481;
+        } else {
+            u64? var_39 = get-object-look(player, 0);
+            u64? var_40 = get-object-look(player, 0);
+            u64? var_41 = get-object-look(player, 0);
+            u64? var_42 = get-object-look(player, 0);
+            u64? var_43 = get-object-look(player, 0);
+            u64? var_44 = get-object-look(player, 0);
+            u64? var_45 = get-object-look(player, 0);
+            u64? var_46 = get-object-look(player, 0);
+            u64? var_47 = get-object-look(player, 0);
+            u64? var_48 = get-object-look(player, 0);
+            u64? var_49 = get-object-look(player, 0);
+            u64? var_50 = get-object-look(player, 0);
+            u64? var_51 = get-object-look(player, 0);
+            u64? var_52 = get-object-look(player, 0);
+            u64? var_53 = get-object-look(player, 0);
+            u64? var_54 = get-object-look(player, 0);
+            u64? var_55 = get-object-look(player, 0);
+            u64? var_56 = get-object-look(player, 0);
+            u64? var_57 = get-object-look(player, 0);
+            u64? var_58 = get-object-look(player, 0);
+            u64? var_59 = get-object-look(player, 0);
+            u64? var_60 = get-object-look(player, 0);
+            u64? var_61 = get-object-look(player, 0);
+            u64? var_62 = get-object-look(player, 0);
+            u64? var_63 = get-object-look(player, 0);
+            u64? var_64 = get-object-look(player, 0);
+            u64? var_65 = get-object-look(player, 0);
+            u64? var_66 = get-object-look(player, 0);
+            u64? var_67 = get-object-look(player, 0);
+            u64? var_68 = get-object-look(player, 0);
+            u64? var_69 = get-object-look(player, 0);
+            u64? var_70 = get-object-look(player, 0);
+            u64? var_71 = get-object-look(player, 0);
+            u64? var_72 = get-object-look(player, 0);
+            u64? var_73 = get-object-look(player, 0);
+            u64? var_74 = get-object-look(player, 0);
+            u64? var_75 = get-object-look(player, 0);
+            u64? var_76 = get-object-look(player, 0);
+            if (var_39 == abby-santabarbara || var_40 == abby-santabarbara-holster || var_41 == abby-santabarbara-ps || var_42 == abby-santabarbara-ps-holster || var_43 == abby-santabarbara-ps-no-backpack || var_44 == abby-santabarbara-ps-holster-no-backpack || var_45 == abby-santabarbara-syphon || var_46 == abby-santabarbara-syphon-holster || var_47 == abby-santabarbara-syphon-no-backpack || var_48 == abby-santabarbara-syphon-holster-no-backpack || var_49 == abby-santabarbara-jd || var_50 == abby-santabarbara-jd-holster || var_51 == abby-santabarbara-jd-no-backpack || var_52 == abby-santabarbara-jd-holster-no-backpack || var_53 == abby-santabarbara-twisted-metal || var_54 == abby-santabarbara-twisted-metal-holster || var_55 == abby-santabarbara-twisted-metal-no-backpack || var_56 == abby-santabarbara-twisted-metal-holster-no-backpack || var_57 == abby-santabarbara-mark-kri || var_58 == abby-santabarbara-mark-kri-holster || var_59 == abby-santabarbara-mark-kri-no-backpack || var_60 == abby-santabarbara-mark-kri-holster-no-backpack || var_61 == abby-santabarbara-war-monsters || var_62 == abby-santabarbara-war-monsters-holster || var_63 == abby-santabarbara-war-monsters-no-backpack || var_64 == abby-santabarbara-war-monsters-holster-no-backpack || var_65 == abby-santabarbara-getaway || var_66 == abby-santabarbara-getaway-holster || var_67 == abby-santabarbara-getaway-no-backpack || var_68 == abby-santabarbara-getaway-holster-no-backpack || var_69 == abby-santabarbara-genji || var_70 == abby-santabarbara-genji-holster || var_71 == abby-santabarbara-genji-no-backpack || var_72 == abby-santabarbara-genji-holster-no-backpack || var_73 == abby-santabarbara-skin || var_74 == abby-santabarbara-skin-holster || var_75 == abby-santabarbara-skin-no-backpack && var_76 == abby-santabarbara-skin-holster-no-backpack) {
+                var_30 = #0787422C1D8790CD;
+            } else {
+                u64? var_77 = get-object-look(player, 0);
+                u64? var_78 = get-object-look(player, 0);
+                u64? var_79 = get-object-look(player, 0);
+                u64? var_80 = get-object-look(player, 0);
+                if (var_77 == abby-badlands || var_78 == abby-badlands-holster || var_79 == abby-badlands-no-backpack && var_80 == abby-badlands-holster-no-backpack) {
+                    var_30 = #DC5565C55EF2A8A3;
+                } else {
+                    u64? var_81 = get-object-look(player, 0);
+                    u64? var_82 = get-object-look(player, 0);
+                    u64? var_83 = get-object-look(player, 0);
+                    u64? var_84 = get-object-look(player, 0);
+                    if (var_81 == abby-80s || var_82 == abby-80s-holster || var_83 == abby-80s-no-backpack && var_84 == abby-80s-holster-no-backpack) {
+                        var_30 = #E62CC12E4C31A295;
+                    } else {
+                        var_30 = *invalid-symbol*;
+                    }
+                }
+            }
+        }
+    }
+    return var_30;
+}
+
+u64?* #2143BD9D094445B6() {
+    u64? var_0 = get-object-look(player, 0);
+    u64? var_1 = get-object-look(player, 0);
+    u64? var_2 = get-object-look(player, 0);
+    u64? var_3 = get-object-look(player, 0);
+    u64? var_4 = get-object-look(player, 0);
+    u64?* var_5;
+    if (var_0 == ellie-santabarbara-alt || var_1 == ellie-santabarbara-skin || var_2 == ellie-santabarbara-skin-no-backpack || var_3 == ellie-santabarbara && var_4 == ellie-santabarbara-no-backpack) {
+        var_5 = #CBEC1A8578583435;
+    } else {
+        u64? var_6 = get-object-look(player, 0);
+        u64? var_7 = get-object-look(player, 0);
+        if (var_6 == ellie-santabarbara-pride && var_7 == ellie-santabarbara-pride-no-backpack) {
+            var_5 = #ECA87BE27F318CAF;
+        } else {
+            u64? var_8 = get-object-look(player, 0);
+            u64? var_9 = get-object-look(player, 0);
+            u64? var_10 = get-object-look(player, 0);
+            u64? var_11 = get-object-look(player, 0);
+            u64? var_12 = get-object-look(player, 0);
+            u64? var_13 = get-object-look(player, 0);
+            u64? var_14 = get-object-look(player, 0);
+            u64? var_15 = get-object-look(player, 0);
+            u64? var_16 = get-object-look(player, 0);
+            u64? var_17 = get-object-look(player, 0);
+            u64? var_18 = get-object-look(player, 0);
+            u64? var_19 = get-object-look(player, 0);
+            u64? var_20 = get-object-look(player, 0);
+            u64? var_21 = get-object-look(player, 0);
+            u64? var_22 = get-object-look(player, 0);
+            u64? var_23 = get-object-look(player, 0);
+            u64? var_24 = get-object-look(player, 0);
+            u64? var_25 = get-object-look(player, 0);
+            u64? var_26 = get-object-look(player, 0);
+            u64? var_27 = get-object-look(player, 0);
+            u64? var_28 = get-object-look(player, 0);
+            u64? var_29 = get-object-look(player, 0);
+            u64? var_30 = get-object-look(player, 0);
+            u64? var_31 = get-object-look(player, 0);
+            u64? var_32 = get-object-look(player, 0);
+            u64? var_33 = get-object-look(player, 0);
+            u64? var_34 = get-object-look(player, 0);
+            u64? var_35 = get-object-look(player, 0);
+            u64? var_36 = get-object-look(player, 0);
+            u64? var_37 = get-object-look(player, 0);
+            u64? var_38 = get-object-look(player, 0);
+            u64? var_39 = get-object-look(player, 0);
+            u64? var_40 = get-object-look(player, 0);
+            u64? var_41 = get-object-look(player, 0);
+            u64? var_42 = get-object-look(player, 0);
+            u64? var_43 = get-object-look(player, 0);
+            u64? var_44 = get-object-look(player, 0);
+            u64? var_45 = get-object-look(player, 0);
+            u64? var_46 = get-object-look(player, 0);
+            u64? var_47 = get-object-look(player, 0);
+            if (var_8 == ellie-seattle-alt || var_9 == ellie-seattle-skin || var_10 == ellie-seattle-skin-no-backpack || var_11 == ellie || var_12 == ellie-no-backpack || var_13 == ellie-seattle || var_14 == ellie-seattle-no-backpack || var_15 == ellie-iconic14-alt || var_16 == ellie-iconic14-alt-no-backpack || var_17 == ellie-iconic14-alt-skin || var_18 == ellie-iconic14-ps || var_19 == ellie-iconic14-ps-no-backpack || var_20 == ellie-iconic14-arc-lad || var_21 == ellie-iconic14-arc-lad-no-backpack || var_22 == ellie-iconic14-killzone || var_23 == ellie-iconic14-killzone-no-backpack || var_24 == ellie-iconic14-wipeout || var_25 == ellie-iconic14-wipeout-no-backpack || var_26 == ellie-iconic14-fantavision || var_27 == ellie-iconic14-fantavision-no-backpack || var_28 == ellie-iconic14-siren || var_29 == ellie-iconic14-siren-no-backpack || var_30 == ellie-iconic14-destiny || var_31 == ellie-iconic14-destiny-no-backpack || var_32 == ellie-iconic14-mortal-kombat || var_33 == ellie-iconic14-mortal-kombat-no-backpack || var_34 == ellie-iconic14-hotline-miami || var_35 == ellie-iconic14-hotline-miami-no-backpack || var_36 == ellie-iconic14-death-stranding || var_37 == ellie-iconic14-death-stranding-no-backpack || var_38 == ellie-swim-alt || var_39 == ellie-swim-alt-no-backpack || var_40 == ellie-plaid || var_41 == ellie-plaid-no-backpack || var_42 == ellie-intergalactic || var_43 == ellie-intergalactic-no-backpack || var_44 == ellie-seattle-yellow || var_45 == ellie-seattle-yellow-no-backpack || var_46 == ellie-savage-starlight && var_47 == ellie-savage-starlight-no-backpack) {
+                var_5 = #B0A5DE1B51190866;
+            } else {
+                u64? var_48 = get-object-look(player, 0);
+                u64? var_49 = get-object-look(player, 0);
+                u64? var_50 = get-object-look(player, 0);
+                u64? var_51 = get-object-look(player, 0);
+                u64? var_52 = get-object-look(player, 0);
+                u64? var_53 = get-object-look(player, 0);
+                u64? var_54 = get-object-look(player, 0);
+                if (var_48 == ellie-patrol || var_49 == ellie-patrol-no-backpack || var_50 == ellie-patrol-home || var_51 == #3459203006DBB8A8 || var_52 == ellie-patrol-embroider || var_53 == ellie-patrol-embroider-no-backpack && var_54 == ellie-grave) {
+                    var_5 = #B6AE07AFBB50E652;
+                } else {
+                    u64? var_55 = get-object-look(player, 0);
+                    u64? var_56 = get-object-look(player, 0);
+                    u64? var_57 = get-object-look(player, 0);
+                    u64? var_58 = get-object-look(player, 0);
+                    if (var_55 == ellie-astro || var_56 == ellie-astro-no-backpack || var_57 == ellie-astro-no-helmet && var_58 == ellie-astro-no-helmet-no-backpack) {
+                        var_5 = #19254F7D970ED089;
+                    } else {
+                        var_5 = *invalid-symbol*;
+                    }
+                }
+            }
+        }
+    }
+    return var_5;
+}
+
+u64 anim-player-misc-character-states__actor-state-list@3900__anim-node-subsystem-ik@a248____anim-node-animation@afd8__(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)((*(arg_1 + 8) + 256) + 8);
+}
+
+u8 anim-player-misc-character-states__actor-state-list@3900__anim-node-subsystem-ik@a248__(u64? arg_0, u8 arg_1, u64? arg_2) {
+    return *(u8*)(*(arg_1 + 8) + 381);
+}
+
+u64? anim-player-misc-character-states(u64? arg_0, u64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64 arg_5, u64? arg_6) {
+    u64 var_0 = *(u64*)(*(arg_1 + 8) + 384);
+    u64? var_1 = player-anim-speed-mult(var_0, *(u64*)arg_5);
+    return arg_2 + ((arg_3 * var_1) * arg_4);
+}
+
+u64 anim-player-misc-character-states__anim-node-subsystem-ik@9ce0__anim-node-animation@b250__(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)((*(arg_1 + 8) + 256) + 16);
+}
+
+u64 anim-player-misc-character-states__anim-node-animation@a190(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(*(arg_1 + 8) + 224);
+}
+
+u64 anim-player-misc-states__actor-state-list@3920__anim-node-subsystem-ik@a130____anim-node-blend@b210____anim-node-blend@b820____anim-node-gesture@d4a8__(u64? arg_0, u64 arg_1) {
+    return *(u64*)((*(arg_1 + 8) + 2368) + (0 * 112));
+}
+
+u8 anim-player-misc-states__actor-state-list@3920__anim-node-subsystem-ik@a130____anim-node-blend@b210____anim-node-blend@b820__(u64?* arg_0) {
+    return ((*(arg_0 + 8) + 2368) + (0 * 112)) + 40;
+}
+
+u64 anim-player-misc-states__actor-state-list@3920__anim-node-animation@c040__(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(((*(arg_1 + 8) + 2368) + (0 * 112)) + 24);
+}
+
+u8 anim-player-misc-states__actor-state-list@3920(u64? arg_0, u8 arg_1, u64? arg_2) {
+    return *(u8*)(((*(arg_1 + 8) + 2368) + (0 * 112)) + 17);
+}
+
+f32 anim-player-misc-states(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)(((*(arg_0 + 8) + 2368) + (0 * 112)) + 32);
+}
+
+u64 anim-player-misc-states__anim-node-subsystem-ik@9b70__anim-node-blend@add8____anim-node-blend@bfd0____anim-node-gesture@c6e8__(u64? arg_0, u64 arg_1) {
+    return *(u64*)((*(arg_1 + 8) + 2368) + (1 * 112));
+}
+
+u8 anim-player-misc-states__anim-node-subsystem-ik@9b70__anim-node-blend@add8____anim-node-blend@bfd0__(u64?* arg_0) {
+    return ((*(arg_0 + 8) + 2368) + (1 * 112)) + 40;
+}
+
+u64 anim-player-misc-states__anim-node-animation@bb18(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(((*(arg_1 + 8) + 2368) + (1 * 112)) + 24);
+}
+
+u64 anim-player-misc-states__anim-node-subsystem-ik@a1e8__anim-node-blend@ace8____anim-node-blend@b8d0____anim-node-gesture@cde8__(u64? arg_0, u64 arg_1) {
+    return *(u64*)((*(arg_1 + 8) + 2368) + (2 * 112));
+}
+
+u8 anim-player-misc-states__anim-node-subsystem-ik@a1e8__anim-node-blend@ace8____anim-node-blend@b8d0__(u64?* arg_0) {
+    return ((*(arg_0 + 8) + 2368) + (2 * 112)) + 40;
+}
+
+u64 anim-player-misc-states__anim-node-animation@bb50(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(((*(arg_1 + 8) + 2368) + (2 * 112)) + 24);
+}
+
+u64 anim-player-misc-states__anim-node-subsystem-ik@a070__anim-node-blend@b120____anim-node-blend@bdb0____anim-node-gesture@d180__(u64? arg_0, u64 arg_1) {
+    return *(u64*)((*(arg_1 + 8) + 2368) + (3 * 112));
+}
+
+u8 anim-player-misc-states__anim-node-subsystem-ik@a070__anim-node-blend@b120____anim-node-blend@bdb0__(u64?* arg_0) {
+    return ((*(arg_0 + 8) + 2368) + (3 * 112)) + 40;
+}
+
+u64 anim-player-misc-states__anim-node-animation@bf98(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(((*(arg_1 + 8) + 2368) + (3 * 112)) + 24);
+}
+
+u64 anim-player-misc-states__anim-node-subsystem-ik@9cb0__anim-node-blend@ab88____anim-node-blend@bc58____anim-node-animation@d038__(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(((*(arg_1 + 8) + 2368) + (0 * 112)) + 8);
+}
+
+u64 anim-player-misc-states__anim-node-subsystem-ik@9e60__anim-node-blend@aa90____anim-node-blend@b780____anim-node-animation@cdb0__(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(((*(arg_1 + 8) + 2368) + (1 * 112)) + 8);
+}
+
+u64 anim-player-misc-states__anim-node-subsystem-ik@a0d0__anim-node-blend@aee8____anim-node-blend@b968____anim-node-animation@ce58__(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(((*(arg_1 + 8) + 2368) + (2 * 112)) + 8);
+}
+
+u64 anim-player-misc-states__anim-node-subsystem-ik@9c08__anim-node-blend@ac58____anim-node-blend@b7e0____anim-node-animation@d518__(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(((*(arg_1 + 8) + 2368) + (3 * 112)) + 8);
+}
+
+f32 anim-player-misc-states__anim-node-blend@9fd8__anim-node-blend@b010____anim-node-blend@bad8____anim-node-blend@c598____anim-node-blend@e140____anim-node-blend@e9b8____anim-node-blend@ebf8____anim-node-blend@ed50____anim-node-blend@f128____anim-node-blend@f370__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)((*(arg_0 + 8) + 2848) + 32);
+}
+
+f32 anim-player-misc-states__anim-node-blend@9fd8__anim-node-blend@b010____anim-node-blend@bad8____anim-node-blend@c598____anim-node-blend@e140____anim-node-blend@e9b8____anim-node-blend@ebf8____anim-node-blend@ed50__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)((*(arg_0 + 8) + 2848) + 16);
+}
+
+f32 anim-player-misc-states__anim-node-blend@9fd8__anim-node-blend@b010____anim-node-blend@bad8____anim-node-blend@c598____anim-node-blend@e140____anim-node-blend@e9b8__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)((*(arg_0 + 8) + 2848) + 20);
+}
+
+f32 anim-player-misc-states__anim-node-blend@9fd8__anim-node-blend@b010____anim-node-blend@bad8____anim-node-blend@c598__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)((*(arg_0 + 8) + 2848) + 24);
+}
+
+f32 anim-player-misc-states__anim-node-blend@9fd8__anim-node-blend@b010__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)((*(arg_0 + 8) + 2848) + 28);
+}
+
+sid player-pickup-anim(u16 arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_0 = get-locator-position(arg_3);
+    u64? var_1 = get-locator-position(arg_1);
+    u64? var_2 = point-subtract(var_0, var_1);
+    u64? var_3 = get-object-facing-angle-plus(arg_1, arg_3, 2, 1);
+    u64? var_4 = get-locator-rotation(arg_1);
+    u64? var_5 = get-local-z(var_4);
+    u64? var_6 = get-locator-rotation(arg_1);
+    u64? var_7 = get-local-y(var_6);
+    u64? var_8 = dot-product(var_7, var_2);
+    u64? var_9 = angle-in-between-vectors(var_5, arg_2);
+    u64? var_10 = vector-magnitude(arg_2);
+    u64? var_11 = get-tension-mode();
+    u64? var_12 = get-locator-distance-xz(arg_1, arg_3);
+    u64? var_13 = is-player-ellie?(player);
+    u64? var_14 = player-is-crouched?();
+    f32 var_15;
+    if (var_14 != nullptr) {
+        var_15 = 1.40;
+    } else {
+        var_15 = 2.00;
+    }
+    u64? var_16 = player-is-crouched?();
+    f32 var_17;
+    if (var_16 != nullptr) {
+        var_17 = 0.80;
+    } else {
+        var_17 = 0.10;
+    }
+    u64? var_18 = player-swimming?();
+    u16 var_19;
+    if (var_18 != nullptr) {
+        var_19 = 0;
+    } else {
+        var_19 = 1;
+    }
+    u64? var_20 = get-current-player-movement-anim-settings();
+    u64? var_21 = get-tension-mode();
+    u16 var_22;
+    if ((var_20 == 0) == nullptr || *(u64*)(var_20 + 512) == *ellie-mm-uneasy-run* || *(u64*)(var_20 + 512) == *ellie-mm-uneasy-walk* || var_21 == 2) {
+        u64? var_23 = get-tension-mode();
+        if (var_23 == 4) {
+            var_22 = 1;
+        } else {
+            var_22 = 0;
+        }
+    }
+    u64? var_24 = get-joypad-stick-intensity(move, 0.20, 1.00);
+    u16 var_25;
+    if (*(u64*)(var_20 + 512) == *ellie-mm-tense-sprint* && var_24 > 0.20) {
+        var_25 = 1;
+    } else {
+        var_25 = 0;
+    }
+    u16 var_26;
+    if (var_19 != nullptr) {
+        bool var_27;
+        if (var_25 != nullptr) {
+            var_27 = var_10 >= 0.80;
+        } else {
+            var_27 = var_10 >= var_15;
+        }
+        u64? var_28 = get-joypad-stick-intensity(move, 0.20, 1.00);
+        if (var_27 != nullptr && var_28 >= var_17) {
+            var_26 = 1;
+        } else {
+            var_26 = 0;
+        }
+    } else {
+        var_26 = 1;
+    }
+    u64? var_29 = alloc-point(1000.00, 260.00, 0.00, 0);
+    u64? var_30 = float-to-string(var_8, 6);
+    u64? var_31 = #5445173390656D6D("Obj. height: %s ", var_30);
+    debug-draw-string-2d(
+        var_29,
+        var_31,
+        7,
+        1.00,
+        0.50,
+        0,
+        0,
+        0,
+        1.00
+    );
+    u64? var_32 = alloc-point(1000.00, 290.00, 0.00, 0);
+    u64? var_33 = float-to-string(var_10, 6);
+    u64? var_34 = #5445173390656D6D("PLR Velocity: %s ", var_33);
+    debug-draw-string-2d(
+        var_32,
+        var_34,
+        7,
+        1.00,
+        0.50,
+        0,
+        0,
+        0,
+        1.00
+    );
+    if (var_22 != nullptr) {
+        u64? var_35 = alloc-point(1000.00, 340.00, 0.00, 0);
+        debug-draw-string-2d(
+            var_35,
+            "player-is-uneasy: True ",
+            7,
+            1.00,
+            0.50,
+            0,
+            0,
+            0,
+            1.00
+        );
+    } else {
+        u64? var_36 = alloc-point(1000.00, 340.00, 0.00, 0);
+        debug-draw-string-2d(
+            var_36,
+            "player-is-uneasy: False ",
+            7,
+            1.00,
+            0.50,
+            0,
+            0,
+            0,
+            1.00
+        );
+    }
+    if (var_25 != nullptr) {
+        u64? var_37 = alloc-point(1000.00, 440.00, 0.00, 0);
+        debug-draw-string-2d(
+            var_37,
+            "player-is-combat-sprint: True ",
+            7,
+            1.00,
+            0.50,
+            0,
+            0,
+            0,
+            1.00
+        );
+    } else {
+        u64? var_38 = alloc-point(1000.00, 440.00, 0.00, 0);
+        debug-draw-string-2d(
+            var_38,
+            "player-is-combat-sprint: False ",
+            7,
+            1.00,
+            0.50,
+            0,
+            0,
+            0,
+            1.00
+        );
+    }
+    u64? var_39 = player-is-supine?();
+    sid var_40;
+    if (var_39 != nullptr) {
+        if (arg_0 == 0) {
+            var_40 = ellie-scav-tense-pickup-110cm-left-arm--move-fw-part--gesture;
+        } else {
+            var_40 = ellie-scav-tense-pickup-110cm-right-arm--move-fw-part--gesture;
+        }
+    } else {
+        u64? var_41 = player-is-prone?();
+        if (var_41 != nullptr) {
+            if (arg_0 == 0 || var_3 < -135.00) {
+                if (var_3 > 90.00) {
+                    var_40 = ellie-pickup-prone-idle-10cm-back-l-hand-gesture;
+                } else if (var_3 < -45.00) {
+                    var_40 = ellie-pickup-prone-idle-10cm-left-l-hand-gesture;
+                } else {
+                    var_40 = ellie-pickup-prone-idle-10cm-forward-l-hand-gesture;
+                }
+            }
+        } else {
+            u64? var_42 = player-is-crouched?();
+            if (var_42 != nullptr) {
+                if (var_26 != nullptr) {
+                    if (arg_0 == 0) {
+                        if (var_9 <= 90.00) {
+                            if (var_8 < 0.35) {
+                                var_40 = ellie-scav-tense-crouch-pickup-0cm-left-arm--move-fw-part--gesture;
+                            } else if (var_8 < 0.75) {
+                                var_40 = ellie-scav-tense-crouch-pickup-60cm-left-arm--move-fw-part--gesture;
+                            } else {
+                                var_40 = ellie-scav-tense-crouch-pickup-100cm-left-arm--move-fw-part--gesture;
+                            }
+                        } else if (var_8 < 0.35) {
+                            var_40 = ellie-pickup-crouch-idle-floor-left-l-hand-gesture;
+                        } else if (var_8 < 0.75) {
+                            var_40 = ellie-pickup-crouch-idle-high-left-l-hand-gesture;
+                        } else {
+                            var_40 = ellie-pickup-crouch-idle-mid-left-l-hand-gesture;
+                        }
+                    } else if (var_9 <= 90.00) {
+                        if (var_8 < 0.35) {
+                            var_40 = ellie-scav-tense-crouch-pickup-0cm-right-arm--move-fw-part--gesture;
+                        } else if (var_8 < 0.75) {
+                            var_40 = ellie-scav-tense-crouch-pickup-60cm-right-arm--move-fw-part--gesture;
+                        } else {
+                            var_40 = ellie-scav-tense-crouch-pickup-100cm-right-arm--move-fw-part--gesture;
+                        }
+                    } else if (var_8 < 0.35) {
+                        var_40 = ellie-pickup-crouch-idle-floor-right-r-hand-gesture;
+                    } else if (var_8 < 0.75) {
+                        var_40 = ellie-pickup-crouch-idle-high-right-r-hand-gesture;
+                    } else {
+                        var_40 = ellie-pickup-crouch-idle-mid-right-r-hand-gesture;
+                    }
+                } else if (var_13 != nullptr) {
+                    if (arg_0 == 0) {
+                        if (var_8 < 0.35 || var_3 < -135.00) {
+                            if (var_3 > 165.00) {
+                                var_40 = ellie-pickup-crouch-idle-floor-back-l-hand-gesture;
+                            } else if (var_3 < -45.00) {
+                                var_40 = ellie-pickup-crouch-idle-floor-left-l-hand-gesture;
+                            } else {
+                                var_40 = ellie-pickup-crouch-idle-floor-forward-l-hand-gesture;
+                            }
+                        }
+                    } else if (var_8 < 0.35 || var_3 > 135.00) {
+                        if (var_3 < -135.00) {
+                            var_40 = ellie-pickup-crouch-idle-floor-back-r-hand-gesture;
+                        } else if (var_3 > 45.00) {
+                            var_40 = ellie-pickup-crouch-idle-floor-right-r-hand-gesture;
+                        } else {
+                            var_40 = ellie-pickup-crouch-idle-floor-forward-r-hand-gesture;
+                        }
+                    }
+                } else if (arg_0 == 0) {
+                    if (var_8 < 0.35 || var_3 < -135.00) {
+                        if (var_3 > 165.00) {
+                            var_40 = abby-pickup-crouch-idle-floor-back-l-hand-gesture;
+                        } else if (var_3 < -45.00) {
+                            var_40 = abby-pickup-crouch-idle-floor-left-l-hand-gesture;
+                        } else {
+                            var_40 = abby-pickup-crouch-idle-floor-forward-l-hand-gesture;
+                        }
+                    }
+                } else if (var_8 < 0.35 || var_3 > 135.00) {
+                    if (var_3 < -135.00) {
+                        var_40 = abby-pickup-crouch-idle-floor-back-r-hand-gesture;
+                    } else if (var_3 > 45.00) {
+                        var_40 = abby-pickup-crouch-idle-floor-right-r-hand-gesture;
+                    } else {
+                        var_40 = abby-pickup-crouch-idle-floor-forward-r-hand-gesture;
+                    }
+                }
+            } else if (var_26 != nullptr) {
+                if (arg_0 == 0) {
+                    if (var_9 > 90.00) {
+                        if (var_8 < 0.75) {
+                            var_40 = ellie-scav-tense-pickup-50cm-left-arm--move-bw-part--gesture;
+                        } else if (var_8 < 1.35) {
+                            var_40 = ellie-scav-tense-pickup-110cm-left-arm--move-bw-part--gesture;
+                        } else {
+                            var_40 = ellie-scav-tense-pickup-160cm-left-arm--move-bw-part--gesture;
+                        }
+                    } else if (var_25 == nullptr) {
+                        if (var_8 < 0.75) {
+                            var_40 = ellie-scav-tense-pickup-50cm-left-arm--move-fw-part--gesture;
+                        } else if (var_8 < 1.35) {
+                            var_40 = ellie-scav-tense-pickup-110cm-left-arm--move-fw-part--gesture;
+                        } else {
+                            var_40 = ellie-scav-tense-pickup-160cm-left-arm--move-fw-part--gesture;
+                        }
+                    } else if (var_8 < 0.75) {
+                        var_40 = ellie-scav-tense-sprint-pickup-70cm-left-arm--move-fw-part--gesture;
+                    } else if (var_8 < 1.35) {
+                        var_40 = ellie-scav-tense-sprint-pickup-110cm-left-arm--move-fw-part--gesture;
+                    } else {
+                        var_40 = ellie-scav-tense-sprint-pickup-160cm-left-arm--move-fw-part--gesture;
+                    }
+                } else if (var_9 > 90.00) {
+                    if (var_8 < 0.75) {
+                        var_40 = ellie-scav-tense-pickup-50cm-right-arm--move-bw-part--gesture;
+                    } else if (var_8 < 1.35) {
+                        var_40 = ellie-scav-tense-pickup-110cm-right-arm--move-bw-part--gesture;
+                    } else {
+                        var_40 = ellie-scav-tense-pickup-160cm-right-arm--move-bw-part--gesture;
+                    }
+                } else if (var_25 == nullptr) {
+                    if (var_8 < 0.75) {
+                        var_40 = ellie-scav-tense-pickup-50cm-right-arm--move-fw-part--gesture;
+                    } else if (var_8 < 1.35) {
+                        var_40 = ellie-scav-tense-pickup-110cm-right-arm--move-fw-part--gesture;
+                    } else {
+                        var_40 = ellie-scav-tense-pickup-160cm-right-arm--move-fw-part--gesture;
+                    }
+                } else if (var_8 < 0.75) {
+                    var_40 = ellie-scav-tense-sprint-pickup-70cm-right-arm--move-fw-part--gesture;
+                } else if (var_8 < 1.35) {
+                    var_40 = ellie-scav-tense-sprint-pickup-110cm-right-arm--move-fw-part--gesture;
+                } else {
+                    var_40 = ellie-scav-tense-sprint-pickup-160cm-right-arm--move-fw-part--gesture;
+                }
+            } else if (var_13 != nullptr) {
+                if (var_11 == 3) {
+                    if (arg_0 == 0) {
+                        if (var_12 > 0.60) {
+                            if (var_3 > -45.00 && var_3 < 135.00) {
+                                if (var_8 > 1.21) {
+                                    var_40 = ellie-pickup-tense-idle-high-forward-l-hand-gesture;
+                                } else {
+                                    var_40 = ellie-pickup-tense-idle-mid-forward-l-hand-gesture;
+                                }
+                            } else if (var_8 > 1.21) {
+                                var_40 = ellie-pickup-tense-idle-high-left-l-hand-gesture;
+                            } else {
+                                var_40 = ellie-pickup-tense-idle-mid-left-l-hand-gesture;
+                            }
+                        } else if (var_3 > -45.00 && var_3 < 135.00) {
+                            if (var_8 > 1.21) {
+                                var_40 = ellie-pickup-tense-idle-high-forward-close-l-hand-gesture;
+                            } else {
+                                var_40 = ellie-pickup-tense-idle-mid-forward-close-l-hand-gesture;
+                            }
+                        } else if (var_8 > 1.21) {
+                            var_40 = ellie-pickup-tense-idle-high-left-close-l-hand-gesture;
+                        } else {
+                            var_40 = ellie-pickup-tense-idle-mid-left-close-l-hand-gesture;
+                        }
+                    } else if (var_12 > 0.60) {
+                        if (var_3 <= 45.00 && var_3 > -135.00) {
+                            if (var_8 > 1.21) {
+                                var_40 = ellie-pickup-tense-idle-high-forward-r-hand-gesture;
+                            } else {
+                                var_40 = ellie-pickup-tense-idle-mid-forward-r-hand-gesture;
+                            }
+                        } else if (var_8 > 1.21) {
+                            var_40 = ellie-pickup-tense-idle-high-right-r-hand-gesture;
+                        } else {
+                            var_40 = ellie-pickup-tense-idle-mid-right-r-hand-gesture;
+                        }
+                    } else if (var_3 <= 45.00 && var_3 > -135.00) {
+                        if (var_8 > 1.21) {
+                            var_40 = ellie-pickup-tense-idle-high-forward-close-r-hand-gesture;
+                        } else {
+                            var_40 = ellie-pickup-tense-idle-mid-forward-close-r-hand-gesture;
+                        }
+                    } else if (var_8 > 1.21) {
+                        var_40 = ellie-pickup-tense-idle-high-right-close-r-hand-gesture;
+                    } else {
+                        var_40 = ellie-pickup-tense-idle-mid-right-close-r-hand-gesture;
+                    }
+                } else if (var_22 != nullptr) {
+                    if (arg_0 == 0) {
+                        if (var_3 > -45.00 && var_3 < 135.00) {
+                            if (var_8 <= 0.71) {
+                                var_40 = ellie-pickup-uneasy-idle-low-forward-l-hand-gesture;
+                            } else if (var_8 < 1.35) {
+                                var_40 = ellie-pickup-uneasy-idle-mid-forward-l-hand-gesture;
+                            } else {
+                                var_40 = ellie-pickup-uneasy-idle-high-forward-l-hand-gesture;
+                            }
+                        } else if (var_8 <= 0.71) {
+                            var_40 = ellie-pickup-uneasy-idle-low-left-l-hand-gesture;
+                        } else if (var_8 < 1.35) {
+                            var_40 = ellie-pickup-uneasy-idle-mid-left-l-hand-gesture;
+                        } else {
+                            var_40 = ellie-pickup-uneasy-idle-high-left-l-hand-gesture;
+                        }
+                    } else if (var_3 <= 45.00 && var_3 > -135.00) {
+                        if (var_8 <= 0.71) {
+                            var_40 = ellie-pickup-uneasy-idle-low-forward-r-hand-gesture;
+                        } else if (var_8 < 1.35) {
+                            var_40 = ellie-pickup-uneasy-idle-mid-forward-r-hand-gesture;
+                        } else {
+                            var_40 = ellie-pickup-uneasy-idle-high-forward-r-hand-gesture;
+                        }
+                    } else if (var_8 <= 0.71) {
+                        var_40 = ellie-pickup-uneasy-idle-low-right-r-hand-gesture;
+                    } else if (var_8 < 1.35) {
+                        var_40 = ellie-pickup-uneasy-idle-mid-right-r-hand-gesture;
+                    } else {
+                        var_40 = ellie-pickup-uneasy-idle-high-right-r-hand-gesture;
+                    }
+                } else if (arg_0 == 0) {
+                    if (var_12 > 0.60) {
+                        if (var_3 > -45.00 && var_3 < 135.00) {
+                            if (var_8 <= 0.71) {
+                                var_40 = ellie-pickup-relaxed-idle-low-forward-l-hand-gesture;
+                            } else if (var_8 < 0.95) {
+                                var_40 = ellie-pickup-relaxed-idle-80cm-forward-l-hand-gesture;
+                            } else if (var_8 < 1.35) {
+                                var_40 = ellie-pickup-relaxed-idle-mid-forward-l-hand-gesture;
+                            } else {
+                                var_40 = ellie-pickup-relaxed-idle-high-forward-l-hand-gesture;
+                            }
+                        } else if (var_8 <= 0.71) {
+                            var_40 = ellie-pickup-relaxed-idle-low-left-l-hand-gesture;
+                        } else if (var_8 < 0.95) {
+                            var_40 = ellie-pickup-relaxed-idle-80cm-left-l-hand-gesture;
+                        } else if (var_8 < 1.35) {
+                            var_40 = ellie-pickup-relaxed-idle-mid-left-l-hand-gesture;
+                        } else {
+                            var_40 = ellie-pickup-relaxed-idle-high-left-l-hand-gesture;
+                        }
+                    } else if (var_3 > -45.00 && var_3 < 135.00) {
+                        if (var_8 <= 0.71) {
+                            var_40 = ellie-pickup-relaxed-idle-low-forward-close-l-hand-gesture;
+                        } else if (var_8 < 0.95) {
+                            var_40 = ellie-pickup-relaxed-idle-80cm-forward-l-hand-gesture;
+                        } else if (var_8 < 1.35) {
+                            var_40 = ellie-pickup-relaxed-idle-mid-forward-close-l-hand-gesture;
+                        } else {
+                            var_40 = ellie-pickup-relaxed-idle-high-forward-close-l-hand-gesture;
+                        }
+                    } else if (var_8 <= 0.71) {
+                        var_40 = ellie-pickup-relaxed-idle-low-left-close-l-hand-gesture;
+                    } else if (var_8 < 0.95) {
+                        var_40 = ellie-pickup-relaxed-idle-80cm-left-l-hand-gesture;
+                    } else if (var_8 < 1.35) {
+                        var_40 = ellie-pickup-relaxed-idle-mid-left-close-l-hand-gesture;
+                    } else {
+                        var_40 = ellie-pickup-relaxed-idle-high-left-close-l-hand-gesture;
+                    }
+                } else if (var_12 > 0.60) {
+                    if (var_3 <= 45.00 && var_3 > -135.00) {
+                        if (var_8 <= 0.71) {
+                            var_40 = ellie-pickup-relaxed-idle-low-forward-r-hand-gesture;
+                        } else if (var_8 < 0.95) {
+                            var_40 = ellie-pickup-relaxed-idle-80cm-forward-r-hand-gesture;
+                        } else if (var_8 < 1.35) {
+                            var_40 = ellie-pickup-relaxed-idle-mid-forward-r-hand-gesture;
+                        } else {
+                            var_40 = ellie-pickup-relaxed-idle-high-forward-r-hand-gesture;
+                        }
+                    } else if (var_8 <= 0.71) {
+                        var_40 = ellie-pickup-relaxed-idle-low-right-r-hand-gesture;
+                    } else if (var_8 < 0.95) {
+                        var_40 = ellie-pickup-relaxed-idle-80cm-right-r-hand-gesture;
+                    } else if (var_8 < 1.35) {
+                        var_40 = ellie-pickup-relaxed-idle-mid-right-r-hand-gesture;
+                    } else {
+                        var_40 = ellie-pickup-relaxed-idle-high-right-r-hand-gesture;
+                    }
+                } else if (var_3 <= 45.00 && var_3 > -135.00) {
+                    if (var_8 <= 0.71) {
+                        var_40 = ellie-pickup-relaxed-idle-low-forward-close-r-hand-gesture;
+                    } else if (var_8 < 0.95) {
+                        var_40 = ellie-pickup-relaxed-idle-80cm-forward-r-hand-gesture;
+                    } else if (var_8 < 1.35) {
+                        var_40 = ellie-pickup-relaxed-idle-mid-forward-close-r-hand-gesture;
+                    } else {
+                        var_40 = ellie-pickup-relaxed-idle-high-forward-close-r-hand-gesture;
+                    }
+                } else if (var_8 <= 0.71) {
+                    var_40 = ellie-pickup-relaxed-idle-low-right-close-r-hand-gesture;
+                } else if (var_8 < 0.95) {
+                    var_40 = ellie-pickup-relaxed-idle-80cm-right-r-hand-gesture;
+                } else if (var_8 < 1.35) {
+                    var_40 = ellie-pickup-relaxed-idle-mid-right-close-r-hand-gesture;
+                } else {
+                    var_40 = ellie-pickup-relaxed-idle-high-right-close-r-hand-gesture;
+                }
+            } else if (var_11 == 3) {
+                if (arg_0 == 0) {
+                    if (var_12 > 0.60) {
+                        if (var_3 > -45.00 && var_3 < 135.00) {
+                            if (var_8 > 1.21) {
+                                var_40 = abby-pickup-tense-idle-high-forward-l-hand-gesture;
+                            } else {
+                                var_40 = abby-pickup-tense-idle-mid-forward-l-hand-gesture;
+                            }
+                        } else if (var_8 > 1.21) {
+                            var_40 = abby-pickup-tense-idle-high-left-l-hand-gesture;
+                        } else {
+                            var_40 = abby-pickup-tense-idle-mid-left-l-hand-gesture;
+                        }
+                    } else if (var_3 > -45.00 && var_3 < 135.00) {
+                        if (var_8 > 1.21) {
+                            var_40 = abby-pickup-tense-idle-high-forward-close-l-hand-gesture;
+                        } else {
+                            var_40 = abby-pickup-tense-idle-mid-forward-close-l-hand-gesture;
+                        }
+                    } else if (var_8 > 1.21) {
+                        var_40 = abby-pickup-tense-idle-high-left-close-l-hand-gesture;
+                    } else {
+                        var_40 = abby-pickup-tense-idle-mid-left-close-l-hand-gesture;
+                    }
+                } else if (var_12 > 0.60) {
+                    if (var_3 <= 45.00 && var_3 > -135.00) {
+                        if (var_8 > 1.21) {
+                            var_40 = abby-pickup-tense-idle-high-forward-r-hand-gesture;
+                        } else {
+                            var_40 = abby-pickup-tense-idle-mid-forward-r-hand-gesture;
+                        }
+                    } else if (var_8 > 1.21) {
+                        var_40 = abby-pickup-tense-idle-high-right-r-hand-gesture;
+                    } else {
+                        var_40 = abby-pickup-tense-idle-mid-right-r-hand-gesture;
+                    }
+                } else if (var_3 <= 45.00 && var_3 > -135.00) {
+                    if (var_8 > 1.21) {
+                        var_40 = abby-pickup-tense-idle-high-forward-close-r-hand-gesture;
+                    } else {
+                        var_40 = abby-pickup-tense-idle-mid-forward-close-r-hand-gesture;
+                    }
+                } else if (var_8 > 1.21) {
+                    var_40 = abby-pickup-tense-idle-high-right-close-r-hand-gesture;
+                } else {
+                    var_40 = abby-pickup-tense-idle-mid-right-close-r-hand-gesture;
+                }
+            } else if (var_22 != nullptr) {
+                if (arg_0 == 0) {
+                    if (var_3 > -45.00 && var_3 < 135.00) {
+                        if (var_8 <= 0.71) {
+                            var_40 = abby-pickup-uneasy-idle-low-forward-l-hand-gesture;
+                        } else if (var_8 < 1.21) {
+                            var_40 = abby-pickup-uneasy-idle-mid-forward-l-hand-gesture;
+                        } else {
+                            var_40 = abby-pickup-uneasy-idle-high-forward-l-hand-gesture;
+                        }
+                    } else if (var_8 <= 0.71) {
+                        var_40 = abby-pickup-uneasy-idle-low-left-l-hand-gesture;
+                    } else if (var_8 < 1.21) {
+                        var_40 = abby-pickup-uneasy-idle-mid-left-l-hand-gesture;
+                    } else {
+                        var_40 = abby-pickup-uneasy-idle-high-left-l-hand-gesture;
+                    }
+                } else if (var_3 <= 45.00 && var_3 > -135.00) {
+                    if (var_8 <= 0.71) {
+                        var_40 = abby-pickup-uneasy-idle-low-forward-r-hand-gesture;
+                    } else if (var_8 < 1.21) {
+                        var_40 = abby-pickup-uneasy-idle-mid-forward-r-hand-gesture;
+                    } else {
+                        var_40 = abby-pickup-uneasy-idle-high-forward-r-hand-gesture;
+                    }
+                } else if (var_8 <= 0.71) {
+                    var_40 = abby-pickup-uneasy-idle-low-right-r-hand-gesture;
+                } else if (var_8 < 1.21) {
+                    var_40 = abby-pickup-uneasy-idle-mid-right-r-hand-gesture;
+                } else {
+                    var_40 = abby-pickup-uneasy-idle-high-right-r-hand-gesture;
+                }
+            } else if (arg_0 == 0) {
+                if (var_12 > 0.60) {
+                    if (var_3 > -45.00 && var_3 < 135.00) {
+                        if (var_8 <= 0.71) {
+                            var_40 = abby-pickup-relaxed-idle-low-forward-l-hand-gesture;
+                        } else if (var_8 < 0.95) {
+                            var_40 = abby-pickup-relaxed-idle-80cm-forward-l-hand-gesture;
+                        } else if (var_8 < 1.35) {
+                            var_40 = abby-pickup-relaxed-idle-mid-forward-l-hand-gesture;
+                        } else {
+                            var_40 = abby-pickup-relaxed-idle-high-forward-l-hand-gesture;
+                        }
+                    } else if (var_8 <= 0.71) {
+                        var_40 = abby-pickup-relaxed-idle-low-left-l-hand-gesture;
+                    } else if (var_8 < 0.95) {
+                        var_40 = abby-pickup-relaxed-idle-80cm-left-l-hand-gesture;
+                    } else if (var_8 < 1.35) {
+                        var_40 = abby-pickup-relaxed-idle-mid-left-l-hand-gesture;
+                    } else {
+                        var_40 = abby-pickup-relaxed-idle-high-left-l-hand-gesture;
+                    }
+                } else if (var_3 > -45.00 && var_3 < 135.00) {
+                    if (var_8 <= 0.71) {
+                        var_40 = abby-pickup-relaxed-idle-low-forward-close-l-hand-gesture;
+                    } else if (var_8 < 0.95) {
+                        var_40 = abby-pickup-relaxed-idle-80cm-forward-l-hand-gesture;
+                    } else if (var_8 < 1.35) {
+                        var_40 = abby-pickup-relaxed-idle-mid-forward-close-l-hand-gesture;
+                    } else {
+                        var_40 = abby-pickup-relaxed-idle-high-forward-close-l-hand-gesture;
+                    }
+                } else if (var_8 <= 0.71) {
+                    var_40 = abby-pickup-relaxed-idle-low-left-close-l-hand-gesture;
+                } else if (var_8 < 0.95) {
+                    var_40 = abby-pickup-relaxed-idle-80cm-left-l-hand-gesture;
+                } else if (var_8 < 1.35) {
+                    var_40 = abby-pickup-relaxed-idle-mid-left-close-l-hand-gesture;
+                } else {
+                    var_40 = abby-pickup-relaxed-idle-high-left-close-l-hand-gesture;
+                }
+            } else if (var_12 > 0.60) {
+                if (var_3 <= 45.00 && var_3 > -135.00) {
+                    if (var_8 <= 0.71) {
+                        var_40 = abby-pickup-relaxed-idle-low-forward-r-hand-gesture;
+                    } else if (var_8 < 0.95) {
+                        var_40 = abby-pickup-relaxed-idle-80cm-forward-r-hand-gesture;
+                    } else if (var_8 < 1.35) {
+                        var_40 = abby-pickup-relaxed-idle-mid-forward-r-hand-gesture;
+                    } else {
+                        var_40 = abby-pickup-relaxed-idle-high-forward-r-hand-gesture;
+                    }
+                } else if (var_8 <= 0.71) {
+                    var_40 = abby-pickup-relaxed-idle-low-right-r-hand-gesture;
+                } else if (var_8 < 0.95) {
+                    var_40 = abby-pickup-relaxed-idle-80cm-right-r-hand-gesture;
+                } else if (var_8 < 1.35) {
+                    var_40 = abby-pickup-relaxed-idle-mid-right-r-hand-gesture;
+                } else {
+                    var_40 = abby-pickup-relaxed-idle-high-right-r-hand-gesture;
+                }
+            } else if (var_3 <= 45.00 && var_3 > -135.00) {
+                if (var_8 <= 0.71) {
+                    var_40 = abby-pickup-relaxed-idle-low-forward-close-r-hand-gesture;
+                } else if (var_8 < 0.95) {
+                    var_40 = abby-pickup-relaxed-idle-80cm-forward-r-hand-gesture;
+                } else if (var_8 < 1.35) {
+                    var_40 = abby-pickup-relaxed-idle-mid-forward-close-r-hand-gesture;
+                } else {
+                    var_40 = abby-pickup-relaxed-idle-high-forward-close-r-hand-gesture;
+                }
+            } else if (var_8 <= 0.71) {
+                var_40 = abby-pickup-relaxed-idle-low-right-close-r-hand-gesture;
+            } else if (var_8 < 0.95) {
+                var_40 = abby-pickup-relaxed-idle-80cm-right-r-hand-gesture;
+            } else if (var_8 < 1.35) {
+                var_40 = abby-pickup-relaxed-idle-mid-right-close-r-hand-gesture;
+            } else {
+                var_40 = abby-pickup-relaxed-idle-high-right-close-r-hand-gesture;
+            }
+        }
+    }
+    return var_40;
+}
+
+u64?* #E71DE494AA1E0CB6() {
+    u64? var_0 = get-object-look(player, 0);
+    u64? var_1 = get-object-look(player, 0);
+    u64? var_2 = get-object-look(player, 0);
+    u64? var_3 = get-object-look(player, 0);
+    u64? var_4 = get-object-look(player, 0);
+    u64? var_5 = get-object-look(player, 0);
+    u64? var_6 = get-object-look(player, 0);
+    u64? var_7 = get-object-look(player, 0);
+    u64? var_8 = get-object-look(player, 0);
+    u64? var_9 = get-object-look(player, 0);
+    u64? var_10 = get-object-look(player, 0);
+    u64? var_11 = get-object-look(player, 0);
+    u64? var_12 = get-object-look(player, 0);
+    u64? var_13 = get-object-look(player, 0);
+    u64? var_14 = get-object-look(player, 0);
+    u64? var_15 = get-object-look(player, 0);
+    u64? var_16 = get-object-look(player, 0);
+    u64? var_17 = get-object-look(player, 0);
+    u64?* var_18;
+    if (var_0 == abby || var_1 == abby-holster || var_2 == abby-no-backpack || var_3 == abby-holster-no-backpack || var_4 == abby-nd || var_5 == abby-nd-holster || var_6 == abby-nd-no-backpack || var_7 == abby-nd-holster-no-backpack || var_8 == abby-zoo || var_9 == abby-zoo-holster || var_10 == abby-zoo-no-backpack || var_11 == abby-zoo-holster-no-backpack || var_12 == abby-swim || var_13 == abby-swim-holster || var_14 == abby-swim-no-backpack || var_15 == abby-swim-holster-no-backpack || var_16 == abby-santabarbara-no-backpack && var_17 == abby-santabarbara-skin-no-backpack) {
+        var_18 = #2C3C156490C2DC45;
+    } else {
+        u64? var_19 = get-object-look(player, 0);
+        u64? var_20 = get-object-look(player, 0);
+        u64? var_21 = get-object-look(player, 0);
+        u64? var_22 = get-object-look(player, 0);
+        u64? var_23 = get-object-look(player, 0);
+        u64? var_24 = get-object-look(player, 0);
+        u64? var_25 = get-object-look(player, 0);
+        u64? var_26 = get-object-look(player, 0);
+        u64? var_27 = get-object-look(player, 0);
+        u64? var_28 = get-object-look(player, 0);
+        u64? var_29 = get-object-look(player, 0);
+        u64? var_30 = get-object-look(player, 0);
+        u64? var_31 = get-object-look(player, 0);
+        u64? var_32 = get-object-look(player, 0);
+        u64? var_33 = get-object-look(player, 0);
+        u64? var_34 = get-object-look(player, 0);
+        u64? var_35 = get-object-look(player, 0);
+        u64? var_36 = get-object-look(player, 0);
+        u64? var_37 = get-object-look(player, 0);
+        u64? var_38 = get-object-look(player, 0);
+        u64? var_39 = get-object-look(player, 0);
+        u64? var_40 = get-object-look(player, 0);
+        u64? var_41 = get-object-look(player, 0);
+        u64? var_42 = get-object-look(player, 0);
+        u64? var_43 = get-object-look(player, 0);
+        u64? var_44 = get-object-look(player, 0);
+        u64? var_45 = get-object-look(player, 0);
+        u64? var_46 = get-object-look(player, 0);
+        u64? var_47 = get-object-look(player, 0);
+        u64? var_48 = get-object-look(player, 0);
+        u64? var_49 = get-object-look(player, 0);
+        u64? var_50 = get-object-look(player, 0);
+        u64? var_51 = get-object-look(player, 0);
+        u64? var_52 = get-object-look(player, 0);
+        u64? var_53 = get-object-look(player, 0);
+        u64? var_54 = get-object-look(player, 0);
+        u64? var_55 = get-object-look(player, 0);
+        u64? var_56 = get-object-look(player, 0);
+        u64? var_57 = get-object-look(player, 0);
+        if (var_19 == abby-santabarbara || var_20 == abby-santabarbara-holster || var_21 == abby-santabarbara-holster-no-backpack || var_22 == abby-santabarbara-ps || var_23 == abby-santabarbara-ps-holster || var_24 == abby-santabarbara-ps-no-backpack || var_25 == abby-santabarbara-ps-holster-no-backpack || var_26 == abby-santabarbara-syphon || var_27 == abby-santabarbara-syphon-holster || var_28 == abby-santabarbara-syphon-no-backpack || var_29 == abby-santabarbara-syphon-holster-no-backpack || var_30 == abby-santabarbara-jd || var_31 == abby-santabarbara-jd-holster || var_32 == abby-santabarbara-jd-no-backpack || var_33 == abby-santabarbara-jd-holster-no-backpack || var_34 == abby-santabarbara-twisted-metal || var_35 == abby-santabarbara-twisted-metal-holster || var_36 == abby-santabarbara-twisted-metal-no-backpack || var_37 == abby-santabarbara-twisted-metal-holster-no-backpack || var_38 == abby-santabarbara-mark-kri || var_39 == abby-santabarbara-mark-kri-holster || var_40 == abby-santabarbara-mark-kri-no-backpack || var_41 == abby-santabarbara-mark-kri-holster-no-backpack || var_42 == abby-santabarbara-war-monsters || var_43 == abby-santabarbara-war-monsters-holster || var_44 == abby-santabarbara-war-monsters-no-backpack || var_45 == abby-santabarbara-war-monsters-holster-no-backpack || var_46 == abby-santabarbara-getaway || var_47 == abby-santabarbara-getaway-holster || var_48 == abby-santabarbara-getaway-no-backpack || var_49 == abby-santabarbara-getaway-holster-no-backpack || var_50 == abby-santabarbara-genji || var_51 == abby-santabarbara-genji-holster || var_52 == abby-santabarbara-genji-no-backpack || var_53 == abby-santabarbara-genji-holster-no-backpack || var_54 == abby-santabarbara-skin || var_55 == abby-santabarbara-skin-holster || var_56 == abby-santabarbara-skin-no-backpack && var_57 == abby-santabarbara-skin-holster-no-backpack) {
+            var_18 = #AF69BBB9C76CCB26;
+        } else {
+            u64? var_58 = get-object-look(player, 0);
+            u64? var_59 = get-object-look(player, 0);
+            u64? var_60 = get-object-look(player, 0);
+            u64? var_61 = get-object-look(player, 0);
+            if (var_58 == abby-badlands || var_59 == abby-badlands-holster || var_60 == abby-badlands-no-backpack && var_61 == abby-badlands-holster-no-backpack) {
+                var_18 = #445D21A117DBC732;
+            } else {
+                var_18 = *invalid-symbol*;
+            }
+        }
+    }
+    return var_18;
+}
+

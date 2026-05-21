@@ -54,3 +54,115 @@ u64? tsk-the-theater-guitar__level-scripted-set@b38() {
     return var_0;
 }
 
+u64? tsk-aef-theater-basement__level-set@2a0__level-scripted-set@b50__() {
+    u64? var_0 = task-complete?(abby-ellie-fight, aef-fight-ellie-hunt-3);
+    return !var_0;
+}
+
+bool tsk-aef-theater-basement__level-scripted-set@910() {
+    u64? var_0 = cinematic-get-current-maya-frame(cin-aef-theater-wrap-up);
+    return var_0 < 2493.00;
+}
+
+bool tsk-aef-theater-basement__level-scripted-set@cd0() {
+    u64? var_0 = cinematic-get-current-maya-frame(cin-aef-theater-wrap-up);
+    return var_0 >= 2493.00;
+}
+
+u64? tsk-aef-theater-basement__level-scripted-set@1060() {
+    u64? var_0 = task-complete?(abby-ellie-fight, aef-fight-ellie-hunt-3);
+    return var_0;
+}
+
+u64? tsk-res-bringing-him-home-preload-chronological__level-set@410__level-scripted-set@e50__() {
+    bool var_0 = get-boolean(#A5D588E81B36BF14, ss-res-escape-post-crash-1);
+    u64? var_1 = !(var_0);
+    return var_1;
+}
+
+u16 tsk-res-bringing-him-home-preload-chronological__level-scripted-set@8f8() {
+    return 1;
+}
+
+bool tsk-aef-theater-fight__level-set@5f0__level-scripted-set@688__() {
+    u64? var_0 = stat-value?(aef-bridge-loaded);
+    return var_0 > 0;
+}
+
+bool tsk-aef-theater-fight__level-scripted-set@1048() {
+    u64? var_0 = stat-value?(aef-basement-loaded);
+    return var_0 == 0;
+}
+
+bool tsk-aef-theater-fight__level-scripted-set@a18() {
+    u64? var_0 = stat-value?(aef-basement-loaded);
+    return var_0 > 0;
+}
+
+u64? tsk-the-theater-guitar__level-set@640__level-scripted-set@aa8__() {
+    u64? var_0 = is-chronological-mode-enabled?();
+    u64? var_1 = !(var_0);
+    return var_1;
+}
+
+u64? tsk-the-theater-guitar__level-scripted-set@b38() {
+    u64? var_0 = is-chronological-mode-enabled?();
+    return var_0;
+}
+
+u64? tsk-aef-theater-basement__level-set@2a0__level-scripted-set@b50__() {
+    u64? var_0 = task-complete?(abby-ellie-fight, aef-fight-ellie-hunt-3);
+    return !var_0;
+}
+
+bool tsk-aef-theater-basement__level-scripted-set@910() {
+    u64? var_0 = cinematic-get-current-maya-frame(cin-aef-theater-wrap-up);
+    return var_0 < 2493.00;
+}
+
+bool tsk-aef-theater-basement__level-scripted-set@cd0() {
+    u64? var_0 = cinematic-get-current-maya-frame(cin-aef-theater-wrap-up);
+    return var_0 >= 2493.00;
+}
+
+u64? tsk-aef-theater-basement__level-scripted-set@1060() {
+    u64? var_0 = task-complete?(abby-ellie-fight, aef-fight-ellie-hunt-3);
+    return var_0;
+}
+
+u64? tsk-res-bringing-him-home-preload-chronological__level-set@410__level-scripted-set@e50__() {
+    bool var_0 = get-boolean(#A5D588E81B36BF14, ss-res-escape-post-crash-1);
+    u64? var_1 = !(var_0);
+    return var_1;
+}
+
+u16 tsk-res-bringing-him-home-preload-chronological__level-scripted-set@8f8() {
+    return 1;
+}
+
+bool tsk-aef-theater-fight__level-set@5f0__level-scripted-set@688__() {
+    u64? var_0 = stat-value?(aef-bridge-loaded);
+    return var_0 > 0;
+}
+
+bool tsk-aef-theater-fight__level-scripted-set@1048() {
+    u64? var_0 = stat-value?(aef-basement-loaded);
+    return var_0 == 0;
+}
+
+bool tsk-aef-theater-fight__level-scripted-set@a18() {
+    u64? var_0 = stat-value?(aef-basement-loaded);
+    return var_0 > 0;
+}
+
+u64? tsk-the-theater-guitar__level-set@640__level-scripted-set@aa8__() {
+    u64? var_0 = is-chronological-mode-enabled?();
+    u64? var_1 = !(var_0);
+    return var_1;
+}
+
+u64? tsk-the-theater-guitar__level-scripted-set@b38() {
+    u64? var_0 = is-chronological-mode-enabled?();
+    return var_0;
+}
+

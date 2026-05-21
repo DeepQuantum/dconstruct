@@ -1776,6 +1776,32 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
         ASSERT_EQ(semantic_errors.size(), 0) << (semantic_errors.empty() ? "" : semantic_errors[0].m_message);
     }
 
+    TEST(COMPILER, NullptrActsAsZeroInLogicalExpressions) {
+        const std::string code =
+            "u64 main(u64 value) {"
+            "    if (nullptr || value && nullptr) {"
+            "        return 1;"
+            "    }"
+            "    while (nullptr) {"
+            "        return 2;"
+            "    }"
+            "    if (value != nullptr) {"
+            "        return 3;"
+            "    }"
+            "    return 0;"
+            "}";
+
+        auto [tokens, lex_errors] = get_tokens(code);
+        ASSERT_EQ(lex_errors.size(), 0) << (lex_errors.empty() ? "" : lex_errors[0].m_message);
+
+        const auto [program, types, parse_errors] = get_parse_results(tokens);
+        ASSERT_EQ(parse_errors.size(), 0) << (parse_errors.empty() ? "" : parse_errors[0].m_message);
+
+        compilation::scope scope{types};
+        const std::vector<ast::semantic_check_error> semantic_errors = program.check_semantics(scope);
+        ASSERT_EQ(semantic_errors.size(), 0) << (semantic_errors.empty() ? "" : semantic_errors[0].m_message);
+    }
+
     TEST(COMPILER, NonCallableCallSemanticErrorHasSourceLine) {
         const std::string code =
             "u64 main() {\n"
@@ -1947,6 +1973,72 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
             Instruction{Opcode::LoadU16Imm, 0, 0, 0},
             Instruction{Opcode::Return, 0, 0, 0},
         });
+    }
+
+    TEST(COMPILER, MatchArrayCompilationLoadsFromSymbolTable) {
+        const std::string code =
+            "u64 main() {"
+            "   string test = \"test\";"
+            "   u64 a = 0;"
+            "   u64 b = match (a) { 0 -> #ellie, 1 -> #dina };"
+            "   return b;"
+            "}";
+
+        auto functions = compile_to_functions(code);
+        ASSERT_TRUE(functions) << functions.error();
+        ASSERT_EQ(functions->size(), 1);
+
+        const compilation::function& fn = (*functions)[0];
+        EXPECT_EQ(fn.m_instructions, (std::vector<Instruction>{
+            Instruction{Opcode::LoadStaticPointerImm, 0, 0, 0},
+            Instruction{Opcode::LoadU16Imm, 1, 0, 0},
+            Instruction{Opcode::IAddImm, 1, 1, 1},
+            Instruction{Opcode::LoadStaticInt, 2, 1, 0},
+            Instruction{Opcode::Move, 0, 2, 0},
+            Instruction{Opcode::Return, 0, 0, 0},
+        }));
+
+        ASSERT_EQ(fn.m_symbolTable.size(), 3);
+        EXPECT_EQ(fn.m_symbolTable[0], 0);
+        EXPECT_EQ(fn.m_symbolTable[1], SID("ellie"));
+        EXPECT_EQ(fn.m_symbolTable[2], SID("dina"));
+
+        ASSERT_EQ(fn.m_symbolTableEntryPointers.size(), 3);
+        EXPECT_EQ(fn.m_symbolTableEntryPointers[0], compilation::function::SYMBOL_TABLE_POINTER_KIND::STRING);
+        EXPECT_EQ(fn.m_symbolTableEntryPointers[1], compilation::function::SYMBOL_TABLE_POINTER_KIND::NONE);
+        EXPECT_EQ(fn.m_symbolTableEntryPointers[2], compilation::function::SYMBOL_TABLE_POINTER_KIND::NONE);
+    }
+
+    TEST(COMPILER, MatchArrayCompilationElseLoadsDefault) {
+        const std::string code =
+            "u64 main(u64 a) {"
+            "   return match (a) { 1 -> #ellie, 3 -> #dina, else -> #joel };"
+            "}";
+
+        auto functions = compile_to_functions(code);
+        ASSERT_TRUE(functions) << functions.error();
+        ASSERT_EQ(functions->size(), 1);
+
+        std::vector<Instruction> expected{
+            Instruction{Opcode::Move, 0, 49, 0},
+            Instruction{Opcode::QEX_InRangeI, 1, 0, 3},
+            Instruction{Opcode::BranchIfNot, 6, 1, 0},
+            Instruction{Opcode::IAddImm, 0, 0, 1},
+            Instruction{Opcode::LoadStaticInt, 1, 0, 0},
+            Instruction{Opcode::Branch, 7, 0, 0},
+            Instruction{Opcode::LoadStaticInt, 1, 1, 0},
+            Instruction{Opcode::Move, 0, 1, 0},
+            Instruction{Opcode::Return, 0, 0, 0},
+        };
+        const compilation::function& fn = (*functions)[0];
+        EXPECT_EQ(fn.m_instructions, expected);
+
+        ASSERT_EQ(fn.m_symbolTable.size(), 5);
+        EXPECT_EQ(fn.m_symbolTable[0], SID("ellie"));
+        EXPECT_EQ(fn.m_symbolTable[1], SID("joel"));
+        EXPECT_EQ(fn.m_symbolTable[2], SID("dina"));
+        EXPECT_EQ(fn.m_symbolTable[3], 1);
+        EXPECT_EQ(fn.m_symbolTable[4], 3);
     }
 
     TEST(COMPILER, IfElseReturn) {

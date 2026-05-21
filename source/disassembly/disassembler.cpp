@@ -1047,6 +1047,15 @@ void store_nonstatic(
     std::snprintf(interpreted, interpreted_buffer_size, type_format, dest, op1_str, op2_str);
 }
 
+void set_symbol_table_type(SymbolTable& symbol_table, const u32 idx, ast::full_type type) {
+    if (idx >= symbol_table.m_types.size()) {
+        symbol_table.m_types.resize(idx + 1);
+    }
+    if (is_unknown(symbol_table.m_types[idx])) {
+        symbol_table.m_types[idx] = std::move(type);
+    }
+}
+
 
 void Disassembler::process_instruction(const u32 istr_idx, function_disassembly &fn) {
     function_disassembly_line& line = fn.m_lines[istr_idx];
@@ -1689,6 +1698,18 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
             std::snprintf(interpreted, interpreted_buffer_size, "DCC BREAKPOINT");
             break;
         }
+        case Opcode::QEX_InRangeI: {
+            const i64 min = frame.m_symbolTable.get<i64>(op2);
+            const i64 max = frame.m_symbolTable.get<i64>(op2 + 1);
+            frame[op1].set_first_type(ast::primitive_kind::I64);
+            frame[dest].m_type = make_type_from_prim(ast::primitive_kind::BOOL);
+            frame[dest].m_value = Register::UNKNOWN_VAL;
+            set_symbol_table_type(frame.m_symbolTable, op2, make_type_from_prim(ast::primitive_kind::I64));
+            set_symbol_table_type(frame.m_symbolTable, op2 + 1, make_type_from_prim(ast::primitive_kind::I64));
+            std::snprintf(varying, disassembly_text_size, "r%d, r%d, %d", dest, op1, op2);
+            std::snprintf(interpreted, interpreted_buffer_size, "r%d = in_range(%s, %lli, %lli)", dest, op1_str, min, max);
+            break;
+        }
         default: {
             std::snprintf(varying, disassembly_text_size, "???");
             std::snprintf(interpreted, interpreted_buffer_size, "UNKNOWN INSTRUCTION");
@@ -1696,8 +1717,8 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
         }
     }
 
-    if (!is_unknown(table_entry) && op1 == frame.m_symbolTable.m_types.size()) {
-        frame.m_symbolTable.m_types.push_back(std::move(table_entry));
+    if (!is_unknown(table_entry)) {
+        set_symbol_table_type(frame.m_symbolTable, op1, std::move(table_entry));
     }
    line.m_text = std::string(disassembly_text);
    line.m_comment = std::string(interpreted);
@@ -1769,6 +1790,14 @@ void Disassembler::insert_function_disassembly_text(const function_disassembly &
                         std::snprintf(type_text, sizeof(type_text), "int: %i\n", value_location.get<i32>());
                         break;
                     }
+                    case ast::primitive_kind::I64: {
+                        std::snprintf(type_text, sizeof(type_text), "int64: %lli\n", value_location.get<i64>());
+                        break;
+                    }
+                    case ast::primitive_kind::U64: {
+                        std::snprintf(type_text, sizeof(type_text), "uint64: %llu\n", value_location.get<u64>());
+                        break;
+                    }
                     case ast::primitive_kind::F32: {
                         std::snprintf(type_text, sizeof(type_text), "float: %f\n", value_location.get<f32>());
                         break;
@@ -1792,7 +1821,7 @@ void Disassembler::insert_function_disassembly_text(const function_disassembly &
             } else if constexpr (std::is_same_v<T, ast::ptr_type>) {
                 std::snprintf(type_text, sizeof(type_text), "pointer: \"%s\" (%s)\n", lookup(value_location.get<sid64>()), ast::type_to_declaration_string(entry).c_str());
             } else if constexpr (std::is_same_v<T, std::monostate>) {
-                std::snprintf(type_text, sizeof(type_text), "unknown: %llu", value_location.get<u64>());
+                std::snprintf(type_text, sizeof(type_text), "unknown: %llu\n", value_location.get<u64>());
             }
         }, type);
         std::snprintf(buffer, sizeof(buffer), "%s %s", line_start, type_text);

@@ -41,7 +41,7 @@ void bitwise_not_expr::pseudo_racket(std::ostream& os) const {
         return rhs_res;
     }
 
-    const emission_res not_destination = fn.get_destination(destination);
+    const emission_res not_destination = fn.fix_destination(destination);
     if (!not_destination) {
         return not_destination;
     }

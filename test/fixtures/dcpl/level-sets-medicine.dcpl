@@ -74,3 +74,155 @@ u64? tsk-med-hidden-ascent-shrine__level-scripted-set@f88() {
     return var_0;
 }
 
+u64? tsk-med-hospital-arrival__level-set@3d8__level-scripted-set@1ed0__() {
+    u64? var_0 = task-complete?(medicine, med-hospital-arrival);
+    u64? var_1 = !(var_0);
+    return var_1;
+}
+
+u16 tsk-med-hospital-arrival__level-scripted-set@fa0() {
+    return 1;
+}
+
+u64? tsk-med-construction-building__level-set@490__level-scripted-set@1768__() {
+    u64? var_0 = task-complete?(medicine, med-construction-building);
+    return !var_0;
+}
+
+bool tsk-med-hidden-ascent__level-set@700__level-scripted-set@d78__() {
+    bool var_0 = get-boolean(#D9C6F63A44AE6DEC, ss-med-hidden-ascent-lantern-igc-1);
+    return var_0;
+}
+
+u64? tsk-med-hospital-escape__level-set@7b8__level-scripted-set@11b0__() {
+    u64? var_0 = is-chronological-mode-enabled?();
+    u64? var_1 = !(var_0);
+    return var_1;
+}
+
+u64? tsk-med-hospital-escape__level-scripted-set@13a8() {
+    u64? var_0 = is-chronological-mode-enabled?();
+    return var_0;
+}
+
+u64? tsk-med-hospital-entry__level-set@988__level-scripted-set@10a8__() {
+    u64? var_0 = stat-value?(med-hospital-approach-underwater-loaded);
+    u64? var_1 = is-chronological-mode-enabled?();
+    u64? var_2 = !(var_1);
+    bool var_3 = var_0 > 0 && var_2;
+    return var_3;
+}
+
+u64? tsk-med-hospital-entry__level-scripted-set@15b8() {
+    u64? var_0 = stat-value?(med-hospital-approach-underwater-loaded);
+    u64? var_1 = is-chronological-mode-enabled?();
+    u64? var_2 = !(var_1);
+    bool var_3 = var_0 == 0 && var_2;
+    return var_3;
+}
+
+u64? tsk-med-hospital-entry__level-scripted-set@14b0() {
+    u64? var_0 = stat-value?(med-hospital-approach-underwater-loaded);
+    u64? var_1 = is-chronological-mode-enabled?();
+    bool var_2 = var_0 > 0 && var_1;
+    return var_2;
+}
+
+u64? tsk-med-hospital-entry__level-scripted-set@1750() {
+    u64? var_0 = stat-value?(med-hospital-approach-underwater-loaded);
+    u64? var_1 = is-chronological-mode-enabled?();
+    bool var_2 = var_0 == 0 && var_1;
+    return var_2;
+}
+
+u64? tsk-med-infected-building-lower__level-set@9e0__level-scripted-set@1e40__() {
+    u64? var_0 = task-complete?(medicine, med-infected-building-corridor-fight);
+    return var_0;
+}
+
+u64? tsk-med-hidden-ascent-shrine__level-set@a98__level-scripted-set@16c0__() {
+    u64? var_0 = task-complete?(medicine, med-hidden-ascent-top);
+    return !var_0;
+}
+
+u64? tsk-med-hidden-ascent-shrine__level-scripted-set@f88() {
+    u64? var_0 = task-complete?(medicine, med-hidden-ascent-top);
+    return var_0;
+}
+
+u64? tsk-med-hospital-arrival__level-set@3d8__level-scripted-set@1ed0__() {
+    u64? var_0 = task-complete?(medicine, med-hospital-arrival);
+    u64? var_1 = !(var_0);
+    return var_1;
+}
+
+u16 tsk-med-hospital-arrival__level-scripted-set@fa0() {
+    return 1;
+}
+
+u64? tsk-med-construction-building__level-set@490__level-scripted-set@1768__() {
+    u64? var_0 = task-complete?(medicine, med-construction-building);
+    return !var_0;
+}
+
+bool tsk-med-hidden-ascent__level-set@700__level-scripted-set@d78__() {
+    bool var_0 = get-boolean(#D9C6F63A44AE6DEC, ss-med-hidden-ascent-lantern-igc-1);
+    return var_0;
+}
+
+u64? tsk-med-hospital-escape__level-set@7b8__level-scripted-set@11b0__() {
+    u64? var_0 = is-chronological-mode-enabled?();
+    u64? var_1 = !(var_0);
+    return var_1;
+}
+
+u64? tsk-med-hospital-escape__level-scripted-set@13a8() {
+    u64? var_0 = is-chronological-mode-enabled?();
+    return var_0;
+}
+
+u64? tsk-med-hospital-entry__level-set@988__level-scripted-set@10a8__() {
+    u64? var_0 = stat-value?(med-hospital-approach-underwater-loaded);
+    u64? var_1 = is-chronological-mode-enabled?();
+    u64? var_2 = !(var_1);
+    bool var_3 = var_0 > 0 && var_2;
+    return var_3;
+}
+
+u64? tsk-med-hospital-entry__level-scripted-set@15b8() {
+    u64? var_0 = stat-value?(med-hospital-approach-underwater-loaded);
+    u64? var_1 = is-chronological-mode-enabled?();
+    u64? var_2 = !(var_1);
+    bool var_3 = var_0 == 0 && var_2;
+    return var_3;
+}
+
+u64? tsk-med-hospital-entry__level-scripted-set@14b0() {
+    u64? var_0 = stat-value?(med-hospital-approach-underwater-loaded);
+    u64? var_1 = is-chronological-mode-enabled?();
+    bool var_2 = var_0 > 0 && var_1;
+    return var_2;
+}
+
+u64? tsk-med-hospital-entry__level-scripted-set@1750() {
+    u64? var_0 = stat-value?(med-hospital-approach-underwater-loaded);
+    u64? var_1 = is-chronological-mode-enabled?();
+    bool var_2 = var_0 == 0 && var_1;
+    return var_2;
+}
+
+u64? tsk-med-infected-building-lower__level-set@9e0__level-scripted-set@1e40__() {
+    u64? var_0 = task-complete?(medicine, med-infected-building-corridor-fight);
+    return var_0;
+}
+
+u64? tsk-med-hidden-ascent-shrine__level-set@a98__level-scripted-set@16c0__() {
+    u64? var_0 = task-complete?(medicine, med-hidden-ascent-top);
+    return !var_0;
+}
+
+u64? tsk-med-hidden-ascent-shrine__level-scripted-set@f88() {
+    u64? var_0 = task-complete?(medicine, med-hidden-ascent-top);
+    return var_0;
+}
+

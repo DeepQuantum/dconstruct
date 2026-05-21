@@ -30,3 +30,67 @@ f32 anim-player-turret-states__anim-node-blend@3e8__anim-node-blend@10c8__(f32 a
     return *(f32*)(*(arg_0 + 16) + 640);
 }
 
+f32 anim-player-turret-states__actor-state-list@48__anim-node-blend@4b8____anim-node-blend@a70____anim-node-blend@18b0____anim-node-blend@1f20____anim-node-animation@2280__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return 1.00;
+}
+
+f32 anim-player-turret-states__actor-state-list@48__anim-node-blend@4b8____anim-node-blend@a70____anim-node-blend@18b0__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)(*(arg_0 + 16) + 640);
+}
+
+f32 anim-player-turret-states__actor-state-list@48__anim-node-blend@4b8____anim-node-animation@1ce8__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return 1.00;
+}
+
+f32 anim-player-turret-states__actor-state-list@48(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)((*(arg_0 + 16) + 640) + 4);
+}
+
+f32 anim-player-turret-states__anim-node-animation@1818(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return 1.00;
+}
+
+f32 anim-player-turret-states(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)((*(arg_0 + 16) + 640) + 8);
+}
+
+f32 anim-player-turret-states__anim-node-animation@c68(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return 1.00;
+}
+
+f32 anim-player-turret-states__anim-node-blend@3e8__anim-node-blend@10c8__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)(*(arg_0 + 16) + 640);
+}
+
+f32 anim-player-turret-states__actor-state-list@48__anim-node-blend@4b8____anim-node-blend@a70____anim-node-blend@18b0____anim-node-blend@1f20____anim-node-animation@2280__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return 1.00;
+}
+
+f32 anim-player-turret-states__actor-state-list@48__anim-node-blend@4b8____anim-node-blend@a70____anim-node-blend@18b0__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)(*(arg_0 + 16) + 640);
+}
+
+f32 anim-player-turret-states__actor-state-list@48__anim-node-blend@4b8____anim-node-animation@1ce8__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return 1.00;
+}
+
+f32 anim-player-turret-states__actor-state-list@48(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)((*(arg_0 + 16) + 640) + 4);
+}
+
+f32 anim-player-turret-states__anim-node-animation@1818(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return 1.00;
+}
+
+f32 anim-player-turret-states(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)((*(arg_0 + 16) + 640) + 8);
+}
+
+f32 anim-player-turret-states__anim-node-animation@c68(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return 1.00;
+}
+
+f32 anim-player-turret-states__anim-node-blend@3e8__anim-node-blend@10c8__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)(*(arg_0 + 16) + 640);
+}
+

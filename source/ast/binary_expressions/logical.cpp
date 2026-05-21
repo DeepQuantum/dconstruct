@@ -7,6 +7,18 @@ namespace {
 void append_branch_locations(std::vector<u64>& destination, std::vector<u64>&& source) noexcept {
     destination.insert(destination.end(), source.begin(), source.end());
 }
+
+[[nodiscard]] bool is_logical_operand(const primitive_kind kind) noexcept {
+    return is_integral(kind) || is_floating_point(kind) || kind == primitive_kind::NULLPTR;
+}
+
+[[nodiscard]] bool are_compatible_logical_operands(const primitive_kind lhs, const primitive_kind rhs) noexcept {
+    if (lhs == primitive_kind::NULLPTR || rhs == primitive_kind::NULLPTR) {
+        return is_logical_operand(lhs) && is_logical_operand(rhs);
+    }
+
+    return (is_integral(lhs) && is_integral(rhs)) || (is_floating_point(lhs) && is_floating_point(rhs));
+}
 }
 
 [[nodiscard]] expr_uptr logical_expr::simplify() const {
@@ -32,9 +44,7 @@ void append_branch_locations(std::vector<u64>& destination, std::vector<u64>&& s
             return "expected primitive type for logical op lhs but got " + type_to_declaration_string(lhs_type);
         } else if constexpr (!is_primitive<rhs_t>) {
             return "expected primitive type for logical op rhs but got " + type_to_declaration_string(rhs_type);
-        } else if (is_integral(lhs_type.m_type) && is_integral(rhs_type.m_type)) {
-            return std::nullopt;
-        } else if (is_floating_point(lhs_type.m_type) && is_floating_point(rhs_type.m_type)) {
+        } else if (are_compatible_logical_operands(lhs_type.m_type, rhs_type.m_type)) {
             return std::nullopt;
         } else { 
             return "expected compatible types for logical op but got " + type_to_declaration_string(lhs_type) + " and " + type_to_declaration_string(rhs_type);
@@ -49,7 +59,7 @@ void append_branch_locations(std::vector<u64>& destination, std::vector<u64>&& s
 }
 
 [[nodiscard]] emission_res logical_expr::emit_dc(compilation::function& fn, compilation::global_state& global, const std::optional<reg_idx> destination) const noexcept {
-    const emission_res logical_destination = fn.get_destination(destination);
+    const emission_res logical_destination = fn.fix_destination(destination);
     if (!logical_destination) {
         return logical_destination;
     }

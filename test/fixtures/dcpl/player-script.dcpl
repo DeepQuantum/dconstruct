@@ -80,3 +80,167 @@ u64? anim-player-script-states__anim-node-blend@2c58__anim-node-blend@8498__(f32
     return var_1;
 }
 
+u64 anim-player-script-states__actor-state-list@48__anim-node-animation@2ba8__(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(*(arg_1 + 16) + 824);
+}
+
+f32 anim-player-script-states(u64? arg_0, u64? arg_1, f32 arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)((*(arg_2 + 16) + 824) + 20);
+}
+
+u64 anim-player-script-states__anim-node-animation@2978(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(*(arg_1 + 16) + 1160);
+}
+
+u64 anim-player-script-states__anim-node-animation@2f28(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(*(arg_1 + 16) + 1272);
+}
+
+u64 anim-player-script-states__anim-node-animation@3488(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(*(arg_1 + 16) + 1384);
+}
+
+u64 anim-player-script-states__anim-node-animation@3378(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(*(arg_1 + 16) + 1496);
+}
+
+u64 anim-player-script-states__anim-node-animation@2228(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(*(arg_1 + 16) + 1608);
+}
+
+u64 anim-player-script-states__anim-node-animation@3578(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(*(arg_1 + 16) + 1720);
+}
+
+u64 anim-player-script-states__anim-node-animation@3660(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(*(arg_1 + 16) + 1832);
+}
+
+u64 anim-player-script-states__anim-node-animation@2358(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(*(arg_1 + 16) + 1944);
+}
+
+u64 anim-player-script-states__anim-node-blend@2698__anim-node-animation@60f8__(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(*(arg_1 + 16) + 824);
+}
+
+u64 anim-player-script-states__anim-node-gesture@5aa8(u64? arg_0, u64 arg_1) {
+    return *(u64*)((*(arg_1 + 16) + 824) + 8);
+}
+
+f32 anim-player-script-states__anim-node-blend@3338(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)((*(arg_0 + 16) + 824) + 36);
+}
+
+f32 anim-player-script-states__anim-node-blend@33f0__anim-node-blend@6130____anim-node-blend@8038__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)((*(arg_0 + 16) + 824) + 36);
+}
+
+f32 anim-player-script-states__anim-node-blend@2118__anim-node-blend@6490__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)((*(arg_0 + 16) + 824) + 36);
+}
+
+u64? anim-player-script-states__anim-node-blend@2d48__anim-node-blend@6308__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = lerp-scale(0.44, 0.46, 1.00, 0.00, arg_1);
+    return var_0;
+}
+
+u64? anim-player-script-states__anim-node-blend@5db0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = lerp-scale(0.97, 0.99, 0.00, 1.00, arg_1);
+    return var_0;
+}
+
+u64? anim-player-script-states__anim-node-blend@2c58__anim-node-blend@6450____anim-node-blend@80d8__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    f32 var_0 = *(f32*)((*(arg_0 + 16) + 824) + 36);
+    u64? var_1 = lerp-scale(-0.33, 0.33, 0.00, 1.00, var_0);
+    return var_1;
+}
+
+u64? anim-player-script-states__anim-node-blend@2c58__anim-node-blend@8498__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    f32 var_0 = *(f32*)((*(arg_0 + 16) + 824) + 40);
+    u64? var_1 = lerp-scale(-0.33, 0.33, 0.00, 1.00, var_0);
+    return var_1;
+}
+
+u64 anim-player-script-states__actor-state-list@48__anim-node-animation@2ba8__(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(*(arg_1 + 16) + 824);
+}
+
+f32 anim-player-script-states(u64? arg_0, u64? arg_1, f32 arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)((*(arg_2 + 16) + 824) + 20);
+}
+
+u64 anim-player-script-states__anim-node-animation@2978(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(*(arg_1 + 16) + 1160);
+}
+
+u64 anim-player-script-states__anim-node-animation@2f28(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(*(arg_1 + 16) + 1272);
+}
+
+u64 anim-player-script-states__anim-node-animation@3488(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(*(arg_1 + 16) + 1384);
+}
+
+u64 anim-player-script-states__anim-node-animation@3378(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(*(arg_1 + 16) + 1496);
+}
+
+u64 anim-player-script-states__anim-node-animation@2228(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(*(arg_1 + 16) + 1608);
+}
+
+u64 anim-player-script-states__anim-node-animation@3578(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(*(arg_1 + 16) + 1720);
+}
+
+u64 anim-player-script-states__anim-node-animation@3660(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(*(arg_1 + 16) + 1832);
+}
+
+u64 anim-player-script-states__anim-node-animation@2358(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(*(arg_1 + 16) + 1944);
+}
+
+u64 anim-player-script-states__anim-node-blend@2698__anim-node-animation@60f8__(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(*(arg_1 + 16) + 824);
+}
+
+u64 anim-player-script-states__anim-node-gesture@5aa8(u64? arg_0, u64 arg_1) {
+    return *(u64*)((*(arg_1 + 16) + 824) + 8);
+}
+
+f32 anim-player-script-states__anim-node-blend@3338(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)((*(arg_0 + 16) + 824) + 36);
+}
+
+f32 anim-player-script-states__anim-node-blend@33f0__anim-node-blend@6130____anim-node-blend@8038__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)((*(arg_0 + 16) + 824) + 36);
+}
+
+f32 anim-player-script-states__anim-node-blend@2118__anim-node-blend@6490__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)((*(arg_0 + 16) + 824) + 36);
+}
+
+u64? anim-player-script-states__anim-node-blend@2d48__anim-node-blend@6308__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = lerp-scale(0.44, 0.46, 1.00, 0.00, arg_1);
+    return var_0;
+}
+
+u64? anim-player-script-states__anim-node-blend@5db0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = lerp-scale(0.97, 0.99, 0.00, 1.00, arg_1);
+    return var_0;
+}
+
+u64? anim-player-script-states__anim-node-blend@2c58__anim-node-blend@6450____anim-node-blend@80d8__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    f32 var_0 = *(f32*)((*(arg_0 + 16) + 824) + 36);
+    u64? var_1 = lerp-scale(-0.33, 0.33, 0.00, 1.00, var_0);
+    return var_1;
+}
+
+u64? anim-player-script-states__anim-node-blend@2c58__anim-node-blend@8498__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    f32 var_0 = *(f32*)((*(arg_0 + 16) + 824) + 40);
+    u64? var_1 = lerp-scale(-0.33, 0.33, 0.00, 1.00, var_0);
+    return var_1;
+}
+

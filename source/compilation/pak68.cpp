@@ -8,7 +8,6 @@
 
 namespace dconstruct::compilation {
 
-namespace {
 
 struct pak68_type_name {
     pak68_type m_type;
@@ -110,7 +109,6 @@ constexpr pak68_type_name pak68_type_names[] = {
     return std::string{pak68_type_to_string(entry.m_type)} + " " + entry.m_sid;
 }
 
-}
 
 [[nodiscard]] std::optional<pak68_type> pak68_type_from_string(const std::string_view name) noexcept {
     for (const pak68_type_name& type_name : pak68_type_names) {

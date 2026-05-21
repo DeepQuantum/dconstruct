@@ -78,3 +78,163 @@ u64? tsk-san-outpost-suburbs__level-scripted-set@13e8() {
     return var_0;
 }
 
+bool tsk-san-outpost-meet-marauders__level-set@300__level-scripted-set@ba8__() {
+    u64? var_0 = stat-value?(san-wilds-spawn-wilds-script);
+    return var_0 > 0;
+}
+
+bool tsk-san-outpost-meet-marauders__level-scripted-set@c38() {
+    u64? var_0 = stat-value?(san-wilds-spawn-wilds-script);
+    return var_0 == 0;
+}
+
+u64? tsk-san-infected-wilds-suburbs__level-set@498__level-scripted-set@aa0__() {
+    u64? var_0 = task-complete?(santa-barbara, san-snared);
+    u64? var_1 = !(var_0);
+    return var_1;
+}
+
+u64? tsk-san-infected-wilds-suburbs__level-scripted-set@cc8() {
+    u64? var_0 = task-complete?(santa-barbara, san-snared);
+    return var_0;
+}
+
+u64? tsk-san-streets-spikes-walk-to-beach__level-set@5f8__level-scripted-set@d58__() {
+    u64? var_0 = task-not-complete?(santa-barbara, san-free-abby-walk-to-boat);
+    return var_0;
+}
+
+u64? san-wilds-upper-mansion-interior-scriptedset__level-set@750__level-scripted-set@1508__() {
+    u64? var_0 = get-svar-as-boolean(san-wilds-upper-load-mansion-interior);
+    return !var_0;
+}
+
+u64? san-wilds-upper-mansion-interior-scriptedset__level-scripted-set@10e8() {
+    u64? var_0 = get-svar-as-boolean(san-wilds-upper-load-mansion-interior);
+    return var_0;
+}
+
+bool tsk-san-streets-start__level-set@808__level-scripted-set@10d0__() {
+    u64? var_0 = stat-value?(san-streets-load-farm);
+    return var_0 == 0;
+}
+
+bool tsk-san-streets-start__level-scripted-set@1718() {
+    u64? var_0 = stat-value?(san-streets-load-farm);
+    return var_0 == 1;
+}
+
+u64? tsk-san-infected-wilds-overlook-fight__level-set@850__level-scripted-set@ed8__() {
+    u64? var_0 = get-svar-as-boolean(san-wilds-overlook-fight-dropped-down);
+    return var_0;
+}
+
+u64? tsk-san-infected-wilds-overlook-fight__level-scripted-set@1358() {
+    u64? var_0 = get-svar-as-boolean(san-wilds-overlook-fight-dropped-down);
+    return !var_0;
+}
+
+u64? san-entered-mansion-scriptedset__level-set@8d0__level-scripted-set@1400__() {
+    u64? var_0 = get-svar-as-boolean(san-wilds-upper-mansion-dropped-down);
+    u64? var_1 = task-continue-active?(santa-barbara, san-infected-wilds-upper-fight, default);
+    u64? var_2 = task-continue-active?(santa-barbara, san-infected-wilds-upper-fight, checkpoint);
+    u64? var_3 = task-active?(santa-barbara, san-infected-wilds-upper-directions);
+    bool var_4 = !var_0 || var_1 || var_2 && var_3;
+    return var_4;
+}
+
+u64? san-entered-mansion-scriptedset__level-scripted-set@a88() {
+    u64? var_0 = get-svar-as-boolean(san-wilds-upper-mansion-dropped-down);
+    return var_0;
+}
+
+u64? tsk-san-outpost-suburbs__level-set@950__level-scripted-set@1610__() {
+    u64? var_0 = get-svar-as-boolean(san-outpost-basement-light-on);
+    return !var_0;
+}
+
+u64? tsk-san-outpost-suburbs__level-scripted-set@13e8() {
+    u64? var_0 = get-svar-as-boolean(san-outpost-basement-light-on);
+    return var_0;
+}
+
+bool tsk-san-outpost-meet-marauders__level-set@300__level-scripted-set@ba8__() {
+    u64? var_0 = stat-value?(san-wilds-spawn-wilds-script);
+    return var_0 > 0;
+}
+
+bool tsk-san-outpost-meet-marauders__level-scripted-set@c38() {
+    u64? var_0 = stat-value?(san-wilds-spawn-wilds-script);
+    return var_0 == 0;
+}
+
+u64? tsk-san-infected-wilds-suburbs__level-set@498__level-scripted-set@aa0__() {
+    u64? var_0 = task-complete?(santa-barbara, san-snared);
+    u64? var_1 = !(var_0);
+    return var_1;
+}
+
+u64? tsk-san-infected-wilds-suburbs__level-scripted-set@cc8() {
+    u64? var_0 = task-complete?(santa-barbara, san-snared);
+    return var_0;
+}
+
+u64? tsk-san-streets-spikes-walk-to-beach__level-set@5f8__level-scripted-set@d58__() {
+    u64? var_0 = task-not-complete?(santa-barbara, san-free-abby-walk-to-boat);
+    return var_0;
+}
+
+u64? san-wilds-upper-mansion-interior-scriptedset__level-set@750__level-scripted-set@1508__() {
+    u64? var_0 = get-svar-as-boolean(san-wilds-upper-load-mansion-interior);
+    return !var_0;
+}
+
+u64? san-wilds-upper-mansion-interior-scriptedset__level-scripted-set@10e8() {
+    u64? var_0 = get-svar-as-boolean(san-wilds-upper-load-mansion-interior);
+    return var_0;
+}
+
+bool tsk-san-streets-start__level-set@808__level-scripted-set@10d0__() {
+    u64? var_0 = stat-value?(san-streets-load-farm);
+    return var_0 == 0;
+}
+
+bool tsk-san-streets-start__level-scripted-set@1718() {
+    u64? var_0 = stat-value?(san-streets-load-farm);
+    return var_0 == 1;
+}
+
+u64? tsk-san-infected-wilds-overlook-fight__level-set@850__level-scripted-set@ed8__() {
+    u64? var_0 = get-svar-as-boolean(san-wilds-overlook-fight-dropped-down);
+    return var_0;
+}
+
+u64? tsk-san-infected-wilds-overlook-fight__level-scripted-set@1358() {
+    u64? var_0 = get-svar-as-boolean(san-wilds-overlook-fight-dropped-down);
+    return !var_0;
+}
+
+u64? san-entered-mansion-scriptedset__level-set@8d0__level-scripted-set@1400__() {
+    u64? var_0 = get-svar-as-boolean(san-wilds-upper-mansion-dropped-down);
+    u64? var_1 = task-continue-active?(santa-barbara, san-infected-wilds-upper-fight, default);
+    u64? var_2 = task-continue-active?(santa-barbara, san-infected-wilds-upper-fight, checkpoint);
+    u64? var_3 = task-active?(santa-barbara, san-infected-wilds-upper-directions);
+    bool var_4 = !var_0 || var_1 || var_2 && var_3;
+    return var_4;
+}
+
+u64? san-entered-mansion-scriptedset__level-scripted-set@a88() {
+    u64? var_0 = get-svar-as-boolean(san-wilds-upper-mansion-dropped-down);
+    return var_0;
+}
+
+u64? tsk-san-outpost-suburbs__level-set@950__level-scripted-set@1610__() {
+    u64? var_0 = get-svar-as-boolean(san-outpost-basement-light-on);
+    return !var_0;
+}
+
+u64? tsk-san-outpost-suburbs__level-scripted-set@13e8() {
+    u64? var_0 = get-svar-as-boolean(san-outpost-basement-light-on);
+    return var_0;
+}
+

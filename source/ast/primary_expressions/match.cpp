@@ -1,5 +1,5 @@
 #include "ast/primary_expressions/match.h"
-
+#include "ast/primary_expressions/literal.h"
 #include <algorithm>
 #include <iomanip>
 #include <numeric>
@@ -7,10 +7,9 @@
 
 namespace dconstruct::ast {
 
-namespace {
     using grouped_patterns_t = std::vector<std::pair<std::vector<const expr_uptr*>, const expr_uptr*>>;
 
-    [[nodiscard]] std::string pattern_list_string(const std::vector<const expr_uptr*>& patterns) {
+    [[nodiscard]] static std::string pattern_list_string(const std::vector<const expr_uptr*>& patterns) {
         std::stringstream ss;
         for (u64 i = 0; i < patterns.size(); ++i) {
             if (i != 0) {
@@ -21,14 +20,13 @@ namespace {
         return ss.str();
     }
 
-    [[nodiscard]] u64 max_pattern_width(const grouped_patterns_t& grouped) {
+    [[nodiscard]] static u64 max_pattern_width(const grouped_patterns_t& grouped) {
         u64 max_size = sizeof("else") - 1;
         for (const auto& [patterns, _] : grouped) {
             max_size = std::max<u64>(max_size, pattern_list_string(patterns).length());
         }
         return max_size;
     }
-}
 
 
 void match_expr::pseudo_c(std::ostream& os) const {
@@ -235,7 +233,7 @@ void match_expr::pseudo_racket(std::ostream& os) const {
             return pattern_type;
         }
 
-        if (*pattern_type != *match_var_type) {
+        if (const std::optional<std::string> pattern_err = not_assignable_reason(*match_var_type, *pattern_type)) {
             return std::unexpected{semantic_check_error{
                 "expected pattern type " + type_to_declaration_string(*match_var_type) + " but got " + type_to_declaration_string(*pattern_type), pattern.get()
             }};
@@ -249,6 +247,11 @@ void match_expr::pseudo_racket(std::ostream& os) const {
 
         if (!result_type_set) {
             result_type = *expr_type;
+            const auto load_opcode = get_static_load_opcode(result_type);
+            if (!load_opcode) {
+                return std::unexpected{semantic_check_error{load_opcode.error(), expression.get()}};
+            }
+            m_loadOpcode = *load_opcode;
             result_type_set = true;
         } else if (*expr_type != result_type) {
             return std::unexpected{semantic_check_error{"expected result type " + type_to_declaration_string(result_type) + " but got " + type_to_declaration_string(*expr_type), expression.get()}};
@@ -257,23 +260,65 @@ void match_expr::pseudo_racket(std::ostream& os) const {
 
     assert(result_type_set && !std::holds_alternative<std::monostate>(result_type));
 
+    if (!m_default) {
+        return result_type;
+    }
+
     const semantic_check_res default_type = m_default->get_type_checked(env);
 
     if (!default_type) {
         return default_type;
     }
 
-    if (*default_type != result_type) {
-        return std::unexpected{semantic_check_error{
-            "expected default expression type " + type_to_declaration_string(result_type) + " but got " + type_to_declaration_string(*default_type), m_default.get()
-        }};
+    if (auto bad_assign = not_assignable_reason(result_type, *default_type)) {
+        return std::unexpected{semantic_check_error{*bad_assign, m_default.get()}};
     }
 
     return result_type;
 }
 
-[[nodiscard]] u64 match_expr::calc_density() const noexcept {
-    
+void match_expr::init_match_metrics() noexcept {
+    sort_matches();
+    calc_density_R();
+}
+
+void match_expr::sort_matches() noexcept {
+    const bool all_patterns_are_raw_numbers = std::all_of(m_matchPairs.begin(), m_matchPairs.end(), [](const matches_t& match) noexcept {
+        return match.first->raw_pattern_number().has_value();
+    });
+
+    if (!all_patterns_are_raw_numbers) {
+        return;
+    }
+
+    std::sort(m_matchPairs.begin(), m_matchPairs.end(), [](const matches_t& lhs, const matches_t& rhs) noexcept {
+        const auto lhs_value = lhs.first->raw_pattern_number();
+        const auto rhs_value = rhs.first->raw_pattern_number();
+        assert(lhs_value && rhs_value);
+        return *lhs_value < *rhs_value;
+    });
+}
+
+void match_expr::calc_density_R() noexcept {
+    if (m_matchPairs.empty()) {
+        return;
+    }
+
+    for (const auto& [pattern, _] : m_matchPairs) {
+        if (!pattern->raw_pattern_number()) {
+            return;
+        }
+    }
+
+    const auto first_value = m_matchPairs.front().first->raw_pattern_number();
+    const auto last_value = m_matchPairs.back().first->raw_pattern_number();
+    assert(first_value && last_value);
+
+    m_min = *first_value;
+    m_max = *last_value;
+    m_R = m_max - m_min + 1;
+    m_density = (f32)m_matchPairs.size() / (f32)m_R;
+    m_hasDensity = true;
 }
 
 [[nodiscard]] emission_res match_expr::emit_dc(compilation::function& fn, compilation::global_state& global, const std::optional<reg_idx> destination) const noexcept {
@@ -282,12 +327,123 @@ void match_expr::pseudo_racket(std::ostream& os) const {
         return condition;
     }
 
-    const u64 density = calc_density();
-
-    for (const auto& [patterns, expression] : m_matchPairs) {
-
+    if (!m_hasDensity) {
+        return std::unexpected{"only compilation with literals is currently supported"};
     }
+
+    constexpr f32 array_approach_min_density = .5f;
+    constexpr u32 array_approach_max_R = 16;
+
+    if (m_density >= array_approach_min_density && m_R <= array_approach_max_R) {
+        return emit_dc_array_approach(fn, global, *condition, destination);
+    }
+
+    return std::unexpected{"match expression is not dense enough for array compilation"};
 }
+
+[[nodiscard]] emission_res match_expr::emit_dc_array_approach(
+    compilation::function& fn,
+    compilation::global_state& global,
+    const reg_idx condition_reg,
+    const std::optional<reg_idx> destination
+) const noexcept {
+    const i64 array_size = m_max - m_min + 1;
+    auto match_it = m_matchPairs.begin();
+
+    std::vector<sid64> entries;
+    entries.reserve(array_size);
+
+    const i64 start_symbol_table_size = fn.m_symbolTable.size();
+
+    static const literal sentinel{SID("sentinel")};
+    const literal& default_case = m_default ? *m_default->as_literal() : sentinel;
+
+    std::optional<u64> default_symbol_table_entry; 
+    std::expected<u16, std::string> symbol_table_entry_res;
+    for (i64 i = m_min; i <= m_max; ++i) {
+        if (match_it != m_matchPairs.end() && static_cast<u16>(*match_it->first->raw_pattern_number()) == i) {
+            symbol_table_entry_res = match_it->second->emit_to_symbol_table(fn, global);
+            ++match_it;
+        } else {
+            symbol_table_entry_res = default_case.emit_to_symbol_table(fn, global);
+            default_symbol_table_entry = symbol_table_entry_res.value_or(0);
+        }
+        if (!symbol_table_entry_res) {
+            return std::unexpected{symbol_table_entry_res.error()};
+        }
+        entries.push_back(*symbol_table_entry_res);
+    }
+
+    if (!default_symbol_table_entry) {
+        const auto st_res = default_case.emit_to_symbol_table(fn, global);
+        if (!st_res) {
+            return std::unexpected{st_res.error()};
+        }
+        default_symbol_table_entry = *st_res;
+    }
+
+    const i64 start_idx = m_min + start_symbol_table_size;
+    u64 default_branch = 0;
+    
+    // for now assume only unsigned numbers in cases
+    // if we have a default: check if condition var is larger than (largest case - lowest case), in which case we just load the default case
+    const u16 default_end_idx = m_max - m_min;
+    if (m_default) {
+        u64 min_idx = fn.add_to_symbol_table(m_min);
+        u64 max_idx = fn.add_to_symbol_table(m_max);
+        u64 offset = fn.add_to_symbol_table(default_end_idx);
+
+        const emission_res range_dest = fn.get_next_unused_register();
+        if (!range_dest) {
+            return range_dest;
+        }
+
+        if (m_min != 0) {
+            const Opcode arith_instruction = m_min < 0 ? Opcode::IAdd : Opcode::ISub;
+            fn.emit_instruction(Opcode::LoadStaticI64Imm, *range_dest, offset, 0);
+            fn.emit_instruction(arith_instruction, condition_reg, condition_reg, *range_dest);
+        }
+        
+        fn.emit_lohi_instruction(Opcode::LoadU16Imm, *range_dest, default_end_idx);
+        fn.emit_instruction(Opcode::IGreaterThan, *range_dest, condition_reg, *range_dest);
+        default_branch = fn.m_instructions.size();
+        fn.emit_instruction(Opcode::BranchIfNot, compilation::function::BRANCH_PLACEHOLDER, *range_dest, compilation::function::BRANCH_PLACEHOLDER);
+        fn.free_register(*range_dest);
+    }
+
+    if (start_idx != 0) {
+        const Opcode math_opcode = start_idx < 0 ? Opcode::ISubImm : Opcode::IAddImm;
+        fn.emit_instruction(math_opcode, condition_reg, condition_reg, start_idx);
+    }
+
+    const emission_res load_dest_res = fn.fix_destination(destination);
+    if (!load_dest_res) {
+        return load_dest_res;
+    }
+
+    assert(m_loadOpcode.has_value());
+    // const auto static_load_opcode_res = get_static_imm_load_opcode(*m_type);
+    // if (!static_load_opcode_res) {
+    //     return std::unexpected{static_load_opcode_res.error()};
+    // }
+    fn.emit_instruction(Opcode::LoadStaticU64Imm, *load_dest_res, (u8)*default_symbol_table_entry);
+
+    if (m_default) {
+        const u64 end_branch = fn.m_instructions.size();
+        fn.emit_instruction(Opcode::Branch, compilation::function::BRANCH_PLACEHOLDER, 0, compilation::function::BRANCH_PLACEHOLDER);
+
+        const u64 default_location = fn.m_instructions.size();
+
+        fn.emit_instruction(*m_loadOpcode, *load_dest_res, condition_reg);
+
+        const u64 end_location = fn.m_instructions.size();
+        fn.m_instructions[default_branch].set_lo_hi(static_cast<u16>(default_location));
+        fn.m_instructions[end_branch].set_lo_hi(static_cast<u16>(end_location));
+    }
+
+    return *load_dest_res;
+}
+
 
 VAR_OPTIMIZATION_ACTION match_expr::var_optimization_pass(var_optimization_env& env) noexcept {
     for (auto& condition : m_conditions) {

@@ -84,6 +84,10 @@ namespace dconstruct::ast {
 
         [[nodiscard]] virtual full_type compute_type_unchecked(const compilation::scope& env) const noexcept = 0;
         [[nodiscard]] virtual semantic_check_res compute_type_checked(compilation::scope& env) const noexcept = 0;
+        [[nodiscard]] virtual std::optional<i64> raw_pattern_number() const noexcept { return std::nullopt; }
+        [[nodiscard]] virtual std::expected<u16, std::string> emit_to_symbol_table(compilation::function&, compilation::global_state&) const noexcept {
+            return std::unexpected{"expression cannot be emitted to symbol table"};
+        }
         [[nodiscard]] virtual emission_res emit_dc(compilation::function& fn, compilation::global_state& global, const std::optional<reg_idx> destination = std::nullopt) const noexcept { return 0; }
         [[nodiscard]] virtual condition_branch_res emit_dc_branch(compilation::function& fn, compilation::global_state& global, const bool branch_when_true) const noexcept {
             const emission_res condition = emit_dc(fn, global);

@@ -2,6 +2,24 @@
 
 namespace dconstruct::ast {
 
+namespace {
+
+[[nodiscard]] bool is_nullptr_type(const full_type& type) noexcept {
+    if (!std::holds_alternative<primitive_type>(type)) {
+        return false;
+    }
+    return std::get<primitive_type>(type).m_type == primitive_kind::NULLPTR;
+}
+
+[[nodiscard]] bool is_floating_point_type(const full_type& type) noexcept {
+    if (!std::holds_alternative<primitive_type>(type)) {
+        return false;
+    }
+    return is_floating_point(std::get<primitive_type>(type).m_type);
+}
+
+}
+
 [[nodiscard]] expr_uptr compare_expr::simplify() const {
     return nullptr;
 }
@@ -26,6 +44,10 @@ namespace dconstruct::ast {
 
 
     if (*lhs_type == *rhs_type) {
+        return make_type_from_prim(primitive_kind::BOOL);
+    }
+
+    if (is_nullptr_type(*lhs_type) || is_nullptr_type(*rhs_type)) {
         return make_type_from_prim(primitive_kind::BOOL);
     }
 
@@ -69,7 +91,9 @@ namespace dconstruct::ast {
         return comp_destination;
     }
 
-    const bool integral = is_integral(std::get<primitive_type>(*m_type).m_type);
+    const std::optional<full_type> lhs_type = m_lhs->get_type();
+    const std::optional<full_type> rhs_type = m_rhs->get_type();
+    const bool integral = !(lhs_type && is_floating_point_type(*lhs_type)) && !(rhs_type && is_floating_point_type(*rhs_type));
 
     Opcode opcode;
     if (m_operator.m_lexeme == ">") {

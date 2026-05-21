@@ -6,6 +6,7 @@
 #include <variant>
 #include <vector>
 #include <expected>
+#include <type_traits>
 #include "disassembly/opcodes.h"
 
 namespace dconstruct::ast {
@@ -42,6 +43,10 @@ namespace dconstruct::ast {
     [[nodiscard]] primitive_kind kind_from_primitive_value(const primitive_value& prim) noexcept;
 
     [[nodiscard]] std::optional<primitive_number> get_number(const primitive_value& prim) noexcept;
+
+    [[nodiscard]] i64 get_raw_number(const primitive_number& prim) noexcept;
+
+    [[nodiscard]] std::optional<i64> get_raw_number(const primitive_value& prim) noexcept;
 
 
     struct primitive_type;
@@ -194,6 +199,7 @@ namespace dconstruct::ast {
     [[nodiscard]] const full_type* get_dominating_type(const full_type& lhs, const full_type& rhs);
 
     [[nodiscard]] std::expected<Opcode, std::string> get_load_opcode(const full_type& type); 
+    [[nodiscard]] std::expected<Opcode, std::string> get_static_load_opcode(const full_type& type);
     [[nodiscard]] std::expected<Opcode, std::string> get_store_opcode(const full_type& type); 
 
     extern const std::string UNKNOWN_TYPE_NAME;

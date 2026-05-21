@@ -100,5 +100,6 @@ namespace dconstruct {
         AssertPointer,
         BreakFlag,
         Breakpoint,
+        QEX_InRangeI,
     };
 }

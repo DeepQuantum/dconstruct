@@ -95,7 +95,7 @@ void subscript_expr::pseudo_racket(std::ostream& os) const {
         return std::unexpected{std::move(load_opcode.error())};
     }
 
-    const emission_res load_destination = fn.get_destination(opt_destination);
+    const emission_res load_destination = fn.fix_destination(opt_destination);
     if (!load_destination) {
         return load_destination;
     }

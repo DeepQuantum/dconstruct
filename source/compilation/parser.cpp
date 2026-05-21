@@ -373,6 +373,7 @@ template<typename... Args> requires (std::same_as<Args, token_type> && ...)
         if (!param_name) {
             return nullptr;
         }
+        func_def->m_type.m_arguments.emplace_back(param_name->m_lexeme, std::make_shared<ast::full_type>(*param_type));
         func_def->m_parameters.emplace_back(std::move(*param_type), param_name->m_lexeme);
 
         if (!check(token_type::RIGHT_PAREN)) {
@@ -1102,8 +1103,8 @@ template<typename ...Args> requires (std::constructible_from<ast::literal, Args>
     std::vector<ast::match_expr::matches_t> matches;
     std::vector<expr_uptr> patterns;
     expr_uptr default_pattern = nullptr;
-    bool default_pattern_reached = false;
-    while (!default_pattern) {
+    while (!check(token_type::RIGHT_BRACE) && !is_at_end()) {
+        bool default_pattern_reached = false;
         do {
             if (match(token_type::ELSE)) {
                 default_pattern_reached = true;
@@ -1128,12 +1129,13 @@ template<typename ...Args> requires (std::constructible_from<ast::literal, Args>
             return nullptr;
         }
 
-        if (!default_pattern_reached && !consume({token_type::COMMA}, "expected ',' at end of pattern-match expression")) {
+        if (!default_pattern_reached && !check(token_type::RIGHT_BRACE) && !consume({token_type::COMMA}, "expected ',' at end of pattern-match expression")) {
             return nullptr;
         }
         
         if (default_pattern_reached) {
             default_pattern = std::move(matched_expression);
+            break;
         } else {
             for (u64 i = 0; i < patterns.size(); ++i) {
                 expr_uptr case_expression =

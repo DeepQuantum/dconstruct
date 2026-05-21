@@ -49,6 +49,7 @@ namespace dconstruct::compilation {
 
 
         void emit_instruction(const Opcode opcode, const u8 destination, const u8 operand1 = 0, const u8 operand2 = 0) noexcept;
+        void emit_lohi_instruction(const Opcode opcode, const u8 destination, const u16 lo_hi) noexcept;
 
         [[nodiscard]] std::expected<reg_idx, std::string> get_next_unused_register() noexcept;
         void free_register(const reg_idx reg) noexcept;
@@ -61,7 +62,7 @@ namespace dconstruct::compilation {
 
         [[nodiscard]] u64 get_size_in_bytes() const noexcept;
         [[nodiscard]] u64 get_scriptlambda_sum() const noexcept;
-        [[nodiscard]] emission_res get_destination(const std::optional<u8> passed_through_destination) noexcept;
+        [[nodiscard]] emission_res fix_destination(const std::optional<u8> passed_through_destination) noexcept;
         void push_deferred() noexcept;
         void pop_deferred() noexcept;
 

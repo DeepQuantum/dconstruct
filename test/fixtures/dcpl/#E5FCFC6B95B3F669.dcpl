@@ -4,17 +4,17 @@ u64? #E5FCFC6B95B3F669() {
     for (u64 i = 0; i < var_0; i++) {
         u64? var_1 = darray-at(#88F409F4BF0F056A, i);
         u16 var_2;
-        if (var_1 && *(u16*)(var_1 + 12) == 7) {
+        if (var_1 != nullptr && *(u16*)(var_1 + 12) == 7) {
             var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
+        } else if (var_1 != nullptr && *(u16*)(var_1 + 12) == 5) {
             var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
+        } else if (var_1 != nullptr && *(u16*)(var_1 + 12) == 4) {
             var_2 = *(u64*)var_1;
         } else {
             var_2 = 0;
         }
         u64? var_3 = npc-alive?(var_2);
-        if (var_3) {
+        if (var_3 != nullptr) {
             npc-disable-has-ever-seen-updates/f(var_2);
             u64? var_4 = new-boxed-value(1, 1);
             fact-set(var_2, has-faction-ever-seen-player-or-buddy, var_4);

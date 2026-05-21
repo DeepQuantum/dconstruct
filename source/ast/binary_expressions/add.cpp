@@ -88,7 +88,7 @@ using larger_t = std::conditional_t<(sizeof(T) >= sizeof(U)), T, U>;
 
     const Opcode opcode = is_floating_point(std::get<primitive_type>(*m_type).m_type) ? Opcode::FAdd : Opcode::IAdd;
 
-    const emission_res add_destination = fn.get_destination(destination);
+    const emission_res add_destination = fn.fix_destination(destination);
     if (!add_destination) {
         return add_destination;
     }

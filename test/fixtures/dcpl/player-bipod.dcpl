@@ -20,3 +20,47 @@ u64? anim-player-bipod-states__anim-transition-group@300__anim-transition-condit
     return var_1;
 }
 
+f32 anim-player-bipod-states__actor-state-list@48__anim-node-blend@3d8____anim-node-blend@6a0____anim-node-animation@ed0__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return *(f32*)((*(arg_0 + 16) + 312) + 20);
+}
+
+f32 anim-player-bipod-states__actor-state-list@48(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)(*(arg_0 + 16) + 640);
+}
+
+f32 anim-player-bipod-states__anim-node-animation@a88(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return *(f32*)((*(arg_0 + 16) + 312) + 20);
+}
+
+f32 anim-player-bipod-states(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)((*(arg_0 + 16) + 640) + 4);
+}
+
+u64? anim-player-bipod-states__anim-transition-group@300__anim-transition-condition-lambda@cc0__(u8 arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_0 = player-animation-abort-active?(arg_2, arg_1);
+    bool var_1 = var_0 && *(u8*)(*arg_0 + 208);
+    return var_1;
+}
+
+f32 anim-player-bipod-states__actor-state-list@48__anim-node-blend@3d8____anim-node-blend@6a0____anim-node-animation@ed0__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return *(f32*)((*(arg_0 + 16) + 312) + 20);
+}
+
+f32 anim-player-bipod-states__actor-state-list@48(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)(*(arg_0 + 16) + 640);
+}
+
+f32 anim-player-bipod-states__anim-node-animation@a88(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return *(f32*)((*(arg_0 + 16) + 312) + 20);
+}
+
+f32 anim-player-bipod-states(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)((*(arg_0 + 16) + 640) + 4);
+}
+
+u64? anim-player-bipod-states__anim-transition-group@300__anim-transition-condition-lambda@cc0__(u8 arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_0 = player-animation-abort-active?(arg_2, arg_1);
+    bool var_1 = var_0 && *(u8*)(*arg_0 + 208);
+    return var_1;
+}
+

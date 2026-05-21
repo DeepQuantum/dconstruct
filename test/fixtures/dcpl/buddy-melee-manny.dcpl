@@ -74,3 +74,155 @@ u64? buddy-manny-hatchet-vs-inf-right-neck-hack-finisher(u64? arg_0, bool arg_1,
     return var_0;
 }
 
+u16 buddy-manny-hatchet-vs-inf-right-neck-hack-finisher-sync__melee-attack@90(i64 arg_0, u64? arg_1, i64 arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    u16 var_0;
+    if (arg_0 == arg_2) {
+        melee-fact-remove(arg_2, force-disable-melee-targeting);
+        u64? var_1 = melee-fact-get-bool(arg_2, doomed?);
+        if (var_1) {
+            u64? var_2 = npc-die(arg_2, 0, 0, 0, 1);
+            var_0 = var_2;
+        } else {
+            var_0 = 0;
+        }
+    } else {
+        var_0 = 0;
+    }
+    return var_0;
+}
+
+u64? buddy-manny-hatchet-vs-inf-right-neck-hack-finisher-sync__melee-event-list@db8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    set-object-health(arg_2, 1.00);
+    u64? var_0 = add-melee-weapon-blood(arg_1, 0.20);
+    return var_0;
+}
+
+u64? buddy-manny-hatchet-vs-inf-right-neck-hack-finisher-sync(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = melee-fact-set-bool(arg_2, doomed?, 1);
+    return var_0;
+}
+
+u16 buddy-manny-hatchet-vs-inf-left-neck-hack-finisher__melee-attack@280(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = target-is-stunned?(arg_2);
+    u16 var_1;
+    if (var_0) {
+        var_1 = 22;
+    } else {
+        var_1 = 19;
+    }
+    return var_1;
+}
+
+u64? buddy-manny-hatchet-vs-inf-left-neck-hack-finisher__start-func-array@e58(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = is-rogue-mode?();
+    u64? var_1 = is-rogue-mode?();
+    u64? var_2 = melee-fact-get-bool(arg_2, #C5AC6809F76060D9);
+    bool var_3 = !var_0 && var_1 && !var_2;
+    return var_3;
+}
+
+u64? buddy-manny-hatchet-vs-inf-left-neck-hack-finisher(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    if (!!(arg_1 == 0)) {
+        melee-debug-text-file-line-fail("(valid-symbol? attacker)", "t2r/src/game/scriptx/melee/buddy-standing/imports/buddy-standing-macros.dcx", 998);
+    }
+    melee-debug-text-file-line-fail("(valid-symbol? defender)", "t2r/src/game/scriptx/melee/buddy-standing/imports/buddy-standing-macros.dcx", 999);
+    bool var_0 = !(arg_1 == 0) && !(arg_2 == 0) && !(arg_2 == 0);
+    return var_0;
+}
+
+u64? buddy-manny-hatchet-vs-inf-left-neck-hack-finisher__melee-event-list@de8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    f32 var_0;
+    if (!(0.00 == 0.00)) {
+        var_0 = 0.00;
+    } else {
+        var_0 = 1.00;
+    }
+    u64? var_1 = play-melee-facial-gesture(arg_1, 22, var_0, 0.10);
+    return var_1;
+}
+
+u64? buddy-manny-hatchet-vs-inf-right-neck-hack-finisher(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    if (!!(arg_1 == 0)) {
+        melee-debug-text-file-line-fail("(valid-symbol? attacker)", "t2r/src/game/scriptx/melee/buddy-standing/imports/buddy-standing-macros.dcx", 998);
+    }
+    melee-debug-text-file-line-fail("(valid-symbol? defender)", "t2r/src/game/scriptx/melee/buddy-standing/imports/buddy-standing-macros.dcx", 999);
+    bool var_0 = !(arg_1 == 0) && !(arg_2 == 0) && !(arg_2 == 0);
+    return var_0;
+}
+
+u16 buddy-manny-hatchet-vs-inf-right-neck-hack-finisher-sync__melee-attack@90(i64 arg_0, u64? arg_1, i64 arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    u16 var_0;
+    if (arg_0 == arg_2) {
+        melee-fact-remove(arg_2, force-disable-melee-targeting);
+        u64? var_1 = melee-fact-get-bool(arg_2, doomed?);
+        if (var_1 != nullptr) {
+            u64? var_2 = npc-die(arg_2, 0, 0, 0, 1);
+            var_0 = var_2;
+        } else {
+            var_0 = 0;
+        }
+    } else {
+        var_0 = 0;
+    }
+    return var_0;
+}
+
+u64? buddy-manny-hatchet-vs-inf-right-neck-hack-finisher-sync__melee-event-list@db8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    set-object-health(arg_2, 1.00);
+    u64? var_0 = add-melee-weapon-blood(arg_1, 0.20);
+    return var_0;
+}
+
+u64? buddy-manny-hatchet-vs-inf-right-neck-hack-finisher-sync(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = melee-fact-set-bool(arg_2, doomed?, 1);
+    return var_0;
+}
+
+u16 buddy-manny-hatchet-vs-inf-left-neck-hack-finisher__melee-attack@280(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = target-is-stunned?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        var_1 = 22;
+    } else {
+        var_1 = 19;
+    }
+    return var_1;
+}
+
+u64? buddy-manny-hatchet-vs-inf-left-neck-hack-finisher__start-func-array@e58(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = is-rogue-mode?();
+    u64? var_1 = is-rogue-mode?();
+    u64? var_2 = melee-fact-get-bool(arg_2, #C5AC6809F76060D9);
+    bool var_3 = !var_0 && var_1 && !var_2;
+    return var_3;
+}
+
+u64? buddy-manny-hatchet-vs-inf-left-neck-hack-finisher(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    if (!(arg_1 == 0) == nullptr) {
+        melee-debug-text-file-line-fail("(valid-symbol? attacker)", "t2r/src/game/scriptx/melee/buddy-standing/imports/buddy-standing-macros.dcx", 998);
+    }
+    melee-debug-text-file-line-fail("(valid-symbol? defender)", "t2r/src/game/scriptx/melee/buddy-standing/imports/buddy-standing-macros.dcx", 999);
+    bool var_0 = !(arg_1 == 0) && !(arg_2 == 0) && !(arg_2 == 0);
+    return var_0;
+}
+
+u64? buddy-manny-hatchet-vs-inf-left-neck-hack-finisher__melee-event-list@de8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    f32 var_0;
+    if ((0.00 == 0.00) == nullptr) {
+        var_0 = 0.00;
+    } else {
+        var_0 = 1.00;
+    }
+    u64? var_1 = play-melee-facial-gesture(arg_1, 22, var_0, 0.10);
+    return var_1;
+}
+
+u64? buddy-manny-hatchet-vs-inf-right-neck-hack-finisher(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    if (!(arg_1 == 0) == nullptr) {
+        melee-debug-text-file-line-fail("(valid-symbol? attacker)", "t2r/src/game/scriptx/melee/buddy-standing/imports/buddy-standing-macros.dcx", 998);
+    }
+    melee-debug-text-file-line-fail("(valid-symbol? defender)", "t2r/src/game/scriptx/melee/buddy-standing/imports/buddy-standing-macros.dcx", 999);
+    bool var_0 = !(arg_1 == 0) && !(arg_2 == 0) && !(arg_2 == 0);
+    return var_0;
+}
+

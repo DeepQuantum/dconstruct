@@ -25,7 +25,7 @@ void logical_not_expr::pseudo_racket(std::ostream &os) const {
         using T = std::decay_t<decltype(rhs_type)>;
 
         if constexpr (is_primitive<T>) {
-            if (is_integral(rhs_type.m_type)) {
+            if (is_integral(rhs_type.m_type) || rhs_type.m_type == primitive_kind::NULLPTR) {
                 return std::nullopt;
             } else {
                 return "expected integral type for logical not but got " + type_to_declaration_string(rhs_type);
@@ -52,6 +52,7 @@ void logical_not_expr::pseudo_racket(std::ostream &os) const {
             case primitive_kind::SID: 
             case primitive_kind::BOOL:    return std::make_unique<literal>(!std::get<bool>(value));
             case primitive_kind::STRING:  return std::make_unique<literal>(!(std::get<std::string>(value).empty()));
+            case primitive_kind::NULLPTR: return std::make_unique<literal>(true);
             default: {
                 const std::optional<primitive_number> num_opt = get_number(value);
                 if (num_opt.has_value()) {
@@ -73,7 +74,7 @@ void logical_not_expr::pseudo_racket(std::ostream &os) const {
         return rhs_res;
     }
     
-    const emission_res not_destination = fn.get_destination(destination);
+    const emission_res not_destination = fn.fix_destination(destination);
     if (!not_destination) {
         return not_destination;
     }

@@ -756,3 +756,1519 @@ u16 play-accessibility-control-lost-control-sound() {
     return var_1;
 }
 
+u64? accessibility-set-custom-state(u16 arg_0, u64? arg_1) {
+    u64? var_0 = new-boxed-value(7, arg_0);
+    u64? var_1 = new-boxed-value(7, arg_1);
+    u64? var_2 = send-event(set-custom-state, ss-accessibility-status, var_0, var_1);
+    return var_2;
+}
+
+u16 play-accessibility-interact-sound-at-position(u64? arg_0, bool arg_1, f32 arg_2, bool arg_3) {
+    u64? var_0 = is-traversal-audio-cues?();
+    u16 var_1;
+    if (var_0) {
+        f32 var_2;
+        if (arg_2 < 0.50) {
+            var_2 = arg_2;
+        } else {
+            var_2 = 0.50;
+        }
+        u64? var_3 = enough-time-since-player-fact?(accessibility-cue, var_2);
+        u64? var_4 = enough-time-since-player-fact?(accessibility-triangle-cue, arg_2);
+        u64? var_5 = enough-time-since-player-fact?(accessibility-triangle-distant-cue, arg_2);
+        if (var_3 && var_4 || !arg_3 && var_5) {
+            if (arg_3) {
+                play-accessibility-sound-at-position(sfx-ui-acc-prompt-distant-triangle-button, arg_0, 0);
+            } else {
+                play-accessibility-sound-at-position(sfx-ui-acc-prompt-triangle-button, arg_0, 0);
+            }
+            if (!(arg_1 == 0)) {
+                play-accessibility-sound-at-position(arg_1, arg_0, 0);
+            }
+            string var_6;
+            if (arg_3) {
+                var_6 = "ACCESSIBILITY AUDIO CUE - INTERACT (DISTANT)";
+            } else {
+                var_6 = "ACCESSIBILITY AUDIO CUE - INTERACT PRESS";
+            }
+            f32 var_7;
+            if (arg_2 > 0.20) {
+                var_7 = arg_2;
+            } else {
+                var_7 = 0.20;
+            }
+            debug-draw-string-centered(var_6, 600.00, 3, var_7, 2.00, 0, 0);
+            set-player-fact-time(accessibility-cue);
+            if (arg_3) {
+                u64? var_8 = set-player-fact-time(accessibility-triangle-distant-cue);
+                var_1 = var_8;
+            } else {
+                u64? var_9 = set-player-fact-time(accessibility-triangle-cue);
+                var_1 = var_9;
+            }
+        } else {
+            var_1 = 0;
+        }
+    }
+    return var_1;
+}
+
+u64? remove-fake-enemy-for-enhanced-listen-mode(u64? arg_0) {
+    u64? var_0 = new-boxed-value(7, arg_0);
+    u64? var_1 = send-event(remove-fake-enemy, ss-player-blind-listen-mode, var_0);
+    return var_1;
+}
+
+u16 play-accessibility-circle-hold-sound-at-position(u64? arg_0) {
+    u64? var_0 = is-traversal-audio-cues?();
+    u64? var_1 = enough-time-since-player-fact?(accessibility-cue, 0.50);
+    u64? var_2 = enough-time-since-player-fact?(accessibility-circle-cue, 2.00);
+    u16 var_3;
+    if (var_0 && var_1 && var_2) {
+        play-accessibility-sound-at-position(sfx-ui-acc-prompt-circle-button-mash, arg_0, 0);
+        debug-draw-string-centered("ACCESSIBILITY AUDIO CUE - CROUCH HOLD", 600.00, 2, 2.00, 2.00, 0, 0);
+        set-player-fact-time(accessibility-cue);
+        u64? var_4 = set-player-fact-time(accessibility-circle-cue);
+        var_3 = var_4;
+    } else {
+        var_3 = 0;
+    }
+    return var_3;
+}
+
+u16 play-accessibility-warning-melee-attack-sound-at-position(u64? arg_0) {
+    u64? var_0 = is-combat-audio-cues?();
+    u64? var_1 = is-rogue-mode?();
+    u64? var_2 = rogue-get-player-character();
+    u64? var_3 = rogue-get-player-character();
+    u64? var_4 = rogue-get-player-character();
+    u16 var_5;
+    if (var_0 || !var_1 && var_2 != 3 && var_3 != 5 && var_4 != 11) {
+        u64? var_6 = play-accessibility-sound-at-position(sfx-ui-acc-warning-melee-attack-incoming, arg_0, 1);
+        var_5 = var_6;
+    } else {
+        var_5 = 0;
+    }
+    return var_5;
+}
+
+u64? valid-sonar-goal-position?(f32 arg_0) {
+    u64? var_0 = alloc-point(0.00, 0.00, 0.00, 0);
+    u64? var_1 = distance-between-points(arg_0, var_0);
+    bool var_2 = arg_0 && var_1 > 0.01;
+    return var_2;
+}
+
+sid #15174E6754A128AD() {
+    sid var_0;
+    if (#47A5AC6E9610149A != nullptr && *(u8*)#47A5AC6E9610149A) {
+        u16 var_1;
+        if (*(i32*)(#47A5AC6E9610149A + 4) == 0) {
+            var_1 = sfx-hud-l3-look-at-menu;
+        } else {
+            u16 var_2;
+            if (*(i32*)(#47A5AC6E9610149A + 4) == 1) {
+                var_2 = sfx-ui-acc-path-locate;
+            } else {
+                u16 var_3;
+                if (*(i32*)(#47A5AC6E9610149A + 4) == 2) {
+                    var_3 = sfx-ui-acc-path-locate-item;
+                } else if (*(i32*)(#47A5AC6E9610149A + 4) == 3) {
+                    var_3 = sfx-ui-acc-path-locate-menu;
+                } else {
+                    var_3 = 0;
+                }
+                var_2 = var_3;
+            }
+            var_1 = var_2;
+        }
+        var_0 = var_1;
+    } else {
+        var_0 = #045F8E50E6CACE28;
+    }
+    return var_0;
+}
+
+u16 play-accessibility-jump-sound-at-position(u64? arg_0, bool arg_1, bool arg_2) {
+    u64? var_0 = is-traversal-audio-cues?();
+    u64? var_1 = enough-time-since-player-fact?(accessibility-cue, 0.50);
+    u64? var_2 = enough-time-since-player-fact?(accessibility-x-cue, 2.00);
+    u64? var_3 = enough-time-since-player-fact?(accessibility-x-distant-cue, 2.00);
+    u16 var_4;
+    if (var_0 && var_1 && var_2 || !arg_2 && var_3) {
+        if (arg_2) {
+            play-accessibility-sound-at-position(sfx-ui-acc-prompt-distant-x-button, arg_0, 0);
+        } else {
+            play-accessibility-sound-at-position(sfx-ui-acc-prompt-x-button, arg_0, 0);
+        }
+        if (!(arg_1 == 0)) {
+            play-accessibility-sound-at-position(arg_1, arg_0, 0);
+        }
+        string var_5;
+        if (arg_2) {
+            var_5 = "ACCESSIBILITY AUDIO CUE - JUMP (DISTANT)";
+        } else {
+            var_5 = "ACCESSIBILITY AUDIO CUE - JUMP";
+        }
+        debug-draw-string-centered(var_5, 600.00, 4, 2.00, 2.00, 0, 0);
+        set-player-fact-time(accessibility-cue);
+        if (arg_2) {
+            u64? var_6 = set-player-fact-time(accessibility-x-distant-cue);
+            var_4 = var_6;
+        } else {
+            u64? var_7 = set-player-fact-time(accessibility-x-cue);
+            var_4 = var_7;
+        }
+    } else {
+        var_4 = 0;
+    }
+    return var_4;
+}
+
+u64? set-accessibility-pathfind-goal(u64? arg_0) {
+    u64? var_0 = new-boxed-value(7, arg_0);
+    u64? var_1 = send-event(set-goal, ss-accessibility-pathfind, var_0);
+    return var_1;
+}
+
+u16 play-accessibility-control-regained-control-sound() {
+    u64? var_0 = is-traversal-audio-cues?();
+    u16 var_1;
+    if (var_0) {
+        play-sound(sfx-ui-acc-player-control-regained, 0);
+        u64? var_2 = debug-draw-string-centered("ACCESSIBILITY AUDIO CUE - CONTROL REGAINED", 600.00, 9, 2.00, 2.00, 0, 0);
+        var_1 = var_2;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 play-accessibility-square-sound-at-position(u64? arg_0, bool arg_1, f32 arg_2) {
+    u64? var_0 = is-traversal-audio-cues?();
+    u64? var_1 = is-combat-audio-cues?();
+    u16 var_2;
+    if (var_0 && var_1) {
+        f32 var_3;
+        if (arg_2 < 0.50) {
+            var_3 = arg_2;
+        } else {
+            var_3 = 0.50;
+        }
+        u64? var_4 = enough-time-since-player-fact?(accessibility-cue, var_3);
+        u64? var_5 = enough-time-since-player-fact?(accessibility-square-cue, arg_2);
+        if (var_4 && var_5) {
+            play-accessibility-sound-at-position(sfx-ui-acc-prompt-square-button, arg_0, 1);
+            if (!(arg_1 == 0)) {
+                play-accessibility-sound-at-position(arg_1, arg_0, 1);
+            }
+            debug-draw-string-centered("ACCESSIBILITY AUDIO CUE - MELEE PRESS", 600.00, 6, 2.00, 2.00, 0, 0);
+            set-player-fact-time(accessibility-cue);
+            u64? var_6 = set-player-fact-time(accessibility-square-cue);
+            var_2 = var_6;
+        } else {
+            var_2 = 0;
+        }
+    }
+    return var_2;
+}
+
+u16 play-accessibility-interact-hold-sound-at-position(u64? arg_0, bool arg_1) {
+    u64? var_0 = is-traversal-audio-cues?();
+    u64? var_1 = enough-time-since-player-fact?(accessibility-cue, 0.50);
+    u64? var_2 = enough-time-since-player-fact?(accessibility-triangle-cue, 2.00);
+    u16 var_3;
+    if (var_0 && var_1 && var_2) {
+        play-accessibility-sound-at-position(sfx-ui-acc-prompt-triangle-button-mash, arg_0, 0);
+        if (!(arg_1 == 0)) {
+            play-accessibility-sound-at-position(arg_1, arg_0, 0);
+        }
+        debug-draw-string-centered("ACCESSIBILITY AUDIO CUE - INTERACT HOLD", 600.00, 3, 2.00, 2.00, 0, 0);
+        set-player-fact-time(accessibility-cue);
+        u64? var_4 = set-player-fact-time(accessibility-triangle-cue);
+        var_3 = var_4;
+    } else {
+        var_3 = 0;
+    }
+    return var_3;
+}
+
+u64? get-sonar-goal-navmesh-position(sid arg_0, u64? arg_1) {
+    u64? var_0 = is-npc?(arg_0);
+    u64? var_1;
+    if (var_0) {
+        u64? var_2 = get-object-locator(arg_0);
+        u64? var_3 = find-closest-point-on-nav-mesh(var_2, 2.00, 2.00, 0.00, 0, 0);
+        u64? var_4 = get-locator-position(var_3);
+        var_1 = var_4;
+    } else {
+        u64? var_5 = tag-boolean(fake-pickup, arg_0);
+        u64? var_6 = tag-symbol(override-goal, arg_0);
+        if (var_5 || !(var_6 == 0)) {
+            if (arg_0 == item-pickup-player-upgrade-generic-339) {
+                u64? var_7 = tag-symbol(override-goal, arg_0);
+                u64? var_8 = get-spawner-locator(var_7, 1);
+                u64? var_9 = find-closest-point-on-nav-mesh(var_8, 0.50, 0.50, 0.00, 0, 0);
+                u64? var_10 = get-locator-position(var_9);
+                var_1 = var_10;
+            } else {
+                u64? var_11 = get-point-for-min-path-distance-to-interactable(arg_0, arg_1);
+                var_1 = var_11;
+            }
+        }
+    }
+    return var_1;
+}
+
+u64? disallow-invisible-while-prone/f() {
+    u64? var_0 = send-event(disallow-invisible-while-prone, ss-accessibility-invisible-prone);
+    return var_0;
+}
+
+u16 play-accessibility-break-glass-throw-sound-at-position(u64? arg_0) {
+    u64? var_0 = player-can-break-throw-glass?();
+    u64? var_1 = is-traversal-audio-cues?();
+    u64? var_2 = enough-time-since-player-fact?(accessibility-cue, 0.50);
+    u64? var_3 = enough-time-since-player-fact?(accessibility-break-glass-cue, 2.00);
+    u64? var_4 = enough-time-since-player-fact?(accessibility-break-glass-distant-cue, 2.00);
+    u16 var_5;
+    if (var_1 && var_2 && var_3 || !!var_0 && var_4) {
+        if (!var_0) {
+            play-accessibility-sound-at-position(sfx-ui-acc-prompt-distant-L1-button, arg_0, 1);
+            play-accessibility-sound-at-position(sfx-ui-acc-interact-glass-break-distant, arg_0, 1);
+            debug-draw-string(arg_0, "ACCESSIBILITY AUDIO CUE - THROW AT GLASS (DISTANT)", 9, 2.00, 1, 0.50, 0, 0);
+        } else {
+            play-accessibility-sound-at-position(sfx-ui-acc-prompt-L1-button, arg_0, 1);
+            u64? var_6 = enough-time-since-player-fact?(accessibility-break-glass-cue, 2.50);
+            if (var_6) {
+                play-accessibility-sound-at-position(sfx-ui-acc-interact-glass-break, arg_0, 1);
+            }
+            debug-draw-string(arg_0, "ACCESSIBILITY AUDIO CUE - THROW AT GLASS", 9, 2.00, 1, 0.50, 0, 0);
+        }
+        if (!var_0) {
+            set-player-fact-time(accessibility-break-glass-distant-cue);
+        } else {
+            set-player-fact-time(accessibility-break-glass-cue);
+        }
+        u64? var_7 = set-player-fact-time(accessibility-cue);
+        var_5 = var_7;
+    } else {
+        var_5 = 0;
+    }
+    return var_5;
+}
+
+u16 send-fake-accessibility-pathfind() {
+    u64? var_0 = is-navigation-assistance-accessibility?();
+    u64? var_1 = joypad-command-active?(accessibility-pathfind, 6);
+    u16 var_2;
+    if (var_0 && var_1) {
+        u64? var_3 = send-event(fake-accessibility-pathfind, ss-accessibility-pathfind);
+        var_2 = var_3;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u64? player-is-accessibility-invisible?() {
+    u64? var_0 = fact-get-bool-safe(player, accessibility-invisible-prone);
+    return var_0;
+}
+
+u64? set-accessibility-pathfind-goal-boat(u64? arg_0) {
+    u64? var_0 = new-boxed-value(7, arg_0);
+    u64? var_1 = send-event(set-goal-boat, ss-accessibility-pathfind, var_0);
+    return var_1;
+}
+
+u64? clear-accessibility-pathfind-goal-boat() {
+    u64? var_0 = set-accessibility-pathfind-goal-boat(0);
+    return var_0;
+}
+
+u16 send-fake-accessibility-pathfind-no-goal() {
+    u64? var_0 = is-navigation-assistance-accessibility?();
+    u64? var_1 = joypad-command-active?(accessibility-pathfind, 6);
+    u16 var_2;
+    if (var_0 && var_1) {
+        u64? var_3 = send-event(fake-accessibility-no-goal, ss-accessibility-pathfind);
+        var_2 = var_3;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u16 #6E75E56BC4F13FFB() {
+    u16 var_0;
+    if (#47A5AC6E9610149A != nullptr && *(u8*)#47A5AC6E9610149A) {
+        var_0 = *(u8*)(#47A5AC6E9610149A + 20);
+    } else {
+        var_0 = 1;
+    }
+    return var_0;
+}
+
+u16 start-accessibility-rumble(u64? arg_0) {
+    u64? var_0 = is-combat-vibration?();
+    u64? var_1 = entity-exists?(player);
+    u64? var_2 = player-in-state?(Death);
+    u16 var_3;
+    if (var_0 || !var_1 || var_2) {
+        u64? var_4 = fact-get-bool-safe(player, buddy-dead);
+        if (!var_4) {
+            u64? var_5 = start-rumble(arg_0, 0);
+            var_3 = var_5;
+        } else {
+            var_3 = 0;
+        }
+    }
+    return var_3;
+}
+
+u16 play-accessibility-square-mash-sound-at-position(u64? arg_0, bool arg_1, f32 arg_2) {
+    u64? var_0 = is-traversal-audio-cues?();
+    u64? var_1 = is-combat-audio-cues?();
+    u16 var_2;
+    if (var_0 && var_1) {
+        f32 var_3;
+        if (arg_2 < 0.50) {
+            var_3 = arg_2;
+        } else {
+            var_3 = 0.50;
+        }
+        u64? var_4 = enough-time-since-player-fact?(accessibility-cue, var_3);
+        u64? var_5 = enough-time-since-player-fact?(accessibility-square-cue, arg_2);
+        if (var_4 && var_5) {
+            play-accessibility-sound-at-position(sfx-ui-acc-prompt-square-button-mash, arg_0, 1);
+            if (!(arg_1 == 0)) {
+                play-accessibility-sound-at-position(arg_1, arg_0, 1);
+            }
+            f32 var_6;
+            if (arg_2 > 0.20) {
+                var_6 = arg_2;
+            } else {
+                var_6 = 0.20;
+            }
+            debug-draw-string-centered("ACCESSIBILITY AUDIO CUE - MELEE MASH", 600.00, 6, var_6, 2.00, 0, 0);
+            set-player-fact-time(accessibility-cue);
+            u64? var_7 = set-player-fact-time(accessibility-square-cue);
+            var_2 = var_7;
+        } else {
+            var_2 = 0;
+        }
+    }
+    return var_2;
+}
+
+f32 get-accessibility-invisible-timer() {
+    u64? var_0 = get-hidden-while-prone-mode();
+    f32 var_1;
+    if (var_0 != 1) {
+        var_1 = -1.00;
+    } else {
+        u64? var_2 = player-is-accessibility-invisible?();
+        if (!var_2) {
+            var_1 = 0.00;
+        } else {
+            u64? var_3 = timer-running?(timer, ss-accessibility-invisible-prone);
+            if (var_3) {
+                u64? var_4 = get-float(timer, ss-accessibility-invisible-prone);
+                var_1 = var_4;
+            } else {
+                u64? var_5 = get-difficulty-detail-stealth();
+                var_1 = *(f32*)(var_5 + 148);
+            }
+        }
+    }
+    return var_1;
+}
+
+u16 notify-skippable-puzzle(i64 arg_0, u64? arg_1) {
+    notify-skippable-puzzle/f(arg_0);
+    u64? var_0 = is-text-to-speech-enabled?();
+    u64? var_1 = current-task-elapsed-time();
+    u64? var_2 = text-to-speech-playing?();
+    u64? var_3 = is-any-major-character-speaking?();
+    u16 var_4;
+    if (arg_1 && var_0 && var_1 > 1.50 && !var_2 && !var_3) {
+        u64? var_5 = fact-get-dictionary(player);
+        u64? var_6 = fact-lookup-symbol(var_5, puzzle-skip, 0);
+        u64? var_7 = enough-time-since-player-fact?(puzzle-skip-cue, 60.00);
+        u64? var_8 = is-skip-puzzle-enabled?();
+        u16 var_9;
+        if (var_7 && arg_0 != var_6 && var_8) {
+            u64? var_10 = new-boxed-value(7, ACCESSIBILITY_SKIP_PUZZLE_PROMPT);
+            speak-text-to-speech-formatted(var_10, 2, 0, 1);
+            u64? var_11 = new-boxed-value(7, arg_0);
+            fact-set(player, puzzle-skip, var_11);
+            u64? var_12 = set-player-fact-time(puzzle-skip-cue);
+            var_9 = var_12;
+        } else {
+            u64? var_13 = get-svar-as-boolean(skip-puzzle-tutorial);
+            if (!var_13) {
+                set-svar-as-boolean(skip-puzzle-tutorial, 1);
+                u64? var_14 = new-boxed-value(7, ACCESSIBILITY_SKIP_PUZZLE_PROMPT_2);
+                speak-text-to-speech-formatted(var_14, 2, 0, 1);
+                u64? var_15 = new-boxed-value(7, arg_0);
+                fact-set(player, puzzle-skip, var_15);
+                u64? var_16 = set-player-fact-time(puzzle-skip-cue);
+                var_9 = var_16;
+            } else {
+                var_9 = 0;
+            }
+        }
+        var_4 = var_9;
+    } else {
+        var_4 = 0;
+    }
+    return var_4;
+}
+
+u16 play-accessibility-grapple-square-mash-sound-at-position(u64? arg_0) {
+    u64? var_0 = is-combat-audio-cues?();
+    u16 var_1;
+    if (var_0) {
+        u64? var_2 = play-accessibility-square-mash-sound-at-position(arg_0, 0, 0.50);
+        var_1 = var_2;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 enough-time-since-player-fact?(u64? arg_0, f32 arg_1) {
+    u64? var_0 = fact-exists?(player, arg_0);
+    u16 var_1;
+    if (var_0) {
+        u64? var_2 = fact-get-dictionary(player);
+        u64? var_3 = fact-lookup-time-frame(var_2, arg_0, 0);
+        u64? var_4 = get-seconds-since(var_3, 0);
+        var_1 = var_4 > arg_1;
+    } else {
+        var_1 = 1;
+    }
+    return var_1;
+}
+
+sid #94C24F94119B8C7A() {
+    sid var_0;
+    if (#47A5AC6E9610149A != nullptr && *(u8*)#47A5AC6E9610149A) {
+        u16 var_1;
+        if (*(i32*)(#47A5AC6E9610149A + 8) == 0) {
+            var_1 = sfx-hud-l3-look-at-menu;
+        } else {
+            u16 var_2;
+            if (*(i32*)(#47A5AC6E9610149A + 8) == 1) {
+                var_2 = sfx-ui-acc-path-locate;
+            } else {
+                u16 var_3;
+                if (*(i32*)(#47A5AC6E9610149A + 8) == 2) {
+                    var_3 = sfx-ui-acc-path-locate-item;
+                } else if (*(i32*)(#47A5AC6E9610149A + 8) == 3) {
+                    var_3 = sfx-ui-acc-path-locate-menu;
+                } else {
+                    var_3 = 0;
+                }
+                var_2 = var_3;
+            }
+            var_1 = var_2;
+        }
+        var_0 = var_1;
+    } else {
+        var_0 = sfx-ui-acc-path-locate;
+    }
+    return var_0;
+}
+
+u16 play-accessibility-rope-throw-sound-at-position(u64? arg_0) {
+    u64? var_0 = player-is-aiming?();
+    u64? var_1 = player-rope-can-throw();
+    u64? var_2 = player-get-lock-on-rope-target();
+    bool var_3 = var_0 && var_1 && !(var_2 == 0);
+    u64? var_4 = get-player-carry-object-id();
+    u64? var_5 = is-traversal-audio-cues?();
+    u64? var_6 = enough-time-since-player-fact?(accessibility-cue, 0.50);
+    u64? var_7 = enough-time-since-player-fact?(accessibility-rope-cue, 2.00);
+    u64? var_8 = enough-time-since-player-fact?(accessibility-rope-distant-cue, 2.00);
+    u16 var_9;
+    if (!(var_4 == 0) && var_5 && var_6 && var_7 || !!var_3 && var_8) {
+        if (!var_3) {
+            play-accessibility-sound-at-position(sfx-ui-acc-prompt-distant-L1-button, arg_0, 1);
+            play-accessibility-sound-at-position(sfx-ui-acc-interact-rope-throw-distant, arg_0, 1);
+            debug-draw-string(arg_0, "ACCESSIBILITY AUDIO CUE - ROPE THROW (DISTANT)", 9, 2.00, 1, 0.50, 0, 0);
+        } else {
+            play-accessibility-sound-at-position(sfx-ui-acc-prompt-L1-button, arg_0, 1);
+            u64? var_10 = enough-time-since-player-fact?(accessibility-rope-cue, 2.50);
+            if (var_10) {
+                play-accessibility-sound-at-position(sfx-ui-acc-interact-rope-throw, arg_0, 1);
+            }
+            debug-draw-string(arg_0, "ACCESSIBILITY AUDIO CUE - ROPE THROW", 9, 2.00, 1, 0.50, 0, 0);
+        }
+        if (!var_3) {
+            set-player-fact-time(accessibility-rope-distant-cue);
+        } else {
+            set-player-fact-time(accessibility-rope-cue);
+        }
+        u64? var_11 = set-player-fact-time(accessibility-cue);
+        var_9 = var_11;
+    } else {
+        var_9 = 0;
+    }
+    return var_9;
+}
+
+u16 play-accessibility-sound-at-position(u64? arg_0, u64? arg_1, bool arg_2) {
+    u64? var_0 = text-to-speech-playing?();
+    u64? var_1 = entity-exists?(player);
+    u64? var_2 = player-in-state?(Death);
+    u16 var_3;
+    if (var_0 || !arg_2 || !var_1 || var_2) {
+        u64? var_4 = fact-get-bool-safe(player, buddy-dead);
+        if (!var_4) {
+            u64? var_5 = play-sound-at-position(arg_0, arg_1, 0, 0);
+            var_3 = var_5;
+        } else {
+            var_3 = 0;
+        }
+    }
+    return var_3;
+}
+
+u64? accessibility-suppress-control-sounds/f() {
+    u64? var_0 = send-event(suppress-control-sounds, ss-accessibility-lost-control-sound);
+    return var_0;
+}
+
+u64? enable-closest-tap(u64? arg_0, u64? arg_1) {
+    u64? var_0 = get-closest-in-group(arg_0, arg_1, 0, 0, 1, 0);
+    u64? var_1 = darray-count(arg_0);
+    begin-foreach();
+    for (u64 i = 0; i < var_1; i++) {
+        u64? var_2 = darray-at(arg_0, i);
+        u16 var_3;
+        if (var_2 && *(u16*)(var_2 + 12) == 7) {
+            var_3 = *(u64*)var_2;
+        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
+            var_3 = *(u64*)var_2;
+        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
+            var_3 = *(u64*)var_2;
+        } else {
+            var_3 = 0;
+        }
+        if (var_3 == var_0) {
+            enable-action-pack(var_3, 1);
+        } else {
+            disable-action-pack(var_3);
+        }
+    }
+    u64? var_4 = end-foreach();
+    return var_4;
+}
+
+u16 play-accessibility-squeeze-through-sound-at-position(u64? arg_0, bool arg_1) {
+    u64? var_0 = enough-time-since-player-fact?(accessibility-squeeze-through, 3.00);
+    if (var_0 && !arg_1) {
+        play-accessibility-jump-sound-at-position(arg_0, sfx-ui-acc-interact-squeeze-through, arg_1);
+    } else {
+        play-accessibility-jump-sound-at-position(arg_0, 0, arg_1);
+    }
+    u16 var_1;
+    if (!arg_1) {
+        u64? var_2 = set-player-fact-time(accessibility-squeeze-through);
+        var_1 = var_2;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+sid #AAA8A3532AAF4880() {
+    sid var_0;
+    if (#47A5AC6E9610149A != nullptr && *(u8*)#47A5AC6E9610149A) {
+        u16 var_1;
+        if (*(i32*)(#47A5AC6E9610149A + 16) == 0) {
+            var_1 = at-initial-wave-spawn;
+        } else {
+            u16 var_2;
+            if (*(i32*)(#47A5AC6E9610149A + 16) == 1) {
+                var_2 = at-live-enemy-centroid;
+            } else {
+                u16 var_3;
+                if (*(i32*)(#47A5AC6E9610149A + 16) == 2) {
+                    var_3 = at-true-combat-goal;
+                } else if (*(i32*)(#47A5AC6E9610149A + 16) == 3) {
+                    var_3 = at-centroid-on-swap-true-goal-on-L3;
+                } else {
+                    var_3 = 0;
+                }
+                var_2 = var_3;
+            }
+            var_1 = var_2;
+        }
+        var_0 = var_1;
+    } else {
+        var_0 = at-centroid-on-swap-true-goal-on-L3;
+    }
+    return var_0;
+}
+
+u64? add-fake-enemy-for-enhanced-listen-mode(u64? arg_0) {
+    u64? var_0 = new-boxed-value(7, arg_0);
+    u64? var_1 = send-event(add-fake-enemy, ss-player-blind-listen-mode, var_0);
+    return var_1;
+}
+
+u64? player-can-break-throw-glass?() {
+    u64? var_0 = player-is-aiming?();
+    u64? var_1 = get-player-weapon-id();
+    u64? var_2 = get-player-weapon-id();
+    u64? var_3 = player-get-aiming-arc-target(1);
+    u64? var_4 = get-current-weapon-type();
+    u64? var_5 = get-current-weapon-type();
+    u64? var_6 = get-player-weapon-id();
+    u64? var_7 = player-has-weapon-and-ammo?(var_6);
+    u64? var_8 = player-get-lock-on-aim-target();
+    bool var_9 = var_0 || var_1 == brick && var_2 == bottle || !(var_3 == 0) || var_4 == 1 && var_5 == 2 && var_7 && !(var_8 == 0);
+    return var_9;
+}
+
+u64? clear-accessibility-pathfind-goal-horse() {
+    u64? var_0 = set-accessibility-pathfind-goal-horse(0);
+    return var_0;
+}
+
+u64? set-player-fact-time(u64? arg_0) {
+    u64? var_0 = get-current-timeframe(0);
+    u64? var_1 = new-boxed-value(8, var_0);
+    u64? var_2 = fact-set(player, arg_0, var_1);
+    return var_2;
+}
+
+u64? set-accessibility-pathfind-unavailable() {
+    u64? var_0 = send-event(set-goal-unavailable, ss-accessibility-pathfind);
+    return var_0;
+}
+
+u64? accessibility-invisible-start-location() {
+    u64? var_0 = get-point(prone-start-position, ss-accessibility-invisible-prone);
+    return var_0;
+}
+
+u64? interactable-set-accessibility-used(u64? arg_0) {
+    interactable-set-exclude-from-pickup-scan(arg_0, 1);
+    interactable-set-accessibility-sound-active(arg_0, 0);
+    interactable-set-accessibility-sound-active-sweetener(arg_0, 0);
+    interactable-set-accessibility-sound-interact(arg_0, 0);
+    interactable-set-accessibility-sound-interact-sweetener(arg_0, 0);
+    u64? var_0 = interactable-set-accessibility-sound-interact-error-sweetener(arg_0, 0);
+    return var_0;
+}
+
+u16 clear-accessibility-pathfind-goal(i64 arg_0) {
+    u64? var_0 = get-symbol(goal, ss-accessibility-pathfind);
+    u16 var_1;
+    if (arg_0 == 0 && var_0 == arg_0) {
+        u64? var_2 = set-accessibility-pathfind-goal(0);
+        var_1 = var_2;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u64? set-accessibility-pathfind-goal-horse(u64? arg_0) {
+    u64? var_0 = new-boxed-value(7, arg_0);
+    u64? var_1 = send-event(set-goal-horse, ss-accessibility-pathfind, var_0);
+    return var_1;
+}
+
+u16 play-accessibility-circle-sound-at-position(u64? arg_0) {
+    u64? var_0 = is-traversal-audio-cues?();
+    u64? var_1 = enough-time-since-player-fact?(accessibility-cue, 0.50);
+    u64? var_2 = enough-time-since-player-fact?(accessibility-circle-cue, 2.00);
+    u16 var_3;
+    if (var_0 && var_1 && var_2) {
+        play-accessibility-sound-at-position(sfx-ui-acc-prompt-circle-button, arg_0, 0);
+        debug-draw-string-centered("ACCESSIBILITY AUDIO CUE - CROUCH PRESS", 600.00, 2, 2.00, 2.00, 0, 0);
+        set-player-fact-time(accessibility-cue);
+        u64? var_4 = set-player-fact-time(accessibility-circle-cue);
+        var_3 = var_4;
+    } else {
+        var_3 = 0;
+    }
+    return var_3;
+}
+
+u16 play-accessibility-control-lost-control-sound() {
+    u64? var_0 = is-traversal-audio-cues?();
+    u16 var_1;
+    if (var_0) {
+        play-sound(sfx-ui-acc-player-control-lost, 0);
+        u64? var_2 = debug-draw-string-centered("ACCESSIBILITY AUDIO CUE - CONTROL LOST", 600.00, 9, 2.00, 2.00, 0, 0);
+        var_1 = var_2;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u64? accessibility-set-custom-state(u16 arg_0, u64? arg_1) {
+    u64? var_0 = new-boxed-value(7, arg_0);
+    u64? var_1 = new-boxed-value(7, arg_1);
+    u64? var_2 = send-event(set-custom-state, ss-accessibility-status, var_0, var_1);
+    return var_2;
+}
+
+u16 play-accessibility-interact-sound-at-position(u64? arg_0, bool arg_1, f32 arg_2, bool arg_3) {
+    u64? var_0 = is-traversal-audio-cues?();
+    u16 var_1;
+    if (var_0 != nullptr) {
+        f32 var_2;
+        if (arg_2 < 0.50) {
+            var_2 = arg_2;
+        } else {
+            var_2 = 0.50;
+        }
+        u64? var_3 = enough-time-since-player-fact?(accessibility-cue, var_2);
+        u64? var_4 = enough-time-since-player-fact?(accessibility-triangle-cue, arg_2);
+        u64? var_5 = enough-time-since-player-fact?(accessibility-triangle-distant-cue, arg_2);
+        if (var_3 != nullptr && var_4 != nullptr || arg_3 == nullptr && var_5 != nullptr) {
+            if (arg_3 != nullptr) {
+                play-accessibility-sound-at-position(sfx-ui-acc-prompt-distant-triangle-button, arg_0, 0);
+            } else {
+                play-accessibility-sound-at-position(sfx-ui-acc-prompt-triangle-button, arg_0, 0);
+            }
+            if ((arg_1 == 0) == nullptr) {
+                play-accessibility-sound-at-position(arg_1, arg_0, 0);
+            }
+            string var_6;
+            if (arg_3 != nullptr) {
+                var_6 = "ACCESSIBILITY AUDIO CUE - INTERACT (DISTANT)";
+            } else {
+                var_6 = "ACCESSIBILITY AUDIO CUE - INTERACT PRESS";
+            }
+            f32 var_7;
+            if (arg_2 > 0.20) {
+                var_7 = arg_2;
+            } else {
+                var_7 = 0.20;
+            }
+            debug-draw-string-centered(var_6, 600.00, 3, var_7, 2.00, 0, 0);
+            set-player-fact-time(accessibility-cue);
+            if (arg_3 != nullptr) {
+                u64? var_8 = set-player-fact-time(accessibility-triangle-distant-cue);
+                var_1 = var_8;
+            } else {
+                u64? var_9 = set-player-fact-time(accessibility-triangle-cue);
+                var_1 = var_9;
+            }
+        } else {
+            var_1 = 0;
+        }
+    }
+    return var_1;
+}
+
+u64? remove-fake-enemy-for-enhanced-listen-mode(u64? arg_0) {
+    u64? var_0 = new-boxed-value(7, arg_0);
+    u64? var_1 = send-event(remove-fake-enemy, ss-player-blind-listen-mode, var_0);
+    return var_1;
+}
+
+u16 play-accessibility-circle-hold-sound-at-position(u64? arg_0) {
+    u64? var_0 = is-traversal-audio-cues?();
+    u64? var_1 = enough-time-since-player-fact?(accessibility-cue, 0.50);
+    u64? var_2 = enough-time-since-player-fact?(accessibility-circle-cue, 2.00);
+    u16 var_3;
+    if (var_0 != nullptr && var_1 != nullptr && var_2 != nullptr) {
+        play-accessibility-sound-at-position(sfx-ui-acc-prompt-circle-button-mash, arg_0, 0);
+        debug-draw-string-centered("ACCESSIBILITY AUDIO CUE - CROUCH HOLD", 600.00, 2, 2.00, 2.00, 0, 0);
+        set-player-fact-time(accessibility-cue);
+        u64? var_4 = set-player-fact-time(accessibility-circle-cue);
+        var_3 = var_4;
+    } else {
+        var_3 = 0;
+    }
+    return var_3;
+}
+
+u16 play-accessibility-warning-melee-attack-sound-at-position(u64? arg_0) {
+    u64? var_0 = is-combat-audio-cues?();
+    u64? var_1 = is-rogue-mode?();
+    u64? var_2 = rogue-get-player-character();
+    u64? var_3 = rogue-get-player-character();
+    u64? var_4 = rogue-get-player-character();
+    u16 var_5;
+    if (var_0 != nullptr || var_1 == nullptr && var_2 != 3 && var_3 != 5 && var_4 != 11) {
+        u64? var_6 = play-accessibility-sound-at-position(sfx-ui-acc-warning-melee-attack-incoming, arg_0, 1);
+        var_5 = var_6;
+    } else {
+        var_5 = 0;
+    }
+    return var_5;
+}
+
+u64? valid-sonar-goal-position?(f32 arg_0) {
+    u64? var_0 = alloc-point(0.00, 0.00, 0.00, 0);
+    u64? var_1 = distance-between-points(arg_0, var_0);
+    bool var_2 = arg_0 && var_1 > 0.01;
+    return var_2;
+}
+
+sid #15174E6754A128AD() {
+    sid var_0;
+    if (#47A5AC6E9610149A != nullptr && *(u8*)#47A5AC6E9610149A != nullptr) {
+        u16 var_1;
+        if (*(i32*)(#47A5AC6E9610149A + 4) == 0) {
+            var_1 = sfx-hud-l3-look-at-menu;
+        } else {
+            u16 var_2;
+            if (*(i32*)(#47A5AC6E9610149A + 4) == 1) {
+                var_2 = sfx-ui-acc-path-locate;
+            } else {
+                u16 var_3;
+                if (*(i32*)(#47A5AC6E9610149A + 4) == 2) {
+                    var_3 = sfx-ui-acc-path-locate-item;
+                } else if (*(i32*)(#47A5AC6E9610149A + 4) == 3) {
+                    var_3 = sfx-ui-acc-path-locate-menu;
+                } else {
+                    var_3 = 0;
+                }
+                var_2 = var_3;
+            }
+            var_1 = var_2;
+        }
+        var_0 = var_1;
+    } else {
+        var_0 = #045F8E50E6CACE28;
+    }
+    return var_0;
+}
+
+u16 play-accessibility-jump-sound-at-position(u64? arg_0, bool arg_1, bool arg_2) {
+    u64? var_0 = is-traversal-audio-cues?();
+    u64? var_1 = enough-time-since-player-fact?(accessibility-cue, 0.50);
+    u64? var_2 = enough-time-since-player-fact?(accessibility-x-cue, 2.00);
+    u64? var_3 = enough-time-since-player-fact?(accessibility-x-distant-cue, 2.00);
+    u16 var_4;
+    if (var_0 != nullptr && var_1 != nullptr && var_2 != nullptr || arg_2 == nullptr && var_3 != nullptr) {
+        if (arg_2 != nullptr) {
+            play-accessibility-sound-at-position(sfx-ui-acc-prompt-distant-x-button, arg_0, 0);
+        } else {
+            play-accessibility-sound-at-position(sfx-ui-acc-prompt-x-button, arg_0, 0);
+        }
+        if ((arg_1 == 0) == nullptr) {
+            play-accessibility-sound-at-position(arg_1, arg_0, 0);
+        }
+        string var_5;
+        if (arg_2 != nullptr) {
+            var_5 = "ACCESSIBILITY AUDIO CUE - JUMP (DISTANT)";
+        } else {
+            var_5 = "ACCESSIBILITY AUDIO CUE - JUMP";
+        }
+        debug-draw-string-centered(var_5, 600.00, 4, 2.00, 2.00, 0, 0);
+        set-player-fact-time(accessibility-cue);
+        if (arg_2 != nullptr) {
+            u64? var_6 = set-player-fact-time(accessibility-x-distant-cue);
+            var_4 = var_6;
+        } else {
+            u64? var_7 = set-player-fact-time(accessibility-x-cue);
+            var_4 = var_7;
+        }
+    } else {
+        var_4 = 0;
+    }
+    return var_4;
+}
+
+u64? set-accessibility-pathfind-goal(u64? arg_0) {
+    u64? var_0 = new-boxed-value(7, arg_0);
+    u64? var_1 = send-event(set-goal, ss-accessibility-pathfind, var_0);
+    return var_1;
+}
+
+u16 play-accessibility-control-regained-control-sound() {
+    u64? var_0 = is-traversal-audio-cues?();
+    u16 var_1;
+    if (var_0 != nullptr) {
+        play-sound(sfx-ui-acc-player-control-regained, 0);
+        u64? var_2 = debug-draw-string-centered("ACCESSIBILITY AUDIO CUE - CONTROL REGAINED", 600.00, 9, 2.00, 2.00, 0, 0);
+        var_1 = var_2;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 play-accessibility-square-sound-at-position(u64? arg_0, bool arg_1, f32 arg_2) {
+    u64? var_0 = is-traversal-audio-cues?();
+    u64? var_1 = is-combat-audio-cues?();
+    u16 var_2;
+    if (var_0 != nullptr && var_1 != nullptr) {
+        f32 var_3;
+        if (arg_2 < 0.50) {
+            var_3 = arg_2;
+        } else {
+            var_3 = 0.50;
+        }
+        u64? var_4 = enough-time-since-player-fact?(accessibility-cue, var_3);
+        u64? var_5 = enough-time-since-player-fact?(accessibility-square-cue, arg_2);
+        if (var_4 != nullptr && var_5 != nullptr) {
+            play-accessibility-sound-at-position(sfx-ui-acc-prompt-square-button, arg_0, 1);
+            if ((arg_1 == 0) == nullptr) {
+                play-accessibility-sound-at-position(arg_1, arg_0, 1);
+            }
+            debug-draw-string-centered("ACCESSIBILITY AUDIO CUE - MELEE PRESS", 600.00, 6, 2.00, 2.00, 0, 0);
+            set-player-fact-time(accessibility-cue);
+            u64? var_6 = set-player-fact-time(accessibility-square-cue);
+            var_2 = var_6;
+        } else {
+            var_2 = 0;
+        }
+    }
+    return var_2;
+}
+
+u16 play-accessibility-interact-hold-sound-at-position(u64? arg_0, bool arg_1) {
+    u64? var_0 = is-traversal-audio-cues?();
+    u64? var_1 = enough-time-since-player-fact?(accessibility-cue, 0.50);
+    u64? var_2 = enough-time-since-player-fact?(accessibility-triangle-cue, 2.00);
+    u16 var_3;
+    if (var_0 != nullptr && var_1 != nullptr && var_2 != nullptr) {
+        play-accessibility-sound-at-position(sfx-ui-acc-prompt-triangle-button-mash, arg_0, 0);
+        if ((arg_1 == 0) == nullptr) {
+            play-accessibility-sound-at-position(arg_1, arg_0, 0);
+        }
+        debug-draw-string-centered("ACCESSIBILITY AUDIO CUE - INTERACT HOLD", 600.00, 3, 2.00, 2.00, 0, 0);
+        set-player-fact-time(accessibility-cue);
+        u64? var_4 = set-player-fact-time(accessibility-triangle-cue);
+        var_3 = var_4;
+    } else {
+        var_3 = 0;
+    }
+    return var_3;
+}
+
+u64? get-sonar-goal-navmesh-position(sid arg_0, u64? arg_1) {
+    u64? var_0 = is-npc?(arg_0);
+    u64? var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-object-locator(arg_0);
+        u64? var_3 = find-closest-point-on-nav-mesh(var_2, 2.00, 2.00, 0.00, 0, 0);
+        u64? var_4 = get-locator-position(var_3);
+        var_1 = var_4;
+    } else {
+        u64? var_5 = tag-boolean(fake-pickup, arg_0);
+        u64? var_6 = tag-symbol(override-goal, arg_0);
+        if (var_5 != nullptr || (var_6 == 0) == nullptr) {
+            if (arg_0 == item-pickup-player-upgrade-generic-339) {
+                u64? var_7 = tag-symbol(override-goal, arg_0);
+                u64? var_8 = get-spawner-locator(var_7, 1);
+                u64? var_9 = find-closest-point-on-nav-mesh(var_8, 0.50, 0.50, 0.00, 0, 0);
+                u64? var_10 = get-locator-position(var_9);
+                var_1 = var_10;
+            } else {
+                u64? var_11 = get-point-for-min-path-distance-to-interactable(arg_0, arg_1);
+                var_1 = var_11;
+            }
+        }
+    }
+    return var_1;
+}
+
+u64? disallow-invisible-while-prone/f() {
+    u64? var_0 = send-event(disallow-invisible-while-prone, ss-accessibility-invisible-prone);
+    return var_0;
+}
+
+u16 play-accessibility-break-glass-throw-sound-at-position(u64? arg_0) {
+    u64? var_0 = player-can-break-throw-glass?();
+    u64? var_1 = is-traversal-audio-cues?();
+    u64? var_2 = enough-time-since-player-fact?(accessibility-cue, 0.50);
+    u64? var_3 = enough-time-since-player-fact?(accessibility-break-glass-cue, 2.00);
+    u64? var_4 = enough-time-since-player-fact?(accessibility-break-glass-distant-cue, 2.00);
+    u16 var_5;
+    if (var_1 != nullptr && var_2 != nullptr && var_3 != nullptr || !var_0 == nullptr && var_4 != nullptr) {
+        if (var_0 == nullptr) {
+            play-accessibility-sound-at-position(sfx-ui-acc-prompt-distant-L1-button, arg_0, 1);
+            play-accessibility-sound-at-position(sfx-ui-acc-interact-glass-break-distant, arg_0, 1);
+            debug-draw-string(arg_0, "ACCESSIBILITY AUDIO CUE - THROW AT GLASS (DISTANT)", 9, 2.00, 1, 0.50, 0, 0);
+        } else {
+            play-accessibility-sound-at-position(sfx-ui-acc-prompt-L1-button, arg_0, 1);
+            u64? var_6 = enough-time-since-player-fact?(accessibility-break-glass-cue, 2.50);
+            if (var_6 != nullptr) {
+                play-accessibility-sound-at-position(sfx-ui-acc-interact-glass-break, arg_0, 1);
+            }
+            debug-draw-string(arg_0, "ACCESSIBILITY AUDIO CUE - THROW AT GLASS", 9, 2.00, 1, 0.50, 0, 0);
+        }
+        if (var_0 == nullptr) {
+            set-player-fact-time(accessibility-break-glass-distant-cue);
+        } else {
+            set-player-fact-time(accessibility-break-glass-cue);
+        }
+        u64? var_7 = set-player-fact-time(accessibility-cue);
+        var_5 = var_7;
+    } else {
+        var_5 = 0;
+    }
+    return var_5;
+}
+
+u16 send-fake-accessibility-pathfind() {
+    u64? var_0 = is-navigation-assistance-accessibility?();
+    u64? var_1 = joypad-command-active?(accessibility-pathfind, 6);
+    u16 var_2;
+    if (var_0 != nullptr && var_1 != nullptr) {
+        u64? var_3 = send-event(fake-accessibility-pathfind, ss-accessibility-pathfind);
+        var_2 = var_3;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u64? player-is-accessibility-invisible?() {
+    u64? var_0 = fact-get-bool-safe(player, accessibility-invisible-prone);
+    return var_0;
+}
+
+u64? set-accessibility-pathfind-goal-boat(u64? arg_0) {
+    u64? var_0 = new-boxed-value(7, arg_0);
+    u64? var_1 = send-event(set-goal-boat, ss-accessibility-pathfind, var_0);
+    return var_1;
+}
+
+u64? clear-accessibility-pathfind-goal-boat() {
+    u64? var_0 = set-accessibility-pathfind-goal-boat(0);
+    return var_0;
+}
+
+u16 send-fake-accessibility-pathfind-no-goal() {
+    u64? var_0 = is-navigation-assistance-accessibility?();
+    u64? var_1 = joypad-command-active?(accessibility-pathfind, 6);
+    u16 var_2;
+    if (var_0 != nullptr && var_1 != nullptr) {
+        u64? var_3 = send-event(fake-accessibility-no-goal, ss-accessibility-pathfind);
+        var_2 = var_3;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u16 #6E75E56BC4F13FFB() {
+    u16 var_0;
+    if (#47A5AC6E9610149A != nullptr && *(u8*)#47A5AC6E9610149A != nullptr) {
+        var_0 = *(u8*)(#47A5AC6E9610149A + 20);
+    } else {
+        var_0 = 1;
+    }
+    return var_0;
+}
+
+u16 start-accessibility-rumble(u64? arg_0) {
+    u64? var_0 = is-combat-vibration?();
+    u64? var_1 = entity-exists?(player);
+    u64? var_2 = player-in-state?(Death);
+    u16 var_3;
+    if (var_0 != nullptr || var_1 == nullptr || var_2 != nullptr) {
+        u64? var_4 = fact-get-bool-safe(player, buddy-dead);
+        if (var_4 == nullptr) {
+            u64? var_5 = start-rumble(arg_0, 0);
+            var_3 = var_5;
+        } else {
+            var_3 = 0;
+        }
+    }
+    return var_3;
+}
+
+u16 play-accessibility-square-mash-sound-at-position(u64? arg_0, bool arg_1, f32 arg_2) {
+    u64? var_0 = is-traversal-audio-cues?();
+    u64? var_1 = is-combat-audio-cues?();
+    u16 var_2;
+    if (var_0 != nullptr && var_1 != nullptr) {
+        f32 var_3;
+        if (arg_2 < 0.50) {
+            var_3 = arg_2;
+        } else {
+            var_3 = 0.50;
+        }
+        u64? var_4 = enough-time-since-player-fact?(accessibility-cue, var_3);
+        u64? var_5 = enough-time-since-player-fact?(accessibility-square-cue, arg_2);
+        if (var_4 != nullptr && var_5 != nullptr) {
+            play-accessibility-sound-at-position(sfx-ui-acc-prompt-square-button-mash, arg_0, 1);
+            if ((arg_1 == 0) == nullptr) {
+                play-accessibility-sound-at-position(arg_1, arg_0, 1);
+            }
+            f32 var_6;
+            if (arg_2 > 0.20) {
+                var_6 = arg_2;
+            } else {
+                var_6 = 0.20;
+            }
+            debug-draw-string-centered("ACCESSIBILITY AUDIO CUE - MELEE MASH", 600.00, 6, var_6, 2.00, 0, 0);
+            set-player-fact-time(accessibility-cue);
+            u64? var_7 = set-player-fact-time(accessibility-square-cue);
+            var_2 = var_7;
+        } else {
+            var_2 = 0;
+        }
+    }
+    return var_2;
+}
+
+f32 get-accessibility-invisible-timer() {
+    u64? var_0 = get-hidden-while-prone-mode();
+    f32 var_1;
+    if (var_0 != 1) {
+        var_1 = -1.00;
+    } else {
+        u64? var_2 = player-is-accessibility-invisible?();
+        if (var_2 == nullptr) {
+            var_1 = 0.00;
+        } else {
+            u64? var_3 = timer-running?(timer, ss-accessibility-invisible-prone);
+            if (var_3 != nullptr) {
+                u64? var_4 = get-float(timer, ss-accessibility-invisible-prone);
+                var_1 = var_4;
+            } else {
+                u64? var_5 = get-difficulty-detail-stealth();
+                var_1 = *(f32*)(var_5 + 148);
+            }
+        }
+    }
+    return var_1;
+}
+
+u16 notify-skippable-puzzle(i64 arg_0, u64? arg_1) {
+    notify-skippable-puzzle/f(arg_0);
+    u64? var_0 = is-text-to-speech-enabled?();
+    u64? var_1 = current-task-elapsed-time();
+    u64? var_2 = text-to-speech-playing?();
+    u64? var_3 = is-any-major-character-speaking?();
+    u16 var_4;
+    if (arg_1 != nullptr && var_0 != nullptr && var_1 > 1.50 && var_2 == nullptr && var_3 == nullptr) {
+        u64? var_5 = fact-get-dictionary(player);
+        u64? var_6 = fact-lookup-symbol(var_5, puzzle-skip, 0);
+        u64? var_7 = enough-time-since-player-fact?(puzzle-skip-cue, 60.00);
+        u64? var_8 = is-skip-puzzle-enabled?();
+        u16 var_9;
+        if (var_7 != nullptr && arg_0 != var_6 && var_8 != nullptr) {
+            u64? var_10 = new-boxed-value(7, ACCESSIBILITY_SKIP_PUZZLE_PROMPT);
+            speak-text-to-speech-formatted(var_10, 2, 0, 1);
+            u64? var_11 = new-boxed-value(7, arg_0);
+            fact-set(player, puzzle-skip, var_11);
+            u64? var_12 = set-player-fact-time(puzzle-skip-cue);
+            var_9 = var_12;
+        } else {
+            u64? var_13 = get-svar-as-boolean(skip-puzzle-tutorial);
+            if (var_13 == nullptr) {
+                set-svar-as-boolean(skip-puzzle-tutorial, 1);
+                u64? var_14 = new-boxed-value(7, ACCESSIBILITY_SKIP_PUZZLE_PROMPT_2);
+                speak-text-to-speech-formatted(var_14, 2, 0, 1);
+                u64? var_15 = new-boxed-value(7, arg_0);
+                fact-set(player, puzzle-skip, var_15);
+                u64? var_16 = set-player-fact-time(puzzle-skip-cue);
+                var_9 = var_16;
+            } else {
+                var_9 = 0;
+            }
+        }
+        var_4 = var_9;
+    } else {
+        var_4 = 0;
+    }
+    return var_4;
+}
+
+u16 play-accessibility-grapple-square-mash-sound-at-position(u64? arg_0) {
+    u64? var_0 = is-combat-audio-cues?();
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = play-accessibility-square-mash-sound-at-position(arg_0, 0, 0.50);
+        var_1 = var_2;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 enough-time-since-player-fact?(u64? arg_0, f32 arg_1) {
+    u64? var_0 = fact-exists?(player, arg_0);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = fact-get-dictionary(player);
+        u64? var_3 = fact-lookup-time-frame(var_2, arg_0, 0);
+        u64? var_4 = get-seconds-since(var_3, 0);
+        var_1 = var_4 > arg_1;
+    } else {
+        var_1 = 1;
+    }
+    return var_1;
+}
+
+sid #94C24F94119B8C7A() {
+    sid var_0;
+    if (#47A5AC6E9610149A != nullptr && *(u8*)#47A5AC6E9610149A != nullptr) {
+        u16 var_1;
+        if (*(i32*)(#47A5AC6E9610149A + 8) == 0) {
+            var_1 = sfx-hud-l3-look-at-menu;
+        } else {
+            u16 var_2;
+            if (*(i32*)(#47A5AC6E9610149A + 8) == 1) {
+                var_2 = sfx-ui-acc-path-locate;
+            } else {
+                u16 var_3;
+                if (*(i32*)(#47A5AC6E9610149A + 8) == 2) {
+                    var_3 = sfx-ui-acc-path-locate-item;
+                } else if (*(i32*)(#47A5AC6E9610149A + 8) == 3) {
+                    var_3 = sfx-ui-acc-path-locate-menu;
+                } else {
+                    var_3 = 0;
+                }
+                var_2 = var_3;
+            }
+            var_1 = var_2;
+        }
+        var_0 = var_1;
+    } else {
+        var_0 = sfx-ui-acc-path-locate;
+    }
+    return var_0;
+}
+
+u16 play-accessibility-rope-throw-sound-at-position(u64? arg_0) {
+    u64? var_0 = player-is-aiming?();
+    u64? var_1 = player-rope-can-throw();
+    u64? var_2 = player-get-lock-on-rope-target();
+    bool var_3 = var_0 && var_1 && !(var_2 == 0);
+    u64? var_4 = get-player-carry-object-id();
+    u64? var_5 = is-traversal-audio-cues?();
+    u64? var_6 = enough-time-since-player-fact?(accessibility-cue, 0.50);
+    u64? var_7 = enough-time-since-player-fact?(accessibility-rope-cue, 2.00);
+    u64? var_8 = enough-time-since-player-fact?(accessibility-rope-distant-cue, 2.00);
+    u16 var_9;
+    if ((var_4 == 0) == nullptr && var_5 != nullptr && var_6 != nullptr && var_7 != nullptr || !var_3 == nullptr && var_8 != nullptr) {
+        if (var_3 == nullptr) {
+            play-accessibility-sound-at-position(sfx-ui-acc-prompt-distant-L1-button, arg_0, 1);
+            play-accessibility-sound-at-position(sfx-ui-acc-interact-rope-throw-distant, arg_0, 1);
+            debug-draw-string(arg_0, "ACCESSIBILITY AUDIO CUE - ROPE THROW (DISTANT)", 9, 2.00, 1, 0.50, 0, 0);
+        } else {
+            play-accessibility-sound-at-position(sfx-ui-acc-prompt-L1-button, arg_0, 1);
+            u64? var_10 = enough-time-since-player-fact?(accessibility-rope-cue, 2.50);
+            if (var_10 != nullptr) {
+                play-accessibility-sound-at-position(sfx-ui-acc-interact-rope-throw, arg_0, 1);
+            }
+            debug-draw-string(arg_0, "ACCESSIBILITY AUDIO CUE - ROPE THROW", 9, 2.00, 1, 0.50, 0, 0);
+        }
+        if (var_3 == nullptr) {
+            set-player-fact-time(accessibility-rope-distant-cue);
+        } else {
+            set-player-fact-time(accessibility-rope-cue);
+        }
+        u64? var_11 = set-player-fact-time(accessibility-cue);
+        var_9 = var_11;
+    } else {
+        var_9 = 0;
+    }
+    return var_9;
+}
+
+u16 play-accessibility-sound-at-position(u64? arg_0, u64? arg_1, bool arg_2) {
+    u64? var_0 = text-to-speech-playing?();
+    u64? var_1 = entity-exists?(player);
+    u64? var_2 = player-in-state?(Death);
+    u16 var_3;
+    if (var_0 != nullptr || arg_2 == nullptr || var_1 == nullptr || var_2 != nullptr) {
+        u64? var_4 = fact-get-bool-safe(player, buddy-dead);
+        if (var_4 == nullptr) {
+            u64? var_5 = play-sound-at-position(arg_0, arg_1, 0, 0);
+            var_3 = var_5;
+        } else {
+            var_3 = 0;
+        }
+    }
+    return var_3;
+}
+
+u64? accessibility-suppress-control-sounds/f() {
+    u64? var_0 = send-event(suppress-control-sounds, ss-accessibility-lost-control-sound);
+    return var_0;
+}
+
+u64? enable-closest-tap(u64? arg_0, u64? arg_1) {
+    u64? var_0 = get-closest-in-group(arg_0, arg_1, 0, 0, 1, 0);
+    u64? var_1 = darray-count(arg_0);
+    begin-foreach();
+    for (u64 i = 0; i < var_1; i++) {
+        u64? var_2 = darray-at(arg_0, i);
+        u16 var_3;
+        if (var_2 != nullptr && *(u16*)(var_2 + 12) == 7) {
+            var_3 = *(u64*)var_2;
+        } else if (var_2 != nullptr && *(u16*)(var_2 + 12) == 5) {
+            var_3 = *(u64*)var_2;
+        } else if (var_2 != nullptr && *(u16*)(var_2 + 12) == 4) {
+            var_3 = *(u64*)var_2;
+        } else {
+            var_3 = 0;
+        }
+        if (var_3 == var_0) {
+            enable-action-pack(var_3, 1);
+        } else {
+            disable-action-pack(var_3);
+        }
+    }
+    u64? var_4 = end-foreach();
+    return var_4;
+}
+
+u16 play-accessibility-squeeze-through-sound-at-position(u64? arg_0, bool arg_1) {
+    u64? var_0 = enough-time-since-player-fact?(accessibility-squeeze-through, 3.00);
+    if (var_0 != nullptr && arg_1 == nullptr) {
+        play-accessibility-jump-sound-at-position(arg_0, sfx-ui-acc-interact-squeeze-through, arg_1);
+    } else {
+        play-accessibility-jump-sound-at-position(arg_0, 0, arg_1);
+    }
+    u16 var_1;
+    if (arg_1 == nullptr) {
+        u64? var_2 = set-player-fact-time(accessibility-squeeze-through);
+        var_1 = var_2;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+sid #AAA8A3532AAF4880() {
+    sid var_0;
+    if (#47A5AC6E9610149A != nullptr && *(u8*)#47A5AC6E9610149A != nullptr) {
+        u16 var_1;
+        if (*(i32*)(#47A5AC6E9610149A + 16) == 0) {
+            var_1 = at-initial-wave-spawn;
+        } else {
+            u16 var_2;
+            if (*(i32*)(#47A5AC6E9610149A + 16) == 1) {
+                var_2 = at-live-enemy-centroid;
+            } else {
+                u16 var_3;
+                if (*(i32*)(#47A5AC6E9610149A + 16) == 2) {
+                    var_3 = at-true-combat-goal;
+                } else if (*(i32*)(#47A5AC6E9610149A + 16) == 3) {
+                    var_3 = at-centroid-on-swap-true-goal-on-L3;
+                } else {
+                    var_3 = 0;
+                }
+                var_2 = var_3;
+            }
+            var_1 = var_2;
+        }
+        var_0 = var_1;
+    } else {
+        var_0 = at-centroid-on-swap-true-goal-on-L3;
+    }
+    return var_0;
+}
+
+u64? add-fake-enemy-for-enhanced-listen-mode(u64? arg_0) {
+    u64? var_0 = new-boxed-value(7, arg_0);
+    u64? var_1 = send-event(add-fake-enemy, ss-player-blind-listen-mode, var_0);
+    return var_1;
+}
+
+u64? player-can-break-throw-glass?() {
+    u64? var_0 = player-is-aiming?();
+    u64? var_1 = get-player-weapon-id();
+    u64? var_2 = get-player-weapon-id();
+    u64? var_3 = player-get-aiming-arc-target(1);
+    u64? var_4 = get-current-weapon-type();
+    u64? var_5 = get-current-weapon-type();
+    u64? var_6 = get-player-weapon-id();
+    u64? var_7 = player-has-weapon-and-ammo?(var_6);
+    u64? var_8 = player-get-lock-on-aim-target();
+    bool var_9 = var_0 || var_1 == brick && var_2 == bottle || !(var_3 == 0) || var_4 == 1 && var_5 == 2 && var_7 && !(var_8 == 0);
+    return var_9;
+}
+
+u64? clear-accessibility-pathfind-goal-horse() {
+    u64? var_0 = set-accessibility-pathfind-goal-horse(0);
+    return var_0;
+}
+
+u64? set-player-fact-time(u64? arg_0) {
+    u64? var_0 = get-current-timeframe(0);
+    u64? var_1 = new-boxed-value(8, var_0);
+    u64? var_2 = fact-set(player, arg_0, var_1);
+    return var_2;
+}
+
+u64? set-accessibility-pathfind-unavailable() {
+    u64? var_0 = send-event(set-goal-unavailable, ss-accessibility-pathfind);
+    return var_0;
+}
+
+u64? accessibility-invisible-start-location() {
+    u64? var_0 = get-point(prone-start-position, ss-accessibility-invisible-prone);
+    return var_0;
+}
+
+u64? interactable-set-accessibility-used(u64? arg_0) {
+    interactable-set-exclude-from-pickup-scan(arg_0, 1);
+    interactable-set-accessibility-sound-active(arg_0, 0);
+    interactable-set-accessibility-sound-active-sweetener(arg_0, 0);
+    interactable-set-accessibility-sound-interact(arg_0, 0);
+    interactable-set-accessibility-sound-interact-sweetener(arg_0, 0);
+    u64? var_0 = interactable-set-accessibility-sound-interact-error-sweetener(arg_0, 0);
+    return var_0;
+}
+
+u16 clear-accessibility-pathfind-goal(i64 arg_0) {
+    u64? var_0 = get-symbol(goal, ss-accessibility-pathfind);
+    u16 var_1;
+    if (arg_0 == 0 && var_0 == arg_0) {
+        u64? var_2 = set-accessibility-pathfind-goal(0);
+        var_1 = var_2;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u64? set-accessibility-pathfind-goal-horse(u64? arg_0) {
+    u64? var_0 = new-boxed-value(7, arg_0);
+    u64? var_1 = send-event(set-goal-horse, ss-accessibility-pathfind, var_0);
+    return var_1;
+}
+
+u16 play-accessibility-circle-sound-at-position(u64? arg_0) {
+    u64? var_0 = is-traversal-audio-cues?();
+    u64? var_1 = enough-time-since-player-fact?(accessibility-cue, 0.50);
+    u64? var_2 = enough-time-since-player-fact?(accessibility-circle-cue, 2.00);
+    u16 var_3;
+    if (var_0 != nullptr && var_1 != nullptr && var_2 != nullptr) {
+        play-accessibility-sound-at-position(sfx-ui-acc-prompt-circle-button, arg_0, 0);
+        debug-draw-string-centered("ACCESSIBILITY AUDIO CUE - CROUCH PRESS", 600.00, 2, 2.00, 2.00, 0, 0);
+        set-player-fact-time(accessibility-cue);
+        u64? var_4 = set-player-fact-time(accessibility-circle-cue);
+        var_3 = var_4;
+    } else {
+        var_3 = 0;
+    }
+    return var_3;
+}
+
+u16 play-accessibility-control-lost-control-sound() {
+    u64? var_0 = is-traversal-audio-cues?();
+    u16 var_1;
+    if (var_0 != nullptr) {
+        play-sound(sfx-ui-acc-player-control-lost, 0);
+        u64? var_2 = debug-draw-string-centered("ACCESSIBILITY AUDIO CUE - CONTROL LOST", 600.00, 9, 2.00, 2.00, 0, 0);
+        var_1 = var_2;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+

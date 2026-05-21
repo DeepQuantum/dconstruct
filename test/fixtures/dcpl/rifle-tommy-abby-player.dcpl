@@ -2,3 +2,7 @@ u8 #BA2C7B74FA45CD8E__anim-overlay-set@98(u64? arg_0, u8 arg_1, u64? arg_2) {
     return *(u8*)((*(arg_1 + 8) + 40) + 44);
 }
 
+u8 #BA2C7B74FA45CD8E__anim-overlay-set@98(u64? arg_0, u8 arg_1, u64? arg_2) {
+    return *(u8*)((*(arg_1 + 8) + 40) + 44);
+}
+

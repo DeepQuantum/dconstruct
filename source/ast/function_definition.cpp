@@ -4,16 +4,15 @@
 namespace dconstruct::ast {
 
 void function_definition::pseudo_c(std::ostream& os) const {
-    if (!std::holds_alternative<state_script_function_id>(m_name)) {
+    if (const std::string* name = std::get_if<std::string>(&m_name)) {
         os << type_to_declaration_string(*m_type.m_return) << " ";
 
         const bool func_name_as_pascal = os.iword(get_flag_index()) & static_cast<i32>(LANGUAGE_FLAGS::FUNCTION_NAMES_PASCAL);
-        const std::string orig = std::get<std::string>(m_name);
         if (func_name_as_pascal) {
-            const auto str_res = try_convert_pascal_case(orig);
-            os << str_res.value_or(orig);
+            const auto str_res = try_convert_pascal_case(*name);
+            os << str_res.value_or(*name);
         } else {
-            os << orig;
+            os << *name;
         }
         if (func_name_as_pascal) {
             os << remove_id_pascal_case;
@@ -35,9 +34,8 @@ void function_definition::pseudo_c(std::ostream& os) const {
 }
 
 void function_definition::pseudo_py(std::ostream& os) const {
-    if (!std::holds_alternative<state_script_function_id>(m_name)) {
-        const std::string name = std::get<std::string>(m_name);
-        os << "def " << name << "(";
+    if (const std::string* name = std::get_if<std::string>(&m_name)) {
+        os << "def " << *name << "(";
         bool first = true;
         for (const auto& param : m_parameters) {
             if (!first) {
@@ -54,9 +52,8 @@ void function_definition::pseudo_py(std::ostream& os) const {
 }
 
 void function_definition::pseudo_racket(std::ostream& os) const {
-    if (!std::holds_alternative<state_script_function_id>(m_name)) {
-        const std::string name = std::get<std::string>(m_name);
-        os << "(define (" << name;
+    if (const std::string* name = std::get_if<std::string>(&m_name)) {
+        os << "(define (" << *name;
         for (const auto& param : m_parameters) {
             os << " ";
             param.pseudo_racket(os);
@@ -74,8 +71,11 @@ void function_definition::pseudo_racket(std::ostream& os) const {
     for (const parameter& param : m_parameters) {
         scope.define(param.m_name, param.m_type);
     }
+    if (const std::string* name = std::get_if<std::string>(&m_name)) {
+        scope.define(*name, m_type);
+    }
     std::vector<semantic_check_error> res = m_body.check_semantics(scope);
-    if (std::holds_alternative<primitive_type>(*scope.m_expectedReturnType) && std::get<primitive_type>(*scope.m_expectedReturnType).m_type != primitive_kind::NOTHING && !scope.m_computedReturnType) {
+    if (const auto* p = std::get_if<primitive_type>(&*scope.m_expectedReturnType); p && p->m_type != primitive_kind::NOTHING && !scope.m_computedReturnType) {
         return {semantic_check_error{"function expects a value to be returned"}};
     }
     return res;
@@ -83,13 +83,14 @@ void function_definition::pseudo_racket(std::ostream& os) const {
 
 [[nodiscard]] program_binary_result function_definition::emit_dc(compilation::global_state& global) const noexcept {
     compilation::function fn{};
-    if (std::holds_alternative<std::string>(m_name)) {
-        if (global.m_sidAliases.contains(std::get<std::string>(m_name))) {
-            const auto id = global.m_sidAliases.at(std::get<std::string>(m_name));
+    if (const std::string* name = std::get_if<std::string>(&m_name)) {
+        if (global.m_sidAliases.contains(*name)) {
+            const auto id = global.m_sidAliases.at(*name);
             fn.m_name = id.second;
         } else {
-            fn.m_name = std::get<std::string>(m_name);
+            fn.m_name = *name;
         }
+        global.m_sidAliases[*name] = {m_type, SID(name->c_str())};
     }
 
     for (u32 i = 0; i < m_parameters.size(); ++i) {

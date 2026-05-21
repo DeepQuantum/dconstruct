@@ -4,6 +4,22 @@
 
 namespace dconstruct::ast {
 
+template<typename T>
+[[nodiscard]] i64 raw_number_value(const T value) noexcept {
+    if constexpr (std::is_same_v<T, f32>) {
+        return static_cast<i64>(std::bit_cast<u32>(value));
+    } else if constexpr (std::is_same_v<T, f64>) {
+        return std::bit_cast<i64>(value);
+    } else if constexpr (std::is_same_v<T, bool>) {
+        return value ? 1 : 0;
+    } else if constexpr (std::is_integral_v<T>) {
+        using unsigned_t = std::make_unsigned_t<T>;
+        return static_cast<i64>(std::bit_cast<unsigned_t>(value));
+    } else {
+        return 0;
+    }
+}
+
 function_type::function_type() noexcept :
     m_return{ std::make_shared<ast::full_type>(std::monostate()) },
     m_distanceType{DISTANCE::NEAR} {}
@@ -65,8 +81,31 @@ ptr_type::ptr_type(const ast::primitive_kind& kind) noexcept
 [[nodiscard]] std::optional<primitive_number> get_number(const primitive_value& prim) noexcept {
     return std::visit([](auto&& arg) -> std::optional<primitive_number> {
         using T = std::decay_t<decltype(arg)>;
-        if constexpr (std::is_arithmetic_v<T>) {
+        if constexpr (std::is_same_v<T, bool>) {
+            return primitive_number{static_cast<u8>(arg)};
+        } else if constexpr (std::is_arithmetic_v<T>) {
             return static_cast<primitive_number>(arg);
+        } else if constexpr (std::is_same_v<T, std::nullptr_t>) {
+            return primitive_number{static_cast<u8>(0)};
+        } else {
+            return std::nullopt;
+        }
+    }, prim);
+}
+
+[[nodiscard]] i64 get_raw_number(const primitive_number& prim) noexcept {
+    return std::visit([](auto&& arg) -> i64 {
+        return raw_number_value(arg);
+    }, prim);
+}
+
+[[nodiscard]] std::optional<i64> get_raw_number(const primitive_value& prim) noexcept {
+    return std::visit([](auto&& arg) -> std::optional<i64> {
+        using T = std::decay_t<decltype(arg)>;
+        if constexpr (std::is_arithmetic_v<T>) {
+            return raw_number_value(arg);
+        } else if constexpr (std::is_same_v<T, std::nullptr_t>) {
+            return 0;
         } else {
             return std::nullopt;
         }
@@ -153,8 +192,6 @@ ptr_type::ptr_type(const ast::primitive_kind& kind) noexcept
             return os.str();
         } else if constexpr(std::is_same_v<T, std::monostate>) {
             return "u64?";
-        } else if constexpr(std::is_same_v<T, darray>) {
-            return "darray<" + type_to_declaration_string(*arg.m_arrType) + ">";
         } else {
             return kind_to_string(arg.m_type);
         }
@@ -213,8 +250,6 @@ ptr_type::ptr_type(const ast::primitive_kind& kind) noexcept
             return sizeof(void*);
         } else if constexpr (std::is_same_v<T, std::monostate>) {
             return 0;
-        } else if constexpr (std::is_same_v<T, darray>) {
-            return get_size(*arg.m_arrType.get());
         } else {
             return 0;
         }
@@ -243,6 +278,26 @@ ptr_type::ptr_type(const ast::primitive_kind& kind) noexcept
             return Opcode::LoadPointer;
         } else {
             return std::unexpected{"no load opcode for type " + type_to_declaration_string(arg)};
+        }
+    }, type);
+}
+
+[[nodiscard]] std::expected<Opcode, std::string> get_static_load_opcode(const full_type& type) {
+    return std::visit([](auto&& arg) -> std::expected<Opcode, std::string> {
+        using T = std::decay_t<decltype(arg)>;
+        if constexpr (std::is_same_v<T, primitive_type>) {
+            const primitive_kind kind = arg.m_type;
+            if (is_integral(kind)) {
+                return Opcode::LoadStaticInt;
+            }
+            if (is_floating_point(kind)) {
+                return Opcode::LoadStaticFloat;
+            }
+            return std::unexpected{"no static load opcode for primitive type " + type_to_declaration_string(arg)};
+        } else if constexpr (std::is_same_v<T, ptr_type>) {
+            return Opcode::LoadStaticPointer;
+        } else {
+            return std::unexpected{"no static load opcode for type " + type_to_declaration_string(arg)};
         }
     }, type);
 }

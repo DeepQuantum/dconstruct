@@ -128,6 +128,7 @@ enum Opcode : u8 {
     AssertPointer,
     BreakFlag,
     Breakpoint,
+    QEX_InRangeI
 };
 
 struct Instruction {

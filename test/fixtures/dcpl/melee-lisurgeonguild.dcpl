@@ -37,3 +37,81 @@ u16 *melee-post-probes-common-evaluation-func-player-npc*(bool arg_0, bool arg_1
     return var_0;
 }
 
+u16 supine-auto-stand-frame-check(u64? arg_0, i32 arg_1) {
+    u64? var_0 = get-animation-playing?(arg_0, supine-idle^crouch-idle, 2);
+    u16 var_1;
+    if (var_0) {
+        u64? var_2 = get-animation-frame(arg_0, 2, supine-idle^crouch-idle);
+        u64? var_3 = round-float(var_2);
+        var_1 = (i32)var_3 < arg_1;
+    } else {
+        u64? var_4 = get-animation-playing?(arg_0, supine-idle^crouch-idle-rifle, 2);
+        if (var_4) {
+            u64? var_5 = get-animation-frame(arg_0, 2, supine-idle^crouch-idle-rifle);
+            u64? var_6 = round-float(var_5);
+            var_1 = (i32)var_6 < arg_1;
+        } else {
+            u64? var_7 = get-animation-playing?(arg_0, supine-idle^crouch-idle-rifle-flip, 2);
+            if (var_7) {
+                u64? var_8 = get-animation-frame(arg_0, 2, supine-idle^crouch-idle-rifle-flip);
+                u64? var_9 = round-float(var_8);
+                var_1 = (i32)var_9 < arg_1;
+            } else {
+                var_1 = 1;
+            }
+        }
+    }
+    return var_1;
+}
+
+u16 *melee-post-probes-common-evaluation-func-player-npc*(bool arg_0, bool arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64?* arg_5) {
+    u16 var_0;
+    if (!(arg_0 == 0) && !(arg_1 == 0)) {
+        u64? var_1 = *(arg_5 + 48);
+        u64? var_2 = get-edge-between-characters->common-data(arg_0, arg_2, arg_1, arg_3, var_1, arg_5);
+        var_0 = var_2;
+    } else {
+        var_0 = 0;
+    }
+    return var_0;
+}
+
+u16 supine-auto-stand-frame-check(u64? arg_0, i32 arg_1) {
+    u64? var_0 = get-animation-playing?(arg_0, supine-idle^crouch-idle, 2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-animation-frame(arg_0, 2, supine-idle^crouch-idle);
+        u64? var_3 = round-float(var_2);
+        var_1 = (i32)var_3 < arg_1;
+    } else {
+        u64? var_4 = get-animation-playing?(arg_0, supine-idle^crouch-idle-rifle, 2);
+        if (var_4 != nullptr) {
+            u64? var_5 = get-animation-frame(arg_0, 2, supine-idle^crouch-idle-rifle);
+            u64? var_6 = round-float(var_5);
+            var_1 = (i32)var_6 < arg_1;
+        } else {
+            u64? var_7 = get-animation-playing?(arg_0, supine-idle^crouch-idle-rifle-flip, 2);
+            if (var_7 != nullptr) {
+                u64? var_8 = get-animation-frame(arg_0, 2, supine-idle^crouch-idle-rifle-flip);
+                u64? var_9 = round-float(var_8);
+                var_1 = (i32)var_9 < arg_1;
+            } else {
+                var_1 = 1;
+            }
+        }
+    }
+    return var_1;
+}
+
+u16 *melee-post-probes-common-evaluation-func-player-npc*(bool arg_0, bool arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64?* arg_5) {
+    u16 var_0;
+    if ((arg_0 == 0) == nullptr && (arg_1 == 0) == nullptr) {
+        u64? var_1 = *(arg_5 + 48);
+        u64? var_2 = get-edge-between-characters->common-data(arg_0, arg_2, arg_1, arg_3, var_1, arg_5);
+        var_0 = var_2;
+    } else {
+        var_0 = 0;
+    }
+    return var_0;
+}
+

@@ -68,7 +68,7 @@ namespace dconstruct::ast {
             return std::unexpected{std::move(load_opcode.error())};
         }
 
-        emission_res load_destination = fn.get_destination(opt_destination);
+        emission_res load_destination = fn.fix_destination(opt_destination);
         if (!load_destination) {
             return load_destination;
         }

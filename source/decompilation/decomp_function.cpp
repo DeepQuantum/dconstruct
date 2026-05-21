@@ -9,6 +9,22 @@ static constexpr u8 MIN_GRAPH_SIZE = 0;
 
 static const auto and_token = compilation::token{ compilation::token_type::AMPERSAND_AMPERSAND, "&&" };
 static const auto or_token = compilation::token{ compilation::token_type::PIPE_PIPE, "||" };
+static const auto equal_nullptr_token = compilation::token{ compilation::token_type::EQUAL_EQUAL, "==" };
+static const auto not_equal_nullptr_token = compilation::token{ compilation::token_type::BANG_EQUAL, "!=" };
+
+namespace {
+
+[[nodiscard]] bool is_explicit_condition_expression(const ast::expression& expression) noexcept {
+    if (const std::optional<ast::full_type> type = expression.get_type();
+        type && std::holds_alternative<ast::primitive_type>(*type) &&
+        std::get<ast::primitive_type>(*type).m_type == ast::primitive_kind::BOOL) {
+        return true;
+    }
+    return dynamic_cast<const ast::compare_expr*>(&expression) != nullptr ||
+        dynamic_cast<const ast::logical_expr*>(&expression) != nullptr;
+}
+
+}
 
 
 std::string decomp_function::get_next_var() {
@@ -39,6 +55,27 @@ void decomp_function::append_to_current_block(expr_uptr&& expr) {
     arg.push_back(m_transformableExpressions[istr.destination]->clone());
     auto callee = std::make_unique<ast::identifier>("symbol_table_load");
     auto call = std::make_unique<ast::call_expr>(compilation::token{ compilation::token_type::_EOF, "" }, std::move(callee), std::move(arg));
+    return call;
+}
+
+[[nodiscard]] std::unique_ptr<ast::call_expr> decomp_function::make_in_range(const Instruction& istr) {
+    const auto& symbol_table = m_disassembly.m_stackFrame.m_symbolTable;
+
+    std::vector<expr_uptr> args;
+    args.push_back(m_transformableExpressions[istr.operand1]->clone());
+    args.push_back(std::make_unique<ast::literal>(symbol_table.get<i64>(istr.operand2)));
+    args.push_back(std::make_unique<ast::literal>(symbol_table.get<i64>(istr.operand2 + 1)));
+
+    ast::function_type callee_type;
+    callee_type.m_return = std::make_shared<ast::full_type>(make_type_from_prim(ast::primitive_kind::BOOL));
+    callee_type.m_arguments.emplace_back("value", std::make_shared<ast::full_type>(make_type_from_prim(ast::primitive_kind::I64)));
+    callee_type.m_arguments.emplace_back("min", std::make_shared<ast::full_type>(make_type_from_prim(ast::primitive_kind::I64)));
+    callee_type.m_arguments.emplace_back("max", std::make_shared<ast::full_type>(make_type_from_prim(ast::primitive_kind::I64)));
+
+    auto callee = std::make_unique<ast::identifier>("in_range");
+    callee->set_type(std::move(callee_type));
+    auto call = std::make_unique<ast::call_expr>(compilation::token{ compilation::token_type::_EOF, "" }, std::move(callee), std::move(args));
+    call->set_type(make_type_from_prim(ast::primitive_kind::BOOL));
     return call;
 }
 
@@ -353,6 +390,7 @@ void decomp_function::parse_basic_block(const control_flow_node &node) {
             case Opcode::FMod: generated_expression = apply_binary_op<ast::mod_expr>(istr); break;
             
             case Opcode::IntAsh: generated_expression = make_shift(istr); break;
+            case Opcode::QEX_InRangeI: generated_expression = make_in_range(istr); break;
 
             case Opcode::IAddImm: generated_expression = apply_binary_op_imm<ast::add_expr>(istr); break;
             case Opcode::IMulImm: generated_expression = apply_binary_op_imm<ast::mul_expr>(istr); break;
@@ -994,8 +1032,20 @@ template<typename to>
         throw std::runtime_error("error: empty expression at " + std::to_string(src));
     }
     expr_uptr condition = m_transformableExpressions[src]->clone();
-    if (std::holds_alternative<ast::ptr_type>(condition->get_type_unchecked(m_env)) || std::holds_alternative<ast::function_type>(condition->get_type_unchecked(m_env))) {
-        condition = std::make_unique<ast::compare_expr>(compilation::token{ compilation::token_type::BANG_EQUAL, "!=" }, std::move(condition), std::make_unique<ast::literal>(nullptr));
+    if (!is_explicit_condition_expression(*condition)) {
+        if (const auto* logical_not = dynamic_cast<const ast::logical_not_expr*>(condition.get())) {
+            condition = std::make_unique<ast::compare_expr>(
+                equal_nullptr_token,
+                logical_not->m_rhs->clone(),
+                std::make_unique<ast::literal>(nullptr)
+            );
+        } else {
+            condition = std::make_unique<ast::compare_expr>(
+                not_equal_nullptr_token,
+                std::move(condition),
+                std::make_unique<ast::literal>(nullptr)
+            );
+        }
     }
     return condition;
 }

@@ -14,7 +14,7 @@
 #include <set>
 #include <sstream>
 
-namespace {
+namespace dconstruct {
 
 constexpr char DEFAULT_OUT[] = "<input_path.asm>";
 constexpr i32 BOX_WIDTH = 100;

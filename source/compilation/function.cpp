@@ -117,6 +117,14 @@ void function::emit_instruction(const Opcode opcode, const u8 destination, const
     }
 }
 
+void function::emit_lohi_instruction(const Opcode opcode, const u8 destination, const u16 lo_hi) noexcept {
+    if (!m_deferred.empty()) {
+        m_deferred.back().first.emplace_back(opcode, destination, lo_hi & 0xFF, (lo_hi >> 8) & 0xFF);
+    } else {
+        m_instructions.emplace_back(opcode, destination, lo_hi & 0xFF, (lo_hi >> 8) & 0xFF);
+    }
+}
+
 
 [[nodiscard]] u16 function::add_to_symbol_table(const u64 value, const SYMBOL_TABLE_POINTER_KIND pointer_kind) noexcept {
     const auto existing = std::find(m_symbolTable.begin(), m_symbolTable.end(), value);
@@ -138,7 +146,7 @@ void function::emit_instruction(const Opcode opcode, const u8 destination, const
     return 12 + 4 * (m_instructions.size() + m_symbolTable.size());
 }
 
-[[nodiscard]] emission_res function::get_destination(const std::optional<reg_idx> passed_through_destination) noexcept {
+[[nodiscard]] emission_res function::fix_destination(const std::optional<reg_idx> passed_through_destination) noexcept {
     if (passed_through_destination) {
         return *passed_through_destination;
     } else {

@@ -64,7 +64,7 @@ namespace dconstruct::ast {
     assert(std::holds_alternative<primitive_type>(*m_type));
     const Opcode mod_opcode = is_integral(std::get<primitive_type>(*m_type).m_type) ? Opcode::IMod : Opcode::FMod;
 
-    const emission_res mod_destination = fn.get_destination(destination);
+    const emission_res mod_destination = fn.fix_destination(destination);
     if (!mod_destination) {
         return mod_destination;
     }

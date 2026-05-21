@@ -24,3 +24,55 @@ u64 anim-player-health-states__anim-node-animation@518(u64? arg_0, u64 arg_1, u6
     return *(u64*)((*(arg_1 + 16) + 3016) + 32);
 }
 
+u64 anim-player-health-states__actor-state-list@48__anim-node-blend@7f0____anim-node-blend@1208____anim-node-animation@14d0__(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)((*(arg_1 + 16) + 3016) + 8);
+}
+
+u64 anim-player-health-states__actor-state-list@48__anim-node-animation@e80__(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(*(arg_1 + 16) + 3016);
+}
+
+u64? anim-player-health-states(u64? arg_0, u64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64 arg_5, u64? arg_6) {
+    u64 var_0 = *(u64*)(*(arg_1 + 8) + 384);
+    u64? var_1 = player-anim-speed-mult(var_0, *(u64*)arg_5);
+    return arg_2 + ((arg_3 * var_1) * arg_4);
+}
+
+u64 anim-player-health-states__anim-node-animation@488(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)((*(arg_1 + 16) + 3016) + 40);
+}
+
+u64 anim-player-health-states__anim-node-animation@5b8(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)((*(arg_1 + 16) + 3016) + 24);
+}
+
+u64 anim-player-health-states__anim-node-animation@518(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)((*(arg_1 + 16) + 3016) + 32);
+}
+
+u64 anim-player-health-states__actor-state-list@48__anim-node-blend@7f0____anim-node-blend@1208____anim-node-animation@14d0__(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)((*(arg_1 + 16) + 3016) + 8);
+}
+
+u64 anim-player-health-states__actor-state-list@48__anim-node-animation@e80__(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(*(arg_1 + 16) + 3016);
+}
+
+u64? anim-player-health-states(u64? arg_0, u64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64 arg_5, u64? arg_6) {
+    u64 var_0 = *(u64*)(*(arg_1 + 8) + 384);
+    u64? var_1 = player-anim-speed-mult(var_0, *(u64*)arg_5);
+    return arg_2 + ((arg_3 * var_1) * arg_4);
+}
+
+u64 anim-player-health-states__anim-node-animation@488(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)((*(arg_1 + 16) + 3016) + 40);
+}
+
+u64 anim-player-health-states__anim-node-animation@5b8(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)((*(arg_1 + 16) + 3016) + 24);
+}
+
+u64 anim-player-health-states__anim-node-animation@518(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)((*(arg_1 + 16) + 3016) + 32);
+}
+

@@ -87,7 +87,7 @@ void sizeof_expr::pseudo_racket(std::ostream& os) const {
         return std::unexpected{"expected type with size less than " + std::to_string(std::numeric_limits<u16>::max()) + " but got size " + std::to_string(type_size)};
     }
 
-    const emission_res sizeof_dest = fn.get_destination(destination);
+    const emission_res sizeof_dest = fn.fix_destination(destination);
     if (!sizeof_dest) {
         return sizeof_dest;
     }

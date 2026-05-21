@@ -17,3 +17,41 @@ u16 menu-main-preload__level-scripted-set@948() {
     return 1;
 }
 
+bool menu-main__level-set@2b0__level-scripted-set@978__() {
+    bool var_0 = get-boolean(#1A46A293A497F115, ss-main-menu-boat-1);
+    return var_0;
+}
+
+u64? menu-main__level-scripted-set@c78() {
+    bool var_0 = get-boolean(#1A46A293A497F115, ss-main-menu-boat-1);
+    return !var_0;
+}
+
+u64? menu-main-preload__level-set@2f8__level-scripted-set@be8__() {
+    u64? var_0 = #70C75B005A822253();
+    return var_0;
+}
+
+u16 menu-main-preload__level-scripted-set@948() {
+    return 1;
+}
+
+bool menu-main__level-set@2b0__level-scripted-set@978__() {
+    bool var_0 = get-boolean(#1A46A293A497F115, ss-main-menu-boat-1);
+    return var_0;
+}
+
+u64? menu-main__level-scripted-set@c78() {
+    bool var_0 = get-boolean(#1A46A293A497F115, ss-main-menu-boat-1);
+    return !var_0;
+}
+
+u64? menu-main-preload__level-set@2f8__level-scripted-set@be8__() {
+    u64? var_0 = #70C75B005A822253();
+    return var_0;
+}
+
+u16 menu-main-preload__level-scripted-set@948() {
+    return 1;
+}
+

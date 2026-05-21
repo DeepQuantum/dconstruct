@@ -5,18 +5,18 @@ u16 #A548628CB635DC72(u16 arg_0, i64 arg_1) {
     for (u64 i = 0; i < var_0; i++) {
         u64? var_2 = darray-at(#88F409F4BF0F056A, i);
         u16 var_3;
-        if (var_2 && *(u16*)(var_2 + 12) == 7) {
+        if (var_2 != nullptr && *(u16*)(var_2 + 12) == 7) {
             var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
+        } else if (var_2 != nullptr && *(u16*)(var_2 + 12) == 5) {
             var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
+        } else if (var_2 != nullptr && *(u16*)(var_2 + 12) == 4) {
             var_3 = *(u64*)var_2;
         } else {
             var_3 = 0;
         }
         u64? var_4 = npc-alive?(var_3);
         u16 var_5;
-        if (var_4) {
+        if (var_4 != nullptr) {
             u64? var_6 = npc-get-awareness(var_3, player);
             u64? var_7 = npc-get-recognition(var_3, player);
             u16 var_8;

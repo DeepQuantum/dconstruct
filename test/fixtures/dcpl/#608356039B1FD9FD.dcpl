@@ -3,7 +3,7 @@ u16 #608356039B1FD9FD() {
     u64? var_1 = get-symbol(current-task, ss-wave-manager-level-set-loader-1);
     bool var_2 = get-boolean(#B0E4DDF4A79D13AC, ss-wave-manager-level-set-loader-1);
     u16 var_3;
-    if (var_0 == var_1 && var_2) {
+    if (var_0 == var_1 && var_2 != nullptr) {
         u64? var_4 = get-svar(#47CB08FCD5FE82DB);
         u64? var_5 = #8693D9A4BDE7277F(var_4);
         u64? var_6 = task-get-current-node-id();

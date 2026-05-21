@@ -20,34 +20,34 @@ u64? #14C6FC79122F4A87(u64? arg_0) {
         u64? var_13 = ddict-key-at(arg_0, i);
         u64? var_14 = ddict-value-at(arg_0, i);
         u16 var_15;
-        if (var_14 && *(u16*)(var_14 + 12) == 1) {
+        if (var_14 != nullptr && *(u16*)(var_14 + 12) == 1) {
             var_15 = *(u8*)var_14;
-        } else if (var_14 && *(u16*)(var_14 + 12) == 2) {
+        } else if (var_14 != nullptr && *(u16*)(var_14 + 12) == 2) {
             var_15 = *(i32*)var_14;
-        } else if (var_14 && *(u16*)(var_14 + 12) == 3) {
+        } else if (var_14 != nullptr && *(u16*)(var_14 + 12) == 3) {
             var_15 = *(u32*)var_14;
-        } else if (var_14 && *(u16*)(var_14 + 12) == 4) {
+        } else if (var_14 != nullptr && *(u16*)(var_14 + 12) == 4) {
             var_15 = *(i64*)var_14;
-        } else if (var_14 && *(u16*)(var_14 + 12) == 5) {
+        } else if (var_14 != nullptr && *(u16*)(var_14 + 12) == 5) {
             var_15 = *(u64*)var_14;
-        } else if (var_14 && *(u16*)(var_14 + 12) == 6) {
+        } else if (var_14 != nullptr && *(u16*)(var_14 + 12) == 6) {
             var_15 = (i32)*(f32*)var_14;
         } else {
             var_15 = 0;
         }
         u64? var_16 = darray-at(var_1, i);
         string var_17;
-        if (var_16 && *(u16*)(var_16 + 12) == 14) {
+        if (var_16 != nullptr && *(u16*)(var_16 + 12) == 14) {
             var_17 = *var_16;
         } else {
             var_17 = "";
         }
         u64? var_18 = wait-raycast-t(var_15);
         bool var_19 = var_18 == -1.00 && var_18 >= 0.90;
-        if (#B96C7EEF7ACAB122 != nullptr && *(u8*)(#B96C7EEF7ACAB122 + 39)) {
+        if (#B96C7EEF7ACAB122 != nullptr && *(u8*)(#B96C7EEF7ACAB122 + 39) != nullptr) {
             u64? var_20 = get-spawner-position(var_13, 1);
             u16 var_21;
-            if (var_19) {
+            if (var_19 != nullptr) {
                 var_21 = 2;
             } else {
                 var_21 = 3;
@@ -56,7 +56,7 @@ u64? #14C6FC79122F4A87(u64? arg_0) {
             u64? var_22 = get-spawner-position(var_13, 1);
             u64? var_23 = string-debug(var_13);
             u16 var_24;
-            if (var_19) {
+            if (var_19 != nullptr) {
                 var_24 = 2;
             } else {
                 var_24 = 3;
@@ -64,7 +64,7 @@ u64? #14C6FC79122F4A87(u64? arg_0) {
             debug-draw-string(var_22, var_23, var_24, 2.00, 0, 0.50, 0, 0);
             u64? var_25 = #5445173390656D6D("%.1f t", var_18);
             u16 var_26;
-            if (var_19) {
+            if (var_19 != nullptr) {
                 var_26 = 2;
             } else {
                 var_26 = 3;
@@ -73,7 +73,7 @@ u64? #14C6FC79122F4A87(u64? arg_0) {
             debug-draw-raycast(var_15, 2.00);
         }
         u64? var_27;
-        if (var_19) {
+        if (var_19 != nullptr) {
             u64? var_28 = new-boxed-value(1, 0);
             u64? var_29 = ddict-set(arg_0, var_13, var_28);
             var_27 = var_29;

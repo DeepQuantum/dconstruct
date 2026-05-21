@@ -29,3 +29,65 @@ u64? anim-overlay-brute-weapon-base-long-melee(u64? arg_0, u64? arg_1, u64? arg_
     return var_1;
 }
 
+u64? anim-overlay-brute-move-set-mg-search-walk__anim-overlay-set@1248(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = read-float-channel(OverlayHelper.AimState, arg_3, arg_0, arg_1, arg_2, 1.00);
+    return var_0;
+}
+
+u64? anim-overlay-brute-weapon-base-mg__anim-overlay-set@1448(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = lerp-scale(1.00, 1.00, 1.00, 0.00, arg_1);
+    return var_0;
+}
+
+u64? anim-overlay-brute-weapon-base-mg(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = lerp-scale(0.45, 0.10, 1.00, 0.00, arg_1);
+    return var_0;
+}
+
+f32 anim-overlay-brute-move-set-long-melee-search-walk-grass__anim-overlay-set@1e28(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return 0.70;
+}
+
+u64? anim-overlay-brute-weapon-base-long-melee__anim-overlay-set@3420(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = lerp-scale(0.30, 0.60, 0.00, 1.00, arg_1);
+    u64? var_1 = make-curve(var_0, 4);
+    return var_1;
+}
+
+u64? anim-overlay-brute-weapon-base-long-melee(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = lerp-scale(0.40, 0.80, 0.00, 1.00, arg_1);
+    u64? var_1 = make-curve(var_0, 4);
+    return var_1;
+}
+
+u64? anim-overlay-brute-move-set-mg-search-walk__anim-overlay-set@1248(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = read-float-channel(OverlayHelper.AimState, arg_3, arg_0, arg_1, arg_2, 1.00);
+    return var_0;
+}
+
+u64? anim-overlay-brute-weapon-base-mg__anim-overlay-set@1448(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = lerp-scale(1.00, 1.00, 1.00, 0.00, arg_1);
+    return var_0;
+}
+
+u64? anim-overlay-brute-weapon-base-mg(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = lerp-scale(0.45, 0.10, 1.00, 0.00, arg_1);
+    return var_0;
+}
+
+f32 anim-overlay-brute-move-set-long-melee-search-walk-grass__anim-overlay-set@1e28(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return 0.70;
+}
+
+u64? anim-overlay-brute-weapon-base-long-melee__anim-overlay-set@3420(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = lerp-scale(0.30, 0.60, 0.00, 1.00, arg_1);
+    u64? var_1 = make-curve(var_0, 4);
+    return var_1;
+}
+
+u64? anim-overlay-brute-weapon-base-long-melee(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = lerp-scale(0.40, 0.80, 0.00, 1.00, arg_1);
+    u64? var_1 = make-curve(var_0, 4);
+    return var_1;
+}
+

@@ -22,3 +22,51 @@ u64? anim-player-improv-blindfire-states(f32 arg_0, u64? arg_1, u64? arg_2, u64?
     return var_1;
 }
 
+u64? anim-player-improv-blindfire-states__actor-state-list@48__anim-node-blend@1b0____anim-node-blend@430____anim-node-blend@560____anim-node-blend@8b8__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    f32 var_0 = *(f32*)((*arg_0 + 332) + 4);
+    u64? var_1 = lerp-scale(0.00, 1.00, 0.00, 1.00, var_0);
+    return var_1;
+}
+
+u64? anim-player-improv-blindfire-states__actor-state-list@48__anim-node-blend@1b0____anim-node-blend@430__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    f32 var_0 = *(f32*)((*arg_0 + 332) + 4);
+    u64? var_1 = lerp-scale(-1.00, 0.00, 1.00, 0.00, var_0);
+    return var_1;
+}
+
+u64? anim-player-improv-blindfire-states__actor-state-list@48(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    f32 var_0 = *(f32*)(*arg_0 + 332);
+    u64? var_1 = lerp-scale(-1.00, 0.00, 1.00, 0.00, var_0);
+    return var_1;
+}
+
+u64? anim-player-improv-blindfire-states(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    f32 var_0 = *(f32*)(*arg_0 + 332);
+    u64? var_1 = lerp-scale(0.00, 1.00, 0.00, 1.00, var_0);
+    return var_1;
+}
+
+u64? anim-player-improv-blindfire-states__actor-state-list@48__anim-node-blend@1b0____anim-node-blend@430____anim-node-blend@560____anim-node-blend@8b8__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    f32 var_0 = *(f32*)((*arg_0 + 332) + 4);
+    u64? var_1 = lerp-scale(0.00, 1.00, 0.00, 1.00, var_0);
+    return var_1;
+}
+
+u64? anim-player-improv-blindfire-states__actor-state-list@48__anim-node-blend@1b0____anim-node-blend@430__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    f32 var_0 = *(f32*)((*arg_0 + 332) + 4);
+    u64? var_1 = lerp-scale(-1.00, 0.00, 1.00, 0.00, var_0);
+    return var_1;
+}
+
+u64? anim-player-improv-blindfire-states__actor-state-list@48(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    f32 var_0 = *(f32*)(*arg_0 + 332);
+    u64? var_1 = lerp-scale(-1.00, 0.00, 1.00, 0.00, var_0);
+    return var_1;
+}
+
+u64? anim-player-improv-blindfire-states(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    f32 var_0 = *(f32*)(*arg_0 + 332);
+    u64? var_1 = lerp-scale(0.00, 1.00, 0.00, 1.00, var_0);
+    return var_1;
+}
+
