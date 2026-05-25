@@ -97,3 +97,36 @@ u16 epilogue-pre-load__level-scripted-set@2b8() {
     return 1;
 }
 
+u64? tsk-epilogue-reconciliation__level-set@f8__level-scripted-set@4f8__() {
+    u64? var_0 = task-complete?(epilogue, epi-reconciliation);
+    u64? var_1 = is-chronological-mode-enabled?();
+    u64? var_2 = !(var_1);
+    bool var_3 = var_0 && var_2;
+    return var_3;
+}
+
+u64? tsk-epilogue-reconciliation__level-scripted-set@4e0() {
+    u64? var_0 = is-chronological-mode-enabled?();
+    u64? var_1 = !(var_0);
+    return var_1;
+}
+
+u64? tsk-epilogue-reconciliation__level-scripted-set@4c8() {
+    u64? var_0 = is-chronological-mode-enabled?();
+    return var_0;
+}
+
+bool epilogue-pre-load__level-set@1b8__level-scripted-set@510__() {
+    u64? var_0 = cinematic-get-current-maya-frame(cin-san-abby-boats-away);
+    return var_0 > 1904.69;
+}
+
+u64? epilogue-pre-load__level-scripted-set@2d0() {
+    u64? var_0 = task-not-complete?(santa-barbara, san-beach-fight-fist-phase);
+    return var_0;
+}
+
+u16 epilogue-pre-load__level-scripted-set@2b8() {
+    return 1;
+}
+

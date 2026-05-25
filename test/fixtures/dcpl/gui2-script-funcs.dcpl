@@ -607,3 +607,206 @@ u64? gui2-get-widget-anim-duration-seconds(u64? arg_0, u64? arg_1) {
     return var_1;
 }
 
+u64? gui2-set-widget-pivot-screenspace(u64? arg_0, u64? arg_1) {
+    u64? var_0 = gui2-get-widget-transform(arg_0);
+    u64? var_1 = gui2-rxfm-set-pivot-ss(var_0, arg_1);
+    return var_1;
+}
+
+u64? gui2-get-widget-pivot-screenspace(u64? arg_0) {
+    u64? var_0 = gui2-get-widget-transform(arg_0);
+    u64? var_1 = gui2-rxfm-get-pivot-ss(var_0);
+    return var_1;
+}
+
+bool gui2-widget-in-state?(u64? arg_0, i64 arg_1, u64? arg_2) {
+    u64? var_0 = gui2-get-widget-state(arg_0, arg_2);
+    return arg_1 == var_0;
+}
+
+u64? gui2-set-widget-scale(u64? arg_0, u64? arg_1) {
+    u64? var_0 = gui2-get-widget-transform(arg_0);
+    u64? var_1 = gui2-rxfm-set-scale-ps(var_0, arg_1);
+    return var_1;
+}
+
+u64? gui2-set-widget-pivot(u64? arg_0, u64? arg_1) {
+    u64? var_0 = gui2-get-widget-transform(arg_0);
+    u64? var_1 = gui2-rxfm-set-pivot-as(var_0, arg_1);
+    return var_1;
+}
+
+u64? gui2-get-widget-pivot-parentspace(u64? arg_0) {
+    u64? var_0 = gui2-get-widget-transform(arg_0);
+    u64? var_1 = gui2-rxfm-get-pivot-ps(var_0);
+    return var_1;
+}
+
+u64? gui2-rxfm-get-pivot-ls(u64? arg_0) {
+    u64? var_0 = alloc-vector2(0.00, 0.00, 0);
+    return var_0;
+}
+
+u64? gui2-get-widget-pivot(u64? arg_0) {
+    u64? var_0 = gui2-get-widget-transform(arg_0);
+    u64? var_1 = gui2-rxfm-get-pivot-as(var_0);
+    return var_1;
+}
+
+u64? gui2-find-angle-toward-target-ss(u64? arg_0, u64? arg_1, f32 arg_2) {
+    u64? var_0 = vector2-sub(arg_1, arg_0);
+    u64? var_1 = vector2-dot(var_0, var_0);
+    u64? var_2;
+    if (var_1 < (arg_2 * arg_2)) {
+        f32 var_3 = (arg_2 * arg_2) - (*(f32*)var_0 * *(f32*)var_0);
+        u64? var_4 = sqrt(var_3);
+        u64? var_5 = arctan2(*(f32*)var_0, var_4);
+        var_2 = var_5;
+    } else {
+        f32 var_6 = -1.00 * *(f32*)(var_0 + 4);
+        u64? var_7 = arctan2(*(f32*)var_0, var_6);
+        var_2 = var_7;
+    }
+    return var_2;
+}
+
+f32 gui2-get-widget-width(u64? arg_0) {
+    u64? var_0 = gui2-get-widget-transform(arg_0);
+    u64? var_1 = gui2-rxfm-get-rect-size-delta(var_0);
+    return *(f32*)var_1;
+}
+
+u64? gui2-get-widget-pivot-anchorspace(u64? arg_0) {
+    u64? var_0 = gui2-get-widget-transform(arg_0);
+    u64? var_1 = gui2-rxfm-get-pivot-as(var_0);
+    return var_1;
+}
+
+u64? gui2-set-widget-pivot-anchorspace(u64? arg_0, u64? arg_1) {
+    u64? var_0 = gui2-get-widget-transform(arg_0);
+    u64? var_1 = gui2-rxfm-set-pivot-as(var_0, arg_1);
+    return var_1;
+}
+
+u64? gui2-set-progress-bar-percent-at-speed(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, f32 arg_4) {
+    u64? var_0 = gui2-get-progress-bar-percent(arg_0);
+    f32 var_1;
+    if ((var_0 - arg_1) < 0.00) {
+        var_1 = (var_0 - arg_1) * -1.00;
+    } else {
+        var_1 = var_0 - arg_1;
+    }
+    f32 var_2;
+    if (arg_4 > (var_1 / arg_2)) {
+        var_2 = arg_4;
+    } else {
+        f32 var_3;
+        if ((var_0 - arg_1) < 0.00) {
+            var_3 = (var_0 - arg_1) * -1.00;
+        } else {
+            var_3 = var_0 - arg_1;
+        }
+        var_2 = var_3 / arg_2;
+    }
+    u64? var_4 = gui2-set-progress-bar-percent(arg_0, arg_1, var_2, arg_3);
+    return var_4;
+}
+
+u64? gui2-widget-path(u64? arg_0) {
+    u64? var_0 = string-to-symbol(arg_0);
+    return var_0;
+}
+
+u64? gui2-get-widget-scale(u64? arg_0) {
+    u64? var_0 = gui2-get-widget-transform(arg_0);
+    u64? var_1 = gui2-rxfm-get-scale-ps(var_0);
+    return var_1;
+}
+
+u64? gui2-set-widget-rotation(u64? arg_0, u64? arg_1) {
+    u64? var_0 = gui2-get-widget-transform(arg_0);
+    u64? var_1 = gui2-rxfm-set-rotation-ps(var_0, arg_1);
+    return var_1;
+}
+
+u64? gui2-get-widget-pivot-normalized(u64? arg_0) {
+    u64? var_0 = gui2-get-widget-transform(arg_0);
+    u64? var_1 = gui2-rxfm-get-pivot-n(var_0);
+    return var_1;
+}
+
+u64? gui2-set-widget-pivot-normalized(u64? arg_0, u64? arg_1) {
+    u64? var_0 = gui2-get-widget-transform(arg_0);
+    u64? var_1 = gui2-rxfm-set-pivot-n(var_0, arg_1);
+    return var_1;
+}
+
+f32 gui2-get-widget-height(u64? arg_0) {
+    u64? var_0 = gui2-get-widget-transform(arg_0);
+    u64? var_1 = gui2-rxfm-get-rect-size-delta(var_0);
+    return *(f32*)(var_1 + 4);
+}
+
+u64? menu2-pop-all-pages(u64? arg_0) {
+    u64? var_0 = menu2-pop-to-page(arg_0, 0);
+    return var_0;
+}
+
+u64? gui2-set-widget-pivot-parentspace(u64? arg_0, u64? arg_1) {
+    u64? var_0 = gui2-get-widget-transform(arg_0);
+    u64? var_1 = gui2-rxfm-set-pivot-ps(var_0, arg_1);
+    return var_1;
+}
+
+u64? gui2-set-widget-anim-time-seconds(u64? arg_0, f32 arg_1) {
+    u64? var_0 = gui2-get-widget-state(arg_0, 0);
+    u64? var_1 = gui2-get-widget-anim-duration-seconds(arg_0, var_0);
+    f32 var_2;
+    if (var_1 > 0.00) {
+        f32 var_3;
+        if ((arg_1 / var_1) > 0.00) {
+            var_3 = arg_1 / var_1;
+        } else {
+            var_3 = 0.00;
+        }
+        if (var_3 < 1.00) {
+            if ((arg_1 / var_1) > 0.00) {
+                var_2 = arg_1 / var_1;
+            } else {
+                var_2 = 0.00;
+            }
+        } else {
+            var_2 = 1.00;
+        }
+    } else {
+        var_2 = 0.00;
+    }
+    u64? var_4 = gui2-set-widget-anim-phase(arg_0, var_2);
+    return var_4;
+}
+
+u64? speak-text-to-speech-formatted(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_0 = generate-text-to-speech-formatted(arg_0, 0);
+    u64? var_1 = speak-text-to-speech-raw(var_0, arg_1, arg_2, arg_3);
+    return var_1;
+}
+
+u64? gui2-set-widget-anchor-rect(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4) {
+    u64? var_0 = gui2-get-widget-transform(arg_0);
+    u64? var_1 = alloc-gui2-rect-ltrb(arg_1, arg_2, arg_3, arg_4, 0);
+    u64? var_2 = gui2-rxfm-set-anchor-rect-n(var_0, var_1);
+    return var_2;
+}
+
+u64? gui2-get-widget-rotation(u64? arg_0) {
+    u64? var_0 = gui2-get-widget-transform(arg_0);
+    u64? var_1 = gui2-rxfm-get-rotation-ps(var_0);
+    return var_1;
+}
+
+u64? gui2-get-widget-anim-duration-seconds(u64? arg_0, u64? arg_1) {
+    u64? var_0 = gui2-get-widget-animation-domain(arg_0);
+    u64? var_1 = gui2-get-anim-duration-seconds(var_0, arg_1);
+    return var_1;
+}
+

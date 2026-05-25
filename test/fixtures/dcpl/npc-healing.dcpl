@@ -64,3 +64,25 @@ u64? npc-use-medkit-attack(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? 
     return var_0;
 }
 
+u64? npc-put-out-fire-self__melee-attack@60__melee-event-list@608__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = npc-put-out-fire(arg_1);
+    return var_0;
+}
+
+u64? npc-use-medkit-attack__melee-attack@250__melee-event-list@510__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = get-character-health(arg_1);
+    u64? var_1 = new-boxed-value(2, var_0);
+    u64? var_2 = fact-set(arg_1, heal-start-health, var_1);
+    return var_2;
+}
+
+u64? npc-use-medkit-attack__melee-attack@250(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = send-event(npc-start-using-medkit, arg_1);
+    return var_0;
+}
+
+u64? npc-use-medkit-attack(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = send-event(npc-finish-using-medkit, arg_1);
+    return var_0;
+}
+

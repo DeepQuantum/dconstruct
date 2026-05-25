@@ -1849,3 +1849,620 @@ u16 npc-brute-counter-right-tell(i64 arg_0, i64 arg_1, u64? arg_2, u64? arg_3, u
     return var_2;
 }
 
+u64? switchblade-left-block-counter-hit-grab-sync__melee-attack@888__start-func-array@cc68__(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = get-object-distance(arg_1, arg_2);
+    bool var_1 = !(arg_1 == 0) && !(arg_2 == 0) && var_0 < 3.00 && var_0 > 0.00;
+    u64? var_2 = new-boxed-value(6, var_0);
+    u64? var_3 = new-boxed-value(6, 0.00);
+    u64? var_4 = new-boxed-value(6, 3.00);
+    u64? var_5;
+    if (var_1 != nullptr) {
+        u64? var_6 = new-boxed-value(7, true);
+        var_5 = var_6;
+    } else {
+        u64? var_7 = new-boxed-value(7, false);
+        var_5 = var_7;
+    }
+    do-melee-log("characters-in-range? [[f]] [[f]] [[f]] [[s]]", var_2, var_3, var_4, var_5);
+    u64? var_8 = has-line-of-motion-to-object?(arg_1, arg_2, 0.00, 0, 0);
+    u64? var_9 = npc-block-counter-eligible(arg_2, arg_1);
+    u64? var_10 = brute-grab-cooldown(arg_2, arg_1, 1);
+    bool var_11 = var_1 && var_8 && var_9 && var_10;
+    return var_11;
+}
+
+u16 switchblade-left-block-counter-hit-grab-sync(i64 arg_0, i64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    u16 var_0;
+    if (arg_0 == arg_1) {
+        u64? var_1 = melee-fact-set-time(arg_1, last-brute-grab-sync);
+        var_0 = var_1;
+    } else {
+        var_0 = 0;
+    }
+    return var_0;
+}
+
+u16 switchblade-left-block-counter-hit-grab-sync__melee-event-list@d9f8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = !(1);
+    u64? var_1 = is-player?(arg_1);
+    u64? var_2 = is-player?(arg_2);
+    u16 var_3;
+    if (var_0 != nullptr && 1 != nullptr || var_1 != nullptr && var_2 != nullptr) {
+        u64? var_4 = frames-to-sec(6);
+        u64? var_5 = wait-rumble-curve(0.70, 0.40, var_4, 1, 0);
+        var_3 = var_5;
+    } else {
+        var_3 = 0;
+    }
+    return var_3;
+}
+
+u64? switchblade-left-block-counter-hit-grab-sync__melee-event-transitions@3c878(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    return arg_2;
+}
+
+u64? fist-light-attack-2-block-hit-sync__melee-attack@a78__start-func-array@d3b0__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = npc-brute?(arg_2);
+    return var_0;
+}
+
+u16 fist-light-attack-2-block-hit-sync__melee-attack@a78(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = npc-enemy-ellie?(arg_2);
+    u64? var_1 = !(var_0);
+    u16 var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = melee-weapon-type-precedence(arg_1, arg_2);
+        u64? var_4 = !(var_3);
+        var_2 = var_4;
+    } else {
+        var_2 = 1;
+    }
+    return var_2;
+}
+
+u64? fist-light-attack-2-block-hit-sync__melee-event-list@b540(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    melee-log-player-event("melee-player-block-hit", 1);
+    u64? var_0 = send-event(reset-dodge-spam, ss-melee-dodge-attack-spam);
+    return var_0;
+}
+
+u16 fist-light-attack-2-block-hit-sync(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = is-player?(arg_1);
+    u64? var_1 = is-player?(arg_2);
+    u16 var_2;
+    if (var_0 != nullptr && var_1 != nullptr) {
+        u64? var_3 = npc-enemy-abby?(arg_2);
+        if (var_3 != nullptr) {
+            start-rumble(melee-blocking-enemy-abby-attack-rumble-settings, 0);
+        } else {
+            start-rumble(melee-blocking-attack-rumble-settings, 0);
+        }
+        u64? var_4 = get-object-locator(arg_2);
+        camera-shake-melee(var_4, 0.50, 0.50, 1);
+        u64? var_5 = npc-brute?(arg_2);
+        if (var_5 != nullptr) {
+            melee-fact-set-int(arg_2, brute-melee-hit-count, 0);
+        }
+        u64? var_6 = npc-enemy-abby?(arg_2);
+        if (var_6 != nullptr) {
+            u64? var_7 = melee-fact-set-int(arg_2, abby-melee-hit-count, 0);
+            var_2 = var_7;
+        } else {
+            var_2 = 0;
+        }
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+sid fist-light-attack-2-block-hit-sync__melee-event-transitions@3b9d0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return player-stun-attacks;
+}
+
+u64? 2h-blunt-attack-2-block-hit-combo-intro__melee-attack@c68__start-func-array@db90__(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = is-npc?(arg_2);
+    if (var_0 == nullptr) {
+        melee-debug-text-file-line-fail("(is-npc? defender)", "t2r/src/game/scriptx/melee/player-standing/imports/player-standing-macros.dcx", 4456);
+    }
+    melee-debug-text-file-line-fail("(valid-symbol? defender)", "t2r/src/game/scriptx/melee/player-standing/imports/player-standing-macros.dcx", 4457);
+    bool var_1 = var_0 && !(arg_2 == 0) && !(arg_2 == 0);
+    return var_1;
+}
+
+u64? 2h-blunt-attack-2-block-hit-combo-intro__melee-event-list@d3c8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = clear-gesture(arg_2, -1, -1.00, 0);
+    return var_0;
+}
+
+u64? 2h-blunt-attack-2-block-hit-combo-intro(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = melee-fact-get-time-since(arg_2, block-sync);
+    if (var_0 > 2.00) {
+        melee-fact-set-int(arg_2, concurrent-block-count, 1);
+    } else {
+        u64? var_1 = melee-fact-get-int(arg_2, concurrent-block-count);
+        melee-fact-set-int(arg_2, concurrent-block-count, var_1 + 1);
+    }
+    u64? var_2 = melee-fact-set-time(arg_2, block-sync);
+    return var_2;
+}
+
+u64? 2h-blunt-attack-2-block-hit-combo-intro__melee-event-advanced@39ef0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = melee-fact-get-float(arg_2, block-intro-rate);
+    return var_0;
+}
+
+u64? 1h-blade-attack-4-block-hit-sync(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    invalidate-melee-command-queue(player);
+    u64? var_0 = joypad-disable-commands-timed(0.50, melee-attack);
+    return var_0;
+}
+
+u64? 2h-blade-attack-1-block-hit-intro__melee-attack@1238__start-func-array@d488__(u64? arg_0, sid arg_1, sid arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u8 arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = is-npc?(arg_2);
+    if (var_0 == nullptr) {
+        melee-debug-text-file-line-fail("(is-npc? defender)", "t2r/src/game/scriptx/melee/player-standing/imports/player-standing-macros.dcx", 4236);
+    }
+    melee-debug-text-file-line-fail("(valid-symbol? defender)", "t2r/src/game/scriptx/melee/player-standing/imports/player-standing-macros.dcx", 4237);
+    bool var_1 = var_0 && !(arg_2 == 0) && !(arg_2 == 0);
+    return var_1;
+}
+
+u64? 2h-blade-attack-1-block-hit-intro__melee-event-list@bc48(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = get-object-locator(arg_2);
+    u64? var_1 = get-object-locator(arg_1);
+    u64? var_2 = rotate-locator-lookat(var_0, var_1, 1.00, 0);
+    u64? var_3 = set-cache-bound-frame(arg_9, var_2, 1);
+    return var_3;
+}
+
+u64? 2h-blade-attack-1-block-hit-intro(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = new-boxed-value(7, arg_2);
+    u64? var_1 = broadcast-event(melee-player-sync-hit, var_0);
+    return var_1;
+}
+
+u64? fist-right-block-counter-hit-grab-sync__melee-attack@1428__start-func-array@e5d0__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = is-rogue-mode?();
+    u64? var_1 = rogue-get-player-character();
+    u64? var_2 = rogue-get-player-character();
+    u64? var_3 = rogue-get-player-character();
+    bool var_4 = var_0 || var_1 == 3 || var_2 == 5 && var_3 == 11;
+    return !var_4;
+}
+
+u16 fist-right-block-counter-hit-grab-sync__melee-event-list@ee38(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = !(1);
+    u64? var_1 = is-player?(arg_1);
+    u64? var_2 = is-player?(arg_2);
+    u16 var_3;
+    if (var_0 != nullptr && 1 != nullptr || var_1 != nullptr && var_2 != nullptr) {
+        u64? var_4 = frames-to-sec(10);
+        u64? var_5 = wait-rumble-curve(0.40, 0.80, var_4, 1, 0);
+        var_3 = var_5;
+    } else {
+        var_3 = 0;
+    }
+    return var_3;
+}
+
+u16 fist-right-block-counter-hit-grab-sync(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = !(1);
+    u64? var_1 = is-player?(arg_1);
+    u64? var_2 = is-player?(arg_2);
+    u16 var_3;
+    if (var_0 != nullptr && 1 != nullptr || var_1 != nullptr && var_2 != nullptr) {
+        u64? var_4 = frames-to-sec(8);
+        u64? var_5 = wait-rumble-curve(0.40, 0.40, var_4, 1, 0);
+        var_3 = var_5;
+    } else {
+        var_3 = 0;
+    }
+    return var_3;
+}
+
+u16 npc-brute-counter-left-tell__melee-attack@1618(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = lookup-symbol(npc-brute-counter-left-swing, melee-attack);
+    u64? var_1 = lookup-symbol(npc-brute-counter-left-swing, melee-attack);
+    u32 var_2 = *(u32*)(*(var_1 + 296) + 40);
+    u64? var_3 = check-valid-swing-type(arg_1, var_2);
+    u16 var_4;
+    if (0 != nullptr && var_0 != nullptr && var_3 != nullptr) {
+        var_4 = 2;
+    } else {
+        var_4 = 1;
+    }
+    return var_4;
+}
+
+f32 npc-brute-counter-left-tell__character-melee-info@c0b8(u64? arg_0, u64? arg_1, u64? arg_2) {
+    return 0.20;
+}
+
+u64? npc-brute-counter-left-tell__start-func-array@efe8(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = npc-is-melee-behavior-condition-active?(arg_1, 19, 0.50);
+    u64? var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-object-distance(arg_1, arg_2);
+        bool var_3 = !(arg_1 == 0) && !(arg_2 == 0) && var_2 < (3.00 + 1.00) && var_2 > 0.00;
+        u64? var_4 = new-boxed-value(6, var_2);
+        u64? var_5 = new-boxed-value(6, 0.00);
+        u64? var_6 = new-boxed-value(6, 3.00 + 1.00);
+        u64? var_7;
+        if (var_3 != nullptr) {
+            u64? var_8 = new-boxed-value(7, true);
+            var_7 = var_8;
+        } else {
+            u64? var_9 = new-boxed-value(7, false);
+            var_7 = var_9;
+        }
+        do-melee-log("characters-in-range? [[f]] [[f]] [[f]] [[s]]", var_4, var_5, var_6, var_7);
+        var_1 = var_3;
+    } else {
+        u64? var_10 = get-object-distance(arg_1, arg_2);
+        bool var_11 = !(arg_1 == 0) && !(arg_2 == 0) && var_10 < 3.00 && var_10 > 0.00;
+        u64? var_12 = new-boxed-value(6, var_10);
+        u64? var_13 = new-boxed-value(6, 0.00);
+        u64? var_14 = new-boxed-value(6, 3.00);
+        u64? var_15;
+        if (var_11 != nullptr) {
+            u64? var_16 = new-boxed-value(7, true);
+            var_15 = var_16;
+        } else {
+            u64? var_17 = new-boxed-value(7, false);
+            var_15 = var_17;
+        }
+        do-melee-log("characters-in-range? [[f]] [[f]] [[f]] [[s]]", var_12, var_13, var_14, var_15);
+        var_1 = var_11;
+    }
+    if (var_1 == nullptr) {
+        melee-debug-text-file-line-fail("(if (npc-is-melee-behavior-condition-active? attacker (melee-behavior-condition-enum target-unreachable) 0.5) (characters-in-range? attacker defender (+ range-max 1.0) range-min) (characters-in-range? attacker defender range-max range-min))", "t2r/src/game/scriptx/melee/npc-standing/imports/npc-standing-macros.dcx", 2837);
+    }
+    u64? var_18 = get-object-locator(arg_1);
+    u64? var_19 = get-object-locator(arg_2);
+    u64? var_20 = melee-direction-check-locator-90s(var_18, var_19, 15, 90.00);
+    bool var_21 = var_1 && !(15 == 15) && var_20;
+    return var_21;
+}
+
+u16 npc-brute-counter-left-tell(i64 arg_0, i64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    u64? var_0 = get-animation-duration(arg_0, brute-f-2hblunt-block-1hblunt-90-lt-block-counter-tell);
+    u64? var_1 = get-animation-frame(arg_0, 2, brute-f-2hblunt-block-1hblunt-90-lt-block-counter-tell);
+    u16 var_2;
+    if (arg_0 == arg_1 && ((var_0 * 30.00) - var_1) > 2.00) {
+        u64? var_3 = is-final-build?();
+        if (var_3 == nullptr) {
+            f32 var_4 = (var_0 * 30.00) - var_1;
+            u64? var_5 = #5445173390656D6D("TELL INTERUPTED: interupted by %f frames", var_4);
+            display(var_5, 19);
+        }
+        u64? var_6 = melee-fact-set-time(arg_0, last-time-tell-interupted);
+        var_2 = var_6;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u64? npc-brute-counter-left-tell__melee-event-list@b510(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = disable-vox-melee-death-callout(arg_1, arg_2);
+    return var_0;
+}
+
+u64? npc-brute-counter-left-tell__melee-event-advanced@3bed8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = estimate-frames-til-hit(arg_1);
+    u64? var_1 = npc-swing-speed-flex(arg_1, arg_2, (f32)var_0, 1);
+    return var_1;
+}
+
+u64? npc-brute-counter-left-tell__melee-event-advanced@3c0a0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = npc-enemy-ellie?(arg_1);
+    u64? var_1 = character-in-unsynced-melee-attack-as-attacker?(arg_2);
+    u64? var_2 = character-in-melee-attack-of-other-character?(arg_1, arg_2);
+    u64? var_3 = get-current-melee-attack(arg_2);
+    u64? var_4 = get-current-melee-attack(arg_2);
+    bool var_5 = 0 || var_0 && var_1 && var_2 && var_3 && *(u64*)(var_4 + 16) == melee-player-contextual-dodge && !(*(u64*)(var_4 + 16) == melee-player-contextual-dodge);
+    return var_5;
+}
+
+sid npc-brute-counter-left-tell__melee-event-transitions@38768(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return npc-execution-surprises;
+}
+
+u64? 2h-melee-left-block-counter-hit-sync__melee-attack@1808__start-func-array@dd10__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = melee-weapon-bit-check(arg_2, #0030008000000000, 1, 0);
+    if (var_0 == nullptr) {
+        melee-debug-text-file-line-fail("(melee-weapon-bit-check defender (target-weapon-type 2h-superheavy-all switchblade-npc-ellie npc-abby-unarmed))", "t2r/src/game/scriptx/melee/player-standing/imports/player-standing-macros.dcx", 4734);
+    }
+    u64? var_1 = npc-brute?(arg_2);
+    u64? var_2 = melee-weapon-type-precedence(arg_1, arg_2);
+    u64? var_3 = !(var_2);
+    bool var_4 = var_0 && var_1 && var_3;
+    return var_4;
+}
+
+u64? 2h-melee-left-block-counter-hit-sync(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = melee-log-player-event("melee-player-block-hit", 1);
+    return var_0;
+}
+
+u64? fist-light-attack-1-block-hit-combo-intro__melee-attack@1be8(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = is-npc?(arg_2);
+    if (var_0 == nullptr) {
+        melee-debug-text-file-line-fail("(is-npc? defender)", "t2r/src/game/scriptx/melee/player-standing/imports/player-standing-macros.dcx", 4456);
+    }
+    melee-debug-text-file-line-fail("(valid-symbol? defender)", "t2r/src/game/scriptx/melee/player-standing/imports/player-standing-macros.dcx", 4457);
+    bool var_1 = var_0 && !(arg_2 == 0) && !(arg_2 == 0);
+    return var_1;
+}
+
+u64? fist-light-attack-1-block-hit-combo-intro(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = estimate-frames-til-hit(arg_1);
+    if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1) != nullptr) {
+        u64? var_1 = is-final-build?();
+        if (var_1 == nullptr) {
+            u64? var_2 = #5445173390656D6D("frames to block hit: %i", var_0);
+            display(var_2, 19);
+        }
+    }
+    u64? var_3 = frames-to-sec(6);
+    u64? var_4 = frames-to-sec(1);
+    u64? var_5 = sec-to-frames(var_3 - var_4);
+    f32 var_6 = (f32)var_5 / (f32)var_0;
+    u64? var_7 = minmax(var_6, 0.50, 2.00);
+    u64? var_8 = melee-fact-set-float(arg_2, block-intro-rate, var_7);
+    return var_8;
+}
+
+u64? 2h-blade-attack-2-block-hit-sync(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = melee-weapon-bit-check(arg_1, #0000008000000000, 1, 0);
+    return var_0;
+}
+
+u64? switchblade-light-attack-3-block-hit-combo-intro__melee-attack@2978(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = is-npc?(arg_2);
+    if (var_0 == nullptr) {
+        melee-debug-text-file-line-fail("(is-npc? defender)", "t2r/src/game/scriptx/melee/player-standing/imports/player-standing-macros.dcx", 4456);
+    }
+    melee-debug-text-file-line-fail("(valid-symbol? defender)", "t2r/src/game/scriptx/melee/player-standing/imports/player-standing-macros.dcx", 4457);
+    bool var_1 = var_0 && !(arg_2 == 0) && !(arg_2 == 0);
+    return var_1;
+}
+
+u64? switchblade-light-attack-3-block-hit-combo-intro(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = estimate-frames-til-hit(arg_1);
+    if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1) != nullptr) {
+        u64? var_1 = is-final-build?();
+        if (var_1 == nullptr) {
+            u64? var_2 = #5445173390656D6D("frames to block hit: %i", var_0);
+            display(var_2, 19);
+        }
+    }
+    u64? var_3 = frames-to-sec(7);
+    u64? var_4 = frames-to-sec(1);
+    u64? var_5 = sec-to-frames(var_3 - var_4);
+    f32 var_6 = (f32)var_5 / (f32)var_0;
+    u64? var_7 = minmax(var_6, 0.50, 2.00);
+    u64? var_8 = melee-fact-set-float(arg_2, block-intro-rate, var_7);
+    return var_8;
+}
+
+u64? fist-light-attack-3-block-hit-intro__melee-attack@2d58(u64? arg_0, sid arg_1, sid arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u8 arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = is-npc?(arg_2);
+    if (var_0 == nullptr) {
+        melee-debug-text-file-line-fail("(is-npc? defender)", "t2r/src/game/scriptx/melee/player-standing/imports/player-standing-macros.dcx", 4236);
+    }
+    melee-debug-text-file-line-fail("(valid-symbol? defender)", "t2r/src/game/scriptx/melee/player-standing/imports/player-standing-macros.dcx", 4237);
+    bool var_1 = var_0 && !(arg_2 == 0) && !(arg_2 == 0);
+    return var_1;
+}
+
+u16 switchblade-left-block-counter-hit-sync(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = !(1);
+    u64? var_1 = is-player?(arg_1);
+    u64? var_2 = is-player?(arg_2);
+    u16 var_3;
+    if (var_0 != nullptr && 1 != nullptr || var_1 != nullptr && var_2 != nullptr) {
+        u64? var_4 = frames-to-sec(25);
+        u64? var_5 = wait-rumble-curve(0.40, 0.40, var_4, 1, 0);
+        var_3 = var_5;
+    } else {
+        var_3 = 0;
+    }
+    return var_3;
+}
+
+u64? fist-light-attack-4-block-hit-sync(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    invalidate-melee-command-queue(player);
+    u64? var_0 = joypad-disable-commands-timed(0.40, melee-attack);
+    return var_0;
+}
+
+u16 fist-left-block-counter-hit-grab-sync(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = !(1);
+    u64? var_1 = is-player?(arg_1);
+    u64? var_2 = is-player?(arg_2);
+    u16 var_3;
+    if (var_0 != nullptr && 1 != nullptr || var_1 != nullptr && var_2 != nullptr) {
+        u64? var_4 = frames-to-sec(6);
+        u64? var_5 = wait-rumble-curve(0.40, 0.80, var_4, 1, 0);
+        var_3 = var_5;
+    } else {
+        var_3 = 0;
+    }
+    return var_3;
+}
+
+u16 switchblade-right-block-counter-hit-grab-sync(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = !(1);
+    u64? var_1 = is-player?(arg_1);
+    u64? var_2 = is-player?(arg_2);
+    u16 var_3;
+    if (var_0 != nullptr && 1 != nullptr || var_1 != nullptr && var_2 != nullptr) {
+        u64? var_4 = frames-to-sec(2);
+        u64? var_5 = wait-rumble-curve(0.40, 0.40, var_4, 1, 0);
+        var_3 = var_5;
+    } else {
+        var_3 = 0;
+    }
+    return var_3;
+}
+
+u64? switchblade-light-attack-3-block-hit-intro__melee-attack@4e48(u64? arg_0, sid arg_1, sid arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u8 arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = is-npc?(arg_2);
+    if (var_0 == nullptr) {
+        melee-debug-text-file-line-fail("(is-npc? defender)", "t2r/src/game/scriptx/melee/player-standing/imports/player-standing-macros.dcx", 4236);
+    }
+    melee-debug-text-file-line-fail("(valid-symbol? defender)", "t2r/src/game/scriptx/melee/player-standing/imports/player-standing-macros.dcx", 4237);
+    bool var_1 = var_0 && !(arg_2 == 0) && !(arg_2 == 0);
+    return var_1;
+}
+
+u16 fist-right-block-counter-hit-sync__melee-event-list@f320(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = !(1);
+    u64? var_1 = is-player?(arg_1);
+    u64? var_2 = is-player?(arg_2);
+    u16 var_3;
+    if (var_0 != nullptr && 1 != nullptr || var_1 != nullptr && var_2 != nullptr) {
+        u64? var_4 = frames-to-sec(7);
+        u64? var_5 = wait-rumble-curve(0.70, 0.40, var_4, 1, 0);
+        var_3 = var_5;
+    } else {
+        var_3 = 0;
+    }
+    return var_3;
+}
+
+f32 npc-brute-counter-left-swing__melee-attack@6f38__character-melee-info@ecd0__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    f32 var_0;
+    if (0 != nullptr && 1 != nullptr) {
+        var_0 = 0.00;
+    } else {
+        f32 var_1 = *(f32*)(*(arg_0 + 296) + 52);
+        u64? var_2 = minmax(var_1, 0.00, 6.00);
+        u64? var_3 = frames-to-sec((i32)var_2);
+        var_0 = var_3;
+    }
+    return var_0;
+}
+
+u16 npc-brute-counter-left-swing__start-func-array@b930(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    return 1;
+}
+
+u64? npc-brute-counter-left-swing(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    u64? var_0 = melee-fact-remove(arg_0, tell-init-defender-move);
+    return var_0;
+}
+
+u16 npc-brute-counter-left-swing__melee-event-list@ced8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = get-character-weapon-id(arg_1);
+    u64? var_1 = string-debug(var_0);
+    log-event("melee-npc-swing", 1, var_1, 0, 0);
+    set-swing-type-fact(arg_1, 1);
+    u64? var_2 = npc-brute?(arg_1);
+    if (var_2 != nullptr) {
+        melee-fact-set-int(arg_1, brute-melee-hit-count, 0);
+    }
+    u64? var_3 = npc-enemy-abby?(arg_1);
+    u16 var_4;
+    if (var_3 != nullptr) {
+        u64? var_5 = melee-fact-set-int(arg_1, abby-melee-hit-count, 0);
+        var_4 = var_5;
+    } else {
+        var_4 = 0;
+    }
+    return var_4;
+}
+
+u64? npc-brute-counter-left-swing__melee-event-advanced@3c5d8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = character-in-unsynced-melee-attack-as-attacker?(arg_2);
+    u64? var_1 = character-in-melee-attack-of-other-character?(arg_1, arg_2);
+    u64? var_2 = get-current-melee-attack(arg_2);
+    u64? var_3 = get-current-melee-attack(arg_2);
+    bool var_4 = var_0 && var_1 && var_2 && *(u64*)(var_3 + 16) == melee-player-contextual-dodge;
+    return !var_4;
+}
+
+u64? npc-brute-counter-left-swing__melee-event-advanced@39608(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = melee-fact-get-bool(arg_1, npc-enemy-abby-punish-dodge);
+    return var_0;
+}
+
+u16 npc-brute-counter-right-swing__melee-event-list@ec88(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = get-character-weapon-id(arg_1);
+    u64? var_1 = string-debug(var_0);
+    log-event("melee-npc-swing", 1, var_1, 0, 0);
+    set-swing-type-fact(arg_1, 8);
+    u64? var_2 = npc-brute?(arg_1);
+    if (var_2 != nullptr) {
+        melee-fact-set-int(arg_1, brute-melee-hit-count, 0);
+    }
+    u64? var_3 = npc-enemy-abby?(arg_1);
+    u16 var_4;
+    if (var_3 != nullptr) {
+        u64? var_5 = melee-fact-set-int(arg_1, abby-melee-hit-count, 0);
+        var_4 = var_5;
+    } else {
+        var_4 = 0;
+    }
+    return var_4;
+}
+
+u16 npc-brute-counter-right-swing(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = fact-exists?(arg_1, hit-reaction-abort-frame);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = lookup-symbol(brute-2hblunt-lt-foot-3m-upward-swing-a-hit, melee-attack);
+        if ((*(i32*)(*(var_2 + 296) + 128) == 0) == nullptr) {
+            u64? var_3 = melee-fact-get-int(arg_1, hit-reaction-abort-frame);
+            u64? var_4 = lookup-symbol(brute-2hblunt-lt-foot-3m-upward-swing-a-hit, melee-attack);
+            f32 var_5 = ((f32)var_3 + (f32)*(i32*)(*(var_4 + 296) + 128)) / 2.00;
+            u64? var_6 = round-float-up(var_5);
+            u64? var_7 = melee-fact-set-int(arg_1, hit-reaction-abort-frame, (i32)var_6);
+            var_1 = var_7;
+        } else {
+            var_1 = 0;
+        }
+    } else {
+        u64? var_8 = lookup-symbol(brute-2hblunt-lt-foot-3m-upward-swing-a-hit, melee-attack);
+        i32 var_9 = *(i32*)(*(var_8 + 296) + 128);
+        u64? var_10 = melee-fact-set-int(arg_1, hit-reaction-abort-frame, var_9);
+        var_1 = var_10;
+    }
+    return var_1;
+}
+
+u16 npc-brute-counter-right-tell__melee-attack@97e8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = lookup-symbol(npc-brute-counter-right-swing, melee-attack);
+    u64? var_1 = lookup-symbol(npc-brute-counter-right-swing, melee-attack);
+    u32 var_2 = *(u32*)(*(var_1 + 296) + 40);
+    u64? var_3 = check-valid-swing-type(arg_1, var_2);
+    u16 var_4;
+    if (0 != nullptr && var_0 != nullptr && var_3 != nullptr) {
+        var_4 = 2;
+    } else {
+        var_4 = 1;
+    }
+    return var_4;
+}
+
+u16 npc-brute-counter-right-tell(i64 arg_0, i64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    u64? var_0 = get-animation-duration(arg_0, brute-f-2hblunt-block-1hblunt-90-rt-block-counter-tell);
+    u64? var_1 = get-animation-frame(arg_0, 2, brute-f-2hblunt-block-1hblunt-90-rt-block-counter-tell);
+    u16 var_2;
+    if (arg_0 == arg_1 && ((var_0 * 30.00) - var_1) > 2.00) {
+        u64? var_3 = is-final-build?();
+        if (var_3 == nullptr) {
+            f32 var_4 = (var_0 * 30.00) - var_1;
+            u64? var_5 = #5445173390656D6D("TELL INTERUPTED: interupted by %f frames", var_4);
+            display(var_5, 19);
+        }
+        u64? var_6 = melee-fact-set-time(arg_0, last-time-tell-interupted);
+        var_2 = var_6;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+

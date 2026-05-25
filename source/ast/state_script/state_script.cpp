@@ -86,7 +86,7 @@ void state_script::pseudo_racket(std::ostream& os) const {
         }
 
         decl_scope.define("#" + state.m_name, make_type_from_prim(ast::primitive_kind::U64));
-        decl_scope.m_sidAliases[state.m_name] = {SID(state.m_name.c_str()), state.m_name};
+        //decl_scope.m_sidAliases[state.m_name] = {SID(state.m_name.c_str()), state.m_name};
 
         std::unordered_set<std::string> block_names;
         for (const auto& block : state.m_blocks) {

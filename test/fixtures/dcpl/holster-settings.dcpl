@@ -130,3 +130,47 @@ u16 *give-player-short-gun-holster*(u64? arg_0) {
     return var_1;
 }
 
+u16 *give-player-long-gun-holster*(u64? arg_0) {
+    u64? var_0 = get-animation-phase(player, 0, 0);
+    u16 var_1;
+    if (arg_0 != nullptr && var_0 > 0.85) {
+        u64? var_2 = is-player-ellie?(player);
+        string var_3;
+        if (var_2 != nullptr) {
+            var_3 = "ellie-long-gun-holster";
+        } else {
+            var_3 = "abby-long-gun-holster";
+        }
+        u64? var_4 = get-object-locator(self);
+        log-event("found-long-gun-holster", 0, var_3, var_4, 0);
+        give-player-upgrade-by-id(long-gun-second-holster);
+        hud2-request-new-item-notification(long-gun-holster, 0.00, 0);
+        var_1 = 1;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 *give-player-short-gun-holster*(u64? arg_0) {
+    u64? var_0 = get-animation-phase(player, 0, 0);
+    u16 var_1;
+    if (arg_0 != nullptr && var_0 > 0.85) {
+        u64? var_2 = is-player-ellie?(player);
+        string var_3;
+        if (var_2 != nullptr) {
+            var_3 = "ellie-short-gun-holster";
+        } else {
+            var_3 = "abby-short-gun-holster";
+        }
+        u64? var_4 = get-object-locator(self);
+        log-event("found-short-gun-holster", 0, var_3, var_4, 0);
+        give-player-upgrade-by-id(short-gun-second-holster);
+        hud2-request-new-item-notification(short-gun-holster, 0.00, 0);
+        var_1 = 1;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+

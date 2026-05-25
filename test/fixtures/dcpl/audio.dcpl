@@ -577,3 +577,196 @@ u64? top-level() {
     return var_0;
 }
 
+u64?* #411A725CB2A71ECB() {
+    u64? var_0 = #1D00A18F0FF3AB83();
+    u64?* var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = task-active?(t2r-guitar-freeplay, t2r-sea-music-store);
+        if (var_2 != nullptr) {
+            var_1 = #E26512A7E4B71A9A;
+        } else {
+            u64? var_3 = task-active?(t2r-guitar-freeplay, t2r-efg-ellie-pad);
+            if (var_3 != nullptr) {
+                var_1 = #516511C65692D3CF;
+            } else {
+                u64? var_4 = task-active?(t2r-guitar-freeplay, t2r-the-theater);
+                if (var_4 != nullptr) {
+                    var_1 = #4E1D21EF00A014E8;
+                } else {
+                    u64? var_5 = task-active?(t2r-guitar-freeplay, t2r-epi-farm-house);
+                    if (var_5 != nullptr) {
+                        var_1 = #F4889E6EF9B72A6F;
+                    } else {
+                        var_1 = *invalid-symbol*;
+                    }
+                }
+            }
+        }
+    } else {
+        u64? var_6 = is-rogue-mode?();
+        u64? var_7 = task-active?(t2r-assault, t2r-rjh-assault);
+        u64? var_8 = task-active?(t2r-survival, t2r-rjh-survival);
+        if (var_6 != nullptr || var_7 != nullptr || var_8 != nullptr) {
+            u64? var_9 = task-active?(t2r-siege, t2r-rjh-siege);
+            if (var_9 != nullptr) {
+                var_1 = #44EAA9589A373637;
+            } else {
+                u64? var_10 = task-active?(t2r-assault, t2r-jackson-assault);
+                u64? var_11 = task-active?(t2r-survival, t2r-jackson-mainstreet-survival);
+                if (var_10 != nullptr && var_11 != nullptr) {
+                    var_1 = #854D05BA2559383E;
+                } else {
+                    u64? var_12 = task-active?(t2r-assault, t2r-resort-assault);
+                    u64? var_13 = task-active?(t2r-survival, t2r-resort-survival);
+                    u64? var_14 = task-active?(t2r-siege, t2r-resort-siege);
+                    if (var_12 != nullptr || var_13 != nullptr && var_14 != nullptr) {
+                        var_1 = #357A4440D7446C04;
+                    } else {
+                        u64? var_15 = task-active?(t2r-assault, t2r-hospital-assault);
+                        u64? var_16 = task-active?(t2r-survival, t2r-hospital-survival);
+                        u64? var_17 = task-active?(t2r-defense, t2r-hospital-defense);
+                        u64? var_18 = task-active?(t2r-siege, t2r-hospital-siege);
+                        if (var_15 != nullptr || var_16 != nullptr || var_17 != nullptr && var_18 != nullptr) {
+                            var_1 = #00226F07DDBF605B;
+                        } else {
+                            u64? var_19 = task-active?(t2r-assault, t2r-logging-camp-assault);
+                            u64? var_20 = task-active?(t2r-survival, t2r-logging-camp-survival);
+                            u64? var_21 = task-active?(t2r-siege, t2r-logging-camp-siege);
+                            if (var_19 != nullptr || var_20 != nullptr && var_21 != nullptr) {
+                                var_1 = #0D76B332A3A0BC58;
+                            } else {
+                                u64? var_22 = task-active?(t2r-assault, t2r-tv-station-assault);
+                                u64? var_23 = task-active?(t2r-survival, t2r-tv-station-survival);
+                                u64? var_24 = task-active?(t2r-siege, t2r-tv-station-siege);
+                                if (var_22 != nullptr || var_23 != nullptr && var_24 != nullptr) {
+                                    var_1 = #04063D1508125212;
+                                } else {
+                                    u64? var_25 = task-active?(t2r-assault, t2r-hardware-assault);
+                                    u64? var_26 = task-active?(t2r-survival, t2r-hardware-survival);
+                                    if (var_25 != nullptr && var_26 != nullptr) {
+                                        var_1 = #3CFF2BF1B0AC6111;
+                                    } else {
+                                        u64? var_27 = task-active?(t2r-assault, t2r-shipyard-assault);
+                                        u64? var_28 = task-active?(t2r-survival, t2r-shipyard-survival);
+                                        if (var_27 != nullptr && var_28 != nullptr) {
+                                            var_1 = #26FF593A64F12017;
+                                        } else {
+                                            u64? var_29 = task-active?(t2r-assault, t2r-forest-assault);
+                                            if (var_29 != nullptr) {
+                                                var_1 = #CF3389313D9C1338;
+                                            } else {
+                                                u64? var_30 = task-active?(t2r-assault, t2r-capitol-hill-assault);
+                                                u64? var_31 = task-active?(t2r-survival, t2r-capitol-hill-survival);
+                                                u64? var_32 = task-active?(t2r-defense, t2r-capitol-hill-defense);
+                                                u64? var_33 = task-active?(t2r-siege, t2r-capitol-hill-siege);
+                                                if (var_30 != nullptr || var_31 != nullptr || var_32 != nullptr && var_33 != nullptr) {
+                                                    var_1 = #544383353A113323;
+                                                } else {
+                                                    u64? var_34 = task-active?(t2r-assault, t2r-brewery-assault);
+                                                    u64? var_35 = task-active?(t2r-survival, t2r-brewery-survival);
+                                                    if (var_34 != nullptr && var_35 != nullptr) {
+                                                        var_1 = #A8FE6D7AA4FE4D85;
+                                                    } else {
+                                                        u64? var_36 = task-active?(t2r-survival, t2r-supermarket-survival);
+                                                        if (var_36 != nullptr) {
+                                                            var_1 = #63DFD70C094DA65C;
+                                                        } else {
+                                                            u64? var_37 = task-active?(t2r-survival, t2r-police-office-survival);
+                                                            if (var_37 != nullptr) {
+                                                                var_1 = #D90725EA17223FDA;
+                                                            } else {
+                                                                u64? var_38 = task-active?(t2r-survival, t2r-police-basement-survival);
+                                                                if (var_38 != nullptr) {
+                                                                    var_1 = #3ED4567740D33C1B;
+                                                                } else {
+                                                                    u64? var_39 = task-active?(t2r-survival, t2r-motel-survival);
+                                                                    if (var_39 != nullptr) {
+                                                                        var_1 = #3B083CA31A2335F2;
+                                                                    } else {
+                                                                        u64? var_40 = task-active?(t2r-survival, t2r-gondola-survival);
+                                                                        if (var_40 != nullptr) {
+                                                                            var_1 = #C87BB86C6305E881;
+                                                                        } else {
+                                                                            u64? var_41 = task-active?(t2r-survival, t2r-ski-restaurant-survival);
+                                                                            if (var_41 != nullptr) {
+                                                                                var_1 = #0A7BF62BB4EE3F42;
+                                                                            } else {
+                                                                                u64? var_42 = task-active?(t2r-survival, t2r-subway-survival);
+                                                                                if (var_42 != nullptr) {
+                                                                                    u64? var_43 = get-svar(#A3CFA1D0C8AA075A);
+                                                                                    u64? var_44 = get-svar(#B588F9BE19063DAC);
+                                                                                    if (var_43 == 1 && var_44 == 3) {
+                                                                                        var_1 = #759D2F10FFDF7A33;
+                                                                                    } else {
+                                                                                        var_1 = #9693CF3B8065952C;
+                                                                                    }
+                                                                                } else {
+                                                                                    u64? var_45 = task-active?(t2r-defense, t2r-overpass-defense);
+                                                                                    if (var_45 != nullptr) {
+                                                                                        var_1 = #9606EF16FA3C932A;
+                                                                                    } else {
+                                                                                        u64? var_46 = task-active?(t2r-defense, t2r-train-station-defense);
+                                                                                        if (var_46 != nullptr) {
+                                                                                            var_1 = #91FFD056188E8908;
+                                                                                        } else {
+                                                                                            u64? var_47 = task-active?(t2r-bosses, t2r-courthouse-carpark);
+                                                                                            if (var_47 != nullptr) {
+                                                                                                var_1 = #48050928F1B97577;
+                                                                                            } else {
+                                                                                                u64? var_48 = task-active?(t2r-bosses, t2r-arcade-fight);
+                                                                                                if (var_48 != nullptr) {
+                                                                                                    var_1 = #BD0B043E856BEFEA;
+                                                                                                } else {
+                                                                                                    u64? var_49 = task-active?(t2r-bosses, t2r-ratking-fight);
+                                                                                                    if (var_49 != nullptr) {
+                                                                                                        var_1 = #EF94C76D48AA6EE0;
+                                                                                                    } else {
+                                                                                                        u64? var_50 = task-active?(t2r-bosses, t2r-brute-archer-fight);
+                                                                                                        if (var_50 != nullptr) {
+                                                                                                            var_1 = #99CC21EBAC026326;
+                                                                                                        } else {
+                                                                                                            u64? var_51 = task-active?(t2r-bosses, t2r-theater-fight);
+                                                                                                            if (var_51 != nullptr) {
+                                                                                                                var_1 = #1B254B72531142C9;
+                                                                                                            } else {
+                                                                                                                u64? var_52 = task-active?(t2r-bosses, t2r-resort-farm-fight);
+                                                                                                                if (var_52 != nullptr) {
+                                                                                                                    var_1 = #AAA995466C65D878;
+                                                                                                                } else {
+                                                                                                                    var_1 = *invalid-symbol*;
+                                                                                                                }
+                                                                                                            }
+                                                                                                        }
+                                                                                                    }
+                                                                                                }
+                                                                                            }
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return var_1;
+}
+
+u64? top-level() {
+    u64? var_0 = sync-audio-audio-meta-data();
+    return var_0;
+}
+

@@ -6,8 +6,8 @@
 namespace dconstruct::ast {
     struct using_declaration : public global_declaration {
 
-        explicit using_declaration(const sid_identifier original, ast::full_type new_type, std::string new_name) noexcept :
-        m_originalName(original), m_newIdentifier{std::move(new_type), std::move(new_name)} {};
+        explicit using_declaration(const sid_identifier name, ast::full_type new_type) noexcept :
+        m_sidIdentifier(name), m_type{std::move(new_type)} {};
 
         virtual void pseudo_c(std::ostream&) const final;
         virtual void pseudo_py(std::ostream&) const final;
@@ -16,7 +16,7 @@ namespace dconstruct::ast {
         [[nodiscard]] std::vector<semantic_check_error> check_semantics(compilation::scope&) const noexcept final;
         [[nodiscard]] program_binary_result emit_dc(compilation::global_state& global) const noexcept final;
 
-        sid_identifier m_originalName;
-        parameter m_newIdentifier;
+        sid_identifier m_sidIdentifier;
+        ast::full_type m_type;
     };
 }

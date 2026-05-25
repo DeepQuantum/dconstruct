@@ -284,3 +284,146 @@ u16 snowball-funisher-front-sync(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3,
     return var_2;
 }
 
+f32 snowball-funisher-front-intro__melee-attack@90__character-melee-info@980__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, i32 arg_4, u64? arg_5, u64? arg_6) {
+    u64? var_0 = melee-fact-get-bool(arg_2, predict-late-start);
+    f32 var_1;
+    if (var_0 != nullptr) {
+        fact-remove(arg_2, predict-late-start);
+        u64? var_2 = frames-to-sec((i32)arg_4);
+        var_1 = var_2;
+    } else {
+        var_1 = 0.20;
+    }
+    return var_1;
+}
+
+u64? snowball-funisher-front-intro__start-func-array@950(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, bool arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = melee-fact-get-bool(arg_1, finisher-started-around-corner);
+    u64? var_1 = npc-is-dog?(arg_2);
+    u64? var_2 = get-animation-duration(arg_1, ellie-knife-sneak-kill-inf-front-fail-ice-pick-intro--ellie);
+    u64? var_3 = melee-direction-check(arg_1, arg_2, 1, var_2);
+    u64? var_4 = melee-character-bit-check(arg_2, 1);
+    u64? var_5 = melee-weapon-bit-check(arg_1, 1, 1, 0);
+    bool var_6 = !(arg_2 == 0) || !*(u8*)(arg_12 + 362) && var_0 && !0 == !var_1 && var_3 && var_4 && var_5;
+    return var_6;
+}
+
+u64? snowball-funisher-front-intro(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = target-is-stunned?(arg_2);
+    u64? var_1 = get-object-distance(arg_1, arg_2);
+    u64? var_2 = new-boxed-value(6, var_1);
+    u64? var_3 = new-boxed-value(6, 0.00);
+    u64? var_4 = new-boxed-value(6, 3.00);
+    u64? var_5 = new-boxed-value(7, true);
+    bool var_6 = var_0 && var_1 && var_1 && var_1 && var_1 && var_1 && var_1;
+    return var_6;
+}
+
+u64? snowball-funisher-front-intro__melee-event-list@d38(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = melee-fact-get-bool(arg_1, finisher-started-around-corner);
+    u64? var_1 = get-layer-animation-phase(arg_1, base);
+    bool var_2 = var_0 && var_1 < 0.50;
+    return var_2;
+}
+
+u64? snowball-funisher-front-intro__melee-event-transitions@4810(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    return arg_2;
+}
+
+u64? snowball-funisher-front-intro__melee-camera-info@968(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_0 = finisher-blend-func-intro(arg_2, arg_3, 0.60, 45.00);
+    return var_0;
+}
+
+f32 snowball-funisher-back-sync__melee-attack@280__character-melee-info@8a8__(u64? arg_0, u64? arg_1, u64? arg_2) {
+    u64? var_0 = get-layer-animation-frame(arg_1, base);
+    u64? var_1 = get-animation-duration(arg_1, ellie-knife-sneak-kill-inf-fail-back-stab--ellie);
+    u64? var_2 = sec-to-frames(var_1);
+    u64? var_3 = get-animation-duration(arg_1, ellie-knife-sneak-kill-inf-fail-back-stab--ellie);
+    u64? var_4 = sec-to-frames(var_3);
+    f32 var_5;
+    if (var_0 >= ((f32)var_2 - 31.00) && (72.00 + 30.00) < (f32)var_4) {
+        var_5 = 1.20;
+    } else {
+        var_5 = 0.50;
+    }
+    return var_5;
+}
+
+bool snowball-funisher-back-sync__start-func-array@a28(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = get-character-health(arg_1);
+    return var_0 > 0;
+}
+
+u16 snowball-funisher-back-sync(i64 arg_0, i64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    if (arg_0 == arg_1) {
+        momentum-vox-end(arg_1, arg_2, player-momentum-strike-taunt);
+    }
+    return 0;
+}
+
+u64? snowball-funisher-back-sync__melee-event-list@d50(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    f32 var_0;
+    if ((0.00 == 0.00) == nullptr) {
+        var_0 = 0.00;
+    } else {
+        var_0 = 0.00;
+    }
+    u64? var_1 = play-melee-facial-gesture(arg_1, 25, var_0, 0.10);
+    return var_1;
+}
+
+f32 snowball-funisher-back-sync__melee-event-advanced@3f78(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = get-melee-weapon-damage(arg_1, arg_2);
+    return 0.00 / var_0;
+}
+
+u64? snowball-funisher-back-intro__start-func-array@e10(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, bool arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = melee-fact-get-bool(arg_1, finisher-started-around-corner);
+    u64? var_1 = npc-is-dog?(arg_2);
+    u64? var_2 = get-animation-duration(arg_1, ellie-knife-sneak-kill-inf-fail-back-stab-intro--ellie);
+    u64? var_3 = melee-direction-check(arg_1, arg_2, 2, var_2);
+    u64? var_4 = melee-character-bit-check(arg_2, 1);
+    u64? var_5 = melee-weapon-bit-check(arg_1, 1, 1, 0);
+    bool var_6 = !(arg_2 == 0) || !*(u8*)(arg_12 + 362) && var_0 && !0 == !var_1 && var_3 && var_4 && var_5;
+    return var_6;
+}
+
+f32 snowball-funisher-front-sync__melee-attack@660__character-melee-info@a40__(u64? arg_0, u64? arg_1, u64? arg_2) {
+    u64? var_0 = get-layer-animation-frame(arg_1, base);
+    u64? var_1 = get-animation-duration(arg_1, ellie-knife-sneak-kill-inf-front-fail-ice-pick--ellie);
+    u64? var_2 = sec-to-frames(var_1);
+    u64? var_3 = get-animation-duration(arg_1, ellie-knife-sneak-kill-inf-front-fail-ice-pick--ellie);
+    u64? var_4 = sec-to-frames(var_3);
+    f32 var_5;
+    if (var_0 >= ((f32)var_2 - 31.00) && (55.00 + 30.00) < (f32)var_4) {
+        var_5 = 1.20;
+    } else {
+        var_5 = 0.50;
+    }
+    return var_5;
+}
+
+u16 snowball-funisher-front-sync(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = is-player?(arg_1);
+    u64? var_1 = character-is-dead?(arg_2);
+    u16 var_2;
+    if (var_0 != nullptr || 0 == nullptr && var_1 != nullptr) {
+        if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1) != nullptr) {
+            u64? var_3 = is-final-build?();
+            if (var_3 == nullptr) {
+                u64? var_4 = #5445173390656D6D("Melee deadened for %f seconds", 0.89);
+                display(var_4, 19);
+            }
+        }
+        disable-untargeted-melee-attack-timed(0.89);
+        invalidate-single-melee-command-queue(arg_1, melee-attack);
+        u64? var_5 = frames-to-sec(10);
+        u64? var_6 = joypad-disable-commands-timed(var_5, melee-attack);
+        var_2 = var_6;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+

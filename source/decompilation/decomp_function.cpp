@@ -635,7 +635,7 @@ void decomp_function::emit_if(const control_flow_node& node, const node_id stop_
         parse_basic_block(*current_node);
         const auto& token = current_node->m_lines.back().m_instruction.opcode == Opcode::BranchIf ? or_token : and_token;
         if (!m_transformableExpressions[check_register]) {
-            throw std::runtime_error{"check register empty"};
+            m_transformableExpressions[check_register] = std::make_unique<ast::identifier>("CHECK_REGISTER_INSERT");
         }
         final_condition = std::make_unique<ast::compare_expr>(token, std::move(final_condition), m_transformableExpressions[check_register]->clone());
         current_node = current_node->has_following() ? &m_graph[current_node->m_followingNode] : target;

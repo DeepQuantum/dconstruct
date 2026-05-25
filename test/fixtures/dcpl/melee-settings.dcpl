@@ -474,3 +474,241 @@ f32 *melee-settings*__melee-settings@988(u64? arg_0, u64? arg_1, f32 arg_2, u64?
     return var_54;
 }
 
+u64? in-knee-stun-action?(u64? arg_0, u8 arg_1) {
+    u64? var_0 = npc-is-stunned-knee?(arg_0);
+    u64? var_1;
+    if (arg_1 != nullptr || *(u8*)(*(arg_1 + 296) + 44) != nullptr || var_0 != nullptr) {
+        u64? var_2 = melee-fact-get-bool(arg_0, in-knee-stun?);
+        var_1 = var_2;
+    }
+    return var_1;
+}
+
+u64? target-is-stunned-action?(u64? arg_0, u64? arg_1) {
+    u64? var_0 = is-character?(arg_0);
+    u64? var_1 = melee-fact-get-bool(arg_0, stunned);
+    u64? var_2 = melee-fact-get-bool(arg_0, stunned-remote);
+    u64? var_3 = melee-fact-get-bool(arg_0, smoke-or-stun);
+    u64? var_4 = is-npc?(arg_0);
+    u64? var_5 = in-knee-stun-action?(arg_0, arg_1);
+    u64? var_6 = is-stun-hit-reaction-playing?(arg_0);
+    bool var_7 = var_0 || var_1 || var_2 || var_3 && var_4 || var_5 && var_6;
+    return var_7;
+}
+
+f32 *melee-settings*__melee-settings@988(u64? arg_0, u64? arg_1, f32 arg_2, u64? arg_3, f32 arg_4, u64? arg_5, f32 arg_6, u16 arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12) {
+    u64? var_0 = get-object-position(player);
+    u64? var_1 = point-sub(arg_12, var_0);
+    u64? var_2 = vector-magnitude(var_1);
+    u64? var_3 = get-predicted-object-locator(arg_7, 0.30);
+    u64? var_4 = get-object-locator(player);
+    u64? var_5 = get-locator-distance-xz(var_3, var_4);
+    u64? var_6 = vector-normalize(var_1, 0);
+    u64? var_7 = vector-dot(var_6, arg_9);
+    u64? var_8 = camera-locator(0);
+    u64? var_9 = get-locator-rotation(var_8);
+    u64? var_10 = get-local-z(var_9);
+    u64? var_11 = vector-dot(var_6, var_10);
+    f32 var_12;
+    if (var_11 < 0.00) {
+        var_12 = -5.00;
+    } else {
+        var_12 = 0.00;
+    }
+    u64? var_13 = get-object-rotation(player);
+    u64? var_14 = get-local-z(var_13);
+    u64? var_15 = vector-dot(var_6, var_14);
+    u64? var_16;
+    if (var_5 < 3.00) {
+        u64? var_17 = lerp-scale(0.00, 3.00, 6.00, 0.00, var_5);
+        var_16 = var_17;
+    } else {
+        u64? var_18 = lerp-scale(3.00, 5.00, 0.00, -3.00, var_5);
+        var_16 = var_18;
+    }
+    u16 var_19;
+    if (arg_2 < 0.80) {
+        var_19 = arg_1;
+    } else {
+        var_19 = 0;
+    }
+    u16 var_20;
+    if (arg_6 < 0.50) {
+        var_20 = arg_5;
+    } else {
+        var_20 = 0;
+    }
+    u16 var_21;
+    if (arg_4 < 0.60) {
+        var_21 = arg_3;
+    } else {
+        var_21 = 0;
+    }
+    if (arg_7 == var_19) {}
+
+    f32 var_22;
+    if (arg_7 == var_21) {
+        var_22 = 2.00;
+    } else {
+        var_22 = 0.00;
+    }
+    f32 var_23;
+    if (arg_7 == var_20) {
+        var_23 = 2.00;
+    } else {
+        var_23 = 0.00;
+    }
+    u64? var_24 = has-line-of-motion-to-object?(arg_7, player, 0.00, 0, 0);
+    f32 var_25;
+    if (var_24 != nullptr) {
+        var_25 = 1.00;
+    } else {
+        var_25 = -2.00;
+    }
+    u64? var_26 = character-melee-event-active?(arg_7, 224, 0);
+    f32 var_27;
+    if (var_26 != nullptr) {
+        var_27 = 2.00;
+    } else {
+        var_27 = 0.00;
+    }
+    u64? var_28 = get-current-melee-attack(player);
+    u64? var_29 = target-is-stunned-action?(arg_7, var_28);
+    f32 var_30;
+    if (var_29 != nullptr) {
+        var_30 = 2.00;
+    } else {
+        var_30 = 0.00;
+    }
+    f32 var_31;
+    if (var_11 < 0.00 && var_16 > 0.00) {
+        u64? var_32 = absf(var_11);
+        var_31 = var_16 * (1.00 - var_32);
+    }
+    u64? var_33 = melee-fact-get-time-since(player, last-context-dodge-time);
+    f32 var_34;
+    if (var_33 < 1.00) {
+        var_34 = (var_7 * 5.00) / 3.00;
+    }
+    u64? var_35 = character-melee-event-active?(arg_7, 188, 0);
+    f32 var_36;
+    string var_37;
+    if (var_35 != nullptr) {
+        var_36 = 50.00;
+        var_37 = "BfL case - force target";
+    } else {
+        u64? var_38 = melee-fact-get-bool(arg_7, force-disable-melee-targeting);
+        if (var_38 != nullptr) {
+            var_36 = 0.00;
+            var_37 = "fact set to force disable target - discard target";
+        } else {
+            u64? var_39 = melee-fact-get-bool(arg_7, npc-ellie-in-dodge?);
+            if (var_39 != nullptr) {
+                var_36 = 0.00;
+                var_37 = "Ellie boss dodging - discard target";
+            } else {
+                u64? var_40 = melee-fact-get-time-since(player, ellie-fight-player-got-shot);
+                if (var_40 < 1.00) {
+                    var_36 = 0.00;
+                    var_37 = "Ellie boss player shot - discard target";
+                } else {
+                    u64? var_41 = npc-stalker?(arg_7);
+                    u64? var_42 = npc-super-stalker?(arg_7);
+                    u64? var_43 = infected-in-ambush-flee?(arg_7);
+                    u64? var_44 = distance-between-objects(player, arg_7);
+                    u64? var_45 = get-object-speed(arg_7);
+                    if (var_41 != nullptr && var_42 != nullptr && var_43 != nullptr && (var_44 + var_45) > 4.20) {
+                        var_36 = 0.00;
+                        var_37 = "Stalker is far and fleeing - discard target";
+                    } else {
+                        u64? var_46 = npc-ratking?(arg_7);
+                        u64? var_47 = npc-super-stalker-attached?(arg_7);
+                        if (var_46 != nullptr && var_47 != nullptr) {
+                            var_36 = 0.00;
+                            var_37 = "Is the rat king - discard target";
+                        } else if (var_28 != nullptr || *(u64*)(var_28 + 16) == melee-player-swing-free-contextual && *(u64*)(var_28 + 16) == melee-player-synced-wall-hit-new) {
+                            u64? var_48 = character-in-melee-attack-of-other-character?(arg_7, player);
+                            if (var_48 != nullptr) {
+                                var_36 = 30.00;
+                            } else {
+                                var_36 = 0.00;
+                            }
+                            var_37 = "in contextual combo - force target";
+                        } else if (arg_10 != nullptr) {
+                            var_36 = 0.00;
+                            var_37 = "collision between target and player - discard target";
+                        } else if (var_11 < 0.00 || var_2 < 2.50) {
+                            if (arg_7 == var_19 || var_2 < 3.50) {
+                                if (arg_7 == var_21 && var_2 < 4.00) {
+                                    u64? var_49 = get-joypad-stick-intensity(move, 0.20, 1.00);
+                                    if (var_34 > 0.00 && var_49 > 0.00) {
+                                        var_36 = (((((((30.00 + var_34) + var_12) + var_31) + var_23) + var_22) + var_25) + var_27) + var_30;
+                                        var_37 = "pressing towards taget - we can target with the big bois but with a penalty";
+                                    } else if (var_15 > 0.50) {
+                                        var_36 = (((((((10.00 + var_34) + var_12) + var_31) + var_23) + var_22) + var_25) + var_27) + var_30;
+                                        var_37 = "not pressing towards taget, but player is facing target - we can target but with a large penalty";
+                                    } else {
+                                        var_36 = 1.00 + var_34;
+                                        var_37 = "not pressing towards this guy we can still target him but low priority";
+                                    }
+                                } else {
+                                    var_36 = 0.00;
+                                    var_37 = "behind camera, but not close enough to consider";
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    u64? var_50 = character-is-dead?(arg_7);
+    f32 var_51;
+    if (var_50 != nullptr) {
+        u64? var_52 = npc-is-full-body-hit-reaction-playing?(arg_7, #0000002000000000);
+        u64? var_53 = npc-is-infected?(arg_7);
+        if (var_52 != nullptr && var_53 == nullptr) {
+            var_51 = var_36 - 20.00;
+        }
+    }
+    f32 var_54;
+    if (arg_11 != nullptr) {
+        u64? var_55 = get-closest-enemy-to-player(5.00, 0, 15);
+        if ((var_55 == 0) == nullptr) {
+            u64? var_56 = vector-dot(var_6, arg_9);
+            if (var_56 > 0.90) {
+                var_54 = var_51 - 23.00;
+            } else {
+                var_54 = 0.00;
+            }
+        } else {
+            u64? var_57 = vector-dot(var_6, arg_9);
+            if (var_57 > 0.30) {
+                var_54 = var_54 - 23.00;
+            } else {
+                var_54 = 0.00;
+            }
+        }
+    }
+    if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 2) != nullptr) {
+        u64? var_58 = is-final-build?();
+        if (var_58 == nullptr) {
+            u64? var_59 = string-debug(arg_7);
+            u64? var_60 = #5445173390656D6D("player targeting %s : stick rating buff = %f : exclude-evade bonus = %f dot-prod-cam = %f dist-rating = %f LoM Bonus = %f FINAL: %f", var_59, var_34, var_23, var_11, var_31, var_25, var_54);
+            display(var_60, 19);
+        }
+        u64? var_61 = is-final-build?();
+        if (var_61 == nullptr) {
+            u64? var_62 = vector-dot(var_6, arg_9);
+            u64? var_63 = #5445173390656D6D("stick dot prod = %f", var_62);
+            display(var_63, 19);
+        }
+        u64? var_64 = is-final-build?();
+        if (var_64 == nullptr) {
+            u64? var_65 = #5445173390656D6D("TARGETING MESSAGE: %s", var_37);
+            display(var_65, 19);
+        }
+    }
+    return var_54;
+}
+

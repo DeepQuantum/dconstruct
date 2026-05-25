@@ -232,3 +232,81 @@ u16 anim-player__anim-node-parametric@5f40(u64? arg_0) {
     return 0;
 }
 
+u64 anim-player__anim-actor@318__anim-node-animation@57b8__(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(*(arg_1 + 8) + 424);
+}
+
+u64? anim-player(u64? arg_0, u64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64 arg_5, u64? arg_6) {
+    u64 var_0 = *(u64*)(*(arg_1 + 8) + 384);
+    u64? var_1 = player-anim-speed-mult(var_0, *(u64*)arg_5);
+    return arg_2 + ((arg_3 * var_1) * arg_4);
+}
+
+sid anim-player__anim-node-animation@5650(u64? arg_0, u8 arg_1, u64? arg_2) {
+    sid var_0;
+    if (*(u8*)(*(arg_1 + 8) + 381) != nullptr) {
+        var_0 = p-aim-flinch-rt--add;
+    } else {
+        var_0 = p-aim-flinch-lt--add;
+    }
+    return var_0;
+}
+
+sid anim-player__anim-node-animation@5ff8(u64? arg_0, u8 arg_1, u64? arg_2) {
+    sid var_0;
+    if (*(u8*)(*(arg_1 + 8) + 381) != nullptr) {
+        var_0 = p-aim-flinch-lt--add;
+    } else {
+        var_0 = p-aim-flinch-rt--add;
+    }
+    return var_0;
+}
+
+sid anim-player__anim-node-animation@5358(u64? arg_0, u8 arg_1, u64? arg_2) {
+    sid var_0;
+    if (*(u8*)(*(arg_1 + 8) + 381) != nullptr) {
+        var_0 = p-aim-small-flinch-rt--add;
+    } else {
+        var_0 = p-aim-small-flinch-lt--add;
+    }
+    return var_0;
+}
+
+sid anim-player__anim-node-animation@6238(u64? arg_0, u8 arg_1, u64? arg_2) {
+    sid var_0;
+    if (*(u8*)(*(arg_1 + 8) + 381) != nullptr) {
+        var_0 = p-aim-small-flinch-lt--add;
+    } else {
+        var_0 = p-aim-small-flinch-rt--add;
+    }
+    return var_0;
+}
+
+sid anim-player__anim-node-animation@5828(u64? arg_0, u8 arg_1, u64? arg_2) {
+    sid var_0;
+    if (*(u8*)(*(arg_1 + 8) + 381) != nullptr) {
+        var_0 = idle-flinch-rt--add;
+    } else {
+        var_0 = idle-flinch-lt--add;
+    }
+    return var_0;
+}
+
+sid anim-player__anim-node-animation@5888(u64? arg_0, u8 arg_1, u64? arg_2) {
+    sid var_0;
+    if (*(u8*)(*(arg_1 + 8) + 381) != nullptr) {
+        var_0 = idle-flinch-lt--add;
+    } else {
+        var_0 = idle-flinch-rt--add;
+    }
+    return var_0;
+}
+
+u64 anim-player__anim-node-blend@5688__anim-node-blend@72d8____anim-node-animation@a5b8__(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(*(arg_1 + 16) + 2984);
+}
+
+u16 anim-player__anim-node-parametric@5f40(u64? arg_0) {
+    return 0;
+}
+

@@ -217,3 +217,72 @@ u64? anim-player-drive-states__anim-node-arm-ik@1ea8__anim-node-blend@4b18____an
     return var_2;
 }
 
+u64 anim-player-drive-states__actor-state-list@48__anim-node-animation@1cb8__(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)((*arg_1 + 816) + 24);
+}
+
+u64? anim-player-drive-states(u64? arg_0, u64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64 arg_5, u64? arg_6) {
+    u64 var_0 = *(u64*)(*(arg_1 + 8) + 384);
+    u64? var_1 = player-anim-speed-mult(var_0, *(u64*)arg_5);
+    return arg_2 + ((arg_3 * var_1) * arg_4);
+}
+
+u64 anim-player-drive-states__anim-node-animation@1b88(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)((*arg_1 + 816) + 200);
+}
+
+f32 anim-player-drive-states__anim-node-blend@16c8__anim-node-blend@3d58____anim-node-blend@5b78____anim-node-blend@6290____anim-node-blend@7658____anim-node-blend@7b60__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)((*arg_0 + 816) + 136);
+}
+
+f32 anim-player-drive-states__anim-node-blend@16c8__anim-node-blend@3d58____anim-node-blend@5b78__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)((*arg_0 + 816) + 140);
+}
+
+f32 anim-player-drive-states__anim-node-blend@16c8__anim-node-blend@74b0____anim-node-blend@7ba0__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)((*arg_0 + 816) + 144);
+}
+
+u64 anim-player-drive-states__anim-node-animation@1a88(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)((*arg_1 + 816) + 8);
+}
+
+u64 anim-player-drive-states__anim-node-animation@19f0(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)((*arg_1 + 816) + 168);
+}
+
+u64 anim-player-drive-states__anim-node-animation@1850(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)((*arg_1 + 816) + 16);
+}
+
+f32 anim-player-drive-states__anim-node-blend@1c18__anim-node-blend@4bc8____anim-node-blend@5fc0____anim-node-blend@6400__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)((*arg_0 + 816) + 136);
+}
+
+f32 anim-player-drive-states__anim-node-blend@1c18(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)((*arg_0 + 816) + 140);
+}
+
+f32 anim-player-drive-states__anim-node-blend@59f8__anim-node-blend@62d0__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)((*arg_0 + 816) + 144);
+}
+
+f32 anim-player-drive-states__anim-node-arm-ik@1b28__arm-ik-node-config@2e78__(f32 arg_0) {
+    return *(f32*)((*arg_0 + 816) + 180);
+}
+
+f32 anim-player-drive-states__anim-node-arm-ik@2148__anim-node-arm-ik@4448____arm-ik-node-config@57b0__(f32 arg_0) {
+    return *(f32*)((*arg_0 + 816) + 180);
+}
+
+f32 anim-player-drive-states__anim-node-arm-ik@1938__anim-node-arm-ik@3838____anim-node-blend@6000____anim-node-animation@68a8__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return *(f32*)(*arg_0 + 816);
+}
+
+u64? anim-player-drive-states__anim-node-arm-ik@1ea8__anim-node-blend@4b18____anim-node-animation@5dc8__(u64? arg_0, i64 arg_1, u64? arg_2) {
+    i64 var_0 = *(i64*)((*arg_1 + 816) + 120);
+    u64? var_1 = #5445173390656D6D("hero-steer-range-right-hand-gearshift-%s--part", var_0);
+    u64? var_2 = string-to-symbol(var_1);
+    return var_2;
+}
+

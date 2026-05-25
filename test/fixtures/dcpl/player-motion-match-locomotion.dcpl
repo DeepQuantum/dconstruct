@@ -64,3 +64,25 @@ f32 anim-player-motion-match-locomotion-states__anim-node-blend@7d8(f32 arg_0, u
     return *(f32*)(*arg_0 + 1252);
 }
 
+u64 anim-player-motion-match-locomotion-states__actor-state-list@48__anim-node-blend@5f8____anim-node-blend@dc8____anim-node-treeref@10a8____anim-node-animation@11f8__(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(*arg_1 + 176);
+}
+
+u64? anim-player-motion-match-locomotion-states__actor-state-list@48__anim-node-blend@5f8____anim-node-blend@dc8__(u64?* arg_0, u8 arg_1) {
+    u64? var_0;
+    if (*(u8*)(*arg_1 + 1248) != nullptr) {
+        var_0 = *(**(arg_0 + 16) + (0 * 8));
+    } else {
+        var_0 = *(arg_0 + 8);
+    }
+    return var_0;
+}
+
+f32 anim-player-motion-match-locomotion-states(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)(*arg_0 + 232);
+}
+
+f32 anim-player-motion-match-locomotion-states__anim-node-blend@7d8(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)(*arg_0 + 1252);
+}
+

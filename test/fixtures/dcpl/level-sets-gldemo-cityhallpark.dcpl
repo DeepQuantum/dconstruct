@@ -79,3 +79,30 @@ u64? rs-gldemo-cityhallpark-forest__level-scripted-set@6f0() {
     return var_1;
 }
 
+bool rs-gldemo-cityhallpark-parking-garage-melee__level-set@300__level-scripted-set@6d8__() {
+    bool var_0 = get-boolean(forest-mem, ss-nor-scar-burial-stealth-kill-1);
+    return var_0;
+}
+
+u64? rs-gldemo-church__level-set@378__level-scripted-set@558__() {
+    bool var_0 = get-boolean(glt-transition-movie-playing?, ss-glt-jackson-dance-intro-1);
+    u64? var_1 = !(var_0);
+    return var_1;
+}
+
+bool rs-gldemo-church__level-scripted-set@b58() {
+    bool var_0 = get-boolean(glt-transition-movie-playing?, ss-glt-jackson-dance-intro-1);
+    return var_0;
+}
+
+bool rs-gldemo-cityhallpark-forest__level-set@3c0__level-scripted-set@8e8__() {
+    bool var_0 = get-boolean(swap-cin-spawner, ss-glt-forest-1);
+    return var_0;
+}
+
+u64? rs-gldemo-cityhallpark-forest__level-scripted-set@6f0() {
+    bool var_0 = get-boolean(swap-cin-spawner, ss-glt-forest-1);
+    u64? var_1 = !(var_0);
+    return var_1;
+}
+

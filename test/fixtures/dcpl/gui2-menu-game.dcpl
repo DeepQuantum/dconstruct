@@ -43,3 +43,18 @@ u64? *tutorials-page-list*() {
     return var_0;
 }
 
+u64? *tutorials-page-list*__tutorials-page-list-collection@138__tutorials-page-list-items@a3c8__(u64? arg_0) {
+    u64? var_0 = is-alternative-boat-controls-enabled?();
+    return var_0;
+}
+
+u64? *tutorials-page-list*__tutorials-page-list-collection@138(u64? arg_0) {
+    u64? var_0 = is-mnk-primary-input-device?();
+    return var_0;
+}
+
+u64? *tutorials-page-list*() {
+    u64? var_0 = is-upgrade-unlocked-any-weapon-from-checkpoint-HACK?(scope);
+    return var_0;
+}
+

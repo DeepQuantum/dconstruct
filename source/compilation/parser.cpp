@@ -436,15 +436,10 @@ template<typename... Args> requires (std::same_as<Args, token_type> && ...)
         }
     }
 
-    std::string new_name = "";
-    if (match(token_type::IDENTIFIER)) {
-        new_name = previous().m_lexeme;
-    }
-
     if (!consume(token_type::SEMICOLON, "expected ';' at end of using declaration")) {
         return std::nullopt;
     }
-    return std::make_unique<ast::using_declaration>(ast::sid_identifier(*old_sid), std::move(*new_type), !new_name.empty() ? std::move(new_name) : old_sid->m_lexeme);
+    return std::make_unique<ast::using_declaration>(ast::sid_identifier(*old_sid), std::move(*new_type));
 }
 
 [[nodiscard]] ast::program Parser::parse() {
@@ -964,7 +959,7 @@ template<typename... Args> requires (std::same_as<Args, token_type> && ...)
                 //return std::make_unique<ast::address_of_expr>(op, std::move(right));
             }
             case token_type::GREATER_GREATER: {
-                return make_call_from_operator(op, "#display", std::move(right), (u16)19);
+                return make_call_from_operator(op, "#display", std::move(right));
             }
             case token_type::EQUAL_GREATER: {
                 return make_call_from_operator(op, "#go", std::move(right), (u16)1);
@@ -987,10 +982,7 @@ template<typename ...Args> requires (std::constructible_from<ast::literal, Args>
 
     args.push_back(std::move(primary_operand));
 
-    for (const auto& arg : {extra_function_args...}) {
-        expr_uptr lit = std::make_unique<ast::literal>(arg);
-        args.push_back(std::move(lit));
-    }
+    (args.push_back(std::make_unique<ast::literal>(extra_function_args)), ...);
 
     std::unique_ptr call = std::make_unique<ast::call_expr>(op, std::move(callee), std::move(args));
 

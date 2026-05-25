@@ -355,3 +355,122 @@ u64? tsk-pat-supermarket-combat-buffer__level-set@1208__level-scripted-set@1e50_
     return var_0;
 }
 
+u64? tsk-pat-supermarket-inside-clicker-combat__level-set@5e8__level-scripted-set@18f8__() {
+    u64? var_0 = task-complete?(patrol, pat-supermarket-molotov);
+    return var_0;
+}
+
+u64? tsk-pat-supermarket-inside-clicker-combat__level-scripted-set@19b8() {
+    u64? var_0 = task-complete?(patrol, pat-supermarket-molotov);
+    u64? var_1 = !(var_0);
+    return var_1;
+}
+
+u64? tsk-pat-tower__level-set@6a8__level-scripted-set@2a98__() {
+    u64? var_0 = task-active?(patrol, pat-tower-approach);
+    return var_0;
+}
+
+u64? tsk-pat-tower__level-scripted-set@2888() {
+    u64? var_0 = task-active?(patrol, pat-tower-approach);
+    u64? var_1 = !(var_0);
+    return var_1;
+}
+
+u64? tsk-pat-supermarket__level-set@6f0__level-scripted-set@2228__() {
+    u64? var_0 = task-complete?(patrol, pat-supermarket-find-window);
+    u64? var_1 = !(var_0);
+    return var_1;
+}
+
+bool tsk-pat-jackson-exit-bar__level-set@7d8__level-scripted-set@19a0__() {
+    u64? var_0 = stat-value?(pat-jackson-player-entering-bar);
+    return var_0 > 0;
+}
+
+bool tsk-pat-jackson-exit-bar__level-scripted-set@2210() {
+    u64? var_0 = stat-value?(pat-jackson-player-entering-bar);
+    return var_0 == 0;
+}
+
+u64? tsk-pat-supermarket-alley__level-set@858__level-scripted-set@1d48__() {
+    u64? var_0 = task-complete?(patrol, pat-supermarket-truck-crawl);
+    return var_0;
+}
+
+u16 tsk-pat-supermarket-alley__level-scripted-set@2168() {
+    return 1;
+}
+
+u64? tsk-pat-packing-seattle-arrival-preload__level-set@8d8__level-scripted-set@1e68__() {
+    u64? var_0 = is-chronological-mode-enabled?();
+    u64? var_1 = !(var_0);
+    return var_1;
+}
+
+u64? tsk-pat-packing-seattle-arrival-preload__level-scripted-set@2f60() {
+    u64? var_0 = is-chronological-mode-enabled?();
+    return var_0;
+}
+
+bool tsk-pat-creek__level-set@b28__level-scripted-set@1910__() {
+    u64? var_0 = stat-value?(pat-load-supermarket);
+    return var_0 > 0;
+}
+
+bool tsk-pat-creek__level-scripted-set@1688() {
+    u64? var_0 = stat-value?(pat-load-supermarket);
+    return var_0 == 0;
+}
+
+u64? tsk-pat-library-hang-cine__level-set@cc0__level-scripted-set@2180__() {
+    u64? var_0 = hands-on?();
+    u64? var_1 = !(var_0);
+    return var_1;
+}
+
+u64? tsk-pat-supermarket-approach__level-set@e50__level-scripted-set@27f8__() {
+    u64? var_0 = get-animation-playing?(player, igc-stream-pat-market-see-carcass--ellie, 2);
+    u64? var_1 = !(var_0);
+    return var_1;
+}
+
+u64? tsk-pat-supermarket-approach__level-scripted-set@2600() {
+    u64? var_0 = get-animation-playing?(player, igc-stream-pat-market-see-carcass--ellie, 2);
+    return var_0;
+}
+
+u64? supermarket-interior-scriptset__level-set@1020__level-scripted-set@1fe8__() {
+    u64? var_0 = task-complete?(patrol, pat-supermarket-clicker-combat);
+    u64? var_1 = is-chronological-mode?();
+    bool var_2 = var_0 && var_1;
+    return var_2;
+}
+
+u64? supermarket-interior-scriptset__level-scripted-set@2990() {
+    u64? var_0 = task-complete?(patrol, pat-supermarket-clicker-combat);
+    u64? var_1 = !(var_0);
+    return var_1;
+}
+
+u64? tsk-pat-library-lit__level-set@10d8__level-scripted-set@1ad8__() {
+    u64? var_0 = is-level-fully-spawned?(pat-jackson-library-probes-on);
+    u64? var_1 = !(var_0);
+    return var_1;
+}
+
+bool tsk-pat-joel-fail-cine-b__level-set@1118__level-scripted-set@3260__() {
+    u64? var_0 = cinematic-get-current-frame(cin-pat-rescue-joel-fail-b);
+    return var_0 >= 794.00;
+}
+
+bool tsk-pat-joel-fail-cine-b__level-scripted-set@2ff0() {
+    u64? var_0 = cinematic-get-current-frame(cin-pat-rescue-joel-fail-b);
+    return var_0 < 794.00;
+}
+
+u64? tsk-pat-supermarket-combat-buffer__level-set@1208__level-scripted-set@1e50__() {
+    u64? var_0 = task-complete?(patrol, pat-supermarket-mixed-combat);
+    return var_0;
+}
+

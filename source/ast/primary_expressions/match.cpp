@@ -411,10 +411,7 @@ void match_expr::calc_density_R() noexcept {
         fn.free_register(*range_dest);
     }
 
-    if (start_idx != 0) {
-        const Opcode math_opcode = start_idx < 0 ? Opcode::ISubImm : Opcode::IAddImm;
-        fn.emit_instruction(math_opcode, condition_reg, condition_reg, start_idx);
-    }
+    
 
     const emission_res load_dest_res = fn.fix_destination(destination);
     if (!load_dest_res) {
@@ -422,24 +419,19 @@ void match_expr::calc_density_R() noexcept {
     }
 
     assert(m_loadOpcode.has_value());
-    // const auto static_load_opcode_res = get_static_imm_load_opcode(*m_type);
-    // if (!static_load_opcode_res) {
-    //     return std::unexpected{static_load_opcode_res.error()};
-    // }
     fn.emit_instruction(Opcode::LoadStaticU64Imm, *load_dest_res, (u8)*default_symbol_table_entry);
 
-    if (m_default) {
-        const u64 end_branch = fn.m_instructions.size();
-        fn.emit_instruction(Opcode::Branch, compilation::function::BRANCH_PLACEHOLDER, 0, compilation::function::BRANCH_PLACEHOLDER);
-
-        const u64 default_location = fn.m_instructions.size();
-
-        fn.emit_instruction(*m_loadOpcode, *load_dest_res, condition_reg);
-
-        const u64 end_location = fn.m_instructions.size();
-        fn.m_instructions[default_branch].set_lo_hi(static_cast<u16>(default_location));
-        fn.m_instructions[end_branch].set_lo_hi(static_cast<u16>(end_location));
+    const u64 end_branch = fn.m_instructions.size();
+    fn.emit_instruction(Opcode::Branch, compilation::function::BRANCH_PLACEHOLDER, 0, compilation::function::BRANCH_PLACEHOLDER);
+    const u64 default_location = fn.m_instructions.size();
+    if (start_idx != 0) {
+        const Opcode math_opcode = start_idx < 0 ? Opcode::ISubImm : Opcode::IAddImm;
+        fn.emit_instruction(math_opcode, condition_reg, condition_reg, start_idx);
     }
+    fn.emit_instruction(*m_loadOpcode, *load_dest_res, condition_reg);
+    const u64 end_location = fn.m_instructions.size();
+    fn.m_instructions[default_branch].set_lo_hi(static_cast<u16>(default_location));
+    fn.m_instructions[end_branch].set_lo_hi(static_cast<u16>(end_location));
 
     return *load_dest_res;
 }

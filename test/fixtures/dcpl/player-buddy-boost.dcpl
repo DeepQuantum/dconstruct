@@ -232,3 +232,81 @@ u64 anim-player-buddy-boost-states__anim-node-animation@e98(u64? arg_0, u64 arg_
     return *(u64*)(*(*(arg_1 + 16) + 3128) + 136);
 }
 
+u64 anim-player-buddy-boost-states__actor-state-list@f8__anim-node-animation@1710__(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)*(*(arg_1 + 16) + 3128);
+}
+
+u64? anim-player-buddy-boost-states(u64? arg_0, u64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64 arg_5, u64? arg_6) {
+    u64 var_0 = *(u64*)(*(arg_1 + 8) + 384);
+    u64? var_1 = player-anim-speed-mult(var_0, *(u64*)arg_5);
+    return arg_2 + ((arg_3 * var_1) * arg_4);
+}
+
+u64 anim-player-buddy-boost-states__anim-node-animation@13d8(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(*(*(arg_1 + 16) + 3128) + 8);
+}
+
+u64 anim-player-buddy-boost-states__anim-node-animation@ef8(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(*(*(arg_1 + 16) + 3128) + 16);
+}
+
+u64 anim-player-buddy-boost-states__anim-node-animation@1190(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(*(*(arg_1 + 16) + 3128) + 24);
+}
+
+u64 anim-player-buddy-boost-states__anim-node-animation@1238(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(*(*(arg_1 + 16) + 3128) + 32);
+}
+
+u64 anim-player-buddy-boost-states__anim-node-animation@1368(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(*(*(arg_1 + 16) + 3128) + 40);
+}
+
+u64 anim-player-buddy-boost-states__anim-node-animation@13a0(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(*(*(arg_1 + 16) + 3128) + 48);
+}
+
+u64 anim-player-buddy-boost-states__anim-node-animation@1858(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(*(*(arg_1 + 16) + 3128) + 56);
+}
+
+u64 anim-player-buddy-boost-states__anim-node-animation@1158(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(*(*(arg_1 + 16) + 3128) + 64);
+}
+
+u64 anim-player-buddy-boost-states__anim-node-animation@1200(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(*(*(arg_1 + 16) + 3128) + 72);
+}
+
+u64 anim-player-buddy-boost-states__anim-node-animation@11c8(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(*(*(arg_1 + 16) + 3128) + 80);
+}
+
+u64 anim-player-buddy-boost-states__anim-node-animation@d38(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(*(*(arg_1 + 16) + 3128) + 88);
+}
+
+u64 anim-player-buddy-boost-states__anim-node-animation@ce0(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(*(*(arg_1 + 16) + 3128) + 96);
+}
+
+u64 anim-player-buddy-boost-states__anim-node-animation@1488(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(*(*(arg_1 + 16) + 3128) + 104);
+}
+
+u64 anim-player-buddy-boost-states__anim-node-animation@17a0(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(*(*(arg_1 + 16) + 3128) + 112);
+}
+
+u64 anim-player-buddy-boost-states__anim-node-animation@1028(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(*(*(arg_1 + 16) + 3128) + 120);
+}
+
+u64 anim-player-buddy-boost-states__anim-node-animation@e60(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(*(*(arg_1 + 16) + 3128) + 128);
+}
+
+u64 anim-player-buddy-boost-states__anim-node-animation@e98(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(*(*(arg_1 + 16) + 3128) + 136);
+}
+

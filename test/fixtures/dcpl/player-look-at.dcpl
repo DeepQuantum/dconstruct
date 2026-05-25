@@ -118,3 +118,43 @@ f32 anim-player-look-at-states__anim-node-blend@3f0(f32 arg_0, u64? arg_1, u64? 
     return *(f32*)((*(arg_0 + 16) + 312) + 8);
 }
 
+f32 anim-player-look-at-states__actor-state-list@48__anim-node-blend@2d0____anim-node-blend@948____anim-node-animation@e98__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return *(f32*)((*(arg_0 + 16) + 312) + 20);
+}
+
+f32 anim-player-look-at-states__actor-state-list@48(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)(*(arg_0 + 16) + 640);
+}
+
+f32 anim-player-look-at-states__anim-node-animation@d38(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return *(f32*)((*(arg_0 + 16) + 312) + 20);
+}
+
+f32 anim-player-look-at-states(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)((*(arg_0 + 16) + 640) + 4);
+}
+
+f32 anim-player-look-at-states__anim-node-blend@3b0__anim-node-blend@908____anim-node-blend@e58____anim-node-blend@1480__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)((*(arg_0 + 16) + 312) + 12);
+}
+
+f32 anim-player-look-at-states__anim-node-blend@3b0(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)((*(arg_0 + 16) + 312) + 4);
+}
+
+f32 anim-player-look-at-states__anim-node-animation@1168(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return 1.00;
+}
+
+f32 anim-player-look-at-states__anim-node-animation@818(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return 1.00;
+}
+
+f32 anim-player-look-at-states__anim-node-blend@3f0__anim-node-blend@780____anim-node-blend@1128____anim-node-blend@1398__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)((*(arg_0 + 16) + 312) + 16);
+}
+
+f32 anim-player-look-at-states__anim-node-blend@3f0(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)((*(arg_0 + 16) + 312) + 8);
+}
+

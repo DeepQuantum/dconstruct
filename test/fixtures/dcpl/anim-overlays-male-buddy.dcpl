@@ -538,3 +538,183 @@ u64? anim-overlay-male-buddy-weapon-base-mg(u64? arg_0, u64? arg_1, u64? arg_2, 
     return var_0;
 }
 
+u64? anim-overlay-male-buddy-weapon-id-hatchet-scar__anim-overlay-set@2530(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = lerp-scale(0.40, 0.36, 1.00, 0.00, arg_1);
+    return var_0;
+}
+
+u64? anim-overlay-male-buddy-weapon-id-hatchet-scar(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = lerp-scale(0.32, 0.29, 1.00, 0.00, arg_1);
+    return var_0;
+}
+
+f32 anim-overlay-male-buddy-move-set-mg-search-walk-grass__anim-overlay-set@26f0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return 0.70;
+}
+
+u64? anim-overlay-male-buddy-move-set-mg-aggr-run__anim-overlay-set@2ad0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = read-float-channel(OverlayHelper.AimState, arg_3, arg_0, arg_1, arg_2, 0.00);
+    return var_0;
+}
+
+f32 anim-overlay-male-buddy-weapon-pistol-crouch__anim-overlay-set@2c90(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return 1.00 - *(f32*)(*arg_0 + 332);
+}
+
+u64? anim-overlay-male-buddy-weapon-pistol-uneasy__anim-overlay-set@2d10(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = lerp-scale(0.40, 0.60, 1.00, 0.00, arg_1);
+    u64? var_1 = make-curve(var_0, 4);
+    return var_1;
+}
+
+u64? anim-overlay-male-buddy-weapon-pistol-uneasy(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = lerp-scale(0.80, 0.50, 1.00, 0.00, arg_1);
+    u64? var_1 = make-curve(var_0, 4);
+    return var_1;
+}
+
+u64? anim-overlay-male-buddy-weapon-base-fist__anim-overlay-set@2f50(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = lerp-scale(0.60, 1.00, 0.00, 1.00, arg_1);
+    u64? var_1 = make-curve(var_0, 2);
+    return var_1;
+}
+
+u64? anim-overlay-male-buddy-weapon-id-assault-rifle-upgrade__anim-overlay-set@3110(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = lerp-scale(0.14, 0.04, 1.00, 0.00, arg_1);
+    return var_0;
+}
+
+u64? anim-overlay-male-buddy-move-set-pistol-aggr-walk__anim-overlay-set@36f0(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    f32 var_0 = *(f32*)(*arg_0 + 312);
+    u64? var_1 = lerp-scale(0.80, 0.20, 0.00, 1.00, var_0);
+    return var_1;
+}
+
+u64? anim-overlay-male-buddy-move-set-pistol-aggr-walk(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    f32 var_0 = *(f32*)(*arg_0 + 312);
+    u64? var_1 = lerp-scale(0.20, 0.80, 0.00, 1.00, var_0);
+    return var_1;
+}
+
+f32 anim-overlay-male-buddy-move-set-pistol-aggr-sprint__anim-overlay-set@37b0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = read-float-channel(OverlayHelper.AimState, arg_3, arg_0, arg_1, arg_2, 0.00);
+    return 1.00 - var_0;
+}
+
+f32 anim-overlay-male-buddy-move-set-pistol-aggr-sprint(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = read-float-channel(OverlayHelper.AimState, arg_3, arg_0, arg_1, arg_2, 0.00);
+    u64? var_1 = pow-float(var_0, 0.50);
+    return 1.50 * var_1;
+}
+
+u64? anim-overlay-male-buddy-weapon-base-bow__anim-overlay-set@3b10(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = lerp-scale(0.00, 0.20, 1.00, 0.00, arg_1);
+    return var_0;
+}
+
+u64? anim-overlay-male-buddy-weapon-base-bow(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = lerp-scale(0.45, 0.60, 1.00, 0.00, arg_1);
+    return var_0;
+}
+
+u64? anim-overlay-male-buddy-weapon-id-pistol-militia__anim-overlay-set@3db0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = lerp-scale(0.80, 0.70, 1.00, 0.00, arg_1);
+    return var_0;
+}
+
+u64? anim-overlay-male-buddy-weapon-1hblade-aggr__anim-overlay-set@3df0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = lerp-scale(0.75, 0.65, 1.00, 0.00, arg_1);
+    return var_0;
+}
+
+u64? anim-overlay-male-buddy-weapon-pistol-search__anim-overlay-set@4090(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = read-float-channel(OverlayHelper.AimState, arg_3, arg_0, arg_1, arg_2, 1.00);
+    return var_0;
+}
+
+u64? anim-overlay-male-buddy-weapon-id-rifle-bolt-scar(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = lerp-scale(0.70, 0.58, 1.00, 0.00, arg_1);
+    return var_0;
+}
+
+u64? anim-overlay-male-buddy-weapon-up-down-up__anim-overlay-set@4da8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = lerp-scale(0.60, 0.80, 1.00, 0.00, arg_1);
+    return var_0;
+}
+
+u64? anim-overlay-male-buddy-weapon-up-down-up(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = lerp-scale(0.20, 0.00, 1.00, 0.00, arg_1);
+    return var_0;
+}
+
+u64? anim-overlay-male-buddy-weapon-base-pistol(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = lerp-scale(0.70, 0.10, 1.00, 0.00, arg_1);
+    return var_0;
+}
+
+u64? anim-overlay-male-buddy-weapon-pistol-aggr(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = lerp-scale(0.70, 0.40, 1.00, 0.00, arg_1);
+    return var_0;
+}
+
+u64? anim-overlay-male-buddy-weapon-bow-aggr__anim-overlay-set@5e48(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = lerp-scale(0.80, 0.40, 1.00, 0.00, arg_1);
+    return var_0;
+}
+
+u64? anim-overlay-male-buddy-weapon-bow-aggr(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = lerp-scale(0.74, 0.40, 1.00, 0.00, arg_1);
+    return var_0;
+}
+
+u64? anim-overlay-male-buddy-weapon-base-1hblade__anim-overlay-set@64a8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = lerp-scale(0.30, 0.90, 0.00, 1.00, arg_1);
+    u64? var_1 = make-curve(var_0, 2);
+    return var_1;
+}
+
+u64? anim-overlay-male-buddy-weapon-mg-aggr__anim-overlay-set@69a8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = lerp-scale(0.45, 0.10, 1.00, 0.00, arg_1);
+    return var_0;
+}
+
+u64? anim-overlay-male-buddy-weapon-mg-aggr(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = lerp-scale(0.64, 0.40, 1.00, 0.00, arg_1);
+    return var_0;
+}
+
+f32 anim-overlay-male-buddy-weapon-fist-ambi__anim-overlay-set@6ba8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return 0.30;
+}
+
+u64? anim-overlay-male-buddy-move-set-mg-aggr-walk__anim-overlay-set@6f08(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = lerp-scale(1.00, 1.00, 1.00, 0.00, arg_1);
+    return var_0;
+}
+
+f32 anim-overlay-male-buddy-weapon-base-long-melee__anim-overlay-set@7348(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return 0.90;
+}
+
+u64? anim-overlay-male-buddy-weapon-id-baseball-bat(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = lerp-scale(0.74, 0.53, 1.00, 0.00, arg_1);
+    return var_0;
+}
+
+u64? anim-overlay-male-buddy-injured-healing(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = lerp-scale(0.40, 0.70, 1.00, 0.00, arg_1);
+    u64? var_1 = make-curve(var_0, 2);
+    return var_1;
+}
+
+u64? anim-overlay-male-buddy-injured-light(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = lerp-scale(0.30, 0.60, 1.00, 0.00, arg_1);
+    u64? var_1 = make-curve(var_0, 2);
+    return var_1;
+}
+
+u64? anim-overlay-male-buddy-weapon-base-mg(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = lerp-scale(0.80, 0.20, 1.00, 0.00, arg_1);
+    return var_0;
+}
+

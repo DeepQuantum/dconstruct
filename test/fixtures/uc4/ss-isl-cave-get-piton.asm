@@ -1,0 +1,858 @@
+    [1 args]
+    0000   0xFFFFF300   43 00 31 00   Move                 r0, r49     r0 = arg_0
+    0001   0xFFFFF308   15 01 00 00   LookupPointer        r1, 0       r1 = ST[0] -> <event-arg-symbol>
+    0002   0xFFFFF310   0C 02 00 00   LoadU16Imm           r2, 0       r2 = 0
+    0003   0xFFFFF318   43 31 02 00   Move                 r49, r2     r49 = 0
+    0004   0xFFFFF320   1C 01 01 01   CallFf               r1, r1, 1   r1 = event-arg-symbol(0)
+    0005   0xFFFFF328   44 02 01 00   LoadStaticU32Imm     r2, 1       r2 = ST[1] -> <932559365>
+    0006   0xFFFFF330   1D 01 01 02   IEqual               r1, r1, r2  r1 = r1 == r2
+    0007   0xFFFFF338   00 01 01 00   Return               r1          Return 
+
+    SYMBOL TABLE: 
+    0000   0x000AB0    function: event-arg-symbol
+    0001   0x000AB8    function: event-arg-symbol
+    [1 args]
+    0000   0xFFFFF300   43 00 31 00   Move                 r0, r49     r0 = arg_0
+    0001   0xFFFFF308   15 01 00 00   LookupPointer        r1, 0       r1 = ST[0] -> <event-arg-symbol>
+    0002   0xFFFFF310   0C 02 00 00   LoadU16Imm           r2, 0       r2 = 0
+    0003   0xFFFFF318   43 31 02 00   Move                 r49, r2     r49 = 0
+    0004   0xFFFFF320   1C 01 01 01   CallFf               r1, r1, 1   r1 = event-arg-symbol(0)
+    0005   0xFFFFF328   44 02 01 00   LoadStaticU32Imm     r2, 1       r2 = ST[1] -> <932559365>
+    0006   0xFFFFF330   1D 01 01 02   IEqual               r1, r1, r2  r1 = r1 == r2
+    0007   0xFFFFF338   00 01 01 00   Return               r1          Return 
+
+    SYMBOL TABLE: 
+    0000   0x000AB0    function: event-arg-symbol
+    0001   0x000AB8    function: event-arg-symbol
+    [1 args]
+    0000   0xFFFFF300   43 00 31 00   Move                 r0, r49     r0 = arg_0
+    0001   0xFFFFF308   15 01 00 00   LookupPointer        r1, 0       r1 = ST[0] -> <event-arg-symbol>
+    0002   0xFFFFF310   0C 02 00 00   LoadU16Imm           r2, 0       r2 = 0
+    0003   0xFFFFF318   43 31 02 00   Move                 r49, r2     r49 = 0
+    0004   0xFFFFF320   1C 01 01 01   CallFf               r1, r1, 1   r1 = event-arg-symbol(0)
+    0005   0xFFFFF328   44 02 01 00   LoadStaticU32Imm     r2, 1       r2 = ST[1] -> <932559365>
+    0006   0xFFFFF330   1D 01 01 02   IEqual               r1, r1, r2  r1 = r1 == r2
+    0007   0xFFFFF338   00 01 01 00   Return               r1          Return 
+
+    SYMBOL TABLE: 
+    0000   0x000AB0    function: event-arg-symbol
+    0001   0x000AB8    function: event-arg-symbol
+    [1 args]
+    0000   0xFFFFF300   43 00 31 00   Move                 r0, r49     r0 = arg_0
+    0001   0xFFFFF308   15 01 00 00   LookupPointer        r1, 0       r1 = ST[0] -> <event-arg-symbol>
+    0002   0xFFFFF310   0C 02 00 00   LoadU16Imm           r2, 0       r2 = 0
+    0003   0xFFFFF318   43 31 02 00   Move                 r49, r2     r49 = 0
+    0004   0xFFFFF320   1C 01 01 01   CallFf               r1, r1, 1   r1 = event-arg-symbol(0)
+    0005   0xFFFFF328   44 02 01 00   LoadStaticU32Imm     r2, 1       r2 = ST[1] -> <932559365>
+    0006   0xFFFFF330   1D 01 01 02   IEqual               r1, r1, r2  r1 = r1 == r2
+    0007   0xFFFFF338   00 01 01 00   Return               r1          Return 
+
+    SYMBOL TABLE: 
+    0000   0x000AB0    function: event-arg-symbol
+    0001   0x000AB8    function: event-arg-symbol
+    [1 args]
+    0000   0xFFFFF300   43 00 31 00   Move                 r0, r49     r0 = arg_0
+    0001   0xFFFFF308   15 01 00 00   LookupPointer        r1, 0       r1 = ST[0] -> <event-arg-symbol>
+    0002   0xFFFFF310   0C 02 00 00   LoadU16Imm           r2, 0       r2 = 0
+    0003   0xFFFFF318   43 31 02 00   Move                 r49, r2     r49 = 0
+    0004   0xFFFFF320   1C 01 01 01   CallFf               r1, r1, 1   r1 = event-arg-symbol(0)
+    0005   0xFFFFF328   44 02 01 00   LoadStaticU32Imm     r2, 1       r2 = ST[1] -> <932559365>
+    0006   0xFFFFF330   1D 01 01 02   IEqual               r1, r1, r2  r1 = r1 == r2
+    0007   0xFFFFF338   00 01 01 00   Return               r1          Return 
+
+    SYMBOL TABLE: 
+    0000   0x000AB0    function: event-arg-symbol
+    0001   0x000AB8    function: event-arg-symbol
+    [1 args]
+    0000   0xFFFFF300   43 00 31 00   Move                 r0, r49     r0 = arg_0
+    0001   0xFFFFF308   15 01 00 00   LookupPointer        r1, 0       r1 = ST[0] -> <event-arg-symbol>
+    0002   0xFFFFF310   0C 02 00 00   LoadU16Imm           r2, 0       r2 = 0
+    0003   0xFFFFF318   43 31 02 00   Move                 r49, r2     r49 = 0
+    0004   0xFFFFF320   1C 01 01 01   CallFf               r1, r1, 1   r1 = event-arg-symbol(0)
+    0005   0xFFFFF328   44 02 01 00   LoadStaticU32Imm     r2, 1       r2 = ST[1] -> <932559365>
+    0006   0xFFFFF330   1D 01 01 02   IEqual               r1, r1, r2  r1 = r1 == r2
+    0007   0xFFFFF338   00 01 01 00   Return               r1          Return 
+
+    SYMBOL TABLE: 
+    0000   0x000AB0    function: event-arg-symbol
+    0001   0x000AB8    function: event-arg-symbol
+    [1 args]
+    0000   0xFFFFF300   43 00 31 00   Move                 r0, r49     r0 = arg_0
+    0001   0xFFFFF308   15 01 00 00   LookupPointer        r1, 0       r1 = ST[0] -> <event-arg-symbol>
+    0002   0xFFFFF310   0C 02 00 00   LoadU16Imm           r2, 0       r2 = 0
+    0003   0xFFFFF318   43 31 02 00   Move                 r49, r2     r49 = 0
+    0004   0xFFFFF320   1C 01 01 01   CallFf               r1, r1, 1   r1 = event-arg-symbol(0)
+    0005   0xFFFFF328   44 02 01 00   LoadStaticU32Imm     r2, 1       r2 = ST[1] -> <932559365>
+    0006   0xFFFFF330   1D 01 01 02   IEqual               r1, r1, r2  r1 = r1 == r2
+    0007   0xFFFFF338   00 01 01 00   Return               r1          Return 
+
+    SYMBOL TABLE: 
+    0000   0x000AB0    function: event-arg-symbol
+    0001   0x000AB8    function: event-arg-symbol
+    [1 args]
+    0000   0xFFFFF300   43 00 31 00   Move                 r0, r49     r0 = arg_0
+    0001   0xFFFFF308   15 01 00 00   LookupPointer        r1, 0       r1 = ST[0] -> <event-arg-symbol>
+    0002   0xFFFFF310   0C 02 00 00   LoadU16Imm           r2, 0       r2 = 0
+    0003   0xFFFFF318   43 31 02 00   Move                 r49, r2     r49 = 0
+    0004   0xFFFFF320   1C 01 01 01   CallFf               r1, r1, 1   r1 = event-arg-symbol(0)
+    0005   0xFFFFF328   44 02 01 00   LoadStaticU32Imm     r2, 1       r2 = ST[1] -> <932559365>
+    0006   0xFFFFF330   1D 01 01 02   IEqual               r1, r1, r2  r1 = r1 == r2
+    0007   0xFFFFF338   00 01 01 00   Return               r1          Return 
+
+    SYMBOL TABLE: 
+    0000   0x000AB0    function: event-arg-symbol
+    0001   0x000AB8    function: event-arg-symbol
+    [1 args]
+    0000   0xFFFFF300   43 00 31 00   Move                 r0, r49     r0 = arg_0
+    0001   0xFFFFF308   15 01 00 00   LookupPointer        r1, 0       r1 = ST[0] -> <event-arg-symbol>
+    0002   0xFFFFF310   0C 02 00 00   LoadU16Imm           r2, 0       r2 = 0
+    0003   0xFFFFF318   43 31 02 00   Move                 r49, r2     r49 = 0
+    0004   0xFFFFF320   1C 01 01 01   CallFf               r1, r1, 1   r1 = event-arg-symbol(0)
+    0005   0xFFFFF328   44 02 01 00   LoadStaticU32Imm     r2, 1       r2 = ST[1] -> <932559365>
+    0006   0xFFFFF330   1D 01 01 02   IEqual               r1, r1, r2  r1 = r1 == r2
+    0007   0xFFFFF338   00 01 01 00   Return               r1          Return 
+
+    SYMBOL TABLE: 
+    0000   0x000AB0    function: event-arg-symbol
+    0001   0x000AB8    function: event-arg-symbol
+    [1 args]
+    0000   0xFFFFF300   43 00 31 00   Move                 r0, r49     r0 = arg_0
+    0001   0xFFFFF308   15 01 00 00   LookupPointer        r1, 0       r1 = ST[0] -> <event-arg-symbol>
+    0002   0xFFFFF310   0C 02 00 00   LoadU16Imm           r2, 0       r2 = 0
+    0003   0xFFFFF318   43 31 02 00   Move                 r49, r2     r49 = 0
+    0004   0xFFFFF320   1C 01 01 01   CallFf               r1, r1, 1   r1 = event-arg-symbol(0)
+    0005   0xFFFFF328   44 02 01 00   LoadStaticU32Imm     r2, 1       r2 = ST[1] -> <932559365>
+    0006   0xFFFFF330   1D 01 01 02   IEqual               r1, r1, r2  r1 = r1 == r2
+    0007   0xFFFFF338   00 01 01 00   Return               r1          Return 
+
+    SYMBOL TABLE: 
+    0000   0x000AB0    function: event-arg-symbol
+    0001   0x000AB8    function: event-arg-symbol
+    [1 args]
+    0000   0xFFFFF300   43 00 31 00   Move                 r0, r49     r0 = arg_0
+    0001   0xFFFFF308   15 01 00 00   LookupPointer        r1, 0       r1 = ST[0] -> <event-arg-symbol>
+    0002   0xFFFFF310   0C 02 00 00   LoadU16Imm           r2, 0       r2 = 0
+    0003   0xFFFFF318   43 31 02 00   Move                 r49, r2     r49 = 0
+    0004   0xFFFFF320   1C 01 01 01   CallFf               r1, r1, 1   r1 = event-arg-symbol(0)
+    0005   0xFFFFF328   44 02 01 00   LoadStaticU32Imm     r2, 1       r2 = ST[1] -> <932559365>
+    0006   0xFFFFF330   1D 01 01 02   IEqual               r1, r1, r2  r1 = r1 == r2
+    0007   0xFFFFF338   00 01 01 00   Return               r1          Return 
+
+    SYMBOL TABLE: 
+    0000   0x000AB0    function: event-arg-symbol
+    0001   0x000AB8    function: event-arg-symbol
+    [1 args]
+    0000   0xFFFFF300   43 00 31 00   Move                 r0, r49     r0 = arg_0
+    0001   0xFFFFF308   15 01 00 00   LookupPointer        r1, 0       r1 = ST[0] -> <event-arg-symbol>
+    0002   0xFFFFF310   0C 02 00 00   LoadU16Imm           r2, 0       r2 = 0
+    0003   0xFFFFF318   43 31 02 00   Move                 r49, r2     r49 = 0
+    0004   0xFFFFF320   1C 01 01 01   CallFf               r1, r1, 1   r1 = event-arg-symbol(0)
+    0005   0xFFFFF328   44 02 01 00   LoadStaticU32Imm     r2, 1       r2 = ST[1] -> <932559365>
+    0006   0xFFFFF330   1D 01 01 02   IEqual               r1, r1, r2  r1 = r1 == r2
+    0007   0xFFFFF338   00 01 01 00   Return               r1          Return 
+
+    SYMBOL TABLE: 
+    0000   0x000AB0    function: event-arg-symbol
+    0001   0x000AB8    function: event-arg-symbol
+    [1 args]
+    0000   0xFFFFF300   43 00 31 00   Move                 r0, r49     r0 = arg_0
+    0001   0xFFFFF308   15 01 00 00   LookupPointer        r1, 0       r1 = ST[0] -> <event-arg-symbol>
+    0002   0xFFFFF310   0C 02 00 00   LoadU16Imm           r2, 0       r2 = 0
+    0003   0xFFFFF318   43 31 02 00   Move                 r49, r2     r49 = 0
+    0004   0xFFFFF320   1C 01 01 01   CallFf               r1, r1, 1   r1 = event-arg-symbol(0)
+    0005   0xFFFFF328   44 02 01 00   LoadStaticU32Imm     r2, 1       r2 = ST[1] -> <932559365>
+    0006   0xFFFFF330   1D 01 01 02   IEqual               r1, r1, r2  r1 = r1 == r2
+    0007   0xFFFFF338   00 01 01 00   Return               r1          Return 
+
+    SYMBOL TABLE: 
+    0000   0x000AB0    function: event-arg-symbol
+    0001   0x000AB8    function: event-arg-symbol
+    [1 args]
+    0000   0xFFFFF300   43 00 31 00   Move                 r0, r49     r0 = arg_0
+    0001   0xFFFFF308   15 01 00 00   LookupPointer        r1, 0       r1 = ST[0] -> <event-arg-symbol>
+    0002   0xFFFFF310   0C 02 00 00   LoadU16Imm           r2, 0       r2 = 0
+    0003   0xFFFFF318   43 31 02 00   Move                 r49, r2     r49 = 0
+    0004   0xFFFFF320   1C 01 01 01   CallFf               r1, r1, 1   r1 = event-arg-symbol(0)
+    0005   0xFFFFF328   44 02 01 00   LoadStaticU32Imm     r2, 1       r2 = ST[1] -> <932559365>
+    0006   0xFFFFF330   1D 01 01 02   IEqual               r1, r1, r2  r1 = r1 == r2
+    0007   0xFFFFF338   00 01 01 00   Return               r1          Return 
+
+    SYMBOL TABLE: 
+    0000   0x000AB0    function: event-arg-symbol
+    0001   0x000AB8    function: event-arg-symbol
+    [1 args]
+    0000   0xFFFFF300   43 00 31 00   Move                 r0, r49     r0 = arg_0
+    0001   0xFFFFF308   15 01 00 00   LookupPointer        r1, 0       r1 = ST[0] -> <event-arg-symbol>
+    0002   0xFFFFF310   0C 02 00 00   LoadU16Imm           r2, 0       r2 = 0
+    0003   0xFFFFF318   43 31 02 00   Move                 r49, r2     r49 = 0
+    0004   0xFFFFF320   1C 01 01 01   CallFf               r1, r1, 1   r1 = event-arg-symbol(0)
+    0005   0xFFFFF328   44 02 01 00   LoadStaticU32Imm     r2, 1       r2 = ST[1] -> <932559365>
+    0006   0xFFFFF330   1D 01 01 02   IEqual               r1, r1, r2  r1 = r1 == r2
+    0007   0xFFFFF338   00 01 01 00   Return               r1          Return 
+
+    SYMBOL TABLE: 
+    0000   0x000AB0    function: event-arg-symbol
+    0001   0x000AB8    function: event-arg-symbol
+    [1 args]
+    0000   0xFFFFF300   43 00 31 00   Move                 r0, r49     r0 = arg_0
+    0001   0xFFFFF308   15 01 00 00   LookupPointer        r1, 0       r1 = ST[0] -> <event-arg-symbol>
+    0002   0xFFFFF310   0C 02 00 00   LoadU16Imm           r2, 0       r2 = 0
+    0003   0xFFFFF318   43 31 02 00   Move                 r49, r2     r49 = 0
+    0004   0xFFFFF320   1C 01 01 01   CallFf               r1, r1, 1   r1 = event-arg-symbol(0)
+    0005   0xFFFFF328   44 02 01 00   LoadStaticU32Imm     r2, 1       r2 = ST[1] -> <932559365>
+    0006   0xFFFFF330   1D 01 01 02   IEqual               r1, r1, r2  r1 = r1 == r2
+    0007   0xFFFFF338   00 01 01 00   Return               r1          Return 
+
+    SYMBOL TABLE: 
+    0000   0x000AB0    function: event-arg-symbol
+    0001   0x000AB8    function: event-arg-symbol
+    [1 args]
+    0000   0xFFFFF300   43 00 31 00   Move                 r0, r49     r0 = arg_0
+    0001   0xFFFFF308   15 01 00 00   LookupPointer        r1, 0       r1 = ST[0] -> <event-arg-symbol>
+    0002   0xFFFFF310   0C 02 00 00   LoadU16Imm           r2, 0       r2 = 0
+    0003   0xFFFFF318   43 31 02 00   Move                 r49, r2     r49 = 0
+    0004   0xFFFFF320   1C 01 01 01   CallFf               r1, r1, 1   r1 = event-arg-symbol(0)
+    0005   0xFFFFF328   44 02 01 00   LoadStaticU32Imm     r2, 1       r2 = ST[1] -> <932559365>
+    0006   0xFFFFF330   1D 01 01 02   IEqual               r1, r1, r2  r1 = r1 == r2
+    0007   0xFFFFF338   00 01 01 00   Return               r1          Return 
+
+    SYMBOL TABLE: 
+    0000   0x000AB0    function: event-arg-symbol
+    0001   0x000AB8    function: event-arg-symbol
+    [1 args]
+    0000   0xFFFFF300   43 00 31 00   Move                 r0, r49     r0 = arg_0
+    0001   0xFFFFF308   15 01 00 00   LookupPointer        r1, 0       r1 = ST[0] -> <event-arg-symbol>
+    0002   0xFFFFF310   0C 02 00 00   LoadU16Imm           r2, 0       r2 = 0
+    0003   0xFFFFF318   43 31 02 00   Move                 r49, r2     r49 = 0
+    0004   0xFFFFF320   1C 01 01 01   CallFf               r1, r1, 1   r1 = event-arg-symbol(0)
+    0005   0xFFFFF328   44 02 01 00   LoadStaticU32Imm     r2, 1       r2 = ST[1] -> <932559365>
+    0006   0xFFFFF330   1D 01 01 02   IEqual               r1, r1, r2  r1 = r1 == r2
+    0007   0xFFFFF338   00 01 01 00   Return               r1          Return 
+
+    SYMBOL TABLE: 
+    0000   0x000AB0    function: event-arg-symbol
+    0001   0x000AB8    function: event-arg-symbol
+    [1 args]
+    0000   0xFFFFF300   43 00 31 00   Move                 r0, r49     r0 = arg_0
+    0001   0xFFFFF308   15 01 00 00   LookupPointer        r1, 0       r1 = ST[0] -> <event-arg-symbol>
+    0002   0xFFFFF310   0C 02 00 00   LoadU16Imm           r2, 0       r2 = 0
+    0003   0xFFFFF318   43 31 02 00   Move                 r49, r2     r49 = 0
+    0004   0xFFFFF320   1C 01 01 01   CallFf               r1, r1, 1   r1 = event-arg-symbol(0)
+    0005   0xFFFFF328   44 02 01 00   LoadStaticU32Imm     r2, 1       r2 = ST[1] -> <932559365>
+    0006   0xFFFFF330   1D 01 01 02   IEqual               r1, r1, r2  r1 = r1 == r2
+    0007   0xFFFFF338   00 01 01 00   Return               r1          Return 
+
+    SYMBOL TABLE: 
+    0000   0x000AB0    function: event-arg-symbol
+    0001   0x000AB8    function: event-arg-symbol
+    [1 args]
+    0000   0xFFFFF300   43 00 31 00   Move                 r0, r49     r0 = arg_0
+    0001   0xFFFFF308   15 01 00 00   LookupPointer        r1, 0       r1 = ST[0] -> <event-arg-symbol>
+    0002   0xFFFFF310   0C 02 00 00   LoadU16Imm           r2, 0       r2 = 0
+    0003   0xFFFFF318   43 31 02 00   Move                 r49, r2     r49 = 0
+    0004   0xFFFFF320   1C 01 01 01   CallFf               r1, r1, 1   r1 = event-arg-symbol(0)
+    0005   0xFFFFF328   44 02 01 00   LoadStaticU32Imm     r2, 1       r2 = ST[1] -> <932559365>
+    0006   0xFFFFF330   1D 01 01 02   IEqual               r1, r1, r2  r1 = r1 == r2
+    0007   0xFFFFF338   00 01 01 00   Return               r1          Return 
+
+    SYMBOL TABLE: 
+    0000   0x000AB0    function: event-arg-symbol
+    0001   0x000AB8    function: event-arg-symbol
+    [1 args]
+    0000   0xFFFFF300   43 00 31 00   Move                 r0, r49     r0 = arg_0
+    0001   0xFFFFF308   15 01 00 00   LookupPointer        r1, 0       r1 = ST[0] -> <event-arg-symbol>
+    0002   0xFFFFF310   0C 02 00 00   LoadU16Imm           r2, 0       r2 = 0
+    0003   0xFFFFF318   43 31 02 00   Move                 r49, r2     r49 = 0
+    0004   0xFFFFF320   1C 01 01 01   CallFf               r1, r1, 1   r1 = event-arg-symbol(0)
+    0005   0xFFFFF328   44 02 01 00   LoadStaticU32Imm     r2, 1       r2 = ST[1] -> <932559365>
+    0006   0xFFFFF330   1D 01 01 02   IEqual               r1, r1, r2  r1 = r1 == r2
+    0007   0xFFFFF338   00 01 01 00   Return               r1          Return 
+
+    SYMBOL TABLE: 
+    0000   0x000AB0    function: event-arg-symbol
+    0001   0x000AB8    function: event-arg-symbol
+    [1 args]
+    0000   0xFFFFF300   43 00 31 00   Move                 r0, r49     r0 = arg_0
+    0001   0xFFFFF308   15 01 00 00   LookupPointer        r1, 0       r1 = ST[0] -> <event-arg-symbol>
+    0002   0xFFFFF310   0C 02 00 00   LoadU16Imm           r2, 0       r2 = 0
+    0003   0xFFFFF318   43 31 02 00   Move                 r49, r2     r49 = 0
+    0004   0xFFFFF320   1C 01 01 01   CallFf               r1, r1, 1   r1 = event-arg-symbol(0)
+    0005   0xFFFFF328   44 02 01 00   LoadStaticU32Imm     r2, 1       r2 = ST[1] -> <932559365>
+    0006   0xFFFFF330   1D 01 01 02   IEqual               r1, r1, r2  r1 = r1 == r2
+    0007   0xFFFFF338   00 01 01 00   Return               r1          Return 
+
+    SYMBOL TABLE: 
+    0000   0x000AB0    function: event-arg-symbol
+    0001   0x000AB8    function: event-arg-symbol
+    [1 args]
+    0000   0xFFFFF300   43 00 31 00   Move                 r0, r49     r0 = arg_0
+    0001   0xFFFFF308   15 01 00 00   LookupPointer        r1, 0       r1 = ST[0] -> <event-arg-symbol>
+    0002   0xFFFFF310   0C 02 00 00   LoadU16Imm           r2, 0       r2 = 0
+    0003   0xFFFFF318   43 31 02 00   Move                 r49, r2     r49 = 0
+    0004   0xFFFFF320   1C 01 01 01   CallFf               r1, r1, 1   r1 = event-arg-symbol(0)
+    0005   0xFFFFF328   44 02 01 00   LoadStaticU32Imm     r2, 1       r2 = ST[1] -> <932559365>
+    0006   0xFFFFF330   1D 01 01 02   IEqual               r1, r1, r2  r1 = r1 == r2
+    0007   0xFFFFF338   00 01 01 00   Return               r1          Return 
+
+    SYMBOL TABLE: 
+    0000   0x000AB0    function: event-arg-symbol
+    0001   0x000AB8    function: event-arg-symbol
+    [1 args]
+    0000   0xFFFFF300   43 00 31 00   Move                 r0, r49     r0 = arg_0
+    0001   0xFFFFF308   15 01 00 00   LookupPointer        r1, 0       r1 = ST[0] -> <event-arg-symbol>
+    0002   0xFFFFF310   0C 02 00 00   LoadU16Imm           r2, 0       r2 = 0
+    0003   0xFFFFF318   43 31 02 00   Move                 r49, r2     r49 = 0
+    0004   0xFFFFF320   1C 01 01 01   CallFf               r1, r1, 1   r1 = event-arg-symbol(0)
+    0005   0xFFFFF328   44 02 01 00   LoadStaticU32Imm     r2, 1       r2 = ST[1] -> <932559365>
+    0006   0xFFFFF330   1D 01 01 02   IEqual               r1, r1, r2  r1 = r1 == r2
+    0007   0xFFFFF338   00 01 01 00   Return               r1          Return 
+
+    SYMBOL TABLE: 
+    0000   0x000AB0    function: event-arg-symbol
+    0001   0x000AB8    function: event-arg-symbol
+    [1 args]
+    0000   0xFFFFF300   43 00 31 00   Move                 r0, r49     r0 = arg_0
+    0001   0xFFFFF308   15 01 00 00   LookupPointer        r1, 0       r1 = ST[0] -> <event-arg-symbol>
+    0002   0xFFFFF310   0C 02 00 00   LoadU16Imm           r2, 0       r2 = 0
+    0003   0xFFFFF318   43 31 02 00   Move                 r49, r2     r49 = 0
+    0004   0xFFFFF320   1C 01 01 01   CallFf               r1, r1, 1   r1 = event-arg-symbol(0)
+    0005   0xFFFFF328   44 02 01 00   LoadStaticU32Imm     r2, 1       r2 = ST[1] -> <932559365>
+    0006   0xFFFFF330   1D 01 01 02   IEqual               r1, r1, r2  r1 = r1 == r2
+    0007   0xFFFFF338   00 01 01 00   Return               r1          Return 
+
+    SYMBOL TABLE: 
+    0000   0x000AB0    function: event-arg-symbol
+    0001   0x000AB8    function: event-arg-symbol
+    [1 args]
+    0000   0xFFFFF300   43 00 31 00   Move                 r0, r49     r0 = arg_0
+    0001   0xFFFFF308   15 01 00 00   LookupPointer        r1, 0       r1 = ST[0] -> <event-arg-symbol>
+    0002   0xFFFFF310   0C 02 00 00   LoadU16Imm           r2, 0       r2 = 0
+    0003   0xFFFFF318   43 31 02 00   Move                 r49, r2     r49 = 0
+    0004   0xFFFFF320   1C 01 01 01   CallFf               r1, r1, 1   r1 = event-arg-symbol(0)
+    0005   0xFFFFF328   44 02 01 00   LoadStaticU32Imm     r2, 1       r2 = ST[1] -> <932559365>
+    0006   0xFFFFF330   1D 01 01 02   IEqual               r1, r1, r2  r1 = r1 == r2
+    0007   0xFFFFF338   00 01 01 00   Return               r1          Return 
+
+    SYMBOL TABLE: 
+    0000   0x000AB0    function: event-arg-symbol
+    0001   0x000AB8    function: event-arg-symbol
+    [1 args]
+    0000   0xFFFFF300   43 00 31 00   Move                 r0, r49     r0 = arg_0
+    0001   0xFFFFF308   15 01 00 00   LookupPointer        r1, 0       r1 = ST[0] -> <event-arg-symbol>
+    0002   0xFFFFF310   0C 02 00 00   LoadU16Imm           r2, 0       r2 = 0
+    0003   0xFFFFF318   43 31 02 00   Move                 r49, r2     r49 = 0
+    0004   0xFFFFF320   1C 01 01 01   CallFf               r1, r1, 1   r1 = event-arg-symbol(0)
+    0005   0xFFFFF328   44 02 01 00   LoadStaticU32Imm     r2, 1       r2 = ST[1] -> <932559365>
+    0006   0xFFFFF330   1D 01 01 02   IEqual               r1, r1, r2  r1 = r1 == r2
+    0007   0xFFFFF338   00 01 01 00   Return               r1          Return 
+
+    SYMBOL TABLE: 
+    0000   0x000AB0    function: event-arg-symbol
+    0001   0x000AB8    function: event-arg-symbol
+    [1 args]
+    0000   0xFFFFF300   43 00 31 00   Move                 r0, r49     r0 = arg_0
+    0001   0xFFFFF308   15 01 00 00   LookupPointer        r1, 0       r1 = ST[0] -> <event-arg-symbol>
+    0002   0xFFFFF310   0C 02 00 00   LoadU16Imm           r2, 0       r2 = 0
+    0003   0xFFFFF318   43 31 02 00   Move                 r49, r2     r49 = 0
+    0004   0xFFFFF320   1C 01 01 01   CallFf               r1, r1, 1   r1 = event-arg-symbol(0)
+    0005   0xFFFFF328   44 02 01 00   LoadStaticU32Imm     r2, 1       r2 = ST[1] -> <932559365>
+    0006   0xFFFFF330   1D 01 01 02   IEqual               r1, r1, r2  r1 = r1 == r2
+    0007   0xFFFFF338   00 01 01 00   Return               r1          Return 
+
+    SYMBOL TABLE: 
+    0000   0x000AB0    function: event-arg-symbol
+    0001   0x000AB8    function: event-arg-symbol
+    [1 args]
+    0000   0xFFFFF300   43 00 31 00   Move                 r0, r49     r0 = arg_0
+    0001   0xFFFFF308   15 01 00 00   LookupPointer        r1, 0       r1 = ST[0] -> <event-arg-symbol>
+    0002   0xFFFFF310   0C 02 00 00   LoadU16Imm           r2, 0       r2 = 0
+    0003   0xFFFFF318   43 31 02 00   Move                 r49, r2     r49 = 0
+    0004   0xFFFFF320   1C 01 01 01   CallFf               r1, r1, 1   r1 = event-arg-symbol(0)
+    0005   0xFFFFF328   44 02 01 00   LoadStaticU32Imm     r2, 1       r2 = ST[1] -> <932559365>
+    0006   0xFFFFF330   1D 01 01 02   IEqual               r1, r1, r2  r1 = r1 == r2
+    0007   0xFFFFF338   00 01 01 00   Return               r1          Return 
+
+    SYMBOL TABLE: 
+    0000   0x000AB0    function: event-arg-symbol
+    0001   0x000AB8    function: event-arg-symbol
+    [1 args]
+    0000   0xFFFFF300   43 00 31 00   Move                 r0, r49     r0 = arg_0
+    0001   0xFFFFF308   15 01 00 00   LookupPointer        r1, 0       r1 = ST[0] -> <event-arg-symbol>
+    0002   0xFFFFF310   0C 02 00 00   LoadU16Imm           r2, 0       r2 = 0
+    0003   0xFFFFF318   43 31 02 00   Move                 r49, r2     r49 = 0
+    0004   0xFFFFF320   1C 01 01 01   CallFf               r1, r1, 1   r1 = event-arg-symbol(0)
+    0005   0xFFFFF328   44 02 01 00   LoadStaticU32Imm     r2, 1       r2 = ST[1] -> <932559365>
+    0006   0xFFFFF330   1D 01 01 02   IEqual               r1, r1, r2  r1 = r1 == r2
+    0007   0xFFFFF338   00 01 01 00   Return               r1          Return 
+
+    SYMBOL TABLE: 
+    0000   0x000AB0    function: event-arg-symbol
+    0001   0x000AB8    function: event-arg-symbol
+    [1 args]
+    0000   0xFFFFF300   43 00 31 00   Move                 r0, r49     r0 = arg_0
+    0001   0xFFFFF308   15 01 00 00   LookupPointer        r1, 0       r1 = ST[0] -> <event-arg-symbol>
+    0002   0xFFFFF310   0C 02 00 00   LoadU16Imm           r2, 0       r2 = 0
+    0003   0xFFFFF318   43 31 02 00   Move                 r49, r2     r49 = 0
+    0004   0xFFFFF320   1C 01 01 01   CallFf               r1, r1, 1   r1 = event-arg-symbol(0)
+    0005   0xFFFFF328   44 02 01 00   LoadStaticU32Imm     r2, 1       r2 = ST[1] -> <932559365>
+    0006   0xFFFFF330   1D 01 01 02   IEqual               r1, r1, r2  r1 = r1 == r2
+    0007   0xFFFFF338   00 01 01 00   Return               r1          Return 
+
+    SYMBOL TABLE: 
+    0000   0x000AB0    function: event-arg-symbol
+    0001   0x000AB8    function: event-arg-symbol
+    [1 args]
+    0000   0xFFFFF300   43 00 31 00   Move                 r0, r49     r0 = arg_0
+    0001   0xFFFFF308   15 01 00 00   LookupPointer        r1, 0       r1 = ST[0] -> <event-arg-symbol>
+    0002   0xFFFFF310   0C 02 00 00   LoadU16Imm           r2, 0       r2 = 0
+    0003   0xFFFFF318   43 31 02 00   Move                 r49, r2     r49 = 0
+    0004   0xFFFFF320   1C 01 01 01   CallFf               r1, r1, 1   r1 = event-arg-symbol(0)
+    0005   0xFFFFF328   44 02 01 00   LoadStaticU32Imm     r2, 1       r2 = ST[1] -> <932559365>
+    0006   0xFFFFF330   1D 01 01 02   IEqual               r1, r1, r2  r1 = r1 == r2
+    0007   0xFFFFF338   00 01 01 00   Return               r1          Return 
+
+    SYMBOL TABLE: 
+    0000   0x000AB0    function: event-arg-symbol
+    0001   0x000AB8    function: event-arg-symbol
+    [1 args]
+    0000   0xFFFFF300   43 00 31 00   Move                 r0, r49     r0 = arg_0
+    0001   0xFFFFF308   15 01 00 00   LookupPointer        r1, 0       r1 = ST[0] -> <event-arg-symbol>
+    0002   0xFFFFF310   0C 02 00 00   LoadU16Imm           r2, 0       r2 = 0
+    0003   0xFFFFF318   43 31 02 00   Move                 r49, r2     r49 = 0
+    0004   0xFFFFF320   1C 01 01 01   CallFf               r1, r1, 1   r1 = event-arg-symbol(0)
+    0005   0xFFFFF328   44 02 01 00   LoadStaticU32Imm     r2, 1       r2 = ST[1] -> <932559365>
+    0006   0xFFFFF330   1D 01 01 02   IEqual               r1, r1, r2  r1 = r1 == r2
+    0007   0xFFFFF338   00 01 01 00   Return               r1          Return 
+
+    SYMBOL TABLE: 
+    0000   0x000AB0    function: event-arg-symbol
+    0001   0x000AB8    function: event-arg-symbol
+    [1 args]
+    0000   0xFFFFF300   43 00 31 00   Move                 r0, r49     r0 = arg_0
+    0001   0xFFFFF308   15 01 00 00   LookupPointer        r1, 0       r1 = ST[0] -> <event-arg-symbol>
+    0002   0xFFFFF310   0C 02 00 00   LoadU16Imm           r2, 0       r2 = 0
+    0003   0xFFFFF318   43 31 02 00   Move                 r49, r2     r49 = 0
+    0004   0xFFFFF320   1C 01 01 01   CallFf               r1, r1, 1   r1 = event-arg-symbol(0)
+    0005   0xFFFFF328   44 02 01 00   LoadStaticU32Imm     r2, 1       r2 = ST[1] -> <932559365>
+    0006   0xFFFFF330   1D 01 01 02   IEqual               r1, r1, r2  r1 = r1 == r2
+    0007   0xFFFFF338   00 01 01 00   Return               r1          Return 
+
+    SYMBOL TABLE: 
+    0000   0x000AB0    function: event-arg-symbol
+    0001   0x000AB8    function: event-arg-symbol
+    [1 args]
+    0000   0xFFFFF300   43 00 31 00   Move                 r0, r49     r0 = arg_0
+    0001   0xFFFFF308   15 01 00 00   LookupPointer        r1, 0       r1 = ST[0] -> <event-arg-symbol>
+    0002   0xFFFFF310   0C 02 00 00   LoadU16Imm           r2, 0       r2 = 0
+    0003   0xFFFFF318   43 31 02 00   Move                 r49, r2     r49 = 0
+    0004   0xFFFFF320   1C 01 01 01   CallFf               r1, r1, 1   r1 = event-arg-symbol(0)
+    0005   0xFFFFF328   44 02 01 00   LoadStaticU32Imm     r2, 1       r2 = ST[1] -> <932559365>
+    0006   0xFFFFF330   1D 01 01 02   IEqual               r1, r1, r2  r1 = r1 == r2
+    0007   0xFFFFF338   00 01 01 00   Return               r1          Return 
+
+    SYMBOL TABLE: 
+    0000   0x000AB0    function: event-arg-symbol
+    0001   0x000AB8    function: event-arg-symbol
+    [1 args]
+    0000   0xFFFFF300   43 00 31 00   Move                 r0, r49     r0 = arg_0
+    0001   0xFFFFF308   15 01 00 00   LookupPointer        r1, 0       r1 = ST[0] -> <event-arg-symbol>
+    0002   0xFFFFF310   0C 02 00 00   LoadU16Imm           r2, 0       r2 = 0
+    0003   0xFFFFF318   43 31 02 00   Move                 r49, r2     r49 = 0
+    0004   0xFFFFF320   1C 01 01 01   CallFf               r1, r1, 1   r1 = event-arg-symbol(0)
+    0005   0xFFFFF328   44 02 01 00   LoadStaticU32Imm     r2, 1       r2 = ST[1] -> <932559365>
+    0006   0xFFFFF330   1D 01 01 02   IEqual               r1, r1, r2  r1 = r1 == r2
+    0007   0xFFFFF338   00 01 01 00   Return               r1          Return 
+
+    SYMBOL TABLE: 
+    0000   0x000AB0    function: event-arg-symbol
+    0001   0x000AB8    function: event-arg-symbol
+    [1 args]
+    0000   0xFFFFF300   43 00 31 00   Move                 r0, r49     r0 = arg_0
+    0001   0xFFFFF308   15 01 00 00   LookupPointer        r1, 0       r1 = ST[0] -> <event-arg-symbol>
+    0002   0xFFFFF310   0C 02 00 00   LoadU16Imm           r2, 0       r2 = 0
+    0003   0xFFFFF318   43 31 02 00   Move                 r49, r2     r49 = 0
+    0004   0xFFFFF320   1C 01 01 01   CallFf               r1, r1, 1   r1 = event-arg-symbol(0)
+    0005   0xFFFFF328   44 02 01 00   LoadStaticU32Imm     r2, 1       r2 = ST[1] -> <932559365>
+    0006   0xFFFFF330   1D 01 01 02   IEqual               r1, r1, r2  r1 = r1 == r2
+    0007   0xFFFFF338   00 01 01 00   Return               r1          Return 
+
+    SYMBOL TABLE: 
+    0000   0x000AB0    function: event-arg-symbol
+    0001   0x000AB8    function: event-arg-symbol
+    [1 args]
+    0000   0xFFFFF300   43 00 31 00   Move                 r0, r49     r0 = arg_0
+    0001   0xFFFFF308   15 01 00 00   LookupPointer        r1, 0       r1 = ST[0] -> <event-arg-symbol>
+    0002   0xFFFFF310   0C 02 00 00   LoadU16Imm           r2, 0       r2 = 0
+    0003   0xFFFFF318   43 31 02 00   Move                 r49, r2     r49 = 0
+    0004   0xFFFFF320   1C 01 01 01   CallFf               r1, r1, 1   r1 = event-arg-symbol(0)
+    0005   0xFFFFF328   44 02 01 00   LoadStaticU32Imm     r2, 1       r2 = ST[1] -> <932559365>
+    0006   0xFFFFF330   1D 01 01 02   IEqual               r1, r1, r2  r1 = r1 == r2
+    0007   0xFFFFF338   00 01 01 00   Return               r1          Return 
+
+    SYMBOL TABLE: 
+    0000   0x000AB0    function: event-arg-symbol
+    0001   0x000AB8    function: event-arg-symbol
+    [1 args]
+    0000   0xFFFFF300   43 00 31 00   Move                 r0, r49     r0 = arg_0
+    0001   0xFFFFF308   15 01 00 00   LookupPointer        r1, 0       r1 = ST[0] -> <event-arg-symbol>
+    0002   0xFFFFF310   0C 02 00 00   LoadU16Imm           r2, 0       r2 = 0
+    0003   0xFFFFF318   43 31 02 00   Move                 r49, r2     r49 = 0
+    0004   0xFFFFF320   1C 01 01 01   CallFf               r1, r1, 1   r1 = event-arg-symbol(0)
+    0005   0xFFFFF328   44 02 01 00   LoadStaticU32Imm     r2, 1       r2 = ST[1] -> <932559365>
+    0006   0xFFFFF330   1D 01 01 02   IEqual               r1, r1, r2  r1 = r1 == r2
+    0007   0xFFFFF338   00 01 01 00   Return               r1          Return 
+
+    SYMBOL TABLE: 
+    0000   0x000AB0    function: event-arg-symbol
+    0001   0x000AB8    function: event-arg-symbol
+    [1 args]
+    0000   0xFFFFF300   43 00 31 00   Move                 r0, r49     r0 = arg_0
+    0001   0xFFFFF308   15 01 00 00   LookupPointer        r1, 0       r1 = ST[0] -> <event-arg-symbol>
+    0002   0xFFFFF310   0C 02 00 00   LoadU16Imm           r2, 0       r2 = 0
+    0003   0xFFFFF318   43 31 02 00   Move                 r49, r2     r49 = 0
+    0004   0xFFFFF320   1C 01 01 01   CallFf               r1, r1, 1   r1 = event-arg-symbol(0)
+    0005   0xFFFFF328   44 02 01 00   LoadStaticU32Imm     r2, 1       r2 = ST[1] -> <932559365>
+    0006   0xFFFFF330   1D 01 01 02   IEqual               r1, r1, r2  r1 = r1 == r2
+    0007   0xFFFFF338   00 01 01 00   Return               r1          Return 
+
+    SYMBOL TABLE: 
+    0000   0x000AB0    function: event-arg-symbol
+    0001   0x000AB8    function: event-arg-symbol
+    [1 args]
+    0000   0xFFFFF300   43 00 31 00   Move                 r0, r49     r0 = arg_0
+    0001   0xFFFFF308   15 01 00 00   LookupPointer        r1, 0       r1 = ST[0] -> <event-arg-symbol>
+    0002   0xFFFFF310   0C 02 00 00   LoadU16Imm           r2, 0       r2 = 0
+    0003   0xFFFFF318   43 31 02 00   Move                 r49, r2     r49 = 0
+    0004   0xFFFFF320   1C 01 01 01   CallFf               r1, r1, 1   r1 = event-arg-symbol(0)
+    0005   0xFFFFF328   44 02 01 00   LoadStaticU32Imm     r2, 1       r2 = ST[1] -> <932559365>
+    0006   0xFFFFF330   1D 01 01 02   IEqual               r1, r1, r2  r1 = r1 == r2
+    0007   0xFFFFF338   00 01 01 00   Return               r1          Return 
+
+    SYMBOL TABLE: 
+    0000   0x000AB0    function: event-arg-symbol
+    0001   0x000AB8    function: event-arg-symbol
+    [1 args]
+    0000   0xFFFFF300   43 00 31 00   Move                 r0, r49     r0 = arg_0
+    0001   0xFFFFF308   15 01 00 00   LookupPointer        r1, 0       r1 = ST[0] -> <event-arg-symbol>
+    0002   0xFFFFF310   0C 02 00 00   LoadU16Imm           r2, 0       r2 = 0
+    0003   0xFFFFF318   43 31 02 00   Move                 r49, r2     r49 = 0
+    0004   0xFFFFF320   1C 01 01 01   CallFf               r1, r1, 1   r1 = event-arg-symbol(0)
+    0005   0xFFFFF328   44 02 01 00   LoadStaticU32Imm     r2, 1       r2 = ST[1] -> <932559365>
+    0006   0xFFFFF330   1D 01 01 02   IEqual               r1, r1, r2  r1 = r1 == r2
+    0007   0xFFFFF338   00 01 01 00   Return               r1          Return 
+
+    SYMBOL TABLE: 
+    0000   0x000AB0    function: event-arg-symbol
+    0001   0x000AB8    function: event-arg-symbol
+    [1 args]
+    0000   0xFFFFF300   43 00 31 00   Move                 r0, r49     r0 = arg_0
+    0001   0xFFFFF308   15 01 00 00   LookupPointer        r1, 0       r1 = ST[0] -> <event-arg-symbol>
+    0002   0xFFFFF310   0C 02 00 00   LoadU16Imm           r2, 0       r2 = 0
+    0003   0xFFFFF318   43 31 02 00   Move                 r49, r2     r49 = 0
+    0004   0xFFFFF320   1C 01 01 01   CallFf               r1, r1, 1   r1 = event-arg-symbol(0)
+    0005   0xFFFFF328   44 02 01 00   LoadStaticU32Imm     r2, 1       r2 = ST[1] -> <932559365>
+    0006   0xFFFFF330   1D 01 01 02   IEqual               r1, r1, r2  r1 = r1 == r2
+    0007   0xFFFFF338   00 01 01 00   Return               r1          Return 
+
+    SYMBOL TABLE: 
+    0000   0x000AB0    function: event-arg-symbol
+    0001   0x000AB8    function: event-arg-symbol
+    [1 args]
+    0000   0xFFFFF300   43 00 31 00   Move                 r0, r49     r0 = arg_0
+    0001   0xFFFFF308   15 01 00 00   LookupPointer        r1, 0       r1 = ST[0] -> <event-arg-symbol>
+    0002   0xFFFFF310   0C 02 00 00   LoadU16Imm           r2, 0       r2 = 0
+    0003   0xFFFFF318   43 31 02 00   Move                 r49, r2     r49 = 0
+    0004   0xFFFFF320   1C 01 01 01   CallFf               r1, r1, 1   r1 = event-arg-symbol(0)
+    0005   0xFFFFF328   44 02 01 00   LoadStaticU32Imm     r2, 1       r2 = ST[1] -> <932559365>
+    0006   0xFFFFF330   1D 01 01 02   IEqual               r1, r1, r2  r1 = r1 == r2
+    0007   0xFFFFF338   00 01 01 00   Return               r1          Return 
+
+    SYMBOL TABLE: 
+    0000   0x000AB0    function: event-arg-symbol
+    0001   0x000AB8    function: event-arg-symbol
+    [1 args]
+    0000   0xFFFFF300   43 00 31 00   Move                 r0, r49     r0 = arg_0
+    0001   0xFFFFF308   15 01 00 00   LookupPointer        r1, 0       r1 = ST[0] -> <event-arg-symbol>
+    0002   0xFFFFF310   0C 02 00 00   LoadU16Imm           r2, 0       r2 = 0
+    0003   0xFFFFF318   43 31 02 00   Move                 r49, r2     r49 = 0
+    0004   0xFFFFF320   1C 01 01 01   CallFf               r1, r1, 1   r1 = event-arg-symbol(0)
+    0005   0xFFFFF328   44 02 01 00   LoadStaticU32Imm     r2, 1       r2 = ST[1] -> <932559365>
+    0006   0xFFFFF330   1D 01 01 02   IEqual               r1, r1, r2  r1 = r1 == r2
+    0007   0xFFFFF338   00 01 01 00   Return               r1          Return 
+
+    SYMBOL TABLE: 
+    0000   0x000AB0    function: event-arg-symbol
+    0001   0x000AB8    function: event-arg-symbol
+    [1 args]
+    0000   0xFFFFF300   43 00 31 00   Move                 r0, r49     r0 = arg_0
+    0001   0xFFFFF308   15 01 00 00   LookupPointer        r1, 0       r1 = ST[0] -> <event-arg-symbol>
+    0002   0xFFFFF310   0C 02 00 00   LoadU16Imm           r2, 0       r2 = 0
+    0003   0xFFFFF318   43 31 02 00   Move                 r49, r2     r49 = 0
+    0004   0xFFFFF320   1C 01 01 01   CallFf               r1, r1, 1   r1 = event-arg-symbol(0)
+    0005   0xFFFFF328   44 02 01 00   LoadStaticU32Imm     r2, 1       r2 = ST[1] -> <932559365>
+    0006   0xFFFFF330   1D 01 01 02   IEqual               r1, r1, r2  r1 = r1 == r2
+    0007   0xFFFFF338   00 01 01 00   Return               r1          Return 
+
+    SYMBOL TABLE: 
+    0000   0x000AB0    function: event-arg-symbol
+    0001   0x000AB8    function: event-arg-symbol
+    [1 args]
+    0000   0xFFFFF300   43 00 31 00   Move                 r0, r49     r0 = arg_0
+    0001   0xFFFFF308   15 01 00 00   LookupPointer        r1, 0       r1 = ST[0] -> <event-arg-symbol>
+    0002   0xFFFFF310   0C 02 00 00   LoadU16Imm           r2, 0       r2 = 0
+    0003   0xFFFFF318   43 31 02 00   Move                 r49, r2     r49 = 0
+    0004   0xFFFFF320   1C 01 01 01   CallFf               r1, r1, 1   r1 = event-arg-symbol(0)
+    0005   0xFFFFF328   44 02 01 00   LoadStaticU32Imm     r2, 1       r2 = ST[1] -> <932559365>
+    0006   0xFFFFF330   1D 01 01 02   IEqual               r1, r1, r2  r1 = r1 == r2
+    0007   0xFFFFF338   00 01 01 00   Return               r1          Return 
+
+    SYMBOL TABLE: 
+    0000   0x000AB0    function: event-arg-symbol
+    0001   0x000AB8    function: event-arg-symbol
+    [1 args]
+    0000   0xFFFFF300   43 00 31 00   Move                 r0, r49     r0 = arg_0
+    0001   0xFFFFF308   15 01 00 00   LookupPointer        r1, 0       r1 = ST[0] -> <event-arg-symbol>
+    0002   0xFFFFF310   0C 02 00 00   LoadU16Imm           r2, 0       r2 = 0
+    0003   0xFFFFF318   43 31 02 00   Move                 r49, r2     r49 = 0
+    0004   0xFFFFF320   1C 01 01 01   CallFf               r1, r1, 1   r1 = event-arg-symbol(0)
+    0005   0xFFFFF328   44 02 01 00   LoadStaticU32Imm     r2, 1       r2 = ST[1] -> <932559365>
+    0006   0xFFFFF330   1D 01 01 02   IEqual               r1, r1, r2  r1 = r1 == r2
+    0007   0xFFFFF338   00 01 01 00   Return               r1          Return 
+
+    SYMBOL TABLE: 
+    0000   0x000AB0    function: event-arg-symbol
+    0001   0x000AB8    function: event-arg-symbol
+    [1 args]
+    0000   0xFFFFF300   43 00 31 00   Move                 r0, r49     r0 = arg_0
+    0001   0xFFFFF308   15 01 00 00   LookupPointer        r1, 0       r1 = ST[0] -> <event-arg-symbol>
+    0002   0xFFFFF310   0C 02 00 00   LoadU16Imm           r2, 0       r2 = 0
+    0003   0xFFFFF318   43 31 02 00   Move                 r49, r2     r49 = 0
+    0004   0xFFFFF320   1C 01 01 01   CallFf               r1, r1, 1   r1 = event-arg-symbol(0)
+    0005   0xFFFFF328   44 02 01 00   LoadStaticU32Imm     r2, 1       r2 = ST[1] -> <932559365>
+    0006   0xFFFFF330   1D 01 01 02   IEqual               r1, r1, r2  r1 = r1 == r2
+    0007   0xFFFFF338   00 01 01 00   Return               r1          Return 
+
+    SYMBOL TABLE: 
+    0000   0x000AB0    function: event-arg-symbol
+    0001   0x000AB8    function: event-arg-symbol
+    [1 args]
+    0000   0xFFFFF300   43 00 31 00   Move                 r0, r49     r0 = arg_0
+    0001   0xFFFFF308   15 01 00 00   LookupPointer        r1, 0       r1 = ST[0] -> <event-arg-symbol>
+    0002   0xFFFFF310   0C 02 00 00   LoadU16Imm           r2, 0       r2 = 0
+    0003   0xFFFFF318   43 31 02 00   Move                 r49, r2     r49 = 0
+    0004   0xFFFFF320   1C 01 01 01   CallFf               r1, r1, 1   r1 = event-arg-symbol(0)
+    0005   0xFFFFF328   44 02 01 00   LoadStaticU32Imm     r2, 1       r2 = ST[1] -> <932559365>
+    0006   0xFFFFF330   1D 01 01 02   IEqual               r1, r1, r2  r1 = r1 == r2
+    0007   0xFFFFF338   00 01 01 00   Return               r1          Return 
+
+    SYMBOL TABLE: 
+    0000   0x000AB0    function: event-arg-symbol
+    0001   0x000AB8    function: event-arg-symbol
+    [1 args]
+    0000   0xFFFFF300   43 00 31 00   Move                 r0, r49     r0 = arg_0
+    0001   0xFFFFF308   15 01 00 00   LookupPointer        r1, 0       r1 = ST[0] -> <event-arg-symbol>
+    0002   0xFFFFF310   0C 02 00 00   LoadU16Imm           r2, 0       r2 = 0
+    0003   0xFFFFF318   43 31 02 00   Move                 r49, r2     r49 = 0
+    0004   0xFFFFF320   1C 01 01 01   CallFf               r1, r1, 1   r1 = event-arg-symbol(0)
+    0005   0xFFFFF328   44 02 01 00   LoadStaticU32Imm     r2, 1       r2 = ST[1] -> <932559365>
+    0006   0xFFFFF330   1D 01 01 02   IEqual               r1, r1, r2  r1 = r1 == r2
+    0007   0xFFFFF338   00 01 01 00   Return               r1          Return 
+
+    SYMBOL TABLE: 
+    0000   0x000AB0    function: event-arg-symbol
+    0001   0x000AB8    function: event-arg-symbol
+    [1 args]
+    0000   0xFFFFF300   43 00 31 00   Move                 r0, r49     r0 = arg_0
+    0001   0xFFFFF308   15 01 00 00   LookupPointer        r1, 0       r1 = ST[0] -> <event-arg-symbol>
+    0002   0xFFFFF310   0C 02 00 00   LoadU16Imm           r2, 0       r2 = 0
+    0003   0xFFFFF318   43 31 02 00   Move                 r49, r2     r49 = 0
+    0004   0xFFFFF320   1C 01 01 01   CallFf               r1, r1, 1   r1 = event-arg-symbol(0)
+    0005   0xFFFFF328   44 02 01 00   LoadStaticU32Imm     r2, 1       r2 = ST[1] -> <932559365>
+    0006   0xFFFFF330   1D 01 01 02   IEqual               r1, r1, r2  r1 = r1 == r2
+    0007   0xFFFFF338   00 01 01 00   Return               r1          Return 
+
+    SYMBOL TABLE: 
+    0000   0x000AB0    function: event-arg-symbol
+    0001   0x000AB8    function: event-arg-symbol
+    [1 args]
+    0000   0xFFFFF300   43 00 31 00   Move                 r0, r49     r0 = arg_0
+    0001   0xFFFFF308   15 01 00 00   LookupPointer        r1, 0       r1 = ST[0] -> <event-arg-symbol>
+    0002   0xFFFFF310   0C 02 00 00   LoadU16Imm           r2, 0       r2 = 0
+    0003   0xFFFFF318   43 31 02 00   Move                 r49, r2     r49 = 0
+    0004   0xFFFFF320   1C 01 01 01   CallFf               r1, r1, 1   r1 = event-arg-symbol(0)
+    0005   0xFFFFF328   44 02 01 00   LoadStaticU32Imm     r2, 1       r2 = ST[1] -> <932559365>
+    0006   0xFFFFF330   1D 01 01 02   IEqual               r1, r1, r2  r1 = r1 == r2
+    0007   0xFFFFF338   00 01 01 00   Return               r1          Return 
+
+    SYMBOL TABLE: 
+    0000   0x000AB0    function: event-arg-symbol
+    0001   0x000AB8    function: event-arg-symbol
+    [1 args]
+    0000   0xFFFFF300   43 00 31 00   Move                 r0, r49     r0 = arg_0
+    0001   0xFFFFF308   15 01 00 00   LookupPointer        r1, 0       r1 = ST[0] -> <event-arg-symbol>
+    0002   0xFFFFF310   0C 02 00 00   LoadU16Imm           r2, 0       r2 = 0
+    0003   0xFFFFF318   43 31 02 00   Move                 r49, r2     r49 = 0
+    0004   0xFFFFF320   1C 01 01 01   CallFf               r1, r1, 1   r1 = event-arg-symbol(0)
+    0005   0xFFFFF328   44 02 01 00   LoadStaticU32Imm     r2, 1       r2 = ST[1] -> <932559365>
+    0006   0xFFFFF330   1D 01 01 02   IEqual               r1, r1, r2  r1 = r1 == r2
+    0007   0xFFFFF338   00 01 01 00   Return               r1          Return 
+
+    SYMBOL TABLE: 
+    0000   0x000AB0    function: event-arg-symbol
+    0001   0x000AB8    function: event-arg-symbol
+    [1 args]
+    0000   0xFFFFF300   43 00 31 00   Move                 r0, r49     r0 = arg_0
+    0001   0xFFFFF308   15 01 00 00   LookupPointer        r1, 0       r1 = ST[0] -> <event-arg-symbol>
+    0002   0xFFFFF310   0C 02 00 00   LoadU16Imm           r2, 0       r2 = 0
+    0003   0xFFFFF318   43 31 02 00   Move                 r49, r2     r49 = 0
+    0004   0xFFFFF320   1C 01 01 01   CallFf               r1, r1, 1   r1 = event-arg-symbol(0)
+    0005   0xFFFFF328   44 02 01 00   LoadStaticU32Imm     r2, 1       r2 = ST[1] -> <932559365>
+    0006   0xFFFFF330   1D 01 01 02   IEqual               r1, r1, r2  r1 = r1 == r2
+    0007   0xFFFFF338   00 01 01 00   Return               r1          Return 
+
+    SYMBOL TABLE: 
+    0000   0x000AB0    function: event-arg-symbol
+    0001   0x000AB8    function: event-arg-symbol
+    [1 args]
+    0000   0xFFFFF300   43 00 31 00   Move                 r0, r49     r0 = arg_0
+    0001   0xFFFFF308   15 01 00 00   LookupPointer        r1, 0       r1 = ST[0] -> <event-arg-symbol>
+    0002   0xFFFFF310   0C 02 00 00   LoadU16Imm           r2, 0       r2 = 0
+    0003   0xFFFFF318   43 31 02 00   Move                 r49, r2     r49 = 0
+    0004   0xFFFFF320   1C 01 01 01   CallFf               r1, r1, 1   r1 = event-arg-symbol(0)
+    0005   0xFFFFF328   44 02 01 00   LoadStaticU32Imm     r2, 1       r2 = ST[1] -> <932559365>
+    0006   0xFFFFF330   1D 01 01 02   IEqual               r1, r1, r2  r1 = r1 == r2
+    0007   0xFFFFF338   00 01 01 00   Return               r1          Return 
+
+    SYMBOL TABLE: 
+    0000   0x000AB0    function: event-arg-symbol
+    0001   0x000AB8    function: event-arg-symbol
+    [1 args]
+    0000   0xFFFFF300   43 00 31 00   Move                 r0, r49     r0 = arg_0
+    0001   0xFFFFF308   15 01 00 00   LookupPointer        r1, 0       r1 = ST[0] -> <event-arg-symbol>
+    0002   0xFFFFF310   0C 02 00 00   LoadU16Imm           r2, 0       r2 = 0
+    0003   0xFFFFF318   43 31 02 00   Move                 r49, r2     r49 = 0
+    0004   0xFFFFF320   1C 01 01 01   CallFf               r1, r1, 1   r1 = event-arg-symbol(0)
+    0005   0xFFFFF328   44 02 01 00   LoadStaticU32Imm     r2, 1       r2 = ST[1] -> <932559365>
+    0006   0xFFFFF330   1D 01 01 02   IEqual               r1, r1, r2  r1 = r1 == r2
+    0007   0xFFFFF338   00 01 01 00   Return               r1          Return 
+
+    SYMBOL TABLE: 
+    0000   0x000AB0    function: event-arg-symbol
+    0001   0x000AB8    function: event-arg-symbol
+    [1 args]
+    0000   0xFFFFF300   43 00 31 00   Move                 r0, r49     r0 = arg_0
+    0001   0xFFFFF308   15 01 00 00   LookupPointer        r1, 0       r1 = ST[0] -> <event-arg-symbol>
+    0002   0xFFFFF310   0C 02 00 00   LoadU16Imm           r2, 0       r2 = 0
+    0003   0xFFFFF318   43 31 02 00   Move                 r49, r2     r49 = 0
+    0004   0xFFFFF320   1C 01 01 01   CallFf               r1, r1, 1   r1 = event-arg-symbol(0)
+    0005   0xFFFFF328   44 02 01 00   LoadStaticU32Imm     r2, 1       r2 = ST[1] -> <932559365>
+    0006   0xFFFFF330   1D 01 01 02   IEqual               r1, r1, r2  r1 = r1 == r2
+    0007   0xFFFFF338   00 01 01 00   Return               r1          Return 
+
+    SYMBOL TABLE: 
+    0000   0x000AB0    function: event-arg-symbol
+    0001   0x000AB8    function: event-arg-symbol
+    [1 args]
+    0000   0xFFFFF300   43 00 31 00   Move                 r0, r49     r0 = arg_0
+    0001   0xFFFFF308   15 01 00 00   LookupPointer        r1, 0       r1 = ST[0] -> <event-arg-symbol>
+    0002   0xFFFFF310   0C 02 00 00   LoadU16Imm           r2, 0       r2 = 0
+    0003   0xFFFFF318   43 31 02 00   Move                 r49, r2     r49 = 0
+    0004   0xFFFFF320   1C 01 01 01   CallFf               r1, r1, 1   r1 = event-arg-symbol(0)
+    0005   0xFFFFF328   44 02 01 00   LoadStaticU32Imm     r2, 1       r2 = ST[1] -> <932559365>
+    0006   0xFFFFF330   1D 01 01 02   IEqual               r1, r1, r2  r1 = r1 == r2
+    0007   0xFFFFF338   00 01 01 00   Return               r1          Return 
+
+    SYMBOL TABLE: 
+    0000   0x000AB0    function: event-arg-symbol
+    0001   0x000AB8    function: event-arg-symbol
+    [1 args]
+    0000   0xFFFFF300   43 00 31 00   Move                 r0, r49     r0 = arg_0
+    0001   0xFFFFF308   15 01 00 00   LookupPointer        r1, 0       r1 = ST[0] -> <event-arg-symbol>
+    0002   0xFFFFF310   0C 02 00 00   LoadU16Imm           r2, 0       r2 = 0
+    0003   0xFFFFF318   43 31 02 00   Move                 r49, r2     r49 = 0
+    0004   0xFFFFF320   1C 01 01 01   CallFf               r1, r1, 1   r1 = event-arg-symbol(0)
+    0005   0xFFFFF328   44 02 01 00   LoadStaticU32Imm     r2, 1       r2 = ST[1] -> <932559365>
+    0006   0xFFFFF330   1D 01 01 02   IEqual               r1, r1, r2  r1 = r1 == r2
+    0007   0xFFFFF338   00 01 01 00   Return               r1          Return 
+
+    SYMBOL TABLE: 
+    0000   0x000AB0    function: event-arg-symbol
+    0001   0x000AB8    function: event-arg-symbol
+    [1 args]
+    0000   0xFFFFF300   43 00 31 00   Move                 r0, r49     r0 = arg_0
+    0001   0xFFFFF308   15 01 00 00   LookupPointer        r1, 0       r1 = ST[0] -> <event-arg-symbol>
+    0002   0xFFFFF310   0C 02 00 00   LoadU16Imm           r2, 0       r2 = 0
+    0003   0xFFFFF318   43 31 02 00   Move                 r49, r2     r49 = 0
+    0004   0xFFFFF320   1C 01 01 01   CallFf               r1, r1, 1   r1 = event-arg-symbol(0)
+    0005   0xFFFFF328   44 02 01 00   LoadStaticU32Imm     r2, 1       r2 = ST[1] -> <932559365>
+    0006   0xFFFFF330   1D 01 01 02   IEqual               r1, r1, r2  r1 = r1 == r2
+    0007   0xFFFFF338   00 01 01 00   Return               r1          Return 
+
+    SYMBOL TABLE: 
+    0000   0x000AB0    function: event-arg-symbol
+    0001   0x000AB8    function: event-arg-symbol
+    [1 args]
+    0000   0xFFFFF300   43 00 31 00   Move                 r0, r49     r0 = arg_0
+    0001   0xFFFFF308   15 01 00 00   LookupPointer        r1, 0       r1 = ST[0] -> <event-arg-symbol>
+    0002   0xFFFFF310   0C 02 00 00   LoadU16Imm           r2, 0       r2 = 0
+    0003   0xFFFFF318   43 31 02 00   Move                 r49, r2     r49 = 0
+    0004   0xFFFFF320   1C 01 01 01   CallFf               r1, r1, 1   r1 = event-arg-symbol(0)
+    0005   0xFFFFF328   44 02 01 00   LoadStaticU32Imm     r2, 1       r2 = ST[1] -> <932559365>
+    0006   0xFFFFF330   1D 01 01 02   IEqual               r1, r1, r2  r1 = r1 == r2
+    0007   0xFFFFF338   00 01 01 00   Return               r1          Return 
+
+    SYMBOL TABLE: 
+    0000   0x000AB0    function: event-arg-symbol
+    0001   0x000AB8    function: event-arg-symbol
+    [1 args]
+    0000   0xFFFFF300   43 00 31 00   Move                 r0, r49     r0 = arg_0
+    0001   0xFFFFF308   15 01 00 00   LookupPointer        r1, 0       r1 = ST[0] -> <event-arg-symbol>
+    0002   0xFFFFF310   0C 02 00 00   LoadU16Imm           r2, 0       r2 = 0
+    0003   0xFFFFF318   43 31 02 00   Move                 r49, r2     r49 = 0
+    0004   0xFFFFF320   1C 01 01 01   CallFf               r1, r1, 1   r1 = event-arg-symbol(0)
+    0005   0xFFFFF328   44 02 01 00   LoadStaticU32Imm     r2, 1       r2 = ST[1] -> <932559365>
+    0006   0xFFFFF330   1D 01 01 02   IEqual               r1, r1, r2  r1 = r1 == r2
+    0007   0xFFFFF338   00 01 01 00   Return               r1          Return 
+
+    SYMBOL TABLE: 
+    0000   0x000AB0    function: event-arg-symbol
+    0001   0x000AB8    function: event-arg-symbol
+    [1 args]
+    0000   0xFFFFF300   43 00 31 00   Move                 r0, r49     r0 = arg_0
+    0001   0xFFFFF308   15 01 00 00   LookupPointer        r1, 0       r1 = ST[0] -> <event-arg-symbol>
+    0002   0xFFFFF310   0C 02 00 00   LoadU16Imm           r2, 0       r2 = 0
+    0003   0xFFFFF318   43 31 02 00   Move                 r49, r2     r49 = 0
+    0004   0xFFFFF320   1C 01 01 01   CallFf               r1, r1, 1   r1 = event-arg-symbol(0)
+    0005   0xFFFFF328   44 02 01 00   LoadStaticU32Imm     r2, 1       r2 = ST[1] -> <932559365>
+    0006   0xFFFFF330   1D 01 01 02   IEqual               r1, r1, r2  r1 = r1 == r2
+    0007   0xFFFFF338   00 01 01 00   Return               r1          Return 
+
+    SYMBOL TABLE: 
+    0000   0x000AB0    function: event-arg-symbol
+    0001   0x000AB8    function: event-arg-symbol
+    [1 args]
+    0000   0xFFFFF300   43 00 31 00   Move                 r0, r49     r0 = arg_0
+    0001   0xFFFFF308   15 01 00 00   LookupPointer        r1, 0       r1 = ST[0] -> <event-arg-symbol>
+    0002   0xFFFFF310   0C 02 00 00   LoadU16Imm           r2, 0       r2 = 0
+    0003   0xFFFFF318   43 31 02 00   Move                 r49, r2     r49 = 0
+    0004   0xFFFFF320   1C 01 01 01   CallFf               r1, r1, 1   r1 = event-arg-symbol(0)
+    0005   0xFFFFF328   44 02 01 00   LoadStaticU32Imm     r2, 1       r2 = ST[1] -> <932559365>
+    0006   0xFFFFF330   1D 01 01 02   IEqual               r1, r1, r2  r1 = r1 == r2
+    0007   0xFFFFF338   00 01 01 00   Return               r1          Return 
+
+    SYMBOL TABLE: 
+    0000   0x000AB0    function: event-arg-symbol
+    0001   0x000AB8    function: event-arg-symbol
+    [1 args]
+    0000   0xFFFFF300   43 00 31 00   Move                 r0, r49     r0 = arg_0
+    0001   0xFFFFF308   15 01 00 00   LookupPointer        r1, 0       r1 = ST[0] -> <event-arg-symbol>
+    0002   0xFFFFF310   0C 02 00 00   LoadU16Imm           r2, 0       r2 = 0
+    0003   0xFFFFF318   43 31 02 00   Move                 r49, r2     r49 = 0
+    0004   0xFFFFF320   1C 01 01 01   CallFf               r1, r1, 1   r1 = event-arg-symbol(0)
+    0005   0xFFFFF328   44 02 01 00   LoadStaticU32Imm     r2, 1       r2 = ST[1] -> <932559365>
+    0006   0xFFFFF330   1D 01 01 02   IEqual               r1, r1, r2  r1 = r1 == r2
+    0007   0xFFFFF338   00 01 01 00   Return               r1          Return 
+
+    SYMBOL TABLE: 
+    0000   0x000AB0    function: event-arg-symbol
+    0001   0x000AB8    function: event-arg-symbol

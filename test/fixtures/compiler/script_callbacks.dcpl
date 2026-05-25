@@ -11,9 +11,6 @@ using #send-event as far (u64, u64, u64) -> u0;
 u0 #spawned-player-callback(u64 arg_0) {
 
     >> "hooked spawned-player-callback";
-    >> "runnning #send-event";
-    breakpoint;
-    >> "hooking display";
 
     u64 player = #player;
 
@@ -73,8 +70,6 @@ u0 #spawned-player-callback(u64 arg_0) {
     if (#pc-build?()) {
         #spawn-script("ss-pc-partial-movement-controller", nullptr, player, 0);
         #spawn-script("ss-hud2-toggle-all", nullptr, player, 0);
-    } else {
-        0;
     }
     if (arg_0) {
         #spawn-script("ss-player-peek-mode", nullptr, player, 0);
@@ -95,10 +90,7 @@ u0 #spawned-player-callback(u64 arg_0) {
         #spawn-script("ss-debug-thirds-grid", nullptr, player, 0);
         #spawn-script("ss-debug-screen-dot-controller", nullptr, player, 0);
         #spawn-script("ss-player-responsiveness-graph", nullptr, player, 0);
-    } else {
-        0;
     }
 
-    >> "launching custom script gas-mask-toggle";
     #spawn-script("gas-mask-toggle", nullptr, player, 0);
 }

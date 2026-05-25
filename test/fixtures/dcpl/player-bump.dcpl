@@ -91,3 +91,34 @@ u64 anim-player-bump-states__anim-node-animation@3e8(u64? arg_0, u64 arg_1, u64?
     return *(u64*)((*arg_1 + 688) + 32);
 }
 
+u64 anim-player-bump-states__actor-state-list@48__anim-node-animation@420__(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)((*arg_1 + 688) + 8);
+}
+
+u64? anim-player-bump-states(u64? arg_0, f32 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    f32 var_0;
+    if (*(f32*)((*arg_1 + 688) + 48) >= 0.00) {
+        var_0 = *(f32*)((*arg_1 + 688) + 48);
+    } else {
+        var_0 = *(f32*)((*(arg_1 + 16) + 144) + 72);
+    }
+    u64? var_1 = calc-new-phase-from-speed-xz(arg_5, arg_2, var_0, arg_4, 0.00, 1);
+    return var_1;
+}
+
+u64 anim-player-bump-states__anim-node-animation@6d0(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)((*arg_1 + 688) + 16);
+}
+
+u64 anim-player-bump-states__anim-node-animation@390(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)((*arg_1 + 688) + 24);
+}
+
+u64 anim-player-bump-states__anim-node-animation@498(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)((*arg_1 + 688) + 40);
+}
+
+u64 anim-player-bump-states__anim-node-animation@3e8(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)((*arg_1 + 688) + 32);
+}
+

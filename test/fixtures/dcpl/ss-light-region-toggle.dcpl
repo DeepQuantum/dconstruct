@@ -940,3 +940,317 @@ u16 safe-toggle-light-on(u64? arg_0) {
     return var_1;
 }
 
+lambda {
+    u64? var_0 = get-self-id();
+    u64? var_1 = player-in-region?(var_0, 2);
+    if (var_1 != nullptr) {
+        safe-toggle-light-on(light-1);
+    } else {
+        safe-toggle-light-off(light-1);
+    }
+}
+
+lambda {
+    u64? var_0 = get-self-id();
+    u64? var_1 = player-in-region?(var_0, 2);
+    if (var_1 != nullptr) {
+        safe-toggle-light-on(light-2);
+    } else {
+        safe-toggle-light-off(light-2);
+    }
+}
+
+lambda {
+    u64? var_0 = get-self-id();
+    u64? var_1 = player-in-region?(var_0, 2);
+    if (var_1 != nullptr) {
+        safe-toggle-light-on(light-3);
+    } else {
+        safe-toggle-light-off(light-3);
+    }
+}
+
+lambda {
+    u64? var_0 = get-self-id();
+    u64? var_1 = player-in-region?(var_0, 2);
+    if (var_1 != nullptr) {
+        safe-toggle-light-on(light-4);
+    } else {
+        safe-toggle-light-off(light-4);
+    }
+}
+
+lambda {
+    u64? var_0 = get-self-id();
+    u64? var_1 = player-in-region?(var_0, 2);
+    if (var_1 != nullptr) {
+        safe-toggle-light-on(light-5);
+    } else {
+        safe-toggle-light-off(light-5);
+    }
+}
+
+lambda {
+    u64? var_0 = get-self-id();
+    u64? var_1 = player-in-region?(var_0, 2);
+    if (var_1 != nullptr) {
+        safe-toggle-light-on(light-6);
+    } else {
+        safe-toggle-light-off(light-6);
+    }
+}
+
+lambda {
+    u64? var_0 = get-self-id();
+    u64? var_1 = player-in-region?(var_0, 2);
+    if (var_1 != nullptr) {
+        safe-toggle-light-on(light-7);
+    } else {
+        safe-toggle-light-off(light-7);
+    }
+}
+
+lambda {
+    u64? var_0 = get-self-id();
+    u64? var_1 = player-in-region?(var_0, 2);
+    if (var_1 != nullptr) {
+        safe-toggle-light-on(light-8);
+    } else {
+        safe-toggle-light-off(light-8);
+    }
+}
+
+lambda {
+    u64? var_0 = get-self-id();
+    u64? var_1 = player-in-region?(var_0, 2);
+    if (var_1 != nullptr) {
+        safe-toggle-light-on(light-9);
+    } else {
+        safe-toggle-light-off(light-9);
+    }
+}
+
+lambda {
+    u64? var_0 = get-self-id();
+    u64? var_1 = player-in-region?(var_0, 2);
+    if (var_1 != nullptr) {
+        safe-toggle-light-on(light-10);
+    } else {
+        safe-toggle-light-off(light-10);
+    }
+}
+
+lambda {
+    u64? var_0 = get-self-id();
+    u64? var_1 = player-in-region?(var_0, 2);
+    if (var_1 != nullptr) {
+        safe-toggle-light-on(light-11);
+    } else {
+        safe-toggle-light-off(light-11);
+    }
+}
+
+lambda {
+    u64? var_0 = get-self-id();
+    u64? var_1 = player-in-region?(var_0, 2);
+    if (var_1 != nullptr) {
+        safe-toggle-light-on(light-12);
+    } else {
+        safe-toggle-light-off(light-12);
+    }
+}
+
+lambda {
+    u64? var_0 = get-self-id();
+    u64? var_1 = player-in-region?(var_0, 2);
+    if (var_1 != nullptr) {
+        safe-toggle-light-on(light-13);
+    } else {
+        safe-toggle-light-off(light-13);
+    }
+}
+
+lambda {
+    u64? var_0 = get-self-id();
+    u64? var_1 = player-in-region?(var_0, 2);
+    if (var_1 != nullptr) {
+        safe-toggle-light-on(light-14);
+    } else {
+        safe-toggle-light-off(light-14);
+    }
+}
+
+lambda {
+    u64? var_0 = get-self-id();
+    u64? var_1 = player-in-region?(var_0, 2);
+    if (var_1 != nullptr) {
+        safe-toggle-light-on(light-15);
+    } else {
+        safe-toggle-light-off(light-15);
+    }
+}
+
+lambda {
+    u64? var_0 = get-self-id();
+    u64? var_1 = player-in-region?(var_0, 2);
+    if (var_1 != nullptr) {
+        safe-toggle-light-on(light-16);
+    } else {
+        safe-toggle-light-off(light-16);
+    }
+}
+
+lambda {
+    safe-toggle-light-on(light-1);
+}
+
+lambda {
+    safe-toggle-light-on(light-2);
+}
+
+lambda {
+    safe-toggle-light-on(light-3);
+}
+
+lambda {
+    safe-toggle-light-on(light-4);
+}
+
+lambda {
+    safe-toggle-light-on(light-5);
+}
+
+lambda {
+    safe-toggle-light-on(light-6);
+}
+
+lambda {
+    safe-toggle-light-on(light-7);
+}
+
+lambda {
+    safe-toggle-light-on(light-8);
+}
+
+lambda {
+    safe-toggle-light-on(light-9);
+}
+
+lambda {
+    safe-toggle-light-on(light-10);
+}
+
+lambda {
+    safe-toggle-light-on(light-11);
+}
+
+lambda {
+    safe-toggle-light-on(light-12);
+}
+
+lambda {
+    safe-toggle-light-on(light-13);
+}
+
+lambda {
+    safe-toggle-light-on(light-14);
+}
+
+lambda {
+    safe-toggle-light-on(light-15);
+}
+
+lambda {
+    safe-toggle-light-on(light-16);
+}
+
+lambda {
+    safe-toggle-light-off(light-1);
+}
+
+lambda {
+    safe-toggle-light-off(light-2);
+}
+
+lambda {
+    safe-toggle-light-off(light-3);
+}
+
+lambda {
+    safe-toggle-light-off(light-4);
+}
+
+lambda {
+    safe-toggle-light-off(light-5);
+}
+
+lambda {
+    safe-toggle-light-off(light-6);
+}
+
+lambda {
+    safe-toggle-light-off(light-7);
+}
+
+lambda {
+    safe-toggle-light-off(light-8);
+}
+
+lambda {
+    safe-toggle-light-off(light-9);
+}
+
+lambda {
+    safe-toggle-light-off(light-10);
+}
+
+lambda {
+    safe-toggle-light-off(light-11);
+}
+
+lambda {
+    safe-toggle-light-off(light-12);
+}
+
+lambda {
+    safe-toggle-light-off(light-13);
+}
+
+lambda {
+    safe-toggle-light-off(light-14);
+}
+
+lambda {
+    safe-toggle-light-off(light-15);
+}
+
+lambda {
+    safe-toggle-light-off(light-16);
+}
+
+u16 safe-toggle-light-off(u64? arg_0) {
+    u64? var_0 = tag-symbol(arg_0, self);
+    u16 var_1;
+    if ((var_0 == 0) == nullptr) {
+        u64? var_2 = tag-symbol(arg_0, self);
+        u64? var_3 = turn-off-light(var_2, 0);
+        var_1 = var_3;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 safe-toggle-light-on(u64? arg_0) {
+    u64? var_0 = tag-symbol(arg_0, self);
+    u16 var_1;
+    if ((var_0 == 0) == nullptr) {
+        u64? var_2 = tag-symbol(arg_0, self);
+        u64? var_3 = turn-on-light(var_2, 0);
+        var_1 = var_3;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+

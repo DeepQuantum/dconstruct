@@ -10,7 +10,7 @@ namespace dconstruct::compilation {
             const bool is_num = c >= '0' && c <= '9';
             const bool is_upper_hex = c >= 'A' && c <= 'F';
             if (!is_num && !is_upper_hex) {
-                return SID(identifier.c_str());
+                return SID(identifier.c_str() + 1);
             }
         }
         return std::stoull(identifier.substr(1), nullptr, 16);

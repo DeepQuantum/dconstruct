@@ -9,6 +9,13 @@ void sid_identifier::pseudo_c(std::ostream& os) const {
     os << m_name.m_lexeme;
 }
 
+void sid_identifier::pseudo_c_for_compiler(std::ostream& os) const {
+    if (!m_name.m_lexeme.starts_with('#')) {
+        os << '#';
+    }
+    os << m_name.m_lexeme;
+}
+
 void sid_identifier::pseudo_py(std::ostream& os) const {
     os << m_name.m_lexeme;
 }

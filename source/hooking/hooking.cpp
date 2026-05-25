@@ -198,9 +198,10 @@ namespace dconstruct::hooking {
         
         DWORD old_protect;
         VirtualProtect((void*)start_loc, length, PAGE_EXECUTE_READWRITE, &old_protect);
-        std::memcpy((void*)start_loc, &nops, length);
+        std::memcpy((void*)start_loc, nops.data(), length);
         VirtualProtect((void*)start_loc, length, old_protect, &old_protect);
         FlushInstructionCache(GetCurrentProcess(), (void*)start_loc, length);
+        log("created breakpoint entry at {:X}", start_loc);
     }
 
     DWORD WINAPI init_thread(void*) {
@@ -221,9 +222,9 @@ namespace dconstruct::hooking {
         //load_sidbase();
        // log("module base: {:016X}, ida image base: {:016X}", module_base, IMAGE_BASE);
 
-        // void* display_target = (void*)(base + DISPLAY_OFFSET);
-        // MH_CreateHook(display_target, &display_hook, reinterpret_cast<void**>(&display_orig));
-        // MH_EnableHook(display_target);
+        void* display_target = (void*)(module_base + DISPLAY_OFFSET);
+        MH_CreateHook(display_target, &display_hook, reinterpret_cast<void**>(&display_orig));
+        MH_EnableHook(display_target);
 
         // void* invoke_function_target = (void*)(base + INVOKE_FUNCTION_OFFSET);
         // MH_CreateHook(invoke_function_target, &invoke_function_hook, reinterpret_cast<void**>(&invoke_function_orig));

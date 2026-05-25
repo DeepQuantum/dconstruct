@@ -136,3 +136,49 @@ lambda {
     interactable-enable(coll-note-ski-coastal-explore-boat-mid-safe-note-1);
 }
 
+lambda {
+    u64? var_0 = task-complete?(saving-kids, ski-coastal-explore-boat-upper);
+    if (var_0 != nullptr) {
+        go(done, 1);
+    }
+}
+
+lambda {
+    u64? var_0 = task-active?(saving-kids, ski-coastal-explore-boat-upper);
+    if (var_0 != nullptr) {
+        go(bottom-infected-dead, 1);
+    }
+}
+
+lambda {
+    u64? var_0 = task-active?(saving-kids, ski-coastal-explore-boat-mid);
+    if (var_0 != nullptr) {
+        go(bottom-infected-dead, 1);
+    }
+}
+
+lambda {
+    u64? var_0 = task-active?(saving-kids, ski-coastal-explore-boat-lower);
+    if (var_0 != nullptr) {
+        go(bottom-infected-dead, 1);
+    }
+}
+
+lambda {
+    u64? var_0 = task-active?(saving-kids, ski-coastal-explore-boat-lower);
+    if (var_0 != nullptr) {
+        go(wait-spawn-mid, 1);
+    }
+}
+
+lambda {
+    u64? var_0 = npc-group-alive-count(#3FFE830B2EF25F64);
+    if (var_0 == 0) {
+        go(activate-note, 1);
+    }
+}
+
+lambda {
+    interactable-enable(coll-note-ski-coastal-explore-boat-mid-safe-note-1);
+}
+

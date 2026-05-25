@@ -13,6 +13,7 @@ namespace dconstruct::ast {
         explicit sid_identifier(std::string name) : m_name(compilation::token{compilation::token_type::SID, std::move(name), 0, 1}){};
 
         void pseudo_c(std::ostream& os) const final;
+        void pseudo_c_for_compiler(std::ostream& os) const final;
         void pseudo_py(std::ostream& os) const final;
         void pseudo_racket(std::ostream& os) const final;
         [[nodiscard]] expr_uptr simplify() const final;

@@ -216,10 +216,10 @@ void program::insert_into_reloctable(u8* out, u64& byte_offset, u64& bit_offset,
 }
 
 [[nodiscard]] std::expected<std::vector<compilation::program_binary_element>, std::string> program::compile_binary_elements(const compilation::scope& scope, compilation::global_state& global) const noexcept {     
-    for (const auto& [name, sid_literal] : scope.m_sidAliases) {
-        const full_type* type = scope.lookup(name);
-        global.m_sidAliases.emplace(name, std::pair{*type, sid_literal.first});
-    }
+    // for (const auto& [name, sid_literal] : scope.m_sidAliases) {
+    //     const full_type* type = scope.lookup(name);
+    //     global.m_sidAliases.emplace(name, std::pair{*type, sid_literal.first});
+    // }
 
     std::vector<compilation::program_binary_element> functions;
     functions.reserve(m_declarations.size());

@@ -1513,3 +1513,508 @@ bool ls-fd-layers-test__level-scripted-set@1fae8() {
     return var_0 == 9;
 }
 
+u64? ls-test-ladder-types__level-set@69d0__level-scripted-set@202c8__() {
+    u64? var_0 = task-active?(metrics, layout-dimensions-attack-up-down);
+    return var_0;
+}
+
+u64? propset__level-set@77a0__level-scripted-set@22470__() {
+    u64? var_0 = task-active?(sandbox, fg-sandbox);
+    return var_0;
+}
+
+u64? propset__level-scripted-set@27018() {
+    u64? var_0 = task-active?(test-fg, propset-ambient-test);
+    return var_0;
+}
+
+u64? propset__level-scripted-set@23010() {
+    u64? var_0 = task-active?(test-fg, propset-glass);
+    return var_0;
+}
+
+u64? propset__level-scripted-set@291f0() {
+    u64? var_0 = task-active?(test-fg, propset-bumpables);
+    return var_0;
+}
+
+u64? propset__level-scripted-set@2df90() {
+    u64? var_0 = task-active?(test-fg, propset-bumpables-b);
+    return var_0;
+}
+
+u64? propset__level-scripted-set@26520() {
+    u64? var_0 = task-active?(test-fg, propset-bumpables-c);
+    return var_0;
+}
+
+u64? propset__level-scripted-set@28c20() {
+    u64? var_0 = task-active?(test-fg, propset-bumpables-d);
+    return var_0;
+}
+
+u64? propset__level-scripted-set@280c8() {
+    u64? var_0 = task-active?(test-fg, propset-bumpables-e);
+    return var_0;
+}
+
+u64? propset__level-scripted-set@31b48() {
+    u64? var_0 = task-active?(test-fg, propset-bumpables-f);
+    return var_0;
+}
+
+u64? propset__level-scripted-set@1fed8() {
+    u64? var_0 = task-active?(test-fg, propset-bumpables-g);
+    return var_0;
+}
+
+u64? propset__level-scripted-set@1e030() {
+    u64? var_0 = task-active?(test-fg, propset-bumpables-h);
+    return var_0;
+}
+
+u64? propset__level-scripted-set@29748() {
+    u64? var_0 = task-active?(test-fg, propset-buoyant);
+    return var_0;
+}
+
+u64? propset__level-scripted-set@1ed38() {
+    u64? var_0 = task-active?(test-fg, propset-collectables);
+    return var_0;
+}
+
+u64? propset__level-scripted-set@1a478() {
+    u64? var_0 = task-active?(test-fg, propset-destructible-doors);
+    return var_0;
+}
+
+u64? propset__level-scripted-set@34428() {
+    u64? var_0 = task-active?(test-fg, propset-doors);
+    return var_0;
+}
+
+u64? propset__level-scripted-set@300c0() {
+    u64? var_0 = task-active?(test-fg, propset-doors-b);
+    return var_0;
+}
+
+u64? propset__level-scripted-set@15d98() {
+    u64? var_0 = task-active?(test-fg, propset-environment-props);
+    return var_0;
+}
+
+u64? propset__level-scripted-set@1c638() {
+    u64? var_0 = task-active?(test-fg, propset-environment-props-b);
+    return var_0;
+}
+
+u64? propset__level-scripted-set@1a5f8() {
+    u64? var_0 = task-active?(test-fg, propset-environment-props-c);
+    return var_0;
+}
+
+u64? propset__level-scripted-set@22da0() {
+    u64? var_0 = task-active?(test-fg, propset-interactables);
+    return var_0;
+}
+
+u64? propset__level-scripted-set@17dc0() {
+    u64? var_0 = task-active?(test-fg, propset-notes);
+    return var_0;
+}
+
+u64? propset__level-scripted-set@199f8() {
+    u64? var_0 = task-active?(test-fg, propset-vehicle-glass);
+    return var_0;
+}
+
+u64? propset__level-scripted-set@2ab70() {
+    u64? var_0 = task-active?(test-fg, propset-cover);
+    return var_0;
+}
+
+u64? propset__level-scripted-set@290e8() {
+    u64? var_0 = task-active?(test-fg, propset-vegetation);
+    return var_0;
+}
+
+u64? nbrown-basic-set__level-set@7cf8__level-scripted-set@22578__() {
+    u64? var_0 = task-active?(nbrown, nbrown-animal-test);
+    return var_0;
+}
+
+u64? nbrown-basic-set__level-scripted-set@1d6e8() {
+    u64? var_0 = task-active?(nbrown, nbrown-simple-bird-test);
+    return var_0;
+}
+
+u64? nbrown-basic-set__level-scripted-set@1b810() {
+    u64? var_0 = task-active?(nbrown, nbrown-t2-bird-test);
+    return var_0;
+}
+
+u64? nbrown-basic-set__level-scripted-set@31590() {
+    u64? var_0 = task-active?(nbrown, nbrown-wolfpack-test);
+    return var_0;
+}
+
+u64? fg-test__level-set@7d50__level-scripted-set@22260__() {
+    u64? var_0 = task-active?(arivera, arivera-test);
+    return var_0;
+}
+
+u64? fg-test__level-scripted-set@30f48() {
+    u64? var_0 = task-active?(cdesse, cd-test);
+    return var_0;
+}
+
+u64? fg-test__level-scripted-set@34440() {
+    u64? var_0 = task-active?(cdesse, cd-test-2);
+    return var_0;
+}
+
+u64? fg-test__level-scripted-set@167d0() {
+    u64? var_0 = task-active?(dschieber, dougtest);
+    return var_0;
+}
+
+u64? fg-test__level-scripted-set@203d0() {
+    u64? var_0 = task-active?(dschieber, propset-ambient-test-doug);
+    return var_0;
+}
+
+u64? fg-test__level-scripted-set@1fec0() {
+    u64? var_0 = task-active?(ilee, ilee-test);
+    return var_0;
+}
+
+u64? fg-test__level-scripted-set@22248() {
+    u64? var_0 = task-active?(janem, janem-test);
+    return var_0;
+}
+
+u64? fg-test__level-scripted-set@1ce60() {
+    u64? var_0 = task-active?(kowens, kowens-test);
+    return var_0;
+}
+
+u64? fg-test__level-scripted-set@31e48() {
+    u64? var_0 = task-active?(mfadollone, mfadollone-test);
+    return var_0;
+}
+
+u64? fg-test__level-scripted-set@1e2a0() {
+    u64? var_0 = task-active?(mhatfield, mhatfield-test);
+    return var_0;
+}
+
+u64? fg-test__level-scripted-set@218d0() {
+    u64? var_0 = task-active?(neilan, neilantest);
+    return var_0;
+}
+
+u64? fg-test__level-scripted-set@268f8() {
+    u64? var_0 = task-active?(neilan, ntest-vis);
+    return var_0;
+}
+
+u64? cin-previs-san-fight-transition-to-joel__level-set@8218__level-scripted-set@30e40__() {
+    u64? var_0 = task-complete?(epilogue, epi-reconciliation);
+    return var_0;
+}
+
+u64? rs-world-room-rt-1__level-set@86f0__level-scripted-set@1e330__() {
+    u64? var_0 = task-active?(character-lighting, studio-character-lighting);
+    return var_0;
+}
+
+u64? rs-world-room-rt-1__level-scripted-set@29208() {
+    u64? var_0 = task-complete?(test-prog-lighting, room-d4-cs);
+    return var_0;
+}
+
+u64? rs-world-room-rt-1__level-scripted-set@25470() {
+    u64? var_0 = task-complete?(test-prog-lighting, room-d3-cs);
+    return var_0;
+}
+
+u64? rs-world-room-rt-1__level-scripted-set@24570() {
+    u64? var_0 = task-complete?(test-prog-lighting, room-d2-cs);
+    return var_0;
+}
+
+u64? rs-world-room-rt-1__level-scripted-set@32e80() {
+    u64? var_0 = task-complete?(test-prog-lighting, room-d1-cs);
+    return var_0;
+}
+
+u16 rs-world-room-rt-1__level-scripted-set@195a8() {
+    return 1;
+}
+
+u64? dw-bird-perch-test__level-set@9a30__level-scripted-set@2d330__() {
+    u64? var_0 = task-active?(dwoo, dwoo-bird-perch-test);
+    return var_0;
+}
+
+u64? bsingh-owen__level-set@d200__level-scripted-set@2e458__() {
+    u64? var_0 = task-active?(bsingh, owen-behind-glass);
+    return var_0;
+}
+
+u64? bsingh-owen__level-scripted-set@31320() {
+    u64? var_0 = task-active?(bsingh, owen-environmental-targets);
+    return var_0;
+}
+
+u64? bsingh-owen__level-scripted-set@2a1f8() {
+    u64? var_0 = task-active?(bsingh, owen-in-cover);
+    return var_0;
+}
+
+u64? bsingh-owen__level-scripted-set@31bd8() {
+    u64? var_0 = task-active?(bsingh, owen-no-headshots);
+    return var_0;
+}
+
+u64? bsingh-owen__level-scripted-set@2e4e8() {
+    u64? var_0 = task-active?(bsingh, owen-quick-draw);
+    return var_0;
+}
+
+bool ls-wait-for-layers__level-set@f138__level-scripted-set@25e00__() {
+    i32 var_0 = get-int32(load-enum, #ED35A1D4B2346BBD);
+    return var_0 == 2;
+}
+
+bool ls-wait-for-layers__level-scripted-set@1d7f0() {
+    i32 var_0 = get-int32(load-enum, #ED35A1D4B2346BBD);
+    return var_0 == 3;
+}
+
+bool ls-wait-for-layers__level-scripted-set@277c8() {
+    i32 var_0 = get-int32(load-enum, #ED35A1D4B2346BBD);
+    return var_0 == 4;
+}
+
+bool ls-wait-for-layers__level-scripted-set@24768() {
+    i32 var_0 = get-int32(load-enum, #ED35A1D4B2346BBD);
+    return var_0 == 5;
+}
+
+bool ls-wait-for-layers__level-scripted-set@18558() {
+    i32 var_0 = get-int32(load-enum, #ED35A1D4B2346BBD);
+    return var_0 == 6;
+}
+
+bool ls-wait-for-layers__level-scripted-set@2bc68() {
+    i32 var_0 = get-int32(load-enum, #ED35A1D4B2346BBD);
+    return var_0 == 7;
+}
+
+u64? character-lineup-plane__level-set@f478__level-scripted-set@1b168__() {
+    u64? var_0 = task-active?(character-lighting, studio-character-lineup-abby);
+    return var_0;
+}
+
+u64? character-lineup-plane__level-scripted-set@24300() {
+    u64? var_0 = task-active?(character-lighting, studio-character-lineup-animals);
+    return var_0;
+}
+
+u64? character-lineup-plane__level-scripted-set@1e018() {
+    u64? var_0 = task-active?(character-lighting, studio-character-lineup-ellie);
+    return var_0;
+}
+
+u64? character-lineup-plane__level-scripted-set@1c830() {
+    u64? var_0 = task-active?(character-lighting, studio-character-lineup-festival);
+    return var_0;
+}
+
+u64? character-lineup-plane__level-scripted-set@15f90() {
+    u64? var_0 = task-active?(character-lighting, studio-character-lineup-jackson);
+    return var_0;
+}
+
+u64? character-lineup-plane__level-scripted-set@175b0() {
+    u64? var_0 = task-active?(character-lighting, studio-character-lineup-infected);
+    return var_0;
+}
+
+u64? character-lineup-plane__level-scripted-set@32298() {
+    u64? var_0 = task-active?(character-lighting, studio-character-lineup-militia);
+    return var_0;
+}
+
+u64? character-lineup-plane__level-scripted-set@17160() {
+    u64? var_0 = task-active?(character-lighting, studio-character-lineup-scar);
+    return var_0;
+}
+
+u64? character-lineup-plane__level-scripted-set@18ba0() {
+    u64? var_0 = task-active?(character-lighting, studio-character-lineup-secondary);
+    return var_0;
+}
+
+u64? character-lineup-plane__level-scripted-set@2e7d0() {
+    u64? var_0 = task-active?(character-lighting, studio-character-lineup-grounded);
+    return var_0;
+}
+
+u64? bsingh-enemy-dogs__level-set@10258__level-scripted-set@162f0__() {
+    u64? var_0 = task-not-complete?(bsingh, enemy-dogs-grass);
+    return var_0;
+}
+
+u64? bsingh-enemy-dogs__level-scripted-set@302b8() {
+    u64? var_0 = task-not-complete?(bsingh, enemy-dogs-smell);
+    return var_0;
+}
+
+u64? mhayden-basic-set__level-set@113f0__level-scripted-set@2db40__() {
+    u64? var_0 = task-active?(mhayden, blade-test);
+    return var_0;
+}
+
+bool mp-vert-slice__level-set@11a18__level-scripted-set@1e870__() {
+    bool var_0 = get-boolean(in-rift, rgn-rift);
+    return var_0;
+}
+
+u64? t2-teaser__level-set@11bb0__level-scripted-set@309f0__() {
+    u64? var_0 = task-not-complete?(teaser-trailer, teaser-intro-forest);
+    return var_0;
+}
+
+u64? t2-teaser__level-scripted-set@202b0() {
+    u64? var_0 = task-not-complete?(teaser-trailer, teaser-interior);
+    return var_0;
+}
+
+u64? anewman-underpass-level-set__level-set@12bf0__level-scripted-set@1b0d8__() {
+    u64? var_0 = task-not-complete?(anewman, underpass-search);
+    return var_0;
+}
+
+u64? anewman-underpass-level-set__level-scripted-set@24900() {
+    u64? var_0 = task-not-complete?(anewman, underpass-sledgehammer);
+    return var_0;
+}
+
+bool tsk-sd-test__level-set@130d0__level-scripted-set@23b68__() {
+    i32 var_0 = get-int32(plane-damage-level, ss-cin-seaplane-animated-bg-1);
+    return var_0 == 0;
+}
+
+bool tsk-sd-test__level-scripted-set@22368() {
+    i32 var_0 = get-int32(plane-damage-level, ss-cin-seaplane-animated-bg-1);
+    return var_0 == 1;
+}
+
+bool tsk-sd-test__level-scripted-set@20f40() {
+    i32 var_0 = get-int32(plane-damage-level, ss-cin-seaplane-animated-bg-1);
+    return var_0 == 2;
+}
+
+bool tsk-sd-test__level-scripted-set@24dc8() {
+    i32 var_0 = get-int32(plane-damage-level, ss-cin-seaplane-animated-bg-1);
+    return var_0 == 3;
+}
+
+bool tsk-sd-test__level-scripted-set@29e80() {
+    i32 var_0 = get-int32(plane-damage-level, ss-cin-seaplane-animated-bg-1);
+    return var_0 == 4;
+}
+
+bool tsk-sd-test__level-scripted-set@34908() {
+    i32 var_0 = get-int32(plane-damage-level, ss-cin-seaplane-animated-bg-1);
+    return var_0 == 5;
+}
+
+u64? pickups-enemy-drop-ellie__level-set@14170__level-scripted-set@308e8__() {
+    u64? var_0 = task-active?(vert-slice, pickups-enemy-drop-alcohol);
+    return var_0;
+}
+
+u64? pickups-enemy-drop-ellie__level-scripted-set@2cee0() {
+    u64? var_0 = task-active?(vert-slice, pickups-enemy-drop-rag);
+    return var_0;
+}
+
+u64? pickups-enemy-drop-ellie__level-scripted-set@19b78() {
+    u64? var_0 = task-active?(vert-slice, pickups-enemy-drop-blade);
+    return var_0;
+}
+
+u64? pickups-enemy-drop-ellie__level-scripted-set@204d8() {
+    u64? var_0 = task-active?(vert-slice, pickups-enemy-drop-binding);
+    return var_0;
+}
+
+u64? pickups-enemy-drop-ellie__level-scripted-set@32d00() {
+    u64? var_0 = task-active?(vert-slice, pickups-enemy-drop-explosive);
+    return var_0;
+}
+
+u64? pickups-enemy-drop-ellie__level-scripted-set@16650() {
+    u64? var_0 = task-active?(vert-slice, pickups-enemy-drop-canister);
+    return var_0;
+}
+
+u64? dh-craftable-common__level-set@14868__level-scripted-set@1de20__() {
+    u64? var_0 = task-active?(dharrison, dh-craftables-ellie);
+    u64? var_1 = task-active?(dharrison, dh-player-upgrade-ellie);
+    u64? var_2 = task-active?(dharrison, dh-fire-test-ellie);
+    u64? var_3 = task-active?(dharrison, dh-craftable-spawn);
+    u64? var_4 = task-active?(dharrison, dh-lockpick);
+    u64? var_5 = task-active?(dharrison, dh-ammo-drop-ellie);
+    bool var_6 = var_0 || var_1 || var_2 || var_3 || var_4 && var_5;
+    return var_6;
+}
+
+bool ls-fd-layers-test__level-set@14a00__level-scripted-set@21138__() {
+    i32 var_0 = get-int32(load-enum, ss);
+    return var_0 == 5;
+}
+
+bool ls-fd-layers-test__level-scripted-set@25668() {
+    i32 var_0 = get-int32(load-enum, ss);
+    return var_0 == 4;
+}
+
+bool ls-fd-layers-test__level-scripted-set@27198() {
+    i32 var_0 = get-int32(load-enum, ss);
+    return var_0 == 3;
+}
+
+bool ls-fd-layers-test__level-scripted-set@18750() {
+    i32 var_0 = get-int32(load-enum, ss);
+    return var_0 == 1;
+}
+
+bool ls-fd-layers-test__level-scripted-set@24780() {
+    i32 var_0 = get-int32(load-enum, ss);
+    return var_0 == 2;
+}
+
+bool ls-fd-layers-test__level-scripted-set@22c98() {
+    i32 var_0 = get-int32(load-enum, ss);
+    return var_0 == 6;
+}
+
+bool ls-fd-layers-test__level-scripted-set@29e98() {
+    i32 var_0 = get-int32(load-enum, ss);
+    return var_0 == 7;
+}
+
+bool ls-fd-layers-test__level-scripted-set@16e00() {
+    i32 var_0 = get-int32(load-enum, ss);
+    return var_0 == 8;
+}
+
+bool ls-fd-layers-test__level-scripted-set@1fae8() {
+    i32 var_0 = get-int32(load-enum, ss);
+    return var_0 == 9;
+}
+

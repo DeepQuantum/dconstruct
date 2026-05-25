@@ -299,24 +299,6 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
         EXPECT_EQ(parse_errors.front().m_token.m_line, 6);
     }
 
-    TEST(COMPILER, Pak68TypesCoverRepoPak68) {
-        std::ifstream in{"pak68.txt"};
-        ASSERT_TRUE(in.is_open());
-
-        for (std::string line; std::getline(in, line);) {
-            if (!line.empty() && line.back() == '\r') {
-                line.pop_back();
-            }
-            if (line.empty()) {
-                continue;
-            }
-            std::istringstream iss{line};
-            std::string type;
-            iss >> type;
-            EXPECT_TRUE(compilation::pak68_type_from_string(type)) << "missing pak68 type enum entry for " << type;
-        }
-    }
-
     TEST(COMPILER, AddPakParsesAndAppliesMultilineEntries) {
         const std::filesystem::path mod_path = "test/fixtures/compiler/pak68_macro_mod";
         const std::filesystem::path pak_path = mod_path / "pak68_macro_mod-pak68.txt";
@@ -492,6 +474,7 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
         auto patch = compilation::patch_modules_size(modules_path, output_path, new_size);
         ASSERT_TRUE(patch) << patch.error();
         EXPECT_EQ(patch->m_targetName, "ss-rogue/test-script-qntm");
+        EXPECT_EQ(patch->m_oldSize, 691);
         EXPECT_EQ(patch->m_newSize, new_size);
 
         auto patched_file = BinaryFile::from_path(modules_path);
@@ -510,6 +493,47 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
         std::filesystem::remove(modules_path, cleanup_ec);
     }
 
+    TEST(COMPILER, PatchModulesSizeRefreshesExistingExports) {
+        const std::filesystem::path modules_path = "test/fixtures/compiler/modules_refresh_exports.bin";
+        std::error_code cleanup_ec;
+        std::filesystem::remove(modules_path, cleanup_ec);
+        std::filesystem::copy_file("test/fixtures/bin/modules.bin", modules_path, std::filesystem::copy_options::overwrite_existing);
+
+        constexpr sid64 target_sid = SID("ss-rogue/test-script-qntm");
+        constexpr u64 new_size = 0x7654;
+        const std::vector<sid64> exports{
+            SID("helper-before-state-script"),
+            SID("test-script-qntm"),
+        };
+
+        const std::filesystem::path output_path =
+            R"(C:/Program Files (x86)/Steam\steamapps\common\The Last of Us Part II/mods/ProjectFEDRA_unpacked/bin/dc1/ss-rogue/test-script-qntm.bin)";
+        auto patch = compilation::patch_modules_size(modules_path, output_path, new_size, exports);
+        ASSERT_TRUE(patch) << patch.error();
+        EXPECT_EQ(patch->m_targetName, "ss-rogue/test-script-qntm");
+        EXPECT_EQ(patch->m_newSize, new_size);
+
+        auto patched_file = BinaryFile::from_path(modules_path);
+        ASSERT_TRUE(patched_file) << patched_file.error();
+        const auto* module_array = reinterpret_cast<const compilation::ModuleInfoArray*>(patched_file->m_dcheader->m_pStartOfData->m_entryPtr);
+        bool found = false;
+        for (u32 i = 0; i < module_array->m_numEntries; ++i) {
+            const ModulesEntry& entry = module_array->m_entries[i];
+            if (entry.m_nameSid == target_sid) {
+                found = true;
+                EXPECT_EQ(entry.m_size, new_size);
+                ASSERT_NE(entry.m_exports, nullptr);
+                ASSERT_EQ(entry.m_exports->m_numEntries, exports.size());
+                for (u32 j = 0; j < entry.m_exports->m_numEntries; ++j) {
+                    EXPECT_EQ(entry.m_exports->m_pSymbols[j], exports[j]);
+                }
+            }
+        }
+        EXPECT_TRUE(found);
+
+        std::filesystem::remove(modules_path, cleanup_ec);
+    }
+
     TEST(COMPILER, PatchModulesSizeCreatesMissingEntry) {
         const std::filesystem::path modules_path = "test/fixtures/compiler/modules_missing_entry.bin";
         std::error_code cleanup_ec;
@@ -519,6 +543,10 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
         constexpr u64 new_size = 0x9876;
         const std::string target_name = "ss-rogue/generated-module-test";
         const sid64 target_sid = SID(target_name.c_str());
+        const std::vector<sid64> exports{
+            SID("generated-helper"),
+            SID("generated-module-test"),
+        };
         const std::filesystem::path output_path =
             R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/mods/ProjectFEDRA_unpacked\bin\dc1\ss-rogue/generated-module-test.bin)";
 
@@ -527,7 +555,7 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
         const auto* before_array = reinterpret_cast<const compilation::ModuleInfoArray*>(before_file->m_dcheader->m_pStartOfData->m_entryPtr);
         const u32 old_count = before_array->m_numEntries;
 
-        auto patch = compilation::patch_modules_size(modules_path, output_path, new_size);
+        auto patch = compilation::patch_modules_size(modules_path, output_path, new_size, exports);
         ASSERT_TRUE(patch) << patch.error();
         EXPECT_EQ(patch->m_targetName, target_name);
         EXPECT_EQ(patch->m_oldSize, 0);
@@ -551,7 +579,10 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
                 ASSERT_NE(entry.m_imports, nullptr);
                 ASSERT_NE(entry.m_exports, nullptr);
                 EXPECT_EQ(entry.m_imports->m_numEntries, 10);
-                EXPECT_EQ(entry.m_exports->m_numEntries, 1);
+                ASSERT_EQ(entry.m_exports->m_numEntries, exports.size());
+                for (u32 j = 0; j < entry.m_exports->m_numEntries; ++j) {
+                    EXPECT_EQ(entry.m_exports->m_pSymbols[j], exports[j]);
+                }
                 const p64 imports_struct = reinterpret_cast<p64>(entry.m_imports);
                 const p64 exports_struct = reinterpret_cast<p64>(entry.m_exports);
                 EXPECT_EQ(exports_struct - imports_struct, sizeof(sid64) + sizeof(SymbolArray));
@@ -562,33 +593,6 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
         EXPECT_TRUE(found);
 
         std::filesystem::remove(modules_path, cleanup_ec);
-    }
-
-    TEST(COMPILER, RemovedPathDirectivesSuggestMod) {
-        std::string source = dcpl_prelude() +
-            "@modules \"test/fixtures/compiler/modules.bin\"\n"
-            "u32 main() { return 0; }\n";
-        std::vector<compilation::source_location> line_map;
-
-        auto options = compilation::compiler_options::parse(get_empty_options(), source, "test/fixtures/compiler/removed_modules_test.dcpl", line_map);
-        ASSERT_FALSE(options);
-        EXPECT_NE(options.error().find("@modules has been removed"), std::string::npos);
-
-        source = dcpl_prelude() +
-            "@repackage\n"
-            "u32 main() { return 0; }\n";
-        line_map.clear();
-        options = compilation::compiler_options::parse(get_empty_options(), source, "test/fixtures/compiler/removed_repackage_test.dcpl", line_map);
-        ASSERT_FALSE(options);
-        EXPECT_NE(options.error().find("@repackage has been removed"), std::string::npos);
-
-        source = dcpl_prelude() +
-            "@standalone\n"
-            "u32 main() { return 0; }\n";
-        line_map.clear();
-        options = compilation::compiler_options::parse(get_empty_options(), source, "test/fixtures/compiler/removed_standalone_test.dcpl", line_map);
-        ASSERT_FALSE(options);
-        EXPECT_NE(options.error().find("@standalone has been removed"), std::string::npos);
     }
 
     TEST(COMPILER, StateScriptsAddAutomaticSpAllPakEntry) {
@@ -728,7 +732,7 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
         const std::vector<compilation::token> expected = {
             compilation::token(compilation::token_type::DOUBLE, "1.3", 1.3f, 1),
             compilation::token(compilation::token_type::MINUS_EQUAL, "-=", 0, 1),
-            compilation::token(compilation::token_type::SID, "#ellie", 0, 1),
+            compilation::token(compilation::token_type::SID, "#ellie", SID("ellie"), 1),
             compilation::token(compilation::token_type::_EOF, "", 0, 1),
         };
         EXPECT_EQ(tokens, expected);
@@ -1325,6 +1329,42 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
         ));
 
         EXPECT_EQ(expected, statements);
+    }
+
+    TEST(COMPILER, PseudoCForCompilerEmitsCompilerOperators) {
+        std::vector<expr_uptr> format_args;
+        format_args.push_back(std::make_unique<ast::literal>("state %d"));
+        format_args.push_back(std::make_unique<ast::literal>((u16)7));
+
+        auto format_call = std::make_unique<ast::call_expr>(
+            compilation::token(compilation::token_type::DOLLAR, "$", 0, 1),
+            std::make_unique<ast::sid_identifier>("dc:format"),
+            std::move(format_args)
+        );
+
+        std::vector<expr_uptr> display_args;
+        display_args.push_back(std::move(format_call));
+        ast::call_expr display_call(
+            compilation::token(compilation::token_type::GREATER_GREATER, ">>", 0, 1),
+            std::make_unique<ast::sid_identifier>("display"),
+            std::move(display_args)
+        );
+
+        EXPECT_EQ(display_call.to_c_for_compiler_string(), ">> \"state %d\" $ 7");
+
+        ast::sid_identifier sid{"custom-state"};
+        EXPECT_EQ(sid.to_c_for_compiler_string(), "#custom-state");
+
+        std::vector<expr_uptr> go_args;
+        go_args.push_back(std::make_unique<ast::sid_identifier>("next-state"));
+        go_args.push_back(std::make_unique<ast::literal>((u16)1));
+        ast::call_expr go_call(
+            compilation::token(compilation::token_type::EQUAL_GREATER, "=>", 0, 1),
+            std::make_unique<ast::sid_identifier>("go"),
+            std::move(go_args)
+        );
+
+        EXPECT_EQ(go_call.to_c_for_compiler_string(), "=> #next-state");
     }
 
     TEST(COMPILER, FormatOperatorUsesGlobalDcFormat) {

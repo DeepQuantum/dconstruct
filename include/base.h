@@ -49,6 +49,14 @@ namespace dconstruct {
 
 	#define SID(str) (dconstruct::ToStringId64(str))
 
+	#define CONCAT_(a, b) a##b
+	#define CONCAT(a, b) CONCAT_(a, b)
+	#define RETURN_UNEXP(decl, expr)                                              \
+		auto CONCAT(_tmp_, __LINE__) = (expr);                                    \
+		if (!CONCAT(_tmp_, __LINE__).has_value())                                 \
+			return std::unexpected(std::move(CONCAT(_tmp_, __LINE__).error()));   \
+		decl = std::move(*CONCAT(_tmp_, __LINE__))
+
 	static std::string sanitize_dc_string(const std::string &dc_string) {
 		std::string sanitized;
 		sanitized.reserve(dc_string.size());

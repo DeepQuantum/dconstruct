@@ -193,3 +193,68 @@ bool tsk-efg-prologue-restring-c__level-scripted-set@1098() {
     return var_0;
 }
 
+u64? tsk-efg-prologue-playable-ride__level-set@1f8__level-scripted-set@a98__() {
+    u64? var_0 = task-active?(ellie-flashback-guitar, efg-prologue-ride-to-jackson);
+    return var_0;
+}
+
+u64? tsk-efg-prologue-playable-ride__level-scripted-set@dc8() {
+    u64? var_0 = task-active?(ellie-flashback-guitar, efg-prologue-ride-to-jackson-plains);
+    return var_0;
+}
+
+u64? tsk-efg-prologue-playable-ride__level-scripted-set@780() {
+    u64? var_0 = task-complete?(ellie-flashback-guitar, efg-prologue-ride-to-jackson-plains);
+    return var_0;
+}
+
+u64? tsk-efg-guitar-flashback__level-set@2b8__level-scripted-set@10b0__() {
+    u64? var_0 = is-chronological-mode-enabled?();
+    u64? var_1 = !(var_0);
+    return var_1;
+}
+
+u64? tsk-efg-guitar-flashback__level-scripted-set@d20() {
+    u64? var_0 = is-chronological-mode-enabled?();
+    return var_0;
+}
+
+bool tsk-efg-prologue-restring-a__level-set@5a0__level-scripted-set@798__() {
+    bool var_0 = get-boolean(#F59095D283A81697, ss-cin-efg-prologue-restring-a-1);
+    return var_0;
+}
+
+bool tsk-efg-prologue-restring-a__level-scripted-set@c18() {
+    bool var_0 = get-boolean(#8B8446A448687FA0, ss-cin-efg-prologue-restring-a-1);
+    return var_0;
+}
+
+bool tsk-efg-prologue-restring-a__level-scripted-set@d38() {
+    bool var_0 = get-boolean(#DB4390F77C6A9C96, ss-cin-efg-prologue-restring-a-1);
+    return var_0;
+}
+
+u16 tsk-efg-prologue-restring-a__level-scripted-set@f00() {
+    return 1;
+}
+
+bool tsk-efg-prologue-restring-b__level-set@5f8__level-scripted-set@ee8__() {
+    bool var_0 = get-boolean(#DB4390F77C6A9C96, ss-cin-efg-prologue-restring-b-1);
+    return var_0;
+}
+
+bool tsk-efg-prologue-restring-c__level-set@640__level-scripted-set@1008__() {
+    bool var_0 = get-boolean(#DB4390F77C6A9C96, ss-cin-efg-prologue-restring-c-1);
+    return var_0;
+}
+
+bool tsk-efg-prologue-restring-c__level-scripted-set@de0() {
+    bool var_0 = get-boolean(#991E93722EE4B507, ss-cin-efg-prologue-restring-c-1);
+    return var_0;
+}
+
+bool tsk-efg-prologue-restring-c__level-scripted-set@1098() {
+    bool var_0 = get-boolean(#9D9E20C74D4DAD76, ss-cin-efg-prologue-restring-c-1);
+    return var_0;
+}
+

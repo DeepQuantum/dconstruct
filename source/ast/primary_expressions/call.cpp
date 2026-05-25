@@ -35,6 +35,53 @@ void call_expr::pseudo_c(std::ostream& os) const {
     }
 }
 
+void call_expr::pseudo_c_for_compiler(std::ostream& os) const {
+    const auto old_flags = os.iword(get_flag_index());
+    os.iword(get_flag_index()) = old_flags | static_cast<i32>(LANGUAGE_FLAGS::COMPILER);
+
+    std::string callee_name;
+    if (const auto* sid = dynamic_cast<const sid_identifier*>(m_callee.get())) {
+        callee_name = sid->m_name.m_lexeme;
+    } else if (const auto* id = dynamic_cast<const identifier*>(m_callee.get())) {
+        callee_name = id->m_name.m_lexeme;
+    }
+
+    if ((callee_name == "#dc:format" || callee_name == "dc:format") && m_arguments.size() >= 2) {
+        os << *m_arguments[0] << " $ ";
+        for (u16 i = 1; i < m_arguments.size(); ++i) {
+            os << *m_arguments[i];
+            if (i + 1 != m_arguments.size()) {
+                os << ", ";
+            }
+        }
+        os.iword(get_flag_index()) = old_flags;
+        return;
+    }
+
+    if ((callee_name == "#display" || callee_name == "display") && !m_arguments.empty()) {
+        os << ">> " << *m_arguments[0];
+        os.iword(get_flag_index()) = old_flags;
+        return;
+    }
+
+    if ((callee_name == "#go" || callee_name == "go") && !m_arguments.empty()) {
+        os << "=> " << *m_arguments[0];
+        os.iword(get_flag_index()) = old_flags;
+        return;
+    }
+
+    os << *m_callee << '(';
+    for (u16 i = 0; i < m_arguments.size(); ++i) {
+        os << *m_arguments[i];
+        if (i + 1 != m_arguments.size()) {
+            os << ", ";
+        }
+    }
+    os << ')';
+
+    os.iword(get_flag_index()) = old_flags;
+}
+
 void call_expr::pseudo_py(std::ostream& os) const {
     const bool func_name_as_pascal = os.iword(get_flag_index()) & static_cast<i32>(LANGUAGE_FLAGS::FUNCTION_NAMES_PASCAL);
     if (func_name_as_pascal) {

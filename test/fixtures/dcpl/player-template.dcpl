@@ -34,3 +34,15 @@ f32 anim-player-template-states(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u
     return *(f32*)((*(arg_0 + 16) + 2400) + 4) % 1.00;
 }
 
+u64 anim-player-template-states__actor-state-list@48__anim-node-blend@168____anim-node-animation@420__(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)((*(arg_1 + 16) + 2400) + 16);
+}
+
+u64 anim-player-template-states__actor-state-list@48__anim-node-animation@3e8__(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)((*(arg_1 + 16) + 2400) + 24);
+}
+
+f32 anim-player-template-states(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)((*(arg_0 + 16) + 2400) + 4) % 1.00;
+}
+

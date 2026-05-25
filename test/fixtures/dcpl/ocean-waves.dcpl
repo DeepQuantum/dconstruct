@@ -28,3 +28,18 @@ u64? wait-set-ocean-wave-parameters-from-settings(u64? arg_0, u64? arg_1, bool a
     return var_7;
 }
 
+u64? wait-set-ocean-wave-parameters-from-settings(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = get-current-time(0);
+    u64? var_1 = get-current-time(0);
+    u64? var_2;
+    while ((var_1 - var_0) > arg_2 && (arg_2 <= 0.00) == nullptr) {
+        u64? var_3 = get-current-time(0);
+        u64? var_4 = (var_3 - var_0) / arg_2;
+        u64? var_5 = lerp-scale(0.00, 1.00, arg_3, arg_4, var_4);
+        u64? var_6 = set-ocean-waves-parameters-from-settings-blend(arg_0, arg_1, var_5, arg_5);
+        wait-one-frame();
+    }
+    u64? var_7 = set-ocean-waves-parameters-from-settings-blend(arg_0, arg_1, arg_4, arg_5);
+    return var_7;
+}
+

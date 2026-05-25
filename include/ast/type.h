@@ -55,11 +55,10 @@ namespace dconstruct::ast {
     struct ptr_type;
     struct function_type;
     struct darray;
+    struct full_type;
 
     
     struct ellipse {};
-
-    using full_type = std::variant<std::monostate, primitive_type, struct_type, enum_type, ptr_type, function_type>;
 
     using ref_full_type = std::shared_ptr<full_type>;
 
@@ -123,6 +122,18 @@ namespace dconstruct::ast {
         explicit ptr_type(const ast::primitive_kind& kind) noexcept;
 
         bool operator==(const ptr_type&) const = default;
+    };
+
+    struct full_type : std::variant<std::monostate, primitive_type, struct_type, enum_type, ptr_type, function_type> {
+        using variant_type = std::variant<std::monostate, primitive_type, struct_type, enum_type, ptr_type, function_type>;
+        using variant_type::variant_type;
+        using variant_type::operator=;
+
+        full_type() = default;
+        full_type(const full_type&) = default;
+        full_type(full_type&&) = default;
+        full_type& operator=(const full_type&) = default;
+        full_type& operator=(full_type&&) = default;
     };
 
 

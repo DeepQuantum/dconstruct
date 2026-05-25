@@ -43,12 +43,19 @@ namespace dconstruct::ast {
         virtual void pseudo_c(std::ostream&) const = 0;
         virtual void pseudo_py(std::ostream&) const = 0;
         virtual void pseudo_racket(std::ostream&) const = 0;
+        virtual void pseudo_c_for_compiler(std::ostream& os) const;
         virtual bool is_dead_code() const noexcept { return false; }
         [[nodiscard]] virtual std::optional<compilation::source_location> source_location() const noexcept { return std::nullopt; }
 
         [[nodiscard]] std::string to_c_string() const noexcept {
             std::ostringstream oss;
             pseudo_c(oss);
+            return oss.str();
+        }
+
+        [[nodiscard]] std::string to_c_for_compiler_string() const noexcept {
+            std::ostringstream oss;
+            pseudo_c_for_compiler(oss);
             return oss.str();
         }
     };
@@ -59,6 +66,7 @@ namespace dconstruct::ast {
         RACKET = 0x4,
         FUNCTION_NAMES_PASCAL = 0x8,
         IDENTIFIER_PASCAL = 0x10,
+        COMPILER = 0x20,
     };
 
     inline i32 get_flag_index() {
@@ -96,6 +104,18 @@ namespace dconstruct::ast {
         return os;
     }
 
+    inline std::ostream& compiler_syntax(std::ostream& os) {
+        os.iword(get_flag_index()) |= static_cast<i32>(LANGUAGE_FLAGS::COMPILER);
+        return os;
+    }
+
+    inline void ast_element::pseudo_c_for_compiler(std::ostream& os) const {
+        const auto old_flags = os.iword(get_flag_index());
+        os.iword(get_flag_index()) = old_flags | static_cast<i32>(LANGUAGE_FLAGS::COMPILER);
+        pseudo_c(os);
+        os.iword(get_flag_index()) = old_flags;
+    }
+
     inline int indent_index() {
         static int idx = std::ios_base::xalloc();
         return idx;
@@ -120,7 +140,9 @@ namespace dconstruct::ast {
     }
 
     inline std::ostream& operator<<(std::ostream& os, const ast_element &expr) {
-        if (os.iword(get_flag_index()) & static_cast<i32>(LANGUAGE_FLAGS::RACKET)) {
+        if (os.iword(get_flag_index()) & static_cast<i32>(LANGUAGE_FLAGS::COMPILER)) {
+            expr.pseudo_c_for_compiler(os);
+        } else if (os.iword(get_flag_index()) & static_cast<i32>(LANGUAGE_FLAGS::RACKET)) {
             expr.pseudo_racket(os);
         } else if (os.iword(get_flag_index()) & static_cast<i32>(LANGUAGE_FLAGS::PY)) {
             expr.pseudo_py(os);

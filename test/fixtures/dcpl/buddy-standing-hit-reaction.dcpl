@@ -4903,3 +4903,1638 @@ u16 buddy-1h-hr-hip-back-left-from-right-d(u64? arg_0, u64? arg_1, u64? arg_2, u
     return var_2;
 }
 
+u16 buddy-1h-hr-chest-front-horizontal-a__melee-attack@570(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, ellie-1h-hr-chest-front-horizontal-a, var_2, var_3, *npc-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 buddy-1h-hr-chest-front-horizontal-a__start-func-array@a2b0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = get-current-melee-attack(arg_1);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-current-melee-attack(arg_1);
+        u64? var_3 = melee-fact-get-symbol(arg_2, last-landed-melee-move);
+        u64? var_4 = melee-fact-get-time-since(arg_2, last-landed-melee-move);
+        bool var_5 = !(*(u64*)var_2 == var_3) && var_4 > 1.00;
+        var_1 = var_5;
+    } else {
+        var_1 = 1;
+    }
+    return var_1;
+}
+
+u64? buddy-1h-hr-chest-front-horizontal-a__melee-event-list@8bd0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = npc-alive?(arg_2);
+    u64? var_1 = !(var_0);
+    return var_1;
+}
+
+u64? buddy-1h-hr-chest-front-horizontal-a(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = npc-brute?(arg_2);
+    return var_0;
+}
+
+u16 buddy-1h-hr-head-left-a__melee-attack@760(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, ellie-1h-hr-head-left-a, var_2, var_3, *npc-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 buddy-1h-hr-head-left-a(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = string-debug(buddy-1h-hr-head-left-a);
+    log-event("melee-npc-generic-reaction", 1, var_0, 0, 0);
+    u64? var_1 = get-current-melee-attack(arg_1);
+    u16 var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-current-melee-attack(arg_1);
+        u64? var_4 = melee-fact-set-symbol(arg_2, last-landed-melee-move, *(u64*)var_3);
+        var_2 = var_4;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u16 buddy-1h-hr-head-right-a__melee-attack@950(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, ellie-1h-hr-head-right-a, var_2, var_3, *npc-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 buddy-1h-hr-head-right-a(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = string-debug(buddy-1h-hr-head-right-a);
+    log-event("melee-npc-generic-reaction", 1, var_0, 0, 0);
+    u64? var_1 = get-current-melee-attack(arg_1);
+    u16 var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-current-melee-attack(arg_1);
+        u64? var_4 = melee-fact-set-symbol(arg_2, last-landed-melee-move, *(u64*)var_3);
+        var_2 = var_4;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u16 buddy-1h-hr-head-right-b__melee-attack@b40(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, ellie-1h-hr-head-right-b, var_2, var_3, *npc-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 buddy-1h-hr-head-right-b(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = string-debug(buddy-1h-hr-head-right-b);
+    log-event("melee-npc-generic-reaction", 1, var_0, 0, 0);
+    u64? var_1 = get-current-melee-attack(arg_1);
+    u16 var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-current-melee-attack(arg_1);
+        u64? var_4 = melee-fact-set-symbol(arg_2, last-landed-melee-move, *(u64*)var_3);
+        var_2 = var_4;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u16 buddy-1h-hr-left-upward-a__melee-attack@d30(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, ellie-1h-hr-left-upward-a, var_2, var_3, *npc-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 buddy-1h-hr-left-upward-a(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = string-debug(buddy-1h-hr-left-upward-a);
+    log-event("melee-npc-generic-reaction", 1, var_0, 0, 0);
+    u64? var_1 = get-current-melee-attack(arg_1);
+    u16 var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-current-melee-attack(arg_1);
+        u64? var_4 = melee-fact-set-symbol(arg_2, last-landed-melee-move, *(u64*)var_3);
+        var_2 = var_4;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u16 buddy-1h-hr-left-upward-b__melee-attack@f20(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, ellie-1h-hr-left-upward-b, var_2, var_3, *npc-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 buddy-1h-hr-left-upward-b(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = string-debug(buddy-1h-hr-left-upward-b);
+    log-event("melee-npc-generic-reaction", 1, var_0, 0, 0);
+    u64? var_1 = get-current-melee-attack(arg_1);
+    u16 var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-current-melee-attack(arg_1);
+        u64? var_4 = melee-fact-set-symbol(arg_2, last-landed-melee-move, *(u64*)var_3);
+        var_2 = var_4;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u16 buddy-1h-hr-right-horizontal-a__melee-attack@1110(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, ellie-1h-hr-right-horizontal-a, var_2, var_3, *npc-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 buddy-1h-hr-right-horizontal-a(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = string-debug(buddy-1h-hr-right-horizontal-a);
+    log-event("melee-npc-generic-reaction", 1, var_0, 0, 0);
+    u64? var_1 = get-current-melee-attack(arg_1);
+    u16 var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-current-melee-attack(arg_1);
+        u64? var_4 = melee-fact-set-symbol(arg_2, last-landed-melee-move, *(u64*)var_3);
+        var_2 = var_4;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u16 buddy-1h-hr-back-left-shoulder-from-right-b__melee-attack@1300(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, ellie-1h-hr-back-left-shoulder-from-right-b, var_2, var_3, *npc-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 buddy-1h-hr-back-left-shoulder-from-right-b(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = string-debug(buddy-1h-hr-back-left-shoulder-from-right-b);
+    log-event("melee-npc-generic-reaction", 1, var_0, 0, 0);
+    u64? var_1 = get-current-melee-attack(arg_1);
+    u16 var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-current-melee-attack(arg_1);
+        u64? var_4 = melee-fact-set-symbol(arg_2, last-landed-melee-move, *(u64*)var_3);
+        var_2 = var_4;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u16 buddy-1h-hr-back-left-shoulder-from-right-c__melee-attack@14f0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, ellie-1h-hr-back-left-shoulder-from-right-c, var_2, var_3, *npc-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 buddy-1h-hr-back-left-shoulder-from-right-c(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = string-debug(buddy-1h-hr-back-left-shoulder-from-right-c);
+    log-event("melee-npc-generic-reaction", 1, var_0, 0, 0);
+    u64? var_1 = get-current-melee-attack(arg_1);
+    u16 var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-current-melee-attack(arg_1);
+        u64? var_4 = melee-fact-set-symbol(arg_2, last-landed-melee-move, *(u64*)var_3);
+        var_2 = var_4;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u16 buddy-1h-hr-back-left-shoulder-from-right-a__melee-attack@16e0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, ellie-1h-hr-back-left-shoulder-from-right-a, var_2, var_3, *npc-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 buddy-1h-hr-back-left-shoulder-from-right-a(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = string-debug(buddy-1h-hr-back-left-shoulder-from-right-a);
+    log-event("melee-npc-generic-reaction", 1, var_0, 0, 0);
+    u64? var_1 = get-current-melee-attack(arg_1);
+    u16 var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-current-melee-attack(arg_1);
+        u64? var_4 = melee-fact-set-symbol(arg_2, last-landed-melee-move, *(u64*)var_3);
+        var_2 = var_4;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u16 buddy-1h-hr-hip-back-right-from-left-a__melee-attack@18d0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, ellie-1h-hr-hip-back-right-from-left-a, var_2, var_3, *npc-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 buddy-1h-hr-hip-back-right-from-left-a(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = string-debug(buddy-1h-hr-hip-back-right-from-left-a);
+    log-event("melee-npc-generic-reaction", 1, var_0, 0, 0);
+    u64? var_1 = get-current-melee-attack(arg_1);
+    u16 var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-current-melee-attack(arg_1);
+        u64? var_4 = melee-fact-set-symbol(arg_2, last-landed-melee-move, *(u64*)var_3);
+        var_2 = var_4;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u16 buddy-1h-hr-head-back-center-b__melee-attack@1ac0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, ellie-1h-hr-head-back-center-b, var_2, var_3, *npc-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 buddy-1h-hr-head-back-center-b(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = string-debug(buddy-1h-hr-head-back-center-b);
+    log-event("melee-npc-generic-reaction", 1, var_0, 0, 0);
+    u64? var_1 = get-current-melee-attack(arg_1);
+    u16 var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-current-melee-attack(arg_1);
+        u64? var_4 = melee-fact-set-symbol(arg_2, last-landed-melee-move, *(u64*)var_3);
+        var_2 = var_4;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u16 buddy-1h-hr-head-back-center-c__melee-attack@1cb0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, ellie-1h-hr-head-back-center-c, var_2, var_3, *npc-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 buddy-1h-hr-head-back-center-c(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = string-debug(buddy-1h-hr-head-back-center-c);
+    log-event("melee-npc-generic-reaction", 1, var_0, 0, 0);
+    u64? var_1 = get-current-melee-attack(arg_1);
+    u16 var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-current-melee-attack(arg_1);
+        u64? var_4 = melee-fact-set-symbol(arg_2, last-landed-melee-move, *(u64*)var_3);
+        var_2 = var_4;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u16 buddy-1h-hr-head-back-center-a__melee-attack@1ea0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, ellie-1h-hr-head-back-center-a, var_2, var_3, *npc-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 buddy-1h-hr-head-back-center-a(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = string-debug(buddy-1h-hr-head-back-center-a);
+    log-event("melee-npc-generic-reaction", 1, var_0, 0, 0);
+    u64? var_1 = get-current-melee-attack(arg_1);
+    u16 var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-current-melee-attack(arg_1);
+        u64? var_4 = melee-fact-set-symbol(arg_2, last-landed-melee-move, *(u64*)var_3);
+        var_2 = var_4;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u16 buddy-1h-hr-back-right-shoulder-from-left-a__melee-attack@2090(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, ellie-1h-hr-back-right-shoulder-from-left-a, var_2, var_3, *npc-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 buddy-1h-hr-back-right-shoulder-from-left-a(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = string-debug(buddy-1h-hr-back-right-shoulder-from-left-a);
+    log-event("melee-npc-generic-reaction", 1, var_0, 0, 0);
+    u64? var_1 = get-current-melee-attack(arg_1);
+    u16 var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-current-melee-attack(arg_1);
+        u64? var_4 = melee-fact-set-symbol(arg_2, last-landed-melee-move, *(u64*)var_3);
+        var_2 = var_4;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u16 buddy-1h-hr-chest-front-downward-b__melee-attack@2280(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, ellie-1h-hr-chest-front-downward-b, var_2, var_3, *npc-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 buddy-1h-hr-chest-front-downward-b(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = string-debug(buddy-1h-hr-chest-front-downward-b);
+    log-event("melee-npc-generic-reaction", 1, var_0, 0, 0);
+    u64? var_1 = get-current-melee-attack(arg_1);
+    u16 var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-current-melee-attack(arg_1);
+        u64? var_4 = melee-fact-set-symbol(arg_2, last-landed-melee-move, *(u64*)var_3);
+        var_2 = var_4;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u16 buddy-1h-hr-chest-front-downward-c__melee-attack@2470(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, ellie-1h-hr-chest-front-downward-c, var_2, var_3, *npc-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 buddy-1h-hr-chest-front-downward-c(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = string-debug(buddy-1h-hr-chest-front-downward-c);
+    log-event("melee-npc-generic-reaction", 1, var_0, 0, 0);
+    u64? var_1 = get-current-melee-attack(arg_1);
+    u16 var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-current-melee-attack(arg_1);
+        u64? var_4 = melee-fact-set-symbol(arg_2, last-landed-melee-move, *(u64*)var_3);
+        var_2 = var_4;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u16 buddy-1h-hr-chest-front-downward-a__melee-attack@2660(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, ellie-1h-hr-chest-front-downward-a, var_2, var_3, *npc-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 buddy-1h-hr-chest-front-downward-a(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = string-debug(buddy-1h-hr-chest-front-downward-a);
+    log-event("melee-npc-generic-reaction", 1, var_0, 0, 0);
+    u64? var_1 = get-current-melee-attack(arg_1);
+    u16 var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-current-melee-attack(arg_1);
+        u64? var_4 = melee-fact-set-symbol(arg_2, last-landed-melee-move, *(u64*)var_3);
+        var_2 = var_4;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u16 buddy-1h-hr-back-center-upward-a__melee-attack@2850(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, ellie-1h-hr-back-center-upward-a, var_2, var_3, *npc-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 buddy-1h-hr-back-center-upward-a(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = string-debug(buddy-1h-hr-back-center-upward-a);
+    log-event("melee-npc-generic-reaction", 1, var_0, 0, 0);
+    u64? var_1 = get-current-melee-attack(arg_1);
+    u16 var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-current-melee-attack(arg_1);
+        u64? var_4 = melee-fact-set-symbol(arg_2, last-landed-melee-move, *(u64*)var_3);
+        var_2 = var_4;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u16 buddy-1h-hr-right-shoulder-from-right-a__melee-attack@2a40(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, ellie-1h-hr-right-shoulder-from-right-a, var_2, var_3, *npc-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 buddy-1h-hr-right-shoulder-from-right-a(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = string-debug(buddy-1h-hr-right-shoulder-from-right-a);
+    log-event("melee-npc-generic-reaction", 1, var_0, 0, 0);
+    u64? var_1 = get-current-melee-attack(arg_1);
+    u16 var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-current-melee-attack(arg_1);
+        u64? var_4 = melee-fact-set-symbol(arg_2, last-landed-melee-move, *(u64*)var_3);
+        var_2 = var_4;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u16 buddy-1h-hr-right-shoulder-from-right-b__melee-attack@2c30(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, ellie-1h-hr-right-shoulder-from-right-b, var_2, var_3, *npc-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 buddy-1h-hr-right-shoulder-from-right-b(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = string-debug(buddy-1h-hr-right-shoulder-from-right-b);
+    log-event("melee-npc-generic-reaction", 1, var_0, 0, 0);
+    u64? var_1 = get-current-melee-attack(arg_1);
+    u16 var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-current-melee-attack(arg_1);
+        u64? var_4 = melee-fact-set-symbol(arg_2, last-landed-melee-move, *(u64*)var_3);
+        var_2 = var_4;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u16 buddy-1h-hr-hip-front-right-from-right-b__melee-attack@2e20(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, ellie-1h-hr-hip-front-right-from-right-b, var_2, var_3, *npc-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 buddy-1h-hr-hip-front-right-from-right-b(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = string-debug(buddy-1h-hr-hip-front-right-from-right-b);
+    log-event("melee-npc-generic-reaction", 1, var_0, 0, 0);
+    u64? var_1 = get-current-melee-attack(arg_1);
+    u16 var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-current-melee-attack(arg_1);
+        u64? var_4 = melee-fact-set-symbol(arg_2, last-landed-melee-move, *(u64*)var_3);
+        var_2 = var_4;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u16 buddy-1h-hr-hip-front-right-from-right-a__melee-attack@3010(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, ellie-1h-hr-hip-front-right-from-right-a, var_2, var_3, *npc-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 buddy-1h-hr-hip-front-right-from-right-a(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = string-debug(buddy-1h-hr-hip-front-right-from-right-a);
+    log-event("melee-npc-generic-reaction", 1, var_0, 0, 0);
+    u64? var_1 = get-current-melee-attack(arg_1);
+    u16 var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-current-melee-attack(arg_1);
+        u64? var_4 = melee-fact-set-symbol(arg_2, last-landed-melee-move, *(u64*)var_3);
+        var_2 = var_4;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u16 buddy-1h-hr-left-horizontal-d__melee-attack@3200(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, ellie-1h-hr-left-horizontal-d, var_2, var_3, *npc-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 buddy-1h-hr-left-horizontal-d(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = string-debug(buddy-1h-hr-left-horizontal-d);
+    log-event("melee-npc-generic-reaction", 1, var_0, 0, 0);
+    u64? var_1 = get-current-melee-attack(arg_1);
+    u16 var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-current-melee-attack(arg_1);
+        u64? var_4 = melee-fact-set-symbol(arg_2, last-landed-melee-move, *(u64*)var_3);
+        var_2 = var_4;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u16 buddy-1h-hr-left-horizontal-a__melee-attack@33f0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, ellie-1h-hr-left-horizontal-a, var_2, var_3, *npc-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 buddy-1h-hr-left-horizontal-a(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = string-debug(buddy-1h-hr-left-horizontal-a);
+    log-event("melee-npc-generic-reaction", 1, var_0, 0, 0);
+    u64? var_1 = get-current-melee-attack(arg_1);
+    u16 var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-current-melee-attack(arg_1);
+        u64? var_4 = melee-fact-set-symbol(arg_2, last-landed-melee-move, *(u64*)var_3);
+        var_2 = var_4;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u16 buddy-1h-hr-left-horizontal-b__melee-attack@35e0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, ellie-1h-hr-left-horizontal-b, var_2, var_3, *npc-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 buddy-1h-hr-left-horizontal-b(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = string-debug(buddy-1h-hr-left-horizontal-b);
+    log-event("melee-npc-generic-reaction", 1, var_0, 0, 0);
+    u64? var_1 = get-current-melee-attack(arg_1);
+    u16 var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-current-melee-attack(arg_1);
+        u64? var_4 = melee-fact-set-symbol(arg_2, last-landed-melee-move, *(u64*)var_3);
+        var_2 = var_4;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u16 buddy-1h-hr-left-horizontal-c__melee-attack@37d0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, ellie-1h-hr-left-horizontal-c, var_2, var_3, *npc-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 buddy-1h-hr-left-horizontal-c(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = string-debug(buddy-1h-hr-left-horizontal-c);
+    log-event("melee-npc-generic-reaction", 1, var_0, 0, 0);
+    u64? var_1 = get-current-melee-attack(arg_1);
+    u16 var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-current-melee-attack(arg_1);
+        u64? var_4 = melee-fact-set-symbol(arg_2, last-landed-melee-move, *(u64*)var_3);
+        var_2 = var_4;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u16 buddy-1h-hr-hip-front-right-from-left-a__melee-attack@39c0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, ellie-1h-hr-hip-front-right-from-left-a, var_2, var_3, *npc-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 buddy-1h-hr-hip-front-right-from-left-a(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = string-debug(buddy-1h-hr-hip-front-right-from-left-a);
+    log-event("melee-npc-generic-reaction", 1, var_0, 0, 0);
+    u64? var_1 = get-current-melee-attack(arg_1);
+    u16 var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-current-melee-attack(arg_1);
+        u64? var_4 = melee-fact-set-symbol(arg_2, last-landed-melee-move, *(u64*)var_3);
+        var_2 = var_4;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u16 buddy-1h-hr-hip-front-right-from-left-c__melee-attack@3bb0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, ellie-1h-hr-hip-front-right-from-left-c, var_2, var_3, *npc-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 buddy-1h-hr-hip-front-right-from-left-c(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = string-debug(buddy-1h-hr-hip-front-right-from-left-c);
+    log-event("melee-npc-generic-reaction", 1, var_0, 0, 0);
+    u64? var_1 = get-current-melee-attack(arg_1);
+    u16 var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-current-melee-attack(arg_1);
+        u64? var_4 = melee-fact-set-symbol(arg_2, last-landed-melee-move, *(u64*)var_3);
+        var_2 = var_4;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u16 buddy-1h-hr-hip-front-right-from-left-b__melee-attack@3da0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, ellie-1h-hr-hip-front-right-from-left-b, var_2, var_3, *npc-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 buddy-1h-hr-hip-front-right-from-left-b(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = string-debug(buddy-1h-hr-hip-front-right-from-left-b);
+    log-event("melee-npc-generic-reaction", 1, var_0, 0, 0);
+    u64? var_1 = get-current-melee-attack(arg_1);
+    u16 var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-current-melee-attack(arg_1);
+        u64? var_4 = melee-fact-set-symbol(arg_2, last-landed-melee-move, *(u64*)var_3);
+        var_2 = var_4;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u16 buddy-1h-hr-head-front-b__melee-attack@3f90(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, ellie-1h-hr-head-front-b, var_2, var_3, *npc-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 buddy-1h-hr-head-front-b(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = string-debug(buddy-1h-hr-head-front-b);
+    log-event("melee-npc-generic-reaction", 1, var_0, 0, 0);
+    u64? var_1 = get-current-melee-attack(arg_1);
+    u16 var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-current-melee-attack(arg_1);
+        u64? var_4 = melee-fact-set-symbol(arg_2, last-landed-melee-move, *(u64*)var_3);
+        var_2 = var_4;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u16 buddy-1h-hr-head-front-c__melee-attack@4180(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, ellie-1h-hr-head-front-c, var_2, var_3, *npc-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 buddy-1h-hr-head-front-c(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = string-debug(buddy-1h-hr-head-front-c);
+    log-event("melee-npc-generic-reaction", 1, var_0, 0, 0);
+    u64? var_1 = get-current-melee-attack(arg_1);
+    u16 var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-current-melee-attack(arg_1);
+        u64? var_4 = melee-fact-set-symbol(arg_2, last-landed-melee-move, *(u64*)var_3);
+        var_2 = var_4;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u16 buddy-1h-hr-head-front-a__melee-attack@4370(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, ellie-1h-hr-head-front-a, var_2, var_3, *npc-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 buddy-1h-hr-head-front-a(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = string-debug(buddy-1h-hr-head-front-a);
+    log-event("melee-npc-generic-reaction", 1, var_0, 0, 0);
+    u64? var_1 = get-current-melee-attack(arg_1);
+    u16 var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-current-melee-attack(arg_1);
+        u64? var_4 = melee-fact-set-symbol(arg_2, last-landed-melee-move, *(u64*)var_3);
+        var_2 = var_4;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u16 buddy-1h-hr-head-front-d__melee-attack@4560(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, ellie-1h-hr-head-front-d, var_2, var_3, *npc-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 buddy-1h-hr-head-front-d(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = string-debug(buddy-1h-hr-head-front-d);
+    log-event("melee-npc-generic-reaction", 1, var_0, 0, 0);
+    u64? var_1 = get-current-melee-attack(arg_1);
+    u16 var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-current-melee-attack(arg_1);
+        u64? var_4 = melee-fact-set-symbol(arg_2, last-landed-melee-move, *(u64*)var_3);
+        var_2 = var_4;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u16 buddy-1h-hr-hip-back-right-from-right-a__melee-attack@4750(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, ellie-1h-hr-hip-back-right-from-right-a, var_2, var_3, *npc-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 buddy-1h-hr-hip-back-right-from-right-a(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = string-debug(buddy-1h-hr-hip-back-right-from-right-a);
+    log-event("melee-npc-generic-reaction", 1, var_0, 0, 0);
+    u64? var_1 = get-current-melee-attack(arg_1);
+    u16 var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-current-melee-attack(arg_1);
+        u64? var_4 = melee-fact-set-symbol(arg_2, last-landed-melee-move, *(u64*)var_3);
+        var_2 = var_4;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u16 buddy-1h-hr-hip-front-left-from-left-a__melee-attack@4940(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, ellie-1h-hr-hip-front-left-from-left-a, var_2, var_3, *npc-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 buddy-1h-hr-hip-front-left-from-left-a(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = string-debug(buddy-1h-hr-hip-front-left-from-left-a);
+    log-event("melee-npc-generic-reaction", 1, var_0, 0, 0);
+    u64? var_1 = get-current-melee-attack(arg_1);
+    u16 var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-current-melee-attack(arg_1);
+        u64? var_4 = melee-fact-set-symbol(arg_2, last-landed-melee-move, *(u64*)var_3);
+        var_2 = var_4;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u16 buddy-1h-hr-back-left-shoulder-from-left-a__melee-attack@4b30(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, ellie-1h-hr-back-left-shoulder-from-left-a, var_2, var_3, *npc-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 buddy-1h-hr-back-left-shoulder-from-left-a(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = string-debug(buddy-1h-hr-back-left-shoulder-from-left-a);
+    log-event("melee-npc-generic-reaction", 1, var_0, 0, 0);
+    u64? var_1 = get-current-melee-attack(arg_1);
+    u16 var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-current-melee-attack(arg_1);
+        u64? var_4 = melee-fact-set-symbol(arg_2, last-landed-melee-move, *(u64*)var_3);
+        var_2 = var_4;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u16 buddy-1h-hr-chest-back-upward-a__melee-attack@4d20(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, ellie-1h-hr-chest-back-upward-a, var_2, var_3, *npc-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 buddy-1h-hr-chest-back-upward-a(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = string-debug(buddy-1h-hr-chest-back-upward-a);
+    log-event("melee-npc-generic-reaction", 1, var_0, 0, 0);
+    u64? var_1 = get-current-melee-attack(arg_1);
+    u16 var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-current-melee-attack(arg_1);
+        u64? var_4 = melee-fact-set-symbol(arg_2, last-landed-melee-move, *(u64*)var_3);
+        var_2 = var_4;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u16 buddy-1h-hr-left-downward-a__melee-attack@4f10(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, ellie-1h-hr-left-downward-a, var_2, var_3, *npc-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 buddy-1h-hr-left-downward-a(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = string-debug(buddy-1h-hr-left-downward-a);
+    log-event("melee-npc-generic-reaction", 1, var_0, 0, 0);
+    u64? var_1 = get-current-melee-attack(arg_1);
+    u16 var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-current-melee-attack(arg_1);
+        u64? var_4 = melee-fact-set-symbol(arg_2, last-landed-melee-move, *(u64*)var_3);
+        var_2 = var_4;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u16 buddy-1h-hr-back-center-a__melee-attack@5100(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, ellie-1h-hr-back-center-a, var_2, var_3, *npc-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 buddy-1h-hr-back-center-a(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = string-debug(buddy-1h-hr-back-center-a);
+    log-event("melee-npc-generic-reaction", 1, var_0, 0, 0);
+    u64? var_1 = get-current-melee-attack(arg_1);
+    u16 var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-current-melee-attack(arg_1);
+        u64? var_4 = melee-fact-set-symbol(arg_2, last-landed-melee-move, *(u64*)var_3);
+        var_2 = var_4;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u16 buddy-1h-hr-back-center-b__melee-attack@52f0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, ellie-1h-hr-back-center-b, var_2, var_3, *npc-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 buddy-1h-hr-back-center-b(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = string-debug(buddy-1h-hr-back-center-b);
+    log-event("melee-npc-generic-reaction", 1, var_0, 0, 0);
+    u64? var_1 = get-current-melee-attack(arg_1);
+    u16 var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-current-melee-attack(arg_1);
+        u64? var_4 = melee-fact-set-symbol(arg_2, last-landed-melee-move, *(u64*)var_3);
+        var_2 = var_4;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u16 buddy-1h-hr-right-upward-a__melee-attack@54e0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, ellie-1h-hr-right-upward-a, var_2, var_3, *npc-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 buddy-1h-hr-right-upward-a(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = string-debug(buddy-1h-hr-right-upward-a);
+    log-event("melee-npc-generic-reaction", 1, var_0, 0, 0);
+    u64? var_1 = get-current-melee-attack(arg_1);
+    u16 var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-current-melee-attack(arg_1);
+        u64? var_4 = melee-fact-set-symbol(arg_2, last-landed-melee-move, *(u64*)var_3);
+        var_2 = var_4;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u16 buddy-1h-hr-hip-front-left-from-right-b__melee-attack@56d0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, ellie-1h-hr-hip-front-left-from-right-b, var_2, var_3, *npc-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 buddy-1h-hr-hip-front-left-from-right-b(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = string-debug(buddy-1h-hr-hip-front-left-from-right-b);
+    log-event("melee-npc-generic-reaction", 1, var_0, 0, 0);
+    u64? var_1 = get-current-melee-attack(arg_1);
+    u16 var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-current-melee-attack(arg_1);
+        u64? var_4 = melee-fact-set-symbol(arg_2, last-landed-melee-move, *(u64*)var_3);
+        var_2 = var_4;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u16 buddy-1h-hr-hip-front-left-from-right-a__melee-attack@58c0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, ellie-1h-hr-hip-front-left-from-right-a, var_2, var_3, *npc-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 buddy-1h-hr-hip-front-left-from-right-a(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = string-debug(buddy-1h-hr-hip-front-left-from-right-a);
+    log-event("melee-npc-generic-reaction", 1, var_0, 0, 0);
+    u64? var_1 = get-current-melee-attack(arg_1);
+    u16 var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-current-melee-attack(arg_1);
+        u64? var_4 = melee-fact-set-symbol(arg_2, last-landed-melee-move, *(u64*)var_3);
+        var_2 = var_4;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u16 buddy-1h-hr-back-right-shoulder-from-right-a__melee-attack@5ab0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, ellie-1h-hr-back-right-shoulder-from-right-a, var_2, var_3, *npc-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 buddy-1h-hr-back-right-shoulder-from-right-a(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = string-debug(buddy-1h-hr-back-right-shoulder-from-right-a);
+    log-event("melee-npc-generic-reaction", 1, var_0, 0, 0);
+    u64? var_1 = get-current-melee-attack(arg_1);
+    u16 var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-current-melee-attack(arg_1);
+        u64? var_4 = melee-fact-set-symbol(arg_2, last-landed-melee-move, *(u64*)var_3);
+        var_2 = var_4;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u16 buddy-1h-hr-back-right-shoulder-from-right-b__melee-attack@5ca0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, ellie-1h-hr-back-right-shoulder-from-right-b, var_2, var_3, *npc-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 buddy-1h-hr-back-right-shoulder-from-right-b(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = string-debug(buddy-1h-hr-back-right-shoulder-from-right-b);
+    log-event("melee-npc-generic-reaction", 1, var_0, 0, 0);
+    u64? var_1 = get-current-melee-attack(arg_1);
+    u16 var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-current-melee-attack(arg_1);
+        u64? var_4 = melee-fact-set-symbol(arg_2, last-landed-melee-move, *(u64*)var_3);
+        var_2 = var_4;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u16 buddy-1h-hr-hip-back-left-from-left-a__melee-attack@5e90(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, ellie-1h-hr-hip-back-left-from-left-a, var_2, var_3, *npc-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 buddy-1h-hr-hip-back-left-from-left-a(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = string-debug(buddy-1h-hr-hip-back-left-from-left-a);
+    log-event("melee-npc-generic-reaction", 1, var_0, 0, 0);
+    u64? var_1 = get-current-melee-attack(arg_1);
+    u16 var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-current-melee-attack(arg_1);
+        u64? var_4 = melee-fact-set-symbol(arg_2, last-landed-melee-move, *(u64*)var_3);
+        var_2 = var_4;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u16 buddy-1h-hr-hip-back-left-from-left-b__melee-attack@6080(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, ellie-1h-hr-hip-back-left-from-left-b, var_2, var_3, *npc-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 buddy-1h-hr-hip-back-left-from-left-b(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = string-debug(buddy-1h-hr-hip-back-left-from-left-b);
+    log-event("melee-npc-generic-reaction", 1, var_0, 0, 0);
+    u64? var_1 = get-current-melee-attack(arg_1);
+    u16 var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-current-melee-attack(arg_1);
+        u64? var_4 = melee-fact-set-symbol(arg_2, last-landed-melee-move, *(u64*)var_3);
+        var_2 = var_4;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u16 buddy-1h-hr-rt-ft-chest-front-horizontal-a__melee-attack@6270(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, ellie-1h-hr-rt-ft-chest-front-horizontal-a, var_2, var_3, *npc-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 buddy-1h-hr-rt-ft-chest-front-horizontal-a(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = string-debug(buddy-1h-hr-rt-ft-chest-front-horizontal-a);
+    log-event("melee-npc-generic-reaction", 1, var_0, 0, 0);
+    u64? var_1 = get-current-melee-attack(arg_1);
+    u16 var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-current-melee-attack(arg_1);
+        u64? var_4 = melee-fact-set-symbol(arg_2, last-landed-melee-move, *(u64*)var_3);
+        var_2 = var_4;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u16 buddy-1h-hr-right-shoulder-from-left-a__melee-attack@6460(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, ellie-1h-hr-right-shoulder-from-left-a, var_2, var_3, *npc-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 buddy-1h-hr-right-shoulder-from-left-a(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = string-debug(buddy-1h-hr-right-shoulder-from-left-a);
+    log-event("melee-npc-generic-reaction", 1, var_0, 0, 0);
+    u64? var_1 = get-current-melee-attack(arg_1);
+    u16 var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-current-melee-attack(arg_1);
+        u64? var_4 = melee-fact-set-symbol(arg_2, last-landed-melee-move, *(u64*)var_3);
+        var_2 = var_4;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u16 buddy-1h-hr-right-shoulder-from-left-b__melee-attack@6650(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, ellie-1h-hr-right-shoulder-from-left-b, var_2, var_3, *npc-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 buddy-1h-hr-right-shoulder-from-left-b(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = string-debug(buddy-1h-hr-right-shoulder-from-left-b);
+    log-event("melee-npc-generic-reaction", 1, var_0, 0, 0);
+    u64? var_1 = get-current-melee-attack(arg_1);
+    u16 var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-current-melee-attack(arg_1);
+        u64? var_4 = melee-fact-set-symbol(arg_2, last-landed-melee-move, *(u64*)var_3);
+        var_2 = var_4;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u16 buddy-1h-hr-chest-front-upward-a__melee-attack@6840(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, ellie-1h-hr-chest-front-upward-a, var_2, var_3, *npc-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 buddy-1h-hr-chest-front-upward-a(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = string-debug(buddy-1h-hr-chest-front-upward-a);
+    log-event("melee-npc-generic-reaction", 1, var_0, 0, 0);
+    u64? var_1 = get-current-melee-attack(arg_1);
+    u16 var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-current-melee-attack(arg_1);
+        u64? var_4 = melee-fact-set-symbol(arg_2, last-landed-melee-move, *(u64*)var_3);
+        var_2 = var_4;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u16 buddy-1h-hr-hip-back-left-from-right-a__melee-attack@6a30(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, ellie-1h-hr-hip-back-left-from-right-a, var_2, var_3, *npc-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 buddy-1h-hr-hip-back-left-from-right-a(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = string-debug(buddy-1h-hr-hip-back-left-from-right-a);
+    log-event("melee-npc-generic-reaction", 1, var_0, 0, 0);
+    u64? var_1 = get-current-melee-attack(arg_1);
+    u16 var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-current-melee-attack(arg_1);
+        u64? var_4 = melee-fact-set-symbol(arg_2, last-landed-melee-move, *(u64*)var_3);
+        var_2 = var_4;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u16 buddy-1h-hr-hip-back-left-from-right-c__melee-attack@6c20(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, ellie-1h-hr-hip-back-left-from-right-c, var_2, var_3, *npc-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 buddy-1h-hr-hip-back-left-from-right-c(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = string-debug(buddy-1h-hr-hip-back-left-from-right-c);
+    log-event("melee-npc-generic-reaction", 1, var_0, 0, 0);
+    u64? var_1 = get-current-melee-attack(arg_1);
+    u16 var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-current-melee-attack(arg_1);
+        u64? var_4 = melee-fact-set-symbol(arg_2, last-landed-melee-move, *(u64*)var_3);
+        var_2 = var_4;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u16 buddy-1h-hr-hip-back-left-from-right-b__melee-attack@6e10(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, ellie-1h-hr-hip-back-left-from-right-b, var_2, var_3, *npc-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 buddy-1h-hr-hip-back-left-from-right-b(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = string-debug(buddy-1h-hr-hip-back-left-from-right-b);
+    log-event("melee-npc-generic-reaction", 1, var_0, 0, 0);
+    u64? var_1 = get-current-melee-attack(arg_1);
+    u16 var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-current-melee-attack(arg_1);
+        u64? var_4 = melee-fact-set-symbol(arg_2, last-landed-melee-move, *(u64*)var_3);
+        var_2 = var_4;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u16 buddy-1h-hr-hip-back-left-from-right-d__melee-attack@7000(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, ellie-1h-hr-hip-back-left-from-right-d, var_2, var_3, *npc-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 buddy-1h-hr-hip-back-left-from-right-d(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = string-debug(buddy-1h-hr-hip-back-left-from-right-d);
+    log-event("melee-npc-generic-reaction", 1, var_0, 0, 0);
+    u64? var_1 = get-current-melee-attack(arg_1);
+    u16 var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-current-melee-attack(arg_1);
+        u64? var_4 = melee-fact-set-symbol(arg_2, last-landed-melee-move, *(u64*)var_3);
+        var_2 = var_4;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+

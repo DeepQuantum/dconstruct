@@ -2332,3 +2332,1160 @@ u64? meatshield-switchblade-human-stealth-neck-n-chest-upgraded-finisher(u64? ar
     return var_1;
 }
 
+u64? meatshield-switchblade-infected-stealth-head-stab-upgraded-finisher__melee-attack@2a0__start-func-array@3ea8__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = npc-alive?(arg_2);
+        var_1 = var_2;
+    } else {
+        var_1 = 1;
+    }
+    u64? var_3 = get-object-locator(arg_1);
+    u64? var_4 = get-ap-ref-from-align(arg_1, ellie-knife-stealth-kill-inf-upgrade-head-stab-3s--ellie, var_3, 0.00, apReference, 0);
+    u64? var_5 = get-ap-ref-from-align(arg_2, ellie-knife-stealth-kill-inf-upgrade-head-stab-3s--inf-f, var_4, 0.00, apReference, 0);
+    u64? var_6 = reverse-locator(var_5);
+    u64? var_7 = set-cache-bound-frame(arg_13, var_6, 0);
+    u64? var_8 = melee-character-bit-check(arg_1, 4);
+    u64? var_9 = melee-character-bit-check(arg_2, 4294967296);
+    bool var_10 = var_1 && var_7 && var_8 && var_9;
+    return var_10;
+}
+
+u64? meatshield-switchblade-infected-stealth-head-stab-upgraded-finisher__melee-attack@2a0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = player-upgrade-active?(stealth-kill-speed-increase);
+    return var_0;
+}
+
+u16 meatshield-switchblade-infected-stealth-head-stab-upgraded-finisher(i64 arg_0, i64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    npc-die(arg_2, 0, 1, 1, 1);
+    u16 var_0;
+    if (arg_0 == arg_1) {
+        u64? var_1 = is-player?(arg_0);
+        if (var_1 != nullptr) {
+            u64? var_2 = send-event(show-pistol-scope, arg_0);
+            var_0 = var_2;
+        } else {
+            var_0 = 0;
+        }
+    } else {
+        var_0 = 0;
+    }
+    return var_0;
+}
+
+u64? meatshield-switchblade-infected-stealth-head-stab-upgraded-finisher__melee-event-list@5158(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    f32 var_0;
+    if ((0.00 == 0.00) == nullptr) {
+        var_0 = 0.00;
+    } else {
+        var_0 = 0.00;
+    }
+    u64? var_1 = play-melee-facial-gesture(arg_2, 3, var_0, 0.20);
+    return var_1;
+}
+
+u64? meatshield-switchblade-inf-stealth-abort-late__melee-attack@490__start-func-array@61e8__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = npc-alive?(arg_2);
+        var_1 = var_2;
+    } else {
+        var_1 = 1;
+    }
+    u64? var_3 = get-object-locator(arg_1);
+    u64? var_4 = get-ap-ref-from-align(arg_1, ellie-knife-stealth-kill-inf-neck-gouge-early-2--ellie, var_3, 0.00, apReference, 0);
+    u64? var_5 = get-ap-ref-from-align(arg_2, ellie-knife-stealth-kill-inf-neck-gouge-early-2--inf-f, var_4, 0.00, apReference, 0);
+    u64? var_6 = reverse-locator(var_5);
+    u64? var_7 = set-cache-bound-frame(arg_13, var_6, 0);
+    u64? var_8 = melee-character-bit-check(arg_1, 4);
+    u64? var_9 = melee-character-bit-check(arg_2, 4294967296);
+    bool var_10 = var_1 && var_7 && var_8 && var_9;
+    return var_10;
+}
+
+u64? meatshield-switchblade-inf-stealth-abort-late__melee-event-list@52b0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    f32 var_0;
+    if ((0.00 == 0.00) == nullptr) {
+        var_0 = 0.00;
+    } else {
+        var_0 = 0.00;
+    }
+    u64? var_1 = play-melee-facial-gesture(arg_2, 28, var_0, 0.10);
+    return var_1;
+}
+
+u64? meatshield-switchblade-inf-stealth-abort-late(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    f32 var_0;
+    if ((0.00 == 0.00) == nullptr) {
+        var_0 = 0.00;
+    } else {
+        var_0 = 0.00;
+    }
+    u64? var_1 = play-melee-facial-gesture(arg_1, 25, var_0, 0.10);
+    return var_1;
+}
+
+u64? meatshield-switchblade-infected-stealth-neck-gouge-finisher__melee-attack@680__start-func-array@6050__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = npc-alive?(arg_2);
+        var_1 = var_2;
+    } else {
+        var_1 = 1;
+    }
+    u64? var_3 = get-object-locator(arg_1);
+    u64? var_4 = get-ap-ref-from-align(arg_1, ellie-knife-stealth-kill-inf-neck-gouge--ellie, var_3, 0.00, apReference, 0);
+    u64? var_5 = get-ap-ref-from-align(arg_2, ellie-knife-stealth-kill-inf-neck-gouge--inf-f, var_4, 0.00, apReference, 0);
+    u64? var_6 = reverse-locator(var_5);
+    u64? var_7 = set-cache-bound-frame(arg_13, var_6, 0);
+    u64? var_8 = melee-character-bit-check(arg_1, 4);
+    u64? var_9 = melee-character-bit-check(arg_2, 4294967296);
+    bool var_10 = var_1 && var_7 && var_8 && var_9;
+    return var_10;
+}
+
+u64? meatshield-switchblade-infected-stealth-neck-gouge-finisher__melee-attack@680(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = player-upgrade-active?(stealth-kill-speed-increase);
+    u64? var_1 = !(var_0);
+    return var_1;
+}
+
+u64? meatshield-switchblade-infected-stealth-neck-gouge-finisher(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    f32 var_0;
+    if ((0.00 == 0.00) == nullptr) {
+        var_0 = 0.00;
+    } else {
+        var_0 = 0.00;
+    }
+    u64? var_1 = play-melee-facial-gesture(arg_1, 3, var_0, 0.10);
+    return var_1;
+}
+
+u64? meatshield-switchblade-inf-stealth-abort-early__melee-attack@870__start-func-array@3c10__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = npc-alive?(arg_2);
+        var_1 = var_2;
+    } else {
+        var_1 = 1;
+    }
+    u64? var_3 = get-object-locator(arg_1);
+    u64? var_4 = get-ap-ref-from-align(arg_1, ellie-knife-stealth-kill-inf-neck-gouge-early-1--ellie, var_3, 0.00, apReference, 0);
+    u64? var_5 = get-ap-ref-from-align(arg_2, ellie-knife-stealth-kill-inf-neck-gouge-early-1--inf-f, var_4, 0.00, apReference, 0);
+    u64? var_6 = reverse-locator(var_5);
+    u64? var_7 = set-cache-bound-frame(arg_13, var_6, 0);
+    u64? var_8 = melee-character-bit-check(arg_1, 4);
+    u64? var_9 = melee-character-bit-check(arg_2, 4294967296);
+    bool var_10 = var_1 && var_7 && var_8 && var_9;
+    return var_10;
+}
+
+u16 meatshield-switchblade-inf-stealth-abort-early(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = is-player?(arg_1);
+    u64? var_1 = character-is-dead?(arg_2);
+    u16 var_2;
+    if (var_0 != nullptr || 0 == nullptr && var_1 != nullptr) {
+        if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1) != nullptr) {
+            u64? var_3 = is-final-build?();
+            if (var_3 == nullptr) {
+                u64? var_4 = #5445173390656D6D("Melee deadened for %f seconds", 1.28);
+                display(var_4, 19);
+            }
+        }
+        disable-untargeted-melee-attack-timed(1.28);
+        invalidate-single-melee-command-queue(arg_1, melee-attack);
+        u64? var_5 = frames-to-sec(10);
+        u64? var_6 = joypad-disable-commands-timed(var_5, melee-attack);
+        var_2 = var_6;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u64? ellie-meatshield-escape-human__melee-attack@a60__start-func-array@5f08__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = get-object-position(arg_2);
+    u64? var_1 = is-point-on-nav-mesh?(var_0, 0.00, 0.50, arg_2);
+    return var_1;
+}
+
+u64? ellie-meatshield-escape-human__melee-attack@a60(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = is-player-ellie?(arg_1);
+    u64? var_1 = npc-is-infected?(arg_2);
+    u64? var_2 = !(var_1);
+    bool var_3 = var_0 && var_2;
+    return var_3;
+}
+
+u16 ellie-meatshield-escape-human__melee-event-list@56f8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = is-player?(arg_1);
+    u64? var_1 = is-player?(arg_2);
+    u16 var_2;
+    if (var_0 != nullptr && var_1 != nullptr) {
+        start-rumble(melee-standing-finisher-stiff-rumble-settings, 0);
+        u64? var_3 = get-object-locator(arg_2);
+        u64? var_4 = camera-shake-melee(var_3, 0.40, 1.00, 1);
+        var_2 = var_4;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u16 ellie-meatshield-escape-human(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = is-player?(arg_1);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-player-weapon-process-id();
+        u64? var_3 = get-object-position(var_2);
+        u64? var_4 = audio-gameplay-event(melee-hit, var_3, arg_1);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u64? ellie-meatshield-escape-inf__melee-attack@c50(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = is-player-ellie?(arg_1);
+    u64? var_1 = npc-is-infected?(arg_2);
+    bool var_2 = var_0 && var_1;
+    return var_2;
+}
+
+u16 ellie-meatshield-escape-inf(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = !(1);
+    u64? var_1 = is-player?(arg_1);
+    u64? var_2 = is-player?(arg_2);
+    u16 var_3;
+    if (var_0 != nullptr && 1 != nullptr || var_1 != nullptr && var_2 != nullptr) {
+        u64? var_4 = frames-to-sec(6);
+        u64? var_5 = wait-rumble-curve(0.30, 0.40, var_4, 1, 0);
+        var_3 = var_5;
+    } else {
+        var_3 = 0;
+    }
+    return var_3;
+}
+
+u64? meatshield-switchblade-stealth-abort-early__melee-attack@e40__start-func-array@5e30__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = npc-alive?(arg_2);
+        var_1 = var_2;
+    } else {
+        var_1 = 1;
+    }
+    u64? var_3 = get-object-locator(arg_1);
+    u64? var_4 = get-ap-ref-from-align(arg_1, ellie-meatshield-knife-stealth-kill-neck-jab-early-1--ellie, var_3, 0.00, apReference, 0);
+    u64? var_5 = get-ap-ref-from-align(arg_2, ellie-meatshield-knife-stealth-kill-neck-jab-early-1--npc-f, var_4, 0.00, apReference, 0);
+    u64? var_6 = reverse-locator(var_5);
+    u64? var_7 = set-cache-bound-frame(arg_13, var_6, 0);
+    u64? var_8 = melee-character-bit-check(arg_1, 4);
+    u64? var_9 = melee-character-bit-check(arg_2, 4194304);
+    bool var_10 = var_1 && var_7 && var_8 && var_9;
+    return var_10;
+}
+
+u16 meatshield-switchblade-stealth-abort-early(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = is-player?(arg_1);
+    u64? var_1 = character-is-dead?(arg_2);
+    u16 var_2;
+    if (var_0 != nullptr || 0 == nullptr && var_1 != nullptr) {
+        if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1) != nullptr) {
+            u64? var_3 = is-final-build?();
+            if (var_3 == nullptr) {
+                u64? var_4 = #5445173390656D6D("Melee deadened for %f seconds", 1.31);
+                display(var_4, 19);
+            }
+        }
+        disable-untargeted-melee-attack-timed(1.31);
+        invalidate-single-melee-command-queue(arg_1, melee-attack);
+        u64? var_5 = frames-to-sec(10);
+        u64? var_6 = joypad-disable-commands-timed(var_5, melee-attack);
+        var_2 = var_6;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+f32 ellie-meatshield-infected-grab-left-enter__melee-attack@1030__character-melee-info@4220__(u64? arg_0, u64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    f32 var_0;
+    if (*(u64*)(*(arg_1 + 296) + 136) == ellie-meatshield-infected-grab-left-enter) {
+        var_0 = 0.00;
+    } else {
+        var_0 = 0.30;
+    }
+    return var_0;
+}
+
+f32 ellie-meatshield-infected-grab-left-enter__character-melee-info@3760(u64? arg_0, u64? arg_1, u64? arg_2) {
+    return 0.50;
+}
+
+u64? ellie-meatshield-infected-grab-left-enter__start-func-array@4a18(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = character-is-dead?(arg_1);
+    u64? var_1 = !(var_0);
+    u64? var_2 = get-object-locator(arg_1);
+    u64? var_3 = get-object-locator(arg_2);
+    u64? var_4 = melee-direction-check-locator-90s(var_2, var_3, 4, 90.00);
+    bool var_5 = var_1 && var_4;
+    return var_5;
+}
+
+u64? ellie-meatshield-infected-grab-left-enter(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    u64? var_0 = melee-fact-set-bool(arg_0, in-melee-meatshield-enter, 0);
+    return var_0;
+}
+
+u16 ellie-meatshield-infected-grab-left-enter__melee-event-list@4c08(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = is-player?(arg_1);
+    u64? var_1 = is-rogue-mode?();
+    u16 var_2;
+    if (var_0 != nullptr && var_1 != nullptr) {
+        u64? var_3 = new-boxed-value(7, arg_2);
+        u64? var_4 = send-event(buddy-unmark-npc, player, var_3);
+        var_2 = var_4;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u64? ellie-meatshield-infected-grab-left-enter__melee-event-transitions@1ec18(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    return arg_2;
+}
+
+u64? meatshield-ellie-back-stab-finisher__melee-attack@1220__start-func-array@52c8__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = npc-alive?(arg_2);
+        var_1 = var_2;
+    } else {
+        var_1 = 1;
+    }
+    u64? var_3 = get-object-locator(arg_1);
+    u64? var_4 = get-ap-ref-from-align(arg_1, ellie-meatshield-knife-kill-loud-back-stab--ellie, var_3, 0.00, apReference, 0);
+    u64? var_5 = get-ap-ref-from-align(arg_2, ellie-meatshield-knife-kill-loud-back-stab--npc-f, var_4, 0.00, apReference, 0);
+    u64? var_6 = reverse-locator(var_5);
+    u64? var_7 = set-cache-bound-frame(arg_13, var_6, 0);
+    u64? var_8 = melee-character-bit-check(arg_1, 4);
+    u64? var_9 = melee-character-bit-check(arg_2, 4194304);
+    bool var_10 = var_1 && var_7 && var_8 && var_9;
+    return var_10;
+}
+
+u16 meatshield-ellie-back-stab-finisher(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = is-player?(arg_1);
+    u64? var_1 = character-is-dead?(arg_2);
+    u16 var_2;
+    if (var_0 != nullptr || 0 == nullptr && var_1 != nullptr) {
+        if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1) != nullptr) {
+            u64? var_3 = is-final-build?();
+            if (var_3 == nullptr) {
+                u64? var_4 = #5445173390656D6D("Melee deadened for %f seconds", 0.73);
+                display(var_4, 19);
+            }
+        }
+        disable-untargeted-melee-attack-timed(0.73);
+        invalidate-single-melee-command-queue(arg_1, melee-attack);
+        u64? var_5 = frames-to-sec(10);
+        u64? var_6 = joypad-disable-commands-timed(var_5, melee-attack);
+        var_2 = var_6;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u64? meatshield-switchblade-human-stealth-neck-jab-finisher__melee-attack@1410__start-func-array@4bf0__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = npc-alive?(arg_2);
+        var_1 = var_2;
+    } else {
+        var_1 = 1;
+    }
+    u64? var_3 = get-object-locator(arg_1);
+    u64? var_4 = get-ap-ref-from-align(arg_1, ellie-meatshield-knife-stealth-kill-neck-jab--ellie, var_3, 0.00, apReference, 0);
+    u64? var_5 = get-ap-ref-from-align(arg_2, ellie-meatshield-knife-stealth-kill-neck-jab--npc-f, var_4, 0.00, apReference, 0);
+    u64? var_6 = reverse-locator(var_5);
+    u64? var_7 = set-cache-bound-frame(arg_13, var_6, 0);
+    u64? var_8 = melee-character-bit-check(arg_1, 4);
+    u64? var_9 = melee-character-bit-check(arg_2, 4194304);
+    bool var_10 = var_1 && var_7 && var_8 && var_9;
+    return var_10;
+}
+
+u64? meatshield-switchblade-human-stealth-neck-jab-finisher(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    f32 var_0;
+    if ((0.00 == 0.00) == nullptr) {
+        var_0 = 0.00;
+    } else {
+        var_0 = 0.00;
+    }
+    u64? var_1 = play-melee-facial-gesture(arg_2, 8, var_0, 0.30);
+    return var_1;
+}
+
+u64? meatshield-switchblade-stealth-upgrade-abort-early__melee-attack@1600__start-func-array@3e90__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = npc-alive?(arg_2);
+        var_1 = var_2;
+    } else {
+        var_1 = 1;
+    }
+    u64? var_3 = get-object-locator(arg_1);
+    u64? var_4 = get-ap-ref-from-align(arg_1, ellie-knife-stealth-kill-neck-n-chest-upgrade-early--ellie, var_3, 0.00, apReference, 0);
+    u64? var_5 = get-ap-ref-from-align(arg_2, ellie-knife-stealth-kill-neck-n-chest-upgrade-early--npc-f, var_4, 0.00, apReference, 0);
+    u64? var_6 = reverse-locator(var_5);
+    u64? var_7 = set-cache-bound-frame(arg_13, var_6, 0);
+    u64? var_8 = melee-character-bit-check(arg_1, 4);
+    u64? var_9 = melee-character-bit-check(arg_2, 4194304);
+    bool var_10 = var_1 && var_7 && var_8 && var_9;
+    return var_10;
+}
+
+u16 meatshield-switchblade-stealth-upgrade-abort-early(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = is-player?(arg_1);
+    u64? var_1 = character-is-dead?(arg_2);
+    u16 var_2;
+    if (var_0 != nullptr || 0 == nullptr && var_1 != nullptr) {
+        if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1) != nullptr) {
+            u64? var_3 = is-final-build?();
+            if (var_3 == nullptr) {
+                u64? var_4 = #5445173390656D6D("Melee deadened for %f seconds", 1.29);
+                display(var_4, 19);
+            }
+        }
+        disable-untargeted-melee-attack-timed(1.29);
+        invalidate-single-melee-command-queue(arg_1, melee-attack);
+        u64? var_5 = frames-to-sec(10);
+        u64? var_6 = joypad-disable-commands-timed(var_5, melee-attack);
+        var_2 = var_6;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u64? meatshield-ellie-neck-slit-finisher__melee-attack@17f0__start-func-array@5aa0__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = npc-alive?(arg_2);
+        var_1 = var_2;
+    } else {
+        var_1 = 1;
+    }
+    u64? var_3 = get-object-locator(arg_1);
+    u64? var_4 = get-ap-ref-from-align(arg_1, ellie-meatshield-knife-kill-loud-neck-slit--ellie, var_3, 0.00, apReference, 0);
+    u64? var_5 = get-ap-ref-from-align(arg_2, ellie-meatshield-knife-kill-loud-neck-slit--npc-f, var_4, 0.00, apReference, 0);
+    u64? var_6 = reverse-locator(var_5);
+    u64? var_7 = set-cache-bound-frame(arg_13, var_6, 0);
+    u64? var_8 = melee-character-bit-check(arg_1, 4);
+    u64? var_9 = melee-character-bit-check(arg_2, 4194304);
+    bool var_10 = var_1 && var_7 && var_8 && var_9;
+    return var_10;
+}
+
+u16 meatshield-ellie-neck-slit-finisher(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = is-player?(arg_1);
+    u64? var_1 = character-is-dead?(arg_2);
+    u16 var_2;
+    if (var_0 != nullptr || 0 == nullptr && var_1 != nullptr) {
+        if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1) != nullptr) {
+            u64? var_3 = is-final-build?();
+            if (var_3 == nullptr) {
+                u64? var_4 = #5445173390656D6D("Melee deadened for %f seconds", 0.81);
+                display(var_4, 19);
+            }
+        }
+        disable-untargeted-melee-attack-timed(0.81);
+        invalidate-single-melee-command-queue(arg_1, melee-attack);
+        u64? var_5 = frames-to-sec(10);
+        u64? var_6 = joypad-disable-commands-timed(var_5, melee-attack);
+        var_2 = var_6;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+f32 ellie-meatshield-infected-grab-right-enter__melee-attack@19e0__character-melee-info@5b90__(u64? arg_0, u64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    f32 var_0;
+    if (*(u64*)(*(arg_1 + 296) + 136) == ellie-meatshield-infected-grab-right-enter) {
+        var_0 = 0.00;
+    } else {
+        var_0 = 0.30;
+    }
+    return var_0;
+}
+
+u64? ellie-meatshield-infected-grab-right-enter__start-func-array@44b0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = character-is-dead?(arg_1);
+    u64? var_1 = !(var_0);
+    u64? var_2 = get-object-locator(arg_1);
+    u64? var_3 = get-object-locator(arg_2);
+    u64? var_4 = melee-direction-check-locator-90s(var_2, var_3, 8, 90.00);
+    bool var_5 = var_1 && var_4;
+    return var_5;
+}
+
+f32 ellie-meatshield-infected-grab-front-enter__melee-attack@1bd0__character-melee-info@44e0__(u64? arg_0, u64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    f32 var_0;
+    if (*(u64*)(*(arg_1 + 296) + 136) == ellie-meatshield-infected-grab-front-enter) {
+        var_0 = 0.00;
+    } else {
+        var_0 = 0.30;
+    }
+    return var_0;
+}
+
+u64? ellie-meatshield-infected-grab-front-enter__start-func-array@5388(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = character-is-dead?(arg_1);
+    u64? var_1 = !(var_0);
+    u64? var_2 = get-object-locator(arg_1);
+    u64? var_3 = get-object-locator(arg_2);
+    u64? var_4 = melee-direction-check-locator-90s(var_2, var_3, 1, 90.00);
+    bool var_5 = var_1 && var_4;
+    return var_5;
+}
+
+u64? meatshield-ellie-inf-jab-to-ground-kill__melee-attack@1dc0__start-func-array@3c28__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = npc-alive?(arg_2);
+        var_1 = var_2;
+    } else {
+        var_1 = 1;
+    }
+    u64? var_3 = get-object-locator(arg_1);
+    u64? var_4 = get-ap-ref-from-align(arg_1, ellie-knife-stealth-quick-kill-inf-jab-to-ground--ellie, var_3, 0.00, apReference, 0);
+    u64? var_5 = get-ap-ref-from-align(arg_2, ellie-knife-stealth-quick-kill-inf-jab-to-ground--inf-f, var_4, 0.00, apReference, 0);
+    u64? var_6 = reverse-locator(var_5);
+    u64? var_7 = set-cache-bound-frame(arg_13, var_6, 0);
+    u64? var_8 = melee-character-bit-check(arg_1, 4);
+    u64? var_9 = melee-character-bit-check(arg_2, 4294967296);
+    bool var_10 = var_1 && var_7 && var_8 && var_9;
+    return var_10;
+}
+
+u16 meatshield-ellie-inf-jab-to-ground-kill(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = is-player?(arg_1);
+    u64? var_1 = character-is-dead?(arg_2);
+    u16 var_2;
+    if (var_0 != nullptr || 0 == nullptr && var_1 != nullptr) {
+        if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1) != nullptr) {
+            u64? var_3 = is-final-build?();
+            if (var_3 == nullptr) {
+                u64? var_4 = #5445173390656D6D("Melee deadened for %f seconds", 0.84);
+                display(var_4, 19);
+            }
+        }
+        disable-untargeted-melee-attack-timed(0.84);
+        invalidate-single-melee-command-queue(arg_1, melee-attack);
+        u64? var_5 = frames-to-sec(10);
+        u64? var_6 = joypad-disable-commands-timed(var_5, melee-attack);
+        var_2 = var_6;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u64? meatshield-ellie-pistol-whip-finisher__melee-attack@1fb0__start-func-array@5498__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = npc-alive?(arg_2);
+        var_1 = var_2;
+    } else {
+        var_1 = 1;
+    }
+    u64? var_3 = get-object-locator(arg_1);
+    u64? var_4 = get-ap-ref-from-align(arg_1, ellie-meatshield-pistol-loud-kill-whip--ellie, var_3, 0.00, apReference, 0);
+    u64? var_5 = get-ap-ref-from-align(arg_2, ellie-meatshield-pistol-loud-kill-whip--npc-f, var_4, 0.00, apReference, 0);
+    u64? var_6 = reverse-locator(var_5);
+    u64? var_7 = set-cache-bound-frame(arg_13, var_6, 0);
+    u64? var_8 = melee-character-bit-check(arg_1, 6);
+    u64? var_9 = melee-character-bit-check(arg_2, 4194304);
+    bool var_10 = var_1 && var_7 && var_8 && var_9;
+    return var_10;
+}
+
+u16 meatshield-ellie-pistol-whip-finisher(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = is-player?(arg_1);
+    u64? var_1 = character-is-dead?(arg_2);
+    u16 var_2;
+    if (var_0 != nullptr || 0 == nullptr && var_1 != nullptr) {
+        if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1) != nullptr) {
+            u64? var_3 = is-final-build?();
+            if (var_3 == nullptr) {
+                u64? var_4 = #5445173390656D6D("Melee deadened for %f seconds", 0.87);
+                display(var_4, 19);
+            }
+        }
+        disable-untargeted-melee-attack-timed(0.87);
+        invalidate-single-melee-command-queue(arg_1, melee-attack);
+        u64? var_5 = frames-to-sec(10);
+        u64? var_6 = joypad-disable-commands-timed(var_5, melee-attack);
+        var_2 = var_6;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u64? meatshield-switchblade-inf-stealth-upgrade-abort-early__melee-attack@21a0__start-func-array@5e48__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = npc-alive?(arg_2);
+        var_1 = var_2;
+    } else {
+        var_1 = 1;
+    }
+    u64? var_3 = get-object-locator(arg_1);
+    u64? var_4 = get-ap-ref-from-align(arg_1, ellie-knife-stealth-kill-inf-upgrade-head-stab-early--ellie, var_3, 0.00, apReference, 0);
+    u64? var_5 = get-ap-ref-from-align(arg_2, ellie-knife-stealth-kill-inf-upgrade-head-stab-early--inf-f, var_4, 0.00, apReference, 0);
+    u64? var_6 = reverse-locator(var_5);
+    u64? var_7 = set-cache-bound-frame(arg_13, var_6, 0);
+    u64? var_8 = melee-character-bit-check(arg_1, 4);
+    u64? var_9 = melee-character-bit-check(arg_2, 4294967296);
+    bool var_10 = var_1 && var_7 && var_8 && var_9;
+    return var_10;
+}
+
+u16 meatshield-switchblade-inf-stealth-upgrade-abort-early(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = is-player?(arg_1);
+    u64? var_1 = character-is-dead?(arg_2);
+    u16 var_2;
+    if (var_0 != nullptr || 0 == nullptr && var_1 != nullptr) {
+        if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1) != nullptr) {
+            u64? var_3 = is-final-build?();
+            if (var_3 == nullptr) {
+                u64? var_4 = #5445173390656D6D("Melee deadened for %f seconds", 1.21);
+                display(var_4, 19);
+            }
+        }
+        disable-untargeted-melee-attack-timed(1.21);
+        invalidate-single-melee-command-queue(arg_1, melee-attack);
+        u64? var_5 = frames-to-sec(10);
+        u64? var_6 = joypad-disable-commands-timed(var_5, melee-attack);
+        var_2 = var_6;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u16 ellie-meatshield-infected-grab-back-intro__melee-attack@2390(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u16 var_0;
+    if ((ellie-meatshield-infected-grab-back-enter == 0) == nullptr) {
+        u64? var_1 = lookup-symbol(ellie-meatshield-infected-grab-back-enter, melee-attack);
+        u64 var_2 = *(u64*)(*(var_1 + 112) + 32);
+        u64? var_3 = calculate-pose-error-simple(arg_2, var_2, 0.00, 0, 0);
+        f32 var_4 = 100.00 * (1.00 / var_3);
+        u64? var_5 = round-float(var_4);
+        if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1) != nullptr) {
+            u64? var_6 = is-final-build?();
+            if (var_6 == nullptr) {
+                u64? var_7 = string-debug(ellie-meatshield-infected-grab-back-intro);
+                u64? var_8 = lookup-symbol(ellie-meatshield-infected-grab-back-enter, melee-attack);
+                u64 var_9 = *(u64*)(*(var_8 + 112) + 32);
+                u64? var_10 = string-debug(var_9);
+                u64? var_11 = #5445173390656D6D("%s - projected sync: %s - sync pose rating: %f - relative priority func rating: %i", var_7, var_10, var_3, (i32)var_5);
+                display(var_11, 19);
+            }
+        }
+        u64? var_12 = in-knee-stun?(arg_2);
+        i32 var_13;
+        if (0 != nullptr && var_12 != nullptr) {
+            var_13 = 1000000;
+        } else {
+            var_13 = (i32)var_5;
+        }
+        var_0 = var_13;
+    } else {
+        var_0 = 1;
+    }
+    return var_0;
+}
+
+f32 ellie-meatshield-infected-grab-back-intro__character-melee-info@5f50(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    u64? var_0 = character-is-crouched?(arg_2);
+    f32 var_1;
+    if (var_0 != nullptr) {
+        var_1 = 0.50;
+    } else {
+        var_1 = 0.20;
+    }
+    return var_1;
+}
+
+u64? ellie-meatshield-infected-grab-back-intro__start-func-array@35a8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = character-is-dead?(arg_1);
+    u64? var_1 = !(var_0);
+    u64? var_2 = player-in-meatshield-sequence?(1);
+    u64? var_3 = !(var_2);
+    u64? var_4 = npc-in-meatshield?(arg_2);
+    u64? var_5 = !(var_4);
+    u64? var_6 = npc-is-on-fire?(arg_2);
+    u64? var_7 = !(var_6);
+    u64? var_8 = is-player?(arg_1);
+    u64? var_9 = player-on-ground?();
+    bool var_10 = var_1 && var_3 && var_5 && var_7 && var_8 && var_9;
+    return var_10;
+}
+
+u64? ellie-meatshield-infected-grab-back-intro__melee-event-list@63f8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = tension-mode-is?(3);
+    u64? var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = log-event("melee-player-meatshield", 1, "combat", 0, 0);
+        var_1 = var_2;
+    } else {
+        u64? var_3 = log-event("melee-player-meatshield", 1, "non-combat", 0, 0);
+        var_1 = var_3;
+    }
+    return var_1;
+}
+
+u64? ellie-meatshield-infected-grab-back-intro(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = joypad-disable-commands(quick-turn);
+    return var_0;
+}
+
+f32 ellie-meatshield-infected-grab-back-enter__melee-attack@2580__character-melee-info@5ce0__(u64? arg_0, u64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    f32 var_0;
+    if (*(u64*)(*(arg_1 + 296) + 136) == ellie-meatshield-infected-grab-back-enter) {
+        var_0 = 0.00;
+    } else {
+        var_0 = 0.30;
+    }
+    return var_0;
+}
+
+u64? ellie-meatshield-infected-grab-back-enter__start-func-array@3990(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = character-is-dead?(arg_1);
+    u64? var_1 = !(var_0);
+    u64? var_2 = get-object-locator(arg_1);
+    u64? var_3 = get-object-locator(arg_2);
+    u64? var_4 = melee-direction-check-locator-90s(var_2, var_3, 2, 90.00);
+    bool var_5 = var_1 && var_4;
+    return var_5;
+}
+
+u64? meatshield-switchblade-stealth-abort-late__melee-attack@2770__start-func-array@4a00__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = npc-alive?(arg_2);
+        var_1 = var_2;
+    } else {
+        var_1 = 1;
+    }
+    u64? var_3 = get-object-locator(arg_1);
+    u64? var_4 = get-ap-ref-from-align(arg_1, ellie-meatshield-knife-stealth-kill-neck-jab-early-2--ellie, var_3, 0.00, apReference, 0);
+    u64? var_5 = get-ap-ref-from-align(arg_2, ellie-meatshield-knife-stealth-kill-neck-jab-early-2--npc-f, var_4, 0.00, apReference, 0);
+    u64? var_6 = reverse-locator(var_5);
+    u64? var_7 = set-cache-bound-frame(arg_13, var_6, 0);
+    u64? var_8 = melee-character-bit-check(arg_1, 4);
+    u64? var_9 = melee-character-bit-check(arg_2, 4194304);
+    bool var_10 = var_1 && var_7 && var_8 && var_9;
+    return var_10;
+}
+
+u16 meatshield-switchblade-stealth-abort-late(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = is-player?(arg_1);
+    u64? var_1 = character-is-dead?(arg_2);
+    u16 var_2;
+    if (var_0 != nullptr || 0 == nullptr && var_1 != nullptr) {
+        if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1) != nullptr) {
+            u64? var_3 = is-final-build?();
+            if (var_3 == nullptr) {
+                u64? var_4 = #5445173390656D6D("Melee deadened for %f seconds", 1.39);
+                display(var_4, 19);
+            }
+        }
+        disable-untargeted-melee-attack-timed(1.39);
+        invalidate-single-melee-command-queue(arg_1, melee-attack);
+        u64? var_5 = frames-to-sec(10);
+        u64? var_6 = joypad-disable-commands-timed(var_5, melee-attack);
+        var_2 = var_6;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+f32 ellie-meatshield-gun-death__melee-attack@2960__character-melee-info@5c38__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    f32 var_0;
+    if (-1 > -1) {
+        var_0 = -1.00;
+    } else {
+        u64? var_1 = is-npc?(arg_2);
+        u64? var_2 = is-npc?(arg_3);
+        if (var_1 != nullptr && var_2 != nullptr) {
+            var_0 = 0.50;
+        } else {
+            var_0 = 0.00;
+        }
+    }
+    return var_0;
+}
+
+f32 ellie-meatshield-gun-death__melee-attack@2960(u64? arg_0, u64? arg_1, u64? arg_2) {
+    u64? var_0 = is-npc?(arg_2);
+    f32 var_1;
+    if (var_0 != nullptr) {
+        var_1 = 0.60;
+    } else {
+        var_1 = 0.20;
+    }
+    return var_1;
+}
+
+f32 ellie-meatshield-gun-death(u64? arg_0, u64? arg_1, u64? arg_2) {
+    u64? var_0 = is-npc?(arg_1);
+    f32 var_1;
+    if (var_0 != nullptr) {
+        var_1 = 0.60;
+    } else {
+        var_1 = 0.20;
+    }
+    return var_1;
+}
+
+u64? ellie-meatshield-gun-death__start-func-array@61d0(u64? arg_0, u64? arg_1, string arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = character-melee-event-active?(arg_2, 211, 0);
+    if (!var_0 == nullptr) {
+        melee-debug-text-file-line-fail("(not (character-melee-event-active? defender (melee-event-type hide-all-uninvolved-characters)))", "t2r/src/game/scriptx/melee/npc-standing/imports/npc-standing-macros.dcx", 3496);
+    }
+    melee-debug-text-file-line-fail("(if player-is-prone (and (player-in-state? (quote Prone)) (prone-pull-out-clear? attacker-probes)) #t)", "t2r/src/game/scriptx/melee/npc-standing/imports/npc-standing-macros.dcx", 3498);
+    bool var_1 = !var_0 && 1 && 1;
+    return var_1;
+}
+
+u16 ellie-meatshield-infected-grab-right-intro__melee-attack@2b50(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u16 var_0;
+    if ((ellie-meatshield-infected-grab-left-enter == 0) == nullptr) {
+        u64? var_1 = lookup-symbol(ellie-meatshield-infected-grab-left-enter, melee-attack);
+        u64 var_2 = *(u64*)(*(var_1 + 112) + 32);
+        u64? var_3 = calculate-pose-error-simple(arg_2, var_2, 0.00, 0, 0);
+        f32 var_4 = 100.00 * (1.00 / var_3);
+        u64? var_5 = round-float(var_4);
+        if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1) != nullptr) {
+            u64? var_6 = is-final-build?();
+            if (var_6 == nullptr) {
+                u64? var_7 = string-debug(ellie-meatshield-infected-grab-right-intro);
+                u64? var_8 = lookup-symbol(ellie-meatshield-infected-grab-left-enter, melee-attack);
+                u64 var_9 = *(u64*)(*(var_8 + 112) + 32);
+                u64? var_10 = string-debug(var_9);
+                u64? var_11 = #5445173390656D6D("%s - projected sync: %s - sync pose rating: %f - relative priority func rating: %i", var_7, var_10, var_3, (i32)var_5);
+                display(var_11, 19);
+            }
+        }
+        u64? var_12 = in-knee-stun?(arg_2);
+        i32 var_13;
+        if (0 != nullptr && var_12 != nullptr) {
+            var_13 = 1000000;
+        } else {
+            var_13 = (i32)var_5;
+        }
+        var_0 = var_13;
+    } else {
+        var_0 = 1;
+    }
+    return var_0;
+}
+
+u64? ellie-meatshield-infected-grab-right-intro__start-func-array@5828(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = character-is-dead?(arg_1);
+    u64? var_1 = !(var_0);
+    u64? var_2 = player-in-meatshield-sequence?(1);
+    u64? var_3 = !(var_2);
+    u64? var_4 = npc-in-meatshield?(arg_2);
+    u64? var_5 = !(var_4);
+    u64? var_6 = npc-is-on-fire?(arg_2);
+    u64? var_7 = !(var_6);
+    u64? var_8 = is-player?(arg_1);
+    u64? var_9 = player-on-ground?();
+    bool var_10 = var_1 && var_3 && var_5 && var_7 && var_8 && var_9;
+    return var_10;
+}
+
+u16 ellie-meatshield-infected-grab-right-intro(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = player-can-attack-from-stealth?(arg_1, 0.20, 3.25, 0);
+    u64? var_1 = is-character?(arg_2);
+    u64? var_2 = is-stun-hit-reaction-playing?(arg_2);
+    u64? var_3 = !(var_2);
+    u16 var_4;
+    if (var_0 != nullptr && var_1 != nullptr && var_3 != nullptr) {
+        u64? var_5 = string-debug(ellie-meatshield-infected-grab-right-intro);
+        log-event("melee-player-meatshield-from-stealth", 1, var_5, 0, 0);
+        var_4 = 1;
+    } else {
+        u64? var_6 = is-character?(arg_2);
+        u64? var_7 = is-stun-hit-reaction-playing?(arg_2);
+        if (var_6 != nullptr && var_7 != nullptr) {
+            u64? var_8 = string-debug(ellie-meatshield-infected-grab-right-intro);
+            log-event("melee-player-meatshield-from-stun", 1, var_8, 0, 0);
+            var_4 = 1;
+        } else {
+            u64? var_9 = string-debug(ellie-meatshield-infected-grab-right-intro);
+            log-event("melee-player-meatshield-from-non-stealth", 1, var_9, 0, 0);
+            var_4 = 1;
+        }
+    }
+    return var_4;
+}
+
+u16 ellie-meatshield-infected-grab-front-intro__melee-attack@2d40(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u16 var_0;
+    if ((ellie-meatshield-infected-grab-front-enter == 0) == nullptr) {
+        u64? var_1 = lookup-symbol(ellie-meatshield-infected-grab-front-enter, melee-attack);
+        u64 var_2 = *(u64*)(*(var_1 + 112) + 32);
+        u64? var_3 = calculate-pose-error-simple(arg_2, var_2, 0.00, 0, 0);
+        f32 var_4 = 100.00 * (1.00 / var_3);
+        u64? var_5 = round-float(var_4);
+        if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1) != nullptr) {
+            u64? var_6 = is-final-build?();
+            if (var_6 == nullptr) {
+                u64? var_7 = string-debug(ellie-meatshield-infected-grab-front-intro);
+                u64? var_8 = lookup-symbol(ellie-meatshield-infected-grab-front-enter, melee-attack);
+                u64 var_9 = *(u64*)(*(var_8 + 112) + 32);
+                u64? var_10 = string-debug(var_9);
+                u64? var_11 = #5445173390656D6D("%s - projected sync: %s - sync pose rating: %f - relative priority func rating: %i", var_7, var_10, var_3, (i32)var_5);
+                display(var_11, 19);
+            }
+        }
+        u64? var_12 = in-knee-stun?(arg_2);
+        i32 var_13;
+        if (0 != nullptr && var_12 != nullptr) {
+            var_13 = 1000000;
+        } else {
+            var_13 = (i32)var_5;
+        }
+        var_0 = var_13;
+    } else {
+        var_0 = 1;
+    }
+    return var_0;
+}
+
+u64? ellie-meatshield-infected-grab-front-intro__start-func-array@5710(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = character-is-dead?(arg_1);
+    u64? var_1 = !(var_0);
+    u64? var_2 = player-in-meatshield-sequence?(1);
+    u64? var_3 = !(var_2);
+    u64? var_4 = npc-in-meatshield?(arg_2);
+    u64? var_5 = !(var_4);
+    u64? var_6 = npc-is-on-fire?(arg_2);
+    u64? var_7 = !(var_6);
+    u64? var_8 = is-player?(arg_1);
+    u64? var_9 = player-on-ground?();
+    bool var_10 = var_1 && var_3 && var_5 && var_7 && var_8 && var_9;
+    return var_10;
+}
+
+u16 ellie-meatshield-infected-grab-front-intro(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = player-can-attack-from-stealth?(arg_1, 0.20, 3.25, 0);
+    u64? var_1 = is-character?(arg_2);
+    u64? var_2 = is-stun-hit-reaction-playing?(arg_2);
+    u64? var_3 = !(var_2);
+    u16 var_4;
+    if (var_0 != nullptr && var_1 != nullptr && var_3 != nullptr) {
+        u64? var_5 = string-debug(ellie-meatshield-infected-grab-front-intro);
+        log-event("melee-player-meatshield-from-stealth", 1, var_5, 0, 0);
+        var_4 = 1;
+    } else {
+        u64? var_6 = is-character?(arg_2);
+        u64? var_7 = is-stun-hit-reaction-playing?(arg_2);
+        if (var_6 != nullptr && var_7 != nullptr) {
+            u64? var_8 = string-debug(ellie-meatshield-infected-grab-front-intro);
+            log-event("melee-player-meatshield-from-stun", 1, var_8, 0, 0);
+            var_4 = 1;
+        } else {
+            u64? var_9 = string-debug(ellie-meatshield-infected-grab-front-intro);
+            log-event("melee-player-meatshield-from-non-stealth", 1, var_9, 0, 0);
+            var_4 = 1;
+        }
+    }
+    return var_4;
+}
+
+u16 ellie-meatshield-infected-grab-left-intro__melee-attack@2f30(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u16 var_0;
+    if ((ellie-meatshield-infected-grab-left-enter == 0) == nullptr) {
+        u64? var_1 = lookup-symbol(ellie-meatshield-infected-grab-left-enter, melee-attack);
+        u64 var_2 = *(u64*)(*(var_1 + 112) + 32);
+        u64? var_3 = calculate-pose-error-simple(arg_2, var_2, 0.00, 0, 0);
+        f32 var_4 = 100.00 * (1.00 / var_3);
+        u64? var_5 = round-float(var_4);
+        if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 1) != nullptr) {
+            u64? var_6 = is-final-build?();
+            if (var_6 == nullptr) {
+                u64? var_7 = string-debug(ellie-meatshield-infected-grab-left-intro);
+                u64? var_8 = lookup-symbol(ellie-meatshield-infected-grab-left-enter, melee-attack);
+                u64 var_9 = *(u64*)(*(var_8 + 112) + 32);
+                u64? var_10 = string-debug(var_9);
+                u64? var_11 = #5445173390656D6D("%s - projected sync: %s - sync pose rating: %f - relative priority func rating: %i", var_7, var_10, var_3, (i32)var_5);
+                display(var_11, 19);
+            }
+        }
+        u64? var_12 = in-knee-stun?(arg_2);
+        i32 var_13;
+        if (0 != nullptr && var_12 != nullptr) {
+            var_13 = 1000000;
+        } else {
+            var_13 = (i32)var_5;
+        }
+        var_0 = var_13;
+    } else {
+        var_0 = 1;
+    }
+    return var_0;
+}
+
+u64? ellie-meatshield-infected-grab-left-intro__start-func-array@5a88(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = character-is-dead?(arg_1);
+    u64? var_1 = !(var_0);
+    u64? var_2 = player-in-meatshield-sequence?(1);
+    u64? var_3 = !(var_2);
+    u64? var_4 = npc-in-meatshield?(arg_2);
+    u64? var_5 = !(var_4);
+    u64? var_6 = npc-is-on-fire?(arg_2);
+    u64? var_7 = !(var_6);
+    u64? var_8 = is-player?(arg_1);
+    u64? var_9 = player-on-ground?();
+    bool var_10 = var_1 && var_3 && var_5 && var_7 && var_8 && var_9;
+    return var_10;
+}
+
+u16 ellie-meatshield-infected-grab-left-intro(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = player-can-attack-from-stealth?(arg_1, 0.20, 3.25, 0);
+    u64? var_1 = is-character?(arg_2);
+    u64? var_2 = is-stun-hit-reaction-playing?(arg_2);
+    u64? var_3 = !(var_2);
+    u16 var_4;
+    if (var_0 != nullptr && var_1 != nullptr && var_3 != nullptr) {
+        u64? var_5 = string-debug(ellie-meatshield-infected-grab-left-intro);
+        log-event("melee-player-meatshield-from-stealth", 1, var_5, 0, 0);
+        var_4 = 1;
+    } else {
+        u64? var_6 = is-character?(arg_2);
+        u64? var_7 = is-stun-hit-reaction-playing?(arg_2);
+        if (var_6 != nullptr && var_7 != nullptr) {
+            u64? var_8 = string-debug(ellie-meatshield-infected-grab-left-intro);
+            log-event("melee-player-meatshield-from-stun", 1, var_8, 0, 0);
+            var_4 = 1;
+        } else {
+            u64? var_9 = string-debug(ellie-meatshield-infected-grab-left-intro);
+            log-event("melee-player-meatshield-from-non-stealth", 1, var_9, 0, 0);
+            var_4 = 1;
+        }
+    }
+    return var_4;
+}
+
+u16 ellie-grab-pistol-shoot-finisher(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = melee-character-bit-check(arg_2, 541065216);
+    u64? var_1 = melee-character-bit-check(arg_1, 1);
+    u64? var_2 = melee-weapon-bit-check(arg_1, 54043195528445952, 1, 0);
+    u16 var_3;
+    if (var_0 != nullptr && var_1 != nullptr && var_2 != nullptr) {
+        if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 5) != nullptr) {
+            u64? var_4 = alloc-vector(0.00, 0.00, 0.00, 1.00, 0);
+            u64? var_5 = get-object-offset-position(arg_2, var_4);
+            u64? var_6 = string-debug(gore-meatshield-head-backexit-l);
+            debug-draw-string(var_5, var_6, 2, 2.00, 1, 1.00, 0, 0);
+            print-symbol(gore-meatshield-head-backexit-l, self);
+        }
+        if ((gore-meatshield-head-backexit-l == 0) == nullptr) {
+            u64? var_7 = spawn-gore-piece(gore-meatshield-head-backexit-l, arg_2, 0, arg_6, 1, 1);
+            var_3 = var_7;
+        } else if ((0 == 0) == nullptr) {
+            u64? var_8 = %alloc-array(single-frame, 16, 2, 1);
+            *(i32*)*(*var_8 + (0 * 8)) = 40;
+            *(u64*)(*(*var_8 + (0 * 8)) + 8) = 0;
+            *(i32*)(*(*var_8 + (0 * 8)) + 8) = 1;
+            *(i32*)*(*var_8 + (1 * 8)) = 31;
+            *(u64*)(*(*var_8 + (1 * 8)) + 8) = 0;
+            *(u8*)(*(*var_8 + (1 * 8)) + 8) = 1;
+            animate_(arg_2, gore-finisher-blunt-head-bind, var_8);
+            u64? var_9 = %alloc-array(single-frame, 16, 1, 1);
+            *(i32*)*(*var_9 + (0 * 8)) = 40;
+            *(u64*)(*(*var_9 + (0 * 8)) + 8) = 0;
+            *(i32*)(*(*var_9 + (0 * 8)) + 8) = 1;
+            u64? var_10 = animate_(arg_2, 0, var_9);
+            var_3 = var_10;
+        } else {
+            u64? var_11 = is-final-build?();
+            if (var_11 == nullptr) {
+                u64? var_12 = #5445173390656D6D("MELEE GORE SPAWN FAILURE");
+                u64? var_13 = display(var_12, 19);
+                var_3 = var_13;
+            } else {
+                var_3 = 0;
+            }
+        }
+    } else if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 5) != nullptr) {
+        u64? var_14 = is-final-build?();
+        if (var_14 == nullptr) {
+            u64? var_15 = string-debug(gore-meatshield-head-backexit-l);
+            u64? var_16 = #5445173390656D6D("INVALID CHARACTERS FOR %s", var_15);
+            u64? var_17 = display(var_16, 19);
+            var_3 = var_17;
+        } else {
+            var_3 = 0;
+        }
+    } else {
+        var_3 = 0;
+    }
+    return var_3;
+}
+
+u64? meatshield-switchblade-human-stealth-neck-n-chest-upgraded-finisher__melee-attack@3310__start-func-array@4380__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = npc-alive?(arg_2);
+        var_1 = var_2;
+    } else {
+        var_1 = 1;
+    }
+    u64? var_3 = get-object-locator(arg_1);
+    u64? var_4 = get-ap-ref-from-align(arg_1, ellie-knife-stealth-kill-upgrade-neck-chest-3s--ellie, var_3, 0.00, apReference, 0);
+    u64? var_5 = get-ap-ref-from-align(arg_2, ellie-knife-stealth-kill-upgrade-neck-chest-3s--npc-f, var_4, 0.00, apReference, 0);
+    u64? var_6 = reverse-locator(var_5);
+    u64? var_7 = set-cache-bound-frame(arg_13, var_6, 0);
+    u64? var_8 = melee-character-bit-check(arg_1, 4);
+    u64? var_9 = melee-character-bit-check(arg_2, 4194304);
+    bool var_10 = var_1 && var_7 && var_8 && var_9;
+    return var_10;
+}
+
+u64? meatshield-switchblade-human-stealth-neck-n-chest-upgraded-finisher(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    f32 var_0;
+    if ((0.00 == 0.00) == nullptr) {
+        var_0 = 0.00;
+    } else {
+        var_0 = 0.00;
+    }
+    u64? var_1 = play-melee-facial-gesture(arg_2, 8, var_0, 0.40);
+    return var_1;
+}
+

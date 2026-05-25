@@ -1,0 +1,235 @@
+bool 0x2064(u64? arg_0) {
+    return event-arg-symbol(0) == 932559365;
+}
+
+u64? 0x4208() {
+    u64? var_0 = #%alloc-array(447260571, 16, 2, 1);
+    *(i32*)*(*var_0 + (0 * 8)) = 8;
+    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
+    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(2387596027, 1);
+    *(i32*)*(*var_0 + (1 * 8)) = 26;
+    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
+    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
+    u64? var_2 = #%alloc-mem(447260571, 16);
+    *(u64*)var_2 = var_0;
+    *(i32*)(var_2 + 12) = 16;
+    return wait-animate_(4246282332, 2313039092, var_2);
+}
+
+u64? 0x4248() {
+    return animate-done(4246282332, 2313039092, 2387596027, 0, 0);
+}
+
+u16 0x4288() {
+    u16 var_2;
+    if (joypad-stick-pressed-towards-screen-space?(2, 192600498, get-spawner-locator(822536670, 1), 0) != nullptr) {
+        var_2 = go(4223951272, 0);
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u64? 0x4328() {
+    return hud-hide-world-widget(3610956631, 0, 0);
+}
+
+u64? 0x4368() {
+    return simple-wait-animate(3454318402, 1448980200, 2387596027, 0.30, 0.30);
+}
+
+u16 0x4408() {
+    u16 var_1;
+    if (task-complete?(1679577440, 2130833225) != nullptr) {
+        var_1 = go(3034841934, 0);
+    } else if (task-complete?(1679577440, 1969940368) != nullptr) {
+        var_1 = go(4184165692, 0);
+    } else if (task-complete?(1679577440, 284587235) != nullptr) {
+        var_1 = go(2548257755, 0);
+    } else if (task-active?(1679577440, 284587235) != nullptr) {
+        var_1 = go(2548257755, 0);
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u64? 0x4448() {
+    u64? var_0 = #%alloc-array(447260571, 16, 5, 1);
+    *(i32*)*(*var_0 + (0 * 8)) = 8;
+    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
+    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(2387596027, 1);
+    *(i32*)*(*var_0 + (1 * 8)) = 54;
+    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
+    *(i32*)(*(*var_0 + (1 * 8)) + 8) = 0;
+    *(i32*)*(*var_0 + (2 * 8)) = 53;
+    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
+    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.00;
+    *(i32*)*(*var_0 + (3 * 8)) = 51;
+    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
+    *(f32*)(*(*var_0 + (3 * 8)) + 8) = 0.00;
+    *(i32*)*(*var_0 + (4 * 8)) = 28;
+    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
+    *(f32*)(*(*var_0 + (4 * 8)) + 8) = 0.00;
+    u64? var_2 = #%alloc-mem(447260571, 16);
+    *(u64*)var_2 = var_0;
+    *(i32*)(var_2 + 12) = 16;
+    return animate_(3524021684, 209074454, var_2);
+}
+
+u16 0x4488() {
+    event-arg-int32(2);
+    u16 var_2;
+    if (event-arg-int32(0) == 1 && event-arg-symbol(1) == 3524021684) {
+        interactable-enable(932559365);
+        var_2 = go(3486144692, 0);
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u64? 0x4528() {
+    return set-shimmer-intensity(3524021684, 0.00, 0.00);
+}
+
+u64? 0x4568() {
+    return send-event(2482449204, 3187749413);
+}
+
+u16 0x4608() {
+    u16 var_1;
+    if (task-active?(1679577440, 284587235) != nullptr) {
+        var_1 = go(2548257755, 0);
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u64? 0x4648() {
+    u64? var_0 = #%alloc-array(447260571, 16, 4, 1);
+    *(i32*)*(*var_0 + (0 * 8)) = 8;
+    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
+    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(2387596027, 1);
+    *(i32*)*(*var_0 + (1 * 8)) = 26;
+    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
+    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.00;
+    *(i32*)*(*var_0 + (2 * 8)) = 28;
+    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
+    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+    *(i32*)*(*var_0 + (3 * 8)) = 22;
+    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
+    *(i32*)(*(*var_0 + (3 * 8)) + 8) = 3;
+    u64? var_2 = #%alloc-mem(447260571, 16);
+    *(u64*)var_2 = var_0;
+    *(i32*)(var_2 + 12) = 16;
+    return wait-animate_(3454318402, 3076665251, var_2);
+}
+
+u64? 0x4688() {
+    return wait(1.00);
+}
+
+u64? 0x4728() {
+    return kill-entity(1355020852);
+}
+
+u64? 0x4768() {
+    return wait(0.75);
+}
+
+u64? 0x4808() {
+    return #000000009A19A720(932559365);
+}
+
+u64? 0x4848() {
+    return hud-hide-world-widget(615947952, 0, 0);
+}
+
+u64? 0x4888() {
+    return hud-show-world-widget(3610956631, get-spawner-locator(3961485205, 1), 0, 20.00);
+}
+
+u64? 0x4928() {
+    return wait(4.50);
+}
+
+u64? 0x4968() {
+    return signal(2781353824, 0);
+}
+
+u64? 0x5008() {
+    return player-check-for-interactables-during-igc();
+}
+
+u64? 0x5048() {
+    return signal(1962236930, 0);
+}
+
+u64? 0x5088() {
+    return #00000000650B7911(4278378425, 0, 2);
+}
+
+u64? 0x5128() {
+    return hud-show-world-widget-on-object(615947952, 3348219355, 0, alloc-vector(0.00, 0.00, 0.00, 1.00, 0), 0, 0, 20.00);
+}
+
+u64? 0x5168() {
+    return camera-fade-out(self(), 2.00, 0);
+}
+
+u64? 0x5208() {
+    return wait-for(2781353824);
+}
+
+u64? 0x5248() {
+    return go(3233162716, 0);
+}
+
+u64? 0x5288() {
+    return go(3034841934, 0);
+}
+
+u16 0x5328() {
+    u16 var_2;
+    if (task-active?(1679577440, 1969940368) != nullptr && player-in-region?(2066233239, 2) != nullptr) {
+        var_2 = player-disable-dyno-jumps();
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u64? 0x5368() {
+    return attach(1355020852, 3454318402, 1638174209);
+}
+
+u64? 0x5408() {
+    return wait-frames(100);
+}
+
+u64? 0x5448() {
+    return go(647076695, 0);
+}
+
+u64? 0x5488() {
+    return interactable-disable(932559365);
+}
+
+u64? 0x5528() {
+    return set-boolean(3239757306, 1, 4290205030);
+}
+
+u64? 0x5568() {
+    return wait-for(976491915);
+}
+
+u64? 0x5608() {
+    return go(2998858290, 0);
+}
+
+u64? 0x5648() {
+    return wait-for(1962236930);
+}
+

@@ -25,3 +25,12 @@ u16 rs-sub-world-elementary-1__level-scripted-set@1a8() {
     return 1;
 }
 
+u64? rs-sub-world-elementary-1__level-set@78__level-scripted-set@238__() {
+    u64? var_0 = task-not-complete?(seattle-ellie-towers, sub-elementary-enter);
+    return var_0;
+}
+
+u16 rs-sub-world-elementary-1__level-scripted-set@1a8() {
+    return 1;
+}
+

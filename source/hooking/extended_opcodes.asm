@@ -1,3 +1,8 @@
+.686
+
+stack_frame  EQU <[rbp - 38h]>
+symbol_table EQU <[rsp + 38h]>
+
 .code
 PUBLIC extended_opcode_switch
 extended_opcode_switch PROC
@@ -10,13 +15,11 @@ extended_opcode_switch PROC
 ; rsi = destination
 ; rbx = value to check register 
 ; rdi = symbol table start (low)
-; stack_frame = [rbp - 38h]
-; symbol_table_ptr = [rsp + 38h]
 
 QEX_InRangeI_handler::
     mov rdx, QWORD PTR [rbp + rbx*8 - 38h]  ; value to check
 
-    mov rcx, QWORD PTR [rsp + 38h]          ; load symbol table pointer 
+    mov rcx, QWORD PTR symbol_table          ; load symbol table pointer 
     mov rax, QWORD PTR [rcx + rdi*8]        ; lower bound
     mov rcx, QWORD PTR [rcx + rdi*8 + 8]    ; upper bound
 
@@ -33,5 +36,4 @@ extended_opcode_switch ENDP
 ALIGN 8
 jump_table LABEL QWORD
     QWORD QEX_InRangeI_handler
-    QWORD QEX_InRangeF_handler
 END

@@ -6318,3 +6318,3163 @@ u64? fist-glass-crouched-high-attack-1__melee-attack@6df8(u64? arg_0, u64? arg_1
     return var_2;
 }
 
+u16 fist-dodge-forward-attack-1__melee-attack@558(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    return 1;
+}
+
+f32 fist-dodge-forward-attack-1__character-melee-info@7bd8(u64? arg_0, u64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    f32 var_0;
+    if (arg_1 != nullptr && *(u64*)(arg_1 + 16) == melee-player-contextual-dodge) {
+        var_0 = 0.20 + 0.10;
+    } else if (arg_1 != nullptr && *(u8*)(*(arg_1 + 296) + 30) != nullptr) {
+        var_0 = 0.20;
+    } else if (arg_1 != nullptr && *(arg_1 + 104) != nullptr && *(u64*)(*(arg_1 + 104) + 32) == null) {
+        var_0 = 0.13;
+    } else {
+        u64? var_1 = get-object-state(arg_2, 0);
+        u64? var_2 = player-is-sprinting?(1);
+        if (Move == var_1 && var_2 == nullptr) {
+            var_0 = 0.13;
+        } else {
+            var_0 = 0.20;
+        }
+    }
+    return var_0;
+}
+
+f32 fist-dodge-forward-attack-1(u64? arg_0, u64? arg_1, u64? arg_2) {
+    u64? var_0 = tension-mode-is?(1);
+    u64? var_1 = tension-mode-is?(2);
+    f32 var_2;
+    if (var_0 != nullptr && var_1 != nullptr) {
+        var_2 = 1.00;
+    } else {
+        var_2 = 0.60;
+    }
+    return var_2;
+}
+
+u64? fist-dodge-forward-attack-1__start-func-array@71b0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = player-can-stand-up?();
+    u64? var_1 = player-on-ground?();
+    u64? var_2 = melee-character-bit-check(arg_1, 2);
+    bool var_3 = var_0 && var_1 && var_2;
+    return var_3;
+}
+
+u64? fist-dodge-forward-attack-1__melee-event-list@c6b0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = new-boxed-value(7, fist-dodge-forward-attack-1);
+    u64? var_1 = new-boxed-value(7, arg_2);
+    u64? var_2 = send-event(new-swing, ss-melee-dodge-attack-spam, var_0, var_1);
+    return var_2;
+}
+
+sid fist-dodge-forward-attack-1__melee-event-transitions@55448(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return player-stun-attacks;
+}
+
+u16 fist-light-attack-4-punch-hit-inf__melee-attack@748(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, abby-fist-combo-punch-4-hit--inf-f, var_2, var_3, *player-npc-sync-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+f32 fist-light-attack-4-punch-hit-inf__character-melee-info@7a00(u64? arg_0, u64? arg_1, u64? arg_2) {
+    u64? var_0 = melee-fact-get-bool(arg_1, aborted-sync-hit-due-to-BfL);
+    f32 var_1;
+    if (var_0 != nullptr) {
+        var_1 = 2.00;
+    } else {
+        var_1 = 0.50;
+    }
+    return var_1;
+}
+
+u16 fist-light-attack-4-punch-hit-inf(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_0 = melee-weapon-bit-check(arg_0, 2, 1, 0);
+    u64? var_1 = player-get-melee-weapon-health();
+    u16 var_2;
+    if (var_0 != nullptr && (var_1 <= 0) == nullptr) {
+        var_2 = 1;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u64? fist-light-attack-4-punch-hit-inf__character-melee-info@bcc0(u64? arg_0, f32 arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_0 = npc-is-dog?(arg_0);
+    u64? var_1 = !(var_0);
+    u64? var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-joint-locator(arg_0, root);
+        u64? var_4 = flatten-locator(var_3);
+        u64? var_5 = get-locator-position(var_4);
+        u64? var_6 = get-joint-locator(arg_0, root);
+        u64? var_7 = get-y-vec-from-bound-frame(var_6);
+        u64? var_8 = vector-neg(var_7);
+        u64? var_9 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+        u64? var_10 = quat-from-look-at(var_8, var_9);
+        u64? var_11 = alloc-bound-frame(var_5, var_10, 0, 0, 0);
+        u64? var_12 = get-joint-locator(arg_0, root);
+        u64? var_13 = get-y-vec-from-bound-frame(var_12);
+        u64? var_14 = vector-neg(var_13);
+        u64? var_15 = get-object-locator(arg_0);
+        u64? var_16 = get-z-vec-from-bound-frame(var_15);
+        u64? var_17 = angle-in-between-vectors-plus(var_14, var_16, 1);
+        u64? var_18 = rotate-locator-angle(var_11, 1, var_17 * 0.50);
+        u64? var_19 = flatten-locator(var_18);
+        var_2 = var_19;
+    } else {
+        u64? var_20 = get-object-locator(arg_0);
+        var_2 = var_20;
+    }
+    u64? var_21 = npc-is-dog?(arg_1);
+    u64? var_22 = !(var_21);
+    u64? var_23;
+    if (var_22 != nullptr) {
+        u64? var_24 = get-joint-locator(arg_1, root);
+        u64? var_25 = flatten-locator(var_24);
+        u64? var_26 = get-locator-position(var_25);
+        u64? var_27 = get-joint-locator(arg_1, root);
+        u64? var_28 = get-y-vec-from-bound-frame(var_27);
+        u64? var_29 = vector-neg(var_28);
+        u64? var_30 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+        u64? var_31 = quat-from-look-at(var_29, var_30);
+        u64? var_32 = alloc-bound-frame(var_26, var_31, 0, 0, 0);
+        u64? var_33 = get-joint-locator(arg_1, root);
+        u64? var_34 = get-y-vec-from-bound-frame(var_33);
+        u64? var_35 = vector-neg(var_34);
+        u64? var_36 = get-object-locator(arg_1);
+        u64? var_37 = get-z-vec-from-bound-frame(var_36);
+        u64? var_38 = angle-in-between-vectors-plus(var_35, var_37, 1);
+        u64? var_39 = rotate-locator-angle(var_32, 1, var_38 * 0.50);
+        u64? var_40 = flatten-locator(var_39);
+        var_23 = var_40;
+    } else {
+        u64? var_41 = get-object-locator(arg_1);
+        var_23 = var_41;
+    }
+    u64? var_42 = npc-in-tap?(arg_1);
+    u64? var_43 = !(var_42);
+    u64? var_44 = npc-in-melee-vulnerable-tap?(arg_1);
+    u64? var_45 = is-npc?(arg_1);
+    u64? var_46;
+    if (var_43 != nullptr && var_44 != nullptr && var_45 != nullptr) {
+        u64? var_47 = melee-fact-get-bool(arg_1, ignore-poise);
+        u16 var_48;
+        if (var_47 != nullptr) {
+            var_48 = 1;
+        } else {
+            u64? var_49 = is-poise-broken?(arg_1);
+            var_48 = var_49;
+        }
+        u64? var_50 = melee-character-bit-check(arg_1, #0000000244200000);
+        u64? var_51 = npc-clicker?(arg_1);
+        u64? var_52 = melee-weapon-type-precedence(arg_0, arg_1);
+        bool var_53 = var_48 && !var_50 && var_51 && var_52;
+        var_46 = var_53;
+    }
+    return var_46;
+}
+
+u64? fist-light-attack-4-punch-hit-inf__start-func-array@bae8(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = is-player?(arg_2);
+    u64? var_1 = is-player-base?(arg_2);
+    u64? var_2 = melee-character-bit-check(arg_2, 452984832);
+    bool var_3 = !(arg_2 == 0) || var_0 && !var_1 && var_2;
+    return var_3;
+}
+
+u16 fist-light-attack-4-punch-hit-inf__melee-event-list@bf80(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = melee-fact-get-time-since(player, last-swing-hit-time);
+    if (var_0 < 2.30) {
+        melee-fact-increment-int(player, swing-hit-repeat-count, 1);
+        melee-fact-increment-int(player, swing-hit-count, 1);
+    } else {
+        melee-fact-set-int(player, swing-hit-repeat-count, 0);
+        melee-fact-set-int(player, swing-hit-count, 1);
+    }
+    melee-fact-set-time(player, last-swing-hit-time);
+    u64? var_1 = npc-enemy-ellie?(arg_2);
+    if (var_1 != nullptr) {
+        u64? var_2 = fact-exists?(arg_2, enemy-ellie-hits);
+        if (var_2 != nullptr) {
+            melee-fact-increment-int(arg_2, enemy-ellie-hits, 1);
+        } else {
+            melee-fact-set-int(arg_2, enemy-ellie-hits, 1);
+        }
+        u64? var_3 = fact-exists?(arg_2, enemy-ellie-parry-hits);
+        if (var_3 != nullptr) {
+            melee-fact-increment-int(arg_2, enemy-ellie-parry-hits, 1);
+        } else {
+            melee-fact-set-int(arg_2, enemy-ellie-parry-hits, 1);
+        }
+    }
+    u64? var_4 = npc-brute?(arg_2);
+    if (var_4 != nullptr) {
+        melee-fact-increment-int(arg_2, brute-melee-hit-count, 1);
+    }
+    u64? var_5 = npc-enemy-abby?(arg_2);
+    u16 var_6;
+    if (var_5 != nullptr) {
+        melee-fact-increment-int(arg_2, abby-melee-hit-count, 1);
+        u64? var_7 = melee-fact-get-time-since(player, contextual-dodge-success);
+        u64? var_8 = get-beach-fight-difficutly-settings();
+        u64? var_9 = melee-fact-get-time-since(arg_2, npc-enemy-abby-player-hit-window);
+        u64? var_10 = melee-fact-get-time-since(arg_2, npc-enemy-abby-vulnerable);
+        u64? var_11 = get-beach-fight-difficutly-settings();
+        if (var_7 < *(f32*)(var_8 + 4) || var_9 < 2.30 && var_10 < *(f32*)(var_11 + 8)) {
+            melee-fact-set-time(arg_2, npc-enemy-abby-player-hit-window);
+        }
+        u64? var_12 = fact-remove(arg_2, boss-parry-valid);
+        var_6 = var_12;
+    } else {
+        var_6 = 0;
+    }
+    return var_6;
+}
+
+u16 fist-dodge-back-attack-1-hit-inf__melee-attack@938(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, abby-fist-dodge-back-attack-hit--npc-f, var_2, var_3, *player-npc-sync-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u64? fist-dodge-back-attack-1-hit-inf__character-melee-info@9fe0(u64? arg_0, f32 arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_0 = npc-is-dog?(arg_0);
+    u64? var_1 = !(var_0);
+    u64? var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-joint-locator(arg_0, root);
+        u64? var_4 = flatten-locator(var_3);
+        u64? var_5 = get-locator-position(var_4);
+        u64? var_6 = get-joint-locator(arg_0, root);
+        u64? var_7 = get-y-vec-from-bound-frame(var_6);
+        u64? var_8 = vector-neg(var_7);
+        u64? var_9 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+        u64? var_10 = quat-from-look-at(var_8, var_9);
+        u64? var_11 = alloc-bound-frame(var_5, var_10, 0, 0, 0);
+        u64? var_12 = get-joint-locator(arg_0, root);
+        u64? var_13 = get-y-vec-from-bound-frame(var_12);
+        u64? var_14 = vector-neg(var_13);
+        u64? var_15 = get-object-locator(arg_0);
+        u64? var_16 = get-z-vec-from-bound-frame(var_15);
+        u64? var_17 = angle-in-between-vectors-plus(var_14, var_16, 1);
+        u64? var_18 = rotate-locator-angle(var_11, 1, var_17 * 0.50);
+        u64? var_19 = flatten-locator(var_18);
+        var_2 = var_19;
+    } else {
+        u64? var_20 = get-object-locator(arg_0);
+        var_2 = var_20;
+    }
+    u64? var_21 = npc-is-dog?(arg_1);
+    u64? var_22 = !(var_21);
+    u64? var_23;
+    if (var_22 != nullptr) {
+        u64? var_24 = get-joint-locator(arg_1, root);
+        u64? var_25 = flatten-locator(var_24);
+        u64? var_26 = get-locator-position(var_25);
+        u64? var_27 = get-joint-locator(arg_1, root);
+        u64? var_28 = get-y-vec-from-bound-frame(var_27);
+        u64? var_29 = vector-neg(var_28);
+        u64? var_30 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+        u64? var_31 = quat-from-look-at(var_29, var_30);
+        u64? var_32 = alloc-bound-frame(var_26, var_31, 0, 0, 0);
+        u64? var_33 = get-joint-locator(arg_1, root);
+        u64? var_34 = get-y-vec-from-bound-frame(var_33);
+        u64? var_35 = vector-neg(var_34);
+        u64? var_36 = get-object-locator(arg_1);
+        u64? var_37 = get-z-vec-from-bound-frame(var_36);
+        u64? var_38 = angle-in-between-vectors-plus(var_35, var_37, 1);
+        u64? var_39 = rotate-locator-angle(var_32, 1, var_38 * 0.50);
+        u64? var_40 = flatten-locator(var_39);
+        var_23 = var_40;
+    } else {
+        u64? var_41 = get-object-locator(arg_1);
+        var_23 = var_41;
+    }
+    u64? var_42 = npc-in-tap?(arg_1);
+    u64? var_43 = !(var_42);
+    u64? var_44 = npc-in-melee-vulnerable-tap?(arg_1);
+    u64? var_45 = is-npc?(arg_1);
+    u64? var_46;
+    if (var_43 != nullptr && var_44 != nullptr && var_45 != nullptr) {
+        u64? var_47 = melee-fact-get-bool(arg_1, ignore-poise);
+        u16 var_48;
+        if (var_47 != nullptr) {
+            var_48 = 1;
+        } else {
+            u64? var_49 = is-poise-broken?(arg_1);
+            var_48 = var_49;
+        }
+        u64? var_50 = melee-character-bit-check(arg_1, #0000000244200000);
+        u64? var_51 = npc-clicker?(arg_1);
+        u64? var_52 = melee-weapon-type-precedence(arg_0, arg_1);
+        bool var_53 = var_48 && !var_50 && var_51 && var_52;
+        var_46 = var_53;
+    }
+    return var_46;
+}
+
+u16 fist-dodge-back-attack-1-hit-brute__melee-attack@b28(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, abby-fist-dodge-back-attack-hit--brute-m, var_2, var_3, *player-npc-sync-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u64? fist-dodge-back-attack-1-hit-brute__character-melee-info@a228(u64? arg_0, f32 arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_0 = npc-is-dog?(arg_0);
+    u64? var_1 = !(var_0);
+    u64? var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-joint-locator(arg_0, root);
+        u64? var_4 = flatten-locator(var_3);
+        u64? var_5 = get-locator-position(var_4);
+        u64? var_6 = get-joint-locator(arg_0, root);
+        u64? var_7 = get-y-vec-from-bound-frame(var_6);
+        u64? var_8 = vector-neg(var_7);
+        u64? var_9 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+        u64? var_10 = quat-from-look-at(var_8, var_9);
+        u64? var_11 = alloc-bound-frame(var_5, var_10, 0, 0, 0);
+        u64? var_12 = get-joint-locator(arg_0, root);
+        u64? var_13 = get-y-vec-from-bound-frame(var_12);
+        u64? var_14 = vector-neg(var_13);
+        u64? var_15 = get-object-locator(arg_0);
+        u64? var_16 = get-z-vec-from-bound-frame(var_15);
+        u64? var_17 = angle-in-between-vectors-plus(var_14, var_16, 1);
+        u64? var_18 = rotate-locator-angle(var_11, 1, var_17 * 0.50);
+        u64? var_19 = flatten-locator(var_18);
+        var_2 = var_19;
+    } else {
+        u64? var_20 = get-object-locator(arg_0);
+        var_2 = var_20;
+    }
+    u64? var_21 = npc-is-dog?(arg_1);
+    u64? var_22 = !(var_21);
+    u64? var_23;
+    if (var_22 != nullptr) {
+        u64? var_24 = get-joint-locator(arg_1, root);
+        u64? var_25 = flatten-locator(var_24);
+        u64? var_26 = get-locator-position(var_25);
+        u64? var_27 = get-joint-locator(arg_1, root);
+        u64? var_28 = get-y-vec-from-bound-frame(var_27);
+        u64? var_29 = vector-neg(var_28);
+        u64? var_30 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+        u64? var_31 = quat-from-look-at(var_29, var_30);
+        u64? var_32 = alloc-bound-frame(var_26, var_31, 0, 0, 0);
+        u64? var_33 = get-joint-locator(arg_1, root);
+        u64? var_34 = get-y-vec-from-bound-frame(var_33);
+        u64? var_35 = vector-neg(var_34);
+        u64? var_36 = get-object-locator(arg_1);
+        u64? var_37 = get-z-vec-from-bound-frame(var_36);
+        u64? var_38 = angle-in-between-vectors-plus(var_35, var_37, 1);
+        u64? var_39 = rotate-locator-angle(var_32, 1, var_38 * 0.50);
+        u64? var_40 = flatten-locator(var_39);
+        var_23 = var_40;
+    } else {
+        u64? var_41 = get-object-locator(arg_1);
+        var_23 = var_41;
+    }
+    u64? var_42 = is-npc?(arg_1);
+    u64? var_43 = melee-fact-get-bool(arg_1, ignore-poise);
+    bool var_44 = var_42 && var_43 && 1;
+    return var_44;
+}
+
+u64? fist-dodge-back-attack-1-hit-brute__start-func-array@cb30(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = melee-character-bit-check(arg_2, 2097152);
+    bool var_1 = !(arg_2 == 0) && var_0;
+    return var_1;
+}
+
+u64? fist-dodge-back-attack-1-hit-brute(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = new-boxed-value(7, arg_2);
+    u64? var_1 = broadcast-event(melee-player-sync-hit, var_0);
+    return var_1;
+}
+
+u64? #0DEE9E714599F8D7(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = distance-between-objects-less-than?(arg_1, arg_2, 3.00);
+    u64? var_1 = player-is-sprinting?(1);
+    u64? var_2 = distance-between-objects-less-than?(arg_1, arg_2, 5.00);
+    bool var_3 = var_0 && var_1 && var_2;
+    if (var_3 == nullptr) {
+        melee-debug-text-file-line-fail("(or (distance-between-objects-less-than? attacker defender 3.0) (and (player-is-sprinting?) (distance-between-objects-less-than? attacker defender 5.0)))", "t2r/src/game/scriptx/melee/player-standing/player-fists.dcx", 1791);
+    }
+    u64? var_4 = melee-character-bit-check(arg_2, #0000000200000000);
+    melee-debug-text-file-line-fail("(melee-character-bit-check defender (target-character-type dog))", "t2r/src/game/scriptx/melee/player-standing/player-fists.dcx", 1798);
+    bool var_5 = var_3 && var_4 && var_4;
+    return var_5;
+}
+
+u64? #0DEE9E714599F8D7__melee-event-list@93e8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = new-boxed-value(7, #0DEE9E714599F8D7);
+    u64? var_1 = new-boxed-value(7, arg_2);
+    u64? var_2 = send-event(new-swing, ss-melee-dodge-attack-spam, var_0, var_1);
+    return var_2;
+}
+
+u16 fist-dodge-forward-attack-1-hit__melee-attack@f08(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, abby-fist-dodge-foward-attack-hit--npc-f, var_2, var_3, *player-npc-sync-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u64? fist-dodge-forward-attack-1-hit__character-melee-info@aa78(u64? arg_0, f32 arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_0 = npc-is-dog?(arg_0);
+    u64? var_1 = !(var_0);
+    u64? var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-joint-locator(arg_0, root);
+        u64? var_4 = flatten-locator(var_3);
+        u64? var_5 = get-locator-position(var_4);
+        u64? var_6 = get-joint-locator(arg_0, root);
+        u64? var_7 = get-y-vec-from-bound-frame(var_6);
+        u64? var_8 = vector-neg(var_7);
+        u64? var_9 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+        u64? var_10 = quat-from-look-at(var_8, var_9);
+        u64? var_11 = alloc-bound-frame(var_5, var_10, 0, 0, 0);
+        u64? var_12 = get-joint-locator(arg_0, root);
+        u64? var_13 = get-y-vec-from-bound-frame(var_12);
+        u64? var_14 = vector-neg(var_13);
+        u64? var_15 = get-object-locator(arg_0);
+        u64? var_16 = get-z-vec-from-bound-frame(var_15);
+        u64? var_17 = angle-in-between-vectors-plus(var_14, var_16, 1);
+        u64? var_18 = rotate-locator-angle(var_11, 1, var_17 * 0.50);
+        u64? var_19 = flatten-locator(var_18);
+        var_2 = var_19;
+    } else {
+        u64? var_20 = get-object-locator(arg_0);
+        var_2 = var_20;
+    }
+    u64? var_21 = npc-is-dog?(arg_1);
+    u64? var_22 = !(var_21);
+    u64? var_23;
+    if (var_22 != nullptr) {
+        u64? var_24 = get-joint-locator(arg_1, root);
+        u64? var_25 = flatten-locator(var_24);
+        u64? var_26 = get-locator-position(var_25);
+        u64? var_27 = get-joint-locator(arg_1, root);
+        u64? var_28 = get-y-vec-from-bound-frame(var_27);
+        u64? var_29 = vector-neg(var_28);
+        u64? var_30 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+        u64? var_31 = quat-from-look-at(var_29, var_30);
+        u64? var_32 = alloc-bound-frame(var_26, var_31, 0, 0, 0);
+        u64? var_33 = get-joint-locator(arg_1, root);
+        u64? var_34 = get-y-vec-from-bound-frame(var_33);
+        u64? var_35 = vector-neg(var_34);
+        u64? var_36 = get-object-locator(arg_1);
+        u64? var_37 = get-z-vec-from-bound-frame(var_36);
+        u64? var_38 = angle-in-between-vectors-plus(var_35, var_37, 1);
+        u64? var_39 = rotate-locator-angle(var_32, 1, var_38 * 0.50);
+        u64? var_40 = flatten-locator(var_39);
+        var_23 = var_40;
+    } else {
+        u64? var_41 = get-object-locator(arg_1);
+        var_23 = var_41;
+    }
+    u64? var_42 = npc-in-tap?(arg_1);
+    u64? var_43 = !(var_42);
+    u64? var_44 = npc-in-melee-vulnerable-tap?(arg_1);
+    u64? var_45 = is-npc?(arg_1);
+    u64? var_46;
+    if (var_43 != nullptr && var_44 != nullptr && var_45 != nullptr) {
+        u64? var_47 = melee-fact-get-bool(arg_1, ignore-poise);
+        u16 var_48;
+        if (var_47 != nullptr) {
+            var_48 = 1;
+        } else {
+            u64? var_49 = is-poise-broken?(arg_1);
+            var_48 = var_49;
+        }
+        u64? var_50 = melee-character-bit-check(arg_1, #0000000244200000);
+        u64? var_51 = npc-clicker?(arg_1);
+        u64? var_52 = melee-weapon-type-precedence(arg_0, arg_1);
+        bool var_53 = var_48 && !var_50 && var_51 && var_52;
+        var_46 = var_53;
+    }
+    return var_46;
+}
+
+u64? fist-dodge-forward-attack-1-hit__start-func-array@bd68(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = is-player?(arg_2);
+    u64? var_1 = is-player-base?(arg_2);
+    u64? var_2 = melee-character-bit-check(arg_2, 1141899270);
+    bool var_3 = !(arg_2 == 0) || var_0 && !var_1 && var_2;
+    return var_3;
+}
+
+f32 fists-stun-combo-2-hit__melee-attack@10f8__character-melee-info@bdd8__(u64? arg_0, u64? arg_1, u64? arg_2) {
+    return 0.60;
+}
+
+u64? fists-stun-combo-2-hit(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    u64? var_0 = melee-fact-set-bool(arg_0, stunned, 0);
+    return var_0;
+}
+
+u64? fists-stun-combo-2-hit__melee-event-list@c920(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    f32 var_0;
+    if ((0.00 == 0.00) == nullptr) {
+        var_0 = 0.00;
+    } else {
+        var_0 = 0.00;
+    }
+    u64? var_1 = play-melee-facial-gesture(arg_2, 14, var_0, 0.10);
+    return var_1;
+}
+
+sid fists-stun-combo-2-hit__melee-event-transitions@549e0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return player-meat-shield-grab-attacks;
+}
+
+u16 fist-light-attack-left-1-hit-brute__melee-attack@12e8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, abby-fist-combo-punch-left-1-hit--brute-m, var_2, var_3, *player-npc-sync-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u64? fist-light-attack-left-1-hit-brute__character-melee-info@c9a8(u64? arg_0, f32 arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_0 = npc-is-dog?(arg_0);
+    u64? var_1 = !(var_0);
+    u64? var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-joint-locator(arg_0, root);
+        u64? var_4 = flatten-locator(var_3);
+        u64? var_5 = get-locator-position(var_4);
+        u64? var_6 = get-joint-locator(arg_0, root);
+        u64? var_7 = get-y-vec-from-bound-frame(var_6);
+        u64? var_8 = vector-neg(var_7);
+        u64? var_9 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+        u64? var_10 = quat-from-look-at(var_8, var_9);
+        u64? var_11 = alloc-bound-frame(var_5, var_10, 0, 0, 0);
+        u64? var_12 = get-joint-locator(arg_0, root);
+        u64? var_13 = get-y-vec-from-bound-frame(var_12);
+        u64? var_14 = vector-neg(var_13);
+        u64? var_15 = get-object-locator(arg_0);
+        u64? var_16 = get-z-vec-from-bound-frame(var_15);
+        u64? var_17 = angle-in-between-vectors-plus(var_14, var_16, 1);
+        u64? var_18 = rotate-locator-angle(var_11, 1, var_17 * 0.50);
+        u64? var_19 = flatten-locator(var_18);
+        var_2 = var_19;
+    } else {
+        u64? var_20 = get-object-locator(arg_0);
+        var_2 = var_20;
+    }
+    u64? var_21 = npc-is-dog?(arg_1);
+    u64? var_22 = !(var_21);
+    u64? var_23;
+    if (var_22 != nullptr) {
+        u64? var_24 = get-joint-locator(arg_1, root);
+        u64? var_25 = flatten-locator(var_24);
+        u64? var_26 = get-locator-position(var_25);
+        u64? var_27 = get-joint-locator(arg_1, root);
+        u64? var_28 = get-y-vec-from-bound-frame(var_27);
+        u64? var_29 = vector-neg(var_28);
+        u64? var_30 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+        u64? var_31 = quat-from-look-at(var_29, var_30);
+        u64? var_32 = alloc-bound-frame(var_26, var_31, 0, 0, 0);
+        u64? var_33 = get-joint-locator(arg_1, root);
+        u64? var_34 = get-y-vec-from-bound-frame(var_33);
+        u64? var_35 = vector-neg(var_34);
+        u64? var_36 = get-object-locator(arg_1);
+        u64? var_37 = get-z-vec-from-bound-frame(var_36);
+        u64? var_38 = angle-in-between-vectors-plus(var_35, var_37, 1);
+        u64? var_39 = rotate-locator-angle(var_32, 1, var_38 * 0.50);
+        u64? var_40 = flatten-locator(var_39);
+        var_23 = var_40;
+    } else {
+        u64? var_41 = get-object-locator(arg_1);
+        var_23 = var_41;
+    }
+    u64? var_42 = is-npc?(arg_1);
+    u64? var_43 = melee-fact-get-bool(arg_1, ignore-poise);
+    bool var_44 = var_42 && var_43 && 1;
+    return var_44;
+}
+
+u16 fist-light-attack-1-far__melee-attack@14d8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    return 10;
+}
+
+u64? fist-light-attack-1-far(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = get-object-distance(arg_1, arg_2);
+    bool var_1 = !(arg_1 == 0) && !(arg_2 == 0) && var_0 < 5.00 && var_0 > 3.00;
+    u64? var_2 = new-boxed-value(6, var_0);
+    u64? var_3 = new-boxed-value(6, 3.00);
+    u64? var_4 = new-boxed-value(6, 5.00);
+    u64? var_5;
+    if (var_1 != nullptr) {
+        u64? var_6 = new-boxed-value(7, true);
+        var_5 = var_6;
+    } else {
+        u64? var_7 = new-boxed-value(7, false);
+        var_5 = var_7;
+    }
+    do-melee-log("characters-in-range? [[f]] [[f]] [[f]] [[s]]", var_2, var_3, var_4, var_5);
+    u64? var_8 = player-is-sprinting?(1);
+    u64? var_9 = is-player-abby?(player);
+    u64? var_10 = net-is-active?();
+    u64? var_11 = melee-character-bit-check(arg_2, #0000000200000000);
+    bool var_12 = var_1 && !var_8 || var_9 && var_10 && !var_11;
+    return var_12;
+}
+
+u64? fist-light-attack-1-far__melee-event-list@9b50(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = new-boxed-value(7, fist-light-attack-1-far);
+    u64? var_1 = new-boxed-value(7, arg_2);
+    u64? var_2 = send-event(new-swing, ss-melee-dodge-attack-spam, var_0, var_1);
+    return var_2;
+}
+
+u16 #2743DD18E80813E2__melee-attack@16c8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, #7F7ED4399CEE8B43, var_2, var_3, *player-npc-sync-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u64? #2743DD18E80813E2__character-melee-info@8148(u64? arg_0, f32 arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_0 = npc-is-dog?(arg_0);
+    u64? var_1 = !(var_0);
+    u64? var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-joint-locator(arg_0, root);
+        u64? var_4 = flatten-locator(var_3);
+        u64? var_5 = get-locator-position(var_4);
+        u64? var_6 = get-joint-locator(arg_0, root);
+        u64? var_7 = get-y-vec-from-bound-frame(var_6);
+        u64? var_8 = vector-neg(var_7);
+        u64? var_9 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+        u64? var_10 = quat-from-look-at(var_8, var_9);
+        u64? var_11 = alloc-bound-frame(var_5, var_10, 0, 0, 0);
+        u64? var_12 = get-joint-locator(arg_0, root);
+        u64? var_13 = get-y-vec-from-bound-frame(var_12);
+        u64? var_14 = vector-neg(var_13);
+        u64? var_15 = get-object-locator(arg_0);
+        u64? var_16 = get-z-vec-from-bound-frame(var_15);
+        u64? var_17 = angle-in-between-vectors-plus(var_14, var_16, 1);
+        u64? var_18 = rotate-locator-angle(var_11, 1, var_17 * 0.50);
+        u64? var_19 = flatten-locator(var_18);
+        var_2 = var_19;
+    } else {
+        u64? var_20 = get-object-locator(arg_0);
+        var_2 = var_20;
+    }
+    u64? var_21 = npc-is-dog?(arg_1);
+    u64? var_22 = !(var_21);
+    u64? var_23;
+    if (var_22 != nullptr) {
+        u64? var_24 = get-joint-locator(arg_1, root);
+        u64? var_25 = flatten-locator(var_24);
+        u64? var_26 = get-locator-position(var_25);
+        u64? var_27 = get-joint-locator(arg_1, root);
+        u64? var_28 = get-y-vec-from-bound-frame(var_27);
+        u64? var_29 = vector-neg(var_28);
+        u64? var_30 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+        u64? var_31 = quat-from-look-at(var_29, var_30);
+        u64? var_32 = alloc-bound-frame(var_26, var_31, 0, 0, 0);
+        u64? var_33 = get-joint-locator(arg_1, root);
+        u64? var_34 = get-y-vec-from-bound-frame(var_33);
+        u64? var_35 = vector-neg(var_34);
+        u64? var_36 = get-object-locator(arg_1);
+        u64? var_37 = get-z-vec-from-bound-frame(var_36);
+        u64? var_38 = angle-in-between-vectors-plus(var_35, var_37, 1);
+        u64? var_39 = rotate-locator-angle(var_32, 1, var_38 * 0.50);
+        u64? var_40 = flatten-locator(var_39);
+        var_23 = var_40;
+    } else {
+        u64? var_41 = get-object-locator(arg_1);
+        var_23 = var_41;
+    }
+    u64? var_42 = npc-in-tap?(arg_1);
+    u64? var_43 = !(var_42);
+    u64? var_44 = npc-in-melee-vulnerable-tap?(arg_1);
+    u64? var_45 = is-npc?(arg_1);
+    u64? var_46;
+    if (var_43 != nullptr && var_44 != nullptr && var_45 != nullptr) {
+        u64? var_47 = melee-fact-get-bool(arg_1, ignore-poise);
+        u16 var_48;
+        if (var_47 != nullptr) {
+            var_48 = 1;
+        } else {
+            u64? var_49 = is-poise-broken?(arg_1);
+            var_48 = var_49;
+        }
+        u64? var_50 = melee-character-bit-check(arg_1, #0000000044200000);
+        u64? var_51 = npc-clicker?(arg_1);
+        u64? var_52 = melee-weapon-type-precedence(arg_0, arg_1);
+        bool var_53 = var_48 && !var_50 && var_51 && var_52;
+        var_46 = var_53;
+    }
+    return var_46;
+}
+
+u64? #2743DD18E80813E2__start-func-array@ada8(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = is-player?(arg_2);
+    u64? var_1 = is-player-base?(arg_2);
+    u64? var_2 = melee-character-bit-check(arg_2, 8589934592);
+    bool var_3 = !(arg_2 == 0) || var_0 && !var_1 && var_2;
+    return var_3;
+}
+
+u64? #2743DD18E80813E2(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = melee-log-player-event("melee-player-sync-hit", 1);
+    return var_0;
+}
+
+u64? #2C85D53610A787F1(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = distance-between-objects-less-than?(arg_1, arg_2, 3.00);
+    u64? var_1 = player-is-sprinting?(1);
+    u64? var_2 = distance-between-objects-less-than?(arg_1, arg_2, 5.00);
+    bool var_3 = var_0 && var_1 && var_2;
+    if (var_3 == nullptr) {
+        melee-debug-text-file-line-fail("(or (distance-between-objects-less-than? attacker defender 3.0) (and (player-is-sprinting?) (distance-between-objects-less-than? attacker defender 5.0)))", "t2r/src/game/scriptx/melee/player-standing/player-fists.dcx", 1702);
+    }
+    u64? var_4 = melee-character-bit-check(arg_2, #0000000200000000);
+    melee-debug-text-file-line-fail("(melee-character-bit-check defender (target-character-type dog))", "t2r/src/game/scriptx/melee/player-standing/player-fists.dcx", 1709);
+    bool var_5 = var_3 && var_4 && var_4;
+    return var_5;
+}
+
+u64? #2C85D53610A787F1__melee-event-list@70e0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = new-boxed-value(7, #2C85D53610A787F1);
+    u64? var_1 = new-boxed-value(7, arg_2);
+    u64? var_2 = send-event(new-swing, ss-melee-dodge-attack-spam, var_0, var_1);
+    return var_2;
+}
+
+f32 fist-light-attack-4-kick__character-melee-info@97b8(u64? arg_0, u64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    f32 var_0;
+    if (arg_1 != nullptr && *(u64*)(arg_1 + 16) == melee-player-contextual-dodge) {
+        var_0 = 0.20 + 0.10;
+    } else if (arg_1 != nullptr && *(u8*)(*(arg_1 + 296) + 30) != nullptr) {
+        var_0 = 0.20;
+    } else if (0 == nullptr && arg_1 != nullptr && *(arg_1 + 104) != nullptr && *(u64*)(*(arg_1 + 104) + 32) == abby-fist-combo-punch-2-hit--abby) {
+        var_0 = 0.13;
+    } else {
+        var_0 = 0.20;
+    }
+    return var_0;
+}
+
+u64? fist-light-attack-4-kick(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = melee-fact-get-int(arg_1, swing-repeat-count);
+    u64? var_1 = melee-fact-get-time-since(arg_1, left-opener);
+    u64? var_2 = frames-to-sec(75);
+    u64? var_3 = player-is-sprinting?(1);
+    u64? var_4 = is-player-abby?(player);
+    u64? var_5 = net-is-active?();
+    bool var_6 = var_0 >= 2 && var_1 < var_2 && !var_3 || var_4 && var_5;
+    return var_6;
+}
+
+u64? fist-light-attack-4-kick__melee-event-list@ccc8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = new-boxed-value(7, fist-light-attack-4-kick);
+    u64? var_1 = new-boxed-value(7, arg_2);
+    u64? var_2 = send-event(new-swing, ss-melee-dodge-attack-spam, var_0, var_1);
+    return var_2;
+}
+
+u64? #3E34FA07F5F2B33F(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = distance-between-objects-less-than?(arg_1, arg_2, 3.00);
+    u64? var_1 = player-is-sprinting?(1);
+    u64? var_2 = distance-between-objects-less-than?(arg_1, arg_2, 5.00);
+    bool var_3 = var_0 && var_1 && var_2;
+    if (var_3 == nullptr) {
+        melee-debug-text-file-line-fail("(or (distance-between-objects-less-than? attacker defender 3.0) (and (player-is-sprinting?) (distance-between-objects-less-than? attacker defender 5.0)))", "t2r/src/game/scriptx/melee/player-standing/player-fists.dcx", 1873);
+    }
+    u64? var_4 = melee-character-bit-check(arg_2, #0000000200000000);
+    melee-debug-text-file-line-fail("(melee-character-bit-check defender (target-character-type dog))", "t2r/src/game/scriptx/melee/player-standing/player-fists.dcx", 1880);
+    bool var_5 = var_3 && var_4 && var_4;
+    return var_5;
+}
+
+u64? #3E34FA07F5F2B33F__melee-event-list@b418(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = new-boxed-value(7, #3E34FA07F5F2B33F);
+    u64? var_1 = new-boxed-value(7, arg_2);
+    u64? var_2 = send-event(new-swing, ss-melee-dodge-attack-spam, var_0, var_1);
+    return var_2;
+}
+
+u64? #3E34FB07F5F2B4F2(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = distance-between-objects-less-than?(arg_1, arg_2, 3.00);
+    u64? var_1 = player-is-sprinting?(1);
+    u64? var_2 = distance-between-objects-less-than?(arg_1, arg_2, 5.00);
+    bool var_3 = var_0 && var_1 && var_2;
+    if (var_3 == nullptr) {
+        melee-debug-text-file-line-fail("(or (distance-between-objects-less-than? attacker defender 3.0) (and (player-is-sprinting?) (distance-between-objects-less-than? attacker defender 5.0)))", "t2r/src/game/scriptx/melee/player-standing/player-fists.dcx", 1620);
+    }
+    u64? var_4 = melee-character-bit-check(arg_2, #0000000200000000);
+    melee-debug-text-file-line-fail("(melee-character-bit-check defender (target-character-type dog))", "t2r/src/game/scriptx/melee/player-standing/player-fists.dcx", 1627);
+    bool var_5 = var_3 && var_4 && var_4;
+    return var_5;
+}
+
+u64? #3E34FB07F5F2B4F2__melee-event-list@a210(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = new-boxed-value(7, #3E34FB07F5F2B4F2);
+    u64? var_1 = new-boxed-value(7, arg_2);
+    u64? var_2 = send-event(new-swing, ss-melee-dodge-attack-spam, var_0, var_1);
+    return var_2;
+}
+
+u16 fist-light-attack-left-1-hit-ellie__melee-attack@2268(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, abby-punch-combo-1-left-hit--ellie, var_2, var_3, *player-npc-sync-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u64? fist-light-attack-left-1-hit-ellie__character-melee-info@a780(u64? arg_0, f32 arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_0 = npc-is-dog?(arg_0);
+    u64? var_1 = !(var_0);
+    u64? var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-joint-locator(arg_0, root);
+        u64? var_4 = flatten-locator(var_3);
+        u64? var_5 = get-locator-position(var_4);
+        u64? var_6 = get-joint-locator(arg_0, root);
+        u64? var_7 = get-y-vec-from-bound-frame(var_6);
+        u64? var_8 = vector-neg(var_7);
+        u64? var_9 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+        u64? var_10 = quat-from-look-at(var_8, var_9);
+        u64? var_11 = alloc-bound-frame(var_5, var_10, 0, 0, 0);
+        u64? var_12 = get-joint-locator(arg_0, root);
+        u64? var_13 = get-y-vec-from-bound-frame(var_12);
+        u64? var_14 = vector-neg(var_13);
+        u64? var_15 = get-object-locator(arg_0);
+        u64? var_16 = get-z-vec-from-bound-frame(var_15);
+        u64? var_17 = angle-in-between-vectors-plus(var_14, var_16, 1);
+        u64? var_18 = rotate-locator-angle(var_11, 1, var_17 * 0.50);
+        u64? var_19 = flatten-locator(var_18);
+        var_2 = var_19;
+    } else {
+        u64? var_20 = get-object-locator(arg_0);
+        var_2 = var_20;
+    }
+    u64? var_21 = npc-is-dog?(arg_1);
+    u64? var_22 = !(var_21);
+    u64? var_23;
+    if (var_22 != nullptr) {
+        u64? var_24 = get-joint-locator(arg_1, root);
+        u64? var_25 = flatten-locator(var_24);
+        u64? var_26 = get-locator-position(var_25);
+        u64? var_27 = get-joint-locator(arg_1, root);
+        u64? var_28 = get-y-vec-from-bound-frame(var_27);
+        u64? var_29 = vector-neg(var_28);
+        u64? var_30 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+        u64? var_31 = quat-from-look-at(var_29, var_30);
+        u64? var_32 = alloc-bound-frame(var_26, var_31, 0, 0, 0);
+        u64? var_33 = get-joint-locator(arg_1, root);
+        u64? var_34 = get-y-vec-from-bound-frame(var_33);
+        u64? var_35 = vector-neg(var_34);
+        u64? var_36 = get-object-locator(arg_1);
+        u64? var_37 = get-z-vec-from-bound-frame(var_36);
+        u64? var_38 = angle-in-between-vectors-plus(var_35, var_37, 1);
+        u64? var_39 = rotate-locator-angle(var_32, 1, var_38 * 0.50);
+        u64? var_40 = flatten-locator(var_39);
+        var_23 = var_40;
+    } else {
+        u64? var_41 = get-object-locator(arg_1);
+        var_23 = var_41;
+    }
+    u64? var_42 = npc-in-tap?(arg_1);
+    u64? var_43 = !(var_42);
+    u64? var_44 = npc-in-melee-vulnerable-tap?(arg_1);
+    u64? var_45 = is-npc?(arg_1);
+    u64? var_46;
+    if (var_43 != nullptr && var_44 != nullptr && var_45 != nullptr) {
+        u64? var_47 = melee-fact-get-bool(arg_1, ignore-poise);
+        u16 var_48;
+        if (var_47 != nullptr) {
+            var_48 = 1;
+        } else {
+            u64? var_49 = is-poise-broken?(arg_1);
+            var_48 = var_49;
+        }
+        u64? var_50 = melee-character-bit-check(arg_1, #0000000244200000);
+        u64? var_51 = npc-clicker?(arg_1);
+        u64? var_52 = melee-weapon-type-precedence(arg_0, arg_1);
+        bool var_53 = var_48 && !var_50 && var_51 && var_52;
+        var_46 = var_53;
+    }
+    return var_46;
+}
+
+u64? fist-light-attack-left-1-hit-ellie__start-func-array@c990(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = is-player?(arg_2);
+    u64? var_1 = is-player-base?(arg_2);
+    u64? var_2 = melee-character-bit-check(arg_2, 4);
+    bool var_3 = !(arg_2 == 0) || var_0 && !var_1 && var_2;
+    return var_3;
+}
+
+f32 fist-light-attack-1__character-melee-info@9a00(u64? arg_0, u64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    f32 var_0;
+    if (arg_1 != nullptr && *(u64*)(arg_1 + 16) == melee-player-contextual-dodge) {
+        var_0 = 0.13 + 0.10;
+    } else if (arg_1 != nullptr && *(u8*)(*(arg_1 + 296) + 30) != nullptr) {
+        var_0 = 0.20;
+    } else if (arg_1 != nullptr && *(arg_1 + 104) != nullptr && *(u64*)(*(arg_1 + 104) + 32) == abby-fist-combo-punch-1-left-hit--abby) {
+        var_0 = 0.13;
+    } else {
+        u64? var_1 = get-object-state(arg_2, 0);
+        u64? var_2 = player-is-sprinting?(1);
+        if (Move == var_1 && var_2 == nullptr) {
+            var_0 = 0.13;
+        } else {
+            var_0 = 0.13;
+        }
+    }
+    return var_0;
+}
+
+u64? fist-light-attack-1(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = melee-fact-get-time-since(player, left-opener);
+    u64? var_1 = frames-to-sec(30);
+    if ((var_0 < var_1) == nullptr) {
+        melee-debug-text-file-line-fail("(< (melee-fact-get-time-since (quote player) (quote left-opener)) (frames-to-sec 30))", "t2r/src/game/scriptx/melee/player-standing/player-fists.dcx", 420);
+    }
+    u64? var_2 = distance-between-objects-greater-than?(arg_1, arg_2, 2.00, 1);
+    melee-debug-text-file-line-fail("(distance-between-objects-greater-than? attacker defender 2.0)", "t2r/src/game/scriptx/melee/player-standing/player-fists.dcx", 421);
+    bool var_3 = var_0 < var_1 && var_2 && var_2;
+    if (var_3 == nullptr) {
+        melee-debug-text-file-line-fail("(melee-debug-or (< (melee-fact-get-time-since (quote player) (quote left-opener)) (frames-to-sec 30)) (distance-between-objects-greater-than? attacker defender 2.0) (melee-character-bit-check defender (target-character-type ellie)) (is-blocking? defender))", "t2r/src/game/scriptx/melee/player-standing/player-fists.dcx", 419);
+    }
+    u64? var_4 = player-is-sprinting?(1);
+    melee-debug-text-file-line-fail("(not (player-is-sprinting?))", "t2r/src/game/scriptx/melee/player-standing/player-fists.dcx", 425);
+    bool var_5 = var_3 && !var_4 && !var_4;
+    return var_5;
+}
+
+u64? fist-light-attack-1__melee-event-list@b5b0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = new-boxed-value(7, fist-light-attack-1);
+    u64? var_1 = new-boxed-value(7, arg_2);
+    u64? var_2 = send-event(new-swing, ss-melee-dodge-attack-spam, var_0, var_1);
+    return var_2;
+}
+
+f32 fist-light-attack-2__character-melee-info@8ee0(u64? arg_0, u64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    f32 var_0;
+    if (arg_1 != nullptr && *(u64*)(arg_1 + 16) == melee-player-contextual-dodge) {
+        var_0 = 0.20 + 0.10;
+    } else if (arg_1 != nullptr && *(u8*)(*(arg_1 + 296) + 30) != nullptr) {
+        var_0 = 0.20;
+    } else if (0 == nullptr && arg_1 != nullptr && *(arg_1 + 104) != nullptr && *(u64*)(*(arg_1 + 104) + 32) == abby-fist-combo-punch-1-hit--abby) {
+        var_0 = 0.13;
+    } else {
+        var_0 = 0.20;
+    }
+    return var_0;
+}
+
+f32 fist-light-attack-2(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7) {
+    u64? var_0 = npc-brute?(arg_2);
+    f32 var_1;
+    if (var_0 != nullptr) {
+        var_1 = 1.00;
+    } else {
+        var_1 = 0.00;
+    }
+    return var_1;
+}
+
+u64? fist-light-attack-2__melee-event-list@9418(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = new-boxed-value(7, fist-light-attack-2);
+    u64? var_1 = new-boxed-value(7, arg_2);
+    u64? var_2 = send-event(new-swing, ss-melee-dodge-attack-spam, var_0, var_1);
+    return var_2;
+}
+
+u64? fist-light-attack-3__melee-event-list@9400(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = new-boxed-value(7, fist-light-attack-3);
+    u64? var_1 = new-boxed-value(7, arg_2);
+    u64? var_2 = send-event(new-swing, ss-melee-dodge-attack-spam, var_0, var_1);
+    return var_2;
+}
+
+u64? fist-light-attack-3(u64 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64 var_0 = *(u64*)(*(arg_0 + 104) + 32);
+    u64? var_1 = get-animation-duration(arg_1, var_0);
+    u64? var_2 = sec-to-frames(var_1);
+    u64? var_3 = tension-mode-is?(1);
+    tension-mode-is?(2);
+    u16 var_4 = 26 - (var_2 - 30);
+    u64? var_5 = frames-to-sec(var_4);
+    joypad-disable-commands-timed(var_5, melee-attack);
+    invalidate-single-melee-command-queue(arg_1, melee-attack);
+    bool var_6 = *(arg_0 + 104) || var_2 - 30 && var_2 - 30 && var_2 - 30 && var_2 - 30;
+    return var_6;
+}
+
+u16 fist-light-attack-left-1__melee-attack@2a28(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    return 5;
+}
+
+u64? fist-light-attack-left-1(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = melee-fact-get-time-since(arg_2, combo-4-punch-landed);
+    u64? var_1 = frames-to-sec(40);
+    u64? var_2;
+    if (var_0 < var_1) {
+        u64? var_3 = distance-between-objects-less-than?(arg_1, arg_2, 3.00);
+        var_2 = var_3;
+    } else {
+        u64? var_4 = distance-between-objects-less-than?(arg_1, arg_2, 2.00);
+        var_2 = var_4;
+    }
+    u64? var_5 = melee-character-bit-check(arg_2, 4);
+    u64? var_6 = player-is-sprinting?(1);
+    u64? var_7 = is-player-abby?(player);
+    u64? var_8 = net-is-active?();
+    bool var_9 = var_2 && !var_5 && !var_6 || var_7 && var_8;
+    return var_9;
+}
+
+u64? fist-light-attack-left-1__melee-event-list@7388(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = new-boxed-value(7, fist-light-attack-left-1);
+    u64? var_1 = new-boxed-value(7, arg_2);
+    u64? var_2 = send-event(new-swing, ss-melee-dodge-attack-spam, var_0, var_1);
+    return var_2;
+}
+
+u16 fist-light-attack-1-hit-brute__melee-attack@2c18(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, abby-fist-combo-punch-1-hit--brute-m, var_2, var_3, *player-npc-sync-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u64? fist-light-attack-1-hit-brute__character-melee-info@7cd8(u64? arg_0, f32 arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_0 = npc-is-dog?(arg_0);
+    u64? var_1 = !(var_0);
+    u64? var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-joint-locator(arg_0, root);
+        u64? var_4 = flatten-locator(var_3);
+        u64? var_5 = get-locator-position(var_4);
+        u64? var_6 = get-joint-locator(arg_0, root);
+        u64? var_7 = get-y-vec-from-bound-frame(var_6);
+        u64? var_8 = vector-neg(var_7);
+        u64? var_9 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+        u64? var_10 = quat-from-look-at(var_8, var_9);
+        u64? var_11 = alloc-bound-frame(var_5, var_10, 0, 0, 0);
+        u64? var_12 = get-joint-locator(arg_0, root);
+        u64? var_13 = get-y-vec-from-bound-frame(var_12);
+        u64? var_14 = vector-neg(var_13);
+        u64? var_15 = get-object-locator(arg_0);
+        u64? var_16 = get-z-vec-from-bound-frame(var_15);
+        u64? var_17 = angle-in-between-vectors-plus(var_14, var_16, 1);
+        u64? var_18 = rotate-locator-angle(var_11, 1, var_17 * 0.50);
+        u64? var_19 = flatten-locator(var_18);
+        var_2 = var_19;
+    } else {
+        u64? var_20 = get-object-locator(arg_0);
+        var_2 = var_20;
+    }
+    u64? var_21 = npc-is-dog?(arg_1);
+    u64? var_22 = !(var_21);
+    u64? var_23;
+    if (var_22 != nullptr) {
+        u64? var_24 = get-joint-locator(arg_1, root);
+        u64? var_25 = flatten-locator(var_24);
+        u64? var_26 = get-locator-position(var_25);
+        u64? var_27 = get-joint-locator(arg_1, root);
+        u64? var_28 = get-y-vec-from-bound-frame(var_27);
+        u64? var_29 = vector-neg(var_28);
+        u64? var_30 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+        u64? var_31 = quat-from-look-at(var_29, var_30);
+        u64? var_32 = alloc-bound-frame(var_26, var_31, 0, 0, 0);
+        u64? var_33 = get-joint-locator(arg_1, root);
+        u64? var_34 = get-y-vec-from-bound-frame(var_33);
+        u64? var_35 = vector-neg(var_34);
+        u64? var_36 = get-object-locator(arg_1);
+        u64? var_37 = get-z-vec-from-bound-frame(var_36);
+        u64? var_38 = angle-in-between-vectors-plus(var_35, var_37, 1);
+        u64? var_39 = rotate-locator-angle(var_32, 1, var_38 * 0.50);
+        u64? var_40 = flatten-locator(var_39);
+        var_23 = var_40;
+    } else {
+        u64? var_41 = get-object-locator(arg_1);
+        var_23 = var_41;
+    }
+    u64? var_42 = is-npc?(arg_1);
+    u64? var_43 = melee-fact-get-bool(arg_1, ignore-poise);
+    bool var_44 = var_42 && var_43 && 1;
+    return var_44;
+}
+
+u16 fist-light-attack-2-hit-brute__melee-attack@2e08(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, abby-fist-combo-punch-2-hit--brute-m, var_2, var_3, *player-npc-sync-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u64? fist-light-attack-2-hit-brute__character-melee-info@7db0(u64? arg_0, f32 arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_0 = npc-is-dog?(arg_0);
+    u64? var_1 = !(var_0);
+    u64? var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-joint-locator(arg_0, root);
+        u64? var_4 = flatten-locator(var_3);
+        u64? var_5 = get-locator-position(var_4);
+        u64? var_6 = get-joint-locator(arg_0, root);
+        u64? var_7 = get-y-vec-from-bound-frame(var_6);
+        u64? var_8 = vector-neg(var_7);
+        u64? var_9 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+        u64? var_10 = quat-from-look-at(var_8, var_9);
+        u64? var_11 = alloc-bound-frame(var_5, var_10, 0, 0, 0);
+        u64? var_12 = get-joint-locator(arg_0, root);
+        u64? var_13 = get-y-vec-from-bound-frame(var_12);
+        u64? var_14 = vector-neg(var_13);
+        u64? var_15 = get-object-locator(arg_0);
+        u64? var_16 = get-z-vec-from-bound-frame(var_15);
+        u64? var_17 = angle-in-between-vectors-plus(var_14, var_16, 1);
+        u64? var_18 = rotate-locator-angle(var_11, 1, var_17 * 0.50);
+        u64? var_19 = flatten-locator(var_18);
+        var_2 = var_19;
+    } else {
+        u64? var_20 = get-object-locator(arg_0);
+        var_2 = var_20;
+    }
+    u64? var_21 = npc-is-dog?(arg_1);
+    u64? var_22 = !(var_21);
+    u64? var_23;
+    if (var_22 != nullptr) {
+        u64? var_24 = get-joint-locator(arg_1, root);
+        u64? var_25 = flatten-locator(var_24);
+        u64? var_26 = get-locator-position(var_25);
+        u64? var_27 = get-joint-locator(arg_1, root);
+        u64? var_28 = get-y-vec-from-bound-frame(var_27);
+        u64? var_29 = vector-neg(var_28);
+        u64? var_30 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+        u64? var_31 = quat-from-look-at(var_29, var_30);
+        u64? var_32 = alloc-bound-frame(var_26, var_31, 0, 0, 0);
+        u64? var_33 = get-joint-locator(arg_1, root);
+        u64? var_34 = get-y-vec-from-bound-frame(var_33);
+        u64? var_35 = vector-neg(var_34);
+        u64? var_36 = get-object-locator(arg_1);
+        u64? var_37 = get-z-vec-from-bound-frame(var_36);
+        u64? var_38 = angle-in-between-vectors-plus(var_35, var_37, 1);
+        u64? var_39 = rotate-locator-angle(var_32, 1, var_38 * 0.50);
+        u64? var_40 = flatten-locator(var_39);
+        var_23 = var_40;
+    } else {
+        u64? var_41 = get-object-locator(arg_1);
+        var_23 = var_41;
+    }
+    u64? var_42 = is-npc?(arg_1);
+    u64? var_43 = melee-fact-get-bool(arg_1, ignore-poise);
+    bool var_44 = var_42 && var_43 && 1;
+    return var_44;
+}
+
+u16 fist-dodge-forward-attack-1-hit-brute__melee-attack@2ff8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, abby-fist-dodge-back-attack-hit--abby, var_2, var_3, *player-npc-sync-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u64? fist-dodge-forward-attack-1-hit-brute__character-melee-info@8dc8(u64? arg_0, f32 arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_0 = npc-is-dog?(arg_0);
+    u64? var_1 = !(var_0);
+    u64? var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-joint-locator(arg_0, root);
+        u64? var_4 = flatten-locator(var_3);
+        u64? var_5 = get-locator-position(var_4);
+        u64? var_6 = get-joint-locator(arg_0, root);
+        u64? var_7 = get-y-vec-from-bound-frame(var_6);
+        u64? var_8 = vector-neg(var_7);
+        u64? var_9 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+        u64? var_10 = quat-from-look-at(var_8, var_9);
+        u64? var_11 = alloc-bound-frame(var_5, var_10, 0, 0, 0);
+        u64? var_12 = get-joint-locator(arg_0, root);
+        u64? var_13 = get-y-vec-from-bound-frame(var_12);
+        u64? var_14 = vector-neg(var_13);
+        u64? var_15 = get-object-locator(arg_0);
+        u64? var_16 = get-z-vec-from-bound-frame(var_15);
+        u64? var_17 = angle-in-between-vectors-plus(var_14, var_16, 1);
+        u64? var_18 = rotate-locator-angle(var_11, 1, var_17 * 0.50);
+        u64? var_19 = flatten-locator(var_18);
+        var_2 = var_19;
+    } else {
+        u64? var_20 = get-object-locator(arg_0);
+        var_2 = var_20;
+    }
+    u64? var_21 = npc-is-dog?(arg_1);
+    u64? var_22 = !(var_21);
+    u64? var_23;
+    if (var_22 != nullptr) {
+        u64? var_24 = get-joint-locator(arg_1, root);
+        u64? var_25 = flatten-locator(var_24);
+        u64? var_26 = get-locator-position(var_25);
+        u64? var_27 = get-joint-locator(arg_1, root);
+        u64? var_28 = get-y-vec-from-bound-frame(var_27);
+        u64? var_29 = vector-neg(var_28);
+        u64? var_30 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+        u64? var_31 = quat-from-look-at(var_29, var_30);
+        u64? var_32 = alloc-bound-frame(var_26, var_31, 0, 0, 0);
+        u64? var_33 = get-joint-locator(arg_1, root);
+        u64? var_34 = get-y-vec-from-bound-frame(var_33);
+        u64? var_35 = vector-neg(var_34);
+        u64? var_36 = get-object-locator(arg_1);
+        u64? var_37 = get-z-vec-from-bound-frame(var_36);
+        u64? var_38 = angle-in-between-vectors-plus(var_35, var_37, 1);
+        u64? var_39 = rotate-locator-angle(var_32, 1, var_38 * 0.50);
+        u64? var_40 = flatten-locator(var_39);
+        var_23 = var_40;
+    } else {
+        u64? var_41 = get-object-locator(arg_1);
+        var_23 = var_41;
+    }
+    u64? var_42 = is-npc?(arg_1);
+    u64? var_43 = melee-fact-get-bool(arg_1, ignore-poise);
+    bool var_44 = var_42 && var_43 && 1;
+    return var_44;
+}
+
+u16 fist-light-attack-1-hit__melee-attack@31e8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, abby-fist-combo-punch-1-hit--npc-f, var_2, var_3, *player-npc-sync-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u64? fist-light-attack-1-hit__character-melee-info@9b68(u64? arg_0, f32 arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_0 = npc-is-dog?(arg_0);
+    u64? var_1 = !(var_0);
+    u64? var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-joint-locator(arg_0, root);
+        u64? var_4 = flatten-locator(var_3);
+        u64? var_5 = get-locator-position(var_4);
+        u64? var_6 = get-joint-locator(arg_0, root);
+        u64? var_7 = get-y-vec-from-bound-frame(var_6);
+        u64? var_8 = vector-neg(var_7);
+        u64? var_9 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+        u64? var_10 = quat-from-look-at(var_8, var_9);
+        u64? var_11 = alloc-bound-frame(var_5, var_10, 0, 0, 0);
+        u64? var_12 = get-joint-locator(arg_0, root);
+        u64? var_13 = get-y-vec-from-bound-frame(var_12);
+        u64? var_14 = vector-neg(var_13);
+        u64? var_15 = get-object-locator(arg_0);
+        u64? var_16 = get-z-vec-from-bound-frame(var_15);
+        u64? var_17 = angle-in-between-vectors-plus(var_14, var_16, 1);
+        u64? var_18 = rotate-locator-angle(var_11, 1, var_17 * 0.50);
+        u64? var_19 = flatten-locator(var_18);
+        var_2 = var_19;
+    } else {
+        u64? var_20 = get-object-locator(arg_0);
+        var_2 = var_20;
+    }
+    u64? var_21 = npc-is-dog?(arg_1);
+    u64? var_22 = !(var_21);
+    u64? var_23;
+    if (var_22 != nullptr) {
+        u64? var_24 = get-joint-locator(arg_1, root);
+        u64? var_25 = flatten-locator(var_24);
+        u64? var_26 = get-locator-position(var_25);
+        u64? var_27 = get-joint-locator(arg_1, root);
+        u64? var_28 = get-y-vec-from-bound-frame(var_27);
+        u64? var_29 = vector-neg(var_28);
+        u64? var_30 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+        u64? var_31 = quat-from-look-at(var_29, var_30);
+        u64? var_32 = alloc-bound-frame(var_26, var_31, 0, 0, 0);
+        u64? var_33 = get-joint-locator(arg_1, root);
+        u64? var_34 = get-y-vec-from-bound-frame(var_33);
+        u64? var_35 = vector-neg(var_34);
+        u64? var_36 = get-object-locator(arg_1);
+        u64? var_37 = get-z-vec-from-bound-frame(var_36);
+        u64? var_38 = angle-in-between-vectors-plus(var_35, var_37, 1);
+        u64? var_39 = rotate-locator-angle(var_32, 1, var_38 * 0.50);
+        u64? var_40 = flatten-locator(var_39);
+        var_23 = var_40;
+    } else {
+        u64? var_41 = get-object-locator(arg_1);
+        var_23 = var_41;
+    }
+    u64? var_42 = npc-in-tap?(arg_1);
+    u64? var_43 = !(var_42);
+    u64? var_44 = npc-in-melee-vulnerable-tap?(arg_1);
+    u64? var_45 = is-npc?(arg_1);
+    u64? var_46;
+    if (var_43 != nullptr && var_44 != nullptr && var_45 != nullptr) {
+        u64? var_47 = melee-fact-get-bool(arg_1, ignore-poise);
+        u16 var_48;
+        if (var_47 != nullptr) {
+            var_48 = 1;
+        } else {
+            u64? var_49 = is-poise-broken?(arg_1);
+            var_48 = var_49;
+        }
+        u64? var_50 = melee-character-bit-check(arg_1, #0000000244200000);
+        u64? var_51 = npc-clicker?(arg_1);
+        u64? var_52 = melee-weapon-type-precedence(arg_0, arg_1);
+        bool var_53 = var_48 && !var_50 && var_51 && var_52;
+        var_46 = var_53;
+    }
+    return var_46;
+}
+
+u16 abby-fists-sprinting-attack-1-hit-brute__melee-attack@33d8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, abby-fist-sprint-attack-hit--brute-m, var_2, var_3, *player-npc-sync-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u64? abby-fists-sprinting-attack-1-hit-brute__character-melee-info@8b10(u64? arg_0, f32 arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_0 = npc-is-dog?(arg_0);
+    u64? var_1 = !(var_0);
+    u64? var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-joint-locator(arg_0, root);
+        u64? var_4 = flatten-locator(var_3);
+        u64? var_5 = get-locator-position(var_4);
+        u64? var_6 = get-joint-locator(arg_0, root);
+        u64? var_7 = get-y-vec-from-bound-frame(var_6);
+        u64? var_8 = vector-neg(var_7);
+        u64? var_9 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+        u64? var_10 = quat-from-look-at(var_8, var_9);
+        u64? var_11 = alloc-bound-frame(var_5, var_10, 0, 0, 0);
+        u64? var_12 = get-joint-locator(arg_0, root);
+        u64? var_13 = get-y-vec-from-bound-frame(var_12);
+        u64? var_14 = vector-neg(var_13);
+        u64? var_15 = get-object-locator(arg_0);
+        u64? var_16 = get-z-vec-from-bound-frame(var_15);
+        u64? var_17 = angle-in-between-vectors-plus(var_14, var_16, 1);
+        u64? var_18 = rotate-locator-angle(var_11, 1, var_17 * 0.50);
+        u64? var_19 = flatten-locator(var_18);
+        var_2 = var_19;
+    } else {
+        u64? var_20 = get-object-locator(arg_0);
+        var_2 = var_20;
+    }
+    u64? var_21 = npc-is-dog?(arg_1);
+    u64? var_22 = !(var_21);
+    u64? var_23;
+    if (var_22 != nullptr) {
+        u64? var_24 = get-joint-locator(arg_1, root);
+        u64? var_25 = flatten-locator(var_24);
+        u64? var_26 = get-locator-position(var_25);
+        u64? var_27 = get-joint-locator(arg_1, root);
+        u64? var_28 = get-y-vec-from-bound-frame(var_27);
+        u64? var_29 = vector-neg(var_28);
+        u64? var_30 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+        u64? var_31 = quat-from-look-at(var_29, var_30);
+        u64? var_32 = alloc-bound-frame(var_26, var_31, 0, 0, 0);
+        u64? var_33 = get-joint-locator(arg_1, root);
+        u64? var_34 = get-y-vec-from-bound-frame(var_33);
+        u64? var_35 = vector-neg(var_34);
+        u64? var_36 = get-object-locator(arg_1);
+        u64? var_37 = get-z-vec-from-bound-frame(var_36);
+        u64? var_38 = angle-in-between-vectors-plus(var_35, var_37, 1);
+        u64? var_39 = rotate-locator-angle(var_32, 1, var_38 * 0.50);
+        u64? var_40 = flatten-locator(var_39);
+        var_23 = var_40;
+    } else {
+        u64? var_41 = get-object-locator(arg_1);
+        var_23 = var_41;
+    }
+    u64? var_42 = is-npc?(arg_1);
+    u64? var_43 = melee-fact-get-bool(arg_1, ignore-poise);
+    bool var_44 = var_42 && var_43 && 1;
+    return var_44;
+}
+
+u16 #627BFB0D087A4EA9__melee-attack@35c8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, #6486B0B030AB12C5, var_2, var_3, *player-npc-sync-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u64? #627BFB0D087A4EA9__character-melee-info@b508(u64? arg_0, f32 arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_0 = npc-is-dog?(arg_0);
+    u64? var_1 = !(var_0);
+    u64? var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-joint-locator(arg_0, root);
+        u64? var_4 = flatten-locator(var_3);
+        u64? var_5 = get-locator-position(var_4);
+        u64? var_6 = get-joint-locator(arg_0, root);
+        u64? var_7 = get-y-vec-from-bound-frame(var_6);
+        u64? var_8 = vector-neg(var_7);
+        u64? var_9 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+        u64? var_10 = quat-from-look-at(var_8, var_9);
+        u64? var_11 = alloc-bound-frame(var_5, var_10, 0, 0, 0);
+        u64? var_12 = get-joint-locator(arg_0, root);
+        u64? var_13 = get-y-vec-from-bound-frame(var_12);
+        u64? var_14 = vector-neg(var_13);
+        u64? var_15 = get-object-locator(arg_0);
+        u64? var_16 = get-z-vec-from-bound-frame(var_15);
+        u64? var_17 = angle-in-between-vectors-plus(var_14, var_16, 1);
+        u64? var_18 = rotate-locator-angle(var_11, 1, var_17 * 0.50);
+        u64? var_19 = flatten-locator(var_18);
+        var_2 = var_19;
+    } else {
+        u64? var_20 = get-object-locator(arg_0);
+        var_2 = var_20;
+    }
+    u64? var_21 = npc-is-dog?(arg_1);
+    u64? var_22 = !(var_21);
+    u64? var_23;
+    if (var_22 != nullptr) {
+        u64? var_24 = get-joint-locator(arg_1, root);
+        u64? var_25 = flatten-locator(var_24);
+        u64? var_26 = get-locator-position(var_25);
+        u64? var_27 = get-joint-locator(arg_1, root);
+        u64? var_28 = get-y-vec-from-bound-frame(var_27);
+        u64? var_29 = vector-neg(var_28);
+        u64? var_30 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+        u64? var_31 = quat-from-look-at(var_29, var_30);
+        u64? var_32 = alloc-bound-frame(var_26, var_31, 0, 0, 0);
+        u64? var_33 = get-joint-locator(arg_1, root);
+        u64? var_34 = get-y-vec-from-bound-frame(var_33);
+        u64? var_35 = vector-neg(var_34);
+        u64? var_36 = get-object-locator(arg_1);
+        u64? var_37 = get-z-vec-from-bound-frame(var_36);
+        u64? var_38 = angle-in-between-vectors-plus(var_35, var_37, 1);
+        u64? var_39 = rotate-locator-angle(var_32, 1, var_38 * 0.50);
+        u64? var_40 = flatten-locator(var_39);
+        var_23 = var_40;
+    } else {
+        u64? var_41 = get-object-locator(arg_1);
+        var_23 = var_41;
+    }
+    u64? var_42 = npc-in-tap?(arg_1);
+    u64? var_43 = !(var_42);
+    u64? var_44 = npc-in-melee-vulnerable-tap?(arg_1);
+    u64? var_45 = is-npc?(arg_1);
+    u64? var_46;
+    if (var_43 != nullptr && var_44 != nullptr && var_45 != nullptr) {
+        u64? var_47 = melee-fact-get-bool(arg_1, ignore-poise);
+        u16 var_48;
+        if (var_47 != nullptr) {
+            var_48 = 1;
+        } else {
+            u64? var_49 = is-poise-broken?(arg_1);
+            var_48 = var_49;
+        }
+        u64? var_50 = melee-character-bit-check(arg_1, #0000000044200000);
+        u64? var_51 = npc-clicker?(arg_1);
+        u64? var_52 = melee-weapon-type-precedence(arg_0, arg_1);
+        bool var_53 = var_48 && !var_50 && var_51 && var_52;
+        var_46 = var_53;
+    }
+    return var_46;
+}
+
+u64? fist-glass-attack-1__melee-attack@37b8__start-func-array@7908__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = is-player-abby?(arg_1);
+    return var_0;
+}
+
+u64? fist-glass-attack-1__melee-attack@37b8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, f32 arg_11, u8 arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = task-active?(saving-kids, ski-find-backpack);
+    if (!var_0 == nullptr) {
+        melee-debug-text-file-line-fail("(not (task-active? (quote saving-kids) (quote ski-find-backpack)))", "t2r/src/game/scriptx/melee/player-standing/imports/player-standing-macros.dcx", 2420);
+    }
+    u64? var_1 = task-active?(saving-kids, ski-find-backpack-enter-building);
+    melee-debug-text-file-line-fail("(not (task-active? (quote saving-kids) (quote ski-find-backpack-enter-building)))", "t2r/src/game/scriptx/melee/player-standing/imports/player-standing-macros.dcx", 2421);
+    bool var_2 = !var_0 && !var_1 && !var_1;
+    return var_2;
+}
+
+u16 fist-glass-attack-1__melee-event-list@8ec8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    melee-log-player-event("melee-player-swing-wall", 1);
+    u16 var_0;
+    if (0 == nullptr) {
+        u64? var_1 = player-equip-best-melee-weapon(1, 1);
+        var_0 = var_1;
+    } else {
+        var_0 = 0;
+    }
+    return var_0;
+}
+
+u64? fist-glass-attack-1(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    f32 var_0;
+    if ((0.00 == 0.00) == nullptr) {
+        var_0 = 0.00;
+    } else {
+        var_0 = 0.00;
+    }
+    u64? var_1 = play-melee-facial-gesture(arg_1, 12, var_0, 0.16);
+    return var_1;
+}
+
+u64? abby-fists-sprinting-attack-1(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = player-is-sprinting?(1);
+    return var_0;
+}
+
+u64? abby-fists-sprinting-attack-1__melee-event-list@7040(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = new-boxed-value(7, abby-fists-sprinting-attack-1);
+    u64? var_1 = new-boxed-value(7, arg_2);
+    u64? var_2 = send-event(new-swing, ss-melee-dodge-attack-spam, var_0, var_1);
+    return var_2;
+}
+
+u16 fist-light-attack-3-hit__melee-attack@3b98(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, abby-fist-combo-punch-3-hit--npc-f, var_2, var_3, *player-npc-sync-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u64? fist-light-attack-3-hit__character-melee-info@c5b0(u64? arg_0, f32 arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_0 = npc-is-dog?(arg_0);
+    u64? var_1 = !(var_0);
+    u64? var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-joint-locator(arg_0, root);
+        u64? var_4 = flatten-locator(var_3);
+        u64? var_5 = get-locator-position(var_4);
+        u64? var_6 = get-joint-locator(arg_0, root);
+        u64? var_7 = get-y-vec-from-bound-frame(var_6);
+        u64? var_8 = vector-neg(var_7);
+        u64? var_9 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+        u64? var_10 = quat-from-look-at(var_8, var_9);
+        u64? var_11 = alloc-bound-frame(var_5, var_10, 0, 0, 0);
+        u64? var_12 = get-joint-locator(arg_0, root);
+        u64? var_13 = get-y-vec-from-bound-frame(var_12);
+        u64? var_14 = vector-neg(var_13);
+        u64? var_15 = get-object-locator(arg_0);
+        u64? var_16 = get-z-vec-from-bound-frame(var_15);
+        u64? var_17 = angle-in-between-vectors-plus(var_14, var_16, 1);
+        u64? var_18 = rotate-locator-angle(var_11, 1, var_17 * 0.50);
+        u64? var_19 = flatten-locator(var_18);
+        var_2 = var_19;
+    } else {
+        u64? var_20 = get-object-locator(arg_0);
+        var_2 = var_20;
+    }
+    u64? var_21 = npc-is-dog?(arg_1);
+    u64? var_22 = !(var_21);
+    u64? var_23;
+    if (var_22 != nullptr) {
+        u64? var_24 = get-joint-locator(arg_1, root);
+        u64? var_25 = flatten-locator(var_24);
+        u64? var_26 = get-locator-position(var_25);
+        u64? var_27 = get-joint-locator(arg_1, root);
+        u64? var_28 = get-y-vec-from-bound-frame(var_27);
+        u64? var_29 = vector-neg(var_28);
+        u64? var_30 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+        u64? var_31 = quat-from-look-at(var_29, var_30);
+        u64? var_32 = alloc-bound-frame(var_26, var_31, 0, 0, 0);
+        u64? var_33 = get-joint-locator(arg_1, root);
+        u64? var_34 = get-y-vec-from-bound-frame(var_33);
+        u64? var_35 = vector-neg(var_34);
+        u64? var_36 = get-object-locator(arg_1);
+        u64? var_37 = get-z-vec-from-bound-frame(var_36);
+        u64? var_38 = angle-in-between-vectors-plus(var_35, var_37, 1);
+        u64? var_39 = rotate-locator-angle(var_32, 1, var_38 * 0.50);
+        u64? var_40 = flatten-locator(var_39);
+        var_23 = var_40;
+    } else {
+        u64? var_41 = get-object-locator(arg_1);
+        var_23 = var_41;
+    }
+    u64? var_42 = npc-in-tap?(arg_1);
+    u64? var_43 = !(var_42);
+    u64? var_44 = npc-in-melee-vulnerable-tap?(arg_1);
+    u64? var_45 = is-npc?(arg_1);
+    u64? var_46;
+    if (var_43 != nullptr && var_44 != nullptr && var_45 != nullptr) {
+        u64? var_47 = melee-fact-get-bool(arg_1, ignore-poise);
+        u16 var_48;
+        if (var_47 != nullptr) {
+            var_48 = 1;
+        } else {
+            u64? var_49 = is-poise-broken?(arg_1);
+            var_48 = var_49;
+        }
+        u64? var_50 = melee-character-bit-check(arg_1, #0000000244200000);
+        u64? var_51 = npc-clicker?(arg_1);
+        u64? var_52 = melee-weapon-type-precedence(arg_0, arg_1);
+        bool var_53 = var_48 && !var_50 && var_51 && var_52;
+        var_46 = var_53;
+    }
+    return var_46;
+}
+
+u16 abby-fists-sprinting-attack-1-hit-inf__melee-attack@3d88(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, abby-fist-sprint-attack-hit--npc-f, var_2, var_3, *player-npc-sync-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u64? abby-fists-sprinting-attack-1-hit-inf__character-melee-info@73a0(u64? arg_0, f32 arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_0 = npc-is-dog?(arg_0);
+    u64? var_1 = !(var_0);
+    u64? var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-joint-locator(arg_0, root);
+        u64? var_4 = flatten-locator(var_3);
+        u64? var_5 = get-locator-position(var_4);
+        u64? var_6 = get-joint-locator(arg_0, root);
+        u64? var_7 = get-y-vec-from-bound-frame(var_6);
+        u64? var_8 = vector-neg(var_7);
+        u64? var_9 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+        u64? var_10 = quat-from-look-at(var_8, var_9);
+        u64? var_11 = alloc-bound-frame(var_5, var_10, 0, 0, 0);
+        u64? var_12 = get-joint-locator(arg_0, root);
+        u64? var_13 = get-y-vec-from-bound-frame(var_12);
+        u64? var_14 = vector-neg(var_13);
+        u64? var_15 = get-object-locator(arg_0);
+        u64? var_16 = get-z-vec-from-bound-frame(var_15);
+        u64? var_17 = angle-in-between-vectors-plus(var_14, var_16, 1);
+        u64? var_18 = rotate-locator-angle(var_11, 1, var_17 * 0.50);
+        u64? var_19 = flatten-locator(var_18);
+        var_2 = var_19;
+    } else {
+        u64? var_20 = get-object-locator(arg_0);
+        var_2 = var_20;
+    }
+    u64? var_21 = npc-is-dog?(arg_1);
+    u64? var_22 = !(var_21);
+    u64? var_23;
+    if (var_22 != nullptr) {
+        u64? var_24 = get-joint-locator(arg_1, root);
+        u64? var_25 = flatten-locator(var_24);
+        u64? var_26 = get-locator-position(var_25);
+        u64? var_27 = get-joint-locator(arg_1, root);
+        u64? var_28 = get-y-vec-from-bound-frame(var_27);
+        u64? var_29 = vector-neg(var_28);
+        u64? var_30 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+        u64? var_31 = quat-from-look-at(var_29, var_30);
+        u64? var_32 = alloc-bound-frame(var_26, var_31, 0, 0, 0);
+        u64? var_33 = get-joint-locator(arg_1, root);
+        u64? var_34 = get-y-vec-from-bound-frame(var_33);
+        u64? var_35 = vector-neg(var_34);
+        u64? var_36 = get-object-locator(arg_1);
+        u64? var_37 = get-z-vec-from-bound-frame(var_36);
+        u64? var_38 = angle-in-between-vectors-plus(var_35, var_37, 1);
+        u64? var_39 = rotate-locator-angle(var_32, 1, var_38 * 0.50);
+        u64? var_40 = flatten-locator(var_39);
+        var_23 = var_40;
+    } else {
+        u64? var_41 = get-object-locator(arg_1);
+        var_23 = var_41;
+    }
+    u64? var_42 = npc-in-tap?(arg_1);
+    u64? var_43 = !(var_42);
+    u64? var_44 = npc-in-melee-vulnerable-tap?(arg_1);
+    u64? var_45 = is-npc?(arg_1);
+    u64? var_46;
+    if (var_43 != nullptr && var_44 != nullptr && var_45 != nullptr) {
+        u64? var_47 = melee-fact-get-bool(arg_1, ignore-poise);
+        u16 var_48;
+        if (var_47 != nullptr) {
+            var_48 = 1;
+        } else {
+            u64? var_49 = is-poise-broken?(arg_1);
+            var_48 = var_49;
+        }
+        u64? var_50 = melee-character-bit-check(arg_1, #0000000244200000);
+        u64? var_51 = npc-clicker?(arg_1);
+        u64? var_52 = melee-weapon-type-precedence(arg_0, arg_1);
+        bool var_53 = var_48 && !var_50 && var_51 && var_52;
+        var_46 = var_53;
+    }
+    return var_46;
+}
+
+u16 fist-light-attack-4-kick-hit__melee-attack@3f78(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, abby-fist-combo-kick-4-hit--npc-f, var_2, var_3, *player-npc-sync-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u64? fist-light-attack-4-kick-hit__character-melee-info@7710(u64? arg_0, f32 arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_0 = npc-is-dog?(arg_0);
+    u64? var_1 = !(var_0);
+    u64? var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-joint-locator(arg_0, root);
+        u64? var_4 = flatten-locator(var_3);
+        u64? var_5 = get-locator-position(var_4);
+        u64? var_6 = get-joint-locator(arg_0, root);
+        u64? var_7 = get-y-vec-from-bound-frame(var_6);
+        u64? var_8 = vector-neg(var_7);
+        u64? var_9 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+        u64? var_10 = quat-from-look-at(var_8, var_9);
+        u64? var_11 = alloc-bound-frame(var_5, var_10, 0, 0, 0);
+        u64? var_12 = get-joint-locator(arg_0, root);
+        u64? var_13 = get-y-vec-from-bound-frame(var_12);
+        u64? var_14 = vector-neg(var_13);
+        u64? var_15 = get-object-locator(arg_0);
+        u64? var_16 = get-z-vec-from-bound-frame(var_15);
+        u64? var_17 = angle-in-between-vectors-plus(var_14, var_16, 1);
+        u64? var_18 = rotate-locator-angle(var_11, 1, var_17 * 0.50);
+        u64? var_19 = flatten-locator(var_18);
+        var_2 = var_19;
+    } else {
+        u64? var_20 = get-object-locator(arg_0);
+        var_2 = var_20;
+    }
+    u64? var_21 = npc-is-dog?(arg_1);
+    u64? var_22 = !(var_21);
+    u64? var_23;
+    if (var_22 != nullptr) {
+        u64? var_24 = get-joint-locator(arg_1, root);
+        u64? var_25 = flatten-locator(var_24);
+        u64? var_26 = get-locator-position(var_25);
+        u64? var_27 = get-joint-locator(arg_1, root);
+        u64? var_28 = get-y-vec-from-bound-frame(var_27);
+        u64? var_29 = vector-neg(var_28);
+        u64? var_30 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+        u64? var_31 = quat-from-look-at(var_29, var_30);
+        u64? var_32 = alloc-bound-frame(var_26, var_31, 0, 0, 0);
+        u64? var_33 = get-joint-locator(arg_1, root);
+        u64? var_34 = get-y-vec-from-bound-frame(var_33);
+        u64? var_35 = vector-neg(var_34);
+        u64? var_36 = get-object-locator(arg_1);
+        u64? var_37 = get-z-vec-from-bound-frame(var_36);
+        u64? var_38 = angle-in-between-vectors-plus(var_35, var_37, 1);
+        u64? var_39 = rotate-locator-angle(var_32, 1, var_38 * 0.50);
+        u64? var_40 = flatten-locator(var_39);
+        var_23 = var_40;
+    } else {
+        u64? var_41 = get-object-locator(arg_1);
+        var_23 = var_41;
+    }
+    u64? var_42 = npc-in-tap?(arg_1);
+    u64? var_43 = !(var_42);
+    u64? var_44 = npc-in-melee-vulnerable-tap?(arg_1);
+    u64? var_45 = is-npc?(arg_1);
+    u64? var_46;
+    if (var_43 != nullptr && var_44 != nullptr && var_45 != nullptr) {
+        u64? var_47 = melee-fact-get-bool(arg_1, ignore-poise);
+        u16 var_48;
+        if (var_47 != nullptr) {
+            var_48 = 1;
+        } else {
+            u64? var_49 = is-poise-broken?(arg_1);
+            var_48 = var_49;
+        }
+        u64? var_50 = melee-character-bit-check(arg_1, #0000000244200000);
+        u64? var_51 = npc-clicker?(arg_1);
+        u64? var_52 = melee-weapon-type-precedence(arg_0, arg_1);
+        bool var_53 = var_48 && !var_50 && var_51 && var_52;
+        var_46 = var_53;
+    }
+    return var_46;
+}
+
+u64? fist-jump-attack-front-kill__melee-attack@4168__start-func-array@a148__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = melee-character-bit-check(arg_1, 1);
+    u64? var_1 = melee-weapon-bit-check(arg_1, 1, 1, 0);
+    u64? var_2 = melee-character-bit-check(arg_2, 185597952);
+    u64? var_3 = is-npc?(arg_2);
+    u64? var_4 = npc-get-limb-state(arg_2);
+    u64? var_5 = npc-alive?(arg_2);
+    bool var_6 = var_0 && var_1 && var_2 && var_3 && !(var_4 == 1) && var_5;
+    return var_6;
+}
+
+u64? fist-jump-attack-front-kill__melee-attack@4168(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = is-player-abby?(arg_1);
+    u64? var_1 = is-in-front?-symbol(arg_2, arg_1, 2, 180.00);
+    bool var_2 = var_0 && var_1;
+    return var_2;
+}
+
+u16 fist-jump-attack-front-kill__melee-event-list@8c98(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = melee-character-bit-check(arg_2, 536870912);
+    u64? var_1 = melee-character-bit-check(arg_1, 1);
+    u64? var_2 = melee-weapon-bit-check(arg_1, 1, 1, 0);
+    u16 var_3;
+    if (var_0 != nullptr && var_1 != nullptr && var_2 != nullptr) {
+        if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 5) != nullptr) {
+            u64? var_4 = alloc-vector(0.00, 0.00, 0.00, 1.00, 0);
+            u64? var_5 = get-object-offset-position(arg_2, var_4);
+            u64? var_6 = string-debug(gore-clicker-gun-head-l);
+            debug-draw-string(var_5, var_6, 2, 2.00, 1, 1.00, 0, 0);
+            print-symbol(gore-clicker-gun-head-l, self);
+        }
+        if ((gore-clicker-gun-head-l == 0) == nullptr) {
+            u64? var_7 = spawn-gore-piece(gore-clicker-gun-head-l, arg_2, 0, arg_6, 1, 1);
+            var_3 = var_7;
+        } else if ((0 == 0) == nullptr) {
+            u64? var_8 = %alloc-array(single-frame, 16, 2, 1);
+            *(i32*)*(*var_8 + (0 * 8)) = 40;
+            *(u64*)(*(*var_8 + (0 * 8)) + 8) = 0;
+            *(i32*)(*(*var_8 + (0 * 8)) + 8) = 1;
+            *(i32*)*(*var_8 + (1 * 8)) = 31;
+            *(u64*)(*(*var_8 + (1 * 8)) + 8) = 0;
+            *(u8*)(*(*var_8 + (1 * 8)) + 8) = 1;
+            animate_(arg_2, gore-finisher-blunt-head-bind, var_8);
+            u64? var_9 = %alloc-array(single-frame, 16, 1, 1);
+            *(i32*)*(*var_9 + (0 * 8)) = 40;
+            *(u64*)(*(*var_9 + (0 * 8)) + 8) = 0;
+            *(i32*)(*(*var_9 + (0 * 8)) + 8) = 1;
+            u64? var_10 = animate_(arg_2, 0, var_9);
+            var_3 = var_10;
+        } else {
+            u64? var_11 = is-final-build?();
+            if (var_11 == nullptr) {
+                u64? var_12 = #5445173390656D6D("MELEE GORE SPAWN FAILURE");
+                u64? var_13 = display(var_12, 19);
+                var_3 = var_13;
+            } else {
+                var_3 = 0;
+            }
+        }
+    } else if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 5) != nullptr) {
+        u64? var_14 = is-final-build?();
+        if (var_14 == nullptr) {
+            u64? var_15 = string-debug(gore-clicker-gun-head-l);
+            u64? var_16 = #5445173390656D6D("INVALID CHARACTERS FOR %s", var_15);
+            u64? var_17 = display(var_16, 19);
+            var_3 = var_17;
+        } else {
+            var_3 = 0;
+        }
+    } else {
+        var_3 = 0;
+    }
+    return var_3;
+}
+
+u16 fist-jump-attack-front-kill(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = melee-character-bit-check(arg_2, 134217728);
+    u64? var_1 = melee-character-bit-check(arg_1, 1);
+    u64? var_2 = melee-weapon-bit-check(arg_1, 1, 1, 0);
+    u16 var_3;
+    if (var_0 != nullptr && var_1 != nullptr && var_2 != nullptr) {
+        if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 5) != nullptr) {
+            u64? var_4 = alloc-vector(0.00, 0.00, 0.00, 1.00, 0);
+            u64? var_5 = get-object-offset-position(arg_2, var_4);
+            u64? var_6 = string-debug(gore-stalker-gun-head-l);
+            debug-draw-string(var_5, var_6, 2, 2.00, 1, 1.00, 0, 0);
+            print-symbol(gore-stalker-gun-head-l, self);
+        }
+        if ((gore-stalker-gun-head-l == 0) == nullptr) {
+            u64? var_7 = spawn-gore-piece(gore-stalker-gun-head-l, arg_2, 0, arg_6, 1, 1);
+            var_3 = var_7;
+        } else if ((0 == 0) == nullptr) {
+            u64? var_8 = %alloc-array(single-frame, 16, 2, 1);
+            *(i32*)*(*var_8 + (0 * 8)) = 40;
+            *(u64*)(*(*var_8 + (0 * 8)) + 8) = 0;
+            *(i32*)(*(*var_8 + (0 * 8)) + 8) = 1;
+            *(i32*)*(*var_8 + (1 * 8)) = 31;
+            *(u64*)(*(*var_8 + (1 * 8)) + 8) = 0;
+            *(u8*)(*(*var_8 + (1 * 8)) + 8) = 1;
+            animate_(arg_2, gore-finisher-blunt-head-bind, var_8);
+            u64? var_9 = %alloc-array(single-frame, 16, 1, 1);
+            *(i32*)*(*var_9 + (0 * 8)) = 40;
+            *(u64*)(*(*var_9 + (0 * 8)) + 8) = 0;
+            *(i32*)(*(*var_9 + (0 * 8)) + 8) = 1;
+            u64? var_10 = animate_(arg_2, 0, var_9);
+            var_3 = var_10;
+        } else {
+            u64? var_11 = is-final-build?();
+            if (var_11 == nullptr) {
+                u64? var_12 = #5445173390656D6D("MELEE GORE SPAWN FAILURE");
+                u64? var_13 = display(var_12, 19);
+                var_3 = var_13;
+            } else {
+                var_3 = 0;
+            }
+        }
+    } else if (*cwohlwend-test* != nullptr && *(u8*)(*cwohlwend-test* + 5) != nullptr) {
+        u64? var_14 = is-final-build?();
+        if (var_14 == nullptr) {
+            u64? var_15 = string-debug(gore-stalker-gun-head-l);
+            u64? var_16 = #5445173390656D6D("INVALID CHARACTERS FOR %s", var_15);
+            u64? var_17 = display(var_16, 19);
+            var_3 = var_17;
+        } else {
+            var_3 = 0;
+        }
+    } else {
+        var_3 = 0;
+    }
+    return var_3;
+}
+
+u16 fist-light-attack-1-hit-inf__melee-attack@4548(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, abby-fist-combo-punch-1-hit--inf-f, var_2, var_3, *player-npc-sync-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u64? fist-light-attack-1-hit-inf__character-melee-info@8668(u64? arg_0, f32 arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_0 = npc-is-dog?(arg_0);
+    u64? var_1 = !(var_0);
+    u64? var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-joint-locator(arg_0, root);
+        u64? var_4 = flatten-locator(var_3);
+        u64? var_5 = get-locator-position(var_4);
+        u64? var_6 = get-joint-locator(arg_0, root);
+        u64? var_7 = get-y-vec-from-bound-frame(var_6);
+        u64? var_8 = vector-neg(var_7);
+        u64? var_9 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+        u64? var_10 = quat-from-look-at(var_8, var_9);
+        u64? var_11 = alloc-bound-frame(var_5, var_10, 0, 0, 0);
+        u64? var_12 = get-joint-locator(arg_0, root);
+        u64? var_13 = get-y-vec-from-bound-frame(var_12);
+        u64? var_14 = vector-neg(var_13);
+        u64? var_15 = get-object-locator(arg_0);
+        u64? var_16 = get-z-vec-from-bound-frame(var_15);
+        u64? var_17 = angle-in-between-vectors-plus(var_14, var_16, 1);
+        u64? var_18 = rotate-locator-angle(var_11, 1, var_17 * 0.50);
+        u64? var_19 = flatten-locator(var_18);
+        var_2 = var_19;
+    } else {
+        u64? var_20 = get-object-locator(arg_0);
+        var_2 = var_20;
+    }
+    u64? var_21 = npc-is-dog?(arg_1);
+    u64? var_22 = !(var_21);
+    u64? var_23;
+    if (var_22 != nullptr) {
+        u64? var_24 = get-joint-locator(arg_1, root);
+        u64? var_25 = flatten-locator(var_24);
+        u64? var_26 = get-locator-position(var_25);
+        u64? var_27 = get-joint-locator(arg_1, root);
+        u64? var_28 = get-y-vec-from-bound-frame(var_27);
+        u64? var_29 = vector-neg(var_28);
+        u64? var_30 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+        u64? var_31 = quat-from-look-at(var_29, var_30);
+        u64? var_32 = alloc-bound-frame(var_26, var_31, 0, 0, 0);
+        u64? var_33 = get-joint-locator(arg_1, root);
+        u64? var_34 = get-y-vec-from-bound-frame(var_33);
+        u64? var_35 = vector-neg(var_34);
+        u64? var_36 = get-object-locator(arg_1);
+        u64? var_37 = get-z-vec-from-bound-frame(var_36);
+        u64? var_38 = angle-in-between-vectors-plus(var_35, var_37, 1);
+        u64? var_39 = rotate-locator-angle(var_32, 1, var_38 * 0.50);
+        u64? var_40 = flatten-locator(var_39);
+        var_23 = var_40;
+    } else {
+        u64? var_41 = get-object-locator(arg_1);
+        var_23 = var_41;
+    }
+    u64? var_42 = npc-in-tap?(arg_1);
+    u64? var_43 = !(var_42);
+    u64? var_44 = npc-in-melee-vulnerable-tap?(arg_1);
+    u64? var_45 = is-npc?(arg_1);
+    u64? var_46;
+    if (var_43 != nullptr && var_44 != nullptr && var_45 != nullptr) {
+        u64? var_47 = melee-fact-get-bool(arg_1, ignore-poise);
+        u16 var_48;
+        if (var_47 != nullptr) {
+            var_48 = 1;
+        } else {
+            u64? var_49 = is-poise-broken?(arg_1);
+            var_48 = var_49;
+        }
+        u64? var_50 = melee-character-bit-check(arg_1, #0000000244200000);
+        u64? var_51 = npc-clicker?(arg_1);
+        u64? var_52 = melee-weapon-type-precedence(arg_0, arg_1);
+        bool var_53 = var_48 && !var_50 && var_51 && var_52;
+        var_46 = var_53;
+    }
+    return var_46;
+}
+
+u16 fist-light-attack-3-hit-inf__melee-attack@4738(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, abby-fist-combo-punch-3-hit--inf-f, var_2, var_3, *player-npc-sync-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u64? fist-light-attack-3-hit-inf__character-melee-info@cc20(u64? arg_0, f32 arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_0 = npc-is-dog?(arg_0);
+    u64? var_1 = !(var_0);
+    u64? var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-joint-locator(arg_0, root);
+        u64? var_4 = flatten-locator(var_3);
+        u64? var_5 = get-locator-position(var_4);
+        u64? var_6 = get-joint-locator(arg_0, root);
+        u64? var_7 = get-y-vec-from-bound-frame(var_6);
+        u64? var_8 = vector-neg(var_7);
+        u64? var_9 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+        u64? var_10 = quat-from-look-at(var_8, var_9);
+        u64? var_11 = alloc-bound-frame(var_5, var_10, 0, 0, 0);
+        u64? var_12 = get-joint-locator(arg_0, root);
+        u64? var_13 = get-y-vec-from-bound-frame(var_12);
+        u64? var_14 = vector-neg(var_13);
+        u64? var_15 = get-object-locator(arg_0);
+        u64? var_16 = get-z-vec-from-bound-frame(var_15);
+        u64? var_17 = angle-in-between-vectors-plus(var_14, var_16, 1);
+        u64? var_18 = rotate-locator-angle(var_11, 1, var_17 * 0.50);
+        u64? var_19 = flatten-locator(var_18);
+        var_2 = var_19;
+    } else {
+        u64? var_20 = get-object-locator(arg_0);
+        var_2 = var_20;
+    }
+    u64? var_21 = npc-is-dog?(arg_1);
+    u64? var_22 = !(var_21);
+    u64? var_23;
+    if (var_22 != nullptr) {
+        u64? var_24 = get-joint-locator(arg_1, root);
+        u64? var_25 = flatten-locator(var_24);
+        u64? var_26 = get-locator-position(var_25);
+        u64? var_27 = get-joint-locator(arg_1, root);
+        u64? var_28 = get-y-vec-from-bound-frame(var_27);
+        u64? var_29 = vector-neg(var_28);
+        u64? var_30 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+        u64? var_31 = quat-from-look-at(var_29, var_30);
+        u64? var_32 = alloc-bound-frame(var_26, var_31, 0, 0, 0);
+        u64? var_33 = get-joint-locator(arg_1, root);
+        u64? var_34 = get-y-vec-from-bound-frame(var_33);
+        u64? var_35 = vector-neg(var_34);
+        u64? var_36 = get-object-locator(arg_1);
+        u64? var_37 = get-z-vec-from-bound-frame(var_36);
+        u64? var_38 = angle-in-between-vectors-plus(var_35, var_37, 1);
+        u64? var_39 = rotate-locator-angle(var_32, 1, var_38 * 0.50);
+        u64? var_40 = flatten-locator(var_39);
+        var_23 = var_40;
+    } else {
+        u64? var_41 = get-object-locator(arg_1);
+        var_23 = var_41;
+    }
+    u64? var_42 = npc-in-tap?(arg_1);
+    u64? var_43 = !(var_42);
+    u64? var_44 = npc-in-melee-vulnerable-tap?(arg_1);
+    u64? var_45 = is-npc?(arg_1);
+    u64? var_46;
+    if (var_43 != nullptr && var_44 != nullptr && var_45 != nullptr) {
+        u64? var_47 = melee-fact-get-bool(arg_1, ignore-poise);
+        u16 var_48;
+        if (var_47 != nullptr) {
+            var_48 = 1;
+        } else {
+            u64? var_49 = is-poise-broken?(arg_1);
+            var_48 = var_49;
+        }
+        u64? var_50 = melee-character-bit-check(arg_1, #0000000244200000);
+        u64? var_51 = npc-clicker?(arg_1);
+        u64? var_52 = melee-weapon-type-precedence(arg_0, arg_1);
+        bool var_53 = var_48 && !var_50 && var_51 && var_52;
+        var_46 = var_53;
+    }
+    return var_46;
+}
+
+f32 fist-dodge-back-attack-1__character-melee-info@84f8(u64? arg_0, u64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    f32 var_0;
+    if (arg_1 != nullptr && *(u64*)(arg_1 + 16) == melee-player-contextual-dodge) {
+        var_0 = 0.13 + 0.10;
+    } else if (arg_1 != nullptr && *(u8*)(*(arg_1 + 296) + 30) != nullptr) {
+        var_0 = 0.20;
+    } else if (arg_1 != nullptr && *(arg_1 + 104) != nullptr && *(u64*)(*(arg_1 + 104) + 32) == null) {
+        var_0 = 0.13;
+    } else {
+        u64? var_1 = get-object-state(arg_2, 0);
+        u64? var_2 = player-is-sprinting?(1);
+        if (Move == var_1 && var_2 == nullptr) {
+            var_0 = 0.13;
+        } else {
+            var_0 = 0.13;
+        }
+    }
+    return var_0;
+}
+
+u64? fist-dodge-back-attack-1__melee-event-list@a2d0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = new-boxed-value(7, fist-dodge-back-attack-1);
+    u64? var_1 = new-boxed-value(7, arg_2);
+    u64? var_2 = send-event(new-swing, ss-melee-dodge-attack-spam, var_0, var_1);
+    return var_2;
+}
+
+f32 fists-stun-combo-2__character-melee-info@bb00(u64? arg_0, u64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    f32 var_0;
+    if (arg_1 != nullptr && *(u64*)(arg_1 + 16) == melee-player-contextual-dodge) {
+        var_0 = 0.20 + 0.10;
+    } else if (arg_1 != nullptr && *(u8*)(*(arg_1 + 296) + 30) != nullptr) {
+        var_0 = 0.20;
+    } else if (0 == nullptr && arg_1 != nullptr && *(arg_1 + 104) != nullptr && *(u64*)(*(arg_1 + 104) + 32) == abby-fist-stun-hammerfist-1-hit--abby) {
+        var_0 = 0.13;
+    } else {
+        var_0 = 0.20;
+    }
+    return var_0;
+}
+
+u64? fists-stun-combo-2(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = is-player-abby?(player);
+    u64? var_1 = net-is-active?();
+    bool var_2 = var_0 && var_1;
+    return var_2;
+}
+
+u64? fists-stun-combo-2__melee-event-list@9430(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = new-boxed-value(7, fists-stun-combo-2);
+    u64? var_1 = new-boxed-value(7, arg_2);
+    u64? var_2 = send-event(new-swing, ss-melee-dodge-attack-spam, var_0, var_1);
+    return var_2;
+}
+
+u64? fists-stun-combo-1(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = task-active?(tracking, tra-find-outpost-dodge-tutorial);
+    u64? var_1 = character-should-do-breaker?(arg_1, arg_2, arg_8, arg_13);
+    u64? var_2 = is-player-abby?(player);
+    u64? var_3 = net-is-active?();
+    bool var_4 = !var_0 && var_1 || var_2 && var_3;
+    return var_4;
+}
+
+u64? fists-stun-combo-1__melee-event-list@c120(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = new-boxed-value(7, fists-stun-combo-1);
+    u64? var_1 = new-boxed-value(7, arg_2);
+    u64? var_2 = send-event(new-swing, ss-melee-dodge-attack-spam, var_0, var_1);
+    return var_2;
+}
+
+u16 fist-light-attack-2-hit__melee-attack@4ef8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, abby-fist-combo-punch-2-hit--npc-f, var_2, var_3, *player-npc-sync-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u64? fist-light-attack-2-hit__character-melee-info@8f88(u64? arg_0, f32 arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_0 = npc-is-dog?(arg_0);
+    u64? var_1 = !(var_0);
+    u64? var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-joint-locator(arg_0, root);
+        u64? var_4 = flatten-locator(var_3);
+        u64? var_5 = get-locator-position(var_4);
+        u64? var_6 = get-joint-locator(arg_0, root);
+        u64? var_7 = get-y-vec-from-bound-frame(var_6);
+        u64? var_8 = vector-neg(var_7);
+        u64? var_9 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+        u64? var_10 = quat-from-look-at(var_8, var_9);
+        u64? var_11 = alloc-bound-frame(var_5, var_10, 0, 0, 0);
+        u64? var_12 = get-joint-locator(arg_0, root);
+        u64? var_13 = get-y-vec-from-bound-frame(var_12);
+        u64? var_14 = vector-neg(var_13);
+        u64? var_15 = get-object-locator(arg_0);
+        u64? var_16 = get-z-vec-from-bound-frame(var_15);
+        u64? var_17 = angle-in-between-vectors-plus(var_14, var_16, 1);
+        u64? var_18 = rotate-locator-angle(var_11, 1, var_17 * 0.50);
+        u64? var_19 = flatten-locator(var_18);
+        var_2 = var_19;
+    } else {
+        u64? var_20 = get-object-locator(arg_0);
+        var_2 = var_20;
+    }
+    u64? var_21 = npc-is-dog?(arg_1);
+    u64? var_22 = !(var_21);
+    u64? var_23;
+    if (var_22 != nullptr) {
+        u64? var_24 = get-joint-locator(arg_1, root);
+        u64? var_25 = flatten-locator(var_24);
+        u64? var_26 = get-locator-position(var_25);
+        u64? var_27 = get-joint-locator(arg_1, root);
+        u64? var_28 = get-y-vec-from-bound-frame(var_27);
+        u64? var_29 = vector-neg(var_28);
+        u64? var_30 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+        u64? var_31 = quat-from-look-at(var_29, var_30);
+        u64? var_32 = alloc-bound-frame(var_26, var_31, 0, 0, 0);
+        u64? var_33 = get-joint-locator(arg_1, root);
+        u64? var_34 = get-y-vec-from-bound-frame(var_33);
+        u64? var_35 = vector-neg(var_34);
+        u64? var_36 = get-object-locator(arg_1);
+        u64? var_37 = get-z-vec-from-bound-frame(var_36);
+        u64? var_38 = angle-in-between-vectors-plus(var_35, var_37, 1);
+        u64? var_39 = rotate-locator-angle(var_32, 1, var_38 * 0.50);
+        u64? var_40 = flatten-locator(var_39);
+        var_23 = var_40;
+    } else {
+        u64? var_41 = get-object-locator(arg_1);
+        var_23 = var_41;
+    }
+    u64? var_42 = npc-in-tap?(arg_1);
+    u64? var_43 = !(var_42);
+    u64? var_44 = npc-in-melee-vulnerable-tap?(arg_1);
+    u64? var_45 = is-npc?(arg_1);
+    u64? var_46;
+    if (var_43 != nullptr && var_44 != nullptr && var_45 != nullptr) {
+        u64? var_47 = melee-fact-get-bool(arg_1, ignore-poise);
+        u16 var_48;
+        if (var_47 != nullptr) {
+            var_48 = 1;
+        } else {
+            u64? var_49 = is-poise-broken?(arg_1);
+            var_48 = var_49;
+        }
+        u64? var_50 = melee-character-bit-check(arg_1, #0000000244200000);
+        u64? var_51 = npc-clicker?(arg_1);
+        u64? var_52 = melee-weapon-type-precedence(arg_0, arg_1);
+        bool var_53 = var_48 && !var_50 && var_51 && var_52;
+        var_46 = var_53;
+    }
+    return var_46;
+}
+
+u16 fist-light-attack-left-1-hit__melee-attack@50e8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, abby-fist-combo-punch-1-left-hit--npc-f, var_2, var_3, *player-npc-sync-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u64? fist-light-attack-left-1-hit__character-melee-info@71c8(u64? arg_0, f32 arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_0 = npc-is-dog?(arg_0);
+    u64? var_1 = !(var_0);
+    u64? var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-joint-locator(arg_0, root);
+        u64? var_4 = flatten-locator(var_3);
+        u64? var_5 = get-locator-position(var_4);
+        u64? var_6 = get-joint-locator(arg_0, root);
+        u64? var_7 = get-y-vec-from-bound-frame(var_6);
+        u64? var_8 = vector-neg(var_7);
+        u64? var_9 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+        u64? var_10 = quat-from-look-at(var_8, var_9);
+        u64? var_11 = alloc-bound-frame(var_5, var_10, 0, 0, 0);
+        u64? var_12 = get-joint-locator(arg_0, root);
+        u64? var_13 = get-y-vec-from-bound-frame(var_12);
+        u64? var_14 = vector-neg(var_13);
+        u64? var_15 = get-object-locator(arg_0);
+        u64? var_16 = get-z-vec-from-bound-frame(var_15);
+        u64? var_17 = angle-in-between-vectors-plus(var_14, var_16, 1);
+        u64? var_18 = rotate-locator-angle(var_11, 1, var_17 * 0.50);
+        u64? var_19 = flatten-locator(var_18);
+        var_2 = var_19;
+    } else {
+        u64? var_20 = get-object-locator(arg_0);
+        var_2 = var_20;
+    }
+    u64? var_21 = npc-is-dog?(arg_1);
+    u64? var_22 = !(var_21);
+    u64? var_23;
+    if (var_22 != nullptr) {
+        u64? var_24 = get-joint-locator(arg_1, root);
+        u64? var_25 = flatten-locator(var_24);
+        u64? var_26 = get-locator-position(var_25);
+        u64? var_27 = get-joint-locator(arg_1, root);
+        u64? var_28 = get-y-vec-from-bound-frame(var_27);
+        u64? var_29 = vector-neg(var_28);
+        u64? var_30 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+        u64? var_31 = quat-from-look-at(var_29, var_30);
+        u64? var_32 = alloc-bound-frame(var_26, var_31, 0, 0, 0);
+        u64? var_33 = get-joint-locator(arg_1, root);
+        u64? var_34 = get-y-vec-from-bound-frame(var_33);
+        u64? var_35 = vector-neg(var_34);
+        u64? var_36 = get-object-locator(arg_1);
+        u64? var_37 = get-z-vec-from-bound-frame(var_36);
+        u64? var_38 = angle-in-between-vectors-plus(var_35, var_37, 1);
+        u64? var_39 = rotate-locator-angle(var_32, 1, var_38 * 0.50);
+        u64? var_40 = flatten-locator(var_39);
+        var_23 = var_40;
+    } else {
+        u64? var_41 = get-object-locator(arg_1);
+        var_23 = var_41;
+    }
+    u64? var_42 = npc-in-tap?(arg_1);
+    u64? var_43 = !(var_42);
+    u64? var_44 = npc-in-melee-vulnerable-tap?(arg_1);
+    u64? var_45 = is-npc?(arg_1);
+    u64? var_46;
+    if (var_43 != nullptr && var_44 != nullptr && var_45 != nullptr) {
+        u64? var_47 = melee-fact-get-bool(arg_1, ignore-poise);
+        u16 var_48;
+        if (var_47 != nullptr) {
+            var_48 = 1;
+        } else {
+            u64? var_49 = is-poise-broken?(arg_1);
+            var_48 = var_49;
+        }
+        u64? var_50 = melee-character-bit-check(arg_1, #0000000244200000);
+        u64? var_51 = npc-clicker?(arg_1);
+        u64? var_52 = melee-weapon-type-precedence(arg_0, arg_1);
+        bool var_53 = var_48 && !var_50 && var_51 && var_52;
+        var_46 = var_53;
+    }
+    return var_46;
+}
+
+f32 fist-light-attack-4-punch__character-melee-info@c878(u64? arg_0, u64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    f32 var_0;
+    if (arg_1 != nullptr && *(u64*)(arg_1 + 16) == melee-player-contextual-dodge) {
+        var_0 = 0.20 + 0.10;
+    } else if (arg_1 != nullptr && *(u8*)(*(arg_1 + 296) + 30) != nullptr) {
+        var_0 = 0.20;
+    } else if (0 == nullptr && arg_1 != nullptr && *(arg_1 + 104) != nullptr && *(u64*)(*(arg_1 + 104) + 32) == abby-fist-combo-punch-3-hit--abby) {
+        var_0 = 0.13;
+    } else {
+        var_0 = 0.20;
+    }
+    return var_0;
+}
+
+u64? fist-light-attack-4-punch__melee-event-list@7070(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = new-boxed-value(7, fist-light-attack-4-punch);
+    u64? var_1 = new-boxed-value(7, arg_2);
+    u64? var_2 = send-event(new-swing, ss-melee-dodge-attack-spam, var_0, var_1);
+    return var_2;
+}
+
+u16 fist-light-attack-4-kick-hit-brute__melee-attack@54c8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, abby-fist-combo-kick-4-hit--brute-m, var_2, var_3, *player-npc-sync-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u64? fist-light-attack-4-kick-hit-brute__character-melee-info@afb8(u64? arg_0, f32 arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_0 = npc-is-dog?(arg_0);
+    u64? var_1 = !(var_0);
+    u64? var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-joint-locator(arg_0, root);
+        u64? var_4 = flatten-locator(var_3);
+        u64? var_5 = get-locator-position(var_4);
+        u64? var_6 = get-joint-locator(arg_0, root);
+        u64? var_7 = get-y-vec-from-bound-frame(var_6);
+        u64? var_8 = vector-neg(var_7);
+        u64? var_9 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+        u64? var_10 = quat-from-look-at(var_8, var_9);
+        u64? var_11 = alloc-bound-frame(var_5, var_10, 0, 0, 0);
+        u64? var_12 = get-joint-locator(arg_0, root);
+        u64? var_13 = get-y-vec-from-bound-frame(var_12);
+        u64? var_14 = vector-neg(var_13);
+        u64? var_15 = get-object-locator(arg_0);
+        u64? var_16 = get-z-vec-from-bound-frame(var_15);
+        u64? var_17 = angle-in-between-vectors-plus(var_14, var_16, 1);
+        u64? var_18 = rotate-locator-angle(var_11, 1, var_17 * 0.50);
+        u64? var_19 = flatten-locator(var_18);
+        var_2 = var_19;
+    } else {
+        u64? var_20 = get-object-locator(arg_0);
+        var_2 = var_20;
+    }
+    u64? var_21 = npc-is-dog?(arg_1);
+    u64? var_22 = !(var_21);
+    u64? var_23;
+    if (var_22 != nullptr) {
+        u64? var_24 = get-joint-locator(arg_1, root);
+        u64? var_25 = flatten-locator(var_24);
+        u64? var_26 = get-locator-position(var_25);
+        u64? var_27 = get-joint-locator(arg_1, root);
+        u64? var_28 = get-y-vec-from-bound-frame(var_27);
+        u64? var_29 = vector-neg(var_28);
+        u64? var_30 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+        u64? var_31 = quat-from-look-at(var_29, var_30);
+        u64? var_32 = alloc-bound-frame(var_26, var_31, 0, 0, 0);
+        u64? var_33 = get-joint-locator(arg_1, root);
+        u64? var_34 = get-y-vec-from-bound-frame(var_33);
+        u64? var_35 = vector-neg(var_34);
+        u64? var_36 = get-object-locator(arg_1);
+        u64? var_37 = get-z-vec-from-bound-frame(var_36);
+        u64? var_38 = angle-in-between-vectors-plus(var_35, var_37, 1);
+        u64? var_39 = rotate-locator-angle(var_32, 1, var_38 * 0.50);
+        u64? var_40 = flatten-locator(var_39);
+        var_23 = var_40;
+    } else {
+        u64? var_41 = get-object-locator(arg_1);
+        var_23 = var_41;
+    }
+    u64? var_42 = is-npc?(arg_1);
+    u64? var_43 = melee-fact-get-bool(arg_1, ignore-poise);
+    bool var_44 = var_42 && var_43 && 1;
+    return var_44;
+}
+
+u16 fist-light-attack-2-hit-inf__melee-attack@58a8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, abby-fist-combo-punch-2-hit--inf-f, var_2, var_3, *player-npc-sync-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u64? fist-light-attack-2-hit-inf__character-melee-info@c150(u64? arg_0, f32 arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_0 = npc-is-dog?(arg_0);
+    u64? var_1 = !(var_0);
+    u64? var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-joint-locator(arg_0, root);
+        u64? var_4 = flatten-locator(var_3);
+        u64? var_5 = get-locator-position(var_4);
+        u64? var_6 = get-joint-locator(arg_0, root);
+        u64? var_7 = get-y-vec-from-bound-frame(var_6);
+        u64? var_8 = vector-neg(var_7);
+        u64? var_9 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+        u64? var_10 = quat-from-look-at(var_8, var_9);
+        u64? var_11 = alloc-bound-frame(var_5, var_10, 0, 0, 0);
+        u64? var_12 = get-joint-locator(arg_0, root);
+        u64? var_13 = get-y-vec-from-bound-frame(var_12);
+        u64? var_14 = vector-neg(var_13);
+        u64? var_15 = get-object-locator(arg_0);
+        u64? var_16 = get-z-vec-from-bound-frame(var_15);
+        u64? var_17 = angle-in-between-vectors-plus(var_14, var_16, 1);
+        u64? var_18 = rotate-locator-angle(var_11, 1, var_17 * 0.50);
+        u64? var_19 = flatten-locator(var_18);
+        var_2 = var_19;
+    } else {
+        u64? var_20 = get-object-locator(arg_0);
+        var_2 = var_20;
+    }
+    u64? var_21 = npc-is-dog?(arg_1);
+    u64? var_22 = !(var_21);
+    u64? var_23;
+    if (var_22 != nullptr) {
+        u64? var_24 = get-joint-locator(arg_1, root);
+        u64? var_25 = flatten-locator(var_24);
+        u64? var_26 = get-locator-position(var_25);
+        u64? var_27 = get-joint-locator(arg_1, root);
+        u64? var_28 = get-y-vec-from-bound-frame(var_27);
+        u64? var_29 = vector-neg(var_28);
+        u64? var_30 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+        u64? var_31 = quat-from-look-at(var_29, var_30);
+        u64? var_32 = alloc-bound-frame(var_26, var_31, 0, 0, 0);
+        u64? var_33 = get-joint-locator(arg_1, root);
+        u64? var_34 = get-y-vec-from-bound-frame(var_33);
+        u64? var_35 = vector-neg(var_34);
+        u64? var_36 = get-object-locator(arg_1);
+        u64? var_37 = get-z-vec-from-bound-frame(var_36);
+        u64? var_38 = angle-in-between-vectors-plus(var_35, var_37, 1);
+        u64? var_39 = rotate-locator-angle(var_32, 1, var_38 * 0.50);
+        u64? var_40 = flatten-locator(var_39);
+        var_23 = var_40;
+    } else {
+        u64? var_41 = get-object-locator(arg_1);
+        var_23 = var_41;
+    }
+    u64? var_42 = npc-in-tap?(arg_1);
+    u64? var_43 = !(var_42);
+    u64? var_44 = npc-in-melee-vulnerable-tap?(arg_1);
+    u64? var_45 = is-npc?(arg_1);
+    u64? var_46;
+    if (var_43 != nullptr && var_44 != nullptr && var_45 != nullptr) {
+        u64? var_47 = melee-fact-get-bool(arg_1, ignore-poise);
+        u16 var_48;
+        if (var_47 != nullptr) {
+            var_48 = 1;
+        } else {
+            u64? var_49 = is-poise-broken?(arg_1);
+            var_48 = var_49;
+        }
+        u64? var_50 = melee-character-bit-check(arg_1, #0000000244200000);
+        u64? var_51 = npc-clicker?(arg_1);
+        u64? var_52 = melee-weapon-type-precedence(arg_0, arg_1);
+        bool var_53 = var_48 && !var_50 && var_51 && var_52;
+        var_46 = var_53;
+    }
+    return var_46;
+}
+
+u16 #AC7DE19943BFC3CF__melee-attack@5a98(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, #208270C167792A42, var_2, var_3, *player-npc-sync-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u64? #AC7DE19943BFC3CF__character-melee-info@91b8(u64? arg_0, f32 arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_0 = npc-is-dog?(arg_0);
+    u64? var_1 = !(var_0);
+    u64? var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-joint-locator(arg_0, root);
+        u64? var_4 = flatten-locator(var_3);
+        u64? var_5 = get-locator-position(var_4);
+        u64? var_6 = get-joint-locator(arg_0, root);
+        u64? var_7 = get-y-vec-from-bound-frame(var_6);
+        u64? var_8 = vector-neg(var_7);
+        u64? var_9 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+        u64? var_10 = quat-from-look-at(var_8, var_9);
+        u64? var_11 = alloc-bound-frame(var_5, var_10, 0, 0, 0);
+        u64? var_12 = get-joint-locator(arg_0, root);
+        u64? var_13 = get-y-vec-from-bound-frame(var_12);
+        u64? var_14 = vector-neg(var_13);
+        u64? var_15 = get-object-locator(arg_0);
+        u64? var_16 = get-z-vec-from-bound-frame(var_15);
+        u64? var_17 = angle-in-between-vectors-plus(var_14, var_16, 1);
+        u64? var_18 = rotate-locator-angle(var_11, 1, var_17 * 0.50);
+        u64? var_19 = flatten-locator(var_18);
+        var_2 = var_19;
+    } else {
+        u64? var_20 = get-object-locator(arg_0);
+        var_2 = var_20;
+    }
+    u64? var_21 = npc-is-dog?(arg_1);
+    u64? var_22 = !(var_21);
+    u64? var_23;
+    if (var_22 != nullptr) {
+        u64? var_24 = get-joint-locator(arg_1, root);
+        u64? var_25 = flatten-locator(var_24);
+        u64? var_26 = get-locator-position(var_25);
+        u64? var_27 = get-joint-locator(arg_1, root);
+        u64? var_28 = get-y-vec-from-bound-frame(var_27);
+        u64? var_29 = vector-neg(var_28);
+        u64? var_30 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+        u64? var_31 = quat-from-look-at(var_29, var_30);
+        u64? var_32 = alloc-bound-frame(var_26, var_31, 0, 0, 0);
+        u64? var_33 = get-joint-locator(arg_1, root);
+        u64? var_34 = get-y-vec-from-bound-frame(var_33);
+        u64? var_35 = vector-neg(var_34);
+        u64? var_36 = get-object-locator(arg_1);
+        u64? var_37 = get-z-vec-from-bound-frame(var_36);
+        u64? var_38 = angle-in-between-vectors-plus(var_35, var_37, 1);
+        u64? var_39 = rotate-locator-angle(var_32, 1, var_38 * 0.50);
+        u64? var_40 = flatten-locator(var_39);
+        var_23 = var_40;
+    } else {
+        u64? var_41 = get-object-locator(arg_1);
+        var_23 = var_41;
+    }
+    u64? var_42 = npc-in-tap?(arg_1);
+    u64? var_43 = !(var_42);
+    u64? var_44 = npc-in-melee-vulnerable-tap?(arg_1);
+    u64? var_45 = is-npc?(arg_1);
+    u64? var_46;
+    if (var_43 != nullptr && var_44 != nullptr && var_45 != nullptr) {
+        u64? var_47 = melee-fact-get-bool(arg_1, ignore-poise);
+        u16 var_48;
+        if (var_47 != nullptr) {
+            var_48 = 1;
+        } else {
+            u64? var_49 = is-poise-broken?(arg_1);
+            var_48 = var_49;
+        }
+        u64? var_50 = melee-character-bit-check(arg_1, #0000000044200000);
+        u64? var_51 = npc-clicker?(arg_1);
+        u64? var_52 = melee-weapon-type-precedence(arg_0, arg_1);
+        bool var_53 = var_48 && !var_50 && var_51 && var_52;
+        var_46 = var_53;
+    }
+    return var_46;
+}
+
+u16 fist-light-attack-3-hit-brute__melee-attack@5c88(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, abby-fist-combo-punch-3-hit--brute-m, var_2, var_3, *player-npc-sync-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u64? fist-light-attack-3-hit-brute__character-melee-info@9c28(u64? arg_0, f32 arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_0 = npc-is-dog?(arg_0);
+    u64? var_1 = !(var_0);
+    u64? var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-joint-locator(arg_0, root);
+        u64? var_4 = flatten-locator(var_3);
+        u64? var_5 = get-locator-position(var_4);
+        u64? var_6 = get-joint-locator(arg_0, root);
+        u64? var_7 = get-y-vec-from-bound-frame(var_6);
+        u64? var_8 = vector-neg(var_7);
+        u64? var_9 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+        u64? var_10 = quat-from-look-at(var_8, var_9);
+        u64? var_11 = alloc-bound-frame(var_5, var_10, 0, 0, 0);
+        u64? var_12 = get-joint-locator(arg_0, root);
+        u64? var_13 = get-y-vec-from-bound-frame(var_12);
+        u64? var_14 = vector-neg(var_13);
+        u64? var_15 = get-object-locator(arg_0);
+        u64? var_16 = get-z-vec-from-bound-frame(var_15);
+        u64? var_17 = angle-in-between-vectors-plus(var_14, var_16, 1);
+        u64? var_18 = rotate-locator-angle(var_11, 1, var_17 * 0.50);
+        u64? var_19 = flatten-locator(var_18);
+        var_2 = var_19;
+    } else {
+        u64? var_20 = get-object-locator(arg_0);
+        var_2 = var_20;
+    }
+    u64? var_21 = npc-is-dog?(arg_1);
+    u64? var_22 = !(var_21);
+    u64? var_23;
+    if (var_22 != nullptr) {
+        u64? var_24 = get-joint-locator(arg_1, root);
+        u64? var_25 = flatten-locator(var_24);
+        u64? var_26 = get-locator-position(var_25);
+        u64? var_27 = get-joint-locator(arg_1, root);
+        u64? var_28 = get-y-vec-from-bound-frame(var_27);
+        u64? var_29 = vector-neg(var_28);
+        u64? var_30 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+        u64? var_31 = quat-from-look-at(var_29, var_30);
+        u64? var_32 = alloc-bound-frame(var_26, var_31, 0, 0, 0);
+        u64? var_33 = get-joint-locator(arg_1, root);
+        u64? var_34 = get-y-vec-from-bound-frame(var_33);
+        u64? var_35 = vector-neg(var_34);
+        u64? var_36 = get-object-locator(arg_1);
+        u64? var_37 = get-z-vec-from-bound-frame(var_36);
+        u64? var_38 = angle-in-between-vectors-plus(var_35, var_37, 1);
+        u64? var_39 = rotate-locator-angle(var_32, 1, var_38 * 0.50);
+        u64? var_40 = flatten-locator(var_39);
+        var_23 = var_40;
+    } else {
+        u64? var_41 = get-object-locator(arg_1);
+        var_23 = var_41;
+    }
+    u64? var_42 = is-npc?(arg_1);
+    u64? var_43 = melee-fact-get-bool(arg_1, ignore-poise);
+    bool var_44 = var_42 && var_43 && 1;
+    return var_44;
+}
+
+u16 fist-light-attack-4-punch-hit-brute__melee-attack@6068(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, abby-fist-combo-punch-4-hit--npc-f, var_2, var_3, *player-npc-sync-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u64? fist-light-attack-4-punch-hit-brute__character-melee-info@a978(u64? arg_0, f32 arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_0 = npc-is-dog?(arg_0);
+    u64? var_1 = !(var_0);
+    u64? var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-joint-locator(arg_0, root);
+        u64? var_4 = flatten-locator(var_3);
+        u64? var_5 = get-locator-position(var_4);
+        u64? var_6 = get-joint-locator(arg_0, root);
+        u64? var_7 = get-y-vec-from-bound-frame(var_6);
+        u64? var_8 = vector-neg(var_7);
+        u64? var_9 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+        u64? var_10 = quat-from-look-at(var_8, var_9);
+        u64? var_11 = alloc-bound-frame(var_5, var_10, 0, 0, 0);
+        u64? var_12 = get-joint-locator(arg_0, root);
+        u64? var_13 = get-y-vec-from-bound-frame(var_12);
+        u64? var_14 = vector-neg(var_13);
+        u64? var_15 = get-object-locator(arg_0);
+        u64? var_16 = get-z-vec-from-bound-frame(var_15);
+        u64? var_17 = angle-in-between-vectors-plus(var_14, var_16, 1);
+        u64? var_18 = rotate-locator-angle(var_11, 1, var_17 * 0.50);
+        u64? var_19 = flatten-locator(var_18);
+        var_2 = var_19;
+    } else {
+        u64? var_20 = get-object-locator(arg_0);
+        var_2 = var_20;
+    }
+    u64? var_21 = npc-is-dog?(arg_1);
+    u64? var_22 = !(var_21);
+    u64? var_23;
+    if (var_22 != nullptr) {
+        u64? var_24 = get-joint-locator(arg_1, root);
+        u64? var_25 = flatten-locator(var_24);
+        u64? var_26 = get-locator-position(var_25);
+        u64? var_27 = get-joint-locator(arg_1, root);
+        u64? var_28 = get-y-vec-from-bound-frame(var_27);
+        u64? var_29 = vector-neg(var_28);
+        u64? var_30 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+        u64? var_31 = quat-from-look-at(var_29, var_30);
+        u64? var_32 = alloc-bound-frame(var_26, var_31, 0, 0, 0);
+        u64? var_33 = get-joint-locator(arg_1, root);
+        u64? var_34 = get-y-vec-from-bound-frame(var_33);
+        u64? var_35 = vector-neg(var_34);
+        u64? var_36 = get-object-locator(arg_1);
+        u64? var_37 = get-z-vec-from-bound-frame(var_36);
+        u64? var_38 = angle-in-between-vectors-plus(var_35, var_37, 1);
+        u64? var_39 = rotate-locator-angle(var_32, 1, var_38 * 0.50);
+        u64? var_40 = flatten-locator(var_39);
+        var_23 = var_40;
+    } else {
+        u64? var_41 = get-object-locator(arg_1);
+        var_23 = var_41;
+    }
+    u64? var_42 = is-npc?(arg_1);
+    u64? var_43 = melee-fact-get-bool(arg_1, ignore-poise);
+    bool var_44 = var_42 && var_43 && 1;
+    return var_44;
+}
+
+u16 fists-stun-combo-hit-1__melee-attack@6258(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, abby-fist-stun-hammerfist-1-hit--npc-f, var_2, var_3, *player-npc-sync-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u64? fists-stun-combo-hit-1__character-melee-info@b460(u64? arg_0, f32 arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_0 = npc-is-dog?(arg_0);
+    u64? var_1 = !(var_0);
+    u64? var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-joint-locator(arg_0, root);
+        u64? var_4 = flatten-locator(var_3);
+        u64? var_5 = get-locator-position(var_4);
+        u64? var_6 = get-joint-locator(arg_0, root);
+        u64? var_7 = get-y-vec-from-bound-frame(var_6);
+        u64? var_8 = vector-neg(var_7);
+        u64? var_9 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+        u64? var_10 = quat-from-look-at(var_8, var_9);
+        u64? var_11 = alloc-bound-frame(var_5, var_10, 0, 0, 0);
+        u64? var_12 = get-joint-locator(arg_0, root);
+        u64? var_13 = get-y-vec-from-bound-frame(var_12);
+        u64? var_14 = vector-neg(var_13);
+        u64? var_15 = get-object-locator(arg_0);
+        u64? var_16 = get-z-vec-from-bound-frame(var_15);
+        u64? var_17 = angle-in-between-vectors-plus(var_14, var_16, 1);
+        u64? var_18 = rotate-locator-angle(var_11, 1, var_17 * 0.50);
+        u64? var_19 = flatten-locator(var_18);
+        var_2 = var_19;
+    } else {
+        u64? var_20 = get-object-locator(arg_0);
+        var_2 = var_20;
+    }
+    u64? var_21 = npc-is-dog?(arg_1);
+    u64? var_22 = !(var_21);
+    u64? var_23;
+    if (var_22 != nullptr) {
+        u64? var_24 = get-joint-locator(arg_1, root);
+        u64? var_25 = flatten-locator(var_24);
+        u64? var_26 = get-locator-position(var_25);
+        u64? var_27 = get-joint-locator(arg_1, root);
+        u64? var_28 = get-y-vec-from-bound-frame(var_27);
+        u64? var_29 = vector-neg(var_28);
+        u64? var_30 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+        u64? var_31 = quat-from-look-at(var_29, var_30);
+        u64? var_32 = alloc-bound-frame(var_26, var_31, 0, 0, 0);
+        u64? var_33 = get-joint-locator(arg_1, root);
+        u64? var_34 = get-y-vec-from-bound-frame(var_33);
+        u64? var_35 = vector-neg(var_34);
+        u64? var_36 = get-object-locator(arg_1);
+        u64? var_37 = get-z-vec-from-bound-frame(var_36);
+        u64? var_38 = angle-in-between-vectors-plus(var_35, var_37, 1);
+        u64? var_39 = rotate-locator-angle(var_32, 1, var_38 * 0.50);
+        u64? var_40 = flatten-locator(var_39);
+        var_23 = var_40;
+    } else {
+        u64? var_41 = get-object-locator(arg_1);
+        var_23 = var_41;
+    }
+    u64? var_42 = npc-in-tap?(arg_1);
+    u64? var_43 = !(var_42);
+    u64? var_44 = npc-in-melee-vulnerable-tap?(arg_1);
+    u64? var_45 = is-npc?(arg_1);
+    u64? var_46;
+    if (var_43 != nullptr && var_44 != nullptr && var_45 != nullptr) {
+        u64? var_47 = melee-fact-get-bool(arg_1, ignore-poise);
+        u16 var_48;
+        if (var_47 != nullptr) {
+            var_48 = 1;
+        } else {
+            u64? var_49 = is-poise-broken?(arg_1);
+            var_48 = var_49;
+        }
+        u64? var_50 = melee-character-bit-check(arg_1, #0000000244200000);
+        u64? var_51 = npc-clicker?(arg_1);
+        u64? var_52 = melee-weapon-type-precedence(arg_0, arg_1);
+        bool var_53 = var_48 && !var_50 && var_51 && var_52;
+        var_46 = var_53;
+    }
+    return var_46;
+}
+
+u64? fists-stun-combo-hit-1__start-func-array@72c8(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = is-player?(arg_2);
+    u64? var_1 = is-player-base?(arg_2);
+    u64? var_2 = melee-character-bit-check(arg_2, 1);
+    bool var_3 = !(arg_2 == 0) || var_0 && !var_1 && var_2;
+    return var_3;
+}
+
+u16 fist-light-attack-left-1-hit-inf__melee-attack@6448(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (var_0 != nullptr) {
+        u64? var_2 = get-hit-direction(arg_2);
+        u64? var_3 = get-hit-pos(arg_2);
+        u64? var_4 = rate-animation-for-melee-impact(arg_2, abby-fist-combo-punch-1-left-hit--inf-f, var_2, var_3, *player-npc-sync-hit-reaction-match-ratings*);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u64? fist-light-attack-left-1-hit-inf__character-melee-info@8988(u64? arg_0, f32 arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_0 = npc-is-dog?(arg_0);
+    u64? var_1 = !(var_0);
+    u64? var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-joint-locator(arg_0, root);
+        u64? var_4 = flatten-locator(var_3);
+        u64? var_5 = get-locator-position(var_4);
+        u64? var_6 = get-joint-locator(arg_0, root);
+        u64? var_7 = get-y-vec-from-bound-frame(var_6);
+        u64? var_8 = vector-neg(var_7);
+        u64? var_9 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+        u64? var_10 = quat-from-look-at(var_8, var_9);
+        u64? var_11 = alloc-bound-frame(var_5, var_10, 0, 0, 0);
+        u64? var_12 = get-joint-locator(arg_0, root);
+        u64? var_13 = get-y-vec-from-bound-frame(var_12);
+        u64? var_14 = vector-neg(var_13);
+        u64? var_15 = get-object-locator(arg_0);
+        u64? var_16 = get-z-vec-from-bound-frame(var_15);
+        u64? var_17 = angle-in-between-vectors-plus(var_14, var_16, 1);
+        u64? var_18 = rotate-locator-angle(var_11, 1, var_17 * 0.50);
+        u64? var_19 = flatten-locator(var_18);
+        var_2 = var_19;
+    } else {
+        u64? var_20 = get-object-locator(arg_0);
+        var_2 = var_20;
+    }
+    u64? var_21 = npc-is-dog?(arg_1);
+    u64? var_22 = !(var_21);
+    u64? var_23;
+    if (var_22 != nullptr) {
+        u64? var_24 = get-joint-locator(arg_1, root);
+        u64? var_25 = flatten-locator(var_24);
+        u64? var_26 = get-locator-position(var_25);
+        u64? var_27 = get-joint-locator(arg_1, root);
+        u64? var_28 = get-y-vec-from-bound-frame(var_27);
+        u64? var_29 = vector-neg(var_28);
+        u64? var_30 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+        u64? var_31 = quat-from-look-at(var_29, var_30);
+        u64? var_32 = alloc-bound-frame(var_26, var_31, 0, 0, 0);
+        u64? var_33 = get-joint-locator(arg_1, root);
+        u64? var_34 = get-y-vec-from-bound-frame(var_33);
+        u64? var_35 = vector-neg(var_34);
+        u64? var_36 = get-object-locator(arg_1);
+        u64? var_37 = get-z-vec-from-bound-frame(var_36);
+        u64? var_38 = angle-in-between-vectors-plus(var_35, var_37, 1);
+        u64? var_39 = rotate-locator-angle(var_32, 1, var_38 * 0.50);
+        u64? var_40 = flatten-locator(var_39);
+        var_23 = var_40;
+    } else {
+        u64? var_41 = get-object-locator(arg_1);
+        var_23 = var_41;
+    }
+    u64? var_42 = npc-in-tap?(arg_1);
+    u64? var_43 = !(var_42);
+    u64? var_44 = npc-in-melee-vulnerable-tap?(arg_1);
+    u64? var_45 = is-npc?(arg_1);
+    u64? var_46;
+    if (var_43 != nullptr && var_44 != nullptr && var_45 != nullptr) {
+        u64? var_47 = melee-fact-get-bool(arg_1, ignore-poise);
+        u16 var_48;
+        if (var_47 != nullptr) {
+            var_48 = 1;
+        } else {
+            u64? var_49 = is-poise-broken?(arg_1);
+            var_48 = var_49;
+        }
+        u64? var_50 = melee-character-bit-check(arg_1, #0000000244200000);
+        u64? var_51 = npc-clicker?(arg_1);
+        u64? var_52 = melee-weapon-type-precedence(arg_0, arg_1);
+        bool var_53 = var_48 && !var_50 && var_51 && var_52;
+        var_46 = var_53;
+    }
+    return var_46;
+}
+
+u64? fist-light-attack-4-punch-hit__character-melee-info@a2e8(u64? arg_0, f32 arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_0 = npc-is-dog?(arg_0);
+    u64? var_1 = !(var_0);
+    u64? var_2;
+    if (var_1 != nullptr) {
+        u64? var_3 = get-joint-locator(arg_0, root);
+        u64? var_4 = flatten-locator(var_3);
+        u64? var_5 = get-locator-position(var_4);
+        u64? var_6 = get-joint-locator(arg_0, root);
+        u64? var_7 = get-y-vec-from-bound-frame(var_6);
+        u64? var_8 = vector-neg(var_7);
+        u64? var_9 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+        u64? var_10 = quat-from-look-at(var_8, var_9);
+        u64? var_11 = alloc-bound-frame(var_5, var_10, 0, 0, 0);
+        u64? var_12 = get-joint-locator(arg_0, root);
+        u64? var_13 = get-y-vec-from-bound-frame(var_12);
+        u64? var_14 = vector-neg(var_13);
+        u64? var_15 = get-object-locator(arg_0);
+        u64? var_16 = get-z-vec-from-bound-frame(var_15);
+        u64? var_17 = angle-in-between-vectors-plus(var_14, var_16, 1);
+        u64? var_18 = rotate-locator-angle(var_11, 1, var_17 * 0.50);
+        u64? var_19 = flatten-locator(var_18);
+        var_2 = var_19;
+    } else {
+        u64? var_20 = get-object-locator(arg_0);
+        var_2 = var_20;
+    }
+    u64? var_21 = npc-is-dog?(arg_1);
+    u64? var_22 = !(var_21);
+    u64? var_23;
+    if (var_22 != nullptr) {
+        u64? var_24 = get-joint-locator(arg_1, root);
+        u64? var_25 = flatten-locator(var_24);
+        u64? var_26 = get-locator-position(var_25);
+        u64? var_27 = get-joint-locator(arg_1, root);
+        u64? var_28 = get-y-vec-from-bound-frame(var_27);
+        u64? var_29 = vector-neg(var_28);
+        u64? var_30 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+        u64? var_31 = quat-from-look-at(var_29, var_30);
+        u64? var_32 = alloc-bound-frame(var_26, var_31, 0, 0, 0);
+        u64? var_33 = get-joint-locator(arg_1, root);
+        u64? var_34 = get-y-vec-from-bound-frame(var_33);
+        u64? var_35 = vector-neg(var_34);
+        u64? var_36 = get-object-locator(arg_1);
+        u64? var_37 = get-z-vec-from-bound-frame(var_36);
+        u64? var_38 = angle-in-between-vectors-plus(var_35, var_37, 1);
+        u64? var_39 = rotate-locator-angle(var_32, 1, var_38 * 0.50);
+        u64? var_40 = flatten-locator(var_39);
+        var_23 = var_40;
+    } else {
+        u64? var_41 = get-object-locator(arg_1);
+        var_23 = var_41;
+    }
+    u64? var_42 = npc-in-tap?(arg_1);
+    u64? var_43 = !(var_42);
+    u64? var_44 = npc-in-melee-vulnerable-tap?(arg_1);
+    u64? var_45 = is-npc?(arg_1);
+    u64? var_46;
+    if (var_43 != nullptr && var_44 != nullptr && var_45 != nullptr) {
+        u64? var_47 = melee-fact-get-bool(arg_1, ignore-poise);
+        u16 var_48;
+        if (var_47 != nullptr) {
+            var_48 = 1;
+        } else {
+            u64? var_49 = is-poise-broken?(arg_1);
+            var_48 = var_49;
+        }
+        u64? var_50 = melee-character-bit-check(arg_1, #0000000244200000);
+        u64? var_51 = npc-clicker?(arg_1);
+        u64? var_52 = melee-weapon-type-precedence(arg_0, arg_1);
+        bool var_53 = var_48 && !var_50 && var_51 && var_52;
+        var_46 = var_53;
+    }
+    return var_46;
+}
+
+u64? fist-jump-attack-back-kill__melee-attack@6828(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = is-player-abby?(arg_1);
+    u64? var_1 = is-behind?-symbol(arg_2, arg_1, 2, 180.00);
+    bool var_2 = var_0 && var_1;
+    return var_2;
+}
+
+u64? fist-glass-crouched-low-attack-1__melee-attack@6a18__start-func-array@7b00__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = player-is-crouched?();
+    return var_0;
+}
+
+u64? fist-glass-crouched-low-attack-1__melee-attack@6a18(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, f32 arg_11, u8 arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = task-active?(saving-kids, ski-find-backpack);
+    if (!var_0 == nullptr) {
+        melee-debug-text-file-line-fail("(not (task-active? (quote saving-kids) (quote ski-find-backpack)))", "t2r/src/game/scriptx/melee/player-standing/imports/player-standing-macros.dcx", 2567);
+    }
+    u64? var_1 = task-active?(saving-kids, ski-find-backpack-enter-building);
+    melee-debug-text-file-line-fail("(not (task-active? (quote saving-kids) (quote ski-find-backpack-enter-building)))", "t2r/src/game/scriptx/melee/player-standing/imports/player-standing-macros.dcx", 2568);
+    bool var_2 = !var_0 && !var_1 && !var_1;
+    return var_2;
+}
+
+u16 fist-glass-crouched-low-attack-1__melee-event-list@87b8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    melee-log-player-event("melee-player-swing-low-glass", 1);
+    u16 var_0;
+    if (0 == nullptr) {
+        u64? var_1 = player-equip-best-melee-weapon(1, 1);
+        var_0 = var_1;
+    } else {
+        var_0 = 0;
+    }
+    return var_0;
+}
+
+u64? fist-glass-crouched-high-attack-1__melee-attack@6df8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, f32 arg_11, u8 arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = task-active?(saving-kids, ski-find-backpack);
+    if (!var_0 == nullptr) {
+        melee-debug-text-file-line-fail("(not (task-active? (quote saving-kids) (quote ski-find-backpack)))", "t2r/src/game/scriptx/melee/player-standing/imports/player-standing-macros.dcx", 2420);
+    }
+    u64? var_1 = task-active?(saving-kids, ski-find-backpack-enter-building);
+    melee-debug-text-file-line-fail("(not (task-active? (quote saving-kids) (quote ski-find-backpack-enter-building)))", "t2r/src/game/scriptx/melee/player-standing/imports/player-standing-macros.dcx", 2421);
+    bool var_2 = !var_0 && !var_1 && !var_1;
+    return var_2;
+}
+

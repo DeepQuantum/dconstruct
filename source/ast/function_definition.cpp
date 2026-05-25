@@ -84,13 +84,7 @@ void function_definition::pseudo_racket(std::ostream& os) const {
 [[nodiscard]] program_binary_result function_definition::emit_dc(compilation::global_state& global) const noexcept {
     compilation::function fn{};
     if (const std::string* name = std::get_if<std::string>(&m_name)) {
-        if (global.m_sidAliases.contains(*name)) {
-            const auto id = global.m_sidAliases.at(*name);
-            fn.m_name = id.second;
-        } else {
-            fn.m_name = *name;
-        }
-        global.m_sidAliases[*name] = {m_type, SID(name->c_str())};
+        fn.m_name = *name;
     }
 
     for (u32 i = 0; i < m_parameters.size(); ++i) {

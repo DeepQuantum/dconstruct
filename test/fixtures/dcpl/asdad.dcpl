@@ -391,7 +391,7 @@ lambda {
 }lambda {
     if (!(tag-specified?(follow-obj, self)) != nullptr) {}
  else if (!(get-boolean(update-pos, self)) != nullptr) {}
- else if (get-boolean(check-ray, self) != nullptr && tag-specified?(center-point, self) != nullptr) {
+ else if (get-boolean(check-ray, self) && tag-specified?(center-point, self) != nullptr) {
         set-object-position(self, get-object-position(tag-symbol(follow-obj, self)));
         set-object-rotation(self, get-locator-rotation(rotate-locator-lookat(
             rotate-locator-angle(rotate-locator-lookat(
@@ -415,7 +415,7 @@ lambda {
             1.00,
             0
         )));
-    } else if (get-boolean(check-ray, self) != nullptr && (get-symbol(curr-cnt-spl, self) == 0) == nullptr) {
+    } else if (get-boolean(check-ray, self) && (get-symbol(curr-cnt-spl, self) == 0) == nullptr) {
         set-object-position(self, get-object-position(tag-symbol(follow-obj, self)));
         set-object-rotation(self, get-locator-rotation(rotate-locator-lookat(
             rotate-locator-angle(rotate-locator-lookat(

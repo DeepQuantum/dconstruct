@@ -76,3 +76,31 @@ u64? anim-player-edge-climb-states__anim-transition-group@58a0__anim-transition-
     return var_1;
 }
 
+u16 anim-player-edge-climb-states__actor-state-list@48__anim-node-blend@5598__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return 0;
+}
+
+u64? anim-player-edge-climb-states(u64? arg_0, u64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64 arg_5, u64? arg_6) {
+    u64 var_0 = *(u64*)(*(arg_1 + 8) + 384);
+    u64? var_1 = player-anim-speed-mult(var_0, *(u64*)arg_5);
+    return arg_2 + ((arg_3 * var_1) * arg_4);
+}
+
+f32 anim-player-edge-climb-states__anim-node-blend@5538(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)((*(arg_0 + 16) + 240) + 4);
+}
+
+f32 anim-player-edge-climb-states__anim-node-blend@58f8__anim-node-blend@d258____anim-node-animation@10b80__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return 1.00;
+}
+
+f32 anim-player-edge-climb-states__anim-node-blend@58f8__anim-node-animation@12458__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return 0.00;
+}
+
+u64? anim-player-edge-climb-states__anim-transition-group@58a0__anim-transition-condition-lambda@12430__(u8 arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_0 = player-animation-abort-active?(arg_2, arg_1);
+    bool var_1 = var_0 && *(u8*)(*arg_0 + 208);
+    return var_1;
+}
+

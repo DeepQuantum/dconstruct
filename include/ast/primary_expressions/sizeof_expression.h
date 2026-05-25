@@ -34,7 +34,7 @@ namespace dconstruct::ast {
         [[nodiscard]] VAR_OPTIMIZATION_ACTION var_optimization_pass(var_optimization_env& env) noexcept final;
         [[nodiscard]] FOREACH_OPTIMIZATION_ACTION foreach_optimization_pass(foreach_optimization_env& env) noexcept final;
 
-        std::variant<full_type, expr_uptr> m_operand;
+        operand_t m_operand;
     };
 
 
