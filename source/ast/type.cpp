@@ -34,6 +34,16 @@ ptr_type::ptr_type(ref_full_type&& type) noexcept : m_pointedAt{ std::move(type)
 ptr_type::ptr_type(const ast::primitive_kind& kind) noexcept
     : m_pointedAt{ std::make_shared<ast::full_type>(make_type_from_prim(kind)) } {}
 
+full_type::full_type() = default;
+
+full_type::full_type(const full_type&) = default;
+
+full_type::full_type(full_type&&) = default;
+
+full_type& full_type::operator=(const full_type&) = default;
+
+full_type& full_type::operator=(full_type&&) = default;
+
 [[nodiscard]] full_type make_type_from_prim(const primitive_kind kind) {
     return full_type{ primitive_type{ kind } };
 }
@@ -143,7 +153,7 @@ ptr_type::ptr_type(const ast::primitive_kind& kind) noexcept
             return first.substr(0, first.find(".") + 3);
         }
         else if constexpr (std::is_same_v<T, std::nullptr_t>) {
-            return "nullptr";
+            return "null";
         }
         else {
             return std::to_string(arg);
@@ -167,7 +177,7 @@ ptr_type::ptr_type(const ast::primitive_kind& kind) noexcept
         case primitive_kind::BOOL:      return "bool";
         case primitive_kind::STRING:    return "string";
         case primitive_kind::SID:       return "sid";
-        case primitive_kind::NULLPTR:   return "nullptr";
+        case primitive_kind::NULLPTR:   return "null";
         default:                        return "u64?";
     }
 }

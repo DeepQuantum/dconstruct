@@ -44,6 +44,7 @@ namespace dconstruct::compilation {
             {"bool", make_type_from_prim(ast::primitive_kind::BOOL)},
             {"string", make_type_from_prim(ast::primitive_kind::STRING)},
             {"sid", make_type_from_prim(ast::primitive_kind::SID)},
+            {"symbol", make_type_from_prim(ast::primitive_kind::U64)},
             {"u0", make_type_from_prim(ast::primitive_kind::NOTHING)}
         };
 

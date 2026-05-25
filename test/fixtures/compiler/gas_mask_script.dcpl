@@ -41,7 +41,7 @@ u64 get_gas_mask_setup(u64 current_character) {
         2 -> #*dina-gas-mask-setup*, 
         3 -> #*joel-gas-mask-setup*,
         4 -> #*lev-gas-mask-setup*,
-        else -> nullptr
+        else -> null
     };
 }
 
@@ -71,7 +71,7 @@ statescript #gas-mask-toggle {
 
                     >> "got gas mask setup: %016X" $ gas_mask_setup;
 
-                    if (gas_mask_setup == nullptr) {
+                    if (gas_mask_setup == null) {
                         >> "invalid gas mask setup, defaulting to ellie";
                         gas_mask_setup = #*ellie-gas-mask-setup*;
                     }

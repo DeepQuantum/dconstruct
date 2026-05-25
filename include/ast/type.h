@@ -129,11 +129,11 @@ namespace dconstruct::ast {
         using variant_type::variant_type;
         using variant_type::operator=;
 
-        full_type() = default;
-        full_type(const full_type&) = default;
-        full_type(full_type&&) = default;
-        full_type& operator=(const full_type&) = default;
-        full_type& operator=(full_type&&) = default;
+        full_type();
+        full_type(const full_type&);
+        full_type(full_type&&);
+        full_type& operator=(const full_type&);
+        full_type& operator=(full_type&&);
     };
 
 

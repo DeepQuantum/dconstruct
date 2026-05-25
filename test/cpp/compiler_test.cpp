@@ -1789,20 +1789,20 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
         EXPECT_EQ(semantic_errors, empty) << semantic_errors[0].m_message;
     }
 
-    TEST(COMPILER, NullptrAssignableToAnyType) {
+    TEST(COMPILER, NullAssignableToAnyType) {
         const std::string code =
             "using #takes-string as near (string) -> u0;"
             "using #takes-u64 as near (u64) -> u0;"
             "u64 main() {"
-            "    string text = nullptr;"
-            "    u64 value = nullptr;"
-            "    u64* pointer = nullptr;"
-            "    text = nullptr;"
-            "    value = nullptr;"
-            "    pointer = nullptr;"
-            "    #takes-string(nullptr);"
-            "    #takes-u64(nullptr);"
-            "    return nullptr;"
+            "    string text = null;"
+            "    u64 value = null;"
+            "    u64* pointer = null;"
+            "    text = null;"
+            "    value = null;"
+            "    pointer = null;"
+            "    #takes-string(null);"
+            "    #takes-u64(null);"
+            "    return null;"
             "}";
 
         auto [tokens, lex_errors] = get_tokens(code);
@@ -1816,16 +1816,16 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
         ASSERT_EQ(semantic_errors.size(), 0) << (semantic_errors.empty() ? "" : semantic_errors[0].m_message);
     }
 
-    TEST(COMPILER, NullptrActsAsZeroInLogicalExpressions) {
+    TEST(COMPILER, NullActsAsZeroInLogicalExpressions) {
         const std::string code =
             "u64 main(u64 value) {"
-            "    if (nullptr || value && nullptr) {"
+            "    if (null || value && null) {"
             "        return 1;"
             "    }"
-            "    while (nullptr) {"
+            "    while (null) {"
             "        return 2;"
             "    }"
-            "    if (value != nullptr) {"
+            "    if (value != null) {"
             "        return 3;"
             "    }"
             "    return 0;"
@@ -2008,8 +2008,8 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
         });
     }
 
-    TEST(COMPILER, ReturnNullptrLoadsZero) {
-        expect_instructions("u64 main() { return nullptr; }", {
+    TEST(COMPILER, ReturnNullLoadsZero) {
+        expect_instructions("u64 main() { return null; }", {
             Instruction{Opcode::LoadU16Imm, 0, 0, 0},
             Instruction{Opcode::Return, 0, 0, 0},
         });
