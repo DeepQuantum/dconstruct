@@ -4,3 +4,6 @@
 [submodule "source/minhook"]
 	path = source/minhook
 	url = https://github.com/TsudaKageyu/minhook
+[submodule "source/qui"]
+	path = source/qui
+	url = https://github.com/DeepQuantum/qui

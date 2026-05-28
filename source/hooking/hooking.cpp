@@ -226,6 +226,10 @@ namespace dconstruct::hooking {
         MH_CreateHook(display_target, &display_hook, reinterpret_cast<void**>(&display_orig));
         MH_EnableHook(display_target);
 
+        void* is_final_build_target = (void*)(module_base + IS_FINAL_BUILD_OFFSET);
+        MH_CreateHook(is_final_build_target, &is_final_build_hook, reinterpret_cast<void**>(&is_final_build_orig));
+        MH_EnableHook(is_final_build_target);
+
         // void* invoke_function_target = (void*)(base + INVOKE_FUNCTION_OFFSET);
         // MH_CreateHook(invoke_function_target, &invoke_function_hook, reinterpret_cast<void**>(&invoke_function_orig));
         // MH_EnableHook(invoke_function_target);

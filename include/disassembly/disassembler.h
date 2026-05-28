@@ -8,26 +8,6 @@
 #include <unordered_map>
 
 namespace dconstruct {
-    struct Color {
-        u8 r, g, b;
-    };
-
-    constexpr static Color TYPE_COLOR = Color{ 78, 201, 176 };
-    constexpr static Color VAR_COLOR = Color{ 156, 220, 254 };
-    constexpr static Color CONTROL_COLOR = Color{ 197, 134, 192 };
-    constexpr static Color NUM_COLOR = Color{ 181, 206, 163 };
-    constexpr static Color OPCODE_COLOR = Color{ 84, 179, 183 };
-    constexpr static Color STRING_COLOR = Color{ 174, 51, 68 };
-    constexpr static Color FUNCTION_COLOR = Color{ 220, 220, 155 };
-    constexpr static Color COMMENT_COLOR = Color{ 204, 204, 204 };
-    constexpr static Color BACKGROUND_COLOR = Color{ 28, 29, 30 };
-    constexpr static Color HASH_COLOR = Color{ 86, 156, 214 };
-
-    struct TextFormat {
-        Color m_color = COMMENT_COLOR;
-        u64 m_fontSize = 14;
-    };
-
     struct DisassemblerOptions {
         u8 m_indentPerLevel = 2;
         bool m_emitOnce = false;
@@ -63,7 +43,7 @@ namespace dconstruct {
         std::unordered_map<u64, std::vector<std::string>> m_offsetsToFunctionNames;
 
     protected:
-        virtual void insert_span(const char* text, const u32 indent = 0, const TextFormat& text_format = TextFormat{}) {};
+        virtual void insert_span(const char* text, const u32 indent = 0) {};
         
         std::map<sid64, std::vector<const structs::unmapped*>> m_unmappedEntries;
         BinaryFile* m_currentFile = nullptr;
@@ -75,18 +55,13 @@ namespace dconstruct {
         bool m_hasStateScript = false;
 
 
-        constexpr static TextFormat ENTRY_HEADER_FMT = { VAR_COLOR, 20 };
-        constexpr static TextFormat ENTRY_TYPE_FMT = { TYPE_COLOR, 20 };
-        constexpr static TextFormat STRUCT_TYPE_FMT = { TYPE_COLOR, 14 };
-        constexpr static TextFormat COMMENT_FMT = { COMMENT_COLOR, 14 };
-
         FILE* m_perfFile = nullptr;
 
         void insert_entry(const Entry* entry);
         void insert_struct(const structs::unmapped* entry, const u32 indent = 0, const sid64 name_id = 0, const sid64 type_id = 0);
-        template<TextFormat text_format = TextFormat{}, typename... Args> 
+        template<typename... Args>
         void insert_span_fmt(const char* format, Args ...args);
-        template<TextFormat text_format = TextFormat{}, typename... Args> 
+        template<typename... Args>
         void insert_span_indent(const char*, const u32, Args ...);
         [[nodiscard]] const char* lookup(const sid64 hash);
         [[nodiscard]] const char* lookup(const sid32 hash);

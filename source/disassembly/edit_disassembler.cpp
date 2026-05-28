@@ -51,16 +51,6 @@ namespace dconstruct {
             member_location += last_member_size;
         }
         const u32 edit_member_size = insert_next_struct_member(struct_member_start + member_location, 0);
-        if (edit_member_size == 8 && (value.m_editType != EditType::SID_STR && value.m_editType != EditType::SID_HASH && value.m_editType != EditType::PTR)) {
-            std::cout << "warning: member " << member_index << " of struct at location 0x" << std::hex << struct_offset
-                << " is size 8, but value passed is of size 4. edit will not be applied.\n";
-            return;
-        }
-        if (edit_member_size == 4 && (value.m_editType == EditType::SID_STR || value.m_editType == EditType::SID_HASH || value.m_editType == EditType::PTR)) {
-            std::cout << "warning: member " << member_index << " of struct at location 0x" << std::hex << struct_offset
-                << " is size 4, but value passed is of size 8. edit will not be applied.\n";
-            return;
-        }
         const location edit_location = struct_member_start + member_location;
         std::cout << "applying change at location 0x" << std::hex << struct_offset << "[0x" << member_index << "]: " << std::dec;
         switch (value.m_editType) {

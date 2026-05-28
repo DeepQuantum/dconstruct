@@ -30,7 +30,7 @@ namespace dconstruct {
         [[nodiscard]] std::optional<sid64> try_get_pointed_struct_type(const location ptr_value) const noexcept;
         void map_temporary_members(const sid64 struct_type_id, const location member_start, const u32 inferred_size);
         void observe_unmapped_struct(const structs::unmapped* struct_ptr, const sid64 type_id = 0);
-        void insert_span(const char* text, const u32 indent = 0, const TextFormat& text_format = TextFormat{}) override {}
+        void insert_span(const char* text, const u32 indent = 0) override {}
 
         MappingRegistry& m_registry;
         std::set<p64> m_visitedStructs;

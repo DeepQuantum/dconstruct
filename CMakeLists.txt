@@ -234,6 +234,35 @@ add_dependencies(dconstruct generate_buildinfo)
 
 add_subdirectory(${SOURCE_DIR}/minhook)
 
+add_subdirectory(${SOURCE_DIR}/qui)
+
+add_executable(dconstruct_ui
+    ${SOURCE_DIR}/ui/main.cpp
+)
+
+target_link_libraries(dconstruct_ui PRIVATE
+    qui_base::qui_base
+    dconstruct_lib
+)
+
+if(WIN32)
+    target_link_libraries(dconstruct_ui PRIVATE comdlg32)
+endif()
+
+set_target_properties(dconstruct_ui PROPERTIES
+    CXX_STANDARD ${CMAKE_CXX_STANDARD}
+    CXX_STANDARD_REQUIRED ON
+    CXX_EXTENSIONS OFF
+)
+
+target_compile_options(dconstruct_ui PRIVATE
+    $<$<CONFIG:Release>:/GL>
+)
+
+target_link_options(dconstruct_ui PRIVATE
+    $<$<CONFIG:Release>:/LTCG>
+)
+
 if(MSVC)
     enable_language(ASM_MASM)
 endif()

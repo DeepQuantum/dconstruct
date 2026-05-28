@@ -33,7 +33,7 @@ namespace dconstruct {
         std::string m_outbuf;
         FILE* m_outfptr;
 
-        void insert_span(const char* text, const u32 indent = 0, const TextFormat& text_format = TextFormat{}) override {
+        void insert_span(const char* text, const u32 indent = 0) override {
             if (indent > 0) {
                 m_outbuf += std::string(indent, ' ');
                 #ifdef _DEBUG

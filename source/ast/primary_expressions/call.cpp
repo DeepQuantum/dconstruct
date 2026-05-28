@@ -174,13 +174,15 @@ void call_expr::pseudo_racket(std::ostream& os) const {
         return std::unexpected{semantic_check_error{"expected at least " + std::to_string(func_type.m_arguments.size()) + " arguments but got " + std::to_string(m_arguments.size()), this}};
     }
 
-    for (u32 i = 0; i < func_type.m_arguments.size(); ++i) {
+    const u64 arg_counter = func_type.m_isVariadic ? m_arguments.size() : func_type.m_arguments.size();
+
+    for (u32 i = 0; i < arg_counter; ++i) {
         const expr_uptr& arg = m_arguments[i];
         const semantic_check_res arg_type = arg->get_type_checked(env);
         if (!arg_type) {
             return arg_type;
         }
-        if (not_assignable_reason(*func_type.m_arguments[i].second, *arg_type)) {
+        if (i < func_type.m_arguments.size() && not_assignable_reason(*func_type.m_arguments[i].second, *arg_type)) {
             return std::unexpected{semantic_check_error{
                 "expected argument of type " + type_to_declaration_string(*func_type.m_arguments[i].second) + " at position " + std::to_string(i) + " but got " + type_to_declaration_string(*arg_type)
             , arg.get()}};

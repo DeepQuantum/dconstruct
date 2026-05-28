@@ -1,0 +1,17 @@
+@mod "C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/mods/gas-mask-toggle"
+@output "ss/ss-gas-mask-material-controller"
+
+@sidbase "C:/Users/damix/Documents/GitHub/TLOU2Modding/dconstruct/test/fixtures/dc/sidbase_new_fixed.bin"
+
+using #is-player-abby? as far (u64) -> bool;
+
+u64 #convert-player-to-name(u64 arg_0) {
+    breakpoint;
+    u64 var_1;
+    if (#is-player-abby?(arg_0)) {
+        var_1 = #abby;
+    } else {
+        var_1 = #ellie;
+    }
+    return var_1;
+}

@@ -32,7 +32,7 @@ statescript {
                 lambda {
                     display(dc:format("launched custom gas mask script, version %d.%d", 1, 1));
                     u64? var_2;
-                    if (is-rogue-mode?() != nullptr) {
+                    if (is-rogue-mode?() != null) {
                         display("in rogue, getting character");
                         u64? var_3 = rogue-get-player-character();
                         display(dc:format("got character %d", var_3));

@@ -74,19 +74,19 @@ namespace dconstruct {
 
 
 
-template<TextFormat text_format, typename... Args>
+template<typename... Args>
 void Disassembler::insert_span_fmt(const char *format, Args ...args) {
     char buffer[512];
     std::snprintf(buffer, sizeof(buffer), format, args...);
-    insert_span(buffer, 0, text_format);
+    insert_span(buffer, 0);
 }
 
 
-template<TextFormat text_format, typename... Args>
+template<typename... Args>
 void Disassembler::insert_span_indent(const char* format, const u32 indent, Args ...args) {
     char buffer[512];
     std::snprintf(buffer, sizeof(buffer), format, indent, "", args...);
-    insert_span(buffer, 0, text_format);
+    insert_span(buffer, 0);
 }
 
 
