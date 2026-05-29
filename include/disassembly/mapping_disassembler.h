@@ -9,10 +9,8 @@ namespace dconstruct {
 
     class MappingDisassembler : public Disassembler {
     public:
-        MappingDisassembler(BinaryFile* file, const SIDBase* sidbase, MappingRegistry& registry, const DisassemblerOptions& options = DisassemblerOptions{}, const game_type game = game_type::T2R) noexcept : 
-        Disassembler(file, sidbase, game), m_registry(registry) {
-            m_options = options;
-        }
+        MappingDisassembler(BinaryFile* file, const SIDBase* sidbase, MappingRegistry& registry, const game_type game = game_type::T2R) noexcept :
+        Disassembler(file, sidbase, game), m_registry(registry) {}
 
         ~MappingDisassembler() override = default;
 
@@ -30,7 +28,6 @@ namespace dconstruct {
         [[nodiscard]] std::optional<sid64> try_get_pointed_struct_type(const location ptr_value) const noexcept;
         void map_temporary_members(const sid64 struct_type_id, const location member_start, const u32 inferred_size);
         void observe_unmapped_struct(const structs::unmapped* struct_ptr, const sid64 type_id = 0);
-        void insert_span(const char* text, const u32 indent = 0) override {}
 
         MappingRegistry& m_registry;
         std::set<p64> m_visitedStructs;

@@ -1,7 +1,7 @@
 #include "disassembly/disassembly_functions.h"
 
+#include "disassembly/disassembler.h"
 #include "disassembly/edit_disassembler.h"
-#include "disassembly/file_disassembler.h"
 #include "disassembly/mapping_disassembler.h"
 #include "decompilation/decomp_function.h"
 #include "buildinfo.h"
@@ -138,7 +138,7 @@ void map_types_multiple(
                 return;
             }
             auto& file = *file_res;
-            dconstruct::MappingDisassembler disassembler(&file, &sidbase, registry, dconstruct::DisassemblerOptions{}, game);
+            dconstruct::MappingDisassembler disassembler(&file, &sidbase, registry, game);
             disassembler.ingest();
         }
     );
@@ -162,7 +162,6 @@ void decomp_file(
     const std::filesystem::path& out_disasm_filename,
     const std::filesystem::path& out_decomp_filename,
     const dconstruct::SIDBase& base,
-    const dconstruct::DisassemblerOptions& options,
     const bool write_graphs,
     const dconstruct::ast::print_fn_type language_type,
     const bool show_warnings,
@@ -186,11 +185,11 @@ void decomp_file(
     auto& file = *file_res;
 
     if (game != dconstruct::game_type::UC4 && !edits.empty()) {
-        dconstruct::EditDisassembler ed(&file, &base, options, edits, game);
+        dconstruct::EditDisassembler ed(&file, &base, edits, game);
         ed.apply_file_edits();
     }
 
-    dconstruct::FileDisassembler disassembler(&file, &base, out_disasm_filename.string(), options, game);
+    dconstruct::Disassembler disassembler(&file, &base, game);
 
     if (game == dconstruct::game_type::UC4) {
         disassembler.disassemble_functions_from_bin_file();
@@ -199,8 +198,11 @@ void decomp_file(
     }
 
     const auto funcs = disassembler.get_all_functions();
-    disassembler.prepend_output(get_output_header(file, file.m_dcheader ? file.m_dcheader->m_numEntries : 0, funcs.size(), disassembler.has_state_script(), game, effective_optimize));
-    disassembler.dump();
+    {
+        std::ofstream out(out_disasm_filename, std::ios::binary);
+        out << get_output_header(file, file.m_dcheader ? file.m_dcheader->m_numEntries : 0, funcs.size(), disassembler.has_state_script(), game, effective_optimize);
+        out << disassembler.disassembly_to_string(disassembler.get_disassembled_entries());
+    }
 
     if (!funcs.empty()) {
         std::ofstream out(out_decomp_filename);
@@ -238,7 +240,6 @@ void disasm_file(
     const std::filesystem::path& inpath,
     const std::filesystem::path& out_filename,
     const dconstruct::SIDBase& base,
-    const dconstruct::DisassemblerOptions& options,
     const std::vector<std::string>& edits,
     const dconstruct::game_type game
 ) {
@@ -248,26 +249,27 @@ void disasm_file(
         std::cerr << file_res.error() << "\n";
         std::terminate();
     }
-
+    
     auto& file = *file_res;
-
+    std::cerr << file.m_path << "\n";
+    
     if (!edits.empty() && game != dconstruct::game_type::UC4) {
-        dconstruct::EditDisassembler ed(&file, &base, options, edits, game);
+        dconstruct::EditDisassembler ed(&file, &base, edits, game);
         ed.apply_file_edits();
     }
 
-    dconstruct::FileDisassembler disassembler(&file, &base, out_filename.string(), options, game);
+    dconstruct::Disassembler disassembler(&file, &base, game);
     disassembler.disassemble();
     const auto funcs = disassembler.get_all_functions();
-    disassembler.prepend_output(get_output_header(file, file.m_dcheader ? file.m_dcheader->m_numEntries : 0, funcs.size(), disassembler.has_state_script(), game, false));
-    disassembler.dump();
+    std::ofstream out(out_filename, std::ios::binary);
+    out << get_output_header(file, file.m_dcheader ? file.m_dcheader->m_numEntries : 0, funcs.size(), disassembler.has_state_script(), game, false);
+    out << disassembler.disassembly_to_string(disassembler.get_disassembled_entries());
 }
 
 void decompile_multiple(
     const std::filesystem::path& in,
     const std::filesystem::path& out,
     const dconstruct::SIDBase& sidbase,
-    const dconstruct::DisassemblerOptions& options,
     const bool generate_graphs,
     const bool show_warnings,
     const bool optimize,
@@ -301,7 +303,7 @@ void decompile_multiple(
             const std::filesystem::path disasm_outpath = (out / std::filesystem::relative(entry, in)).concat(".asm");
             const std::filesystem::path decomp_outpath = (out / std::filesystem::relative(entry, in)).concat(".dcpl");
             std::filesystem::create_directories(disasm_outpath.parent_path());
-            decomp_file(entry.string(), disasm_outpath, decomp_outpath, sidbase, options, generate_graphs, language_print, show_warnings, effective_optimize, {}, pascal_case, game);
+            decomp_file(entry.string(), disasm_outpath, decomp_outpath, sidbase, generate_graphs, language_print, show_warnings, effective_optimize, {}, pascal_case, game);
         }
     );
 
@@ -314,7 +316,6 @@ void disassemble_multiple(
     const std::filesystem::path& in,
     const std::filesystem::path& out,
     const dconstruct::SIDBase& sidbase,
-    const dconstruct::DisassemblerOptions& options,
     const dconstruct::game_type game
 ) {
     std::vector<std::filesystem::path> filepaths;
@@ -337,7 +338,7 @@ void disassemble_multiple(
         [&](const std::filesystem::path& entry) {
             const std::filesystem::path outpath = (out / std::filesystem::relative(entry, in)).concat(".asm");
             std::filesystem::create_directories(outpath.parent_path());
-            disasm_file(entry.string(), outpath, sidbase, options, {}, game);
+            disasm_file(entry.string(), outpath, sidbase, {}, game);
         }
     );
 
@@ -417,13 +418,11 @@ std::vector<std::string> edits_from_file(const std::filesystem::path& path) {
     options.add_options("configuration")
         ("no_decompile", "don't emit a file containing the decompiled functions (excluding those nested inside structs).", cxxopts::value<bool>()->default_value("false"))
         ("no_optimize", "don't optimize/cleanup the decompiled code output, e.g. replacing some 'for' loops with 'foreach' loops, some if-else chains with match expressions, and removing unused variables.", cxxopts::value<bool>()->default_value("false"))
-        ("verbose", "emit verbose details for script-lambda and state-script structs, including all known fields from DCScript.h.", cxxopts::value<bool>()->default_value("false"))
         ("pascal_case", "convert the games function names into pascal case in the DCPL output.", cxxopts::value<bool>()->default_value("false"))
         ("show_warnings", "don't show warnings for functions that couldn't be decompiled.", cxxopts::value<bool>()->default_value("false"))
         ("language", "specify the DCPL pseudo language type. current options are 'C', 'Racket' (closest to original DC), or 'Python'. default is 'C'.", cxxopts::value<std::string>()->default_value("C"))
         ("g,game_type", "game type. current options are 't2r', 't1x', or 'uc4'. default is 't2r'.", cxxopts::value<std::string>()->default_value("t2r"))
         ("graphs", "emit control flow graph SVGs of the named functions when decompiling. only emits graphs of size >1. SIGNIFICANTLY slows down decompilation.", cxxopts::value<bool>()->default_value("false"))
-        ("emit_once", "only emit the first occurence of a struct. repeating instances will still show the address but not the contents of the struct.", cxxopts::value<bool>()->default_value("false"))
         ("map_types", "don't emit disassembly or decompilation output, just map as many struct types as possible and emit them to a file specified by --output", cxxopts::value<bool>()->default_value("false"));
 
     options.add_options("edit")

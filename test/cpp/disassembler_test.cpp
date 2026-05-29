@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 #include "binaryfile.h"
-#include "disassembly/file_disassembler.h"
+#include "disassembly/disassembler.h"
 #include "decompilation/decomp_function.h"
 #include <fstream>
 #include <filesystem>
@@ -53,11 +53,12 @@ namespace dconstruct::testing {
         auto file_res = BinaryFile::from_path(filepath);
         ASSERT_TRUE(file_res.has_value());
         auto& file = *file_res;
-        dconstruct::FileDisassembler dis{&file, &base, "test/fixtures/uc4/ss-isl-cave-get-piton.asm", {}};
+        dconstruct::Disassembler dis{&file, &base};
 
         dis.disassemble_functions_from_bin_file();
 
-        dis.dump();
+        std::ofstream asm_out("test/fixtures/uc4/ss-isl-cave-get-piton.asm", std::ios::binary);
+        asm_out << dis.disassembly_to_string(dis.get_disassembled_entries());
         std::ofstream out("test/fixtures/uc4/ss-isl-cave-get-piton.dcpl");
 
         for (const auto* func : dis.get_all_functions()) {

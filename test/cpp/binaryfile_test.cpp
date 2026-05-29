@@ -3,7 +3,7 @@
 #include "decompilation/decomp_function.h"
 #include <fstream>
 #include "compilation/function.h"
-#include "disassembly/file_disassembler.h"
+#include "disassembly/disassembler.h"
 
 namespace dconstruct::testing {
 
@@ -27,7 +27,7 @@ namespace dconstruct::testing {
         std::filesystem::create_directories(result.parent_path());
 
         BinaryFile file = *BinaryFile::from_path(input);
-        FileDisassembler disassembler(&file, &base, (TEST_ROOT / "fixtures" / "bin" / "transplant_check.bin").string(), {});
+        Disassembler disassembler(&file, &base);
         disassembler.disassemble();
 
         std::vector<compilation::function> converted;

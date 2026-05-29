@@ -26,8 +26,7 @@ namespace dconstruct {
     class EditDisassembler : public Disassembler {
 
     public:
-        EditDisassembler(BinaryFile* file, const SIDBase* sidbase, const DisassemblerOptions& options, const std::vector<std::string> &edits, const game_type game = game_type::T2R) noexcept : Disassembler(file, sidbase, game) {
-            m_options = options;
+        EditDisassembler(BinaryFile* file, const SIDBase* sidbase, const std::vector<std::string> &edits, const game_type game = game_type::T2R) noexcept : Disassembler(file, sidbase, game) {
             m_edits = edits;
         }
         ~EditDisassembler() override = default;
@@ -39,7 +38,6 @@ namespace dconstruct {
     private:
         std::vector<std::string> m_edits;
 
-        void insert_span(const char* text, const u32 indent = 0) override {};
         void output_edit_file();
     };
 }

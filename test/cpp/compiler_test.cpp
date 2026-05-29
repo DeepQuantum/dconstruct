@@ -4,7 +4,7 @@
 #include "compilation/compiler_funcs.h"
 #include "compilation/preprocessor.h"
 #include "compilation/function.h"
-#include "disassembly/file_disassembler.h"
+#include "disassembly/disassembler.h"
 #include "disassembly/instructions.h"
 #include "decompilation/decomp_function.h"
 #include "binaryfile.h"
@@ -1519,7 +1519,9 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
         ASSERT_EQ(parsed->m_states[0].m_blocks[0].m_tracks.size(), 1);
         EXPECT_EQ(parsed->m_states[0].m_blocks[0].m_tracks[0].m_name, "Base");
         ASSERT_EQ(parsed->m_states[0].m_blocks[0].m_tracks[0].m_lambdas.size(), 1);
-        ASSERT_EQ(parsed->m_states[0].m_blocks[0].m_tracks[0].m_lambdas[0].m_body.m_statements.size(), 1);
+        const auto* lambda = std::get_if<ast::function_definition>(&parsed->m_states[0].m_blocks[0].m_tracks[0].m_lambdas[0]);
+        ASSERT_NE(lambda, nullptr);
+        ASSERT_EQ(lambda->m_body.m_statements.size(), 1);
     }
 
     

@@ -1,6 +1,6 @@
 #include "BinaryFile.h"
 #include "decompilation/decomp_function.h"
-#include "disassembly/file_disassembler.h"
+#include "disassembly/disassembler.h"
 #include "ast/ast.h"
 #include <array>
 #include <gtest/gtest.h>
@@ -22,9 +22,9 @@ namespace dconstruct::testing {
             std::terminate();
         }
         auto& file = *file_res;
-        FileDisassembler disassembler(&file, &base, "", DisassemblerOptions{}); 
+        Disassembler disassembler(&file, &base);
         const ScriptLambda *lambda_ptr = disassembler.get_value_ptr_at<ScriptLambda>(offset); 
-        const function_disassembly fd = disassembler.create_function_disassembly(lambda_ptr, "");
+        const function_disassembly fd = *disassembler.create_function_disassembly(lambda_ptr, "");
         return fd;
     }
 
@@ -35,7 +35,7 @@ namespace dconstruct::testing {
     ) {
         BinaryFile file = *BinaryFile::from_path(TEST_DIR + R"(\dummy.bin)");
         Disassembler da{ &file, &base };
-        auto fd = da.create_function_disassembly(std::move(istrs), name, table.m_location);
+        auto fd = *da.create_function_disassembly(std::move(istrs), name, table.m_location);
         auto dc_func = dconstruct::dcompiler::decomp_function(fd, file, ControlFlowGraph::build(fd));
         auto& test = const_cast<ast::function_definition&>(dc_func.decompile(false));
         return std::move(test);
@@ -84,9 +84,10 @@ namespace dconstruct::testing {
             std::terminate();
         }
         auto& file = *file_res;
-        FileDisassembler da{ &file, &base, DCPL_PATH + dconstruct::sanitize_dc_string(id) + ".asm", {} };
+        Disassembler da{ &file, &base };
         da.disassemble();
-        da.dump();
+        std::ofstream asm_out(DCPL_PATH + dconstruct::sanitize_dc_string(id) + ".asm", std::ios::binary);
+        asm_out << da.disassembly_to_string(da.get_disassembled_entries());
         const auto funcs = da.get_all_functions();
         const auto func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly* f) { return f->get_id() == id; });
         ASSERT_NE(func, funcs.end());
@@ -489,9 +490,10 @@ namespace dconstruct::testing {
             std::terminate();
         }
         auto& file = *file_res;
-        FileDisassembler da{ &file, &base, R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\fixtures\dcpl\\blbl.asm)", {} };
+        Disassembler da{ &file, &base };
         da.disassemble();
-        da.dump();
+        std::ofstream asm_out(R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\fixtures\dcpl\\blbl.asm)", std::ios::binary);
+        asm_out << da.disassembly_to_string(da.get_disassembled_entries());
         const auto& funcs = da.get_named_functions();
         std::set<std::string> emitted{};
         std::ofstream out(R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\fixtures\dcpl\\asdad.dcpl)");
@@ -866,9 +868,10 @@ namespace dconstruct::testing {
             std::terminate();
         }
         auto& file = *file_res;
-        FileDisassembler da{ &file, &base, DCPL_PATH + "animal_behavior.asm", {} };
+        Disassembler da{ &file, &base };
         da.disassemble();
-        da.dump();
+        std::ofstream asm_out(DCPL_PATH + "animal_behavior.asm", std::ios::binary);
+        asm_out << da.disassembly_to_string(da.get_disassembled_entries());
         const auto funcs = da.get_all_functions();
         std::vector<ast::function_definition> decompiled_funcs;
         for (const auto* func : funcs) {

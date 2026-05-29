@@ -4,10 +4,9 @@
 #include "disassembly/disassembler.h"
 #include <cstring>
 #include <fstream>
+#include <functional>
 #include <sstream>
 #include <iostream>
-
-static constexpr char ENTRY_SEP[] = "##############################";
 
 
 namespace dconstruct {
@@ -15,16 +14,16 @@ namespace dconstruct {
 [[nodiscard]] const std::vector<const function_disassembly*> Disassembler::get_all_functions() noexcept {
     std::vector<const function_disassembly*> funcs;
     for (auto& func : m_functions) {
-        if (func.m_isEmbeddedFunction) {
-            const auto& ids = m_offsetsToFunctionNames.at(func.m_originalOffset);
+        if (func->m_isEmbeddedFunction) {
+            const auto& ids = m_offsetsToFunctionNames.at(func->m_originalOffset);
             std::ostringstream final_id;
             for (const auto& id : ids) {
                 final_id << id << "\n";
             }
-            final_id << "embedded@" << std::hex << func.m_originalOffset;
-            func.m_id = final_id.str();
+            final_id << "embedded@" << std::hex << func->m_originalOffset;
+            func->m_id = final_id.str();
         }
-        funcs.push_back(&func);
+        funcs.push_back(func.get());
     }
     return funcs;
 }
@@ -32,8 +31,8 @@ namespace dconstruct {
 [[nodiscard]] std::vector<const function_disassembly*> Disassembler::get_named_functions() const noexcept {
     std::vector<const function_disassembly*> funcs;
     for (const auto& func : m_functions) {
-        if (!func.get_id().starts_with("anonymous")) {
-            funcs.push_back(&func);
+        if (!func->get_id().starts_with("anonymous")) {
+            funcs.push_back(func.get());
         }
     }
     return funcs;
@@ -74,22 +73,6 @@ namespace dconstruct {
 
 
 
-template<typename... Args>
-void Disassembler::insert_span_fmt(const char *format, Args ...args) {
-    char buffer[512];
-    std::snprintf(buffer, sizeof(buffer), format, args...);
-    insert_span(buffer, 0);
-}
-
-
-template<typename... Args>
-void Disassembler::insert_span_indent(const char* format, const u32 indent, Args ...args) {
-    char buffer[512];
-    std::snprintf(buffer, sizeof(buffer), format, indent, "", args...);
-    insert_span(buffer, 0);
-}
-
-
 [[nodiscard]] bool Disassembler::is_unmapped_sid(const location loc) const noexcept {
     const bool in_range = loc.get<sid64>() >= m_sidbase->m_lowestSid && loc.get<sid64>() <= m_sidbase->m_highestSid;
     const bool is_fileptr = m_currentFile->is_file_ptr(loc);
@@ -116,50 +99,49 @@ void Disassembler::insert_span_indent(const char* format, const u32 indent, Args
 
 */  
 
-u8 Disassembler::insert_struct_or_arraylike(const location struct_location, const u32 indent) {
+u8 Disassembler::insert_struct_or_arraylike(const location struct_location, disassembled_values_t& values) {
     u8 bytes_inserted = 0;
     if (m_currentFile->is_file_ptr(struct_location)) {
-        if (m_currentFile->is_string(location().from(struct_location))) {
-            insert_span_fmt("string: \"%s\"\n", struct_location.get<char*>());
+        const location ptr_value = location().from(struct_location);
+        if (m_currentFile->is_string(ptr_value)) {
+            values.emplace_back(ptr_value.as<char>());
             bytes_inserted = 8;
             return bytes_inserted;
         }
         const location next_struct_header = location().from(struct_location, -8);
         if (!next_struct_header.is_aligned() || !is_unmapped_sid(next_struct_header)) {
-            insert_anonymous_array(struct_location, indent);
+            insert_anonymous_array(struct_location, values);
         } else if (next_struct_header.get<sid64>() == SID("array")) {
-            insert_array(struct_location, get_size_array(struct_location, indent), indent);
+            values.emplace_back(insert_array(struct_location, get_size_array(struct_location)));
         } else {
-            insert_struct(next_struct_header.as<structs::unmapped>(), indent);
+            values.emplace_back(insert_struct(next_struct_header.as<structs::unmapped>()));
         }
         bytes_inserted = 8;
     }
     else {
         if (struct_location >= m_currentFile->m_strings) {
-            insert_span_fmt("string: \"%s\"\n", struct_location.get<char*>());
+            values.emplace_back(struct_location.as<char>());
             bytes_inserted = 8;
         }
         else {
-            bytes_inserted = insert_next_struct_member(struct_location, indent);
+            bytes_inserted = insert_next_struct_member(struct_location, values);
         }
     }
     return bytes_inserted;
 }
 
 
-void Disassembler::insert_anonymous_array(const location anon_array, const u32 indent) {
+void Disassembler::insert_anonymous_array(const location anon_array, disassembled_values_t& values) {
     const u32 anonymous_array_size = anon_array.get<u32>(8);
     if (anonymous_array_size > 100'000) {
-        insert_span_fmt("anonymous array with invalid size %u, returning\n", anonymous_array_size);
         return;
     }
 
-    insert_span_fmt("anonymous array [0x%x] {size: %u} {\n", get_offset(anon_array), anonymous_array_size);
-    insert_array(anon_array, anonymous_array_size, indent);
+    values.emplace_back(insert_array(anon_array, anonymous_array_size));
 }
 
 
-[[nodiscard]] u32 Disassembler::get_size_array(const location array, const u32 indent) {
+[[nodiscard]] u32 Disassembler::get_size_array(const location array) {
     u32 size_array_front = array.get<u32>(8);
     u32 size_array_back = array.get<u32>(-8);
     u32 size_array = 0;
@@ -176,11 +158,6 @@ void Disassembler::insert_anonymous_array(const location anon_array, const u32 i
                 size_array = size_array_back & bit_mask_u16;
             }
             else {
-                insert_span_fmt("array [0x%x] {size: (%u, %u) (*invalid*)} {", 
-                    get_offset(array), 
-                    size_array_front,
-                    size_array_back
-                );
                 return 0;
             }
         } else {
@@ -189,20 +166,23 @@ void Disassembler::insert_anonymous_array(const location anon_array, const u32 i
     } else {
         size_array = size_array_front;
     }
-    insert_span_fmt("array [0x%x] {size: %d} {\n", get_offset(array), size_array);
     return size_array;
 }
 
 
-void Disassembler::insert_array(const location array, const u32 array_size, const u32 indent) {
+disassembled_value Disassembler::insert_array(const location array, const u32 array_size) {
+    disassembled_value array_value{
+        .m_typeId = SID("array"),
+        .m_offset = get_offset(location().from(array)),
+        .m_values = {},
+        .m_arraySize = std::nullopt,
+    };
     
     if (array_size == 0) {
-        insert_span("}\n", indent);
-        return;
+        return array_value;
     }
 
     u32 member_offset = 8;
-    u32 member_count = 0;
     const location member = location().from(array);
 
     while (!m_currentFile->is_string(member + member_offset) && !m_currentFile->gets_pointed_at(member + member_offset)) {
@@ -215,116 +195,359 @@ void Disassembler::insert_array(const location array, const u32 array_size, cons
     
 
     for (u32 array_entry_count = 0; array_entry_count < array_size; ++array_entry_count) {
-        member_offset = member_count = 0;
-        insert_span_indent("%*s[%u] anonymous struct [0x%x] {\n", 
-            indent + m_options.m_indentPerLevel, 
-            array_entry_count,
-            get_offset(member + array_entry_count * struct_size)
-        );
+        member_offset = 0;
+        disassembled_value array_entry{
+            .m_typeId = 0,
+            .m_offset = get_offset(member + array_entry_count * struct_size),
+            .m_values = {},
+            .m_arraySize = std::nullopt,
+        };
 
         while (member_offset < struct_size) {
-            insert_span_indent("%*s[%d] ", indent + m_options.m_indentPerLevel * 2, member_count++);
             const location current_member_location = member + (array_entry_count * struct_size + member_offset);
-            const u32 last_member_size = insert_struct_or_arraylike(current_member_location.aligned(), indent + m_options.m_indentPerLevel * 2);
+            const u32 last_member_size = insert_struct_or_arraylike(current_member_location.aligned(), array_entry.m_values);
             member_offset += last_member_size ? last_member_size : 8;
         }
 
-        insert_span("}\n", indent + m_options.m_indentPerLevel);
+        array_value.m_values.emplace_back(std::move(array_entry));
     }
-    insert_span("}\n", indent);
+    return array_value;
 }
 
 
-void Disassembler::insert_unmapped_struct(const structs::unmapped *struct_ptr, const u32 indent) {
+void Disassembler::insert_unmapped_struct(const structs::unmapped *struct_ptr, disassembled_values_t& values) {
     u64 member_offset = 0;
     bool offset_gets_pointed_at = false;
     u64 last_member_size = 0;
-    u32 member_count = 0;
     const location member_start = location(&struct_ptr->m_data);
     location member_location = member_start;
     while (!offset_gets_pointed_at) {
         member_offset += last_member_size;
-        insert_span_indent("%*s[%d] ", indent, member_count++);
-        last_member_size = insert_next_struct_member(member_start + member_offset, indent);
+        last_member_size = insert_next_struct_member(member_start + member_offset, values);
         member_location = member_start + (member_offset + last_member_size);
         offset_gets_pointed_at = m_currentFile->gets_pointed_at(member_location + 8) || m_currentFile->is_string(member_location);
     }
 }
 
 
-u8 Disassembler::insert_next_struct_member(const location member, const u32 indent) {
+u8 Disassembler::insert_next_struct_member(const location member, disassembled_values_t& values) {
     u8 member_size;
-    const char *str_ptr = nullptr;
     if (m_currentFile->is_file_ptr(member)) {
         if (member >= m_currentFile->m_strings) {
-            insert_span_fmt("string: \"%s\"\n", member.as<char>());
+            values.emplace_back(member.as<char>());
         }
         else {
-            insert_struct_or_arraylike(member, indent);
+            insert_struct_or_arraylike(member, values);
         }
         member_size = 8;
     }
-    else if ((str_ptr = m_sidbase->search(member.get<sid64>())) != nullptr) {
-        insert_span_fmt("sid: %s\n", str_ptr);
+    else if (m_sidbase->search(member.get<sid64>()) != nullptr) {
+        values.emplace_back(member.as<u64>());
         member_size = 8;
     }
     else if (is_possible_float(member.as<f32>())) {
-        insert_span_fmt("float: %.2f\n", member.get<f32>());
+        values.emplace_back(member.as<f32>());
         member_size = 4;
     }
     else if (is_possible_i32(member.as<i32>())) {
-        insert_span_fmt("int: %d\n", member.get<i32>());
+        values.emplace_back(member.as<i32>());
         member_size = 4;
     }
     else if (is_unmapped_sid(member)) {
-        str_ptr = lookup(member.get<sid64>());
-        insert_span_fmt("sid: %s\n", str_ptr);
+        values.emplace_back(member.as<u64>());
         member_size = 8;
     }
     else {
-        insert_span_fmt("int: %d\n", member.get<i32>());
+        values.emplace_back(member.as<i32>());
         member_size = 4;
     }
     return member_size;
 }
 
 
-void Disassembler::disassemble() {
+const std::vector<disassembled_entry>& Disassembler::disassemble() {
+    m_disassembledEntries.clear();
+    m_functions.clear();
+    m_offsetsToFunctionNames.clear();
+    m_stateScript.reset();
+    m_disassembledEntries.reserve(m_currentFile->m_dcheader->m_numEntries);
     for (i32 i = 0; i < m_currentFile->m_dcheader->m_numEntries; ++i) {
-        insert_span("\n\n");
-        insert_span_fmt(ENTRY_SEP);
-        insert_span_fmt("  ENTRY %u  ", i);
-        insert_span(ENTRY_SEP);
-        insert_span("\n\n");
-        insert_entry(m_currentFile->m_dcheader->m_pStartOfData + i);
+        m_disassembledEntries.emplace_back(insert_entry(m_currentFile->m_dcheader->m_pStartOfData + i));
     }
+    return m_disassembledEntries;
+}
+
+std::string Disassembler::disassembly_to_string(const std::vector<disassembled_entry>& entries) {
+    static constexpr char ENTRY_SEP[] = "##############################";
+    constexpr u8 indent_per_level = 2;
+
+    std::string out;
+    out.reserve(0x2FFFFFULL);
+
+    const auto append_format = [&out](const char* format, auto... args) {
+        char buffer[1024];
+        std::snprintf(buffer, sizeof(buffer), format, args...);
+        out += buffer;
+    };
+
+    const auto append_indented_text = [&out](const std::string& text, const u32 indent) {
+        size_t start = 0;
+        while (start < text.size()) {
+            const size_t end = text.find('\n', start);
+            out.append(indent, ' ');
+            if (end == std::string::npos) {
+                out.append(text, start, std::string::npos);
+                break;
+            }
+            out.append(text, start, end - start + 1);
+            start = end + 1;
+        }
+    };
+
+    const auto append_goto_label = [&out, append_format](const std::vector<u32>& labels, const function_disassembly_line& line, const u32 func_size, const std::vector<function_disassembly_line>& lines) {
+        if (line.m_target == std::numeric_limits<u16>::max()) {
+            return;
+        }
+        const u32 target = static_cast<u32>(std::distance(labels.begin(), std::find(labels.begin(), labels.end(), line.m_target)));
+        if (line.m_target == func_size) {
+            out += "=> L_RETURN";
+        } else if (line.m_target == func_size - 1 && lines[line.m_target].m_instruction.opcode == Opcode::LoadU16Imm) {
+            append_format("=> L_RETURN_%d", lines[line.m_target].m_instruction.operand1);
+        } else {
+            append_format("=> L_%d", target);
+        }
+    };
+
+    const auto append_label = [this, &out, append_format](const std::vector<u32>& labels, const function_disassembly_line& line, const u32 func_size, const u32 indent) {
+        auto label_location = std::find(labels.begin(), labels.end(), line.m_location);
+        if (label_location == labels.end()) {
+            return;
+        }
+        const u32 label_indent = indent > indent_per_level ? indent - indent_per_level : 0;
+        const u32 label_index = static_cast<u32>(std::distance(labels.begin(), label_location));
+        out.append(indent, ' ');
+        if (line.m_location == func_size) {
+            out += "L_RETURN:\n";
+        } else if (line.m_location == func_size - 1 && line.m_instruction.opcode == Opcode::LoadU16Imm) {
+            append_format("L_RETURN_%d:\n", line.m_instruction.operand1);
+        } else {
+            append_format("L_%d:\n", label_index);
+        }
+    };
+
+    const auto append_function_disassembly = [&, this](const function_disassembly& function_disassembly, const u32 indent) {
+        const auto labels = function_disassembly.m_stackFrame.m_labels;
+
+        if (!function_disassembly.m_stackFrame.m_registerArgs.empty()) {
+            out.append(indent, ' ');
+            append_format("[%zu args]\n", function_disassembly.m_stackFrame.m_registerArgs.size());
+        }
+
+        for (const auto& line : function_disassembly.m_lines) {
+            const u32 line_offset = static_cast<u32>(std::max(67 - static_cast<i32>(line.m_text.length()), 0));
+            append_label(labels, line, static_cast<u32>(function_disassembly.m_lines.size() - 1), indent);
+            out.append(indent, ' ');
+            out += line.m_text;
+            out.append(line_offset, ' ');
+            out += line.m_comment;
+            append_goto_label(labels, line, static_cast<u32>(function_disassembly.m_lines.size() - 1), function_disassembly.m_lines);
+            out += '\n';
+        }
+
+        out += '\n';
+        out.append(indent, ' ');
+        out += "SYMBOL TABLE: \n";
+
+        const auto& [table_location, types] = function_disassembly.m_stackFrame.m_symbolTable;
+        for (u32 i = 0; i < types.size(); ++i) {
+            const auto& type = types[i];
+            location value_location = table_location + i * 8;
+            out.append(indent, ' ');
+            append_format("%04X   0x%06X    ", i, get_offset(value_location));
+            std::visit([&](auto&& entry) -> void {
+                using T = std::decay_t<decltype(entry)>;
+                if constexpr (std::is_same_v<T, ast::primitive_type>) {
+                    switch (entry.m_type) {
+                        case ast::primitive_kind::I32: append_format("int: %i\n", value_location.get<i32>()); break;
+                        case ast::primitive_kind::I64: append_format("int64: %lli\n", value_location.get<i64>()); break;
+                        case ast::primitive_kind::U64: append_format("uint64: %llu\n", value_location.get<u64>()); break;
+                        case ast::primitive_kind::F32: append_format("float: %f\n", value_location.get<f32>()); break;
+                        case ast::primitive_kind::STRING: append_format("string: \"%s\"\n", value_location.get<const char*>()); break;
+                        case ast::primitive_kind::SID: append_format("sid: %s\n", lookup(value_location.get<sid64>())); break;
+                        default: append_format("unknown: %llu\n", value_location.get<u64>()); break;
+                    }
+                } else if constexpr (std::is_same_v<T, ast::function_type>) {
+                    if (entry.m_return != nullptr && !is_unknown(*entry.m_return)) {
+                        append_format("function: %s%s\n", lookup(value_location.get<sid64>()), ast::type_to_declaration_string(entry).c_str());
+                    } else {
+                        append_format("function: %s\n", lookup(value_location.get<sid64>()));
+                    }
+                } else if constexpr (std::is_same_v<T, ast::ptr_type>) {
+                    append_format("pointer: \"%s\" (%s)\n", lookup(value_location.get<sid64>()), ast::type_to_declaration_string(entry).c_str());
+                } else if constexpr (std::is_same_v<T, std::monostate>) {
+                    append_format("unknown: %llu\n", value_location.get<u64>());
+                } else {
+                    append_format("unknown: %llu\n", value_location.get<u64>());
+                }
+            }, type);
+        }
+    };
+
+    std::function<void(const disassembled_values_t&, u32)> append_values;
+    std::function<void(const disassembled_values_t::value_type&, u32)> append_value;
+    std::function<void(sid64, p64, const disassembled_values_t&, u32)> append_struct_like;
+
+    append_values = [&](const disassembled_values_t& values, const u32 indent) {
+        u32 member_count = 0;
+        for (const auto& value : values) {
+            out.append(indent, ' ');
+            append_format("[%u] ", member_count++);
+            append_value(value, indent);
+        }
+    };
+
+    append_struct_like = [&](const sid64 type_id, const p64 offset, const disassembled_values_t& values, const u32 indent) {
+        if (type_id == SID("array")) {
+            append_format("array [0x%x] {size: %zu} {\n", offset, values.size());
+            for (u32 i = 0; i < values.size(); ++i) {
+                out.append(indent + indent_per_level, ' ');
+                if (const auto* entry = std::get_if<disassembled_value>(&values[i]); entry != nullptr && entry->m_typeId == 0) {
+                    append_format("[%u] anonymous struct [0x%x] {\n", i, entry->m_offset);
+                    append_values(entry->m_values, indent + indent_per_level * 2);
+                    out.append(indent + indent_per_level, ' ');
+                    out += "}\n";
+                } else {
+                    append_format("[%u] ", i);
+                    append_value(values[i], indent + indent_per_level);
+                }
+            }
+            out.append(indent, ' ');
+            out += "}\n";
+            return;
+        }
+
+        if (type_id == 0) {
+            append_format("anonymous struct [0x%05X] {\n", offset);
+        } else {
+            append_format("%s [0x%05X] {\n", lookup(type_id), offset);
+        }
+
+        if (type_id == SID("script-lambda")) {
+            for (const auto& value : values) {
+                if (const auto* function = std::get_if<std::shared_ptr<function_disassembly>>(&value)) {
+                    append_function_disassembly(**function, indent + indent_per_level * 2);
+                }
+            }
+        } else if (type_id == SID("state-script")) {
+            for (const auto& value : values) {
+                if (const auto* state_script = std::get_if<const ast::state_script*>(&value)) {
+                    std::ostringstream stream;
+                    stream << ast::set_indent_width{indent_per_level} << **state_script;
+                    append_indented_text(stream.str(), indent + indent_per_level);
+                    if (out.empty() || out.back() != '\n') {
+                        out += '\n';
+                    }
+                }
+            }
+        } else if (type_id == SID("map") || type_id == SID("map-32")) {
+            for (const auto& value : values) {
+                if (const auto* map = std::get_if<const structs::map*>(&value); map != nullptr && *map != nullptr) {
+                    out.append(indent + indent_per_level, ' ');
+                    append_format("keys: [0x%05X], values: [0x%05X]\n\n", get_offset((*map)->keys.data), get_offset((*map)->values.data));
+                }
+            }
+        } else {
+            append_values(values, indent + indent_per_level);
+        }
+
+        out.append(indent, ' ');
+        out += "}\n";
+    };
+
+    append_value = [&](const disassembled_values_t::value_type& value, const u32 indent) {
+        std::visit([&](auto&& entry) {
+            using T = std::decay_t<decltype(entry)>;
+            if constexpr (std::is_same_v<T, disassembled_value>) {
+                append_struct_like(entry.m_typeId, entry.m_offset, entry.m_values, indent);
+            } else if constexpr (std::is_same_v<T, std::shared_ptr<function_disassembly>>) {
+                out += '\n';
+                append_function_disassembly(*entry, indent + indent_per_level);
+            } else if constexpr (std::is_same_v<T, const ast::state_script*>) {
+                std::ostringstream stream;
+                stream << ast::set_indent_width{indent_per_level} << *entry;
+                out += '\n';
+                append_indented_text(stream.str(), indent + indent_per_level);
+                if (out.empty() || out.back() != '\n') {
+                    out += '\n';
+                }
+            } else if constexpr (std::is_same_v<T, const i32*>) {
+                append_format("int: %d\n", *entry);
+            } else if constexpr (std::is_same_v<T, const u64*>) {
+                append_format("sid: %s\n", lookup(*entry));
+            } else if constexpr (std::is_same_v<T, const f32*>) {
+                append_format("float: %.2f\n", *entry);
+            } else if constexpr (std::is_same_v<T, const char*>) {
+                append_format("string: \"%s\"\n", entry != nullptr ? entry : "");
+            } else if constexpr (std::is_same_v<T, const structs::map*>) {
+                append_format("keys: [0x%05X], values: [0x%05X]\n\n", get_offset(entry->keys.data), get_offset(entry->values.data));
+            }
+        }, value);
+    };
+
+    for (u32 i = 0; i < entries.size(); ++i) {
+        const disassembled_entry& entry = entries[i];
+        out += "\n\n";
+        out += ENTRY_SEP;
+        append_format("  ENTRY %u  ", i);
+        out += ENTRY_SEP;
+        out += "\n\n";
+        append_format("%s = ", lookup(entry.m_nameId));
+        append_struct_like(entry.m_typeId, entry.m_offset, entry.m_values, 0);
+    }
+
+    if (entries.empty()) {
+        for (const auto& function : m_functions) {
+            append_function_disassembly(*function, indent_per_level * 2);
+        }
+    }
+
+    return out;
 }
 
 
-void Disassembler::insert_entry(const Entry *entry) {
+disassembled_entry Disassembler::insert_entry(const Entry *entry) {
     m_currentEmbeddedFunctionId = embedded_function_id{};
     const structs::unmapped *struct_ptr = reinterpret_cast<const structs::unmapped*>(reinterpret_cast<const u64*>(entry->m_entryPtr) - 1);
     const char* entry_name = lookup(entry->m_nameID);
-    insert_span_fmt("%s = ", entry_name);
     m_currentEmbeddedFunctionId.m_entry = entry_name;
-    insert_struct(struct_ptr, 0, entry->m_nameID, entry->m_typeId);
+    disassembled_value entry_value = insert_struct(struct_ptr, entry->m_nameID, entry->m_typeId);
+    return disassembled_entry{
+        .m_nameId = entry->m_nameID,
+        .m_typeId = entry_value.m_typeId,
+        .m_offset = entry_value.m_offset,
+        .m_values = std::move(entry_value.m_values),
+    };
 }
 
 
 
-void Disassembler::insert_struct(const structs::unmapped *struct_ptr, const u32 indent, const sid64 name_id, const sid64 type_id) {
+disassembled_value Disassembler::insert_struct(const structs::unmapped *struct_ptr, const sid64 name_id, const sid64 type_id) {
 
     const u64 offset = get_offset(&struct_ptr->m_data);
     
     sid64 effective_type_id = type_id != 0 ? type_id : struct_ptr->typeID;
     const char* struct_name = lookup(effective_type_id);
+    disassembled_value value{
+        .m_typeId = effective_type_id,
+        .m_offset = offset,
+        .m_values = {},
+        .m_arraySize = std::nullopt,
+    };
 
-    insert_span_fmt("%s [0x%05X] {\n", struct_name, offset);
     m_currentEmbeddedFunctionId.m_outerStructs.emplace_back(struct_name, offset);
     
     switch (effective_type_id) {
         case SID("state-script"): {
-            m_hasStateScript = true;
             const StateScript *script;
             switch (m_game) {
                 case game_type::T2R:
@@ -337,16 +560,12 @@ void Disassembler::insert_struct(const structs::unmapped *struct_ptr, const u32 
                     script = nullptr;
             }
             m_currentFile->m_dcscript = script;
-            if (m_options.m_verbose) {
-                insert_state_script_verbose_fields(script, indent + m_options.m_indentPerLevel);
-            }
-            insert_state_script(script, indent + m_options.m_indentPerLevel);
+            m_stateScript = insert_state_script(script);
+            value.m_values.emplace_back(&*m_stateScript);
             break;
         }
         case SID("script-lambda"): {
-            if (m_options.m_verbose) {
-                insert_script_lambda_verbose_fields(reinterpret_cast<const ScriptLambda*>(&struct_ptr->m_data), indent + m_options.m_indentPerLevel);
-            }
+            const ScriptLambda* script_lambda = reinterpret_cast<const ScriptLambda*>(&struct_ptr->m_data);
             bool already_emitted_func = m_offsetsToFunctionNames.contains(offset);
             std::string name;
             if (name_id == 0) {
@@ -359,42 +578,28 @@ void Disassembler::insert_struct(const structs::unmapped *struct_ptr, const u32 
             } else {
                 name = lookup(name_id);
             }
-            function_disassembly function = create_function_disassembly(reinterpret_cast<const ScriptLambda*>(&struct_ptr->m_data), std::move(name));
-            function.m_isEmbeddedFunction = name_id == 0;
-            function.m_originalOffset = offset;
-            insert_function_disassembly_text(function, indent + m_options.m_indentPerLevel * 2);
+            std::shared_ptr<function_disassembly> function = create_function_disassembly(script_lambda, std::move(name));
+            function->m_isEmbeddedFunction = name_id == 0;
+            function->m_originalOffset = offset;
+            value.m_values.emplace_back(function);
             m_functions.push_back(std::move(function));
             break;
         }
         case SID("map"):
         case SID("map-32"): {
             const structs::map *map = reinterpret_cast<const structs::map*>(&struct_ptr->m_data);
-            insert_span_indent("%*skeys: [0x%05X], values: [0x%05X]\n\n", indent + m_options.m_indentPerLevel, get_offset(map->keys.data), get_offset(map->values.data));
-            for (u64 i = 0; i < map->size; ++i) {
-                const char *key_hash = lookup(map->keys[i]);
-                insert_span_indent("%*s%s {\n%*s", indent + m_options.m_indentPerLevel, key_hash, indent + m_options.m_indentPerLevel * 2, "");
-                const structs::unmapped *struct_ptr = reinterpret_cast<const structs::unmapped*>(map->values[i] - 8);
-                insert_struct(struct_ptr, indent + m_options.m_indentPerLevel * 2);
-                insert_span("}\n", indent + m_options.m_indentPerLevel);
-            }
+            value.m_values.emplace_back(map);
             break;
         }
         default: {
-            if (m_options.m_emitOnce && m_currentFile->m_emittedStructs.find(reinterpret_cast<p64>(struct_ptr)) != m_currentFile->m_emittedStructs.end()) {
-                insert_span_indent("%*sALREADY EMITTED\n%*s}\n", indent + m_options.m_indentPerLevel, indent, "");
-                return;
-            }
-            insert_unmapped_struct(struct_ptr, indent + m_options.m_indentPerLevel);
+            insert_unmapped_struct(struct_ptr, value.m_values);
             break;
         }
     }
     if (!m_currentEmbeddedFunctionId.m_outerStructs.empty()) {
         m_currentEmbeddedFunctionId.m_outerStructs.pop_back();
     }
-    insert_span("}\n", indent);
-    if (m_options.m_emitOnce) {
-        m_currentFile->m_emittedStructs.emplace(reinterpret_cast<p64>(struct_ptr));
-    }
+    return value;
 }
 
 
@@ -408,96 +613,85 @@ void Disassembler::insert_struct(const structs::unmapped *struct_ptr, const u32 
 }
 
 
-void Disassembler::insert_variable(const SsDeclaration *var, const u32 indent) {
-    bool is_nullptr = var->m_pDeclValue == nullptr;
+[[nodiscard]] static std::string sid_lexeme(const char* name) {
+    if (name == nullptr || name[0] == '\0') {
+        return "#0";
+    }
+    if (name[0] == '#') {
+        return name;
+    }
+    return std::string("#") + name;
+}
 
+[[nodiscard]] static std::string raw_sid_name(const char* name) {
+    if (name == nullptr) {
+        return "";
+    }
+    if (name[0] == '#') {
+        return name + 1;
+    }
+    return name;
+}
 
-    insert_span_indent("%*s[0x%06X] ", indent, var->m_pDeclValue ? get_offset(var->m_pDeclValue) : get_offset(var));
-    insert_span_fmt("%-8s ", lookup(var->m_declTypeId));
-    insert_span_fmt("%-20s = ", lookup(var->m_declId));
+[[nodiscard]] static ast::full_type state_script_decl_type(const sid64 type_id, const char* type_name) {
+    switch (type_id) {
+        case SID("boolean"): return ast::make_type_from_prim(ast::primitive_kind::BOOL);
+        case SID("float"):
+        case SID("timer"):
+        case SID("bound-frame"): return ast::make_type_from_prim(ast::primitive_kind::F32);
+        case SID("string"): return ast::make_type_from_prim(ast::primitive_kind::STRING);
+        case SID("symbol"): return ast::make_type_from_prim(ast::primitive_kind::SID);
+        case SID("int32"): return ast::make_type_from_prim(ast::primitive_kind::I32);
+        case SID("uint64"): return ast::make_type_from_prim(ast::primitive_kind::U64);
+        default: return ast::struct_type{type_name != nullptr ? type_name : ast::UNKNOWN_TYPE_NAME, {}};
+    }
+}
+
+std::optional<ast::variable_declaration> Disassembler::insert_variable(const SsDeclaration *var) {
+    if (var == nullptr || !var->m_isVar) {
+        return std::nullopt;
+    }
+
+    ast::full_type type = state_script_decl_type(var->m_declTypeId, lookup(var->m_declTypeId));
+    std::string name = sid_lexeme(lookup(var->m_declId));
+    if (var->m_pDeclValue == nullptr) {
+        return ast::variable_declaration(std::move(type), std::move(name));
+    }
 
     switch (var->m_declTypeId) {
         case SID("boolean"): {
-            if (!is_nullptr) 
-                insert_span(*reinterpret_cast<bool*>(var->m_pDeclValue) ? "true" : "false");
-            break;
+            return ast::variable_declaration(std::move(type), std::move(name), *reinterpret_cast<bool*>(var->m_pDeclValue));
         }
-        case SID("vector"): {
-            if (!is_nullptr) {
-                f32 *val = reinterpret_cast<f32*>(var->m_pDeclValue);
-                insert_span_fmt("(%.2f, %.2f, %.2f, %.2f)", val[0], val[1], val[2], val[3]);
-            }
-            break;
-        }
-        case SID("quat"): {
-            if (!is_nullptr) {
-                f32 *val = reinterpret_cast<f32*>(var->m_pDeclValue);
-                insert_span_fmt("(%.2f, %.2f, %.2f, %.2f)", val[0], val[1], val[2], val[3]);
-            }
-            break;
-        }
-        case SID("float"): {
-            if (!is_nullptr) {
-                insert_span_fmt("%.2f", *reinterpret_cast<f32*>(var->m_pDeclValue));
-            }
-            break;
+        case SID("float"):
+        case SID("timer"):
+        case SID("bound-frame"): {
+            return ast::variable_declaration(std::move(type), std::move(name), *reinterpret_cast<f32*>(var->m_pDeclValue));
         }
         case SID("string"): {
-            if (!is_nullptr) {
-                insert_span_fmt("%s", *reinterpret_cast<const char**>(var->m_pDeclValue));
-            }
-            break;
+            const char* str = *reinterpret_cast<const char**>(var->m_pDeclValue);
+            return ast::variable_declaration(std::move(type), std::move(name), std::string(str != nullptr ? str : ""));
         }
         case SID("symbol"): {
-            if (!is_nullptr) {
-                insert_span(lookup(*reinterpret_cast<sid64*>(var->m_pDeclValue)));
-            }
-            break;
+            expr_uptr sid = std::make_unique<ast::sid_identifier>(sid_lexeme(lookup(*reinterpret_cast<sid64*>(var->m_pDeclValue))));
+            return ast::variable_declaration(std::move(type), std::move(name), std::move(sid));
         }
         case SID("int32"): {
-            if (!is_nullptr) {
-                insert_span_fmt("%i", *reinterpret_cast<i32*>(var->m_pDeclValue));
-            }
-            break;
+            return ast::variable_declaration(std::move(type), std::move(name), *reinterpret_cast<i32*>(var->m_pDeclValue));
         }
         case SID("uint64"): {
-            if (!is_nullptr) {
-                insert_span_fmt("%llx", *reinterpret_cast<u64*>(var->m_pDeclValue));
-            }
-            break;
-        }
-        case SID("timer"): {
-            if (!is_nullptr) {
-                insert_span_fmt("%f", *reinterpret_cast<f32*>(var->m_pDeclValue));
-            }
-            break;
-        }
-        case SID("point"): {
-            if (!is_nullptr) {
-                f32 *val = reinterpret_cast<f32*>(var->m_pDeclValue);
-                insert_span_fmt("(%.2f, %.2f, %.2f)", val[0], val[1], val[2]);
-            }
-            break;
-        }
-        case SID("bound-frame"): {
-            if (!is_nullptr) {
-                insert_span_fmt("%f", *reinterpret_cast<f32*>(var->m_pDeclValue));
-            }
-            break;
+            return ast::variable_declaration(std::move(type), std::move(name), *reinterpret_cast<u64*>(var->m_pDeclValue));
         }
         default: {
-            insert_span("???");
-            break;
+            return ast::variable_declaration(std::move(type), std::move(name));
         }
     }
-    if (is_nullptr) {
-        insert_span("uninitialized");
-    }
-    insert_span("\n");
 }
 
 
-void Disassembler::insert_on_block(const SsOnBlock *block, const u32 indent, state_script_function_id& function_name) {
+ast::state_script_block Disassembler::insert_on_block(const SsOnBlock *block, state_script_function_id& function_name) {
+    std::vector<ast::state_script_track> tracks;
+    tracks.reserve(block->m_trackGroup.m_numTracks);
+
     switch (block->m_blockType) {
         case BLOCK_TYPE::START: {
             function_name.m_event.m_name = "start";
@@ -508,7 +702,7 @@ void Disassembler::insert_on_block(const SsOnBlock *block, const u32 indent, sta
             break;
         }
         case BLOCK_TYPE::EVENT: {
-            function_name.m_event.m_name = std::string("event ").append(lookup(block->m_blockEventId));
+            function_name.m_event.m_name = std::string("event ").append(raw_sid_name(lookup(block->m_blockEventId)));
             break;
         }
         case BLOCK_TYPE::UPDATE: {
@@ -524,368 +718,75 @@ void Disassembler::insert_on_block(const SsOnBlock *block, const u32 indent, sta
             break;
         }
     }
-    insert_span_indent("%*sON %s {\n", indent, function_name.m_event.m_name.c_str());
-
-    if (m_options.m_verbose) {
-        insert_ss_on_block_verbose_fields(block, indent + m_options.m_indentPerLevel);
-        insert_ss_track_group_verbose_fields(&block->m_trackGroup, indent + m_options.m_indentPerLevel);
-    }
 
     for (i16 i = 0; i < block->m_trackGroup.m_numTracks; ++i) {
         SsTrack *track_ptr = block->m_trackGroup.m_aTracks + i;
-        function_name.m_track = {lookup(track_ptr->m_trackId), static_cast<u32>(i)};
-        insert_span_indent("%*sTRACK %s {\n", indent + m_options.m_indentPerLevel, function_name.m_track.m_name.c_str());
-        if (m_options.m_verbose) {
-            insert_ss_track_verbose_fields(track_ptr, indent + m_options.m_indentPerLevel * 2);
-        }
+        function_name.m_track = {raw_sid_name(lookup(track_ptr->m_trackId)), static_cast<u32>(i)};
+        std::vector<ast::state_script_lambda> lambdas;
+        lambdas.reserve(track_ptr->m_totalLambdaCount);
+
         for (i16 j = 0; j < track_ptr->m_totalLambdaCount; ++j) {
-            insert_span("{\n", indent + m_options.m_indentPerLevel * 2);
             function_name.m_idx = j;
             SsLambda *ss_lambda = &track_ptr->m_pSsLambda[j];
-            if (m_options.m_verbose) {
-                insert_ss_lambda_verbose_fields(ss_lambda, indent + m_options.m_indentPerLevel * 3);
-                if (ss_lambda->m_pScriptLambda != nullptr) {
-                    insert_script_lambda_verbose_fields(ss_lambda->m_pScriptLambda, indent + m_options.m_indentPerLevel * 3);
-                }
-            }
-            function_disassembly function = create_function_disassembly(ss_lambda->m_pScriptLambda, function_name, true);
-            insert_function_disassembly_text(function, indent + m_options.m_indentPerLevel * 3);
-            m_functions.push_back(std::move(function));
-            insert_span("}\n", indent + m_options.m_indentPerLevel * 2);
+            std::shared_ptr function = create_function_disassembly(ss_lambda->m_pScriptLambda, function_name, true);
+            lambdas.push_back(function);
+            m_functions.push_back(function);
         }
-        insert_span("}\n\n", indent + m_options.m_indentPerLevel);
+
+        tracks.emplace_back(function_name.m_track.m_name, std::move(lambdas));
     }
-    insert_span("}\n", indent);
+
+    if (block->m_blockType == BLOCK_TYPE::EVENT) {
+        return ast::state_script_block(raw_sid_name(lookup(block->m_blockEventId)), std::move(tracks));
+    }
+    return ast::state_script_block(block->m_blockType, std::move(tracks));
 }
 
 
-void Disassembler::insert_state_script_verbose_fields(const StateScript *stateScript, const u32 indent) {
-    insert_span("FIELDS: \n", indent);
-    insert_span_indent("%*s%-18s = %s\n", indent, "m_stateScriptId", stateScript->m_stateScriptId == 0 ? "0" : lookup(stateScript->m_stateScriptId));
-    if (stateScript->m_pSsDeclList == nullptr) {
-        insert_span_indent("%*s%-18s = null\n", indent, "m_pSsDeclList");
-    } else {
-        insert_span_indent("%*s%-18s = [0x%06X]\n", indent, "m_pSsDeclList", get_offset(stateScript->m_pSsDeclList));
-    }
-    insert_span_indent("%*s%-18s = %s\n", indent, "m_initialStateId", stateScript->m_initialStateId == 0 ? "0" : lookup(stateScript->m_initialStateId));
-    if (stateScript->m_pSsOptions == nullptr) {
-        insert_span_indent("%*s%-18s = null\n", indent, "m_pSsOptions");
-    } else {
-        insert_span_indent("%*s%-18s = [0x%06X]\n", indent, "m_pSsOptions", get_offset(stateScript->m_pSsOptions));
-    }
-    insert_span_indent("%*s%-18s = 0x%llX\n", indent, "m_always0_1", stateScript->m_always0_1);
-    if (stateScript->m_pSsStateTable == nullptr) {
-        insert_span_indent("%*s%-18s = null\n", indent, "m_pSsStateTable");
-    } else {
-        insert_span_indent("%*s%-18s = [0x%06X]\n", indent, "m_pSsStateTable", get_offset(stateScript->m_pSsStateTable));
-    }
-    insert_span_indent("%*s%-18s = %d\n", indent, "m_stateCount", stateScript->m_stateCount);
-    insert_span_indent("%*s%-18s = %d\n", indent, "m_line", stateScript->m_line);
-    insert_span_indent("%*s%-18s = 0x%X\n", indent, "m_always0_2", stateScript->m_always0_2);
-    if (stateScript->m_pDebugFileName == nullptr) {
-        insert_span_indent("%*s%-18s = null\n", indent, "m_pDebugFileName");
-    } else {
-        insert_span_indent("%*s%-18s = \"%s\" [0x%06X]\n", indent, "m_pDebugFileName", stateScript->m_pDebugFileName, get_offset(stateScript->m_pDebugFileName));
-    }
-    if (stateScript->m_pErrorName == nullptr) {
-        insert_span_indent("%*s%-18s = null\n", indent, "m_pErrorName");
-    } else {
-        insert_span_indent("%*s%-18s = \"%s\" [0x%06X]\n", indent, "m_pErrorName", stateScript->m_pErrorName, get_offset(stateScript->m_pErrorName));
-    }
-    insert_span_indent("%*s%-18s = 0x%llX\n", indent, "m_padding", stateScript ? static_cast<u64>(stateScript->m_padding) : 0);
-    insert_span("\n", indent);
-}
-
-
-void Disassembler::insert_script_lambda_verbose_fields(const ScriptLambda *lambda, const u32 indent) {
-    insert_span("FIELDS: \n", indent);
-    if (lambda->m_pInstruction == nullptr) {
-        insert_span_indent("%*s%-18s = null\n", indent, "m_pInstruction");
-    } else {
-        insert_span_indent("%*s%-18s = [0x%06X]\n", indent, "m_pInstruction", get_offset(lambda->m_pInstruction));
-    }
-    if (lambda->m_pSymbols == nullptr) {
-        insert_span_indent("%*s%-18s = null\n", indent, "m_pSymbols");
-    } else {
-        insert_span_indent("%*s%-18s = [0x%06X]\n", indent, "m_pSymbols", get_offset(lambda->m_pSymbols));
-    }
-    insert_span_indent("%*s%-18s = %s\n", indent, "m_typeId", lambda->m_typeId == 0 ? "0" : lookup(lambda->m_typeId));
-    insert_span_indent("%*s%-18s = %llu\n", indent, "m_sum", static_cast<u64>(lambda->m_sum));
-    insert_span_indent("%*s%-18s = %s\n", indent, "m_funcName", lambda->m_funcName == 0 ? "0" : lookup(lambda->m_funcName));
-    insert_span_indent("%*s%-18s = 0x%llX\n", indent, "m_instructionFlag", static_cast<u64>(lambda->m_instructionFlag));
-    insert_span_indent("%*s%-18s = %u\n", indent, "m_always0_2", lambda->m_always0_2);
-    insert_span_indent("%*s%-18s = %u\n", indent, "m_numInstructions", lambda->m_numInstructions);
-    insert_span_indent("%*s%-18s = %lld\n", indent, "m_neg1", static_cast<i64>(lambda->m_neg1));
-    insert_span_indent("%*s%-18s = %s\n", indent, "m_sidGlobal", lambda->m_sidGlobal == 0 ? "0" : lookup(lambda->m_sidGlobal));
-    insert_span_indent("%*s%-18s = 0x%llX\n", indent, "m_always0_3", static_cast<u64>(lambda->m_always0_3));
-    insert_span("\n", indent);
-}
-
-
-void Disassembler::insert_ss_declaration_list_verbose_fields(const SsDeclarationList *decl_list, const u32 indent) {
-    if (decl_list == nullptr) {
-        insert_span("FIELDS: null SsDeclarationList\n\n", indent);
-        return;
-    }
-
-    insert_span("FIELDS: \n", indent);
-    insert_span_indent("%*s%-18s = %d\n", indent, "m_totalDeclarationSize", decl_list->m_totalDeclarationSize);
-    insert_span_indent("%*s%-18s = %d\n", indent, "m_numDeclarations", decl_list->m_numDeclarations);
-    if (decl_list->m_pDeclarations == nullptr) {
-        insert_span_indent("%*s%-18s = null\n", indent, "m_pDeclarations");
-    } else {
-        insert_span_indent("%*s%-18s = [0x%06X]\n", indent, "m_pDeclarations", get_offset(decl_list->m_pDeclarations));
-    }
-    insert_span("\n", indent);
-}
-
-
-void Disassembler::insert_ss_declaration_verbose_fields(const SsDeclaration *decl, const u32 indent) {
-    if (decl == nullptr) {
-        insert_span("FIELDS: null SsDeclaration\n\n", indent);
-        return;
-    }
-
-    insert_span("FIELDS: \n", indent);
-    insert_span_indent("%*s%-18s = %s\n", indent, "m_declId", decl->m_declId == 0 ? "0" : lookup(decl->m_declId));
-    insert_span_indent("%*s%-18s = \"%s\"\n", indent, "m_declIdString", decl->m_declIdString);
-    insert_span_indent("%*s%-18s = %s\n", indent, "m_declTypeId", decl->m_declTypeId == 0 ? "0" : lookup(decl->m_declTypeId));
-    insert_span_indent("%*s%-18s = %d\n", indent, "m_varSizeInBytes", decl->m_varSizeSum);
-    insert_span_indent("%*s%-18s = %d\n", indent, "m_isVar", decl->m_isVar);
-    insert_span_indent("%*s%-18s = 0x%X\n", indent, "m_always0", decl->m_always0);
-    if (decl->m_pDeclValue == nullptr) {
-        insert_span_indent("%*s%-18s = null\n", indent, "m_pDeclValue");
-    } else {
-        insert_span_indent("%*s%-18s = [0x%06X]\n", indent, "m_pDeclValue", get_offset(decl->m_pDeclValue));
-    }
-    insert_span_indent("%*s%-18s = 0x%llX\n", indent, "m_always0x80", static_cast<u64>(decl->m_always0x80));
-    insert_span("\n", indent);
-}
-
-
-void Disassembler::insert_ss_options_verbose_fields(const SsOptions *options, const u32 indent) {
-    if (options == nullptr) {
-        insert_span("FIELDS: null SsOptions\n\n", indent);
-        return;
-    }
-
-    insert_span("FIELDS: \n", indent);
-    insert_span_indent("%*s%-18s = \"%s\"\n", indent, "m_optionString", options->m_optionString);
-    
-    insert_span_indent("%*s%-18s = %llu\n", indent, "m_unknownFlags", options->m_unknownFlags);
-    insert_span_indent("%*s%-18s = %u\n", indent, "m_always0_1", options->m_always0_1);
-
-    if (options->m_pSymbolArray == nullptr) {
-        insert_span_indent("%*s%-18s = null\n", indent, "m_pSymbolArray");
-    } else {
-        insert_span_indent("%*s%-18s = [0x%06X]\n", indent, "m_pSymbolArray", get_offset(options->m_pSymbolArray));
-    }
-
-    if (options->m_symbolArray2 != nullptr) {
-        insert_span_indent("%*s%-18s [0x%06X]\n", indent, "m_symbolArray2", get_offset(options->m_symbolArray2));
-        insert_struct(reinterpret_cast<const structs::unmapped*>((u8*)options->m_symbolArray2 - 8), indent + m_options.m_indentPerLevel);
-    } else {
-        insert_span_indent("%*s%-18s = null\n", indent, "m_symbolArray2");
-    }
-
-    if (options->m_symbolArray3 != nullptr) {
-        insert_span_indent("%*s%-18s [0x%06X]\n", indent, "m_symbolArray3", get_offset(options->m_symbolArray3));
-        insert_struct(reinterpret_cast<const structs::unmapped*>((u8*)options->m_symbolArray3 - 8), indent + m_options.m_indentPerLevel);
-    } else {
-        insert_span_indent("%*s%-18s = null\n", indent, "m_symbolArray3");
-    }
-
-
-    if (options->m_symbolArray4 != nullptr) {
-        insert_span_indent("%*s%-18s [0x%06X]\n", indent, "m_symbolArray4", get_offset(options->m_symbolArray4));
-        insert_struct(reinterpret_cast<const structs::unmapped*>((u8*)options->m_symbolArray4 - 8), indent + m_options.m_indentPerLevel);
-    } else {
-        insert_span_indent("%*s%-18s = null\n", indent, "m_symbolArray4");
-    }
-    insert_span_indent("%*s%-18s = %u\n", indent, "m_always5", options->m_always5);
-    insert_span_indent("%*s%-18s = %u\n", indent, "m_mostly0", options->m_mostly0);
-    insert_span_indent("%*s%-18s = %llu\n", indent, "m_mostly0Rarely1", options->m_mostly0Rarely1);
-    insert_span_indent("%*s%-18s = %llu\n", indent, "m_always0_2", options->m_always0_2);
-    insert_span("\n", indent);
-}
-
-
-void Disassembler::insert_symbol_array_verbose_fields(const SymbolArray *symbol_array, const u32 indent) {
-    if (symbol_array == nullptr) {
-        insert_span("FIELDS: null SymbolArray\n\n", indent);
-        return;
-    }
-
-    insert_span("FIELDS: \n", indent);
-    insert_span_indent("%*s%-18s = %d\n", indent, "m_numEntries", symbol_array->m_numEntries);
-    insert_span_indent("%*s%-18s = 0x%X\n", indent, "m_unk", symbol_array->m_unk);
-    if (symbol_array->m_pSymbols == nullptr) {
-        insert_span_indent("%*s%-18s = null\n", indent, "m_pSymbols");
-    } else {
-        insert_span_indent("%*s%-18s = [0x%06X]\n", indent, "m_pSymbols", get_offset(symbol_array->m_pSymbols));
-    }
-    insert_span("\n", indent);
-}
-
-
-void Disassembler::insert_ss_state_verbose_fields(const SsState *state, const u32 indent) {
-    if (state == nullptr) {
-        insert_span("FIELDS: null SsState\n\n", indent);
-        return;
-    }
-
-    insert_span("FIELDS: \n", indent);
-    insert_span_indent("%*s%-18s = %s\n", indent, "m_stateId", state->m_stateId == 0 ? "0" : lookup(state->m_stateId));
-    insert_span_indent("%*s%-18s = %lld\n", indent, "m_numSsOnBlocks", static_cast<i64>(state->m_numSsOnBlocks));
-    if (state->m_pSsOnBlocks == nullptr) {
-        insert_span_indent("%*s%-18s = null\n", indent, "m_pSsOnBlocks");
-    } else {
-        insert_span_indent("%*s%-18s = [0x%06X]\n", indent, "m_pSsOnBlocks", get_offset(state->m_pSsOnBlocks));
-    }
-    insert_span("\n", indent);
-}
-
-
-void Disassembler::insert_ss_track_group_verbose_fields(const SsTrackGroup *track_group, const u32 indent) {
-    if (track_group == nullptr) {
-        insert_span("FIELDS: null SsTrackGroup\n\n", indent);
-        return;
-    }
-
-    insert_span("FIELDS: \n", indent);
-    insert_span_indent("%*s%-18s = 0x%llX\n", indent, "m_always0", static_cast<u64>(track_group->m_always0));
-    insert_span_indent("%*s%-18s = %u\n", indent, "m_totalLambdaCount", track_group->m_totalLambdaCount);
-    insert_span_indent("%*s%-18s = %d\n", indent, "m_numTracks", track_group->m_numTracks);
-    insert_span_indent("%*s%-18s = 0x%X\n", indent, "m_padding", track_group->m_padding);
-    if (track_group->m_aTracks == nullptr) {
-        insert_span_indent("%*s%-18s = null\n", indent, "m_aTracks");
-    } else {
-        insert_span_indent("%*s%-18s = [0x%06X]\n", indent, "m_aTracks", get_offset(track_group->m_aTracks));
-    }
-    if (track_group->m_name == nullptr) {
-        insert_span_indent("%*s%-18s = null\n", indent, "m_name");
-    } else {
-        insert_span_indent("%*s%-18s = \"%s\" [0x%06X]\n", indent, "m_name", track_group->m_name, get_offset(track_group->m_name));
-    }
-    insert_span_indent("%*s%-18s = 0x%llX\n", indent, "m_always0_1", track_group->m_always0_1);
-    insert_span_indent("%*s%-18s = 0x%llX\n", indent, "m_always0_2", track_group->m_always0_2);
-    if (track_group->m_rareScriptLambda != nullptr) {
-        const ScriptLambda* state_script = track_group->m_rareScriptLambda;
-        insert_span_indent("%*s%-18s = [0x%06X] (ScriptLambda) {\n", indent, "m_rareScriptLambda", get_offset(track_group->m_rareScriptLambda));
-        if (m_options.m_verbose) {
-            insert_script_lambda_verbose_fields(state_script, indent + m_options.m_indentPerLevel);
-        }
-        function_disassembly function = create_function_disassembly(state_script, std::string("m_rareScriptLambda ScriptLambda"));
-        insert_function_disassembly_text(function, indent + m_options.m_indentPerLevel);
-    }
-    insert_span("\n", indent);
-}
-
-
-void Disassembler::insert_ss_on_block_verbose_fields(const SsOnBlock *block, const u32 indent) {
-    if (block == nullptr) {
-        insert_span("FIELDS: null SsOnBlock\n\n", indent);
-        return;
-    }
-
-    insert_span("FIELDS: \n", indent);
-    insert_span_indent("%*s%-18s = %d\n", indent, "m_blockType", block->m_blockType);
-    insert_span_indent("%*s%-18s = 0x%X\n", indent, "m_unkNumberBlock", block->m_always0);
-    insert_span_indent("%*s%-18s = %s\n", indent, "m_blockEventId", block->m_blockEventId == 0 ? "0" : lookup(block->m_blockEventId));
-    if (block->m_pScriptLambda == nullptr) {
-        insert_span_indent("%*s%-18s = null\n", indent, "m_pScriptLambda");
-    } else {
-        insert_span_indent("%*s%-18s = [0x%06X]\n", indent, "m_pScriptLambda", get_offset(block->m_pScriptLambda));
-    }
-    insert_span("\n", indent);
-}
-
-
-void Disassembler::insert_ss_track_verbose_fields(const SsTrack *track, const u32 indent) {
-    if (track == nullptr) {
-        insert_span("FIELDS: null SsTrack\n\n", indent);
-        return;
-    }
-
-    insert_span("FIELDS: \n", indent);
-    insert_span_indent("%*s%-18s = %s\n", indent, "m_trackId", track->m_trackId == 0 ? "0" : lookup(track->m_trackId));
-    insert_span_indent("%*s%-18s = %u\n", indent, "m_trackIdx", track->m_trackIdx);
-    insert_span_indent("%*s%-18s = %d\n", indent, "m_totalLambdaCount", track->m_totalLambdaCount);
-    insert_span_indent("%*s%-18s = 0x%X\n", indent, "m_padding", track->m_padding);
-    if (track->m_pSsLambda == nullptr) {
-        insert_span_indent("%*s%-18s = null\n", indent, "m_pSsLambda");
-    } else {
-        insert_span_indent("%*s%-18s = [0x%06X]\n", indent, "m_pSsLambda", get_offset(track->m_pSsLambda));
-    }
-    insert_span("\n", indent);
-}
-
-
-void Disassembler::insert_ss_lambda_verbose_fields(const SsLambda *ss_lambda, const u32 indent) {
-    if (ss_lambda == nullptr) {
-        insert_span("FIELDS: null SsLambda\n\n", indent);
-        return;
-    }
-
-    insert_span("FIELDS: \n", indent);
-    if (ss_lambda->m_pScriptLambda == nullptr) {
-        insert_span_indent("%*s%-18s = null\n", indent, "m_pScriptLambda");
-    } else {
-        insert_span_indent("%*s%-18s = [0x%06X]\n", indent, "m_pScriptLambda", get_offset(ss_lambda->m_pScriptLambda));
-    }
-    insert_span_indent("%*s%-18s = 0x%llX\n", indent, "m_unkNumberSsLambda", static_cast<u64>(ss_lambda->m_someSortOfCounter));
-    insert_span("\n", indent);
-}
-
-
-void Disassembler::insert_state_script(const StateScript *stateScript, const u32 indent) {
-
-    if (m_options.m_verbose && stateScript->m_pSsOptions != nullptr) {
-        insert_ss_options_verbose_fields(stateScript->m_pSsOptions, indent + m_options.m_indentPerLevel);
-    }
-
+ast::state_script Disassembler::insert_state_script(const StateScript *stateScript) {
+    std::vector<ast::sid_identifier> options;
     if (stateScript->m_pSsOptions != nullptr && stateScript->m_pSsOptions->m_pSymbolArray != nullptr) {
-        SymbolArray *s_array = stateScript->m_pSsOptions->m_pSymbolArray;
-        if (m_options.m_verbose) {
-            insert_symbol_array_verbose_fields(s_array, indent + m_options.m_indentPerLevel);
-        }
-        insert_span("OPTIONS: \n", indent);
+        const SymbolArray *s_array = stateScript->m_pSsOptions->m_pSymbolArray;
+        options.reserve(s_array->m_numEntries);
         for (i32 i = 0; i < s_array->m_numEntries; ++i) {
-            insert_span_indent("%*s[0x%06X] ", indent + m_options.m_indentPerLevel, get_offset(s_array->m_pSymbols + i));
-            insert_span(lookup(s_array->m_pSymbols[i]), indent + m_options.m_indentPerLevel);
-            insert_span("\n");
+            options.emplace_back(sid_lexeme(lookup(s_array->m_pSymbols[i])));
         }
     }
 
+    std::vector<ast::variable_declaration> declarations;
     SsDeclarationList *decl_table = stateScript->m_pSsDeclList;
     if (decl_table != nullptr) {
-        if (m_options.m_verbose) {
-            insert_ss_declaration_list_verbose_fields(decl_table, indent + m_options.m_indentPerLevel);
-        }
-        insert_span("DECLARATIONS: \n", indent);
+        declarations.reserve(decl_table->m_numDeclarations);
         for (i32 i = 0; i < decl_table->m_numDeclarations; ++i) {
-            if (m_options.m_verbose) {
-                insert_ss_declaration_verbose_fields(&decl_table->m_pDeclarations[i], indent + m_options.m_indentPerLevel);
-            }
-            if (decl_table->m_pDeclarations[i].m_isVar) {
-                insert_variable(&decl_table->m_pDeclarations[i], indent + m_options.m_indentPerLevel);
+            std::optional<ast::variable_declaration> declaration = insert_variable(&decl_table->m_pDeclarations[i]);
+            if (declaration) {
+                declarations.push_back(std::move(*declaration));
             }
         }
     }
+
+    std::vector<ast::state_script_state> states;
+    states.reserve(stateScript->m_stateCount);
     state_script_function_id anon_name;
     for (i16 i = 0; i < stateScript->m_stateCount; ++i) {
         SsState *state_ptr = stateScript->m_pSsStateTable + i;
-        anon_name.m_state = {lookup(state_ptr->m_stateId), static_cast<u32>(i)};
-        insert_span_indent("%*sSTATE %s {\n", indent + m_options.m_indentPerLevel, anon_name.m_state.m_name.c_str());
-        if (m_options.m_verbose) {
-            insert_ss_state_verbose_fields(state_ptr, indent + m_options.m_indentPerLevel * 2);
-        }
+        anon_name.m_state = {raw_sid_name(lookup(state_ptr->m_stateId)), static_cast<u32>(i)};
+        std::vector<ast::state_script_block> blocks;
+        blocks.reserve(state_ptr->m_numSsOnBlocks);
         for (i64 j = 0; j < state_ptr->m_numSsOnBlocks; ++j) {
             anon_name.m_event.m_idx = j;
-            insert_on_block(state_ptr->m_pSsOnBlocks + j, indent + m_options.m_indentPerLevel * 2, anon_name);
+            blocks.push_back(insert_on_block(state_ptr->m_pSsOnBlocks + j, anon_name));
         }
-        insert_span_indent("%*s} END STATE %s\n\n", indent + m_options.m_indentPerLevel, anon_name.m_state.m_name.c_str());
+        states.emplace_back(anon_name.m_state.m_name, std::move(blocks));
     }
+
+    ast::state_script script{
+        raw_sid_name(lookup(stateScript->m_stateScriptId)),
+        std::move(options),
+        std::move(declarations),
+        std::move(states)
+    };
+    return script;
 }
 
 
@@ -899,7 +800,7 @@ void Disassembler::insert_state_script(const StateScript *stateScript, const u32
 }
 
 
-[[nodiscard]] function_disassembly Disassembler::create_function_disassembly(const ScriptLambda *lambda, function_name_variant name, const bool is_script_function) {
+[[nodiscard]] std::shared_ptr<function_disassembly> Disassembler::create_function_disassembly(const ScriptLambda *lambda, function_name_variant name, const bool is_script_function) {
     Instruction *instructionPtr = reinterpret_cast<Instruction*>(lambda->m_pInstruction);
 
     //const u32 instruction_count = m_game == game_type::T2R ? lambda->m_numInstructions : lambda->m_numInstructions / 2 - 1;
@@ -909,36 +810,36 @@ void Disassembler::insert_state_script(const StateScript *stateScript, const u32
     std::vector<function_disassembly_line> lines;
     lines.reserve(instruction_count);
 
-    function_disassembly function_disassembly {
+    std::shared_ptr func = std::make_shared<function_disassembly>(
         std::move(lines),
         StackFrame(location(lambda->m_pSymbols)),
         std::move(name),
         is_script_function
-    };
+    );
 
 
     for (u64 i = 0; i < instruction_count; ++i) {
-        function_disassembly.m_lines.emplace_back(i, instructionPtr);
+        func->m_lines.emplace_back(i, instructionPtr);
     }
 
     bool counting_args = true;
 
     for (u64 i = 0; i < instruction_count; ++i) {
-        process_instruction(i, function_disassembly);
+        process_instruction(i, *func);
         if (counting_args) {
-            if (function_disassembly.m_lines[i].m_instruction.operand1 >= ARGUMENT_REGISTERS_IDX) {
-                function_disassembly.m_stackFrame.m_registerArgs.push_back(std::monostate());
+            if (func->m_lines[i].m_instruction.operand1 >= ARGUMENT_REGISTERS_IDX) {
+                func->m_stackFrame.m_registerArgs.push_back(std::monostate());
             } else {
                 counting_args = false;
             }
         }
     }
 
-    return function_disassembly;
+    return func;
 }
 
 
-[[nodiscard]] function_disassembly Disassembler::create_function_disassembly(std::vector<Instruction>&& instructions, function_name_variant name, const location& symbol_table, const bool is_script_function) {
+[[nodiscard]] std::shared_ptr<function_disassembly> Disassembler::create_function_disassembly(std::vector<Instruction>&& instructions, function_name_variant name, const location& symbol_table, const bool is_script_function) {
     std::vector<function_disassembly_line> lines;
     lines.reserve(instructions.size());
 
@@ -946,20 +847,20 @@ void Disassembler::insert_state_script(const StateScript *stateScript, const u32
         lines.emplace_back(i, instructions.data());
     }
 
-    function_disassembly functionDisassembly {
+    std::shared_ptr functionDisassembly = std::make_shared<function_disassembly>(
         std::move(lines),
         StackFrame(symbol_table),
         std::move(name),
         is_script_function
-    };
+    );
 
     bool counting_args = true;
 
     for (u64 i = 0; i < instructions.size(); ++i) {
-        process_instruction(i, functionDisassembly);
+        process_instruction(i, *functionDisassembly);
         if (counting_args) {
-            if (functionDisassembly.m_lines[i].m_instruction.operand1 >= 49) {
-                functionDisassembly.m_stackFrame.m_registerArgs.push_back(std::monostate());
+            if (functionDisassembly->m_lines[i].m_instruction.operand1 >= 49) {
+                functionDisassembly->m_stackFrame.m_registerArgs.push_back(std::monostate());
             } else {
                 counting_args = false;
             }
@@ -1091,8 +992,8 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
     if (!istr.destination_is_immediate()) {
         frame.to_string(dst_str, interpreted_buffer_size, dest, lookup(frame[dest].m_value));
         if (!is_unknown(frame[dest].m_type) && frame[dest].m_containsArg) {
-            if (std::holds_alternative<ast::function_type>(frame[dest].m_type)) {
-                frame.m_registerArgs[frame[dest].m_argNum] = *std::get<ast::function_type>(frame[dest].m_type).m_return;
+            if (const auto *ft_ptr = std::get_if<ast::function_type>(&frame[dest].m_type)) {
+                frame.m_registerArgs[frame[dest].m_argNum] = *ft_ptr->m_return;
             } else {
                 frame.m_registerArgs[frame[dest].m_argNum] = frame[dest].m_type;
             }
@@ -1266,7 +1167,7 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
             frame[dest].m_value = value;
             frame[dest].m_fromSymbolTable = op1;
             const bool is_function = pointer_gets_called(dest, istr_idx + 1, fn);
-            const ast::full_type existing_type = builtinFunctions.contains(value) ? builtinFunctions.at(value) : ast::function_type{};
+            const ast::full_type existing_type = ast::function_type{};
             std::snprintf(interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%s>", dest, op1, lookup(value));
             if (is_function) {
                 table_entry = existing_type;
@@ -1317,34 +1218,22 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
             std::snprintf(varying, disassembly_text_size, "r%d, r%d, %d", dest, op1, op2);
             char comment_str[300];
             const char* function_name = lookup(frame[op1].m_value);
-            const auto builtin = builtinFunctions.find(frame[op1].m_value);
             u8 offset = std::snprintf(comment_str, sizeof(comment_str), "r%d = %s(", dest, function_name);
             for (u64 i = 0; i < op2; ++i) {
                 if (i != 0) {
                     offset += std::snprintf(comment_str + offset, sizeof(comment_str) - offset, ", ");
                 }
-                if (builtin != builtinFunctions.end()) {
-                    offset += std::snprintf(comment_str + offset, sizeof(comment_str) - offset, "%s: ", builtin->second.m_arguments[i].first.c_str());
+                const auto arg_type = std::make_shared<ast::full_type>(frame[ARGUMENT_REGISTERS_IDX + i].m_type);
+                auto& ftype = frame.m_symbolTable.get_type(frame[dest].m_fromSymbolTable);
+                if (!std::holds_alternative<ast::function_type>(ftype)) {
+                    ftype = ast::function_type{};
                 }
-                else {
-                    const auto arg_type = std::make_shared<ast::full_type>(frame[ARGUMENT_REGISTERS_IDX + i].m_type);
-                    auto& ftype = frame.m_symbolTable.get_type(frame[dest].m_fromSymbolTable);
-                    if (!std::holds_alternative<ast::function_type>(ftype)) {
-                        ftype = ast::function_type{};
-                    }
-                    std::get<ast::function_type>(ftype).m_arguments.emplace_back("", arg_type);
-                }
+                std::get<ast::function_type>(ftype).m_arguments.emplace_back("", arg_type);
                 frame.to_string(dst_str, interpreted_buffer_size, ARGUMENT_REGISTERS_IDX + i, lookup(frame[i + ARGUMENT_REGISTERS_IDX].m_value));
                 offset += std::snprintf(comment_str + offset, sizeof(comment_str) - offset, "%s", dst_str);
             }
-            if (builtin != builtinFunctions.end()) {
-                frame[dest].m_type = *builtin->second.m_return;
-                u8 i = 0;
-                for (const auto& [name, type] : builtin->second.m_arguments) {
-                    frame[ARGUMENT_REGISTERS_IDX + i++].m_type = *type;
-                }
-            } else if (std::holds_alternative<ast::function_type>(frame[dest].m_type)) {
-                frame[dest].m_type = std::move(*std::get<ast::function_type>(frame[dest].m_type).m_return);
+            if (auto* ft_ptr = std::get_if<ast::function_type>(&frame[dest].m_type)) {
+                frame[dest].m_type = std::move(*ft_ptr->m_return);
             }
             frame[dest].m_isReturn = true;
             frame[dest].m_pointerOffset = 0;
@@ -1725,113 +1614,12 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
 }
 
 
-void Disassembler::insert_label(const std::vector<u32> &labels, const function_disassembly_line &line, const u32 func_size, const u32 indent) {
-    auto label_location = std::find(labels.begin(), labels.end(), line.m_location);
-    if (label_location != labels.end()) {
-        const u32 label_index = std::distance(labels.begin(), label_location);
-        if (line.m_location == func_size) {
-            insert_span("L_RETURN:\n", indent - m_options.m_indentPerLevel);
-        } else if (line.m_location == func_size - 1 && line.m_instruction.opcode == Opcode::LoadU16Imm) {
-            insert_span_indent("%*sL_RETURN_%d:\n", indent - m_options.m_indentPerLevel, line.m_instruction.operand1);  
-        } else {
-            insert_span_indent("%*sL_%d:\n", indent - m_options.m_indentPerLevel, label_index);  
-        }
-    }
-}
-
-
-void Disassembler::insert_goto_label(const std::vector<u32> &labels, const function_disassembly_line &line, const u32 func_size, const std::vector<function_disassembly_line> &lines) {
-    if (line.m_target != std::numeric_limits<u16>::max()) {
-        u32 target = std::distance(labels.begin(), std::find(labels.begin(), labels.end(), line.m_target));
-        if (line.m_target == func_size) {
-            insert_span("=> L_RETURN");
-        } else if (line.m_target == func_size - 1 && lines[line.m_target].m_instruction.opcode == Opcode::LoadU16Imm) {
-            insert_span_fmt("=> L_RETURN_%d", lines[line.m_target].m_instruction.operand1);
-        } else {
-            insert_span_fmt("=> L_%d", target);
-        }
-    }
-}
-
-
-void Disassembler::insert_function_disassembly_text(const function_disassembly &functionDisassembly, const u32 indent) {
-    auto labels = functionDisassembly.m_stackFrame.m_labels;
-    char buffer[512] = {0};
-    
-    if (!functionDisassembly.m_stackFrame.m_registerArgs.empty()) {
-        insert_span_indent("%*s[%d args]\n", indent, functionDisassembly.m_stackFrame.m_registerArgs.size());
-    }
-    
-    for (const auto &line : functionDisassembly.m_lines) {
-        u32 line_offset = std::max(67 - (i32)line.m_text.length(), 0);
-        insert_label(labels, line, functionDisassembly.m_lines.size() - 1, indent);
-        insert_span(line.m_text.c_str(), indent);
-        const std::string comment = std::string(line_offset, ' ') + line.m_comment;
-        insert_span(comment.c_str());
-        insert_goto_label(labels, line, functionDisassembly.m_lines.size() - 1, functionDisassembly.m_lines);
-        insert_span("\n");
-    }
-    insert_span_indent("\n%*sSYMBOL TABLE: \n", indent);
-
-    char line_start[64] = {0};
-    char type_text[512] = {0};
-
-    const auto& [table_location, types] = functionDisassembly.m_stackFrame.m_symbolTable;
-
-    for (u32 i = 0; i < types.size(); ++i) {
-        const auto& type = types[i];
-        location value_location = table_location + i * 8;
-        std::snprintf(line_start, sizeof(line_start), "%04X   0x%06X   ", i, get_offset(value_location));
-        std::visit([&](auto&& entry) -> void {
-            using T = std::decay_t<decltype(entry)>;
-            if constexpr (std::is_same_v<T, ast::primitive_type>) {
-                switch (entry.m_type) {
-                    case ast::primitive_kind::I32: {
-                        std::snprintf(type_text, sizeof(type_text), "int: %i\n", value_location.get<i32>());
-                        break;
-                    }
-                    case ast::primitive_kind::I64: {
-                        std::snprintf(type_text, sizeof(type_text), "int64: %lli\n", value_location.get<i64>());
-                        break;
-                    }
-                    case ast::primitive_kind::U64: {
-                        std::snprintf(type_text, sizeof(type_text), "uint64: %llu\n", value_location.get<u64>());
-                        break;
-                    }
-                    case ast::primitive_kind::F32: {
-                        std::snprintf(type_text, sizeof(type_text), "float: %f\n", value_location.get<f32>());
-                        break;
-                    }
-                    case ast::primitive_kind::STRING: {
-                        std::snprintf(type_text, sizeof(type_text), "string: \"%s\"\n", value_location.get<const char*>());
-                        break;
-                    }
-                    case ast::primitive_kind::SID: {
-                        std::snprintf(type_text, sizeof(type_text), "sid: %s\n", lookup(value_location.get<sid64>()));
-                        break;
-                    }
-                }
-            } else if constexpr (std::is_same_v<T, ast::function_type>) {
-                if (entry.m_return != nullptr && !is_unknown(*entry.m_return)) {
-                    std::snprintf(type_text, sizeof(type_text), "function: %s%s\n", lookup(value_location.get<sid64>()), ast::type_to_declaration_string(entry).c_str());
-                }
-                else {
-                    std::snprintf(type_text, sizeof(type_text), "function: %s\n", lookup(value_location.get<sid64>()));
-                }
-            } else if constexpr (std::is_same_v<T, ast::ptr_type>) {
-                std::snprintf(type_text, sizeof(type_text), "pointer: \"%s\" (%s)\n", lookup(value_location.get<sid64>()), ast::type_to_declaration_string(entry).c_str());
-            } else if constexpr (std::is_same_v<T, std::monostate>) {
-                std::snprintf(type_text, sizeof(type_text), "unknown: %llu\n", value_location.get<u64>());
-            }
-        }, type);
-        std::snprintf(buffer, sizeof(buffer), "%s %s", line_start, type_text);
-        insert_span(buffer, indent);
-    }
-}
-
-
 void Disassembler::disassemble_functions_from_bin_file() {
     constexpr sid32 function_sid = 0xAB3EB31F;
+    m_disassembledEntries.clear();
+    m_functions.clear();
+    m_offsetsToFunctionNames.clear();
+    m_stateScript.reset();
     const location start = location(m_currentFile->m_bytes.get());
     for (u64 i = 0; i < m_currentFile->m_size; i += 4) {
         if (start.get<u32>(i) == function_sid) {
@@ -1848,7 +1636,6 @@ void Disassembler::disassemble_functions_from_bin_file() {
             
             auto function_disassembly = create_function_disassembly(std::move(istrs), "0x" + std::to_string(i), location(instr_ptr), false);
             m_functions.push_back(std::move(function_disassembly));
-            insert_function_disassembly_text(m_functions[0], 4);
         }
     }
 }

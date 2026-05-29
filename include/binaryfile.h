@@ -64,7 +64,6 @@ namespace dconstruct {
         location m_strings;
         location m_relocTable;
         std::map<sid64, const std::string> m_sidCache;
-        std::set<p64> m_emittedStructs;
         [[nodiscard]] bool is_file_ptr(const location) const noexcept;
         [[nodiscard]] bool gets_pointed_at(const location) const noexcept;
         [[nodiscard]] bool is_string(const location) const noexcept;

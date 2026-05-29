@@ -46,11 +46,14 @@ namespace dconstruct {
         const location struct_member_start = location(m_currentFile->m_bytes.get()) + struct_offset;
         u32 member_location = 0;
         u32 last_member_size = 0;
+        disassembled_values_t ignored_values;
         for (u32 i = 0; i < member_index; ++i) {
-            last_member_size = insert_next_struct_member(struct_member_start + member_location, 0);
+            last_member_size = insert_next_struct_member(struct_member_start + member_location, ignored_values);
+            ignored_values.clear();
             member_location += last_member_size;
         }
-        const u32 edit_member_size = insert_next_struct_member(struct_member_start + member_location, 0);
+        const u32 edit_member_size = insert_next_struct_member(struct_member_start + member_location, ignored_values);
+        ignored_values.clear();
         const location edit_location = struct_member_start + member_location;
         std::cout << "applying change at location 0x" << std::hex << struct_offset << "[0x" << member_index << "]: " << std::dec;
         switch (value.m_editType) {

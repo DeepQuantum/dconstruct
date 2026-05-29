@@ -19,7 +19,6 @@ void decomp_file(
     const std::filesystem::path &out_disasm_filename, 
     const std::filesystem::path &out_decomp_filename,
     const dconstruct::SIDBase &base,
-    const dconstruct::DisassemblerOptions &options,
     const bool write_graphs,
     const dconstruct::ast::print_fn_type language_type,
     const bool show_warnings,
@@ -30,17 +29,15 @@ void decomp_file(
 
 void disasm_file(
     const std::filesystem::path &inpath, 
-    const std::filesystem::path &out_filename, 
+    const std::filesystem::path &out_filename,
     const dconstruct::SIDBase &base,
-    const dconstruct::DisassemblerOptions &options,
     const std::vector<std::string> &edits = {},
     const dconstruct::game_type game = dconstruct::game_type::T2R);
 
 void decompile_multiple(
     const std::filesystem::path &in, 
-    const std::filesystem::path &out, 
-    const dconstruct::SIDBase &sidbase, 
-    const dconstruct::DisassemblerOptions &options,
+    const std::filesystem::path &out,
+    const dconstruct::SIDBase &sidbase,
     const bool generate_graphs,
     const bool show_warnings,
     const bool optimize,
@@ -51,9 +48,8 @@ void decompile_multiple(
 
 void disassemble_multiple(
     const std::filesystem::path &in, 
-    const std::filesystem::path &out, 
-    const dconstruct::SIDBase &sidbase, 
-    const dconstruct::DisassemblerOptions &options,
+    const std::filesystem::path &out,
+    const dconstruct::SIDBase &sidbase,
     const dconstruct::game_type game = dconstruct::game_type::T2R
 );
 

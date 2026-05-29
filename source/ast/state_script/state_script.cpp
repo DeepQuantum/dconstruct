@@ -12,7 +12,7 @@ namespace dconstruct::ast {
 }
 
 void state_script::pseudo_c(std::ostream& os) const {
-    os << "statescript {\n";
+    os << "statescript #" << m_name << " {\n";
     os << indent_more;
     os << indent << "options {\n";
     os << indent_more;
@@ -36,7 +36,7 @@ void state_script::pseudo_c(std::ostream& os) const {
 }
 
 void state_script::pseudo_py(std::ostream& os) const {
-    os << "statescript:\n  options: ";
+    os << "statescript #" << m_name << ":\n  options: ";
     for (const auto& opt : m_options) {
         os << opt << " ";
     }
@@ -51,7 +51,7 @@ void state_script::pseudo_py(std::ostream& os) const {
 }
 
 void state_script::pseudo_racket(std::ostream& os) const {
-    os << "(statescript (options";
+    os << "(statescript #" << m_name << " (options";
     for (const auto& opt : m_options) {
         os << " " << opt;
     }
@@ -108,8 +108,11 @@ void state_script::pseudo_racket(std::ostream& os) const {
         for (const auto& block : state.m_blocks) {
             for (const auto& track : block.m_tracks) {
                 for (size_t i = 0; i < track.m_lambdas.size(); ++i) {
-                    const auto& lambda = track.m_lambdas[i];
-                    std::vector<semantic_check_error> lambda_errors = lambda.check_semantics(decl_scope);
+                    const auto* lambda = std::get_if<function_definition>(&track.m_lambdas[i]);
+                    if (lambda == nullptr) {
+                        continue;
+                    }
+                    std::vector<semantic_check_error> lambda_errors = lambda->check_semantics(decl_scope);
                     const std::string path = "in state '" + state.m_name + "' block '" + block.block_type_to_string() + "' track '" + track.m_name + "' lambda " + std::to_string(i);
                     for (auto& err : lambda_errors) {
                         err.m_message = path + ": " + err.m_message;
@@ -443,8 +446,12 @@ void state_script::pseudo_racket(std::ostream& os) const {
         for (const auto& block : state.m_blocks) {
             for (const auto& track : block.m_tracks) {
                 for (u32 lambda_idx = 0; lambda_idx < track.m_lambdas.size(); ++lambda_idx) {
-                    const auto& lambda = track.m_lambdas[lambda_idx];
-                    program_binary_result lambda_element_res = lambda.emit_dc(global);
+                    const auto* lambda = std::get_if<function_definition>(&track.m_lambdas[lambda_idx]);
+                    if (lambda == nullptr) {
+                        return std::unexpected{"cannot emit raw disassembly lambda in state '" + state.m_name + "' block '" + block.block_type_to_string() + "' track '" + track.m_name + "' lambda " + std::to_string(lambda_idx)};
+                    }
+
+                    program_binary_result lambda_element_res = lambda->emit_dc(global);
                     if (!lambda_element_res) {
                         return std::unexpected{"failed to emit lambda in state '" + state.m_name + "' block '" + block.block_type_to_string() + "' track '" + track.m_name + "' lambda " + std::to_string(lambda_idx) + ": " + lambda_element_res.error()};
                     }

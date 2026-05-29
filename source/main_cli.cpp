@@ -98,9 +98,6 @@ int main(int argc, char *argv[]) {
         return 0;
     }
 
-    constexpr u8 indent_per_level = 2;
-    const bool emit_once = opts["emit_once"].as<bool>();
-    const bool verbose = opts["verbose"].as<bool>();
     const bool decompile = !opts["no_decompile"].as<bool>();
     const bool optimize = !opts["no_optimize"].as<bool>();
     const bool generate_graphs = opts["graphs"].as<bool>();
@@ -123,11 +120,6 @@ int main(int argc, char *argv[]) {
         std::vector<std::string> edit_strings = opts["e"].as<std::vector<std::string>>();
         edits.insert(edits.end(), edit_strings.begin(), edit_strings.end());
     }
-    const dconstruct::DisassemblerOptions disassember_options {
-        indent_per_level,
-        emit_once,
-        verbose,
-    };
 
     auto base_exp = dconstruct::SIDBase::from_binary(sidbase_path);
     if (!base_exp) {
@@ -137,9 +129,12 @@ int main(int argc, char *argv[]) {
     const auto& base = *base_exp;
 
     if (std::filesystem::is_directory(filepath)) {
-        if (!output_is_folder) {
+        if (std::filesystem::exists(output) && !output_is_folder) {
             std::cout << "error: the input " << filepath << " is a folder, but output " << output << " is a file.\n";
             return -1;
+        }
+        if (!output_is_folder) {
+            std::filesystem::create_directories(output);
         }
         if (!edits.empty()) {
             std::cout << "warning: edits ignored as input path is a directory. edits only work in single file disassembly.\n";
@@ -148,20 +143,20 @@ int main(int argc, char *argv[]) {
             if (generate_graphs) {
                 std::filesystem::create_directory(output / "graphs");
             }
-            dconstruct::disassembly::decompile_multiple(filepath, output, base, disassember_options, generate_graphs, show_warnings, optimize, print_func, use_pascal_case, game);
+            dconstruct::disassembly::decompile_multiple(filepath, output, base, generate_graphs, show_warnings, optimize, print_func, use_pascal_case, game);
         }
         else {
-            dconstruct::disassembly::disassemble_multiple(filepath, output, base, disassember_options, game);
+            dconstruct::disassembly::disassemble_multiple(filepath, output, base, game);
         }
     } else {
         const auto start = std::chrono::high_resolution_clock::now();
         if (decompile) {
             std::cout << "disassembling & decompiling " << filepath.filename() << "...\n";
-            dconstruct::disassembly::decomp_file(filepath, output, std::filesystem::path(output).replace_extension(".dcpl"), base, disassember_options, generate_graphs, print_func, show_warnings, optimize, edits, use_pascal_case, game);
+            dconstruct::disassembly::decomp_file(filepath, output, std::filesystem::path(output).replace_extension(".dcpl"), base, generate_graphs, print_func, show_warnings, optimize, edits, use_pascal_case, game);
         }
         else {
             std::cout << "disassembling " << filepath.filename() << "...\n";
-            dconstruct::disassembly::disasm_file(filepath, output, base, disassember_options, edits, game);
+            dconstruct::disassembly::disasm_file(filepath, output, base, edits, game);
         }
         const auto time_taken = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - start);
         std::cout << "took " << time_taken.count() << "ms\n";

@@ -22,6 +22,11 @@ namespace dconstruct::ast {
               m_declarations(std::move(declarations)),
               m_states(std::move(states)) {}
 
+        state_script(const state_script&) = delete;
+        state_script& operator=(const state_script&) = delete;
+        state_script(state_script&&) noexcept = default;
+        state_script& operator=(state_script&&) noexcept = default;
+
         void pseudo_c(std::ostream& os) const final;
         void pseudo_py(std::ostream& os) const final;
         void pseudo_racket(std::ostream& os) const final;

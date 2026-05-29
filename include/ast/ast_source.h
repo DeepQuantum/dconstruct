@@ -121,6 +121,25 @@ namespace dconstruct::ast {
         return idx;
     }
 
+    inline int indent_width_index() {
+        static int idx = std::ios_base::xalloc();
+        return idx;
+    }
+
+    inline int get_indent_width(std::ostream& os) {
+        const int width = static_cast<int>(os.iword(indent_width_index()));
+        return width > 0 ? width : 4;
+    }
+
+    struct set_indent_width {
+        int m_width;
+    };
+
+    inline std::ostream& operator<<(std::ostream& os, set_indent_width width) {
+        os.iword(indent_width_index()) = width.m_width;
+        return os;
+    }
+
     inline std::ostream& indent_more(std::ostream& os) {
         ++os.iword(indent_index());
         return os;
@@ -132,9 +151,10 @@ namespace dconstruct::ast {
     }
 
     inline std::ostream& indent(std::ostream& os) {
-        int level = os.iword(indent_index());
-        for (int i = 0; i < level; ++i) {
-            os << "    ";
+        const int level = static_cast<int>(os.iword(indent_index()));
+        const int width = get_indent_width(os);
+        for (int i = 0; i < level * width; ++i) {
+            os << ' ';
         }
         return os;
     }
