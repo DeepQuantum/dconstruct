@@ -261,6 +261,8 @@ target_compile_options(dconstruct_ui PRIVATE
 
 target_link_options(dconstruct_ui PRIVATE
     $<$<CONFIG:Release>:/LTCG>
+    $<$<CXX_COMPILER_ID:MSVC>:/SUBSYSTEM:WINDOWS>
+    $<$<CXX_COMPILER_ID:MSVC>:/ENTRY:mainCRTStartup>
 )
 
 if(MSVC)
