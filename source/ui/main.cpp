@@ -44,6 +44,10 @@ struct document {
     std::string m_name;
     i32 m_selectedEntry = -1;
     f32 m_listWidth = 0.0F;
+    const void *m_expandRequest = nullptr;
+    const void *m_pendingExpand = nullptr;
+    i32 m_forceOpenDepth = 0;
+    std::vector<char> m_forceStack;
 };
 
 struct drag_state {
@@ -487,6 +491,490 @@ void draw_entry_list(app_state &state, document &doc) {
     }
 }
 
+namespace val_color {
+inline const ImVec4 IntZero = qui::color::retina_dark::TextDisabled;
+inline const ImVec4 Int = qui::color::rgba(0x6F, 0xB8, 0xE8);
+inline const ImVec4 Float = qui::color::rgba(0xE5, 0xC0, 0x7B);
+inline const ImVec4 Sid = qui::color::rgba(0xC2, 0x9E, 0xF0);
+inline const ImVec4 String = qui::color::rgba(0xE2, 0x8C, 0x6E);
+inline const ImVec4 Array = qui::color::rgba(0x9C, 0xD6, 0x8E);
+inline const ImVec4 Map = qui::color::rgba(0x5C, 0xB8, 0xD6);
+inline const ImVec4 Struct = qui::color::rgba(0xCF, 0xCF, 0xD4);
+inline const ImVec4 Function = qui::color::retina_dark::Highlight;
+inline const ImVec4 StateScript = qui::color::retina_dark::AccentYellow;
+inline const ImVec4 EntryName = qui::color::retina_dark::AccentYellow;
+inline const ImVec4 Group = qui::color::rgba(0xB0, 0xB0, 0xB8);
+} // namespace val_color
+
+struct value_view {
+    app_state *state;
+    document *doc;
+};
+
+u32 file_offset(const document &doc, const void *ptr) {
+    return static_cast<u32>(reinterpret_cast<p64>(ptr) - reinterpret_cast<p64>(doc.m_file->m_dcheader));
+}
+
+bool dv_node(value_view v, const void *id, const ImVec4 &color, const char *label, const char *suffix, bool leaf) {
+    document *doc = v.doc;
+    const bool force = !leaf && (doc->m_forceOpenDepth > 0 || id == doc->m_expandRequest);
+    if (force) {
+        ImGui::SetNextItemOpen(true, ImGuiCond_Always);
+    }
+
+    ImGuiTreeNodeFlags flags = 0;
+    if (leaf) {
+        flags |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen | ImGuiTreeNodeFlags_Bullet;
+    }
+    ImGui::PushStyleColor(ImGuiCol_Text, color);
+    const bool open = ImGui::TreeNodeEx(id, flags, "%s", label);
+    ImGui::PopStyleColor();
+    if (!leaf && ImGui::IsItemClicked(ImGuiMouseButton_Right)) {
+        doc->m_pendingExpand = id;
+    }
+    if (suffix != nullptr && suffix[0] != '\0') {
+        ImGui::SameLine(0.0F, 0.0F);
+        ImGui::TextColored(qui::color::retina_dark::TextDisabled, "  %s", suffix);
+    }
+    if (!leaf && open) {
+        doc->m_forceStack.push_back(force ? 1 : 0);
+        if (force) {
+            doc->m_forceOpenDepth++;
+        }
+    }
+    return open;
+}
+
+void dv_tree_pop(value_view v) {
+    document *doc = v.doc;
+    if (!doc->m_forceStack.empty()) {
+        if (doc->m_forceStack.back() != 0) {
+            doc->m_forceOpenDepth--;
+        }
+        doc->m_forceStack.pop_back();
+    }
+    ImGui::TreePop();
+}
+
+void dv_draw_values(value_view v, const disassembled_values_t &values);
+void dv_draw_value(value_view v, const disassembled_values_t::value_type &value, i32 index);
+void dv_draw_function(value_view v, const function_disassembly &func, i32 index);
+void dv_draw_function_body(value_view v, const function_disassembly &func);
+void dv_draw_state_script(value_view v, const ast::state_script &script, i32 index);
+void dv_draw_map(value_view v, const disassembled_value &entry, const void *id, i32 index);
+void dv_draw_script_lambda(value_view v, const disassembled_value &entry, const void *id, i32 index);
+
+void dv_index_prefix(char *buffer, std::size_t size, i32 index) {
+    if (index >= 0) {
+        std::snprintf(buffer, size, "[%d] ", index);
+    } else if (size > 0) {
+        buffer[0] = '\0';
+    }
+}
+
+void dv_draw_struct_like(value_view v, const disassembled_value &entry, const void *id, i32 index) {
+    char label[256];
+    char suffix[128];
+    char prefix[24];
+    dv_index_prefix(prefix, sizeof(prefix), index);
+
+    if (entry.m_typeId == SID("map") || entry.m_typeId == SID("map-32") || entry.m_typeId == SID("render-settings-map")) {
+        dv_draw_map(v, entry, id, index);
+        return;
+    }
+
+    if (entry.m_typeId == SID("script-lambda")) {
+        dv_draw_script_lambda(v, entry, id, index);
+        return;
+    }
+
+    if (entry.m_typeId == SID("array")) {
+        std::snprintf(label, sizeof(label), "%sarray", prefix);
+        std::snprintf(suffix, sizeof(suffix), "[0x%05X] {size: %zu}", static_cast<u32>(entry.m_offset), entry.m_values.size());
+        const bool open = dv_node(v, id, val_color::Array, label, suffix, entry.m_values.empty());
+        if (open && !entry.m_values.empty()) {
+            dv_draw_values(v, entry.m_values);
+            dv_tree_pop(v);
+        }
+        return;
+    }
+
+    ImVec4 color = val_color::Struct;
+    std::string type_storage;
+    const char *type_name = "anonymous struct";
+    if (entry.m_typeId != 0) {
+        type_storage = lookup_sid(*v.state->m_sidbase, *v.doc->m_file, entry.m_typeId);
+        type_name = type_storage.c_str();
+        if (entry.m_typeId == SID("state-script")) {
+            color = val_color::StateScript;
+        } else if (entry.m_typeId == SID("script-lambda")) {
+            color = val_color::Function;
+        }
+    }
+
+    std::snprintf(label, sizeof(label), "%s%s", prefix, type_name);
+    std::snprintf(suffix, sizeof(suffix), "[0x%05X]", static_cast<u32>(entry.m_offset));
+    const bool open = dv_node(v, id, color, label, suffix, entry.m_values.empty());
+    if (open && !entry.m_values.empty()) {
+        dv_draw_values(v, entry.m_values);
+        dv_tree_pop(v);
+    }
+}
+
+void dv_draw_value(value_view v, const disassembled_values_t::value_type &value, i32 index) {
+    char label[512];
+    char suffix[128];
+    char prefix[24];
+    dv_index_prefix(prefix, sizeof(prefix), index);
+    std::visit([&](auto &&entry) {
+        using T = std::decay_t<decltype(entry)>;
+        if constexpr (std::is_same_v<T, disassembled_value>) {
+            dv_draw_struct_like(v, entry, &value, index);
+        } else if constexpr (std::is_same_v<T, std::shared_ptr<function_disassembly>>) {
+            dv_draw_function(v, *entry, index);
+        } else if constexpr (std::is_same_v<T, const ast::state_script *>) {
+            dv_draw_state_script(v, *entry, index);
+        } else if constexpr (std::is_same_v<T, const i32 *>) {
+            std::snprintf(label, sizeof(label), "%s%d", prefix, *entry);
+            dv_node(v, &value, *entry == 0 ? val_color::IntZero : val_color::Int, label, ": int", true);
+        } else if constexpr (std::is_same_v<T, const u64 *>) {
+            const std::string resolved = lookup_sid(*v.state->m_sidbase, *v.doc->m_file, *entry);
+            std::snprintf(label, sizeof(label), "%s%s", prefix, resolved.c_str());
+            dv_node(v, &value, val_color::Sid, label, ": sid", true);
+        } else if constexpr (std::is_same_v<T, const f32 *>) {
+            std::snprintf(label, sizeof(label), "%s%.2f", prefix, *entry);
+            dv_node(v, &value, val_color::Float, label, ": float", true);
+        } else if constexpr (std::is_same_v<T, const char *>) {
+            std::snprintf(label, sizeof(label), "%s\"%s\"", prefix, entry != nullptr ? entry : "");
+            dv_node(v, &value, val_color::String, label, ": string", true);
+        } else if constexpr (std::is_same_v<T, const structs::map *>) {
+            std::snprintf(label, sizeof(label), "%smap", prefix);
+            std::snprintf(suffix, sizeof(suffix), "keys: [0x%05X], values: [0x%05X]",
+                          file_offset(*v.doc, entry->keys.data), file_offset(*v.doc, entry->values.data));
+            dv_node(v, &value, val_color::Map, label, suffix, true);
+        }
+    }, value);
+}
+
+void dv_draw_values(value_view v, const disassembled_values_t &values) {
+    for (i32 i = 0; i < static_cast<i32>(values.size()); ++i) {
+        dv_draw_value(v, values[static_cast<u32>(i)], i);
+    }
+}
+
+void dv_map_extract(const disassembled_values_t &values, const structs::map *&header,
+                    const disassembled_value *&keys, const disassembled_value *&vals) {
+    header = nullptr;
+    keys = nullptr;
+    vals = nullptr;
+    for (const auto &child : values) {
+        if (const auto *m = std::get_if<const structs::map *>(&child)) {
+            header = *m;
+        } else if (const auto *dv = std::get_if<disassembled_value>(&child)) {
+            if (keys == nullptr) {
+                keys = dv;
+            } else {
+                vals = dv;
+            }
+        }
+    }
+}
+
+void dv_draw_map_table(value_view v, const disassembled_value &keys, const disassembled_value &vals, const void *id) {
+    ImGui::PushID(id);
+    constexpr ImGuiTableFlags table_flags =
+        ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg | ImGuiTableFlags_Resizable;
+    if (ImGui::BeginTable("##map", 2, table_flags)) {
+        ImGui::TableSetupColumn("Key", ImGuiTableColumnFlags_WidthFixed);
+        ImGui::TableSetupColumn("Value", ImGuiTableColumnFlags_WidthStretch);
+        ImGui::TableHeadersRow();
+
+        const std::size_t count = std::min(keys.m_values.size(), vals.m_values.size());
+        for (std::size_t i = 0; i < count; ++i) {
+            ImGui::TableNextRow();
+            ImGui::TableSetColumnIndex(0);
+            dv_draw_value(v, keys.m_values[i], -1);
+            ImGui::TableSetColumnIndex(1);
+            dv_draw_value(v, vals.m_values[i], -1);
+        }
+        ImGui::EndTable();
+    }
+    ImGui::PopID();
+}
+
+void dv_draw_map(value_view v, const disassembled_value &entry, const void *id, i32 index) {
+    char label[64];
+    char suffix[160];
+    char prefix[24];
+    dv_index_prefix(prefix, sizeof(prefix), index);
+
+    const structs::map *header = nullptr;
+    const disassembled_value *keys = nullptr;
+    const disassembled_value *vals = nullptr;
+    dv_map_extract(entry.m_values, header, keys, vals);
+
+    std::snprintf(label, sizeof(label), "%smap", prefix);
+    if (header != nullptr) {
+        std::snprintf(suffix, sizeof(suffix), "[0x%05X] keys: [0x%05X], values: [0x%05X]",
+                      static_cast<u32>(entry.m_offset),
+                      file_offset(*v.doc, header->keys.data), file_offset(*v.doc, header->values.data));
+    } else {
+        std::snprintf(suffix, sizeof(suffix), "[0x%05X]", static_cast<u32>(entry.m_offset));
+    }
+
+    const bool empty = keys == nullptr || vals == nullptr || keys->m_values.empty();
+    const bool open = dv_node(v, id, val_color::Map, label, suffix, empty);
+    if (!open || empty) {
+        return;
+    }
+
+    dv_draw_map_table(v, *keys, *vals, id);
+    dv_tree_pop(v);
+}
+
+void dv_draw_function_body(value_view v, const function_disassembly &func) {
+    const std::vector<function_disassembly_line> &lines = func.m_lines;
+
+    constexpr ImGuiTableFlags table_flags =
+        ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg | ImGuiTableFlags_Resizable | ImGuiTableFlags_SizingStretchProp;
+
+    ImFont *mono = qui::font_medium();
+    if (mono != nullptr) {
+        ImGui::PushFont(mono);
+    }
+
+    ImGui::SetNextItemOpen(true, ImGuiCond_Once);
+    if (dv_node(v, &func.m_lines, val_color::Group, "Instructions", nullptr, false)) {
+        if (ImGui::BeginTable("##instructions", 2, table_flags)) {
+            ImGui::TableSetupColumn("Instruction");
+            ImGui::TableSetupColumn("Comment");
+            ImGui::TableHeadersRow();
+
+            for (const function_disassembly_line &line : lines) {
+                ImGui::TableNextRow();
+                ImGui::TableSetColumnIndex(0);
+                ImGui::TextUnformatted(line.m_text.c_str());
+                ImGui::TableSetColumnIndex(1);
+                ImGui::TextColored(qui::color::retina_dark::TextDisabled, "%s", line.m_comment.c_str());
+            }
+            ImGui::EndTable();
+        }
+        dv_tree_pop(v);
+    }
+
+    const SymbolTable &symbols = func.m_stackFrame.m_symbolTable;
+    if (symbols.m_location.m_ptr != nullptr && !symbols.m_types.empty()) {
+        if (dv_node(v, &func.m_stackFrame, val_color::Group, "Symbol Table", nullptr, false)) {
+            if (ImGui::BeginTable("##symbols", 3, table_flags)) {
+                ImGui::TableSetupColumn("#", ImGuiTableColumnFlags_WidthFixed);
+                ImGui::TableSetupColumn("Offset", ImGuiTableColumnFlags_WidthFixed);
+                ImGui::TableSetupColumn("Value");
+                ImGui::TableHeadersRow();
+
+                for (u32 i = 0; i < symbols.m_types.size(); ++i) {
+                    const location value_location = symbols.m_location + static_cast<u64>(i) * 8;
+                    char value_buffer[256];
+                    value_buffer[0] = '\0';
+                    std::visit([&](auto &&type) {
+                        using T = std::decay_t<decltype(type)>;
+                        if constexpr (std::is_same_v<T, ast::primitive_type>) {
+                            switch (type.m_type) {
+                                case ast::primitive_kind::I32: std::snprintf(value_buffer, sizeof(value_buffer), "int: %d", value_location.get<i32>()); break;
+                                case ast::primitive_kind::I64: std::snprintf(value_buffer, sizeof(value_buffer), "int64: %lld", static_cast<long long>(value_location.get<i64>())); break;
+                                case ast::primitive_kind::U64: std::snprintf(value_buffer, sizeof(value_buffer), "uint64: %llu", static_cast<unsigned long long>(value_location.get<u64>())); break;
+                                case ast::primitive_kind::F32: std::snprintf(value_buffer, sizeof(value_buffer), "float: %f", static_cast<double>(value_location.get<f32>())); break;
+                                case ast::primitive_kind::STRING: std::snprintf(value_buffer, sizeof(value_buffer), "string: \"%s\"", value_location.get<const char *>()); break;
+                                case ast::primitive_kind::SID: std::snprintf(value_buffer, sizeof(value_buffer), "sid: %s", lookup_sid(*v.state->m_sidbase, *v.doc->m_file, value_location.get<sid64>()).c_str()); break;
+                                default: std::snprintf(value_buffer, sizeof(value_buffer), "unknown: %llu", static_cast<unsigned long long>(value_location.get<u64>())); break;
+                            }
+                        } else if constexpr (std::is_same_v<T, ast::function_type>) {
+                            std::snprintf(value_buffer, sizeof(value_buffer), "function: %s", lookup_sid(*v.state->m_sidbase, *v.doc->m_file, value_location.get<sid64>()).c_str());
+                        } else if constexpr (std::is_same_v<T, ast::ptr_type>) {
+                            std::snprintf(value_buffer, sizeof(value_buffer), "pointer: %s", lookup_sid(*v.state->m_sidbase, *v.doc->m_file, value_location.get<sid64>()).c_str());
+                        } else {
+                            std::snprintf(value_buffer, sizeof(value_buffer), "unknown: %llu", static_cast<unsigned long long>(value_location.get<u64>()));
+                        }
+                    }, static_cast<const ast::full_type::variant_type &>(symbols.m_types[i]));
+
+                    ImGui::TableNextRow();
+                    ImGui::TableSetColumnIndex(0);
+                    ImGui::Text("%04X", i);
+                    ImGui::TableSetColumnIndex(1);
+                    ImGui::TextColored(qui::color::retina_dark::TextDisabled, "0x%06X", file_offset(*v.doc, value_location.m_ptr));
+                    ImGui::TableSetColumnIndex(2);
+                    ImGui::TextUnformatted(value_buffer);
+                }
+                ImGui::EndTable();
+            }
+            dv_tree_pop(v);
+        }
+    }
+
+    if (mono != nullptr) {
+        ImGui::PopFont();
+    }
+}
+
+void dv_draw_function(value_view v, const function_disassembly &func, i32 index) {
+    char label[256];
+    std::snprintf(label, sizeof(label), "[%d] function %s", index, func.get_id().c_str());
+    const bool open = dv_node(v, &func, val_color::Function, label, nullptr, false);
+    if (open) {
+        ImGui::PushID(&func);
+        dv_draw_function_body(v, func);
+        ImGui::PopID();
+        dv_tree_pop(v);
+    }
+}
+
+void dv_draw_script_lambda(value_view v, const disassembled_value &entry, const void *id, i32 index) {
+    char label[64];
+    char suffix[64];
+    char prefix[24];
+    dv_index_prefix(prefix, sizeof(prefix), index);
+
+    const function_disassembly *func = nullptr;
+    for (const auto &child : entry.m_values) {
+        if (const auto *f = std::get_if<std::shared_ptr<function_disassembly>>(&child); f != nullptr && *f != nullptr) {
+            func = f->get();
+        }
+    }
+    if (func == nullptr && v.doc->m_disassembler != nullptr) {
+        func = v.doc->m_disassembler->get_function_at_offset(entry.m_offset);
+    }
+
+    std::snprintf(label, sizeof(label), "%sscript-lambda", prefix);
+    std::snprintf(suffix, sizeof(suffix), "[0x%05X]", static_cast<u32>(entry.m_offset));
+    const bool open = dv_node(v, id, val_color::Function, label, suffix, func == nullptr);
+    if (open && func != nullptr) {
+        ImGui::PushID(id);
+        dv_draw_function_body(v, *func);
+        ImGui::PopID();
+        dv_tree_pop(v);
+    }
+}
+
+void dv_draw_text_leaf(value_view v, const void *id, const ImVec4 &color, const std::string &text) {
+    std::string single_line = text;
+    const std::size_t newline = single_line.find('\n');
+    if (newline != std::string::npos) {
+        single_line.resize(newline);
+    }
+    dv_node(v, id, color, single_line.c_str(), nullptr, true);
+}
+
+void dv_draw_state_script(value_view v, const ast::state_script &script, i32 index) {
+    char label[256];
+    std::snprintf(label, sizeof(label), "[%d] state-script %s", index, script.m_name.c_str());
+    const bool open = dv_node(v, &script, val_color::StateScript, label, nullptr, false);
+    if (!open) {
+        return;
+    }
+    ImGui::PushID(&script);
+
+    if (!script.m_options.empty()) {
+        if (dv_node(v, &script.m_options, val_color::Group, "options", nullptr, false)) {
+            for (const ast::sid_identifier &option : script.m_options) {
+                dv_draw_text_leaf(v, &option, val_color::Sid, option.to_c_string());
+            }
+            dv_tree_pop(v);
+        }
+    }
+
+    if (!script.m_declarations.empty()) {
+        if (dv_node(v, &script.m_declarations, val_color::Group, "declarations", nullptr, false)) {
+            for (const ast::variable_declaration &declaration : script.m_declarations) {
+                dv_draw_text_leaf(v, &declaration, val_color::Struct, declaration.to_c_string());
+            }
+            dv_tree_pop(v);
+        }
+    }
+
+    for (const ast::state_script_state &ss_state : script.m_states) {
+        char state_label[256];
+        std::snprintf(state_label, sizeof(state_label), "state %s", ss_state.m_name.c_str());
+        if (dv_node(v, &ss_state, val_color::StateScript, state_label, nullptr, ss_state.m_blocks.empty()) && !ss_state.m_blocks.empty()) {
+            for (const ast::state_script_block &block : ss_state.m_blocks) {
+                const std::string block_name = block.block_type_to_string();
+                if (dv_node(v, &block, val_color::Group, block_name.c_str(), nullptr, block.m_tracks.empty()) && !block.m_tracks.empty()) {
+                    for (const ast::state_script_track &track : block.m_tracks) {
+                        char track_label[256];
+                        std::snprintf(track_label, sizeof(track_label), "track %s", track.m_name.c_str());
+                        if (dv_node(v, &track, val_color::Group, track_label, nullptr, track.m_lambdas.empty()) && !track.m_lambdas.empty()) {
+                            i32 lambda_index = 0;
+                            for (const ast::state_script_lambda &lambda : track.m_lambdas) {
+                                std::visit([&](auto &&fn) {
+                                    using T = std::decay_t<decltype(fn)>;
+                                    if constexpr (std::is_same_v<T, std::shared_ptr<function_disassembly>>) {
+                                        if (fn != nullptr) {
+                                            dv_draw_function(v, *fn, lambda_index);
+                                        }
+                                    } else {
+                                        dv_draw_text_leaf(v, &fn, val_color::Function, fn.to_c_string());
+                                    }
+                                }, lambda);
+                                ++lambda_index;
+                            }
+                            dv_tree_pop(v);
+                        }
+                    }
+                    dv_tree_pop(v);
+                }
+            }
+            dv_tree_pop(v);
+        }
+    }
+
+    ImGui::PopID();
+    dv_tree_pop(v);
+}
+
+void draw_entry_detail(app_state &state, document &doc) {
+    if (doc.m_entries == nullptr || state.m_sidbase == nullptr || doc.m_file == nullptr) {
+        qui::text_label("Not disassembled.");
+        return;
+    }
+    if (doc.m_selectedEntry < 0 || doc.m_selectedEntry >= static_cast<i32>(doc.m_entries->size())) {
+        ImGui::PushStyleColor(ImGuiCol_Text, qui::color::retina_dark::TextDisabled);
+        qui::text_label("Select an entry to inspect.");
+        ImGui::PopStyleColor();
+        return;
+    }
+
+    const disassembled_entry &entry = (*doc.m_entries)[static_cast<u32>(doc.m_selectedEntry)];
+    const std::string name = lookup_sid(*state.m_sidbase, *doc.m_file, entry.m_nameId);
+    const std::string type = lookup_sid(*state.m_sidbase, *doc.m_file, entry.m_typeId);
+
+    char suffix[256];
+    std::snprintf(suffix, sizeof(suffix), ": %s  [0x%05X]", type.c_str(), static_cast<u32>(entry.m_offset));
+
+    doc.m_expandRequest = doc.m_pendingExpand;
+    doc.m_pendingExpand = nullptr;
+    doc.m_forceOpenDepth = 0;
+    doc.m_forceStack.clear();
+
+    value_view v{&state, &doc};
+    ImGui::SetNextItemOpen(true, ImGuiCond_Once);
+    ImGui::PushID(doc.m_selectedEntry);
+    const bool entry_is_map = entry.m_typeId == SID("map") || entry.m_typeId == SID("map-32") || entry.m_typeId == SID("render-settings-map");
+    const bool open = dv_node(v, &entry, val_color::EntryName, name.c_str(), suffix, entry.m_values.empty());
+    if (open && !entry.m_values.empty()) {
+        if (entry_is_map) {
+            const structs::map *header = nullptr;
+            const disassembled_value *keys = nullptr;
+            const disassembled_value *vals = nullptr;
+            dv_map_extract(entry.m_values, header, keys, vals);
+            if (keys != nullptr && vals != nullptr && !keys->m_values.empty()) {
+                dv_draw_map_table(v, *keys, *vals, &entry);
+            }
+        } else {
+            dv_draw_values(v, entry.m_values);
+        }
+        dv_tree_pop(v);
+    }
+    ImGui::PopID();
+}
+
 void draw_document(app_state &state, document &doc) {
     const f32 avail_width = ImGui::GetContentRegionAvail().x;
     const f32 avail_height = ImGui::GetContentRegionAvail().y;
@@ -518,6 +1006,12 @@ void draw_document(app_state &state, document &doc) {
     ImGui::SameLine(0.0F, 0.0F);
 
     ImGui::BeginChild("##dconstruct_entry_view", ImVec2(0.0F, 0.0F), ImGuiChildFlags_Borders);
+    ImVec2 detail_size;
+    if (begin_labeled_table_frame("Disassembly", detail_size)) {
+        ImGui::BeginChild("##dconstruct_entry_detail", detail_size);
+        draw_entry_detail(state, doc);
+        ImGui::EndChild();
+    }
     ImGui::EndChild();
 }
 
@@ -626,6 +1120,11 @@ int main() {
 
     while (glfwWindowShouldClose(window) == GLFW_FALSE) {
         glfwPollEvents();
+
+        if (glfwGetWindowAttrib(window, GLFW_ICONIFIED) != 0) {
+            glfwWaitEvents();
+            continue;
+        }
 
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();

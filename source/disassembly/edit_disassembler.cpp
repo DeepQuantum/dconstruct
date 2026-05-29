@@ -135,12 +135,25 @@ namespace dconstruct {
     }
 
     void EditDisassembler::output_edit_file() {
-        const std::filesystem::path edited_file_path = m_currentFile->m_path.parent_path() / (m_currentFile->m_path.stem().string() + "_edited.bin");
-        std::cout << "creating edited file: " << edited_file_path << '\n';
+        const std::filesystem::path& file_path = m_currentFile->m_path;
+        const std::size_t expected_size = m_currentFile->m_size;
+        std::cout << "writing edits to original file: " << file_path << '\n';
+
         auto unmapped_bytes = m_currentFile->get_unmapped();
-        FILE *out = fopen(edited_file_path.string().c_str(), "wb");
-        fwrite(unmapped_bytes.get(), sizeof(unmapped_bytes[0]), m_currentFile->m_size, out);
+        FILE *out = fopen(file_path.string().c_str(), "wb");
+        if (out == nullptr) {
+            std::cout << "error: could not open file for writing: " << file_path << '\n';
+            return;
+        }
+        const std::size_t written = fwrite(unmapped_bytes.get(), sizeof(unmapped_bytes[0]), expected_size, out);
         fclose(out);
+
+        std::error_code ec;
+        const std::uintmax_t final_size = std::filesystem::file_size(file_path, ec);
+        if (written != expected_size || ec || final_size != expected_size) {
+            std::cout << "error: edited file size (" << (ec ? 0 : final_size) << " bytes) does not match original size ("
+                << expected_size << " bytes)\n";
+        }
     }
 }
 

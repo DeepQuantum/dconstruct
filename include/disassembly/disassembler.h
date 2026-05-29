@@ -62,6 +62,8 @@ namespace dconstruct {
 
         [[nodiscard]] std::vector<const function_disassembly*> get_named_functions() const noexcept;
 
+        [[nodiscard]] const function_disassembly* get_function_at_offset(const u64 offset) const noexcept;
+
         [[nodiscard]] bool has_state_script() const noexcept {
             return m_stateScript.has_value();
         }
