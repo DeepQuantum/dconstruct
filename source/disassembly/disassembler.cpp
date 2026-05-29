@@ -450,10 +450,16 @@ std::string Disassembler::disassembly_to_string(const std::vector<disassembled_e
                 }
             }
         } else if (type_id == SID("map") || type_id == SID("map-32")) {
+            bool seen_keys = false;
             for (const auto& value : values) {
                 if (const auto* map = std::get_if<const structs::map*>(&value); map != nullptr && *map != nullptr) {
                     out.append(indent + indent_per_level, ' ');
-                    append_format("keys: [0x%05X], values: [0x%05X]\n\n", get_offset((*map)->keys.data), get_offset((*map)->values.data));
+                    append_format("keys: [0x%05X], values: [0x%05X]\n", get_offset((*map)->keys.data), get_offset((*map)->values.data));
+                } else {
+                    out.append(indent + indent_per_level, ' ');
+                    out += seen_keys ? "values " : "keys ";
+                    seen_keys = true;
+                    append_value(value, indent + indent_per_level);
                 }
             }
         } else {
@@ -589,6 +595,22 @@ disassembled_value Disassembler::insert_struct(const structs::unmapped *struct_p
         case SID("map-32"): {
             const structs::map *map = reinterpret_cast<const structs::map*>(&struct_ptr->m_data);
             value.m_values.emplace_back(map);
+            if (map->size > 0 && map->keys.data != nullptr && map->values.data != nullptr) {
+                const auto build_entries = [this](const location data_start, const u32 count) {
+                    disassembled_value entries{
+                        .m_typeId = SID("array"),
+                        .m_offset = get_offset(data_start),
+                        .m_values = {},
+                        .m_arraySize = std::nullopt,
+                    };
+                    for (u32 i = 0; i < count; ++i) {
+                        insert_struct_or_arraylike(data_start + i * sizeof(u64), entries.m_values);
+                    }
+                    return entries;
+                };
+                value.m_values.emplace_back(build_entries(location(map->keys.data), map->size));
+                value.m_values.emplace_back(build_entries(location(map->values.data), map->size));
+            }
             break;
         }
         default: {
