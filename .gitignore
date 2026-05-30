@@ -110,3 +110,4 @@ include/clang*
 **/__pycache__
 test/fixtures/dcpl/**
 game_dumps/**
+imgui.ini

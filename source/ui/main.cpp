@@ -1,17 +1,23 @@
 #include <algorithm>
+#include <cmath>
 #include <cstddef>
 #include <cstdio>
 #include <filesystem>
 #include <memory>
+#include <span>
+#include <sstream>
 #include <string>
+#include <unordered_map>
 #include <vector>
 
 #include "base.h"
 #include "binaryfile.h"
 #include "sidbase.h"
 #include "disassembly/disassembler.h"
+#include "decompilation/decomp_function.h"
 
 #include <qui.h>
+#include <qui/code_window_ctre.hpp>
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
@@ -48,6 +54,8 @@ struct document {
     const void *m_pendingExpand = nullptr;
     i32 m_forceOpenDepth = 0;
     std::vector<char> m_forceStack;
+    std::unordered_map<const function_disassembly *, std::string> m_decompiled;
+    std::unordered_map<const function_disassembly *, bool> m_lambdaViewDcpl;
 };
 
 struct drag_state {
@@ -177,10 +185,32 @@ f32 measure_entry_list_width(const app_state &state, const document &doc) {
     return max_width;
 }
 
+void decompile_document(document &doc) {
+    doc.m_decompiled.clear();
+    doc.m_lambdaViewDcpl.clear();
+    if (doc.m_disassembler == nullptr || doc.m_file == nullptr) {
+        return;
+    }
+
+    for (const function_disassembly *func : doc.m_disassembler->get_all_functions()) {
+        try {
+            ast::function_definition def =
+                dcompiler::decomp_function{*func, *doc.m_file, ControlFlowGraph::build(*func)}.decompile(true);
+            std::ostringstream oss;
+            oss << def;
+            doc.m_decompiled.emplace(func, std::move(oss).str());
+        } catch (const std::exception &) {
+        } catch (...) {
+        }
+    }
+}
+
 void disassemble_document(app_state &state, document &doc) {
     doc.m_entries = nullptr;
     doc.m_selectedEntry = -1;
     doc.m_disassembler.reset();
+    doc.m_decompiled.clear();
+    doc.m_lambdaViewDcpl.clear();
 
     if (state.m_sidbase == nullptr || doc.m_file == nullptr) {
         return;
@@ -189,6 +219,7 @@ void disassemble_document(app_state &state, document &doc) {
     doc.m_disassembler = std::make_unique<Disassembler>(doc.m_file.get(), state.m_sidbase.get());
     doc.m_disassembler->disassemble();
     doc.m_entries = &doc.m_disassembler->get_disassembled_entries();
+    decompile_document(doc);
 
     const ImGuiStyle &style = ImGui::GetStyle();
     doc.m_listWidth = measure_entry_list_width(state, doc) + style.WindowPadding.x * 2.0F + style.ScrollbarSize + 8.0F;
@@ -328,6 +359,24 @@ f32 draw_title_menu_bar(app_state &state, GLFWwindow *window) {
         ImGui::PopStyleColor();
 
         ImGui::EndMenuBar();
+    }
+
+    if (const document *doc = active_document(state); doc != nullptr && !doc->m_name.empty()) {
+        ImFont *title_font = qui::font_medium();
+        if (title_font != nullptr) {
+            ImGui::PushFont(title_font);
+        }
+        const ImVec2 title_size = ImGui::CalcTextSize(doc->m_name.c_str());
+        const f32 title_font_size = ImGui::GetFontSize();
+        if (title_font != nullptr) {
+            ImGui::PopFont();
+        }
+        const ImVec2 title_pos(
+            bar_min.x + (bar_max.x - bar_min.x - title_size.x) * 0.5F,
+            bar_min.y + (height - title_size.y) * 0.5F
+        );
+        draw_list->AddText(title_font, title_font_size, title_pos,
+            ImGui::ColorConvertFloat4ToU32(qui::color::retina_dark::Text), doc->m_name.c_str());
     }
 
     const ImVec2 button_size(WINDOW_BUTTON_WIDTH, height);
@@ -506,6 +555,30 @@ inline const ImVec4 EntryName = qui::color::retina_dark::AccentYellow;
 inline const ImVec4 Group = qui::color::rgba(0xB0, 0xB0, 0xB8);
 } // namespace val_color
 
+// dcpl syntax-highlighting rules for the code window. Pattern groups and their
+// order are copied from dcpl-lint/syntaxes/dcpl.tmLanguage.json; the widget
+// itself is language-agnostic and only consumes this collection.
+std::span<const qui::code::rule> dcpl_rules() {
+    using qui::code::ctre_rule;
+    using qui::code::to_u32;
+    using qui::color::rgba;
+    static const std::vector<qui::code::rule> rules = {
+        ctre_rule<R"(//.*)">(to_u32(rgba(0x6A, 0x73, 0x80))),
+        // ctre_rule<R"RE(\b(if|else|while|for|return|foreach|match|state|block|event|track|statescript|options|declarations|using|as|far|near|not|and|or|in|lambda|start|end|update|null|struct|enum)\b)RE">(to_u32(rgba(0xC6, 0x78, 0xDD))),
+        // ctre_rule<R"(\b((var|arg)_\d+)\b)">(to_u32(rgba(0xE0, 0x6C, 0x75))),
+        // ctre_rule<R"(\b(i|j|k|l)\b)">(to_u32(rgba(0xE0, 0x6C, 0x75))),
+        // ctre_rule<R"RE("(\\.|[^"\\])*")RE">(to_u32(rgba(0x98, 0xC3, 0x79))),
+        // ctre_rule<R"RE((?:--|\b)[A-Za-z0-9_/@>#\-]+\??(?=\s*\())RE">(to_u32(rgba(0x61, 0xAF, 0xEF))),
+        // ctre_rule<R"RE(#[A-Z0-9]{16}(?=\())RE">(to_u32(rgba(0x61, 0xAF, 0xEF))),
+        // ctre_rule<R"(>>|=>|\$)">(to_u32(rgba(0x61, 0xAF, 0xEF))),
+        // ctre_rule<R"(\b(\d+)\b)">(to_u32(rgba(0xD1, 0x9A, 0x66))),
+        // ctre_rule<R"RE(\b(u0|u8|i8|u16|i16|u32|i32|u64|i64|f32|f64|bool|string|timer|quaternion|bound-frame|vector|actor|cache|ir-pack|level-id|level-name|lut-table|package|particle-module|render-settings|sound-bank|symbol|vox-character)\b\??)RE">(to_u32(rgba(0xE5, 0xC0, 0x7B))),
+        // ctre_rule<R"RE((\*(?!var)|\b)([\w/*\-]{3,}\??(?![\w\-])))RE">(to_u32(rgba(0x56, 0xB6, 0xC2))),
+        // ctre_rule<R"(#[A-Z0-9]{16})">(to_u32(rgba(0x56, 0xB6, 0xC2))),
+    };
+    return rules;
+}
+
 struct value_view {
     app_state *state;
     document *doc;
@@ -560,6 +633,7 @@ void dv_draw_values(value_view v, const disassembled_values_t &values);
 void dv_draw_value(value_view v, const disassembled_values_t::value_type &value, i32 index);
 void dv_draw_function(value_view v, const function_disassembly &func, i32 index);
 void dv_draw_function_body(value_view v, const function_disassembly &func);
+void dv_function_switch_and_body(value_view v, const function_disassembly &func, const void *id, bool open);
 void dv_draw_state_script(value_view v, const ast::state_script &script, i32 index);
 void dv_draw_map(value_view v, const disassembled_value &entry, const void *id, i32 index);
 void dv_draw_script_lambda(value_view v, const disassembled_value &entry, const void *id, i32 index);
@@ -819,12 +893,115 @@ void dv_draw_function(value_view v, const function_disassembly &func, i32 index)
     char label[256];
     std::snprintf(label, sizeof(label), "[%d] function %s", index, func.get_id().c_str());
     const bool open = dv_node(v, &func, val_color::Function, label, nullptr, false);
-    if (open) {
-        ImGui::PushID(&func);
-        dv_draw_function_body(v, func);
-        ImGui::PopID();
-        dv_tree_pop(v);
+    dv_function_switch_and_body(v, func, &func, open);
+}
+
+ImVec2 view_switch_size() {
+    ImFont *font = qui::font_semi_bold();
+    if (font != nullptr) {
+        ImGui::PushFont(font);
     }
+    const f32 wa = ImGui::CalcTextSize("ASM").x;
+    const f32 wb = ImGui::CalcTextSize("DCPL").x;
+    if (font != nullptr) {
+        ImGui::PopFont();
+    }
+    const f32 seg = std::max(wa, wb) + 16.0F;
+    return ImVec2(seg * 2.0F, ImGui::GetFrameHeight() * 0.82F);
+}
+
+bool draw_view_switch(const char *str_id, bool *dcpl, const ImVec2 &size) {
+    ImGui::PushID(str_id);
+    const ImVec2 pos = ImGui::GetCursorScreenPos();
+    ImGui::InvisibleButton("##switch", size);
+    bool changed = false;
+    if (ImGui::IsItemClicked()) {
+        *dcpl = !*dcpl;
+        changed = true;
+    }
+    const bool hovered = ImGui::IsItemHovered();
+    if (hovered) {
+        ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
+    }
+
+    ImGuiStorage *storage = ImGui::GetStateStorage();
+    const ImGuiID key = ImGui::GetID("##t");
+    const f32 target = *dcpl ? 1.0F : 0.0F;
+    f32 t = storage->GetFloat(key, target);
+    t += (target - t) * std::clamp(ImGui::GetIO().DeltaTime * 14.0F, 0.0F, 1.0F);
+    if (std::fabs(target - t) < 0.001F) {
+        t = target;
+    }
+    storage->SetFloat(key, t);
+
+    ImDrawList *draw_list = ImGui::GetWindowDrawList();
+    const f32 seg = size.x * 0.5F;
+    const f32 rounding = size.y * 0.5F;
+    const ImVec2 max(pos.x + size.x, pos.y + size.y);
+
+    draw_list->AddRectFilled(pos, max, ImGui::ColorConvertFloat4ToU32(qui::color::retina_dark::WindowBackground), rounding);
+    draw_list->AddRect(pos, max, ImGui::ColorConvertFloat4ToU32(qui::color::retina_dark::Border), rounding);
+
+    const ImVec2 knob_min(pos.x + t * seg, pos.y);
+    const ImVec2 knob_max(knob_min.x + seg, pos.y + size.y);
+    ImVec4 accent = qui::color::retina_dark::Highlight;
+    if (!hovered) {
+        accent.w = 0.85F;
+    }
+    draw_list->AddRectFilled(knob_min, knob_max, ImGui::ColorConvertFloat4ToU32(accent), rounding);
+
+    ImFont *font = qui::font_semi_bold();
+    if (font != nullptr) {
+        ImGui::PushFont(font);
+    }
+    const ImU32 active = ImGui::ColorConvertFloat4ToU32(qui::color::retina_dark::WindowBackground);
+    const ImU32 inactive = ImGui::ColorConvertFloat4ToU32(qui::color::retina_dark::TextDisabled);
+    const char *labels[2] = {"ASM", "DCPL"};
+    for (int i = 0; i < 2; ++i) {
+        const ImVec2 text_size = ImGui::CalcTextSize(labels[i]);
+        const f32 text_x = pos.x + seg * static_cast<f32>(i) + (seg - text_size.x) * 0.5F;
+        const f32 text_y = pos.y + (size.y - text_size.y) * 0.5F;
+        const bool is_active = (i == 1) == *dcpl;
+        draw_list->AddText(ImVec2(text_x, text_y), is_active ? active : inactive, labels[i]);
+    }
+    if (font != nullptr) {
+        ImGui::PopFont();
+    }
+
+    ImGui::PopID();
+    return changed;
+}
+
+void dv_function_switch_and_body(value_view v, const function_disassembly &func, const void *id, bool open) {
+    bool &show_dcpl = v.doc->m_lambdaViewDcpl[&func];
+
+    const ImVec2 sw_size = view_switch_size();
+    ImGui::SameLine();
+    ImGui::SetCursorPosX(std::max(ImGui::GetCursorPosX(), ImGui::GetContentRegionMax().x - sw_size.x));
+    ImGui::PushID(id);
+    draw_view_switch("##view_switch", &show_dcpl, sw_size);
+    ImGui::PopID();
+
+    if (!open) {
+        return;
+    }
+
+    ImGui::PushID(id);
+    if (show_dcpl) {
+        const auto it = v.doc->m_decompiled.find(&func);
+        if (it != v.doc->m_decompiled.end()) {
+            const std::string &text = it->second;
+            qui::code::code_window("##dcpl_view", text, dcpl_rules());
+        } else {
+            ImGui::PushStyleColor(ImGuiCol_Text, qui::color::retina_dark::TextDisabled);
+            qui::text_label("Decompilation unavailable for this function.");
+            ImGui::PopStyleColor();
+        }
+    } else {
+        dv_draw_function_body(v, func);
+    }
+    ImGui::PopID();
+    dv_tree_pop(v);
 }
 
 void dv_draw_script_lambda(value_view v, const disassembled_value &entry, const void *id, i32 index) {
@@ -846,12 +1023,11 @@ void dv_draw_script_lambda(value_view v, const disassembled_value &entry, const 
     std::snprintf(label, sizeof(label), "%sscript-lambda", prefix);
     std::snprintf(suffix, sizeof(suffix), "[0x%05X]", static_cast<u32>(entry.m_offset));
     const bool open = dv_node(v, id, val_color::Function, label, suffix, func == nullptr);
-    if (open && func != nullptr) {
-        ImGui::PushID(id);
-        dv_draw_function_body(v, *func);
-        ImGui::PopID();
-        dv_tree_pop(v);
+
+    if (func == nullptr) {
+        return;
     }
+    dv_function_switch_and_body(v, *func, id, open);
 }
 
 void dv_draw_text_leaf(value_view v, const void *id, const ImVec4 &color, const std::string &text) {
