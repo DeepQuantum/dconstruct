@@ -1,0 +1,17 @@
+struct #gas-mask-setup {
+    symbol on_gesture;
+    symbol off_gesture;
+    symbol on_gas_mask;
+    symbol idle_gas_mask;
+    symbol off_gas_mask;
+    symbol gas_mask_name;
+    symbol target;
+    i32 unknown0;
+    i32 unknown1;
+    symbol futz;
+};
+
+
+var_map {
+    anim-gas-mask-impl@internal-put-on-gas-mask@var_1 = #gas-mask-setup*;
+}

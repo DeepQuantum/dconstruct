@@ -36,6 +36,8 @@ namespace dconstruct {
 	using sid64_literal = std::pair<sid64, std::string>;
 	using sid32_literal = std::pair<sid32, std::string>;
 
+	using error_msg = std::optional<std::string>;
+
 	using reg_idx = u8;
 	using node_id = u16;
 	using istr_line = u16;

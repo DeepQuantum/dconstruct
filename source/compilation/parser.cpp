@@ -261,9 +261,13 @@ template<typename... Args> requires (std::same_as<Args, token_type> && ...)
 }
 
 [[nodiscard]] std::optional<ast::struct_type> Parser::make_struct_type() {
-    const token* struct_name = consume(token_type::IDENTIFIER, "expected name after struct keyword");
-    if (!struct_name) {
-        return std::nullopt;
+    std::string struct_name;
+    if (match(token_type::IDENTIFIER)) {
+        struct_name = previous().m_lexeme;
+    } else if (match(token_type::SID)) {
+        struct_name = previous().m_lexeme.substr(1, peek().m_lexeme.size() - 2);
+    } else {
+        m_errors.emplace_back(previous(), "expected name after struct keyword");
     }
 
     if (!consume(token_type::LEFT_BRACE, "expected '{'")) {
@@ -271,7 +275,7 @@ template<typename... Args> requires (std::same_as<Args, token_type> && ...)
     }
 
     ast::struct_type struct_t;
-    struct_t.m_name = struct_name->m_lexeme;
+    struct_t.m_name = std::move(struct_name);
 
     while (!check(token_type::RIGHT_BRACE) && !is_at_end()) {
         std::unique_ptr<ast::variable_declaration> decl = make_var_declaration();

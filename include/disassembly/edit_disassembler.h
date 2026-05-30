@@ -31,13 +31,12 @@ namespace dconstruct {
         }
         ~EditDisassembler() override = default;
 
-        void apply_file_edits() noexcept;
-        void apply_edit(const u64 offset, const u32 member_index, const BinaryFileEdit& value) noexcept;
+        error_msg apply_file_edits() noexcept;
+        error_msg apply_edit(const u64 offset, const u32 member_index, const BinaryFileEdit& value) noexcept;
         [[nodiscard]] BinaryFileEdit get_edit_value_from_string(const std::string& str_value) const noexcept;
+        error_msg write_edited_file();
 
     private:
         std::vector<std::string> m_edits;
-
-        void output_edit_file();
     };
 }

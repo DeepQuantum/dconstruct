@@ -196,7 +196,9 @@ void decomp_file(
 
     if (game != dconstruct::game_type::UC4 && !edits.empty()) {
         dconstruct::EditDisassembler ed(&file, &base, edits, game);
-        ed.apply_file_edits();
+        if (const dconstruct::error_msg err = ed.apply_file_edits(); err.has_value()) {
+            std::cerr << *err << "\n";
+        }
     }
 
     dconstruct::Disassembler disassembler(&file, &base, game);
@@ -265,7 +267,9 @@ void disasm_file(
     
     if (!edits.empty() && game != dconstruct::game_type::UC4) {
         dconstruct::EditDisassembler ed(&file, &base, edits, game);
-        ed.apply_file_edits();
+        if (const dconstruct::error_msg err = ed.apply_file_edits(); err.has_value()) {
+            std::cerr << *err << "\n";
+        }
     }
 
     dconstruct::Disassembler disassembler(&file, &base, game);

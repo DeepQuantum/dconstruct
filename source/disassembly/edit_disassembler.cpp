@@ -42,7 +42,7 @@ namespace dconstruct {
         }
     }
 
-    void EditDisassembler::apply_edit(const u64 struct_offset, const u32 member_index, const BinaryFileEdit& value) noexcept {
+    error_msg EditDisassembler::apply_edit(const u64 struct_offset, const u32 member_index, const BinaryFileEdit& value) noexcept {
         const location struct_member_start = location(m_currentFile->m_bytes.get()) + struct_offset;
         u32 member_location = 0;
         u32 last_member_size = 0;
@@ -80,8 +80,8 @@ namespace dconstruct {
                     *reinterpret_cast<sid64*>(const_cast<std::byte*>(edit_location.m_ptr)) = new_sid;
                 }
                 else {
-                    std::cout << "warning: the sid '" << value.string << "' does not exist within the sidbase, so the edit will not be applied. " \
-                        "if this is intentional, please use the numerical hash instead (#" << std::hex << std::setfill('0') << std::setw(16) << ").";
+                    return std::format("the sid '{}' does not exist within the sidbase, so the edit will not be applied. " \
+                        "if this is intentional, please use the numerical hash instead (#{:016X}).", *value.string, new_sid);
                 }
                 break;
             }
@@ -98,9 +98,10 @@ namespace dconstruct {
                 break;
             }
         }
+        return std::nullopt;
     }
 
-    void EditDisassembler::apply_file_edits() noexcept {
+    error_msg EditDisassembler::apply_file_edits() noexcept {
         bool applied_at_least_one = false;
         u16 edit_index = 0;
         for (const auto& edit_str : m_edits) {
@@ -108,15 +109,13 @@ namespace dconstruct {
             const u64 equal_offset = edit_str.rfind('=');
             const u64 left_sqbr_offset = edit_str.rfind('[');
             if (equal_offset == std::string::npos || left_sqbr_offset == std::string::npos) {
-                std::cout << "error: malformed input in edit " << edit_index << ", not applying\n";
-                continue;
+                return std::format("error: malformed input in edit {}, not applying\n", edit_index);
             }
 
             const u64 struct_location = std::stoi(edit_str.substr(0, left_sqbr_offset), nullptr, 0);
             const u32 right_sqbr_offset = edit_str.find(']', left_sqbr_offset);
             if (right_sqbr_offset == std::string::npos) {
-                std::cout << "error: malformed input in edit " << edit_index << ", not applying\n";
-                continue;
+                return std::format("error: malformed input in edit {}, not applying\n", edit_index);
             }
 
             const std::string member_string = edit_str.substr(left_sqbr_offset + 1, right_sqbr_offset - left_sqbr_offset - 1);
@@ -126,15 +125,18 @@ namespace dconstruct {
 
             const BinaryFileEdit edit = get_edit_value_from_string(str_value);
 
-            apply_edit(struct_location, member_index, edit);
+            if (const error_msg err = apply_edit(struct_location, member_index, edit); err.has_value()) {
+                return err;
+            }
             applied_at_least_one = true;
         }
         if (applied_at_least_one) {
-            output_edit_file();
+            return write_edited_file();
         }
+        return std::nullopt;
     }
 
-    void EditDisassembler::output_edit_file() {
+    error_msg EditDisassembler::write_edited_file() {
         const std::filesystem::path& file_path = m_currentFile->m_path;
         const std::size_t expected_size = m_currentFile->m_size;
         std::cout << "writing edits to original file: " << file_path << '\n';
@@ -142,8 +144,7 @@ namespace dconstruct {
         auto unmapped_bytes = m_currentFile->get_unmapped();
         FILE *out = fopen(file_path.string().c_str(), "wb");
         if (out == nullptr) {
-            std::cout << "error: could not open file for writing: " << file_path << '\n';
-            return;
+            return std::format("error: could not open file for writing: {}\n", file_path.string());
         }
         const std::size_t written = fwrite(unmapped_bytes.get(), sizeof(unmapped_bytes[0]), expected_size, out);
         fclose(out);
@@ -151,9 +152,9 @@ namespace dconstruct {
         std::error_code ec;
         const std::uintmax_t final_size = std::filesystem::file_size(file_path, ec);
         if (written != expected_size || ec || final_size != expected_size) {
-            std::cout << "error: edited file size (" << (ec ? 0 : final_size) << " bytes) does not match original size ("
-                << expected_size << " bytes)\n";
+            return std::format("error: edited file size ({} bytes) does not match original size ({} bytes)\n", ec ? 0 : final_size, expected_size);
         }
+        return std::nullopt;
     }
 }
 

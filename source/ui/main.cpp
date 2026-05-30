@@ -1,9 +1,13 @@
 #include <algorithm>
+#include <chrono>
 #include <cmath>
 #include <cstddef>
 #include <cstdio>
+#include <cstring>
 #include <filesystem>
+#include <fstream>
 #include <memory>
+#include <print>
 #include <span>
 #include <sstream>
 #include <string>
@@ -14,10 +18,12 @@
 #include "binaryfile.h"
 #include "sidbase.h"
 #include "disassembly/disassembler.h"
+#include "disassembly/edit_disassembler.h"
 #include "decompilation/decomp_function.h"
 
 #include <qui.h>
 #include <qui/code_window_ctre.hpp>
+#include <imgui_stdlib.h>
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
@@ -42,9 +48,27 @@ constexpr f32 ENTRY_CELL_LEFT_PADDING = 4.0F;
 constexpr char DONATE_URL[] = "https://ko-fi.com/deepquantum";
 constexpr wchar_t PREVIOUS_WNDPROC_PROP[] = L"dconstruct.previous_wndproc";
 
+enum class edit_kind { Int, Float, Sid };
+
+struct pending_edit {
+    u32 m_offset = 0;
+    edit_kind m_kind = edit_kind::Int;
+    std::string m_text;
+};
+
+struct edit_record {
+    u32 m_offset = 0;
+    edit_kind m_kind = edit_kind::Int;
+    std::vector<std::byte> m_oldBytes;
+    std::vector<std::byte> m_newBytes;
+    std::string m_oldText;
+    std::string m_newText;
+};
+
 struct document {
     std::unique_ptr<BinaryFile> m_file;
     std::unique_ptr<Disassembler> m_disassembler;
+    std::unique_ptr<EditDisassembler> m_editor;
     const std::vector<disassembled_entry>* m_entries = nullptr;
     std::string m_path;
     std::string m_name;
@@ -56,7 +80,23 @@ struct document {
     std::vector<char> m_forceStack;
     std::unordered_map<const function_disassembly *, std::string> m_decompiled;
     std::unordered_map<const function_disassembly *, bool> m_lambdaViewDcpl;
+    bool m_dirty = false;
+    const void *m_editingValue = nullptr;
+    bool m_editFocus = false;
+    std::string m_editBuffer;
+    std::vector<pending_edit> m_pendingEdits;
+    std::vector<edit_record> m_undoStack;
+    std::vector<edit_record> m_redoStack;
+    std::size_t m_savedDepth = 0;
 };
+
+template <typename... Args>
+void log_event(std::format_string<Args...> fmt, Args &&...args) {
+    static std::ofstream log_file("dconstruct.log", std::ios::app);
+    const auto now = std::chrono::floor<std::chrono::seconds>(std::chrono::system_clock::now());
+    std::println(log_file, "[{:%Y-%m-%d %H:%M:%S}] {}", now, std::format(fmt, std::forward<Args>(args)...));
+    log_file.flush();
+}
 
 struct drag_state {
     bool m_active = false;
@@ -73,6 +113,7 @@ struct app_state {
     i32 m_pendingSelect = -1;
     std::string m_loadError;
     drag_state m_drag;
+    GLFWwindow *m_window = nullptr;
 };
 
 std::string lookup_sid(const SIDBase &sidbase, const BinaryFile &file, const sid64 hash) {
@@ -209,6 +250,8 @@ void disassemble_document(app_state &state, document &doc) {
     doc.m_entries = nullptr;
     doc.m_selectedEntry = -1;
     doc.m_disassembler.reset();
+    doc.m_editor.reset();
+    doc.m_editingValue = nullptr;
     doc.m_decompiled.clear();
     doc.m_lambdaViewDcpl.clear();
 
@@ -219,6 +262,7 @@ void disassemble_document(app_state &state, document &doc) {
     doc.m_disassembler = std::make_unique<Disassembler>(doc.m_file.get(), state.m_sidbase.get());
     doc.m_disassembler->disassemble();
     doc.m_entries = &doc.m_disassembler->get_disassembled_entries();
+    doc.m_editor = std::make_unique<EditDisassembler>(doc.m_file.get(), state.m_sidbase.get(), std::vector<std::string>{});
     decompile_document(doc);
 
     const ImGuiStyle &style = ImGui::GetStyle();
@@ -261,6 +305,7 @@ void load_bin_file(app_state &state, const std::string &path) {
     state.m_activeDocument = static_cast<i32>(state.m_documents.size()) - 1;
     state.m_pendingSelect = state.m_activeDocument;
     disassemble_document(state, state.m_documents.back());
+    log_event("Loaded file: {}", path);
 }
 
 void load_sidbase(app_state &state, const std::string &path) {
@@ -271,10 +316,17 @@ void load_sidbase(app_state &state, const std::string &path) {
     }
 
     state.m_sidbase = std::make_unique<SIDBase>(std::move(*sidbase_res));
+    std::error_code ec;
+    const std::uintmax_t size = std::filesystem::file_size(path, ec);
+    log_event("Loaded sidbase: {} ({} bytes)", path, ec ? 0 : size);
     for (document &doc : state.m_documents) {
         disassemble_document(state, doc);
     }
 }
+
+void save_active_document(app_state &state);
+void undo_active_document(app_state &state);
+void redo_active_document(app_state &state);
 
 f32 draw_title_menu_bar(app_state &state, GLFWwindow *window) {
     const ImGuiViewport *viewport = ImGui::GetMainViewport();
@@ -342,8 +394,28 @@ f32 draw_title_menu_bar(app_state &state, GLFWwindow *window) {
                 }
             }
             ImGui::Separator();
+            {
+                document *save_doc = active_document(state);
+                const std::string save_label = save_doc != nullptr ? "Save " + save_doc->m_name : std::string("Save");
+                if (ImGui::MenuItem(save_label.c_str(), "Ctrl+S", false, save_doc != nullptr && save_doc->m_dirty)) {
+                    save_active_document(state);
+                }
+            }
+            ImGui::Separator();
             if (ImGui::MenuItem("Exit")) {
                 glfwSetWindowShouldClose(window, GLFW_TRUE);
+            }
+            ImGui::EndMenu();
+        }
+        if (ImGui::BeginMenu("Edit")) {
+            const document *edit_doc = active_document(state);
+            const bool can_undo = edit_doc != nullptr && !edit_doc->m_undoStack.empty();
+            const bool can_redo = edit_doc != nullptr && !edit_doc->m_redoStack.empty();
+            if (ImGui::MenuItem("Undo", "Ctrl+Z", false, can_undo)) {
+                undo_active_document(state);
+            }
+            if (ImGui::MenuItem("Redo", "Ctrl+Y", false, can_redo)) {
+                redo_active_document(state);
             }
             ImGui::EndMenu();
         }
@@ -362,11 +434,12 @@ f32 draw_title_menu_bar(app_state &state, GLFWwindow *window) {
     }
 
     if (const document *doc = active_document(state); doc != nullptr && !doc->m_name.empty()) {
+        const std::string title = doc->m_dirty ? doc->m_name + " \xE2\x97\x8F" : doc->m_name;
         ImFont *title_font = qui::font_medium();
         if (title_font != nullptr) {
             ImGui::PushFont(title_font);
         }
-        const ImVec2 title_size = ImGui::CalcTextSize(doc->m_name.c_str());
+        const ImVec2 title_size = ImGui::CalcTextSize(title.c_str());
         const f32 title_font_size = ImGui::GetFontSize();
         if (title_font != nullptr) {
             ImGui::PopFont();
@@ -376,7 +449,7 @@ f32 draw_title_menu_bar(app_state &state, GLFWwindow *window) {
             bar_min.y + (height - title_size.y) * 0.5F
         );
         draw_list->AddText(title_font, title_font_size, title_pos,
-            ImGui::ColorConvertFloat4ToU32(qui::color::retina_dark::Text), doc->m_name.c_str());
+            ImGui::ColorConvertFloat4ToU32(qui::color::retina_dark::Text), title.c_str());
     }
 
     const ImVec2 button_size(WINDOW_BUTTON_WIDTH, height);
@@ -497,7 +570,12 @@ void draw_entry_list(app_state &state, document &doc) {
     if (ImGui::BeginTable("##dconstruct_entries", 2, table_flags, table_size)) {
         ImGui::TableSetupColumn("Entry Name");
         ImGui::TableSetupColumn("Type Name");
-        ImGui::TableHeadersRow();
+        ImGui::TableNextRow(ImGuiTableRowFlags_Headers);
+        for (int column = 0; column < 2; ++column) {
+            ImGui::TableSetColumnIndex(column);
+            ImGui::SetCursorPosX(ImGui::GetCursorPosX() + ENTRY_CELL_LEFT_PADDING);
+            ImGui::TableHeader(ImGui::TableGetColumnName(column));
+        }
 
         ImGuiListClipper clipper;
         clipper.Begin(static_cast<int>(entries.size()));
@@ -595,10 +673,14 @@ bool dv_node(value_view v, const void *id, const ImVec4 &color, const char *labe
         ImGui::SetNextItemOpen(true, ImGuiCond_Always);
     }
 
-    ImGuiTreeNodeFlags flags = 0;
+    ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_FramePadding | ImGuiTreeNodeFlags_SpanAvailWidth;
     if (leaf) {
         flags |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen | ImGuiTreeNodeFlags_Bullet;
     }
+    const ImGuiStyle &style = ImGui::GetStyle();
+    const f32 spacing_y = style.ItemSpacing.y;
+    ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(style.FramePadding.x, spacing_y * 0.5F));
+    ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(style.ItemSpacing.x, 0.0F));
     ImGui::PushStyleColor(ImGuiCol_Text, color);
     const bool open = ImGui::TreeNodeEx(id, flags, "%s", label);
     ImGui::PopStyleColor();
@@ -609,6 +691,7 @@ bool dv_node(value_view v, const void *id, const ImVec4 &color, const char *labe
         ImGui::SameLine(0.0F, 0.0F);
         ImGui::TextColored(qui::color::retina_dark::TextDisabled, "  %s", suffix);
     }
+    ImGui::PopStyleVar(2);
     if (!leaf && open) {
         doc->m_forceStack.push_back(force ? 1 : 0);
         if (force) {
@@ -695,6 +778,68 @@ void dv_draw_struct_like(value_view v, const disassembled_value &entry, const vo
     }
 }
 
+bool ptr_in_file(const document &doc, const void *ptr) {
+    if (doc.m_file == nullptr) {
+        return false;
+    }
+    const p64 base = reinterpret_cast<p64>(doc.m_file->m_bytes.get());
+    const p64 here = reinterpret_cast<p64>(ptr);
+    return here >= base && (here - base) < doc.m_file->m_size;
+}
+
+std::string read_value_string(value_view v, const void *data_ptr, edit_kind kind) {
+    switch (kind) {
+        case edit_kind::Int:
+            return std::format("{}", *reinterpret_cast<const i32 *>(data_ptr));
+        case edit_kind::Float:
+            return std::format("{}", *reinterpret_cast<const f32 *>(data_ptr));
+        case edit_kind::Sid:
+            return lookup_sid(*v.state->m_sidbase, *v.doc->m_file, *reinterpret_cast<const sid64 *>(data_ptr));
+    }
+    return {};
+}
+
+void dv_editable_leaf(value_view v, const void *id, const void *data_ptr, edit_kind kind,
+                      const ImVec4 &color, const char *label, const char *suffix) {
+    document *doc = v.doc;
+    if (doc->m_editingValue == id) {
+        ImGui::PushID(id);
+        ImGui::SetNextItemWidth(220.0F);
+        if (doc->m_editFocus) {
+            ImGui::SetKeyboardFocusHere();
+            doc->m_editFocus = false;
+        }
+        const bool entered = ImGui::InputText("##edit", &doc->m_editBuffer,
+            ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_AutoSelectAll);
+        if (entered) {
+            doc->m_pendingEdits.emplace_back(file_offset(*doc, data_ptr), kind, doc->m_editBuffer);
+            doc->m_editingValue = nullptr;
+        } else if (ImGui::IsKeyPressed(ImGuiKey_Escape) || ImGui::IsItemDeactivated()) {
+            doc->m_editingValue = nullptr;
+        }
+        ImGui::PopID();
+        return;
+    }
+
+    const ImGuiStyle &style = ImGui::GetStyle();
+    ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(style.FramePadding.x, style.ItemSpacing.y * 0.5F));
+    ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(style.ItemSpacing.x, 0.0F));
+    ImGui::PushStyleColor(ImGuiCol_Text, color);
+    ImGui::TreeNodeEx(id, ImGuiTreeNodeFlags_FramePadding | ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen | ImGuiTreeNodeFlags_Bullet, "%s", label);
+    ImGui::PopStyleColor();
+    const bool double_clicked = ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left);
+    if (suffix != nullptr && suffix[0] != '\0') {
+        ImGui::SameLine(0.0F, 0.0F);
+        ImGui::TextColored(qui::color::retina_dark::TextDisabled, "  %s", suffix);
+    }
+    ImGui::PopStyleVar(2);
+    if (double_clicked && ptr_in_file(*doc, data_ptr)) {
+        doc->m_editingValue = id;
+        doc->m_editFocus = true;
+        doc->m_editBuffer = read_value_string(v, data_ptr, kind);
+    }
+}
+
 void dv_draw_value(value_view v, const disassembled_values_t::value_type &value, i32 index) {
     char label[512];
     char suffix[128];
@@ -710,14 +855,14 @@ void dv_draw_value(value_view v, const disassembled_values_t::value_type &value,
             dv_draw_state_script(v, *entry, index);
         } else if constexpr (std::is_same_v<T, const i32 *>) {
             std::snprintf(label, sizeof(label), "%s%d", prefix, *entry);
-            dv_node(v, &value, *entry == 0 ? val_color::IntZero : val_color::Int, label, ": int", true);
+            dv_editable_leaf(v, &value, entry, edit_kind::Int, *entry == 0 ? val_color::IntZero : val_color::Int, label, ": int");
         } else if constexpr (std::is_same_v<T, const u64 *>) {
             const std::string resolved = lookup_sid(*v.state->m_sidbase, *v.doc->m_file, *entry);
             std::snprintf(label, sizeof(label), "%s%s", prefix, resolved.c_str());
-            dv_node(v, &value, val_color::Sid, label, ": sid", true);
+            dv_editable_leaf(v, &value, entry, edit_kind::Sid, val_color::Sid, label, ": sid");
         } else if constexpr (std::is_same_v<T, const f32 *>) {
             std::snprintf(label, sizeof(label), "%s%.2f", prefix, *entry);
-            dv_node(v, &value, val_color::Float, label, ": float", true);
+            dv_editable_leaf(v, &value, entry, edit_kind::Float, val_color::Float, label, ": float");
         } else if constexpr (std::is_same_v<T, const char *>) {
             std::snprintf(label, sizeof(label), "%s\"%s\"", prefix, entry != nullptr ? entry : "");
             dv_node(v, &value, val_color::String, label, ": string", true);
@@ -892,6 +1037,7 @@ void dv_draw_function_body(value_view v, const function_disassembly &func) {
 void dv_draw_function(value_view v, const function_disassembly &func, i32 index) {
     char label[256];
     std::snprintf(label, sizeof(label), "[%d] function %s", index, func.get_id().c_str());
+    ImGui::SetNextItemAllowOverlap();
     const bool open = dv_node(v, &func, val_color::Function, label, nullptr, false);
     dv_function_switch_and_body(v, func, &func, open);
 }
@@ -907,7 +1053,7 @@ ImVec2 view_switch_size() {
         ImGui::PopFont();
     }
     const f32 seg = std::max(wa, wb) + 16.0F;
-    return ImVec2(seg * 2.0F, ImGui::GetFrameHeight() * 0.82F);
+    return ImVec2(seg * 2.0F, ImGui::GetTextLineHeight());
 }
 
 bool draw_view_switch(const char *str_id, bool *dcpl, const ImVec2 &size) {
@@ -936,11 +1082,10 @@ bool draw_view_switch(const char *str_id, bool *dcpl, const ImVec2 &size) {
 
     ImDrawList *draw_list = ImGui::GetWindowDrawList();
     const f32 seg = size.x * 0.5F;
-    const f32 rounding = size.y * 0.5F;
     const ImVec2 max(pos.x + size.x, pos.y + size.y);
 
-    draw_list->AddRectFilled(pos, max, ImGui::ColorConvertFloat4ToU32(qui::color::retina_dark::WindowBackground), rounding);
-    draw_list->AddRect(pos, max, ImGui::ColorConvertFloat4ToU32(qui::color::retina_dark::Border), rounding);
+    draw_list->AddRectFilled(pos, max, ImGui::ColorConvertFloat4ToU32(qui::color::retina_dark::WindowBackground));
+    draw_list->AddRect(pos, max, ImGui::ColorConvertFloat4ToU32(qui::color::retina_dark::Border));
 
     const ImVec2 knob_min(pos.x + t * seg, pos.y);
     const ImVec2 knob_max(knob_min.x + seg, pos.y + size.y);
@@ -948,7 +1093,7 @@ bool draw_view_switch(const char *str_id, bool *dcpl, const ImVec2 &size) {
     if (!hovered) {
         accent.w = 0.85F;
     }
-    draw_list->AddRectFilled(knob_min, knob_max, ImGui::ColorConvertFloat4ToU32(accent), rounding);
+    draw_list->AddRectFilled(knob_min, knob_max, ImGui::ColorConvertFloat4ToU32(accent));
 
     ImFont *font = qui::font_semi_bold();
     if (font != nullptr) {
@@ -978,6 +1123,8 @@ void dv_function_switch_and_body(value_view v, const function_disassembly &func,
     const ImVec2 sw_size = view_switch_size();
     ImGui::SameLine();
     ImGui::SetCursorPosX(std::max(ImGui::GetCursorPosX(), ImGui::GetContentRegionMax().x - sw_size.x));
+    const f32 line_h = ImGui::GetTextLineHeight() + ImGui::GetStyle().ItemSpacing.y;
+    ImGui::SetCursorPosY(ImGui::GetCursorPosY() + (line_h - sw_size.y) * 0.5F);
     ImGui::PushID(id);
     draw_view_switch("##view_switch", &show_dcpl, sw_size);
     ImGui::PopID();
@@ -1022,6 +1169,9 @@ void dv_draw_script_lambda(value_view v, const disassembled_value &entry, const 
 
     std::snprintf(label, sizeof(label), "%sscript-lambda", prefix);
     std::snprintf(suffix, sizeof(suffix), "[0x%05X]", static_cast<u32>(entry.m_offset));
+    if (func != nullptr) {
+        ImGui::SetNextItemAllowOverlap();
+    }
     const bool open = dv_node(v, id, val_color::Function, label, suffix, func == nullptr);
 
     if (func == nullptr) {
@@ -1191,6 +1341,143 @@ void draw_document(app_state &state, document &doc) {
     ImGui::EndChild();
 }
 
+void show_error_box(const app_state &state, const std::string &message) {
+    HWND owner = state.m_window != nullptr ? glfwGetWin32Window(state.m_window) : nullptr;
+    MessageBoxA(owner, message.c_str(), "dconstruct \xE2\x80\x94 edit error", MB_OK | MB_ICONERROR);
+}
+
+void redisassemble_preserving(app_state &state, document &doc) {
+    const i32 selected = doc.m_selectedEntry;
+    disassemble_document(state, doc);
+    if (doc.m_entries != nullptr && selected >= 0 && selected < static_cast<i32>(doc.m_entries->size())) {
+        doc.m_selectedEntry = selected;
+    }
+}
+
+u32 edit_value_size(edit_kind kind) {
+    return kind == edit_kind::Sid ? 8U : 4U;
+}
+
+std::string value_at_string(value_view v, u32 offset, edit_kind kind) {
+    return read_value_string(v, v.doc->m_file->m_bytes.get() + offset, kind);
+}
+
+void update_dirty(document &doc) {
+    doc.m_dirty = doc.m_undoStack.size() != doc.m_savedDepth;
+}
+
+bool apply_one_edit(app_state &state, document &doc, const pending_edit &edit) {
+    const value_view v{&state, &doc};
+    const u32 size = edit_value_size(edit.m_kind);
+    std::byte *value_ptr = doc.m_file->m_bytes.get() + edit.m_offset;
+
+    const std::string old_text = value_at_string(v, edit.m_offset, edit.m_kind);
+    std::vector<std::byte> old_bytes(value_ptr, value_ptr + size);
+
+    try {
+        const BinaryFileEdit value = [&]() -> BinaryFileEdit {
+            switch (edit.m_kind) {
+                case edit_kind::Int:
+                    return {.m_editType = EditType::INT32, .I32 = static_cast<i32>(std::stol(edit.m_text))};
+                case edit_kind::Float:
+                    return {.m_editType = EditType::F32, .F32 = std::stof(edit.m_text)};
+                case edit_kind::Sid:
+                    if (!edit.m_text.empty() && edit.m_text.front() == '#') {
+                        return {.m_editType = EditType::SID_HASH, .U64 = std::stoull(edit.m_text.substr(1), nullptr, 16)};
+                    }
+                    BinaryFileEdit sid_edit{.m_editType = EditType::SID_STR};
+                    sid_edit.string = &edit.m_text;
+                    return sid_edit;
+            }
+            return {.m_editType = EditType::INT32, .I32 = 0};
+        }();
+
+        if (const error_msg err = doc.m_editor->apply_edit(edit.m_offset, 0, value); err.has_value()) {
+            show_error_box(state, *err);
+            return false;
+        }
+    } catch (const std::exception &e) {
+        show_error_box(state, std::format("'{}' is not a valid value for this field. err: {}", edit.m_text, e.what()));
+        return false;
+    }
+
+    const std::string new_text = value_at_string(v, edit.m_offset, edit.m_kind);
+    std::vector<std::byte> new_bytes(value_ptr, value_ptr + size);
+
+    doc.m_redoStack.clear();
+    doc.m_undoStack.push_back({edit.m_offset, edit.m_kind, std::move(old_bytes), std::move(new_bytes), old_text, new_text});
+    log_event("Edit applied [{}] 0x{:05X}: {} -> {}", doc.m_name, edit.m_offset, old_text, new_text);
+    return true;
+}
+
+void process_pending_edits(app_state &state, document &doc) {
+    if (doc.m_pendingEdits.empty()) {
+        return;
+    }
+    if (doc.m_editor == nullptr || doc.m_file == nullptr || state.m_sidbase == nullptr) {
+        doc.m_pendingEdits.clear();
+        return;
+    }
+
+    bool applied_any = false;
+    for (const pending_edit &edit : doc.m_pendingEdits) {
+        applied_any = apply_one_edit(state, doc, edit) || applied_any;
+    }
+    doc.m_pendingEdits.clear();
+
+    if (applied_any) {
+        update_dirty(doc);
+        redisassemble_preserving(state, doc);
+    }
+}
+
+void apply_record_bytes(document &doc, const edit_record &record, bool redo) {
+    const std::vector<std::byte> &bytes = redo ? record.m_newBytes : record.m_oldBytes;
+    std::memcpy(doc.m_file->m_bytes.get() + record.m_offset, bytes.data(), bytes.size());
+}
+
+void undo_active_document(app_state &state) {
+    document *doc = active_document(state);
+    if (doc == nullptr || doc->m_file == nullptr || doc->m_undoStack.empty()) {
+        return;
+    }
+    edit_record record = std::move(doc->m_undoStack.back());
+    doc->m_undoStack.pop_back();
+    apply_record_bytes(*doc, record, false);
+    log_event("Undo [{}] 0x{:05X}: {} -> {}", doc->m_name, record.m_offset, record.m_newText, record.m_oldText);
+    doc->m_redoStack.push_back(std::move(record));
+    update_dirty(*doc);
+    redisassemble_preserving(state, *doc);
+}
+
+void redo_active_document(app_state &state) {
+    document *doc = active_document(state);
+    if (doc == nullptr || doc->m_file == nullptr || doc->m_redoStack.empty()) {
+        return;
+    }
+    edit_record record = std::move(doc->m_redoStack.back());
+    doc->m_redoStack.pop_back();
+    apply_record_bytes(*doc, record, true);
+    log_event("Redo [{}] 0x{:05X}: {} -> {}", doc->m_name, record.m_offset, record.m_oldText, record.m_newText);
+    doc->m_undoStack.push_back(std::move(record));
+    update_dirty(*doc);
+    redisassemble_preserving(state, *doc);
+}
+
+void save_active_document(app_state &state) {
+    document *doc = active_document(state);
+    if (doc == nullptr || doc->m_editor == nullptr || !doc->m_dirty) {
+        return;
+    }
+    if (const error_msg err = doc->m_editor->write_edited_file(); err.has_value()) {
+        show_error_box(state, *err);
+        return;
+    }
+    doc->m_savedDepth = doc->m_undoStack.size();
+    update_dirty(*doc);
+    log_event("Saved file: {}", doc->m_path);
+}
+
 void draw_content_area(f32 top_offset, app_state &state) {
     const ImGuiViewport *viewport = ImGui::GetMainViewport();
     ImGui::SetNextWindowPos(ImVec2(viewport->Pos.x, viewport->Pos.y + top_offset));
@@ -1204,6 +1491,18 @@ void draw_content_area(f32 top_offset, app_state &state) {
         ImGuiWindowFlags_NoBringToFrontOnFocus;
 
     ImGui::Begin("##dconstruct_content", nullptr, window_flags);
+
+    const ImGuiIO &io = ImGui::GetIO();
+    if (io.KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_S, false)) {
+        save_active_document(state);
+    }
+    if (!io.WantTextInput && io.KeyCtrl && !io.KeyShift && ImGui::IsKeyPressed(ImGuiKey_Z, false)) {
+        undo_active_document(state);
+    }
+    if (!io.WantTextInput && io.KeyCtrl &&
+        (ImGui::IsKeyPressed(ImGuiKey_Y, false) || (io.KeyShift && ImGui::IsKeyPressed(ImGuiKey_Z, false)))) {
+        redo_active_document(state);
+    }
 
     draw_status_text(state);
     ImGui::Dummy(ImVec2(0.0F, 0.0F));
@@ -1223,7 +1522,7 @@ void draw_content_area(f32 top_offset, app_state &state) {
         for (i32 i = 0; i < static_cast<i32>(state.m_documents.size()); ++i) {
             document &doc = state.m_documents[static_cast<u32>(i)];
             bool open = true;
-            const std::string label = doc.m_name + "##doc" + std::to_string(i);
+            const std::string label = doc.m_name + (doc.m_dirty ? " \xE2\x97\x8F" : "") + "##doc" + std::to_string(i);
             const ImGuiTabItemFlags flags = i == state.m_pendingSelect ? ImGuiTabItemFlags_SetSelected : 0;
             if (ImGui::BeginTabItem(label.c_str(), &open, flags)) {
                 state.m_activeDocument = i;
@@ -1242,6 +1541,7 @@ void draw_content_area(f32 top_offset, app_state &state) {
 
     if (document *doc = active_document(state)) {
         draw_document(state, *doc);
+        process_pending_edits(state, *doc);
     }
 
     ImGui::End();
@@ -1290,6 +1590,8 @@ int main() {
     ImGui_ImplOpenGL3_Init(glsl_version);
 
     app_state state;
+    state.m_window = window;
+    log_event("Start");
     if (std::filesystem::exists("sidbase.bin")) {
         load_sidbase(state, "sidbase.bin");
     }
