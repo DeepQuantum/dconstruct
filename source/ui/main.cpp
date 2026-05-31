@@ -7,10 +7,12 @@
 #include <filesystem>
 #include <fstream>
 #include <memory>
+#include <optional>
 #include <print>
 #include <span>
 #include <sstream>
 #include <string>
+#include <string_view>
 #include <unordered_map>
 #include <vector>
 
@@ -24,6 +26,7 @@
 #include <qui.h>
 #include <qui/code_window_ctre.hpp>
 #include <imgui_stdlib.h>
+#include <imgui_internal.h>
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
@@ -45,13 +48,14 @@ constexpr f32 WINDOW_BUTTON_WIDTH = 46.0F;
 constexpr f32 SPLITTER_WIDTH = 6.0F;
 constexpr f32 MIN_PANEL_WIDTH = 120.0F;
 constexpr f32 ENTRY_CELL_LEFT_PADDING = 4.0F;
+constexpr f32 FUNCTION_INSTRUCTION_COLUMN_WIDTH = 560.0F;
 constexpr i32 MAX_FORCE_OPEN_NODES = 10000;
 constexpr i32 EXPAND_SHALLOW_DEPTH = 2;
 constexpr i32 EXPAND_RECURSIVE_DEPTH = 1 << 30;
 constexpr char DONATE_URL[] = "https://ko-fi.com/deepquantum";
 constexpr wchar_t PREVIOUS_WNDPROC_PROP[] = L"dconstruct.previous_wndproc";
 
-enum class edit_kind { Int, Float, Sid };
+enum class edit_kind { Int, Int64, Float, Sid };
 
 struct pending_edit {
     u32 m_offset = 0;
@@ -309,6 +313,15 @@ document *active_document(app_state &state) {
 
 void load_bin_file(app_state &state, const std::string &path) {
     state.m_loadError.clear();
+
+    for (i32 i = 0; i < static_cast<i32>(state.m_documents.size()); ++i) {
+        if (state.m_documents[static_cast<u32>(i)].m_path == path) {
+            state.m_activeDocument = i;
+            state.m_pendingSelect = i;
+            log_event("File already open, switching to it: {}", path);
+            return;
+        }
+    }
 
     auto file_res = BinaryFile::from_path(path);
     if (!file_res) {
@@ -827,6 +840,12 @@ void dv_draw_state_script(value_view v, const ast::state_script &script, i32 ind
 void dv_draw_map(value_view v, const disassembled_value &entry, const void *id, i32 index);
 void dv_draw_script_lambda(value_view v, const disassembled_value &entry, const void *id, i32 index);
 
+struct typed_value_text {
+    std::string text;
+    ImVec4 color = val_color::Struct;
+    std::optional<edit_kind> editKind;
+};
+
 void dv_index_prefix(char *buffer, std::size_t size, i32 index) {
     if (index >= 0) {
         std::snprintf(buffer, size, "[%d] ", index);
@@ -898,12 +917,107 @@ std::string read_value_string(value_view v, const void *data_ptr, edit_kind kind
     switch (kind) {
         case edit_kind::Int:
             return std::format("{}", *reinterpret_cast<const i32 *>(data_ptr));
+        case edit_kind::Int64:
+            return std::format("{}", *reinterpret_cast<const i64 *>(data_ptr));
         case edit_kind::Float:
             return std::format("{}", *reinterpret_cast<const f32 *>(data_ptr));
         case edit_kind::Sid:
             return lookup_sid(*v.state->m_sidbase, *v.doc->m_file, *reinterpret_cast<const sid64 *>(data_ptr));
     }
     return {};
+}
+
+ImVec4 color_for_value_prefix(std::string_view prefix) {
+    if (prefix == "int" || prefix == "int64" || prefix == "uint64") {
+        return val_color::Int;
+    }
+    if (prefix == "float") {
+        return val_color::Float;
+    }
+    if (prefix == "sid" || prefix == "pointer") {
+        return val_color::Sid;
+    }
+    if (prefix == "function") {
+        return val_color::Function;
+    }
+    if (prefix == "string") {
+        return val_color::String;
+    }
+    return val_color::Struct;
+}
+
+std::optional<edit_kind> edit_kind_for_value_prefix(std::string_view prefix) {
+    if (prefix == "int") {
+        return edit_kind::Int;
+    }
+    if (prefix == "int64" || prefix == "uint64") {
+        return edit_kind::Int64;
+    }
+    if (prefix == "float") {
+        return edit_kind::Float;
+    }
+    if (prefix == "sid" || prefix == "function" || prefix == "pointer") {
+        return edit_kind::Sid;
+    }
+    return std::nullopt;
+}
+
+typed_value_text make_typed_value_text(std::string text) {
+    const std::size_t colon = text.find(':');
+    const std::string_view prefix(text.data(), colon == std::string::npos ? text.size() : colon);
+    return {
+        .text = std::move(text),
+        .color = color_for_value_prefix(prefix),
+        .editKind = edit_kind_for_value_prefix(prefix),
+    };
+}
+
+std::optional<std::string> known_sid_name(value_view v, sid64 hash) {
+    if (v.doc == nullptr || v.doc->m_file == nullptr || v.state == nullptr || v.state->m_sidbase == nullptr) {
+        return std::nullopt;
+    }
+    if (const auto cached = v.doc->m_file->m_sidCache.find(hash); cached != v.doc->m_file->m_sidCache.end() && !cached->second.starts_with('#')) {
+        return cached->second;
+    }
+    if (const char *resolved = v.state->m_sidbase->search(hash)) {
+        return std::string(resolved);
+    }
+    return std::nullopt;
+}
+
+void dv_editable_table_value(value_view v, const void *id, const void *data_ptr, const typed_value_text &value) {
+    document *doc = v.doc;
+    if (doc->m_editingValue == id && value.editKind.has_value()) {
+        ImGui::PushID(id);
+        const f32 text_w = ImGui::CalcTextSize(doc->m_editBuffer.c_str()).x;
+        ImGui::SetNextItemWidth(std::max(text_w + ImGui::GetStyle().FramePadding.x * 2.0F + 24.0F, 80.0F));
+        if (doc->m_editFocus) {
+            ImGui::SetKeyboardFocusHere();
+            doc->m_editFocus = false;
+        }
+        const bool entered = ImGui::InputText("##edit", &doc->m_editBuffer,
+            ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_AutoSelectAll);
+        if (entered) {
+            doc->m_pendingEdits.emplace_back(file_offset(*doc, data_ptr), *value.editKind, doc->m_editBuffer);
+            doc->m_editingValue = nullptr;
+        } else if (ImGui::IsKeyPressed(ImGuiKey_Escape) || ImGui::IsItemDeactivated()) {
+            doc->m_editingValue = nullptr;
+        }
+        ImGui::PopID();
+        return;
+    }
+
+    const ImVec2 text_pos = ImGui::GetCursorScreenPos();
+    const f32 cell_width = std::max(ImGui::GetContentRegionAvail().x, ImGui::CalcTextSize(value.text.c_str()).x);
+    const ImVec2 hit_size(cell_width, ImGui::GetTextLineHeightWithSpacing());
+    ImGui::InvisibleButton("##value_hit", hit_size);
+    const bool double_clicked = ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left);
+    ImGui::GetWindowDrawList()->AddText(text_pos, ImGui::ColorConvertFloat4ToU32(value.color), value.text.c_str());
+    if (double_clicked && value.editKind.has_value() && ptr_in_file(*doc, data_ptr)) {
+        doc->m_editingValue = id;
+        doc->m_editFocus = true;
+        doc->m_editBuffer = read_value_string(v, data_ptr, *value.editKind);
+    }
 }
 
 void dv_editable_leaf(value_view v, const void *id, const void *data_ptr, edit_kind kind,
@@ -1067,6 +1181,58 @@ void dv_draw_map(value_view v, const disassembled_value &entry, const void *id, 
     dv_tree_pop(v);
 }
 
+typed_value_text symbol_table_value_text(value_view v, const SymbolTable &symbols, u32 index) {
+    const location value_location = symbols.m_location + static_cast<u64>(index) * 8;
+    std::string text;
+    std::visit([&](auto &&type) {
+        using T = std::decay_t<decltype(type)>;
+        if constexpr (std::is_same_v<T, ast::primitive_type>) {
+            switch (type.m_type) {
+                case ast::primitive_kind::I32:
+                    text = std::format("int: {}", value_location.get<i32>());
+                    break;
+                case ast::primitive_kind::I64:
+                    text = std::format("int64: {}", value_location.get<i64>());
+                    break;
+                case ast::primitive_kind::U64:
+                    if (const std::optional<std::string> sid_name = known_sid_name(v, value_location.get<sid64>())) {
+                        text = std::format("sid: {}", *sid_name);
+                    } else {
+                        text = std::format("uint64: {}", value_location.get<u64>());
+                    }
+                    break;
+                case ast::primitive_kind::F32:
+                    text = std::format("float: {:.2f}", value_location.get<f32>());
+                    break;
+                case ast::primitive_kind::STRING:
+                    text = std::format("string: \"{}\"", value_location.get<const char *>() != nullptr ? value_location.get<const char *>() : "");
+                    break;
+                case ast::primitive_kind::SID:
+                    text = std::format("sid: {}", lookup_sid(*v.state->m_sidbase, *v.doc->m_file, value_location.get<sid64>()));
+                    break;
+                default:
+                    if (const std::optional<std::string> sid_name = known_sid_name(v, value_location.get<sid64>())) {
+                        text = std::format("sid: {}", *sid_name);
+                    } else {
+                        text = std::format("unknown: {}", value_location.get<u64>());
+                    }
+                    break;
+            }
+        } else if constexpr (std::is_same_v<T, ast::function_type>) {
+            text = std::format("function: {}", lookup_sid(*v.state->m_sidbase, *v.doc->m_file, value_location.get<sid64>()));
+        } else if constexpr (std::is_same_v<T, ast::ptr_type>) {
+            text = std::format("pointer: {}", lookup_sid(*v.state->m_sidbase, *v.doc->m_file, value_location.get<sid64>()));
+        } else {
+            if (const std::optional<std::string> sid_name = known_sid_name(v, value_location.get<sid64>())) {
+                text = std::format("sid: {}", *sid_name);
+            } else {
+                text = std::format("unknown: {}", value_location.get<u64>());
+            }
+        }
+    }, static_cast<const ast::full_type::variant_type &>(symbols.m_types[index]));
+    return make_typed_value_text(std::move(text));
+}
+
 void dv_draw_function_body(value_view v, const function_disassembly &func) {
     const std::vector<function_disassembly_line> &lines = func.m_lines;
 
@@ -1084,8 +1250,8 @@ void dv_draw_function_body(value_view v, const function_disassembly &func) {
     ImGui::SetNextItemOpen(true, ImGuiCond_Once);
     if (dv_node(v, &instructions_node, val_color::Group, "Instructions", nullptr, false)) {
         if (ImGui::BeginTable("##instructions", 2, table_flags)) {
-            ImGui::TableSetupColumn("Instruction");
-            ImGui::TableSetupColumn("Comment");
+            ImGui::TableSetupColumn("Instruction", ImGuiTableColumnFlags_WidthFixed, FUNCTION_INSTRUCTION_COLUMN_WIDTH);
+            ImGui::TableSetupColumn("Comment", ImGuiTableColumnFlags_WidthStretch);
             ImGui::TableHeadersRow();
 
             for (const function_disassembly_line &line : lines) {
@@ -1102,6 +1268,7 @@ void dv_draw_function_body(value_view v, const function_disassembly &func) {
 
     const SymbolTable &symbols = func.m_stackFrame.m_symbolTable;
     if (symbols.m_location.m_ptr != nullptr && !symbols.m_types.empty()) {
+        ImGui::SetNextItemOpen(true, ImGuiCond_Once);
         if (dv_node(v, &symbols_node, val_color::Group, "Symbol Table", nullptr, false)) {
             if (ImGui::BeginTable("##symbols", 3, table_flags)) {
                 ImGui::TableSetupColumn("#", ImGuiTableColumnFlags_WidthFixed);
@@ -1109,38 +1276,25 @@ void dv_draw_function_body(value_view v, const function_disassembly &func) {
                 ImGui::TableSetupColumn("Value");
                 ImGui::TableHeadersRow();
 
+                const ImVec4 hl = qui::color::retina_dark::Highlight;
+                const ImU32 row_hl = ImGui::ColorConvertFloat4ToU32(ImVec4(hl.x, hl.y, hl.z, 0.15F));
+
                 for (u32 i = 0; i < symbols.m_types.size(); ++i) {
                     const location value_location = symbols.m_location + static_cast<u64>(i) * 8;
-                    char value_buffer[256];
-                    value_buffer[0] = '\0';
-                    std::visit([&](auto &&type) {
-                        using T = std::decay_t<decltype(type)>;
-                        if constexpr (std::is_same_v<T, ast::primitive_type>) {
-                            switch (type.m_type) {
-                                case ast::primitive_kind::I32: std::snprintf(value_buffer, sizeof(value_buffer), "int: %d", value_location.get<i32>()); break;
-                                case ast::primitive_kind::I64: std::snprintf(value_buffer, sizeof(value_buffer), "int64: %lld", static_cast<long long>(value_location.get<i64>())); break;
-                                case ast::primitive_kind::U64: std::snprintf(value_buffer, sizeof(value_buffer), "uint64: %llu", static_cast<unsigned long long>(value_location.get<u64>())); break;
-                                case ast::primitive_kind::F32: std::snprintf(value_buffer, sizeof(value_buffer), "float: %f", static_cast<double>(value_location.get<f32>())); break;
-                                case ast::primitive_kind::STRING: std::snprintf(value_buffer, sizeof(value_buffer), "string: \"%s\"", value_location.get<const char *>()); break;
-                                case ast::primitive_kind::SID: std::snprintf(value_buffer, sizeof(value_buffer), "sid: %s", lookup_sid(*v.state->m_sidbase, *v.doc->m_file, value_location.get<sid64>()).c_str()); break;
-                                default: std::snprintf(value_buffer, sizeof(value_buffer), "unknown: %llu", static_cast<unsigned long long>(value_location.get<u64>())); break;
-                            }
-                        } else if constexpr (std::is_same_v<T, ast::function_type>) {
-                            std::snprintf(value_buffer, sizeof(value_buffer), "function: %s", lookup_sid(*v.state->m_sidbase, *v.doc->m_file, value_location.get<sid64>()).c_str());
-                        } else if constexpr (std::is_same_v<T, ast::ptr_type>) {
-                            std::snprintf(value_buffer, sizeof(value_buffer), "pointer: %s", lookup_sid(*v.state->m_sidbase, *v.doc->m_file, value_location.get<sid64>()).c_str());
-                        } else {
-                            std::snprintf(value_buffer, sizeof(value_buffer), "unknown: %llu", static_cast<unsigned long long>(value_location.get<u64>()));
-                        }
-                    }, static_cast<const ast::full_type::variant_type &>(symbols.m_types[i]));
+                    const typed_value_text value = symbol_table_value_text(v, symbols, i);
 
                     ImGui::TableNextRow();
+                    if (ImGui::TableGetHoveredRow() == ImGui::TableGetRowIndex()) {
+                        ImGui::TableSetBgColor(ImGuiTableBgTarget_RowBg0, row_hl);
+                    }
                     ImGui::TableSetColumnIndex(0);
                     ImGui::Text("%04X", i);
                     ImGui::TableSetColumnIndex(1);
                     ImGui::TextColored(qui::color::retina_dark::TextDisabled, "0x%06X", file_offset(*v.doc, value_location.m_ptr));
                     ImGui::TableSetColumnIndex(2);
-                    ImGui::TextUnformatted(value_buffer);
+                    ImGui::PushID(static_cast<i32>(i));
+                    dv_editable_table_value(v, value_location.m_ptr, value_location.m_ptr, value);
+                    ImGui::PopID();
                 }
                 ImGui::EndTable();
             }
@@ -1487,14 +1641,14 @@ void draw_document(app_state &state, document &doc) {
 
     ImGui::SameLine(0.0F, 0.0F);
 
-    ImGui::BeginChild("##dconstruct_entry_view", ImVec2(0.0F, 0.0F), ImGuiChildFlags_Borders);
+    //ImGui::BeginChild("##dconstruct_entry_view", ImVec2(0.0F, 0.0F), ImGuiChildFlags_Borders);
     ImVec2 detail_size;
     if (begin_labeled_table_frame("Disassembly", detail_size)) {
         ImGui::BeginChild("##dconstruct_entry_detail", detail_size);
         draw_entry_detail(state, doc);
         ImGui::EndChild();
     }
-    ImGui::EndChild();
+    //ImGui::EndChild();
 }
 
 void show_error_box(app_state &state, const std::string &message) {
@@ -1510,7 +1664,7 @@ void redisassemble_preserving(app_state &state, document &doc) {
 }
 
 u32 edit_value_size(edit_kind kind) {
-    return kind == edit_kind::Sid ? 8U : 4U;
+    return kind == edit_kind::Sid || kind == edit_kind::Int64 ? 8U : 4U;
 }
 
 std::string value_at_string(value_view v, u32 offset, edit_kind kind) {
@@ -1534,6 +1688,10 @@ bool apply_one_edit(app_state &state, document &doc, const pending_edit &edit) {
             switch (edit.m_kind) {
                 case edit_kind::Int:
                     return {.m_editType = EditType::INT32, .I32 = static_cast<i32>(std::stol(edit.m_text))};
+                case edit_kind::Int64:
+                    return {.m_editType = EditType::INT64, .U64 = edit.m_text.starts_with("-")
+                        ? static_cast<u64>(std::stoll(edit.m_text))
+                        : std::stoull(edit.m_text)};
                 case edit_kind::Float:
                     return {.m_editType = EditType::F32, .F32 = std::stof(edit.m_text)};
                 case edit_kind::Sid:

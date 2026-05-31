@@ -263,7 +263,6 @@ void disasm_file(
     }
     
     auto& file = *file_res;
-    std::cerr << file.m_path << "\n";
     
     if (!edits.empty() && game != dconstruct::game_type::UC4) {
         dconstruct::EditDisassembler ed(&file, &base, edits, game);

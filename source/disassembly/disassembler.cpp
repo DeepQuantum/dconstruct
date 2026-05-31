@@ -199,8 +199,14 @@ disassembled_value Disassembler::insert_array(const location array, const u32 ar
     }
 
     const u8 type_id_padding = m_currentFile->is_string(member + member_offset) ? 0 : 8;
-    u32 struct_size = (member_offset - type_id_padding) / array_size;
-    struct_size &= ~(sizeof(sid64) - 1);
+    u32 struct_size = 0;
+    f32 struct_size_f = f32(member_offset - type_id_padding) / f32(array_size);
+    if (struct_size_f != std::trunc(struct_size_f) || struct_size_f == .0) {
+        struct_size_f = member_offset / array_size;
+        assert(struct_size_f == std::trunc(struct_size_f));
+    }
+    assert(struct_size_f != 0.0);
+    struct_size = (u32)struct_size_f;
     
 
     for (u32 array_entry_count = 0; array_entry_count < array_size; ++array_entry_count) {
