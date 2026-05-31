@@ -45,6 +45,9 @@ constexpr f32 WINDOW_BUTTON_WIDTH = 46.0F;
 constexpr f32 SPLITTER_WIDTH = 6.0F;
 constexpr f32 MIN_PANEL_WIDTH = 120.0F;
 constexpr f32 ENTRY_CELL_LEFT_PADDING = 4.0F;
+constexpr i32 MAX_FORCE_OPEN_NODES = 10000;
+constexpr i32 EXPAND_SHALLOW_DEPTH = 2;
+constexpr i32 EXPAND_RECURSIVE_DEPTH = 1 << 30;
 constexpr char DONATE_URL[] = "https://ko-fi.com/deepquantum";
 constexpr wchar_t PREVIOUS_WNDPROC_PROP[] = L"dconstruct.previous_wndproc";
 
@@ -65,6 +68,8 @@ struct edit_record {
     std::string m_newText;
 };
 
+enum class tree_op { none, expand, close };
+
 struct document {
     std::unique_ptr<BinaryFile> m_file;
     std::unique_ptr<Disassembler> m_disassembler;
@@ -74,10 +79,21 @@ struct document {
     std::string m_name;
     i32 m_selectedEntry = -1;
     f32 m_listWidth = 0.0F;
-    const void *m_expandRequest = nullptr;
-    const void *m_pendingExpand = nullptr;
-    i32 m_forceOpenDepth = 0;
-    std::vector<char> m_forceStack;
+    std::string m_entrySearch;
+    bool m_entrySortAlphabetically = false;
+    bool m_entrySortDescending = false;
+    ImGuiID m_menuTarget = 0;
+    bool m_openMenu = false;
+    ImGuiID m_opTarget = 0;
+    ImGuiID m_opPendingTarget = 0;
+    tree_op m_opMode = tree_op::none;
+    tree_op m_opPendingMode = tree_op::none;
+    i32 m_opMaxDepth = 0;
+    i32 m_opPendingMaxDepth = 0;
+    i32 m_opDepth = -1;
+    i32 m_forceOpenCount = 0;
+    std::vector<i32> m_depthStack;
+    std::vector<ImGuiID> m_closeIds;
     std::unordered_map<const function_disassembly *, std::string> m_decompiled;
     std::unordered_map<const function_disassembly *, bool> m_lambdaViewDcpl;
     bool m_dirty = false;
@@ -114,6 +130,9 @@ struct app_state {
     std::string m_loadError;
     drag_state m_drag;
     GLFWwindow *m_window = nullptr;
+    qui::message_box m_errorBox;
+    qui::message_box m_closeBox;
+    bool m_closeRequested = false;
 };
 
 std::string lookup_sid(const SIDBase &sidbase, const BinaryFile &file, const sid64 hash) {
@@ -327,6 +346,14 @@ void load_sidbase(app_state &state, const std::string &path) {
 void save_active_document(app_state &state);
 void undo_active_document(app_state &state);
 void redo_active_document(app_state &state);
+void request_app_close(app_state &state);
+
+void window_close_callback(GLFWwindow *window) {
+    glfwSetWindowShouldClose(window, GLFW_FALSE);
+    if (auto *state = static_cast<app_state *>(glfwGetWindowUserPointer(window))) {
+        request_app_close(*state);
+    }
+}
 
 f32 draw_title_menu_bar(app_state &state, GLFWwindow *window) {
     const ImGuiViewport *viewport = ImGui::GetMainViewport();
@@ -403,7 +430,7 @@ f32 draw_title_menu_bar(app_state &state, GLFWwindow *window) {
             }
             ImGui::Separator();
             if (ImGui::MenuItem("Exit")) {
-                glfwSetWindowShouldClose(window, GLFW_TRUE);
+                request_app_close(state);
             }
             ImGui::EndMenu();
         }
@@ -470,7 +497,7 @@ f32 draw_title_menu_bar(app_state &state, GLFWwindow *window) {
     }
 
     if (qui::title_bar_button("close", "X", ImVec2(close_x, bar_min.y), button_size, true)) {
-        glfwSetWindowShouldClose(window, GLFW_TRUE);
+        request_app_close(state);
     }
 
     qui::update_title_bar_drag(window, ImVec2(0.0F, 8.0F), ImVec2(minimize_x - bar_min.x, height), bar_state);
@@ -548,6 +575,9 @@ bool begin_labeled_table_frame(const char *label, ImVec2 &table_size) {
 }
 
 void draw_entry_list(app_state &state, document &doc) {
+    ImGui::SetNextItemWidth(-1.0F);
+    ImGui::InputTextWithHint("##dconstruct_entry_search", "Search entries", &doc.m_entrySearch);
+
     ImVec2 table_size;
     if (!begin_labeled_table_frame("Entries", table_size)) {
         return;
@@ -559,6 +589,28 @@ void draw_entry_list(app_state &state, document &doc) {
     }
 
     const std::vector<disassembled_entry> &entries = *doc.m_entries;
+    const bool searching = !doc.m_entrySearch.empty();
+    std::vector<qui::fuzzy_match> matches;
+    if (searching) {
+        std::vector<std::string> choices;
+        choices.reserve(entries.size());
+        for (const disassembled_entry &entry : entries) {
+            choices.push_back(lookup_sid(*state.m_sidbase, *doc.m_file, entry.m_nameId));
+        }
+        matches = qui::fuzzy_search(doc.m_entrySearch, choices);
+    }
+    std::vector<i32> row_indices;
+    if (searching) {
+        row_indices.reserve(matches.size());
+        for (const qui::fuzzy_match &match : matches) {
+            row_indices.push_back(static_cast<i32>(match.index));
+        }
+    } else {
+        row_indices.reserve(entries.size());
+        for (i32 i = 0; i < static_cast<i32>(entries.size()); ++i) {
+            row_indices.push_back(i);
+        }
+    }
 
     constexpr ImGuiTableFlags table_flags =
         ImGuiTableFlags_BordersInnerV |
@@ -568,20 +620,46 @@ void draw_entry_list(app_state &state, document &doc) {
         ImGuiTableFlags_SizingStretchProp;
 
     if (ImGui::BeginTable("##dconstruct_entries", 2, table_flags, table_size)) {
-        ImGui::TableSetupColumn("Entry Name");
+        const char *entry_name_header = doc.m_entrySortAlphabetically
+            ? (doc.m_entrySortDescending ? "Entry Name \xE2\x96\xBC" : "Entry Name \xE2\x96\xB2")
+            : "Entry Name";
+
+        ImGui::TableSetupColumn(entry_name_header);
         ImGui::TableSetupColumn("Type Name");
         ImGui::TableNextRow(ImGuiTableRowFlags_Headers);
         for (int column = 0; column < 2; ++column) {
             ImGui::TableSetColumnIndex(column);
             ImGui::SetCursorPosX(ImGui::GetCursorPosX() + ENTRY_CELL_LEFT_PADDING);
             ImGui::TableHeader(ImGui::TableGetColumnName(column));
+            if (column == 0 && ImGui::IsItemClicked(ImGuiMouseButton_Left)) {
+                if (doc.m_entrySortAlphabetically) {
+                    doc.m_entrySortDescending = !doc.m_entrySortDescending;
+                } else {
+                    doc.m_entrySortAlphabetically = true;
+                    doc.m_entrySortDescending = false;
+                }
+            }
+        }
+
+        if (doc.m_entrySortAlphabetically) {
+            std::stable_sort(row_indices.begin(), row_indices.end(), [&](const i32 lhs, const i32 rhs) {
+                const disassembled_entry &left = entries[static_cast<u32>(lhs)];
+                const disassembled_entry &right = entries[static_cast<u32>(rhs)];
+                const std::string left_name = lookup_sid(*state.m_sidbase, *doc.m_file, left.m_nameId);
+                const std::string right_name = lookup_sid(*state.m_sidbase, *doc.m_file, right.m_nameId);
+                if (doc.m_entrySortDescending) {
+                    return right_name < left_name;
+                }
+                return left_name < right_name;
+            });
         }
 
         ImGuiListClipper clipper;
-        clipper.Begin(static_cast<int>(entries.size()));
+        clipper.Begin(static_cast<int>(row_indices.size()));
         while (clipper.Step()) {
             for (int i = clipper.DisplayStart; i < clipper.DisplayEnd; ++i) {
-                const disassembled_entry &entry = entries[static_cast<u32>(i)];
+                const int entry_index = row_indices[static_cast<u32>(i)];
+                const disassembled_entry &entry = entries[static_cast<u32>(entry_index)];
                 const std::string name = lookup_sid(*state.m_sidbase, *doc.m_file, entry.m_nameId);
                 const std::string type = lookup_sid(*state.m_sidbase, *doc.m_file, entry.m_typeId);
 
@@ -589,12 +667,12 @@ void draw_entry_list(app_state &state, document &doc) {
                 ImGui::TableSetColumnIndex(0);
                 ImGui::SetCursorPosX(ImGui::GetCursorPosX() + ENTRY_CELL_LEFT_PADDING);
 
-                ImGui::PushID(i);
+                ImGui::PushID(entry_index);
                 if (ImFont *font = qui::font_bold()) {
                     ImGui::PushFont(font);
                 }
-                if (ImGui::Selectable(name.c_str(), doc.m_selectedEntry == i, ImGuiSelectableFlags_SpanAllColumns)) {
-                    doc.m_selectedEntry = i;
+                if (ImGui::Selectable(name.c_str(), doc.m_selectedEntry == entry_index, ImGuiSelectableFlags_SpanAllColumns)) {
+                    doc.m_selectedEntry = entry_index;
                 }
                 if (qui::font_bold() != nullptr) {
                     ImGui::PopFont();
@@ -641,7 +719,7 @@ std::span<const qui::code::rule> dcpl_rules() {
     using qui::code::to_u32;
     using qui::color::rgba;
     static const std::vector<qui::code::rule> rules = {
-        ctre_rule<R"(//.*)">(to_u32(rgba(0x6A, 0x73, 0x80))),
+        // ctre_rule<R"(//.*)">(to_u32(rgba(0x6A, 0x73, 0x80))),
         // ctre_rule<R"RE(\b(if|else|while|for|return|foreach|match|state|block|event|track|statescript|options|declarations|using|as|far|near|not|and|or|in|lambda|start|end|update|null|struct|enum)\b)RE">(to_u32(rgba(0xC6, 0x78, 0xDD))),
         // ctre_rule<R"(\b((var|arg)_\d+)\b)">(to_u32(rgba(0xE0, 0x6C, 0x75))),
         // ctre_rule<R"(\b(i|j|k|l)\b)">(to_u32(rgba(0xE0, 0x6C, 0x75))),
@@ -666,11 +744,40 @@ u32 file_offset(const document &doc, const void *ptr) {
     return static_cast<u32>(reinterpret_cast<p64>(ptr) - reinterpret_cast<p64>(doc.m_file->m_dcheader));
 }
 
+// A tree-node id that stays stable across re-disassembly (the underlying file
+// bytes are not reallocated), so ImGui keeps the expand state and scroll
+// position when an edit triggers a re-disassemble. The top bit is set so these
+// ids live in a separate space from the raw file-data pointers that primitive
+// leaves use as their ids (m_dcheader aliases m_bytes.get(), so without this a
+// node and a same-offset leaf would hash to a conflicting ImGui ID).
+const void *stable_id(const document &doc, u64 offset) {
+    const std::uintptr_t base = reinterpret_cast<std::uintptr_t>(doc.m_file->m_bytes.get() + offset);
+    return reinterpret_cast<const void *>(base | (std::uintptr_t{1} << 63));
+}
+
 bool dv_node(value_view v, const void *id, const ImVec4 &color, const char *label, const char *suffix, bool leaf) {
     document *doc = v.doc;
-    const bool force = !leaf && (doc->m_forceOpenDepth > 0 || id == doc->m_expandRequest);
-    if (force) {
-        ImGui::SetNextItemOpen(true, ImGuiCond_Always);
+    const ImGuiID node_im_id = ImGui::GetID(id);
+    i32 node_depth = -1;
+    if (!leaf && doc->m_opMode != tree_op::none) {
+        if (node_im_id == doc->m_opTarget) {
+            node_depth = 0;
+        } else if (doc->m_opDepth >= 0) {
+            node_depth = doc->m_opDepth + 1;
+        }
+    }
+    if (node_depth >= 0 && doc->m_opMode == tree_op::expand) {
+        bool want_open = node_depth < doc->m_opMaxDepth;
+        if (want_open) {
+            if (doc->m_forceOpenCount >= MAX_FORCE_OPEN_NODES) {
+                want_open = false;
+            } else {
+                ++doc->m_forceOpenCount;
+            }
+        }
+        ImGui::SetNextItemOpen(want_open, ImGuiCond_Always);
+    } else if (node_depth >= 1 && doc->m_opMode == tree_op::close) {
+        doc->m_closeIds.push_back(node_im_id);
     }
 
     ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_FramePadding | ImGuiTreeNodeFlags_SpanAvailWidth;
@@ -685,7 +792,8 @@ bool dv_node(value_view v, const void *id, const ImVec4 &color, const char *labe
     const bool open = ImGui::TreeNodeEx(id, flags, "%s", label);
     ImGui::PopStyleColor();
     if (!leaf && ImGui::IsItemClicked(ImGuiMouseButton_Right)) {
-        doc->m_pendingExpand = id;
+        doc->m_menuTarget = node_im_id;
+        doc->m_openMenu = true;
     }
     if (suffix != nullptr && suffix[0] != '\0') {
         ImGui::SameLine(0.0F, 0.0F);
@@ -693,9 +801,9 @@ bool dv_node(value_view v, const void *id, const ImVec4 &color, const char *labe
     }
     ImGui::PopStyleVar(2);
     if (!leaf && open) {
-        doc->m_forceStack.push_back(force ? 1 : 0);
-        if (force) {
-            doc->m_forceOpenDepth++;
+        doc->m_depthStack.push_back(doc->m_opDepth);
+        if (node_depth >= 0) {
+            doc->m_opDepth = node_depth;
         }
     }
     return open;
@@ -703,11 +811,9 @@ bool dv_node(value_view v, const void *id, const ImVec4 &color, const char *labe
 
 void dv_tree_pop(value_view v) {
     document *doc = v.doc;
-    if (!doc->m_forceStack.empty()) {
-        if (doc->m_forceStack.back() != 0) {
-            doc->m_forceOpenDepth--;
-        }
-        doc->m_forceStack.pop_back();
+    if (!doc->m_depthStack.empty()) {
+        doc->m_opDepth = doc->m_depthStack.back();
+        doc->m_depthStack.pop_back();
     }
     ImGui::TreePop();
 }
@@ -734,8 +840,9 @@ void dv_draw_struct_like(value_view v, const disassembled_value &entry, const vo
     char suffix[128];
     char prefix[24];
     dv_index_prefix(prefix, sizeof(prefix), index);
+    id = stable_id(*v.doc, entry.m_offset);
 
-    if (entry.m_typeId == SID("map") || entry.m_typeId == SID("map-32") || entry.m_typeId == SID("render-settings-map")) {
+    if (entry.m_typeId == SID("map") || entry.m_typeId == SID("map-32") || entry.m_typeId == SID("render-settings-map") || entry.m_typeId  == SID("hash-table")) {
         dv_draw_map(v, entry, id, index);
         return;
     }
@@ -804,7 +911,8 @@ void dv_editable_leaf(value_view v, const void *id, const void *data_ptr, edit_k
     document *doc = v.doc;
     if (doc->m_editingValue == id) {
         ImGui::PushID(id);
-        ImGui::SetNextItemWidth(220.0F);
+        const f32 text_w = ImGui::CalcTextSize(doc->m_editBuffer.c_str()).x;
+        ImGui::SetNextItemWidth(std::max(text_w + ImGui::GetStyle().FramePadding.x * 2.0F + 24.0F, 60.0F));
         if (doc->m_editFocus) {
             ImGui::SetKeyboardFocusHere();
             doc->m_editFocus = false;
@@ -855,29 +963,31 @@ void dv_draw_value(value_view v, const disassembled_values_t::value_type &value,
             dv_draw_state_script(v, *entry, index);
         } else if constexpr (std::is_same_v<T, const i32 *>) {
             std::snprintf(label, sizeof(label), "%s%d", prefix, *entry);
-            dv_editable_leaf(v, &value, entry, edit_kind::Int, *entry == 0 ? val_color::IntZero : val_color::Int, label, ": int");
+            dv_editable_leaf(v, entry, entry, edit_kind::Int, *entry == 0 ? val_color::IntZero : val_color::Int, label, ": int");
         } else if constexpr (std::is_same_v<T, const u64 *>) {
             const std::string resolved = lookup_sid(*v.state->m_sidbase, *v.doc->m_file, *entry);
             std::snprintf(label, sizeof(label), "%s%s", prefix, resolved.c_str());
-            dv_editable_leaf(v, &value, entry, edit_kind::Sid, val_color::Sid, label, ": sid");
+            dv_editable_leaf(v, entry, entry, edit_kind::Sid, val_color::Sid, label, ": sid");
         } else if constexpr (std::is_same_v<T, const f32 *>) {
             std::snprintf(label, sizeof(label), "%s%.2f", prefix, *entry);
-            dv_editable_leaf(v, &value, entry, edit_kind::Float, val_color::Float, label, ": float");
+            dv_editable_leaf(v, entry, entry, edit_kind::Float, val_color::Float, label, ": float");
         } else if constexpr (std::is_same_v<T, const char *>) {
             std::snprintf(label, sizeof(label), "%s\"%s\"", prefix, entry != nullptr ? entry : "");
-            dv_node(v, &value, val_color::String, label, ": string", true);
+            dv_node(v, entry, val_color::String, label, ": string", true);
         } else if constexpr (std::is_same_v<T, const structs::map *>) {
             std::snprintf(label, sizeof(label), "%smap", prefix);
             std::snprintf(suffix, sizeof(suffix), "keys: [0x%05X], values: [0x%05X]",
                           file_offset(*v.doc, entry->keys.data), file_offset(*v.doc, entry->values.data));
-            dv_node(v, &value, val_color::Map, label, suffix, true);
+            dv_node(v, entry, val_color::Map, label, suffix, true);
         }
     }, value);
 }
 
 void dv_draw_values(value_view v, const disassembled_values_t &values) {
     for (i32 i = 0; i < static_cast<i32>(values.size()); ++i) {
+        ImGui::PushID(i);
         dv_draw_value(v, values[static_cast<u32>(i)], i);
+        ImGui::PopID();
     }
 }
 
@@ -911,10 +1021,16 @@ void dv_draw_map_table(value_view v, const disassembled_value &keys, const disas
         const std::size_t count = std::min(keys.m_values.size(), vals.m_values.size());
         for (std::size_t i = 0; i < count; ++i) {
             ImGui::TableNextRow();
+            ImGui::PushID(static_cast<i32>(i));
             ImGui::TableSetColumnIndex(0);
+            ImGui::PushID(0);
             dv_draw_value(v, keys.m_values[i], -1);
+            ImGui::PopID();
             ImGui::TableSetColumnIndex(1);
+            ImGui::PushID(1);
             dv_draw_value(v, vals.m_values[i], -1);
+            ImGui::PopID();
+            ImGui::PopID();
         }
         ImGui::EndTable();
     }
@@ -962,8 +1078,11 @@ void dv_draw_function_body(value_view v, const function_disassembly &func) {
         ImGui::PushFont(mono);
     }
 
+    static const char instructions_node = 0;
+    static const char symbols_node = 0;
+
     ImGui::SetNextItemOpen(true, ImGuiCond_Once);
-    if (dv_node(v, &func.m_lines, val_color::Group, "Instructions", nullptr, false)) {
+    if (dv_node(v, &instructions_node, val_color::Group, "Instructions", nullptr, false)) {
         if (ImGui::BeginTable("##instructions", 2, table_flags)) {
             ImGui::TableSetupColumn("Instruction");
             ImGui::TableSetupColumn("Comment");
@@ -983,7 +1102,7 @@ void dv_draw_function_body(value_view v, const function_disassembly &func) {
 
     const SymbolTable &symbols = func.m_stackFrame.m_symbolTable;
     if (symbols.m_location.m_ptr != nullptr && !symbols.m_types.empty()) {
-        if (dv_node(v, &func.m_stackFrame, val_color::Group, "Symbol Table", nullptr, false)) {
+        if (dv_node(v, &symbols_node, val_color::Group, "Symbol Table", nullptr, false)) {
             if (ImGui::BeginTable("##symbols", 3, table_flags)) {
                 ImGui::TableSetupColumn("#", ImGuiTableColumnFlags_WidthFixed);
                 ImGui::TableSetupColumn("Offset", ImGuiTableColumnFlags_WidthFixed);
@@ -1037,9 +1156,10 @@ void dv_draw_function_body(value_view v, const function_disassembly &func) {
 void dv_draw_function(value_view v, const function_disassembly &func, i32 index) {
     char label[256];
     std::snprintf(label, sizeof(label), "[%d] function %s", index, func.get_id().c_str());
+    const void *fid = stable_id(*v.doc, func.m_originalOffset);
     ImGui::SetNextItemAllowOverlap();
-    const bool open = dv_node(v, &func, val_color::Function, label, nullptr, false);
-    dv_function_switch_and_body(v, func, &func, open);
+    const bool open = dv_node(v, fid, val_color::Function, label, nullptr, false);
+    dv_function_switch_and_body(v, func, fid, open);
 }
 
 ImVec2 view_switch_size() {
@@ -1274,16 +1394,22 @@ void draw_entry_detail(app_state &state, document &doc) {
     char suffix[256];
     std::snprintf(suffix, sizeof(suffix), ": %s  [0x%05X]", type.c_str(), static_cast<u32>(entry.m_offset));
 
-    doc.m_expandRequest = doc.m_pendingExpand;
-    doc.m_pendingExpand = nullptr;
-    doc.m_forceOpenDepth = 0;
-    doc.m_forceStack.clear();
+    doc.m_opTarget = doc.m_opPendingTarget;
+    doc.m_opMode = doc.m_opPendingMode;
+    doc.m_opMaxDepth = doc.m_opPendingMaxDepth;
+    doc.m_opPendingTarget = 0;
+    doc.m_opPendingMode = tree_op::none;
+    doc.m_opDepth = -1;
+    doc.m_forceOpenCount = 0;
+    doc.m_depthStack.clear();
+    doc.m_closeIds.clear();
 
     value_view v{&state, &doc};
     ImGui::SetNextItemOpen(true, ImGuiCond_Once);
     ImGui::PushID(doc.m_selectedEntry);
-    const bool entry_is_map = entry.m_typeId == SID("map") || entry.m_typeId == SID("map-32") || entry.m_typeId == SID("render-settings-map");
-    const bool open = dv_node(v, &entry, val_color::EntryName, name.c_str(), suffix, entry.m_values.empty());
+    const bool entry_is_map = entry.m_typeId == SID("map") || entry.m_typeId == SID("map-32") || entry.m_typeId == SID("render-settings-map") || entry.m_typeId == SID("hash-table");
+    const void *entry_id = stable_id(doc, entry.m_offset);
+    const bool open = dv_node(v, entry_id, val_color::EntryName, name.c_str(), suffix, entry.m_values.empty());
     if (open && !entry.m_values.empty()) {
         if (entry_is_map) {
             const structs::map *header = nullptr;
@@ -1291,7 +1417,7 @@ void draw_entry_detail(app_state &state, document &doc) {
             const disassembled_value *vals = nullptr;
             dv_map_extract(entry.m_values, header, keys, vals);
             if (keys != nullptr && vals != nullptr && !keys->m_values.empty()) {
-                dv_draw_map_table(v, *keys, *vals, &entry);
+                dv_draw_map_table(v, *keys, *vals, entry_id);
             }
         } else {
             dv_draw_values(v, entry.m_values);
@@ -1299,6 +1425,36 @@ void draw_entry_detail(app_state &state, document &doc) {
         dv_tree_pop(v);
     }
     ImGui::PopID();
+
+    if (doc.m_opMode == tree_op::close && !doc.m_closeIds.empty()) {
+        ImGuiStorage *storage = ImGui::GetStateStorage();
+        for (const ImGuiID close_id : doc.m_closeIds) {
+            storage->SetInt(close_id, 0);
+        }
+    }
+
+    if (doc.m_openMenu) {
+        ImGui::OpenPopup("##dv_context_menu");
+        doc.m_openMenu = false;
+    }
+    if (ImGui::BeginPopup("##dv_context_menu")) {
+        if (ImGui::MenuItem("Expand all children")) {
+            doc.m_opPendingTarget = doc.m_menuTarget;
+            doc.m_opPendingMode = tree_op::expand;
+            doc.m_opPendingMaxDepth = EXPAND_SHALLOW_DEPTH;
+        }
+        if (ImGui::MenuItem("Expand all children recursively")) {
+            doc.m_opPendingTarget = doc.m_menuTarget;
+            doc.m_opPendingMode = tree_op::expand;
+            doc.m_opPendingMaxDepth = EXPAND_RECURSIVE_DEPTH;
+        }
+        if (ImGui::MenuItem("Close all children")) {
+            doc.m_opPendingTarget = doc.m_menuTarget;
+            doc.m_opPendingMode = tree_op::close;
+            doc.m_opPendingMaxDepth = 0;
+        }
+        ImGui::EndPopup();
+    }
 }
 
 void draw_document(app_state &state, document &doc) {
@@ -1341,9 +1497,8 @@ void draw_document(app_state &state, document &doc) {
     ImGui::EndChild();
 }
 
-void show_error_box(const app_state &state, const std::string &message) {
-    HWND owner = state.m_window != nullptr ? glfwGetWin32Window(state.m_window) : nullptr;
-    MessageBoxA(owner, message.c_str(), "dconstruct \xE2\x80\x94 edit error", MB_OK | MB_ICONERROR);
+void show_error_box(app_state &state, const std::string &message) {
+    qui::open_alert(state.m_errorBox, "Edit error", message);
 }
 
 void redisassemble_preserving(app_state &state, document &doc) {
@@ -1478,6 +1633,74 @@ void save_active_document(app_state &state) {
     log_event("Saved file: {}", doc->m_path);
 }
 
+bool any_document_dirty(const app_state &state) {
+    for (const document &doc : state.m_documents) {
+        if (doc.m_dirty) {
+            return true;
+        }
+    }
+    return false;
+}
+
+void save_all_documents(app_state &state) {
+    for (document &doc : state.m_documents) {
+        if (!doc.m_dirty || doc.m_editor == nullptr) {
+            continue;
+        }
+        if (const error_msg err = doc.m_editor->write_edited_file(); err.has_value()) {
+            show_error_box(state, *err);
+            continue;
+        }
+        doc.m_savedDepth = doc.m_undoStack.size();
+        update_dirty(doc);
+        log_event("Saved file: {}", doc.m_path);
+    }
+}
+
+void request_app_close(app_state &state) {
+    if (!any_document_dirty(state)) {
+        glfwSetWindowShouldClose(state.m_window, GLFW_TRUE);
+        return;
+    }
+    state.m_closeRequested = true;
+    state.m_closeBox.title = "Unsaved changes";
+    state.m_closeBox.message = "You have unsaved changes. Do you want to save them before exiting?";
+    state.m_closeBox.buttons = {
+        qui::message_box_button{"Exit without saving", qui::color::retina_dark::AccentRed, true, true},
+        qui::message_box_button{"Go back"},
+        qui::message_box_button{"Save & Exit"},
+    };
+    state.m_closeBox.open();
+}
+
+void process_message_boxes(app_state &state) {
+    qui::draw_message_box(state.m_errorBox);
+
+    const int result = qui::draw_message_box(state.m_closeBox);
+    if (!state.m_closeRequested) {
+        return;
+    }
+    switch (result) {
+        case 0: // Exit without saving
+            state.m_closeRequested = false;
+            glfwSetWindowShouldClose(state.m_window, GLFW_TRUE);
+            break;
+        case 2: // Save & Exit
+            state.m_closeRequested = false;
+            save_all_documents(state);
+            if (!any_document_dirty(state)) {
+                glfwSetWindowShouldClose(state.m_window, GLFW_TRUE);
+            }
+            break;
+        case 1: // Go back
+        case qui::message_box_dismissed:
+            state.m_closeRequested = false;
+            break;
+        default:
+            break;
+    }
+}
+
 void draw_content_area(f32 top_offset, app_state &state) {
     const ImGuiViewport *viewport = ImGui::GetMainViewport();
     ImGui::SetNextWindowPos(ImVec2(viewport->Pos.x, viewport->Pos.y + top_offset));
@@ -1591,6 +1814,13 @@ int main() {
 
     app_state state;
     state.m_window = window;
+    state.m_errorBox.popup_id = "##dconstruct_error_box";
+    state.m_errorBox.selectable = true;
+    state.m_errorBox.width = 600.0F * dpi_scale;
+    state.m_closeBox.popup_id = "##dconstruct_close_box";
+    state.m_closeBox.width = 540.0F * dpi_scale;
+    glfwSetWindowUserPointer(window, &state);
+    glfwSetWindowCloseCallback(window, window_close_callback);
     log_event("Start");
     if (std::filesystem::exists("sidbase.bin")) {
         load_sidbase(state, "sidbase.bin");
@@ -1613,6 +1843,7 @@ int main() {
 
         const f32 bar_height = draw_title_menu_bar(state, window);
         draw_content_area(bar_height, state);
+        process_message_boxes(state);
 
         ImGui::Render();
 

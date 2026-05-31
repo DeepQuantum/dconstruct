@@ -458,7 +458,7 @@ std::string Disassembler::disassembly_to_string(const std::vector<disassembled_e
                     }
                 }
             }
-        } else if (type_id == SID("map") || type_id == SID("map-32") || type_id == SID("render-settings-map")) {
+        } else if (type_id == SID("map") || type_id == SID("map-32") || type_id == SID("render-settings-map") || type_id == SID("hash-table")) {
             bool seen_keys = false;
             for (const auto& value : values) {
                 if (const auto* map = std::get_if<const structs::map*>(&value); map != nullptr && *map != nullptr) {
@@ -602,7 +602,8 @@ disassembled_value Disassembler::insert_struct(const structs::unmapped *struct_p
         }
         case SID("map"):
         case SID("map-32"):
-        case SID("render-settings-map"): {
+        case SID("render-settings-map"):
+        case SID("hash-table"): {
             const structs::map *map = reinterpret_cast<const structs::map*>(&struct_ptr->m_data);
             value.m_values.emplace_back(map);
             if (map->size > 0 && map->keys.data != nullptr && map->values.data != nullptr) {
