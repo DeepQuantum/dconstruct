@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 
 project(dconstruct LANGUAGES CXX)
 
-set(VERSION_NUMBER "1.52.0")
+set(VERSION_NUMBER "2.0.0")
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -238,6 +238,7 @@ add_subdirectory(${SOURCE_DIR}/qui)
 
 add_executable(dconstruct_ui
     ${SOURCE_DIR}/ui/main.cpp
+    $<$<BOOL:${WIN32}>:${CMAKE_SOURCE_DIR}/resources/dconstruct.rc>
 )
 
 target_link_libraries(dconstruct_ui PRIVATE
@@ -245,8 +246,12 @@ target_link_libraries(dconstruct_ui PRIVATE
     dconstruct_lib
 )
 
+target_include_directories(dconstruct_ui PRIVATE ${SOURCE_DIR}/qui/source/stb)
+add_dependencies(dconstruct_ui generate_buildinfo)
+
 if(WIN32)
     target_link_libraries(dconstruct_ui PRIVATE comdlg32)
+    target_include_directories(dconstruct_ui PRIVATE ${CMAKE_SOURCE_DIR}/resources)
 endif()
 
 set_target_properties(dconstruct_ui PROPERTIES

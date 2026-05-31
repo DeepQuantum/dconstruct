@@ -39,9 +39,12 @@
 #endif
 #include <GLFW/glfw3native.h>
 
-namespace {
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb_image.h>
 
-using namespace dconstruct;
+#include "buildinfo.h"
+
+namespace dconstruct::ui {
 
 constexpr f32 BAR_VERTICAL_PADDING = 8.0F;
 constexpr f32 WINDOW_BUTTON_WIDTH = 46.0F;
@@ -53,6 +56,7 @@ constexpr i32 MAX_FORCE_OPEN_NODES = 10000;
 constexpr i32 EXPAND_SHALLOW_DEPTH = 2;
 constexpr i32 EXPAND_RECURSIVE_DEPTH = 1 << 30;
 constexpr char DONATE_URL[] = "https://ko-fi.com/deepquantum";
+constexpr char GITHUB_URL[] = "https://github.com/DeepQuantum";
 constexpr wchar_t PREVIOUS_WNDPROC_PROP[] = L"dconstruct.previous_wndproc";
 
 enum class edit_kind { Int, Int64, Float, Sid };
@@ -134,6 +138,7 @@ struct app_state {
     std::string m_loadError;
     drag_state m_drag;
     GLFWwindow *m_window = nullptr;
+    unsigned int m_iconTexture = 0;
     qui::message_box m_errorBox;
     qui::message_box m_closeBox;
     bool m_closeRequested = false;
@@ -152,6 +157,44 @@ std::string lookup_sid(const SIDBase &sidbase, const BinaryFile &file, const sid
 
 void glfw_error_callback(int error, const char *description) {
     std::fprintf(stderr, "GLFW error %d: %s\n", error, description);
+}
+
+unsigned int create_icon_texture() {
+    HMODULE module = GetModuleHandleW(nullptr);
+    HRSRC resource = FindResourceW(module, L"DCONSTRUCT_LOGO", MAKEINTRESOURCEW(10));
+    if (resource == nullptr) {
+        return 0;
+    }
+    HGLOBAL loaded = LoadResource(module, resource);
+    const void *data = loaded != nullptr ? LockResource(loaded) : nullptr;
+    const DWORD size = SizeofResource(module, resource);
+    if (data == nullptr || size == 0) {
+        return 0;
+    }
+
+    i32 width = 0;
+    i32 height = 0;
+    i32 channels = 0;
+    stbi_uc *pixels = stbi_load_from_memory(
+        static_cast<const stbi_uc *>(data), static_cast<int>(size),
+        &width, &height, &channels, 4
+    );
+    if (pixels == nullptr) {
+        return 0;
+    }
+
+    unsigned int texture = 0;
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    glTexImage2D(
+        GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0,
+        GL_RGBA, GL_UNSIGNED_BYTE, pixels
+    );
+    stbi_image_free(pixels);
+    return texture;
 }
 
 std::string filename_from_path(const std::string &path) {
@@ -368,6 +411,100 @@ void window_close_callback(GLFWwindow *window) {
     }
 }
 
+void draw_about_popup(bool open_requested) {
+    if (open_requested) {
+        ImGui::OpenPopup("##dconstruct_about");
+    }
+
+    const ImGuiViewport *viewport = ImGui::GetMainViewport();
+    ImGui::SetNextWindowPos(viewport->GetCenter(), ImGuiCond_Appearing, ImVec2(0.5F, 0.5F));
+
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(28.0F, 24.0F));
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 8.0F);
+    ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(8.0F, 8.0F));
+    ImGui::PushStyleColor(ImGuiCol_PopupBg, qui::color::retina_dark::WindowBackground);
+
+    if (ImGui::BeginPopupModal("##dconstruct_about", nullptr,
+            ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove)) {
+
+        if (ImFont *title_font = qui::font_bold(); title_font != nullptr) {
+            ImGui::PushFont(title_font, title_font->LegacySize * 1.4F);
+            ImGui::PushStyleColor(ImGuiCol_Text, qui::color::retina_dark::Highlight);
+            ImGui::TextUnformatted("dconstruct");
+            ImGui::PopStyleColor();
+            ImGui::PopFont();
+        }
+
+        ImGui::PushStyleColor(ImGuiCol_Text, qui::color::retina_dark::TextDisabled);
+        ImGui::Text("Version %s", VERSION);
+        ImGui::Text("Built %s", BUILD_DATE);
+        ImGui::PopStyleColor();
+
+        ImGui::Dummy(ImVec2(0.0F, 6.0F));
+        ImGui::Separator();
+        ImGui::Dummy(ImVec2(0.0F, 6.0F));
+
+        ImGui::TextUnformatted("Created by");
+        ImGui::SameLine();
+        if (ImGui::TextLink("qntm")) {
+            open_url(GITHUB_URL);
+        }
+
+        ImGui::Dummy(ImVec2(0.0F, 6.0F));
+        ImGui::Separator();
+        ImGui::Dummy(ImVec2(0.0F, 6.0F));
+
+        if (ImFont *heading_font = qui::font_semi_bold(); heading_font != nullptr) {
+            ImGui::PushFont(heading_font);
+            ImGui::TextUnformatted("Special thanks");
+            ImGui::PopFont();
+        } else {
+            ImGui::TextUnformatted("Special thanks");
+        }
+        ImGui::Dummy(ImVec2(0.0F, 2.0F));
+
+        struct credit {
+            const char *name;
+            const char *role;
+        };
+        constexpr credit credits[] = {
+            {"Chandler Threepwood", "beta testing"},
+            {"Speclizer", "the DC-Tool"},
+            {"uxh", "DC-file knowledge"},
+            {"icemesh", "the original disassembler"},
+        };
+
+        ImGui::PushStyleVar(ImGuiStyleVar_CellPadding, ImVec2(16.0F, 5.0F));
+        if (ImGui::BeginTable("##about_thanks", 2, ImGuiTableFlags_SizingFixedFit)) {
+            for (const credit &entry : credits) {
+                ImGui::TableNextRow();
+                ImGui::TableSetColumnIndex(0);
+                ImGui::PushStyleColor(ImGuiCol_Text, qui::color::retina_dark::Highlight);
+                ImGui::TextUnformatted(entry.name);
+                ImGui::PopStyleColor();
+                ImGui::TableSetColumnIndex(1);
+                ImGui::PushStyleColor(ImGuiCol_Text, qui::color::retina_dark::TextDisabled);
+                ImGui::TextUnformatted(entry.role);
+                ImGui::PopStyleColor();
+            }
+            ImGui::EndTable();
+        }
+        ImGui::PopStyleVar();
+
+        ImGui::Dummy(ImVec2(0.0F, 12.0F));
+        constexpr f32 button_width = 110.0F;
+        ImGui::SetCursorPosX((ImGui::GetWindowSize().x - button_width) * 0.5F);
+        if (ImGui::Button("Close", ImVec2(button_width, 0.0F))) {
+            ImGui::CloseCurrentPopup();
+        }
+
+        ImGui::EndPopup();
+    }
+
+    ImGui::PopStyleColor();
+    ImGui::PopStyleVar(3);
+}
+
 f32 draw_title_menu_bar(app_state &state, GLFWwindow *window) {
     const ImGuiViewport *viewport = ImGui::GetMainViewport();
     const ImVec2 pos = viewport->Pos;
@@ -406,17 +543,32 @@ f32 draw_title_menu_bar(app_state &state, GLFWwindow *window) {
         ImGui::ColorConvertFloat4ToU32(qui::color::retina_dark::Border)
     );
 
-    constexpr f32 logo_size = 13.0F;
+    constexpr f32 logo_size = 16.0F;
     const ImVec2 logo_min(bar_min.x + 10.0F, bar_min.y + (height - logo_size) * 0.5F);
     const ImVec2 logo_max(logo_min.x + logo_size, logo_min.y + logo_size);
-    draw_list->AddRectFilled(logo_min, logo_max, ImGui::ColorConvertFloat4ToU32(qui::color::retina_dark::AccentBlue), 2.0F);
-    draw_list->AddRectFilled(ImVec2(logo_min.x + 4.0F, logo_min.y + 4.0F), logo_max, ImGui::ColorConvertFloat4ToU32(qui::color::retina_dark::Highlight), 2.0F);
+    if (state.m_iconTexture != 0) {
+        draw_list->AddImage(static_cast<ImTextureID>(state.m_iconTexture), logo_min, logo_max);
+    }
 
     const f32 buttons_total = WINDOW_BUTTON_WIDTH * 3.0F;
     const f32 minimize_x = bar_max.x - buttons_total;
 
+    bool about_clicked = false;
     if (ImGui::BeginMenuBar()) {
-        ImGui::SetCursorPosX(34.0F);
+        ImGui::SetCursorPosX(logo_max.x - bar_min.x + 8.0F);
+        {
+            ImFont *app_name_font = qui::font_medium();
+            if (app_name_font != nullptr) {
+                ImGui::PushFont(app_name_font);
+            }
+            ImGui::PushStyleColor(ImGuiCol_Text, qui::color::retina_dark::Highlight);
+            ImGui::TextUnformatted("dconstruct");
+            ImGui::PopStyleColor();
+            if (app_name_font != nullptr) {
+                ImGui::PopFont();
+            }
+        }
+        ImGui::SameLine(0.0F, 16.0F);
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(12.0F, 10.0F));
         ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(12.0F, 6.0F));
         ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(10.0F, 6.0F));
@@ -463,6 +615,14 @@ f32 draw_title_menu_bar(app_state &state, GLFWwindow *window) {
 
         const char *donate_label = "Donate";
         const f32 donate_width = ImGui::CalcTextSize(donate_label).x + ImGui::GetStyle().ItemSpacing.x * 2.0F;
+        const char *about_label = "About";
+        const f32 about_width = ImGui::CalcTextSize(about_label).x + ImGui::GetStyle().ItemSpacing.x * 2.0F;
+
+        ImGui::SetCursorPosX((minimize_x - bar_min.x) - donate_width - about_width);
+        if (ImGui::MenuItem(about_label)) {
+            about_clicked = true;
+        }
+
         ImGui::SetCursorPosX((minimize_x - bar_min.x) - donate_width);
         ImGui::PushStyleColor(ImGuiCol_Text, qui::color::retina_dark::Highlight);
         if (ImGui::MenuItem(donate_label)) {
@@ -472,6 +632,8 @@ f32 draw_title_menu_bar(app_state &state, GLFWwindow *window) {
 
         ImGui::EndMenuBar();
     }
+
+    draw_about_popup(about_clicked);
 
     if (const document *doc = active_document(state); doc != nullptr && !doc->m_name.empty()) {
         const std::string title = doc->m_dirty ? doc->m_name + " \xE2\x97\x8F" : doc->m_name;
@@ -964,7 +1126,7 @@ std::optional<edit_kind> edit_kind_for_value_prefix(std::string_view prefix) {
 
 typed_value_text make_typed_value_text(std::string text) {
     const std::size_t colon = text.find(':');
-    const std::string_view prefix(text.data(), colon == std::string::npos ? text.size() : colon);
+    const std::string prefix = text.substr(0, colon != std::string::npos ? colon : text.size());
     return {
         .text = std::move(text),
         .color = color_for_value_prefix(prefix),
@@ -1928,10 +2090,10 @@ void draw_content_area(f32 top_offset, app_state &state) {
     ImGui::End();
 }
 
-} // namespace
+}
 
 int main() {
-    glfwSetErrorCallback(glfw_error_callback);
+    glfwSetErrorCallback(dconstruct::ui::glfw_error_callback);
     if (glfwInit() == GLFW_FALSE) {
         return 1;
     }
@@ -1948,7 +2110,7 @@ int main() {
         return 1;
     }
     glfwSetWindowSizeLimits(window, 720, 450, GLFW_DONT_CARE, GLFW_DONT_CARE);
-    install_window_proc(window);
+    dconstruct::ui::install_window_proc(window);
 
     glfwMakeContextCurrent(window);
     glfwSwapInterval(1);
@@ -1970,18 +2132,19 @@ int main() {
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init(glsl_version);
 
-    app_state state;
+    dconstruct::ui::app_state state;
     state.m_window = window;
+    state.m_iconTexture = dconstruct::ui::create_icon_texture();
     state.m_errorBox.popup_id = "##dconstruct_error_box";
     state.m_errorBox.selectable = true;
     state.m_errorBox.width = 600.0F * dpi_scale;
     state.m_closeBox.popup_id = "##dconstruct_close_box";
     state.m_closeBox.width = 540.0F * dpi_scale;
     glfwSetWindowUserPointer(window, &state);
-    glfwSetWindowCloseCallback(window, window_close_callback);
-    log_event("Start");
+    glfwSetWindowCloseCallback(window, dconstruct::ui::window_close_callback);
+    dconstruct::ui::log_event("Start");
     if (std::filesystem::exists("sidbase.bin")) {
-        load_sidbase(state, "sidbase.bin");
+        dconstruct::ui::load_sidbase(state, "sidbase.bin");
     }
 
     while (glfwWindowShouldClose(window) == GLFW_FALSE) {
@@ -1999,9 +2162,9 @@ int main() {
         const ImGuiViewport *viewport = ImGui::GetMainViewport();
         qui::update_window_resize(window, viewport->Pos, viewport->Size, qui::default_window_bar_state());
 
-        const f32 bar_height = draw_title_menu_bar(state, window);
-        draw_content_area(bar_height, state);
-        process_message_boxes(state);
+        const f32 bar_height = dconstruct::ui::draw_title_menu_bar(state, window);
+        dconstruct::ui::draw_content_area(bar_height, state);
+        dconstruct::ui::process_message_boxes(state);
 
         ImGui::Render();
 
@@ -2020,7 +2183,7 @@ int main() {
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
 
-    uninstall_window_proc(window);
+    dconstruct::ui::uninstall_window_proc(window);
     glfwDestroyWindow(window);
     glfwTerminate();
 
