@@ -1,0 +1,6 @@
+// The resource named GLFW_ICON is picked up automatically by GLFW as the
+// window/taskbar icon, and serves as the executable's icon in Explorer.
+GLFW_ICON ICON "dconstruct.ico"
+
+// PNG decoded at runtime with stb_image for the in-app title-bar logo.
+DCONSTRUCT_LOGO RCDATA "dconstruct.png"

@@ -111,3 +111,4 @@ include/clang*
 test/fixtures/dcpl/**
 game_dumps/**
 imgui.ini
+!resources/dconstruct.rc
