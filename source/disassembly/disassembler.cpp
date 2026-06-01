@@ -151,8 +151,8 @@ void Disassembler::insert_anonymous_array(const location anon_array, disassemble
 
 
 [[nodiscard]] u32 Disassembler::get_size_array(const location array) {
-    u32 size_array_front = array.get<u32>(8);
-    u32 size_array_back = array.get<u32>(-8);
+    u32 size_array_front = array.get<u32>(-8);
+    u32 size_array_back = array.get<u32>(8);
     u32 size_array = 0;
     constexpr u32 max_allowed_size_array_u32 = 100'000;
     constexpr u16 max_allowed_size_array_u16 = 1'000;
