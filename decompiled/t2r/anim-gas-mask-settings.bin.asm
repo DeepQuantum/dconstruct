@@ -15,8 +15,9 @@
 
 ##############################  ENTRY 0  ##############################
 
+// entry
 *abby-gas-mask-setup* = gas-mask-setup [0x00408] {
-  [0] sid: abby-gas-mask-on-gesture
+  [0] sid: abby-gas-mask-on-gesture // mapped_value -> { name = on_gesture, disassembled_value_v = const u64* }, 
   [1] sid: abby-gas-mask-off-gesture
   [2] sid: abby-gas-mask-on--gas-mask
   [3] sid: abby-gas-mask-idle--gas-mask

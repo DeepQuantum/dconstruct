@@ -44,7 +44,7 @@ namespace dconstruct {
         result.m_name = get_type_name_from_sid(mapping_struct.m_typeId, sidbase);
 
         for (const auto& [offset, member] : mapping_struct.m_members) {
-            result.m_members.emplace(member_name_from_offset(offset), std::make_shared<ast::full_type>(mapping_member_to_type(member, sidbase)));
+           // result.m_members.emplace(member_name_from_offset(offset), std::make_shared<ast::full_type>(mapping_member_to_type(member, sidbase)));
         }
 
         return result;

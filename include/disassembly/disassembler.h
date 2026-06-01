@@ -21,13 +21,22 @@ namespace dconstruct {
 
     struct disassembled_value;
 
-    using disassembled_values_t = std::vector<std::variant<disassembled_value, std::shared_ptr<function_disassembly>, const ast::state_script*, const i32*, const u64*, const f32*, const char*, const structs::map*>>;
+    struct mapped_value;
+
+    using disassembled_value_content = std::variant<disassembled_value, mapped_value, std::shared_ptr<function_disassembly>, const ast::state_script*, const u8*, const u16*, const u32*, const i32*, const u64*, const f32*, const char*, const structs::map*>;
+
+    using disassembled_values_t = std::vector<disassembled_value_content>;
 
     struct disassembled_value {
         sid64 m_typeId;
         p64 m_offset;
         disassembled_values_t m_values;
         std::optional<u64> m_arraySize;
+    };
+
+    struct mapped_value {
+        std::string m_name;
+        std::unique_ptr<disassembled_value_content> m_value;
     };
 
     struct disassembled_entry {
@@ -41,7 +50,11 @@ namespace dconstruct {
     class Disassembler {
     public:
 
-        Disassembler(BinaryFile* file, const SIDBase* sidbase, const game_type game = game_type::T2R) noexcept : m_currentFile(file), m_sidbase(sidbase), m_game(game) {}
+        Disassembler(BinaryFile* file, const SIDBase* sidbase, const game_type game = game_type::T2R) noexcept 
+            : m_currentFile(file), m_sidbase(sidbase), m_game(game) {};
+
+        Disassembler(BinaryFile* file, const SIDBase* sidbase, const std::map<sid64, ast::full_type>* known_types, const game_type game = game_type::T2R) noexcept 
+            : m_currentFile(file), m_sidbase(sidbase), m_knownTypes(known_types), m_game(game) {};
 
         const std::vector<disassembled_entry>& disassemble();
         [[nodiscard]] std::string disassembly_to_string(const std::vector<disassembled_entry>& entries);
@@ -75,6 +88,11 @@ namespace dconstruct {
         std::map<sid64, std::vector<const structs::unmapped*>> m_unmappedEntries;
         BinaryFile* m_currentFile = nullptr;
         const SIDBase* m_sidbase = nullptr;
+
+        inline static const std::map<sid64, ast::full_type> s_emptyTypes;
+        const std::map<sid64, ast::full_type>* m_knownTypes = &s_emptyTypes;
+
+
         std::vector<std::shared_ptr<function_disassembly>> m_functions;
         std::optional<ast::state_script> m_stateScript;
         embedded_function_id m_currentEmbeddedFunctionId;
@@ -96,8 +114,10 @@ namespace dconstruct {
         void insert_anonymous_array(const location, disassembled_values_t&);
         [[nodiscard]] disassembled_value insert_array(const location, const u32);
         [[nodiscard]] ast::state_script insert_state_script(const StateScript*);
+        [[nodiscard]] disassembled_values_t insert_mapped_struct(const location, const std::pair<sid64, ast::full_type>&);
         void insert_unmapped_struct(const structs::unmapped*, disassembled_values_t&);
         u8 insert_next_struct_member(const location, disassembled_values_t&);
+        [[nodiscard]] u8 insert_next_struct_member(const location, const ast::full_type&, disassembled_values_t& values);
         [[nodiscard]] std::optional<ast::variable_declaration> insert_variable(const SsDeclaration* var);
         [[nodiscard]] ast::state_script_block insert_on_block(const SsOnBlock* block, state_script_function_id& state_name);
         void set_register_types(Register&, Register&, const ast::full_type type);

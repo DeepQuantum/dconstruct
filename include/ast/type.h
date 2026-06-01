@@ -72,7 +72,7 @@ namespace dconstruct::ast {
 
     struct struct_type {
         std::string m_name;
-        std::map<std::string, ref_full_type> m_members;
+        std::vector<std::pair<std::string, ref_full_type>> m_members;
         bool operator==(const struct_type&) const = default;
     };
 

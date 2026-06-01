@@ -282,7 +282,7 @@ template<typename... Args> requires (std::same_as<Args, token_type> && ...)
         if (!decl) {
             return std::nullopt;
         }
-        struct_t.m_members[decl->m_identifier] = std::make_unique<ast::full_type>(std::move(decl->m_type));
+        struct_t.m_members.emplace_back(std::move(decl->m_identifier), std::make_unique<ast::full_type>(std::move(decl->m_type)));
     }
 
     if (!consume(token_type::RIGHT_BRACE, "expected '}' after struct definition")) {

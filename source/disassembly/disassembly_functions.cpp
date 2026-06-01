@@ -201,7 +201,26 @@ void decomp_file(
         }
     }
 
-    dconstruct::Disassembler disassembler(&file, &base, game);
+    std::map<sid64, dconstruct::ast::full_type> known_types{};
+    known_types[SID("gas-mask-setup")] = ast::struct_type{
+        .m_name = "gas-mask-setup",
+        .m_members = {
+            {"on_gesture", std::make_shared<dconstruct::ast::full_type>(dconstruct::ast::make_type_from_prim(ast::primitive_kind::SID))},
+            {"off_gesture", std::make_shared<dconstruct::ast::full_type>(dconstruct::ast::make_type_from_prim(ast::primitive_kind::SID))},
+            {"on_gas_mask", std::make_shared<dconstruct::ast::full_type>(dconstruct::ast::make_type_from_prim(ast::primitive_kind::SID))},
+            {"idle_gas_mask", std::make_shared<dconstruct::ast::full_type>(dconstruct::ast::make_type_from_prim(ast::primitive_kind::SID))},
+            {"off_gas_mask", std::make_shared<dconstruct::ast::full_type>(dconstruct::ast::make_type_from_prim(ast::primitive_kind::SID))},
+            {"gas_mask_name", std::make_shared<dconstruct::ast::full_type>(dconstruct::ast::make_type_from_prim(ast::primitive_kind::SID))},
+            {"target", std::make_shared<dconstruct::ast::full_type>(dconstruct::ast::make_type_from_prim(ast::primitive_kind::SID))},
+            {"gas_mask_state", std::make_shared<dconstruct::ast::full_type>(dconstruct::ast::make_type_from_prim(ast::primitive_kind::U8))},
+            {"unknown0", std::make_shared<dconstruct::ast::full_type>(dconstruct::ast::make_type_from_prim(ast::primitive_kind::U8))},
+            {"unused0", std::make_shared<dconstruct::ast::full_type>(dconstruct::ast::make_type_from_prim(ast::primitive_kind::U16))},
+            {"unused1", std::make_shared<dconstruct::ast::full_type>(dconstruct::ast::make_type_from_prim(ast::primitive_kind::U32))},
+            {"futz", std::make_shared<dconstruct::ast::full_type>(dconstruct::ast::make_type_from_prim(ast::primitive_kind::SID))},
+        }
+    };
+
+    dconstruct::Disassembler disassembler(&file, &base, &known_types, game);
 
     if (game == dconstruct::game_type::UC4) {
         disassembler.disassemble_functions_from_bin_file();

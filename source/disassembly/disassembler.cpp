@@ -257,7 +257,7 @@ u8 Disassembler::insert_next_struct_member(const location member, disassembled_v
         member_size = 8;
     }
     else if (m_sidbase->search(member.get<sid64>()) != nullptr) {
-        values.emplace_back(member.as<u64>());
+        values.emplace_back(member.as<sid64>());
         member_size = 8;
     }
     else if (is_possible_float(member.as<f32>())) {
@@ -277,6 +277,44 @@ u8 Disassembler::insert_next_struct_member(const location member, disassembled_v
         member_size = 4;
     }
     return member_size;
+}
+
+[[nodiscard]] u8 Disassembler::insert_next_struct_member(const location member, const ast::full_type& type, disassembled_values_t& values) {
+    return std::visit([this, member, &values](auto&& type) -> u8 {
+        using member_type = std::decay_t<decltype(type)>;
+
+        if constexpr (std::is_same_v<member_type, ast::primitive_type>) {
+            switch (type.m_type) {
+                case ast::primitive_kind::SID:
+                case ast::primitive_kind::U64: {
+                    values.emplace_back(member.as<sid64>());
+                    return sizeof(sid64);
+                }
+                case ast::primitive_kind::STRING: {
+                    values.emplace_back(member.as<char>());
+                    return sizeof(const char*);
+                }
+                case ast::primitive_kind::U8: {
+                    values.emplace_back(member.as<u8>());
+                    return sizeof(u8);
+                }
+                case ast::primitive_kind::U16: {
+                    values.emplace_back(member.as<u16>());
+                    return sizeof(u16);
+                }
+                case ast::primitive_kind::U32: {
+                    values.emplace_back(member.as<u32>());
+                    return sizeof(u32);
+                }
+                default: {
+                    values.emplace_back(member.as<i32>());
+                    return sizeof(i32); 
+                }
+            }
+        } else {
+            return insert_struct_or_arraylike(member, values);
+        }
+    }, type);
 }
 
 
@@ -485,12 +523,20 @@ std::string Disassembler::disassembly_to_string(const std::vector<disassembled_e
         out += "}\n";
     };
 
-    append_value = [&](const disassembled_values_t::value_type& value, const u32 indent) {
+    append_value = [&](const disassembled_value_content& value, const u32 indent) {
+
+        const disassembled_value_content* value_to_use = &value;
+        if (const mapped_value* mapped_value_ref = std::get_if<mapped_value>(&value)) {
+            append_format("%s ", mapped_value_ref->m_name.c_str());
+            value_to_use = mapped_value_ref->m_value.get();
+        }
+
         std::visit([&](auto&& entry) {
             using T = std::decay_t<decltype(entry)>;
+
             if constexpr (std::is_same_v<T, disassembled_value>) {
                 append_struct_like(entry.m_typeId, entry.m_offset, entry.m_values, indent);
-            } else if constexpr (std::is_same_v<T, std::shared_ptr<function_disassembly>>) {
+            }  else if constexpr (std::is_same_v<T, std::shared_ptr<function_disassembly>>) {
                 out += '\n';
                 append_function_disassembly(*entry, indent + indent_per_level);
             } else if constexpr (std::is_same_v<T, const ast::state_script*>) {
@@ -501,7 +547,11 @@ std::string Disassembler::disassembly_to_string(const std::vector<disassembled_e
                 if (out.empty() || out.back() != '\n') {
                     out += '\n';
                 }
-            } else if constexpr (std::is_same_v<T, const i32*>) {
+            } else if constexpr (std::is_same_v<T, const u8*>) {
+                append_format("u8: %u\n", *entry);
+            } else if constexpr (std::is_same_v<T, const u16*>) {
+                append_format("u16: %u\n", *entry);
+            } else if constexpr (std::is_same_v<T, const i32*> || std::is_same_v<T, const u32*>) {
                 append_format("int: %d\n", *entry);
             } else if constexpr (std::is_same_v<T, const u64*>) {
                 append_format("sid: %s\n", lookup(*entry));
@@ -512,7 +562,7 @@ std::string Disassembler::disassembly_to_string(const std::vector<disassembled_e
             } else if constexpr (std::is_same_v<T, const structs::map*>) {
                 append_format("keys: [0x%05X], values: [0x%05X]\n\n", get_offset(entry->keys.data), get_offset(entry->values.data));
             }
-        }, value);
+        }, *value_to_use);
     };
 
     for (u32 i = 0; i < entries.size(); ++i) {
@@ -631,7 +681,11 @@ disassembled_value Disassembler::insert_struct(const structs::unmapped *struct_p
             break;
         }
         default: {
-            insert_unmapped_struct(struct_ptr, value.m_values);
+            if (auto entry = m_knownTypes->find(effective_type_id); entry != m_knownTypes->end()) {
+                value.m_values = insert_mapped_struct(&struct_ptr->m_data, *entry);
+            } else {
+                insert_unmapped_struct(struct_ptr, value.m_values);
+            }
             break;
         }
     }
@@ -639,6 +693,24 @@ disassembled_value Disassembler::insert_struct(const structs::unmapped *struct_p
         m_currentEmbeddedFunctionId.m_outerStructs.pop_back();
     }
     return value;
+}
+
+[[nodiscard]] disassembled_values_t Disassembler::insert_mapped_struct(const location _struct, const std::pair<sid64, ast::full_type>& mapped_type) {
+    return std::visit([this, _struct, type_id = mapped_type.first](auto&& t) -> disassembled_values_t {
+        using outer_type = std::decay_t<decltype(t)>;
+
+        disassembled_values_t mapped_values{};
+        if constexpr (std::is_same_v<outer_type, ast::struct_type>) {
+            location member_location = _struct;
+            for (const auto& [member_name, member_type] : t.m_members) {
+                const auto inserted_size = insert_next_struct_member(member_location, *member_type, mapped_values);
+                mapped_values.back() = mapped_value{ member_name, std::make_unique<disassembled_value_content>(std::move(mapped_values.back())) };
+                member_location = member_location + inserted_size;
+            }
+        }
+
+        return mapped_values;
+    }, mapped_type.second);
 }
 
 
