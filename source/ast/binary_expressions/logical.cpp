@@ -195,19 +195,19 @@ void append_branch_locations(std::vector<u64>& destination, std::vector<u64>&& s
     return rhs_false;
 }
 
-void logical_expr::pseudo_py(std::ostream& os) const {
+void logical_expr::pseudo_py(ast_serialization_buffer& buffer) const {
     if (m_operator.m_lexeme == "&&") {
-        os << *m_lhs << " and " << *m_rhs;
+        buffer.append(*m_lhs, " and "sv, *m_rhs);
     } else {
-        os << *m_lhs << " or " << *m_rhs;
+        buffer.append(*m_lhs, " or "sv, *m_rhs);
     }
 }
 
-void logical_expr::pseudo_racket(std::ostream& os) const {
+void logical_expr::pseudo_racket(ast_serialization_buffer& buffer) const {
     if (m_operator.m_lexeme == "&&") {
-        os << "(and " << *m_lhs << " " << *m_rhs << ")";
+        buffer.append("(and "sv, *m_lhs, ' ', *m_rhs, ')');
     } else {
-        os << "(or " << *m_lhs << " " << *m_rhs << ")";
+        buffer.append("(or "sv, *m_lhs, ' ', *m_rhs, ')');
     }
 }
 

@@ -5,39 +5,42 @@
 
 namespace dconstruct::ast {
 
-void call_expr::pseudo_c(std::ostream& os) const {
-    const bool func_name_as_pascal = os.iword(get_flag_index()) & static_cast<i32>(LANGUAGE_FLAGS::FUNCTION_NAMES_PASCAL);
+void call_expr::pseudo_c(ast_serialization_buffer& buffer) const {
+    const bool func_name_as_pascal = buffer.has_flag(LANGUAGE_FLAGS::FUNCTION_NAMES_PASCAL);
     if (func_name_as_pascal) {
-        os << id_pascal_case;
+        buffer.set_flag(LANGUAGE_FLAGS::IDENTIFIER_PASCAL);
     }
-    os << *m_callee << "(";
+    buffer.append(*m_callee, '(');
     if (func_name_as_pascal) {
-        os << remove_id_pascal_case;
+        buffer.clear_flag(LANGUAGE_FLAGS::IDENTIFIER_PASCAL);
     }
     if (m_arguments.size() > 8 || get_complexity() > MAX_NON_SPLIT_COMPLEXITY && m_arguments.size() > 3) {
-        os << "\n" << indent_more;
+        buffer.append('\n');
+        buffer.indent_more();
         for (u16 i = 0; i < m_arguments.size(); ++i) {
-            os << indent << *m_arguments[i];
+            buffer.append_indent();
+            buffer.append(*m_arguments[i]);
             if (i != m_arguments.size() - 1) {
-                os << ",\n";
+                buffer.append(",\n"sv);
             }
         }
-        os << indent_less;
-        os << "\n" << indent << ")";
+        buffer.indent_less();
+        buffer.append('\n');
+        buffer.append_indent();
+        buffer.append(')');
     } else {
         for (u16 i = 0; i < m_arguments.size(); ++i) {
-            os << *m_arguments[i];
+            buffer.append(*m_arguments[i]);
             if (i != m_arguments.size() - 1) {
-                os << ", ";
+                buffer.append(", "sv);
             }
         }
-        os << ')';
+        buffer.append(')');
     }
 }
 
-void call_expr::pseudo_c_for_compiler(std::ostream& os) const {
-    const auto old_flags = os.iword(get_flag_index());
-    os.iword(get_flag_index()) = old_flags | static_cast<i32>(LANGUAGE_FLAGS::COMPILER);
+void call_expr::pseudo_c_for_compiler(ast_serialization_buffer& buffer) const {
+    buffer.set_flag(LANGUAGE_FLAGS::COMPILER);
 
     std::string callee_name;
     if (const auto* sid = dynamic_cast<const sid_identifier*>(m_callee.get())) {
@@ -47,65 +50,60 @@ void call_expr::pseudo_c_for_compiler(std::ostream& os) const {
     }
 
     if ((callee_name == "#dc:format" || callee_name == "dc:format") && m_arguments.size() >= 2) {
-        os << *m_arguments[0] << " $ ";
+        buffer.append(*m_arguments[0], " $ "sv);
         for (u16 i = 1; i < m_arguments.size(); ++i) {
-            os << *m_arguments[i];
+            buffer.append(*m_arguments[i]);
             if (i + 1 != m_arguments.size()) {
-                os << ", ";
+                buffer.append(", "sv);
             }
         }
-        os.iword(get_flag_index()) = old_flags;
         return;
     }
 
     if ((callee_name == "#display" || callee_name == "display") && !m_arguments.empty()) {
-        os << ">> " << *m_arguments[0];
-        os.iword(get_flag_index()) = old_flags;
+        buffer.append(">> "sv, *m_arguments[0]);
         return;
     }
 
     if ((callee_name == "#go" || callee_name == "go") && !m_arguments.empty()) {
-        os << "=> " << *m_arguments[0];
-        os.iword(get_flag_index()) = old_flags;
+        buffer.append("=> "sv, *m_arguments[0]);
         return;
     }
 
-    os << *m_callee << '(';
+    buffer.append(*m_callee, '(');
     for (u16 i = 0; i < m_arguments.size(); ++i) {
-        os << *m_arguments[i];
+        buffer.append(*m_arguments[i]);
         if (i + 1 != m_arguments.size()) {
-            os << ", ";
+            buffer.append(", "sv);
         }
     }
-    os << ')';
-
-    os.iword(get_flag_index()) = old_flags;
+    buffer.append(')');
 }
 
-void call_expr::pseudo_py(std::ostream& os) const {
-    const bool func_name_as_pascal = os.iword(get_flag_index()) & static_cast<i32>(LANGUAGE_FLAGS::FUNCTION_NAMES_PASCAL);
+void call_expr::pseudo_py(ast_serialization_buffer& buffer) const {
+    const bool func_name_as_pascal = buffer.has_flag(LANGUAGE_FLAGS::FUNCTION_NAMES_PASCAL);
     if (func_name_as_pascal) {
-        os << id_pascal_case;
+        buffer.set_flag(LANGUAGE_FLAGS::IDENTIFIER_PASCAL);
     }
-    os << *m_callee << '(';
+    buffer.append(*m_callee, '(');
     if (func_name_as_pascal) {
-        os << remove_id_pascal_case;
+        buffer.clear_flag(LANGUAGE_FLAGS::IDENTIFIER_PASCAL);
     }
     for (u16 i = 0; i < m_arguments.size(); ++i) {
-        os << *m_arguments[i];
+        buffer.append(*m_arguments[i]);
         if (i != m_arguments.size() - 1) {
-            os << ", ";
+            buffer.append(", "sv);
         }
     }
-    os << ')';
+    buffer.append(')');
 }
 
-void call_expr::pseudo_racket(std::ostream& os) const {
-    os << '(' << *m_callee;
+void call_expr::pseudo_racket(ast_serialization_buffer& buffer) const {
+    buffer.append('(', *m_callee);
     for (const auto& arg : m_arguments) {
-        os << " " << *arg;
+        buffer.append(' ', *arg);
     }
-    os << ')';
+    buffer.append(')');
 }
 
 

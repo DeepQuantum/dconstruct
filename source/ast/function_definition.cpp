@@ -3,64 +3,63 @@
 
 namespace dconstruct::ast {
 
-void function_definition::pseudo_c(std::ostream& os) const {
+void function_definition::pseudo_c(ast_serialization_buffer& buffer) const {
     if (const std::string* name = std::get_if<std::string>(&m_name)) {
-        os << type_to_declaration_string(*m_type.m_return) << " ";
+        buffer.append(type_to_declaration_string(*m_type.m_return), ' ');
 
-        const bool func_name_as_pascal = os.iword(get_flag_index()) & static_cast<i32>(LANGUAGE_FLAGS::FUNCTION_NAMES_PASCAL);
+        const bool func_name_as_pascal = buffer.has_flag(LANGUAGE_FLAGS::FUNCTION_NAMES_PASCAL);
         if (func_name_as_pascal) {
             const auto str_res = try_convert_pascal_case(*name);
-            os << str_res.value_or(*name);
+            buffer.append(str_res.value_or(*name));
         } else {
-            os << *name;
+            buffer.append(*name);
         }
         if (func_name_as_pascal) {
-            os << remove_id_pascal_case;
+            buffer.clear_flag(LANGUAGE_FLAGS::IDENTIFIER_PASCAL);
         }
-        os << "(";
+        buffer.append('(');
         bool first = true;
         for (const auto& param : m_parameters) {
             if (!first) {
-                os << ", ";
+                buffer.append(", "sv);
             }
             first = false;
-            os << param;
+            buffer.append(param);
         } 
-        os << ") ";
+        buffer.append(") "sv);
     } else {
-        os << "lambda ";
+        buffer.append("lambda "sv);
     }
-    os << m_body;
+    buffer.append(m_body);
 }
 
-void function_definition::pseudo_py(std::ostream& os) const {
+void function_definition::pseudo_py(ast_serialization_buffer& buffer) const {
     if (const std::string* name = std::get_if<std::string>(&m_name)) {
-        os << "def " << *name << "(";
+        buffer.append("def "sv, *name, '(');
         bool first = true;
         for (const auto& param : m_parameters) {
             if (!first) {
-                os << ", ";
+                buffer.append(", "sv);
             }
             first = false;
-            param.pseudo_py(os);
+            param.pseudo_py(buffer);
         }
-        os << "):";
-        os << m_body;
+        buffer.append("):"sv, m_body);
     } else {
-        os << "lambda " << m_body;
+        buffer.append("lambda "sv, m_body);
     }
 }
 
-void function_definition::pseudo_racket(std::ostream& os) const {
+void function_definition::pseudo_racket(ast_serialization_buffer& buffer) const {
     if (const std::string* name = std::get_if<std::string>(&m_name)) {
-        os << "(define (" << *name;
+        buffer.append("(define ("sv, *name);
         for (const auto& param : m_parameters) {
-            os << " ";
-            param.pseudo_racket(os);
+            buffer.append(' ');
+            param.pseudo_racket(buffer);
         }
-        os << ") " << m_body << ")";
+        buffer.append(") "sv, m_body, ')');
     } else {
-        os << "(lambda " << m_body << ")";
+        buffer.append("(lambda "sv, m_body, ')');
     }
 }
 

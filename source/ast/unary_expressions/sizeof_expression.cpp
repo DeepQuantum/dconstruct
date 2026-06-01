@@ -29,32 +29,32 @@ namespace dconstruct::ast {
     return clone();
 }
 
-void sizeof_expr::pseudo_c(std::ostream& os) const {
-    os << "sizeof(";
+void sizeof_expr::pseudo_c(ast_serialization_buffer& buffer) const {
+    buffer.append("sizeof("sv);
     if (std::holds_alternative<full_type>(m_operand)) {
-        os << type_to_declaration_string(std::get<full_type>(m_operand));
+        buffer.append(type_to_declaration_string(std::get<full_type>(m_operand)));
     } else {
-        os << *std::get<expr_uptr>(m_operand);
+        buffer.append(*std::get<expr_uptr>(m_operand));
     }
-    os << ")";
+    buffer.append(')');
 }
 
-void sizeof_expr::pseudo_py(std::ostream& os) const {
+void sizeof_expr::pseudo_py(ast_serialization_buffer& buffer) const {
     if (std::holds_alternative<full_type>(m_operand)) {
-        os << "sizeof(" << type_to_declaration_string(std::get<full_type>(m_operand)) << ")";
+        buffer.append("sizeof("sv, type_to_declaration_string(std::get<full_type>(m_operand)), ')');
     } else {
-        os << "sys.getsizeof(" << *std::get<expr_uptr>(m_operand) << ")";
+        buffer.append("sys.getsizeof("sv, *std::get<expr_uptr>(m_operand), ')');
     }
 }
 
-void sizeof_expr::pseudo_racket(std::ostream& os) const {
-    os << "(sizeof ";
+void sizeof_expr::pseudo_racket(ast_serialization_buffer& buffer) const {
+    buffer.append("(sizeof "sv);
     if (std::holds_alternative<full_type>(m_operand)) {
-        os << type_to_declaration_string(std::get<full_type>(m_operand));
+        buffer.append(type_to_declaration_string(std::get<full_type>(m_operand)));
     } else {
-        os << *std::get<expr_uptr>(m_operand);
+        buffer.append(*std::get<expr_uptr>(m_operand));
     }
-    os << ")";
+    buffer.append(')');
 }
 
 [[nodiscard]] inline full_type sizeof_expr::compute_type_unchecked(const compilation::scope& env) const noexcept {

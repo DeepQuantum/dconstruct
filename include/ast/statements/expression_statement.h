@@ -8,9 +8,9 @@
 namespace dconstruct::ast {
     struct expression_stmt : public statement {
         explicit expression_stmt(expr_uptr&& expr) noexcept : m_expression(std::move(expr)) {};
-        void pseudo_c(std::ostream&) const final;
-        void pseudo_py(std::ostream&) const final;
-		void pseudo_racket(std::ostream&) const final;
+        void pseudo_c(ast_serialization_buffer&) const final;
+        void pseudo_py(ast_serialization_buffer&) const final;
+		void pseudo_racket(ast_serialization_buffer&) const final;
         [[nodiscard]] bool equals(const statement& rhs) const noexcept final;
         [[nodiscard]] std::unique_ptr<statement> clone() const noexcept final;
         [[nodiscard]] bool is_dead_code() const noexcept override;

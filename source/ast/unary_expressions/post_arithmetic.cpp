@@ -3,16 +3,16 @@
 
 namespace dconstruct::ast {
 
-void post_arithmetic_expression::pseudo_c(std::ostream& os) const {
-    os << *m_rhs << m_operator.m_lexeme;
+void post_arithmetic_expression::pseudo_c(ast_serialization_buffer& buffer) const {
+    buffer.append(*m_rhs, m_operator.m_lexeme);
 }
 
-void post_arithmetic_expression::pseudo_py(std::ostream& os) const {
-    os << *m_rhs << m_operator.m_lexeme;
+void post_arithmetic_expression::pseudo_py(ast_serialization_buffer& buffer) const {
+    buffer.append(*m_rhs, m_operator.m_lexeme);
 }
 
-void post_arithmetic_expression::pseudo_racket(std::ostream& os) const {
-    os << '(' << m_operator.m_lexeme << ' ' << *m_rhs << ')';
+void post_arithmetic_expression::pseudo_racket(ast_serialization_buffer& buffer) const {
+    buffer.append('(', m_operator.m_lexeme, ' ', *m_rhs, ')');
 }
 
 [[nodiscard]] expr_uptr post_arithmetic_expression::simplify() const {

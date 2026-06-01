@@ -95,7 +95,7 @@ struct compilation_run_result {
                 if (const std::optional<source_location> loc = err.m_expr->source_location()) {
                     std::cerr << " at " << format_source_location(*loc);
                 }
-                std::cerr << " checking expression " << err.m_expr->to_c_string();
+                std::cerr << " checking expression " << err.m_expr->to_pseudo_c_string();
             }
             std::cerr << "\n";
         }

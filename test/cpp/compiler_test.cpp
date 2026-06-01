@@ -1740,7 +1740,7 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
         EXPECT_EQ(access->m_token.m_lexeme, "SPACE");
         EXPECT_EQ(access->m_enumName, "Keycodes");
         EXPECT_EQ(access->m_memberName, "SPACE");
-        EXPECT_EQ(access->to_c_string(), "Keycodes.SPACE");
+        EXPECT_EQ(access->to_pseudo_c_string(), "Keycodes.SPACE");
         EXPECT_EQ(std::get<u64>(access->m_value.m_value), 20);
 
         compilation::scope scope{types};
@@ -1910,9 +1910,9 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
 
         const auto* using_decl = dynamic_cast<const ast::using_declaration*>(program.m_declarations[0].get());
         ASSERT_NE(using_decl, nullptr);
-        ASSERT_TRUE(std::holds_alternative<ast::function_type>(using_decl->m_newIdentifier.m_type));
+        ASSERT_TRUE(std::holds_alternative<ast::function_type>(using_decl->m_type));
 
-        const auto& format_type = std::get<ast::function_type>(using_decl->m_newIdentifier.m_type);
+        const auto& format_type = std::get<ast::function_type>(using_decl->m_type);
         EXPECT_EQ(format_type.m_distanceType, ast::function_type::DISTANCE::FAR);
         EXPECT_TRUE(format_type.m_isVariadic);
         ASSERT_EQ(format_type.m_arguments.size(), 1);

@@ -6,22 +6,21 @@
 
 namespace dconstruct::ast {
 
-void for_stmt::pseudo_c(std::ostream& os) const {
-    os << "for (" << *m_init << ' ' << *m_condition << "; " << *m_incr << ") " << *m_body;
+void for_stmt::pseudo_c(ast_serialization_buffer& buffer) const {
+    buffer.append("for ("sv, *m_init, ' ', *m_condition, "; "sv, *m_incr, ") "sv, *m_body);
 }
 
 
-void for_stmt::pseudo_py(std::ostream& os) const {
+void for_stmt::pseudo_py(ast_serialization_buffer& buffer) const {
     const auto& var = static_cast<const variable_declaration&>(*m_init).m_identifier;
     const auto& range = static_cast<const binary_expr&>(*m_condition).m_rhs;
-    os << "for " << var << " in range(" << *range << "):";
-    os << *m_body;
+    buffer.append("for "sv, var, " in range("sv, *range, "):"sv, *m_body);
 }
 
-void for_stmt::pseudo_racket(std::ostream& os) const {
+void for_stmt::pseudo_racket(ast_serialization_buffer& buffer) const {
     const auto& var = static_cast<const variable_declaration&>(*m_init).m_identifier;
     const auto& range = static_cast<const binary_expr&>(*m_condition).m_rhs;
-    os << "(for ([ " << var << " (in-range " << *range << ")]) " << *m_body << ")";
+    buffer.append("(for ([ "sv, var, " (in-range "sv, *range, ")]) "sv, *m_body, ')');
 }
 
 [[nodiscard]] bool for_stmt::equals(const statement& rhs) const noexcept {

@@ -1,7 +1,7 @@
 #include "decompilation/decomp_function.h"
-#include <sstream>
 #include <iostream>
-#include <iomanip>
+
+using namespace std::literals;
 
 namespace dconstruct::dcompiler {
 
@@ -158,9 +158,9 @@ state_script_functions::state_script_functions(const std::vector<ast::function_d
     }
 }
 
-[[nodiscard]] void state_script_functions::to_string(std::ostream& os) const noexcept {
+[[nodiscard]] void state_script_functions::to_string(ast::ast_serialization_buffer& buffer) const noexcept {
     for (const auto& func : m_nonStateScriptFuncs) {
-        os << *func << "\n\n";
+        buffer.append(*func, "\n\n"sv);
     }
 
     if (m_states.empty()) {
@@ -169,177 +169,182 @@ state_script_functions::state_script_functions(const std::vector<ast::function_d
 
     assert(m_binFile->m_dcscript != nullptr);
 
-    os << "statescript {\n" << ast::indent_more;
+    buffer.append("statescript {\n"sv);
+    buffer.indent_more();
 
-    emit_script_metadata(os);
+    emit_script_metadata(buffer);
 
     for (const auto& [state_name, blocks] : m_states) {
-        os << ast::indent <<  "state " << state_name << " {\n";
-        os << ast::indent_more;
+        buffer.append_indent();
+        buffer.append("state "sv, state_name, " {\n"sv);
+        buffer.indent_more();
         for (const auto& [block_name, tracks] : blocks) {
-            os << ast::indent << "block " << block_name << " {\n";
-            os << ast::indent_more;
+            buffer.append_indent();
+            buffer.append("block "sv, block_name, " {\n"sv);
+            buffer.indent_more();
             for (const auto& [track_name, functions] : tracks) {
-                os << ast::indent << "track " << track_name << " {\n";
-                os << ast::indent_more;
+                buffer.append_indent();
+                buffer.append("track "sv, track_name, " {\n"sv);
+                buffer.indent_more();
                 for (const auto* function : functions) {
-                    os << ast::indent << *function;
-                    os << "\n";
+                    buffer.append_indent();
+                    buffer.append(*function, '\n');
                 }
-                os << ast::indent_less;
-                os << ast::indent << "}\n";
+                buffer.indent_less();
+                buffer.append_indent();
+                buffer.append("}\n"sv);
             }
-            os << ast::indent_less;
-            os << ast::indent << "}\n";
+            buffer.indent_less();
+            buffer.append_indent();
+            buffer.append("}\n"sv);
         }
-        os << ast::indent_less;
-        os << ast::indent << "}\n";
+        buffer.indent_less();
+        buffer.append_indent();
+        buffer.append("}\n"sv);
     }
 
-    os << "}\n" << ast::indent_less;
+    buffer.indent_less();
+    buffer.append("}\n"sv);
 }
 
-void state_script_functions::emit_script_metadata(std::ostream& os) const {
+void state_script_functions::emit_script_metadata(ast::ast_serialization_buffer& buffer) const {
     if (m_binFile->m_dcscript->m_pSsOptions && m_binFile->m_dcscript->m_pSsOptions->m_pSymbolArray) {
         const SymbolArray* array = m_binFile->m_dcscript->m_pSsOptions->m_pSymbolArray;
-        os << ast::indent << "options {\n" << ast::indent_more;
+        buffer.append_indent();
+        buffer.append("options {\n"sv);
+        buffer.indent_more();
         for (i32 i = 0; i < array->m_numEntries; ++i){
-            os << ast::indent << m_binFile->m_sidCache.at(array->m_pSymbols[i]) << "\n";
+            buffer.append_indent();
+            buffer.append(m_binFile->m_sidCache.at(array->m_pSymbols[i]), '\n');
         }
-        os << ast::indent_less << ast::indent << "}\n";
+        buffer.indent_less();
+        buffer.append_indent();
+        buffer.append("}\n"sv);
     }
 
-    os << std::fixed << std::setprecision(2);
-
     if (m_binFile->m_dcscript->m_pSsDeclList) {
-        os << ast::indent << "declarations {\n" << ast::indent_more;
+        buffer.append_indent();
+        buffer.append("declarations {\n"sv);
+        buffer.indent_more();
         for (i32 i = 0; i < m_binFile->m_dcscript->m_pSsDeclList->m_numDeclarations; ++i) {
             const SsDeclaration* decl = m_binFile->m_dcscript->m_pSsDeclList->m_pDeclarations + i;
             const bool is_nullptr = decl->m_pDeclValue == nullptr;
             if (decl->m_isVar) {
-                os << ast::indent;
+                buffer.append_indent();
                 std::string decl_name = m_binFile->m_sidCache.at(decl->m_declId);
                 switch (decl->m_declTypeId) {
                     case SID("boolean"): {
-                        os << "bool " << decl_name << " = ";
+                        buffer.append("bool "sv, decl_name, " = "sv);
                         if (!is_nullptr) {
-                            os << std::boolalpha << *reinterpret_cast<const bool*>(decl->m_pDeclValue);
+                            buffer.append(*reinterpret_cast<const bool*>(decl->m_pDeclValue) ? "true"sv : "false"sv);
                         } else {
-                            os << "nullptr";
+                            buffer.append("nullptr"sv);
                         }
                         break;
                     }
                     case SID("vector"): {
                         const f32* val = reinterpret_cast<const f32*>(decl->m_pDeclValue);
-                        os << "vector " << decl_name << " = ";
-                        if (!is_nullptr)
-                        os << "("
-                            << val[0] << ", "
-                            << val[1] << ", "
-                            << val[2] << ", "
-                            << val[3] << ")";
-                        else {
-                            os << "nullptr";
+                        buffer.append("vector "sv, decl_name, " = "sv);
+                        if (!is_nullptr) {
+                            buffer.append_format("({:.2f}, {:.2f}, {:.2f}, {:.2f})", val[0], val[1], val[2], val[3]);
+                        } else {
+                            buffer.append("nullptr"sv);
                         }
                         break;
                     }
                     case SID("quat"): {
                         const f32* val = reinterpret_cast<const f32*>(decl->m_pDeclValue);
-                        os << "quaternion " << decl_name << " = ";
+                        buffer.append("quaternion "sv, decl_name, " = "sv);
                         if (!is_nullptr) {
-                        os
-                            << "(" << val[0] << ", "
-                            << val[1] << ", "
-                            << val[2] << ", "
-                            << val[3] << ")";
+                            buffer.append_format("({:.2f}, {:.2f}, {:.2f}, {:.2f})", val[0], val[1], val[2], val[3]);
                         } else {
-                            os << "nullptr";
+                            buffer.append("nullptr"sv);
                         }
                         break;
                     }
                     case SID("float"): {
-                        os << "f32 " << decl_name << " = ";
+                        buffer.append("f32 "sv, decl_name, " = "sv);
                         if (!is_nullptr) {
-                            os << *reinterpret_cast<const f32*>(decl->m_pDeclValue);
+                            buffer.append_format("{:.2f}", *reinterpret_cast<const f32*>(decl->m_pDeclValue));
                         } else {
-                            os << "nullptr";
+                            buffer.append("nullptr"sv);
                         }
                         break;
                     }
                     case SID("string"): {
-                        os << "string " << decl_name << " = ";
+                        buffer.append("string "sv, decl_name, " = "sv);
                         if (!is_nullptr) {
-                            os << *reinterpret_cast<const char**>(decl->m_pDeclValue);
+                            buffer.append(std::string_view{*reinterpret_cast<const char**>(decl->m_pDeclValue)});
                         } else {
-                            os << "nullptr";
+                            buffer.append("nullptr"sv);
                         }
                         break;
                     }
                     case SID("symbol"): {
-                        os << "symbol " << decl_name << " = ";
+                        buffer.append("symbol "sv, decl_name, " = "sv);
                         if (!is_nullptr) {
-                            os << m_binFile->m_sidCache.at(*reinterpret_cast<const sid64*>(decl->m_pDeclValue));
+                            buffer.append(m_binFile->m_sidCache.at(*reinterpret_cast<const sid64*>(decl->m_pDeclValue)));
                         } else {
-                            os << "nullptr";
+                            buffer.append("nullptr"sv);
                         }
                         break;
                     }
                     case SID("int32"): {
-                        os << "i32 " << decl_name << " = ";
+                        buffer.append("i32 "sv, decl_name, " = "sv);
                         if (!is_nullptr) {
-                            os << *reinterpret_cast<const i32*>(decl->m_pDeclValue);
+                            buffer.append(*reinterpret_cast<const i32*>(decl->m_pDeclValue));
                         } else {
-                            os << "nullptr";
+                            buffer.append("nullptr"sv);
                         }
                         break;
                     }
                     case SID("uint64"): {
-                        os << "u64 " << decl_name << " = ";
+                        buffer.append("u64 "sv, decl_name, " = "sv);
                         if (!is_nullptr) {
-                            os << *reinterpret_cast<const u64*>(decl->m_pDeclValue);
+                            buffer.append(*reinterpret_cast<const u64*>(decl->m_pDeclValue));
                         } else {
-                            os << "nullptr";
+                            buffer.append("nullptr"sv);
                         }
                         break;
                     }
                     case SID("timer"): {
-                        os << "timer " << decl_name << " = ";
+                        buffer.append("timer "sv, decl_name, " = "sv);
                         if (!is_nullptr) {
-                            os << *reinterpret_cast<const f32*>(decl->m_pDeclValue);
+                            buffer.append_format("{:.2f}", *reinterpret_cast<const f32*>(decl->m_pDeclValue));
                         } else {
-                            os << "nullptr";
+                            buffer.append("nullptr"sv);
                         }
                         break;
                     }
                     case SID("point"): {
                         const f32* val = reinterpret_cast<const f32*>(decl->m_pDeclValue);
-                        os << "point " << decl_name << " = ";
+                        buffer.append("point "sv, decl_name, " = "sv);
                         if (!is_nullptr) {
-                            os << "(" << val[0] << ", "
-                               << "(" << val[1] << ", "
-                               << "(" << val[2] << ")";
+                            buffer.append_format("({:.2f}, {:.2f}, {:.2f})", val[0], val[1], val[2]);
                         } else {
-                            os << "nullptr";
+                            buffer.append("nullptr"sv);
                         }
                         break;
                     }
                     case SID("bound-frame"): {
-                        os << "bound-frame " << decl_name << " = ";
+                        buffer.append("bound-frame "sv, decl_name, " = "sv);
                         if (!is_nullptr) {
-                            os << *reinterpret_cast<const f32*>(decl->m_pDeclValue);
+                            buffer.append_format("{:.2f}", *reinterpret_cast<const f32*>(decl->m_pDeclValue));
                         } else {
-                            os << "nullptr";
+                            buffer.append("nullptr"sv);
                         }
                         break;
                     }
                     default: {
-                        os << "u64? " << decl_name << " = ???";
+                        buffer.append("u64? "sv, decl_name, " = ???"sv);
                     }
                 }
-                os << "\n";
+                buffer.append('\n');
             }
         }
-        os << ast::indent_less << ast::indent << "}\n";
+        buffer.indent_less();
+        buffer.append_indent();
+        buffer.append("}\n"sv);
     }
 }
 

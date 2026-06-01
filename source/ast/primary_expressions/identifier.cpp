@@ -5,16 +5,16 @@
 namespace dconstruct::ast {
 
     
-void identifier::pseudo_c(std::ostream& os) const {
-    os << m_name.m_lexeme;
+void identifier::pseudo_c(ast_serialization_buffer& buffer) const {
+    buffer.append(m_name.m_lexeme);
 }
 
-void identifier::pseudo_py(std::ostream& os) const {
-    os << m_name.m_lexeme;
+void identifier::pseudo_py(ast_serialization_buffer& buffer) const {
+    buffer.append(m_name.m_lexeme);
 }
 
-void identifier::pseudo_racket(std::ostream& os) const {
-    os << m_name.m_lexeme;
+void identifier::pseudo_racket(ast_serialization_buffer& buffer) const {
+    buffer.append(m_name.m_lexeme);
 }
 
 [[nodiscard]] bool identifier::equals(const expression &rhs) const noexcept {

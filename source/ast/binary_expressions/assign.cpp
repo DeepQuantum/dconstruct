@@ -3,17 +3,17 @@
 
 namespace dconstruct::ast {    
 
-void assign_expr::pseudo_c(std::ostream& os) const {
-    os << *m_lhs << " = " << *m_rhs;
+void assign_expr::pseudo_c(ast_serialization_buffer& buffer) const {
+    buffer.append(*m_lhs, " = "sv, *m_rhs);
 }
 
 
-void assign_expr::pseudo_py(std::ostream& os) const {
-    os << *m_lhs << " = " << *m_rhs;
+void assign_expr::pseudo_py(ast_serialization_buffer& buffer) const {
+    buffer.append(*m_lhs, " = "sv, *m_rhs);
 }
 
-void assign_expr::pseudo_racket(std::ostream& os) const {
-    os << "(set! " << *m_lhs << ' ' << *m_rhs << ')';
+void assign_expr::pseudo_racket(ast_serialization_buffer& buffer) const {
+    buffer.append("(set! "sv, *m_lhs, ' ', *m_rhs, ')');
 }
 
 [[nodiscard]] expr_uptr assign_expr::simplify() const {

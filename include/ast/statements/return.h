@@ -7,9 +7,9 @@ namespace dconstruct::ast {
     struct return_stmt : public statement {
         return_stmt(expr_uptr&& expr) noexcept : m_expr(std::move(expr)) {}
 
-        void pseudo_c(std::ostream&) const final;
-        void pseudo_py(std::ostream&) const final;
-        void pseudo_racket(std::ostream&) const final;
+        void pseudo_c(ast_serialization_buffer&) const final;
+        void pseudo_py(ast_serialization_buffer&) const final;
+        void pseudo_racket(ast_serialization_buffer&) const final;
         [[nodiscard]] bool equals(const statement& rhs) const noexcept final;
         [[nodiscard]] std::unique_ptr<statement> clone() const noexcept final;
         [[nodiscard]] std::vector<semantic_check_error> check_semantics(compilation::scope& env) const noexcept final;

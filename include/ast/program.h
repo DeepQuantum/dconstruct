@@ -7,9 +7,9 @@ namespace dconstruct::ast {
 
         explicit program(std::vector<ast::global_decl_uptr> declarations) noexcept : m_declarations(std::move(declarations)) {};
 
-        void pseudo_c(std::ostream&) const final;
-        void pseudo_py(std::ostream&) const final;
-        void pseudo_racket(std::ostream&) const final;
+        void pseudo_c(ast_serialization_buffer&) const final;
+        void pseudo_py(ast_serialization_buffer&) const final;
+        void pseudo_racket(ast_serialization_buffer&) const final;
         
 
         [[nodiscard]] std::vector<semantic_check_error> check_semantics(compilation::scope&) const noexcept;

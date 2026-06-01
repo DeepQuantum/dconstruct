@@ -10,6 +10,7 @@
 #include <codecvt>
 #include <execution>
 #include <fstream>
+#include <iostream>
 #include <locale>
 #include <set>
 #include <sstream>
@@ -47,11 +48,11 @@ constexpr i32 BOX_WIDTH = 100;
     return (graph_dir / sanitized_func_id).replace_extension(".svg");
 }
 
-[[nodiscard]] std::string get_dcpl_comment_prefix(const dconstruct::ast::print_fn_type language_type) {
-    if (language_type == dconstruct::ast::py) {
+[[nodiscard]] std::string get_dcpl_comment_prefix(const dconstruct::ast::LANGUAGE_FLAGS language_flags) {
+    if (static_cast<u8>(language_flags & dconstruct::ast::LANGUAGE_FLAGS::PY) != 0) {
         return "#";
     }
-    if (language_type == dconstruct::ast::racket) {
+    if (static_cast<u8>(language_flags & dconstruct::ast::LANGUAGE_FLAGS::RACKET) != 0) {
         return ";";
     }
     return "//";
@@ -173,11 +174,10 @@ void decomp_file(
     const std::filesystem::path& out_decomp_filename,
     const dconstruct::SIDBase& base,
     const bool write_graphs,
-    const dconstruct::ast::print_fn_type language_type,
+    const dconstruct::ast::LANGUAGE_FLAGS language_flags,
     const bool show_warnings,
     const bool optimize,
     const std::vector<std::string>& edits,
-    const bool use_pascal_case,
     const dconstruct::game_type game
 ) {
     const bool effective_optimize = optimize && game == dconstruct::game_type::T2R;
@@ -201,32 +201,14 @@ void decomp_file(
         }
     }
 
-    std::map<sid64, dconstruct::ast::full_type> known_types{};
-    known_types[SID("gas-mask-setup")] = ast::struct_type{
-        .m_name = "gas-mask-setup",
-        .m_members = {
-            {"on_gesture", std::make_shared<dconstruct::ast::full_type>(dconstruct::ast::make_type_from_prim(ast::primitive_kind::SID))},
-            {"off_gesture", std::make_shared<dconstruct::ast::full_type>(dconstruct::ast::make_type_from_prim(ast::primitive_kind::SID))},
-            {"on_gas_mask", std::make_shared<dconstruct::ast::full_type>(dconstruct::ast::make_type_from_prim(ast::primitive_kind::SID))},
-            {"idle_gas_mask", std::make_shared<dconstruct::ast::full_type>(dconstruct::ast::make_type_from_prim(ast::primitive_kind::SID))},
-            {"off_gas_mask", std::make_shared<dconstruct::ast::full_type>(dconstruct::ast::make_type_from_prim(ast::primitive_kind::SID))},
-            {"gas_mask_name", std::make_shared<dconstruct::ast::full_type>(dconstruct::ast::make_type_from_prim(ast::primitive_kind::SID))},
-            {"target", std::make_shared<dconstruct::ast::full_type>(dconstruct::ast::make_type_from_prim(ast::primitive_kind::SID))},
-            {"gas_mask_state", std::make_shared<dconstruct::ast::full_type>(dconstruct::ast::make_type_from_prim(ast::primitive_kind::U8))},
-            {"unknown0", std::make_shared<dconstruct::ast::full_type>(dconstruct::ast::make_type_from_prim(ast::primitive_kind::U8))},
-            {"unused0", std::make_shared<dconstruct::ast::full_type>(dconstruct::ast::make_type_from_prim(ast::primitive_kind::U16))},
-            {"unused1", std::make_shared<dconstruct::ast::full_type>(dconstruct::ast::make_type_from_prim(ast::primitive_kind::U32))},
-            {"futz", std::make_shared<dconstruct::ast::full_type>(dconstruct::ast::make_type_from_prim(ast::primitive_kind::SID))},
-        }
-    };
-
-    dconstruct::Disassembler disassembler(&file, &base, &known_types, game);
+    dconstruct::Disassembler disassembler(&file, &base, game);
 
     if (game == dconstruct::game_type::UC4) {
         disassembler.disassemble_functions_from_bin_file();
     } else {
         disassembler.disassemble();
     }
+
 
     const auto funcs = disassembler.get_all_functions();
     {
@@ -236,14 +218,12 @@ void decomp_file(
     }
 
     if (!funcs.empty()) {
-        std::ofstream out(out_decomp_filename);
         std::vector<dconstruct::ast::function_definition> functions;
         functions.reserve(funcs.size());
-        out << get_output_header(file, file.m_dcheader ? file.m_dcheader->m_numEntries : 0, funcs.size(), disassembler.has_state_script(), game, effective_optimize, get_dcpl_comment_prefix(language_type));
-        out << language_type;
-        if (use_pascal_case) {
-            out << dconstruct::ast::func_pascal_case;
-        }
+
+        dconstruct::ast::ast_serialization_buffer out{100'000};
+        out.append(get_output_header(file, file.m_dcheader ? file.m_dcheader->m_numEntries : 0, funcs.size(), disassembler.has_state_script(), game, effective_optimize, get_dcpl_comment_prefix(language_flags)));
+        out.m_flags = language_flags;
         std::set<u64> emitted_funcs;
 
         for (const auto& func : funcs) {
@@ -264,6 +244,9 @@ void decomp_file(
         }
         dconstruct::dcompiler::state_script_functions output_functions{functions, &file};
         output_functions.to_string(out);
+
+        std::ofstream file_out(out_decomp_filename, std::ios::binary);
+        file_out << out.str();
     }
 }
 
@@ -305,8 +288,7 @@ void decompile_multiple(
     const bool generate_graphs,
     const bool show_warnings,
     const bool optimize,
-    const dconstruct::ast::print_fn_type language_print,
-    const bool pascal_case,
+    const dconstruct::ast::LANGUAGE_FLAGS language_flags,
     const dconstruct::game_type game
 ) {
     const bool effective_optimize = optimize && game == dconstruct::game_type::T2R;
@@ -335,7 +317,7 @@ void decompile_multiple(
             const std::filesystem::path disasm_outpath = (out / std::filesystem::relative(entry, in)).concat(".asm");
             const std::filesystem::path decomp_outpath = (out / std::filesystem::relative(entry, in)).concat(".dcpl");
             std::filesystem::create_directories(disasm_outpath.parent_path());
-            decomp_file(entry.string(), disasm_outpath, decomp_outpath, sidbase, generate_graphs, language_print, show_warnings, effective_optimize, {}, pascal_case, game);
+            decomp_file(entry.string(), disasm_outpath, decomp_outpath, sidbase, generate_graphs, language_flags, show_warnings, effective_optimize, {}, game);
         }
     );
 
@@ -405,15 +387,15 @@ std::vector<std::string> edits_from_file(const std::filesystem::path& path) {
     return result;
 }
 
-[[nodiscard]] std::optional<dconstruct::ast::print_fn_type> get_print_type(const std::string& input_string) {
+[[nodiscard]] std::optional<dconstruct::ast::LANGUAGE_FLAGS> get_print_type(const std::string& input_string) {
     if (input_string == "C" || input_string == "c") {
-        return dconstruct::ast::c;
+        return dconstruct::ast::LANGUAGE_FLAGS::C;
     }
     if (input_string == "Python" || input_string == "python") {
-        return dconstruct::ast::py;
+        return dconstruct::ast::LANGUAGE_FLAGS::PY;
     }
     if (input_string == "Racket" || input_string == "racket") {
-        return dconstruct::ast::racket;
+        return dconstruct::ast::LANGUAGE_FLAGS::RACKET;
     }
     return std::nullopt;
 }

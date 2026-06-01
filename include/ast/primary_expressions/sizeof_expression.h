@@ -15,11 +15,11 @@ namespace dconstruct::ast {
 
         [[nodiscard]] bool equals(const expression& rhs) const noexcept final;
 
-        void pseudo_c(std::ostream& os) const override;
+        void pseudo_c(ast_serialization_buffer& buffer) const override;
 
-        void pseudo_py(std::ostream& os) const override;
+        void pseudo_py(ast_serialization_buffer& buffer) const override;
 
-        void pseudo_racket(std::ostream& os) const override;
+        void pseudo_racket(ast_serialization_buffer& buffer) const override;
 
         [[nodiscard]] expr_uptr clone() const noexcept final;
 

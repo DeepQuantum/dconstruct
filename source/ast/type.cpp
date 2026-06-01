@@ -1,5 +1,5 @@
 #include "ast/type.h"
-#include <sstream>
+#include <format>
 #include <numeric>
 
 namespace dconstruct::ast {
@@ -190,16 +190,17 @@ full_type& full_type::operator=(full_type&&) = default;
         } else if constexpr (std::is_same_v<T, ptr_type>) {
             return type_to_declaration_string(*arg.m_pointedAt) + '*';
         } else if constexpr (std::is_same_v<T, function_type>) {
-            std::ostringstream os;
-            os << "(";
+            std::string buffer;
+            buffer.push_back('(');
             for (u32 i = 0; i < arg.m_arguments.size(); ++i) {
-                os << type_to_declaration_string(*arg.m_arguments[i].second.get());
+                buffer.append(type_to_declaration_string(*arg.m_arguments[i].second.get()));
                 if (i < arg.m_arguments.size() - 1) {
-                    os << ", ";
+                    buffer.append(", ");
                 }
             }
-            os << ") -> " << (arg.m_return != nullptr ? type_to_declaration_string(*arg.m_return.get()) : "void");
-            return os.str();
+            buffer.append(") -> ");
+            buffer.append(arg.m_return != nullptr ? type_to_declaration_string(*arg.m_return.get()) : "void");
+            return buffer;
         } else if constexpr(std::is_same_v<T, std::monostate>) {
             return "u64?";
         } else {
@@ -212,27 +213,25 @@ full_type& full_type::operator=(full_type&&) = default;
     return std::visit([&type](auto&& arg) -> std::string {
         using T = std::decay_t<decltype(arg)>;
         if constexpr (std::is_same_v<T, struct_type>) {
-            std::ostringstream os;
-            os << "struct " << arg.m_name << " // size: " << get_size(type) << "\n";
-            os << "{\n";
+            std::string buffer = std::format("struct {} // size: {}\n{{\n", arg.m_name, get_size(type));
             for (const auto& [name, member_type] : arg.m_members) {
-                os << "    " << type_to_declaration_string(*member_type.get()) << " " << name << ";\n";
+                buffer.append("    ");
+                buffer.append(type_to_declaration_string(*member_type.get()));
+                buffer.push_back(' ');
+                buffer.append(name);
+                buffer.append(";\n");
             }
-            os << "};";
-            return os.str();
+            buffer.append("};");
+            return buffer;
         } else if constexpr (std::is_same_v<T, enum_type>) {
-            std::ostringstream os;
-            os << "enum " << arg.m_name << " // size: " << get_size(type) << "\n";
-            os << "{\n";
+            std::string buffer = std::format("enum {} // size: {}\n{{\n", arg.m_name, get_size(type));
             for (const auto& [name, value] : arg.m_enumerators) {
-                os << "    " << name << " " << value << ";\n";
+                buffer.append(std::format("    {} {};\n", name, value));
             }
-            os << "};";
-            return os.str();
+            buffer.append("};");
+            return buffer;
         } else {
-            std::ostringstream os;
-            os << type_to_declaration_string(type) << " // size: " << get_size(type);
-            return os.str();
+            return std::format("{} // size: {}", type_to_declaration_string(type), get_size(type));
         }
     }, type);
 }

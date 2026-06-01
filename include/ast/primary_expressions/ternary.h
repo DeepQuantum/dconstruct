@@ -11,9 +11,9 @@ namespace dconstruct::ast {
         ternary_expr(expr_uptr&& condition, expr_uptr&& then, expr_uptr&& _else) noexcept : 
         m_condition(std::move(condition)), m_then(std::move(then)), m_else(std::move(_else)) {};
         
-        void pseudo_c(std::ostream& os) const final;
-        void pseudo_py(std::ostream& os) const final;
-        void pseudo_racket(std::ostream& os) const final;
+        void pseudo_c(ast_serialization_buffer& buffer) const final;
+        void pseudo_py(ast_serialization_buffer& buffer) const final;
+        void pseudo_racket(ast_serialization_buffer& buffer) const final;
         [[nodiscard]] expr_uptr simplify() const final;
         [[nodiscard]] bool equals(const expression &rhs) const noexcept final;
         [[nodiscard]] expr_uptr clone() const final;

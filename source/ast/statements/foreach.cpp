@@ -7,18 +7,17 @@
 namespace dconstruct::ast {
 
 
-void foreach_stmt::pseudo_c(std::ostream& os) const {
-    os << "foreach (" << m_var  << " : " << *m_iterable << ") " << *m_body;
+void foreach_stmt::pseudo_c(ast_serialization_buffer& buffer) const {
+    buffer.append("foreach ("sv, m_var, " : "sv, *m_iterable, ") "sv, *m_body);
 }
 
 
-void foreach_stmt::pseudo_py(std::ostream& os) const {
-    os << "for " << m_var << " in " << *m_iterable << ":";
-    os << *m_body;
+void foreach_stmt::pseudo_py(ast_serialization_buffer& buffer) const {
+    buffer.append("for "sv, m_var, " in "sv, *m_iterable, ':', *m_body);
 }
 
-void foreach_stmt::pseudo_racket(std::ostream& os) const {
-    os << "(for ([" << m_var << " " << *m_iterable << "]) " << *m_body << ")";
+void foreach_stmt::pseudo_racket(ast_serialization_buffer& buffer) const {
+    buffer.append("(for (["sv, m_var, ' ', *m_iterable, "]) "sv, *m_body, ')');
 }
 
 [[nodiscard]] bool foreach_stmt::equals(const statement& rhs) const noexcept {

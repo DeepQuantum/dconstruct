@@ -3,18 +3,17 @@
 
 namespace dconstruct::ast {
 
-void while_stmt::pseudo_c(std::ostream& os) const {
-    os << "while (" << *m_condition << ") " << *m_body;
+void while_stmt::pseudo_c(ast_serialization_buffer& buffer) const {
+    buffer.append("while ("sv, *m_condition, ") "sv, *m_body);
 }
 
 
-void while_stmt::pseudo_py(std::ostream& os) const {
-    os << "while " << *m_condition << ":";
-    os << *m_body;
+void while_stmt::pseudo_py(ast_serialization_buffer& buffer) const {
+    buffer.append("while "sv, *m_condition, ':', *m_body);
 }
 
-void while_stmt::pseudo_racket(std::ostream& os) const {
-    os << "(let loop () (when " << *m_condition << " " << *m_body << " (loop)))";
+void while_stmt::pseudo_racket(ast_serialization_buffer& buffer) const {
+    buffer.append("(let loop () (when "sv, *m_condition, ' ', *m_body, " (loop)))"sv);
 }
 
 

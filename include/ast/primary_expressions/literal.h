@@ -18,11 +18,11 @@ namespace dconstruct::ast {
             return kind_from_primitive_value(m_value);
         }
         
-        void pseudo_c(std::ostream& os) const final;
+        void pseudo_c(ast_serialization_buffer& buffer) const final;
         
-        void pseudo_py(std::ostream& os) const final;
+        void pseudo_py(ast_serialization_buffer& buffer) const final;
         
-        void pseudo_racket(std::ostream& os) const final;
+        void pseudo_racket(ast_serialization_buffer& buffer) const final;
         
         [[nodiscard]] expr_uptr simplify() const final;
         [[nodiscard]] bool equals(const expression& other) const noexcept final;

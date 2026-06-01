@@ -5,16 +5,16 @@
 namespace dconstruct::ast {
 
     
-void grouping::pseudo_c(std::ostream& os) const {
-    os << '(' << *m_expr << ')';
+void grouping::pseudo_c(ast_serialization_buffer& buffer) const {
+    buffer.append('(', *m_expr, ')');
 }
 
-void grouping::pseudo_py(std::ostream& os) const {
-    os << '(' << *m_expr << ')';
+void grouping::pseudo_py(ast_serialization_buffer& buffer) const {
+    buffer.append('(', *m_expr, ')');
 }
 
-void grouping::pseudo_racket(std::ostream& os) const {
-    os << *m_expr;
+void grouping::pseudo_racket(ast_serialization_buffer& buffer) const {
+    buffer.append(*m_expr);
 }
 
 [[nodiscard]] bool grouping::equals(const expression &rhs) const noexcept {

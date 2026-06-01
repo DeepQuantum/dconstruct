@@ -11,59 +11,67 @@ namespace dconstruct::ast {
     return lhs.equals(rhs);
 }
 
-void state_script::pseudo_c(std::ostream& os) const {
-    os << "statescript #" << m_name << " {\n";
-    os << indent_more;
-    os << indent << "options {\n";
-    os << indent_more;
+void state_script::pseudo_c(ast_serialization_buffer& buffer) const {
+    buffer.append("statescript #"sv, m_name, " {\n"sv);
+    buffer.indent_more();
+    buffer.append_indent();
+    buffer.append("options {\n"sv);
+    buffer.indent_more();
     for (const auto& opt : m_options) {
-        os << indent << opt << "\n";
+        buffer.append_indent();
+        buffer.append(opt, '\n');
     }
-    os << indent_less;
-    os << indent << "}\n";
-    os << indent << "declarations {\n";
-    os << indent_more;
+    buffer.indent_less();
+    buffer.append_indent();
+    buffer.append("}\n"sv);
+    buffer.append_indent();
+    buffer.append("declarations {\n"sv);
+    buffer.indent_more();
     for (const auto& decl : m_declarations) {
-        os << indent << decl.m_identifier << "\n";
+        buffer.append_indent();
+        buffer.append(decl.m_identifier, '\n');
     }
-    os << indent_less;
-    os << indent << "}\n";
+    buffer.indent_less();
+    buffer.append_indent();
+    buffer.append("}\n"sv);
     for (const auto& s : m_states) {
-        os << indent << s << "\n";
+        buffer.append_indent();
+        buffer.append(s, '\n');
     }
-    os << indent_less;
-    os << indent << "}";
+    buffer.indent_less();
+    buffer.append_indent();
+    buffer.append('}');
 }
 
-void state_script::pseudo_py(std::ostream& os) const {
-    os << "statescript #" << m_name << ":\n  options: ";
+void state_script::pseudo_py(ast_serialization_buffer& buffer) const {
+    buffer.append("statescript #"sv, m_name, ":\n  options: "sv);
     for (const auto& opt : m_options) {
-        os << opt << " ";
+        buffer.append(opt, ' ');
     }
-    os << "\n  declarations: ";
+    buffer.append("\n  declarations: "sv);
     for (const auto& decl : m_declarations) {
-        os << decl.m_identifier << " ";
+        buffer.append(decl.m_identifier, ' ');
     }
-    os << "\n  states: ";
+    buffer.append("\n  states: "sv);
     for (const auto& s : m_states) {
-        os << s << " ";
+        buffer.append(s, ' ');
     }
 }
 
-void state_script::pseudo_racket(std::ostream& os) const {
-    os << "(statescript #" << m_name << " (options";
+void state_script::pseudo_racket(ast_serialization_buffer& buffer) const {
+    buffer.append("(statescript #"sv, m_name, " (options"sv);
     for (const auto& opt : m_options) {
-        os << " " << opt;
+        buffer.append(' ', opt);
     }
-    os << ") (declarations";
+    buffer.append(") (declarations"sv);
     for (const auto& decl : m_declarations) {
-        os << " " << decl.m_identifier;
+        buffer.append(' ', decl.m_identifier);
     }
-    os << ") (states";
+    buffer.append(") (states"sv);
     for (const auto& s : m_states) {
-        os << " " << s;
+        buffer.append(' ', s);
     }
-    os << "))";
+    buffer.append("))"sv);
 }
 
 [[nodiscard]] std::vector<semantic_check_error> state_script::check_semantics(compilation::scope& scope) const noexcept {

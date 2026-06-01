@@ -8,9 +8,9 @@ namespace dconstruct::ast {
         explicit while_stmt(expr_uptr&& condition, stmnt_uptr&& body) noexcept :
         m_condition(std::move(condition)), m_body(std::move(body)) {};
 
-        void pseudo_c(std::ostream& os) const final;
-        void pseudo_py(std::ostream& os) const final;
-		void pseudo_racket(std::ostream& os) const final;
+        void pseudo_c(ast_serialization_buffer& buffer) const final;
+        void pseudo_py(ast_serialization_buffer& buffer) const final;
+		void pseudo_racket(ast_serialization_buffer& buffer) const final;
 
         [[nodiscard]] bool equals(const statement& rhs) const noexcept final;
 

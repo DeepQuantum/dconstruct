@@ -2,16 +2,16 @@
 #include "ast/primary_expressions/literal.h"
 
 namespace dconstruct::ast {
-void logical_not_expr::pseudo_c(std::ostream &os) const {
-    os << '!' << *m_rhs;
+void logical_not_expr::pseudo_c(ast_serialization_buffer& buffer) const {
+    buffer.append('!', *m_rhs);
 }
 
-void logical_not_expr::pseudo_py(std::ostream &os) const {
-    os << "not " << *m_rhs; 
+void logical_not_expr::pseudo_py(ast_serialization_buffer& buffer) const {
+    buffer.append("not "sv, *m_rhs);
 }
 
-void logical_not_expr::pseudo_racket(std::ostream &os) const {
-    os << "(not " << *m_rhs << ')';
+void logical_not_expr::pseudo_racket(ast_serialization_buffer& buffer) const {
+    buffer.append("(not "sv, *m_rhs, ')');
 }
 
 [[nodiscard]] semantic_check_res logical_not_expr::compute_type_checked(compilation::scope& env) const noexcept {

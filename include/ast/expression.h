@@ -7,7 +7,6 @@
 #include "compilation/environment.h"
 #include "compilation/function.h"
 #include "compilation/global_state.h"
-#include <ostream>
 #include <vector>
 // #include "llvm/IR/Value.h"
 // #include "llvm/IR/IRBuilder.h"
@@ -183,16 +182,16 @@ namespace dconstruct::ast {
             return false;
         }
 
-        inline void pseudo_c(std::ostream& os) const override {
-            os << m_operator.m_lexeme << *m_rhs;
+        inline void pseudo_c(ast_serialization_buffer& buffer) const override {
+            buffer.append(m_operator.m_lexeme, *m_rhs);
         }
 
-        inline void pseudo_py(std::ostream& os) const override {
-            os << m_operator.m_lexeme << *m_rhs;
+        inline void pseudo_py(ast_serialization_buffer& buffer) const override {
+            buffer.append(m_operator.m_lexeme, *m_rhs);
         }
 
-        inline void pseudo_racket(std::ostream& os) const override {
-            os << '(' << m_operator.m_lexeme << ' ' << *m_rhs << ')';
+        inline void pseudo_racket(ast_serialization_buffer& buffer) const override {
+            buffer.append('(', m_operator.m_lexeme, ' ', *m_rhs, ')');
         }
 
         [[nodiscard]] inline full_type compute_type_unchecked(const compilation::scope& env) const noexcept override {
@@ -223,16 +222,16 @@ namespace dconstruct::ast {
         binary_expr(compilation::token op, std::unique_ptr<expression>&& lhs, std::unique_ptr<expression>&& rhs) noexcept
             : m_operator(std::move(op)), m_lhs(std::move(lhs)), m_rhs(std::move(rhs)) {}
 
-        inline void pseudo_c(std::ostream& os) const override {
-            os << *m_lhs << ' ' << m_operator.m_lexeme << ' ' << *m_rhs;
+        inline void pseudo_c(ast_serialization_buffer& buffer) const override {
+            buffer.append(*m_lhs, ' ', m_operator.m_lexeme, ' ', *m_rhs);
         }
 
-        inline void pseudo_py(std::ostream& os) const override {
-            os << *m_lhs << ' ' << m_operator.m_lexeme << ' ' << *m_rhs;
+        inline void pseudo_py(ast_serialization_buffer& buffer) const override {
+            buffer.append(*m_lhs, ' ', m_operator.m_lexeme, ' ', *m_rhs);
         }
 
-        inline void pseudo_racket(std::ostream& os) const override {
-            os << '(' << m_operator.m_lexeme << ' ' << *m_lhs << ' ' << *m_rhs << ')';
+        inline void pseudo_racket(ast_serialization_buffer& buffer) const override {
+            buffer.append('(', m_operator.m_lexeme, ' ', *m_lhs, ' ', *m_rhs, ')');
         }
 
         // [[nodiscard]] inline full_type compute_type(const compiler::scope&) const override {

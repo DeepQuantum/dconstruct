@@ -3,16 +3,16 @@
 
 namespace dconstruct::ast {
 
-void cast_expr::pseudo_c(std::ostream& os) const {
-    os << '(' << type_to_declaration_string(m_castType) << ')' << *m_rhs; 
+void cast_expr::pseudo_c(ast_serialization_buffer& buffer) const {
+    buffer.append('(', type_to_declaration_string(m_castType), ')', *m_rhs);
 }
 
-void cast_expr::pseudo_py(std::ostream& os) const {
-    os << type_to_declaration_string(m_castType) << '(' << *m_rhs << ')';
+void cast_expr::pseudo_py(ast_serialization_buffer& buffer) const {
+    buffer.append(type_to_declaration_string(m_castType), '(', *m_rhs, ')');
 }
 
-void cast_expr::pseudo_racket(std::ostream& os) const {
-    os << "(cast " << type_to_declaration_string(m_castType) << " " << *m_rhs << ")";
+void cast_expr::pseudo_racket(ast_serialization_buffer& buffer) const {
+    buffer.append("(cast "sv, type_to_declaration_string(m_castType), ' ', *m_rhs, ')');
 }
 
 [[nodiscard]] expr_uptr cast_expr::simplify() const {

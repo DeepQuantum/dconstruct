@@ -3,8 +3,8 @@
 
 namespace dconstruct::ast {
 
-    void dereference_expr::pseudo_racket(std::ostream& os) const {
-        os << "(deref " << *m_rhs << ")";
+    void dereference_expr::pseudo_racket(ast_serialization_buffer& buffer) const {
+        buffer.append("(deref "sv, *m_rhs, ')');
     }
 
     [[nodiscard]] expr_uptr dereference_expr::simplify() const {

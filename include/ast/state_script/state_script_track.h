@@ -25,9 +25,9 @@ namespace dconstruct::ast {
         state_script_track(std::string name, std::vector<state_script_lambda> lambdas) noexcept
             : m_name(std::move(name)), m_lambdas(std::move(lambdas)) {}
 
-        void pseudo_c(std::ostream& os) const final;
-        void pseudo_py(std::ostream& os) const final;
-        void pseudo_racket(std::ostream& os) const final;
+        void pseudo_c(ast_serialization_buffer& buffer) const final;
+        void pseudo_py(ast_serialization_buffer& buffer) const final;
+        void pseudo_racket(ast_serialization_buffer& buffer) const final;
 
         [[nodiscard]] bool equals(const state_script_track& rhs) const noexcept;
 

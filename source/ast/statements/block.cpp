@@ -1,20 +1,21 @@
 #include "compilation/environment.h"
 #include "ast/ast.h"
-#include <iostream>
 
 namespace dconstruct::ast {
 
-void block::pseudo_c(std::ostream& os) const {
+void block::pseudo_c(ast_serialization_buffer& buffer) const {
     if (m_statements.empty()) {
-        os << "{}" << '\n';
+        buffer.append("{}\n"sv);
     } else {
-        os << "{\n";
-        os << indent_more;
+        buffer.append("{\n"sv);
+        buffer.indent_more();
         for (const auto& stmnt : m_statements) {
-            os << indent << *stmnt << '\n';
+            buffer.append_indent();
+            buffer.append(*stmnt, '\n');
         }
-        os << indent_less;
-        os << indent << '}';
+        buffer.indent_less();
+        buffer.append_indent();
+        buffer.append('}');
     }
 }
 
@@ -25,22 +26,25 @@ void block::clear_dead_statements() noexcept {
 }
 
 
-void block::pseudo_py(std::ostream& os) const {
-    os << '\n' << indent_more;
+void block::pseudo_py(ast_serialization_buffer& buffer) const {
+    buffer.append('\n');
+    buffer.indent_more();
     for (const auto& stmnt : m_statements) {
-        os << indent << *stmnt << '\n';
+        buffer.append_indent();
+        buffer.append(*stmnt, '\n');
     }
-    os << indent_less;
+    buffer.indent_less();
 }
 
-void block::pseudo_racket(std::ostream& os) const {
-    os << "\n";
-    os << indent_more;
+void block::pseudo_racket(ast_serialization_buffer& buffer) const {
+    buffer.append('\n');
+    buffer.indent_more();
     for (const auto& stmnt : m_statements) {
-        os << indent << *stmnt << '\n';
+        buffer.append_indent();
+        buffer.append(*stmnt, '\n');
     } 
-    os << indent_less;
-    os << indent;
+    buffer.indent_less();
+    buffer.append_indent();
 }
 
 [[nodiscard]] bool block::equals(const statement& rhs) const noexcept {

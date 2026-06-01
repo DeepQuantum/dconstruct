@@ -1,23 +1,24 @@
 #include "ast/primary_expressions/match.h"
 #include "ast/primary_expressions/literal.h"
 #include <algorithm>
-#include <iomanip>
 #include <numeric>
-#include <sstream>
+#include <string_view>
+
+using namespace std::literals::string_view_literals;
 
 namespace dconstruct::ast {
 
     using grouped_patterns_t = std::vector<std::pair<std::vector<const expr_uptr*>, const expr_uptr*>>;
 
     [[nodiscard]] static std::string pattern_list_string(const std::vector<const expr_uptr*>& patterns) {
-        std::stringstream ss;
+        ast_serialization_buffer buffer;
         for (u64 i = 0; i < patterns.size(); ++i) {
             if (i != 0) {
-                ss << ", ";
+                buffer.append(", "sv);
             }
-            ss << **patterns[i];
+            buffer.append(**patterns[i]);
         }
-        return ss.str();
+        return buffer.take();
     }
 
     [[nodiscard]] static u64 max_pattern_width(const grouped_patterns_t& grouped) {
@@ -29,29 +30,33 @@ namespace dconstruct::ast {
     }
 
 
-void match_expr::pseudo_c(std::ostream& os) const {
-    os << "match (";
+void match_expr::pseudo_c(ast_serialization_buffer& buffer) const {
+    buffer.append("match ("sv);
     bool first = true;
     for (const auto& condition : m_conditions) {
         if (!first) {
-            os << "; ";
+            buffer.append("; "sv);
         }
         first = false;
-        os << *condition;
+        buffer.append(*condition);
     }
-    os << ") {\n";
-    os << indent_more;
+    buffer.append(") {\n"sv);
+    buffer.indent_more();
 
     const auto grouped = group_patterns();
     const u64 max_size = max_pattern_width(grouped);
 
     for (const auto& [patterns, expression] : grouped) {
-        os << indent;
-        os << std::left << std::setw(max_size) << pattern_list_string(patterns);
-        os << " -> " << **expression << ",\n";
+        buffer.append_indent();
+        buffer.append_padded(pattern_list_string(patterns), max_size);
+        buffer.append(" -> "sv, **expression, ",\n"sv);
     }
-    os << indent << std::left << std::setw(max_size) << "else" << " -> " << *m_default << "\n";
-    os << indent_less << indent << "}";
+    buffer.append_indent();
+    buffer.append_padded("else", max_size);
+    buffer.append(" -> "sv, *m_default, '\n');
+    buffer.indent_less();
+    buffer.append_indent();
+    buffer.append('}');
 }
 
 [[nodiscard]] std::vector<std::pair<std::vector<const expr_uptr*>, const expr_uptr*>> match_expr::group_patterns() const noexcept {
@@ -71,48 +76,53 @@ void match_expr::pseudo_c(std::ostream& os) const {
 }
 
 
-void match_expr::pseudo_py(std::ostream& os) const {
-    os << "match ";
+void match_expr::pseudo_py(ast_serialization_buffer& buffer) const {
+    buffer.append("match "sv);
     bool first = true;
     for (const auto& condition : m_conditions) {
         if (!first) {
-            os << "; ";
+            buffer.append("; "sv);
         }
         first = false;
-        os << *condition;
+        buffer.append(*condition);
     }
-    os << ":\n";
-    os << indent_more;
+    buffer.append(":\n"sv);
+    buffer.indent_more();
 
     const auto grouped = group_patterns();
     const u64 max_size = max_pattern_width(grouped);
 
     for (const auto& [patterns, expression] : grouped) {
-        os << indent;
-        os << std::left << std::setw(max_size) << pattern_list_string(patterns);
-        os << " -> " << **expression << ",\n";
+        buffer.append_indent();
+        buffer.append_padded(pattern_list_string(patterns), max_size);
+        buffer.append(" -> "sv, **expression, ",\n"sv);
     }
-    os << indent << std::left << std::setw(static_cast<std::streamsize>(max_size)) << "else" << " -> " << *m_default << "\n";
-    os << indent_less;
+    buffer.append_indent();
+    buffer.append_padded("else", max_size);
+    buffer.append(" -> "sv, *m_default, '\n');
+    buffer.indent_less();
 }
 
-void match_expr::pseudo_racket(std::ostream& os) const {
-    os << "(match (list";
+void match_expr::pseudo_racket(ast_serialization_buffer& buffer) const {
+    buffer.append("(match (list"sv);
     for (const auto& c : m_conditions) {
-        os << " " << *c;
+        buffer.append(' ', *c);
     }
-    os << ")\n";
-    os << indent_more;
+    buffer.append(")\n"sv);
+    buffer.indent_more();
 
     const auto grouped = group_patterns();
     for (const auto& [patterns, expression] : grouped) {
         for (const auto& pattern : patterns) {
-            os << indent << "[" << **pattern << " " << *expression << "]\n";
+            buffer.append_indent();
+            buffer.append('[', **pattern, ' ', **expression, "]\n"sv);
         }
     }
-    os << indent << "[_ " << *m_default << "]\n";
-    os << indent_less;
-    os << indent << ")";
+    buffer.append_indent();
+    buffer.append("[_ "sv, *m_default, "]\n"sv);
+    buffer.indent_less();
+    buffer.append_indent();
+    buffer.append(')');
 }
 
 [[nodiscard]] expr_uptr match_expr::simplify() const {

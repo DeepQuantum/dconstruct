@@ -7,19 +7,19 @@
 
 namespace dconstruct::ast {
 
-void program::pseudo_c(std::ostream& os) const {
+void program::pseudo_c(ast_serialization_buffer& buffer) const {
     for (const auto& decl : m_declarations) {
-        os << *decl << "\n\n";
+        buffer.append(*decl, "\n\n"sv);
     }
 }
-void program::pseudo_py(std::ostream& os) const {
+void program::pseudo_py(ast_serialization_buffer& buffer) const {
     for (const auto& decl : m_declarations) {
-        os << *decl << '\n';
+        buffer.append(*decl, '\n');
     }
 }
-void program::pseudo_racket(std::ostream& os) const {
+void program::pseudo_racket(ast_serialization_buffer& buffer) const {
     for (const auto& decl : m_declarations) {
-        os << *decl << "\n\n";
+        buffer.append(*decl, "\n\n"sv);
     }
 }
 

@@ -1,31 +1,28 @@
 #include "ast/statements/variable_declaration.h"
 
-
-#include <iostream>
-
 namespace dconstruct::ast {
 
-void variable_declaration::pseudo_c(std::ostream& os) const {
-    os << type_to_declaration_string(m_type) << ' ' << m_identifier;
+void variable_declaration::pseudo_c(ast_serialization_buffer& buffer) const {
+    buffer.append(type_to_declaration_string(m_type), ' ', m_identifier);
     if (m_init != nullptr) {
-        os << " = " << *m_init;
+        buffer.append(" = "sv, *m_init);
     }
-    os << ';';
+    buffer.append(';');
 }
 
-void variable_declaration::pseudo_py(std::ostream& os) const {
-    os << m_identifier;
+void variable_declaration::pseudo_py(ast_serialization_buffer& buffer) const {
+    buffer.append(m_identifier);
     if (m_init != nullptr) {
-        os << " = " << *m_init;
+        buffer.append(" = "sv, *m_init);
     }
 }
 
-void variable_declaration::pseudo_racket(std::ostream& os) const {
-    os << "(define " << m_identifier;
+void variable_declaration::pseudo_racket(ast_serialization_buffer& buffer) const {
+    buffer.append("(define "sv, m_identifier);
     if (m_init != nullptr) {
-        os << ' ' << *m_init;
+        buffer.append(' ', *m_init);
     }
-    os << ')';
+    buffer.append(')');
 }
 
 [[nodiscard]] bool variable_declaration::equals(const statement& rhs) const noexcept {

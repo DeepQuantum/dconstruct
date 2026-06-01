@@ -7,7 +7,6 @@
 #include "cxxopts.hpp"
 #include <chrono>
 #include <filesystem>
-#include <iostream>
 #include <optional>
 #include <string>
 #include <vector>
@@ -20,11 +19,10 @@ void decomp_file(
     const std::filesystem::path &out_decomp_filename,
     const dconstruct::SIDBase &base,
     const bool write_graphs,
-    const dconstruct::ast::print_fn_type language_type,
+    const dconstruct::ast::LANGUAGE_FLAGS language_flags,
     const bool show_warnings,
     const bool optimize,
-    const std::vector<std::string> &edits = {}, 
-    const bool use_pascal_case = false,
+    const std::vector<std::string> &edits = {},
     const dconstruct::game_type game = dconstruct::game_type::T2R);
 
 void disasm_file(
@@ -41,8 +39,7 @@ void decompile_multiple(
     const bool generate_graphs,
     const bool show_warnings,
     const bool optimize,
-    const dconstruct::ast::print_fn_type language_print,
-    const bool pascal_case,
+    const dconstruct::ast::LANGUAGE_FLAGS language_flags,
     const dconstruct::game_type game = dconstruct::game_type::T2R
 );
 
@@ -77,7 +74,7 @@ std::vector<std::string> edits_from_file(const std::filesystem::path &path);
 //     return 0;
 // }
 
-[[nodiscard]] std::optional<dconstruct::ast::print_fn_type> get_print_type(const std::string& input_string);
+[[nodiscard]] std::optional<dconstruct::ast::LANGUAGE_FLAGS> get_print_type(const std::string& input_string);
 
 [[nodiscard]] std::optional<dconstruct::game_type> get_game_type(const std::string& input_string);
 

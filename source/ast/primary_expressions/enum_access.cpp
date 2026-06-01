@@ -3,19 +3,19 @@
 namespace dconstruct::ast {
 
 [[nodiscard]] std::string enum_access::qualified_name() const {
-    return m_enumName + "." + m_memberName;
+    return std::format("{}.{}", m_enumName, m_memberName);
 }
 
-void enum_access::pseudo_c(std::ostream& os) const {
-    os << qualified_name();
+void enum_access::pseudo_c(ast_serialization_buffer& buffer) const {
+    buffer.append(qualified_name());
 }
 
-void enum_access::pseudo_py(std::ostream& os) const {
-    os << qualified_name();
+void enum_access::pseudo_py(ast_serialization_buffer& buffer) const {
+    buffer.append(qualified_name());
 }
 
-void enum_access::pseudo_racket(std::ostream& os) const {
-    os << qualified_name();
+void enum_access::pseudo_racket(ast_serialization_buffer& buffer) const {
+    buffer.append(qualified_name());
 }
 
 [[nodiscard]] expr_uptr enum_access::simplify() const {

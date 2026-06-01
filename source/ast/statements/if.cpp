@@ -1,38 +1,36 @@
 #include "ast/statements/if.h"
 #include "ast/statements/block.h"
 #include "ast/assign.h"
-#include <iostream>
 
 
 namespace dconstruct::ast {
 
-void if_stmt::pseudo_c(std::ostream& os) const {
-    os << "if (" << *m_condition << ") " << *m_then;
+void if_stmt::pseudo_c(ast_serialization_buffer& buffer) const {
+    buffer.append("if ("sv, *m_condition, ") "sv, *m_then);
     if (m_else && !m_else->is_dead_code()) {
         if (const auto* statement = m_else->inlineable_else_statement()) {
-            os << " else " << *statement;
+            buffer.append(" else "sv, *statement);
         } else {
-            os << " else " << *m_else;
+            buffer.append(" else "sv, *m_else);
         }
     }
 }
 
-void if_stmt::pseudo_py(std::ostream& os) const {
-    os << "if " << *m_condition << ":";
-    os << *m_then;
+void if_stmt::pseudo_py(ast_serialization_buffer& buffer) const {
+    buffer.append("if "sv, *m_condition, ':', *m_then);
     if (m_else && !m_else->is_dead_code()) {
-        os << indent << "else:";
-        os << *m_else;
+        buffer.append_indent();
+        buffer.append("else:"sv, *m_else);
     }
 }
 
-void if_stmt::pseudo_racket(std::ostream& os) const {
-    os << "(if " << *m_condition << ") " << *m_then;
+void if_stmt::pseudo_racket(ast_serialization_buffer& buffer) const {
+    buffer.append("(if "sv, *m_condition, ") "sv, *m_then);
     if (m_else && !m_else->is_dead_code()) {
         if (const auto* statement = m_else->inlineable_else_statement()) {
-            os << "(else " << *statement << ")";
+            buffer.append("(else "sv, *statement, ')');
         } else {
-            os << "(else " << *m_else << ")";
+            buffer.append("(else "sv, *m_else, ')');
         }
     }
 }

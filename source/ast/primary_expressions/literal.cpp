@@ -4,33 +4,33 @@
 
 namespace dconstruct::ast {
 
-void literal::pseudo_c(std::ostream& os) const {
+void literal::pseudo_c(ast_serialization_buffer& buffer) const {
     const std::string orig = primitive_to_string(m_value);
-    if (os.iword(get_flag_index()) & static_cast<i32>(LANGUAGE_FLAGS::IDENTIFIER_PASCAL)) {
+    if (buffer.has_flag(LANGUAGE_FLAGS::IDENTIFIER_PASCAL)) {
         const auto str_res = try_convert_pascal_case(orig);
-        os << str_res.value_or(orig);
+        buffer.append(str_res.value_or(orig));
     } else {
-        os << orig;
+        buffer.append(orig);
     }
 }
 
-void literal::pseudo_py(std::ostream& os) const {
+void literal::pseudo_py(ast_serialization_buffer& buffer) const {
     const std::string orig = primitive_to_string(m_value);
-    if (os.iword(get_flag_index()) & static_cast<i32>(LANGUAGE_FLAGS::IDENTIFIER_PASCAL)) {
+    if (buffer.has_flag(LANGUAGE_FLAGS::IDENTIFIER_PASCAL)) {
         const auto str_res = try_convert_pascal_case(orig);
-        os << str_res.value_or(orig);
+        buffer.append(str_res.value_or(orig));
     } else {
-        os << orig;
+        buffer.append(orig);
     }
 }
 
-void literal::pseudo_racket(std::ostream& os) const {
+void literal::pseudo_racket(ast_serialization_buffer& buffer) const {
     const std::string orig = primitive_to_string(m_value);
-    if (os.iword(get_flag_index()) & static_cast<i32>(LANGUAGE_FLAGS::IDENTIFIER_PASCAL)) {
+    if (buffer.has_flag(LANGUAGE_FLAGS::IDENTIFIER_PASCAL)) {
         const auto str_res = try_convert_pascal_case(orig);
-        os << str_res.value_or(orig);
+        buffer.append(str_res.value_or(orig));
     } else {
-        os << orig;
+        buffer.append(orig);
     }
 }
 
@@ -120,7 +120,7 @@ MATCH_OPTIMIZATION_ACTION literal::match_optimization_pass(match_optimization_en
         } else if constexpr (std::is_same_v<T, std::nullptr_t>) {
             return fn.add_to_symbol_table(0);
         } else {
-            return std::unexpected{"can't add " + to_c_string() + " to symbol table"};
+            return std::unexpected{"can't add " + to_pseudo_c_string() + " to symbol table"};
         }
     }, m_value);
 }
@@ -167,7 +167,7 @@ MATCH_OPTIMIZATION_ACTION literal::match_optimization_pass(match_optimization_en
         } else if constexpr (std::is_same_v<T, std::nullptr_t>) {
             fn.emit_instruction(Opcode::LoadU16Imm, *literal_dest, 0, 0);
         } else {
-            return std::unexpected{"can't compile " + to_c_string()};
+            return std::unexpected{"can't compile " + to_pseudo_c_string()};
         }
 
         return *literal_dest;

@@ -301,11 +301,8 @@ void decompile_document(document &doc) {
 
     for (const function_disassembly *func : doc.m_disassembler->get_all_functions()) {
         try {
-            ast::function_definition def =
-                dcompiler::decomp_function{*func, *doc.m_file, ControlFlowGraph::build(*func)}.decompile(true);
-            std::ostringstream oss;
-            oss << def;
-            doc.m_decompiled.emplace(func, std::move(oss).str());
+            ast::function_definition def = dcompiler::decomp_function{*func, *doc.m_file, ControlFlowGraph::build(*func)}.decompile(true);
+            doc.m_decompiled.emplace(func, def.to_pseudo_c_string());
         } catch (const std::exception &) {
         } catch (...) {
         }
@@ -471,7 +468,7 @@ void draw_about_popup(bool open_requested) {
             {"Chandler Threepwood", "beta testing"},
             {"Speclizer", "the DC-Tool"},
             {"uxh", "DC-file knowledge"},
-            {"icemesh", "the original disassembler"},
+            {"icemesh", "DC structs"},
         };
 
         ImGui::PushStyleVar(ImGuiStyleVar_CellPadding, ImVec2(16.0F, 5.0F));
@@ -800,7 +797,7 @@ void draw_entry_list(app_state &state, document &doc) {
             : "Entry Name";
 
         ImGui::TableSetupColumn(entry_name_header);
-        ImGui::TableSetupColumn("Type Name");
+        ImGui::TableSetupColumn("Type");
         ImGui::TableNextRow(ImGuiTableRowFlags_Headers);
         for (int column = 0; column < 2; ++column) {
             ImGui::TableSetColumnIndex(column);
@@ -894,18 +891,18 @@ std::span<const qui::code::rule> dcpl_rules() {
     using qui::code::to_u32;
     using qui::color::rgba;
     static const std::vector<qui::code::rule> rules = {
-        // ctre_rule<R"(//.*)">(to_u32(rgba(0x6A, 0x73, 0x80))),
-        // ctre_rule<R"RE(\b(if|else|while|for|return|foreach|match|state|block|event|track|statescript|options|declarations|using|as|far|near|not|and|or|in|lambda|start|end|update|null|struct|enum)\b)RE">(to_u32(rgba(0xC6, 0x78, 0xDD))),
-        // ctre_rule<R"(\b((var|arg)_\d+)\b)">(to_u32(rgba(0xE0, 0x6C, 0x75))),
-        // ctre_rule<R"(\b(i|j|k|l)\b)">(to_u32(rgba(0xE0, 0x6C, 0x75))),
-        // ctre_rule<R"RE("(\\.|[^"\\])*")RE">(to_u32(rgba(0x98, 0xC3, 0x79))),
-        // ctre_rule<R"RE((?:--|\b)[A-Za-z0-9_/@>#\-]+\??(?=\s*\())RE">(to_u32(rgba(0x61, 0xAF, 0xEF))),
-        // ctre_rule<R"RE(#[A-Z0-9]{16}(?=\())RE">(to_u32(rgba(0x61, 0xAF, 0xEF))),
-        // ctre_rule<R"(>>|=>|\$)">(to_u32(rgba(0x61, 0xAF, 0xEF))),
-        // ctre_rule<R"(\b(\d+)\b)">(to_u32(rgba(0xD1, 0x9A, 0x66))),
-        // ctre_rule<R"RE(\b(u0|u8|i8|u16|i16|u32|i32|u64|i64|f32|f64|bool|string|timer|quaternion|bound-frame|vector|actor|cache|ir-pack|level-id|level-name|lut-table|package|particle-module|render-settings|sound-bank|symbol|vox-character)\b\??)RE">(to_u32(rgba(0xE5, 0xC0, 0x7B))),
-        // ctre_rule<R"RE((\*(?!var)|\b)([\w/*\-]{3,}\??(?![\w\-])))RE">(to_u32(rgba(0x56, 0xB6, 0xC2))),
-        // ctre_rule<R"(#[A-Z0-9]{16})">(to_u32(rgba(0x56, 0xB6, 0xC2))),
+        ctre_rule<R"(//.*)">(to_u32(rgba(0x6A, 0x73, 0x80))),
+        ctre_rule<R"RE(\b(if|else|while|for|return|foreach|match|state|block|event|track|statescript|options|declarations|using|as|far|near|not|and|or|in|lambda|start|end|update|null|struct|enum)\b)RE">(to_u32(rgba(0xC6, 0x78, 0xDD))),
+        ctre_rule<R"(\b((var|arg)_\d+)\b)">(to_u32(rgba(0xE0, 0x6C, 0x75))),
+        ctre_rule<R"(\b(i|j|k|l)\b)">(to_u32(rgba(0xE0, 0x6C, 0x75))),
+        ctre_rule<R"RE("(\\.|[^"\\])*")RE">(to_u32(rgba(0x98, 0xC3, 0x79))),
+        ctre_rule<R"RE((?:--|\b)[A-Za-z0-9_/@>#\-]+\??(?=\s*\())RE">(to_u32(rgba(0x61, 0xAF, 0xEF))),
+        ctre_rule<R"RE(#[A-Z0-9]{16}(?=\())RE">(to_u32(rgba(0x61, 0xAF, 0xEF))),
+        ctre_rule<R"(>>|=>|\$)">(to_u32(rgba(0x61, 0xAF, 0xEF))),
+        ctre_rule<R"(\b(\d+)\b)">(to_u32(rgba(0xD1, 0x9A, 0x66))),
+        ctre_rule<R"RE(\b(u0|u8|i8|u16|i16|u32|i32|u64|i64|f32|f64|bool|string|timer|quaternion|bound-frame|vector|actor|cache|ir-pack|level-id|level-name|lut-table|package|particle-module|render-settings|sound-bank|symbol|vox-character)\b\??)RE">(to_u32(rgba(0xE5, 0xC0, 0x7B))),
+        ctre_rule<R"RE((\*(?!var)|\b)([\w/*\-]{3,}\??(?![\w\-])))RE">(to_u32(rgba(0x56, 0xB6, 0xC2))),
+        ctre_rule<R"(#[A-Z0-9]{16})">(to_u32(rgba(0x56, 0xB6, 0xC2))),
     };
     return rules;
 }
@@ -1637,7 +1634,7 @@ void dv_draw_state_script(value_view v, const ast::state_script &script, i32 ind
     if (!script.m_options.empty()) {
         if (dv_node(v, &script.m_options, val_color::Group, "options", nullptr, false)) {
             for (const ast::sid_identifier &option : script.m_options) {
-                dv_draw_text_leaf(v, &option, val_color::Sid, option.to_c_string());
+                dv_draw_text_leaf(v, &option, val_color::Sid, option.to_pseudo_c_string());
             }
             dv_tree_pop(v);
         }
@@ -1646,7 +1643,7 @@ void dv_draw_state_script(value_view v, const ast::state_script &script, i32 ind
     if (!script.m_declarations.empty()) {
         if (dv_node(v, &script.m_declarations, val_color::Group, "declarations", nullptr, false)) {
             for (const ast::variable_declaration &declaration : script.m_declarations) {
-                dv_draw_text_leaf(v, &declaration, val_color::Struct, declaration.to_c_string());
+                dv_draw_text_leaf(v, &declaration, val_color::Struct, declaration.to_pseudo_c_string());
             }
             dv_tree_pop(v);
         }
@@ -1672,7 +1669,7 @@ void dv_draw_state_script(value_view v, const ast::state_script &script, i32 ind
                                             dv_draw_function(v, *fn, lambda_index);
                                         }
                                     } else {
-                                        dv_draw_text_leaf(v, &fn, val_color::Function, fn.to_c_string());
+                                        dv_draw_text_leaf(v, &fn, val_color::Function, fn.to_pseudo_c_string());
                                     }
                                 }, lambda);
                                 ++lambda_index;

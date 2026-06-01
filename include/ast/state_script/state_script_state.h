@@ -12,9 +12,9 @@ namespace dconstruct::ast {
         state_script_state(std::string name, std::vector<state_script_block> blocks) noexcept
             : m_name(std::move(name)), m_blocks(std::move(blocks)) {}
 
-        void pseudo_c(std::ostream& os) const final;
-        void pseudo_py(std::ostream& os) const final;
-        void pseudo_racket(std::ostream& os) const final;
+        void pseudo_c(ast_serialization_buffer& buffer) const final;
+        void pseudo_py(ast_serialization_buffer& buffer) const final;
+        void pseudo_racket(ast_serialization_buffer& buffer) const final;
 
         [[nodiscard]] bool equals(const state_script_state& rhs) const noexcept;
 

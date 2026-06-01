@@ -3,16 +3,16 @@
 
 namespace dconstruct::ast {
 
-void breakpoint::pseudo_c(std::ostream& os) const {
-    os << "breakpoint;";
+void breakpoint::pseudo_c(ast_serialization_buffer& buffer) const {
+    buffer.append("breakpoint;"sv);
 }
 
-void breakpoint::pseudo_py(std::ostream& os) const {
-    os << "breakpoint()";
+void breakpoint::pseudo_py(ast_serialization_buffer& buffer) const {
+    buffer.append("breakpoint()"sv);
 }
 
-void breakpoint::pseudo_racket(std::ostream& os) const {
-    os << "(breakpoint)";
+void breakpoint::pseudo_racket(ast_serialization_buffer& buffer) const {
+    buffer.append("(breakpoint)"sv);
 }
 
 [[nodiscard]] bool breakpoint::equals(const statement& rhs) const noexcept {

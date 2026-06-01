@@ -3,8 +3,9 @@
 #include "disassembly/disassembler.h"
 #include "ast/ast.h"
 #include <array>
-#include <gtest/gtest.h>
 #include <filesystem>
+#include <fstream>
+#include <gtest/gtest.h>
 
 const std::filesystem::path TEST_ROOT = DCONSTRUCT_TEST_ROOT;
 const std::string TEST_DIR = (TEST_ROOT / "fixtures" / "dc").string() + "/";
@@ -53,7 +54,7 @@ namespace dconstruct::testing {
         for (const auto* func : da.get_all_functions()) {
             if (func->get_id() == function_id) {
                 auto fd = dcompiler::decomp_function{*func, file, ControlFlowGraph::build(*func)};
-                return fd.decompile(optimize).to_c_string();
+                return fd.decompile(optimize).to_pseudo_c_string();
             }
         }
         return "";
@@ -71,13 +72,13 @@ namespace dconstruct::testing {
         for (const auto* func : da.get_all_functions()) {
             if (func->get_id() == function_id) {
                 auto fd = dcompiler::decomp_function{*func, file, ControlFlowGraph::build(*func)};
-                return fd.decompile().to_c_string();
+                return fd.decompile().to_pseudo_c_string();
             }
         }
         return "";
     }
 
-    static void decomp_test(const std::string& filepath, const std::string& id, const std::string& expected, dconstruct::ast::print_fn_type stream_lang = dconstruct::ast::racket, const bool optimize = false, const bool use_pascal = false) {
+    static void decomp_test(const std::string& filepath, const std::string& id, const std::string& expected, dconstruct::ast::LANGUAGE_FLAGS stream_lang = dconstruct::ast::LANGUAGE_FLAGS::RACKET, const bool optimize = false, const bool use_pascal = false) {
         auto file_res = BinaryFile::from_path(filepath);
         if (!file_res) {
             std::cerr << file_res.error() << "\n";
@@ -93,12 +94,13 @@ namespace dconstruct::testing {
         ASSERT_NE(func, funcs.end());
         auto dc_func = dcompiler::decomp_function{ **func, file,  ControlFlowGraph::build(**func), DCPL_PATH + dconstruct::sanitize_dc_string(id) + ".svg" };
         std::ofstream file_out(DCPL_PATH + dconstruct::sanitize_dc_string(id) + ".dcpl");
-        std::ostringstream out;
+        ast::ast_serialization_buffer out;
+        out.m_flags = stream_lang;
         if (use_pascal) {
-            out << ast::func_pascal_case;
+            out.set_flag(ast::LANGUAGE_FLAGS::FUNCTION_NAMES_PASCAL);
         }
-        out << stream_lang << dc_func.decompile(optimize);
-        file_out << stream_lang << out.str();
+        out.append(dc_func.decompile(optimize));
+        file_out << out.str();
         ASSERT_EQ(expected, out.str());
     }
 
@@ -139,9 +141,9 @@ namespace dconstruct::testing {
 
         const auto& type = rhs;
 
-        std::ostringstream actual_os;
-		actual.pseudo_c(actual_os);
-        const std::string actual_str = actual_os.str();
+        ast::ast_serialization_buffer actual_buffer;
+		actual.pseudo_c(actual_buffer);
+        const std::string actual_str = actual_buffer.take();
         const std::string expected_str = "return 1;";
         ASSERT_EQ(expected_str, actual_str);
     }
@@ -157,11 +159,11 @@ namespace dconstruct::testing {
 
         const auto& actual = func.m_body.m_statements;
         const std::string expected = "return 1;";
-        std::ostringstream os;
+        ast::ast_serialization_buffer buffer;
         for (const auto& stmt : actual) {
-            stmt->pseudo_c(os);
+            stmt->pseudo_c(buffer);
         }
-        EXPECT_EQ(expected, os.str());
+        EXPECT_EQ(expected, buffer.str());
     }
 
 
@@ -177,9 +179,9 @@ namespace dconstruct::testing {
 
         const auto& actual = static_cast<const ast::return_stmt&>(*func.m_body.m_statements.front());
         const std::string expected = "return 1 + 1285;";
-        std::ostringstream os;
-        os << actual;
-        EXPECT_EQ(expected, os.str());
+        ast::ast_serialization_buffer buffer;
+        buffer.append(actual);
+        EXPECT_EQ(expected, buffer.str());
     }
 
     TEST(DECOMPILER, TwoAdds) {
@@ -196,9 +198,9 @@ namespace dconstruct::testing {
         const auto& actual = func.m_body.m_statements.front();
         const std::string expected = "return (1 + 1285) + (1 + 1285);";
 
-        std::ostringstream os;
-        os << *actual;
-        EXPECT_EQ(expected, os.str());
+        ast::ast_serialization_buffer buffer;
+        buffer.append(*actual);
+        EXPECT_EQ(expected, buffer.str());
     }
 
 
@@ -223,9 +225,9 @@ namespace dconstruct::testing {
             "    return var_0;\n"
             "}";
 
-        std::ostringstream os;
-        os << actual;
-        EXPECT_EQ(expected, os.str());
+        ast::ast_serialization_buffer buffer;
+        buffer.append(actual);
+        EXPECT_EQ(expected, buffer.str());
     }
 
     TEST(DECOMPILER, FullFunc1) {
@@ -284,7 +286,7 @@ namespace dconstruct::testing {
             {Opcode::Return, 2, 0, 0}
         };
         const auto& func = decompile_instructions_with_disassembly(std::move(istrs), "DetermineArgumentType");
-        const auto& actual = func.to_c_string();
+        const auto& actual = func.to_pseudo_c_string();
 
         const std::string expected =
             "bool DetermineArgumentType(u16 arg_0) {\n"
@@ -326,7 +328,7 @@ namespace dconstruct::testing {
             "    }\n"
             "    return var_0;\n"
             "}";
-        decomp_test(filepath, id, expected, dconstruct::ast::c, true);
+        decomp_test(filepath, id, expected, dconstruct::ast::LANGUAGE_FLAGS::C, true);
     }
 
     TEST(DECOMPILER, If2) {
@@ -336,7 +338,7 @@ namespace dconstruct::testing {
             "bool DetermineArgumentType(i64 arg_0) {\n"
             "    return arg_0 == 5;\n"
             "}";
-        decomp_test(filepath, id, expected, dconstruct::ast::c);
+        decomp_test(filepath, id, expected, dconstruct::ast::LANGUAGE_FLAGS::C);
     }
 
     TEST(DECOMPILER, If3) {
@@ -373,8 +375,8 @@ namespace dconstruct::testing {
             "    return var_0;\n"
             "}";
         std::ofstream out(DCPL_PATH + id + ".dcpl");
-        out << dc_func;
-        ASSERT_EQ(dc_func.to_c_string(), expected);
+        out << dc_func.to_pseudo_c_string();
+        ASSERT_EQ(dc_func.to_pseudo_c_string(), expected);
     }
 
     TEST(DECOMPILER, Loop1) {
@@ -384,7 +386,7 @@ namespace dconstruct::testing {
             "function DetermineArgumentType(i64 arg_0) {\n"
             "    return arg_0 == 5;\n"
             "}";
-        decomp_test(filepath, id, expected, dconstruct::ast::c);
+        decomp_test(filepath, id, expected, dconstruct::ast::LANGUAGE_FLAGS::C);
     }
 
     TEST(DECOMPILER, ShortCircuit1) {
@@ -394,7 +396,7 @@ namespace dconstruct::testing {
             "function DetermineArgumentType(i64 arg_0) {\n"
             "    return arg_0 == 5;\n"
             "}";
-        decomp_test(filepath, id, expected, dconstruct::ast::c);
+        decomp_test(filepath, id, expected, dconstruct::ast::LANGUAGE_FLAGS::C);
     }
 
     TEST(DECOMPILER, ShortCircuit2) {
@@ -404,7 +406,7 @@ namespace dconstruct::testing {
         const std::string expected = "function DetermineArgumentType(i64 arg_0) {\n"
             "    return arg_0 == 5;\n"
             "}";
-        decomp_test(filepath, id, expected, dconstruct::ast::c);
+        decomp_test(filepath, id, expected, dconstruct::ast::LANGUAGE_FLAGS::C);
     }
 
     TEST(DECOMPILER, Loop2) {
@@ -414,7 +416,7 @@ namespace dconstruct::testing {
             "function DetermineArgumentType(i64 arg_0) {\n"
             "    return arg_0 == 5;\n"
             "}";
-        decomp_test(filepath, id, expected, dconstruct::ast::c);
+        decomp_test(filepath, id, expected, dconstruct::ast::LANGUAGE_FLAGS::C);
     }
 
     TEST(DECOMPILER, Loop3) {
@@ -424,7 +426,7 @@ namespace dconstruct::testing {
             "function DetermineArgumentType(i64 arg_0) {\n"
             "    return arg_0 == 5;\n"
             "}";
-        decomp_test(filepath, id, expected, dconstruct::ast::c);
+        decomp_test(filepath, id, expected, dconstruct::ast::LANGUAGE_FLAGS::C);
     }
 
     TEST(DECOMPILER, If5) {
@@ -434,7 +436,7 @@ namespace dconstruct::testing {
             "function DetermineArgumentType(i64 arg_0) {\n"
             "    return arg_0 == 5;\n"
             "}";
-        decomp_test(filepath, id, expected, dconstruct::ast::c);
+        decomp_test(filepath, id, expected, dconstruct::ast::LANGUAGE_FLAGS::C);
     }
 
     TEST(DECOMPILER, If6) {
@@ -443,7 +445,7 @@ namespace dconstruct::testing {
         const std::string expected = "function DetermineArgumentType(i64 arg_0) {\n"
             "    return arg_0 == 5;\n"
             "}";
-        decomp_test(filepath, id, expected, dconstruct::ast::c);
+        decomp_test(filepath, id, expected, dconstruct::ast::LANGUAGE_FLAGS::C);
     }
 
     TEST(DECOMPILER, NodeRegisters0) {
@@ -479,7 +481,7 @@ namespace dconstruct::testing {
         const std::string filepath = TEST_DIR + R"(\ss-boss-health-tts.bin)";
         const std::string id = "wait-for-tts@main@start@0";
         const std::string expected = "?";
-        decomp_test(filepath, id, expected, dconstruct::ast::c);
+        decomp_test(filepath, id, expected, dconstruct::ast::LANGUAGE_FLAGS::C);
     }
 
     TEST(DECOMPILER, AllFuncs) {
@@ -497,7 +499,8 @@ namespace dconstruct::testing {
         const auto& funcs = da.get_named_functions();
         std::set<std::string> emitted{};
         std::ofstream out(R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\fixtures\dcpl\\asdad.dcpl)");
-		out << dconstruct::ast::c;
+		ast::ast_serialization_buffer buffer;
+        buffer.m_flags = dconstruct::ast::LANGUAGE_FLAGS::C;
         const auto start = std::chrono::high_resolution_clock::now();
         for (const auto* func : funcs) {
             if (emitted.contains(func->get_id())) {
@@ -507,12 +510,13 @@ namespace dconstruct::testing {
             try {
                 std::cout << func->get_id() << "\n";
                 const auto dc_func = dcompiler::decomp_function{ *func, file, ControlFlowGraph::build(*func) }.decompile(true);
-                out << dc_func;
+                buffer.append(dc_func);
             }
             catch (const std::exception& e) {
                 std::cout << e.what();
             }
         }
+        out << buffer.str();
         const auto stop = std::chrono::high_resolution_clock::now();
         const auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start).count();
         std::cout << "took " << duration << "ms\n";
@@ -547,7 +551,7 @@ namespace dconstruct::testing {
                     //std::cout << func->get_id() << "\n";
                     const auto dc_func = dcompiler::decomp_function{ *func, file, ControlFlowGraph::build(*func) }.decompile(false);
                     std::ofstream out(new_path, std::ios::app);
-                    out << dc_func << "\n\n";
+                    out << dc_func.to_pseudo_c_string() << "\n\n";
                 }
                 catch (const std::exception& e) {
                     std::cout << e.what() << '\n';
@@ -676,7 +680,7 @@ namespace dconstruct::testing {
             "    }\n"
             "    return var_1;\n"
             "}";
-        decomp_test(filepath, id, expected, dconstruct::ast::c);
+        decomp_test(filepath, id, expected, dconstruct::ast::LANGUAGE_FLAGS::C);
     }
 
     TEST(DECOMPILER, Var2) {
@@ -690,35 +694,35 @@ namespace dconstruct::testing {
             "        display(var_1, 19);\n"
             "    }\n"
             "}";
-        decomp_test(filepath, id, expected, dconstruct::ast::c);
+        decomp_test(filepath, id, expected, dconstruct::ast::LANGUAGE_FLAGS::C);
     }
 
     TEST(DECOMPILER, RacketSqrt) {
         const std::string filepath = TEST_DIR + R"(\user-script-funcs-impl.bin)";
         const std::string id = "sqrt-sign";
         const std::string expected = "(sqrt-sign ?)";
-        decomp_test(filepath, id, expected, ast::racket, true);
+        decomp_test(filepath, id, expected, ast::LANGUAGE_FLAGS::RACKET, true);
     }
 
     TEST(DECOMPILER, Optimization1) {
         const std::string filepath = TEST_DIR + R"(\ss-wave-manager.bin)";
         const std::string id = "#14C6FC79122F4A87";
         const std::string expected = "";
-        decomp_test(filepath, id, expected, ast::c, true);
+        decomp_test(filepath, id, expected, ast::LANGUAGE_FLAGS::C, true);
     }
 
     TEST(DECOMPILER, Optimization2) {
         const std::string filepath = TEST_DIR + R"(\animal-behavior.bin)";
         const std::string id = "large-bird-panic-get-fly-anim-id";
         const std::string expected = "";
-        decomp_test(filepath, id, expected, ast::c, true);
+        decomp_test(filepath, id, expected, ast::LANGUAGE_FLAGS::C, true);
     }
 
     TEST(DECOMPILER, Optimization3) {
         const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/player-upgrade-script-funcs-impl.bin)";
         const std::string id = "can-purchase-any-upgrades-in-branch-points?";
         const std::string expected = "";
-        decomp_test(filepath, id, expected, ast::c, true);
+        decomp_test(filepath, id, expected, ast::LANGUAGE_FLAGS::C, true);
     }
 
     TEST(DECOMPILER, Optimization4) {
@@ -728,7 +732,7 @@ namespace dconstruct::testing {
             "u64? npc-ratking?(bool arg_0) {\n"
             "    return !(arg_0 == 0) && is-npc?(arg_0) && npc-get-archetype(arg_0) && *(u64*)(npc-get-archetype(arg_0) + 392) == *infected-ratking-params*;\n"
             "}";
-        decomp_test(filepath, id, expected, ast::c, true);
+        decomp_test(filepath, id, expected, ast::LANGUAGE_FLAGS::C, true);
     }
 
     TEST(DECOMPILER, Optimization5) {
@@ -742,7 +746,7 @@ namespace dconstruct::testing {
             "    }\n"
             "    return var_1;\n"
             "}";
-        decomp_test(filepath, id, expected, ast::c, true);
+        decomp_test(filepath, id, expected, ast::LANGUAGE_FLAGS::C, true);
     }
     
     TEST(DECOMPILER, Optimization6) {
@@ -756,7 +760,7 @@ namespace dconstruct::testing {
             "    }\n"
             "    return var_1;\n"
             "}";
-        decomp_test(filepath, id, expected, ast::c, true);
+        decomp_test(filepath, id, expected, ast::LANGUAGE_FLAGS::C, true);
     }
 
     TEST(DECOMPILER, Optimization7) {
@@ -778,7 +782,7 @@ namespace dconstruct::testing {
             "        net-send-event-all(deactivate, var_2);\n"
             "    }\n"
             "}";
-        decomp_test(filepath, id, expected, ast::c, true);
+        decomp_test(filepath, id, expected, ast::LANGUAGE_FLAGS::C, true);
     }
 
     TEST(DECOMPILER, CallArguments) {
@@ -801,14 +805,14 @@ namespace dconstruct::testing {
             "        -1.00\n"
             "    );\n"
             "}"; 
-        decomp_test(filepath, id, expected, ast::c, true);
+        decomp_test(filepath, id, expected, ast::LANGUAGE_FLAGS::C, true);
     }
 
     TEST(DECOMPILER, Foreach2) {
         const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/nd-script-funcs.bin)";
         const std::string id = "set-bit";
         const std::string expected = "";
-        decomp_test(filepath, id, expected, ast::c, true);
+        decomp_test(filepath, id, expected, ast::LANGUAGE_FLAGS::C, true);
     }
 
     TEST(DECOMPILER, Match1) {
@@ -825,7 +829,7 @@ namespace dconstruct::testing {
             "        else -> \"Invalid\"\n"
             "    };\n"
             "}";
-        decomp_test(filepath, id, expected, ast::c, true);
+        decomp_test(filepath, id, expected, ast::LANGUAGE_FLAGS::C, true);
     }
 
     TEST(DECOMPILER, Match4) {
@@ -841,7 +845,7 @@ namespace dconstruct::testing {
             "        else -> *invalid-symbol*\n"
             "    };\n"
             "}";
-        decomp_test(filepath, id, expected, ast::c, true);
+        decomp_test(filepath, id, expected, ast::LANGUAGE_FLAGS::C, true);
     }
 
     TEST(DECOMPILER, Optimization8) {
@@ -857,7 +861,7 @@ namespace dconstruct::testing {
             "        else -> *invalid-symbol*\n"
             "    };\n"
             "}";
-        decomp_test(filepath, id, expected, ast::c, false);
+        decomp_test(filepath, id, expected, ast::LANGUAGE_FLAGS::C, false);
     }
 
     TEST(DECOMPILER, NewFileFormat1) {
@@ -880,35 +884,37 @@ namespace dconstruct::testing {
         dcompiler::state_script_functions full_file_decomp(decompiled_funcs);
 
         std::ofstream file_out(DCPL_PATH + dconstruct::sanitize_dc_string("animal_behavior") + ".dcpl");
-        full_file_decomp.to_string(file_out);
+        ast::ast_serialization_buffer buffer;
+        full_file_decomp.to_string(buffer);
+        file_out << buffer.str();
     }
 
     TEST(DECOMPILER, Optimization10) {
         const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/anim-gas-mask-impl.bin)";
         const std::string id = "internal-put-on-gas-mask";
         const std::string expected = "";
-        decomp_test(filepath, id, expected, ast::c, true);
+        decomp_test(filepath, id, expected, ast::LANGUAGE_FLAGS::C, true);
     }
 
     TEST(DECOMPILER, Optimization11) {
         const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/animal-behavior.bin)";
         const std::string id = "get-landing-anim-id";
         const std::string expected = "";
-        decomp_test(filepath, id, expected, ast::c, true);
+        decomp_test(filepath, id, expected, ast::LANGUAGE_FLAGS::C, true);
     }
 
     TEST(DECOMPILER, Optimization12) {
         const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/ss-rogue/ss-survival-manager.bin)";
         const std::string id = "survival-setup-level@main@start@36";
         const std::string expected = "";
-        decomp_test(filepath, id, expected, ast::c, true);
+        decomp_test(filepath, id, expected, ast::LANGUAGE_FLAGS::C, true);
     }
     
     TEST(DECOMPILER, Optimization13) {
         const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/ss-abby-fights-militia/ss-afm-horse-chase-combat.bin)";
         const std::string id = "start-chase@militia-1@start@6";
         const std::string expected = "";
-        decomp_test(filepath, id, expected, ast::c, true);
+        decomp_test(filepath, id, expected, ast::LANGUAGE_FLAGS::C, true);
     }
 
     
@@ -916,7 +922,7 @@ namespace dconstruct::testing {
         const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/melee-script-funcs-impl.bin)";
         const std::string id = "npc-contextual-parry-cooldown";
         const std::string expected = "";
-        decomp_test(filepath, id, expected, ast::c, false);
+        decomp_test(filepath, id, expected, ast::LANGUAGE_FLAGS::C, false);
     }
 
     TEST(DECOMPILER, Optimization15) {
@@ -928,56 +934,56 @@ namespace dconstruct::testing {
         "        darray-append(arg_0, element, 0);\n"
         "    }\n"
         "}";
-        decomp_test(filepath, id, expected, ast::c, true);
+        decomp_test(filepath, id, expected, ast::LANGUAGE_FLAGS::C, true);
     }
 
     TEST(DECOMPILER, Optimization16) {
         const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1\ss-test\ss-test-cwohlwend\ss-npc-begs-for-life-tester.bin)";
         const std::string id = "main@begs-for-life@start@0";
         const std::string expected = "";
-        decomp_test(filepath, id, expected, ast::c, true);
+        decomp_test(filepath, id, expected, ast::LANGUAGE_FLAGS::C, true);
     }
 
     TEST(DECOMPILER, WhileFix1) {
         const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1\ss/ss-ground-animal-flee.bin)";
         const std::string id = "setup@main@start@2";
         const std::string expected = "";
-        decomp_test(filepath, id, expected, ast::c, false);
+        decomp_test(filepath, id, expected, ast::LANGUAGE_FLAGS::C, false);
     }
 
     TEST(DECOMPILER, WhileFix2) {
         const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1\ss/ss-ground-animal-flee.bin)";
         const std::string id = "setup@main@start@0";
         const std::string expected = "";
-        decomp_test(filepath, id, expected, ast::c, true);
+        decomp_test(filepath, id, expected, ast::LANGUAGE_FLAGS::C, true);
     }
 
     TEST(DECOMPILER, Crash1) {
         const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1\npc-script-funcs.bin)";
         const std::string id = "wait-npc-play-feather-blend-with-turn-to";
         const std::string expected = "";
-        decomp_test(filepath, id, expected, ast::c, true);
+        decomp_test(filepath, id, expected, ast::LANGUAGE_FLAGS::C, true);
     }
 
     TEST(DECOMPILER, Crash2) {
         const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1\nd-script-funcs.bin)";
         const std::string id = "ddict-print";
         const std::string expected = "";
-        decomp_test(filepath, id, expected, ast::c, true);
+        decomp_test(filepath, id, expected, ast::LANGUAGE_FLAGS::C, true);
     }
 
     TEST(DECOMPILER, Crash3) {
         const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1\\ss-watchtower\\ss-wat-infected-tunnels-station-combat-hardpoint.bin)";
         const std::string id = "assign-to-hardpoint@main@start@0";
         const std::string expected = "";
-        decomp_test(filepath, id, expected, ast::c, true);
+        decomp_test(filepath, id, expected, ast::LANGUAGE_FLAGS::C, true);
     }
 
     TEST(DECOMPILER, MaxMatchTest) {
         const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1\\workbench-script-funcs-impl.bin)";
         const std::string id = "get-worst-stat";
         const std::string expected = "";
-        decomp_test(filepath, id, expected, ast::c, true);
+        decomp_test(filepath, id, expected, ast::LANGUAGE_FLAGS::C, true);
     }
 
     TEST(DECOMPILER, ArgumentType1) {
@@ -993,7 +999,7 @@ namespace dconstruct::testing {
             "    }\n"
             "    return var_0;\n"
             "}";
-        decomp_test(filepath, id, expected, ast::c, true);
+        decomp_test(filepath, id, expected, ast::LANGUAGE_FLAGS::C, true);
     }
 
     TEST(DECOMPILER, PascalCase1) {
@@ -1010,6 +1016,6 @@ namespace dconstruct::testing {
             "    }\n"
             "    return var_2;\n"
             "}\n";
-        decomp_test(filepath, id, expected, ast::c, true, true);
+        decomp_test(filepath, id, expected, ast::LANGUAGE_FLAGS::C, true, true);
     }
 }

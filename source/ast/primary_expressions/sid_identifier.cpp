@@ -5,23 +5,23 @@
 namespace dconstruct::ast {
 
     
-void sid_identifier::pseudo_c(std::ostream& os) const {
-    os << m_name.m_lexeme;
+void sid_identifier::pseudo_c(ast_serialization_buffer& buffer) const {
+    buffer.append(m_name.m_lexeme);
 }
 
-void sid_identifier::pseudo_c_for_compiler(std::ostream& os) const {
+void sid_identifier::pseudo_c_for_compiler(ast_serialization_buffer& buffer) const {
     if (!m_name.m_lexeme.starts_with('#')) {
-        os << '#';
+        buffer.append('#');
     }
-    os << m_name.m_lexeme;
+    buffer.append(m_name.m_lexeme);
 }
 
-void sid_identifier::pseudo_py(std::ostream& os) const {
-    os << m_name.m_lexeme;
+void sid_identifier::pseudo_py(ast_serialization_buffer& buffer) const {
+    buffer.append(m_name.m_lexeme);
 }
 
-void sid_identifier::pseudo_racket(std::ostream& os) const {
-    os << m_name.m_lexeme;
+void sid_identifier::pseudo_racket(ast_serialization_buffer& buffer) const {
+    buffer.append(m_name.m_lexeme);
 }
 
 [[nodiscard]] bool sid_identifier::equals(const expression &rhs) const noexcept {

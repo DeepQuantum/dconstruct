@@ -20,16 +20,6 @@ namespace dconstruct::dcompiler {
         m_ipdomsEmitted(m_graph.m_nodes.size(), false),
         m_functionDefinition{} {};
 
-        // struct allocator {
-
-        // };
-
-
-        // template<node_t, Args... args> requires (std::is_base_of<node_t, ast::ast_element>)
-        // [[nodiscard]] expr_uptr create_node(Args ...args)  {
-        //     return new (m_arena) node_t(std::forward(args)...);
-        // }
-
         const ast::function_definition& decompile(const bool optimization_passes = false) & ;
         [[nodiscard]] ast::function_definition decompile(const bool optimization_passes = false) && ;
 
@@ -175,9 +165,9 @@ namespace dconstruct::dcompiler {
 
         state_script_functions(const std::vector<ast::function_definition>& funcs, const BinaryFile* binary_file = nullptr) noexcept;
 
-        [[nodiscard]] void to_string(std::ostream& os) const noexcept;
+        [[nodiscard]] void to_string(ast::ast_serialization_buffer& buffer) const noexcept;
 
-        void emit_script_metadata(std::ostream &os) const;
+        void emit_script_metadata(ast::ast_serialization_buffer& buffer) const;
     };
 
 

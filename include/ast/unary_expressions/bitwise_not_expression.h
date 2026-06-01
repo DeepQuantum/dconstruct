@@ -8,7 +8,7 @@ namespace dconstruct::ast {
         
         explicit bitwise_not_expr(expr_uptr&& rhs) noexcept : clonable_unary_expr(compilation::token{ compilation::token_type::TILDE, "~" }, std::move(rhs)) {};
 
-        void pseudo_racket(std::ostream& os) const final;
+        void pseudo_racket(ast_serialization_buffer& buffer) const final;
 
         [[nodiscard]] expr_uptr simplify() const final;       
         [[nodiscard]] semantic_check_res compute_type_checked(compilation::scope& env) const noexcept final;

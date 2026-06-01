@@ -494,9 +494,10 @@ std::string Disassembler::disassembly_to_string(const std::vector<disassembled_e
         } else if (type_id == SID("state-script")) {
             for (const auto& value : values) {
                 if (const auto* state_script = std::get_if<const ast::state_script*>(&value)) {
-                    std::ostringstream stream;
-                    stream << ast::set_indent_width{indent_per_level} << **state_script;
-                    append_indented_text(stream.str(), indent + indent_per_level);
+                    ast::ast_serialization_buffer buffer;
+                    buffer.m_indent_width = indent_per_level;
+                    buffer.append(**state_script);
+                    append_indented_text(buffer.str(), indent + indent_per_level);
                     if (out.empty() || out.back() != '\n') {
                         out += '\n';
                     }
@@ -540,10 +541,11 @@ std::string Disassembler::disassembly_to_string(const std::vector<disassembled_e
                 out += '\n';
                 append_function_disassembly(*entry, indent + indent_per_level);
             } else if constexpr (std::is_same_v<T, const ast::state_script*>) {
-                std::ostringstream stream;
-                stream << ast::set_indent_width{indent_per_level} << *entry;
+                ast::ast_serialization_buffer buffer;
+                buffer.m_indent_width = indent_per_level;
+                buffer.append(*entry);
                 out += '\n';
-                append_indented_text(stream.str(), indent + indent_per_level);
+                append_indented_text(buffer.str(), indent + indent_per_level);
                 if (out.empty() || out.back() != '\n') {
                     out += '\n';
                 }

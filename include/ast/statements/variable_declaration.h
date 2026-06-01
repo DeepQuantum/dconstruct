@@ -26,11 +26,11 @@ namespace dconstruct::ast {
         FOREACH_OPTIMIZATION_ACTION foreach_optimization_pass(foreach_optimization_env& env) noexcept final;
         MATCH_OPTIMIZATION_ACTION match_optimization_pass(match_optimization_env& env) noexcept final;
 
-        void pseudo_c(std::ostream& os) const final;
+        void pseudo_c(ast_serialization_buffer& buffer) const final;
 
-        void pseudo_py(std::ostream& os) const final;
+        void pseudo_py(ast_serialization_buffer& buffer) const final;
 
-		void pseudo_racket(std::ostream& os) const final;
+		void pseudo_racket(ast_serialization_buffer& buffer) const final;
 
         [[nodiscard]] bool equals(const statement& rhs) const noexcept final;
 

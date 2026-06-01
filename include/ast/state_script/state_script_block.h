@@ -15,9 +15,9 @@ namespace dconstruct::ast {
         state_script_block(std::string event_name, std::vector<state_script_track> tracks) noexcept
             : m_blockType(BLOCK_TYPE::EVENT), m_eventName(event_name), m_tracks(std::move(tracks)) {}
 
-        void pseudo_c(std::ostream& os) const final;
-        void pseudo_py(std::ostream& os) const final;
-        void pseudo_racket(std::ostream& os) const final;
+        void pseudo_c(ast_serialization_buffer& buffer) const final;
+        void pseudo_py(ast_serialization_buffer& buffer) const final;
+        void pseudo_racket(ast_serialization_buffer& buffer) const final;
 
         [[nodiscard]] bool equals(const state_script_block& rhs) const noexcept;
 

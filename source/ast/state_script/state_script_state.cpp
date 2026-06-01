@@ -6,29 +6,31 @@ namespace dconstruct::ast {
     return lhs.equals(rhs);
 }
 
-void state_script_state::pseudo_c(std::ostream& os) const {
-    os << "state " << m_name << " {\n";
-    os << indent_more;
+void state_script_state::pseudo_c(ast_serialization_buffer& buffer) const {
+    buffer.append("state "sv, m_name, " {\n"sv);
+    buffer.indent_more();
     for (const auto& b : m_blocks) {
-        os << indent << b << "\n";
+        buffer.append_indent();
+        buffer.append(b, '\n');
     }
-    os << indent_less;
-    os << indent << "}";
+    buffer.indent_less();
+    buffer.append_indent();
+    buffer.append('}');
 }
 
-void state_script_state::pseudo_py(std::ostream& os) const {
-    os << "state " << m_name << ":";
+void state_script_state::pseudo_py(ast_serialization_buffer& buffer) const {
+    buffer.append("state "sv, m_name, ':');
     for (const auto& b : m_blocks) {
-        os << "\n  " << b;
+        buffer.append("\n  "sv, b);
     }
 }
 
-void state_script_state::pseudo_racket(std::ostream& os) const {
-    os << "(state " << m_name;
+void state_script_state::pseudo_racket(ast_serialization_buffer& buffer) const {
+    buffer.append("(state "sv, m_name);
     for (const auto& b : m_blocks) {
-        os << " " << b;
+        buffer.append(' ', b);
     }
-    os << ")";
+    buffer.append(')');
 }
 
 [[nodiscard]] bool state_script_state::equals(const state_script_state& rhs) const noexcept {

@@ -1,5 +1,8 @@
 #include "disassembly/disassembly_functions.h"
 
+#include <cstdio>
+#include <print>
+
 int main(int argc, char *argv[]) {  
     const std::optional<std::pair<cxxopts::Options, cxxopts::ParseResult>> opts_res = dconstruct::disassembly::get_command_line_options(argc, argv);
     if (!opts_res) {
@@ -8,12 +11,12 @@ int main(int argc, char *argv[]) {
     const auto& [options, opts] = *opts_res;
 
     if (opts.count("h") > 0) {
-        std::cout << options.help({"", "information", "input/output", "configuration", "edit"}) << '\n';
+        std::println("{}", options.help({"", "information", "input/output", "configuration", "edit"}));
         return 0;
     }
 
     if (opts.count("help_edit") > 0) {
-        std::cout << HELP_EDIT;
+        std::print("{}", HELP_EDIT);
         return 0;
     }
 
@@ -24,12 +27,12 @@ int main(int argc, char *argv[]) {
     
     std::filesystem::path filepath;
     if (opts.count("i") == 0) {
-        std::cout << "error: no input specified\n";
+        std::println(stderr, "error: no input specified");
         return -1;
     } else {
         filepath = opts["i"].as<std::string>();
         if (!std::filesystem::exists(filepath)) {
-            std::cout << "error: input filepath " << filepath << " doesn't exist\n";
+            std::println(stderr, "error: input filepath {} doesn't exist", filepath.string());
             return -1;
         }
     }
@@ -67,14 +70,14 @@ int main(int argc, char *argv[]) {
     const auto game_type_opt = dconstruct::disassembly::get_game_type(game_type_string);
 
     if (!game_type_opt) {
-        std::cerr << "error: unknown game type: '" << game_type_string << "'\n";
+        std::println(stderr, "error: unknown game type: '{}'", game_type_string);
         return -1;
     }
 
     const dconstruct::game_type game = *game_type_opt;
 
     if (!std::filesystem::exists(sidbase_path)) {
-        std::cout << "error: sidbase path " << sidbase_path << " doesn't exist\n";
+        std::println(stderr, "error: sidbase path {} doesn't exist", sidbase_path.string());
         return -1;
     }
     
@@ -82,16 +85,16 @@ int main(int argc, char *argv[]) {
 
     if (map_types) {
         if (std::filesystem::is_directory(output)) {
-            std::cout << "error: output path must be a file when using --map_types\n";
+            std::println(stderr, "error: output path must be a file when using --map_types");
             return -1;
         } 
         if (!std::filesystem::is_directory(filepath)) {
-            std::cout << "error: input path must be a folder when using --map_types\n";
+            std::println(stderr, "error: input path must be a folder when using --map_types");
             return -1;
         }
         const std::expected<dconstruct::SIDBase, std::string> sidbase_opt = dconstruct::SIDBase::from_binary(sidbase_path);
         if (!sidbase_opt) {
-            std::cout << "error: couldn't load sidbase: " << sidbase_opt.error() << "\n";
+            std::println(stderr, "error: couldn't load sidbase: {}", sidbase_opt.error());
             return -1;
         }
         dconstruct::disassembly::map_types_multiple_to_file(filepath, *sidbase_opt, output, game);
@@ -101,7 +104,6 @@ int main(int argc, char *argv[]) {
     const bool decompile = !opts["no_decompile"].as<bool>();
     const bool optimize = !opts["no_optimize"].as<bool>();
     const bool generate_graphs = opts["graphs"].as<bool>();
-    const bool use_pascal_case = opts["pascal_case"].as<bool>();
     const bool show_warnings = opts["show_warnings"].as<bool>();
 
 
@@ -110,11 +112,14 @@ int main(int argc, char *argv[]) {
 
     const auto opt_print_func = dconstruct::disassembly::get_print_type(language_type);
     if (!opt_print_func) {
-        std::cerr << "error: unknown language type: '" << language_type << "'\n";
+        std::println(stderr, "error: unknown language type: '{}'", language_type);
         return -1;
     }
-    const auto print_func = *opt_print_func;
-    
+    auto language_flags = *opt_print_func;
+    if (opts["pascal_case"].as<bool>()) {
+        language_flags = language_flags | dconstruct::ast::LANGUAGE_FLAGS::FUNCTION_NAMES_PASCAL;
+    }
+
 
     if (opts.count("e") > 0) {
         std::vector<std::string> edit_strings = opts["e"].as<std::vector<std::string>>();
@@ -123,27 +128,27 @@ int main(int argc, char *argv[]) {
 
     auto base_exp = dconstruct::SIDBase::from_binary(sidbase_path);
     if (!base_exp) {
-        std::cerr << base_exp.error();
+        std::print(stderr, "{}", base_exp.error());
         return -1;
     }
     const auto& base = *base_exp;
 
     if (std::filesystem::is_directory(filepath)) {
         if (std::filesystem::exists(output) && !output_is_folder) {
-            std::cout << "error: the input " << filepath << " is a folder, but output " << output << " is a file.\n";
+            std::println(stderr, "error: the input {} is a folder, but output {} is a file.", filepath.string(), output.string());
             return -1;
         }
         if (!output_is_folder) {
             std::filesystem::create_directories(output);
         }
         if (!edits.empty()) {
-            std::cout << "warning: edits ignored as input path is a directory. edits only work in single file disassembly.\n";
+            std::println("warning: edits ignored as input path is a directory. edits only work in single file disassembly.");
         }
         if (decompile) {
             if (generate_graphs) {
                 std::filesystem::create_directory(output / "graphs");
             }
-            dconstruct::disassembly::decompile_multiple(filepath, output, base, generate_graphs, show_warnings, optimize, print_func, use_pascal_case, game);
+            dconstruct::disassembly::decompile_multiple(filepath, output, base, generate_graphs, show_warnings, optimize, language_flags, game);
         }
         else {
             dconstruct::disassembly::disassemble_multiple(filepath, output, base, game);
@@ -151,15 +156,15 @@ int main(int argc, char *argv[]) {
     } else {
         const auto start = std::chrono::high_resolution_clock::now();
         if (decompile) {
-            std::cout << "disassembling & decompiling " << filepath.filename() << "...\n";
-            dconstruct::disassembly::decomp_file(filepath, output, std::filesystem::path(output).replace_extension(".dcpl"), base, generate_graphs, print_func, show_warnings, optimize, edits, use_pascal_case, game);
+            std::println("disassembling & decompiling {}...", filepath.filename().string());
+            dconstruct::disassembly::decomp_file(filepath, output, std::filesystem::path(output).replace_extension(".dcpl"), base, generate_graphs, language_flags, show_warnings, optimize, edits, game);
         }
         else {
-            std::cout << "disassembling " << filepath.filename() << "...\n";
+            std::println("disassembling {}...", filepath.filename().string());
             dconstruct::disassembly::disasm_file(filepath, output, base, edits, game);
         }
         const auto time_taken = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - start);
-        std::cout << "took " << time_taken.count() << "ms\n";
+        std::println("took {}ms", time_taken.count());
     }
     return 0;
 }

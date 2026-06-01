@@ -63,7 +63,7 @@ namespace dconstruct::testing {
 
         for (const auto* func : dis.get_all_functions()) {
             auto decomp = dconstruct::dcompiler::decomp_function{*func, file, ControlFlowGraph::build(*func)}.decompile(true);
-            out << decomp << "\n\n";
+            out << decomp.to_pseudo_c_string() << "\n\n";
         }
 
         ASSERT_GT(dis.get_all_functions().size(), 0);

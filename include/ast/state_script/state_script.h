@@ -27,9 +27,9 @@ namespace dconstruct::ast {
         state_script(state_script&&) noexcept = default;
         state_script& operator=(state_script&&) noexcept = default;
 
-        void pseudo_c(std::ostream& os) const final;
-        void pseudo_py(std::ostream& os) const final;
-        void pseudo_racket(std::ostream& os) const final;
+        void pseudo_c(ast_serialization_buffer& buffer) const final;
+        void pseudo_py(ast_serialization_buffer& buffer) const final;
+        void pseudo_racket(ast_serialization_buffer& buffer) const final;
 
         [[nodiscard]] virtual std::vector<semantic_check_error> check_semantics(compilation::scope&) const noexcept final;
         [[nodiscard]] virtual program_binary_result emit_dc(compilation::global_state& global) const noexcept final;

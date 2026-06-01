@@ -4,61 +4,63 @@ namespace dconstruct::ast {
 
 namespace {
 
-void pseudo_c_lambda(std::ostream& os, const function_definition& lambda) {
-    os << lambda;
+void pseudo_c_lambda(ast_serialization_buffer& buffer, const function_definition& lambda) {
+    buffer.append(lambda);
 }
 
-void pseudo_c_lambda(std::ostream& os, const function_disassembly& lambda) {
-    os << "lambda " << lambda.get_id() << " {\n";
-    os << indent_more;
+void pseudo_c_lambda(ast_serialization_buffer& buffer, const function_disassembly& lambda) {
+    buffer.append("lambda "sv, lambda.get_id(), " {\n"sv);
+    buffer.indent_more();
     for (const function_disassembly_line& line : lambda.m_lines) {
         const size_t line_offset = line.m_text.length() < 67 ? 67 - line.m_text.length() : 0;
-        os << indent << line.m_text << std::string(line_offset, ' ') << line.m_comment << "\n";
+        buffer.append_indent();
+        buffer.append(line.m_text, std::string(line_offset, ' '), line.m_comment, '\n');
     }
-    os << indent_less;
-    os << indent << "}";
+    buffer.indent_less();
+    buffer.append_indent();
+    buffer.append('}');
 }
 
-void pseudo_c_lambda(std::ostream& os, const std::shared_ptr<function_disassembly>& lambda) {
-    pseudo_c_lambda(os, *lambda);
+void pseudo_c_lambda(ast_serialization_buffer& buffer, const std::shared_ptr<function_disassembly>& lambda) {
+    pseudo_c_lambda(buffer, *lambda);
 }
 
-void pseudo_py_lambda(std::ostream& os, const function_definition& lambda) {
-    os << lambda;
+void pseudo_py_lambda(ast_serialization_buffer& buffer, const function_definition& lambda) {
+    buffer.append(lambda);
 }
 
-void pseudo_py_lambda(std::ostream& os, const function_disassembly& lambda) {
-    os << "lambda " << lambda.get_id() << ":";
+void pseudo_py_lambda(ast_serialization_buffer& buffer, const function_disassembly& lambda) {
+    buffer.append("lambda "sv, lambda.get_id(), ':');
     for (const function_disassembly_line& line : lambda.m_lines) {
-        os << "\n    " << line.m_text;
+        buffer.append("\n    "sv, line.m_text);
         if (!line.m_comment.empty()) {
-            os << "  # " << line.m_comment;
+            buffer.append("  # "sv, line.m_comment);
         }
     }
 }
 
-void pseudo_py_lambda(std::ostream& os, const std::shared_ptr<function_disassembly>& lambda) {
-    pseudo_py_lambda(os, *lambda);
+void pseudo_py_lambda(ast_serialization_buffer& buffer, const std::shared_ptr<function_disassembly>& lambda) {
+    pseudo_py_lambda(buffer, *lambda);
 }
 
-void pseudo_racket_lambda(std::ostream& os, const function_definition& lambda) {
-    os << lambda;
+void pseudo_racket_lambda(ast_serialization_buffer& buffer, const function_definition& lambda) {
+    buffer.append(lambda);
 }
 
-void pseudo_racket_lambda(std::ostream& os, const function_disassembly& lambda) {
-    os << "(lambda " << lambda.get_id();
+void pseudo_racket_lambda(ast_serialization_buffer& buffer, const function_disassembly& lambda) {
+    buffer.append("(lambda "sv, lambda.get_id());
     for (const function_disassembly_line& line : lambda.m_lines) {
-        os << " (" << line.m_text;
+        buffer.append(" ("sv, line.m_text);
         if (!line.m_comment.empty()) {
-            os << "  " << line.m_comment;
+            buffer.append("  "sv, line.m_comment);
         }
-        os << ")";
+        buffer.append(')');
     }
-    os << ")";
+    buffer.append(')');
 }
 
-void pseudo_racket_lambda(std::ostream& os, const std::shared_ptr<function_disassembly>& lambda) {
-    pseudo_racket_lambda(os, *lambda);
+void pseudo_racket_lambda(ast_serialization_buffer& buffer, const std::shared_ptr<function_disassembly>& lambda) {
+    pseudo_racket_lambda(buffer, *lambda);
 }
 
 [[nodiscard]] bool equals_function_disassembly(const function_disassembly& lhs, const function_disassembly& rhs) noexcept {
@@ -99,39 +101,40 @@ void pseudo_racket_lambda(std::ostream& os, const std::shared_ptr<function_disas
     return lhs.equals(rhs);
 }
 
-void state_script_track::pseudo_c(std::ostream& os) const {
-    os << "track " << m_name << " {\n";
-    os << indent_more;
+void state_script_track::pseudo_c(ast_serialization_buffer& buffer) const {
+    buffer.append("track "sv, m_name, " {\n"sv);
+    buffer.indent_more();
     for (const auto& lam : m_lambdas) {
-        os << indent;
-        std::visit([&os](const auto& lambda) {
-            pseudo_c_lambda(os, lambda);
+        buffer.append_indent();
+        std::visit([&buffer](const auto& lambda) {
+            pseudo_c_lambda(buffer, lambda);
         }, lam);
-        os << "\n";
+        buffer.append('\n');
     }
-    os << indent_less;
-    os << indent << "}";
+    buffer.indent_less();
+    buffer.append_indent();
+    buffer.append('}');
 }
 
-void state_script_track::pseudo_py(std::ostream& os) const {
-    os << "track " << m_name << ":";
+void state_script_track::pseudo_py(ast_serialization_buffer& buffer) const {
+    buffer.append("track "sv, m_name, ':');
     for (const auto& lam : m_lambdas) {
-        os << "\n  ";
-        std::visit([&os](const auto& lambda) {
-            pseudo_py_lambda(os, lambda);
+        buffer.append("\n  "sv);
+        std::visit([&buffer](const auto& lambda) {
+            pseudo_py_lambda(buffer, lambda);
         }, lam);
     }
 }
 
-void state_script_track::pseudo_racket(std::ostream& os) const {
-    os << "(track " << m_name;
+void state_script_track::pseudo_racket(ast_serialization_buffer& buffer) const {
+    buffer.append("(track "sv, m_name);
     for (const auto& lam : m_lambdas) {
-        os << " ";
-        std::visit([&os](const auto& lambda) {
-            pseudo_racket_lambda(os, lambda);
+        buffer.append(' ');
+        std::visit([&buffer](const auto& lambda) {
+            pseudo_racket_lambda(buffer, lambda);
         }, lam);
     }
-    os << ")";
+    buffer.append(')');
 }
 
 [[nodiscard]] bool state_script_track::equals(const state_script_track& rhs) const noexcept {

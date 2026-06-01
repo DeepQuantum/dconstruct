@@ -2,25 +2,25 @@
 
 namespace dconstruct::ast {
 
-void return_stmt::pseudo_c(std::ostream& os) const {
+void return_stmt::pseudo_c(ast_serialization_buffer& buffer) const {
     if (m_expr) {
-        os << "return " << *m_expr << ';';
+        buffer.append("return "sv, *m_expr, ';');
     } else {
-        os << "return;";
+        buffer.append("return;"sv);
     }
 }
 
-void return_stmt::pseudo_py(std::ostream& os) const {
+void return_stmt::pseudo_py(ast_serialization_buffer& buffer) const {
     if (m_expr) {
-        os << "return " << *m_expr;
+        buffer.append("return "sv, *m_expr);
     } else {
-        os << "return;";
+        buffer.append("return;"sv);
     }
 }
 
-void return_stmt::pseudo_racket(std::ostream& os) const {
+void return_stmt::pseudo_racket(ast_serialization_buffer& buffer) const {
     if (m_expr) {
-        os << *m_expr;
+        buffer.append(*m_expr);
     }
 }
 

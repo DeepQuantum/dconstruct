@@ -6,29 +6,31 @@ namespace dconstruct::ast {
     return lhs.equals(rhs);
 }
 
-void state_script_block::pseudo_c(std::ostream& os) const {
-    os << "block " << block_type_to_string() << " {\n";
-    os << indent_more;
+void state_script_block::pseudo_c(ast_serialization_buffer& buffer) const {
+    buffer.append("block "sv, block_type_to_string(), " {\n"sv);
+    buffer.indent_more();
     for (const auto& t : m_tracks) {
-        os << indent << t << "\n";
+        buffer.append_indent();
+        buffer.append(t, '\n');
     }
-    os << indent_less;
-    os << indent << "}";
+    buffer.indent_less();
+    buffer.append_indent();
+    buffer.append('}');
 }
 
-void state_script_block::pseudo_py(std::ostream& os) const {
-    os << "block " << block_type_to_string() << ":";
+void state_script_block::pseudo_py(ast_serialization_buffer& buffer) const {
+    buffer.append("block "sv, block_type_to_string(), ':');
     for (const auto& t : m_tracks) {
-        os << "\n  " << t;
+        buffer.append("\n  "sv, t);
     }
 }
 
-void state_script_block::pseudo_racket(std::ostream& os) const {
-    os << "(block " << block_type_to_string();
+void state_script_block::pseudo_racket(ast_serialization_buffer& buffer) const {
+    buffer.append("(block "sv, block_type_to_string());
     for (const auto& t : m_tracks) {
-        os << " " << t;
+        buffer.append(' ', t);
     }
-    os << ")";
+    buffer.append(')');
 }
 
 [[nodiscard]] bool state_script_block::equals(const state_script_block& rhs) const noexcept {
