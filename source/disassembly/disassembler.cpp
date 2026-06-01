@@ -768,6 +768,7 @@ ast::state_script_block Disassembler::insert_on_block(const SsOnBlock *block, st
             function_name.m_idx = j;
             SsLambda *ss_lambda = &track_ptr->m_pSsLambda[j];
             std::shared_ptr function = create_function_disassembly(ss_lambda->m_pScriptLambda, function_name, true);
+            function->m_originalOffset = get_offset(ss_lambda->m_pScriptLambda);
             lambdas.push_back(function);
             m_functions.push_back(function);
         }

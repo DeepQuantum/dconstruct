@@ -420,7 +420,7 @@ struct function_disassembly {
     std::vector<function_disassembly_line> m_lines;
     StackFrame m_stackFrame;
     function_name_variant m_id;
-    u64 m_originalOffset;
+    u64 m_originalOffset = 0;
     bool m_isScriptFunction;
     bool m_isEmbeddedFunction = false;
 
