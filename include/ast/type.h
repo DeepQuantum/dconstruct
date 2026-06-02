@@ -7,6 +7,7 @@
 #include <vector>
 #include <expected>
 #include <type_traits>
+#include <unordered_map>
 #include "disassembly/opcodes.h"
 
 namespace dconstruct::ast {
@@ -215,4 +216,7 @@ namespace dconstruct::ast {
     [[nodiscard]] std::expected<Opcode, std::string> get_store_opcode(const full_type& type); 
 
     extern const std::string UNKNOWN_TYPE_NAME;
+
+    using mapped_var_scope = std::map<u64, std::pair<ast::full_type, std::optional<std::string>>>;
+    using function_to_mapped_vars = std::unordered_map<sid64, mapped_var_scope>;
 }

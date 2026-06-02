@@ -33,7 +33,7 @@ namespace dconstruct::dcompiler {
             ControlFlowGraph graph,
             std::optional<std::filesystem::path> graph_path = std::nullopt,
             const std::unordered_map<sid64, ast::full_type>* known_types = nullptr,
-            const std::filesystem::path* type_map_path = nullptr) noexcept :
+            const ast::function_to_mapped_vars* function_scopes = nullptr) noexcept :
         m_disassembly(func),
         m_file(file),
         m_sidbase(sidbase),
@@ -42,7 +42,7 @@ namespace dconstruct::dcompiler {
         m_parsedNodes(graph.m_nodes.size(), false),
         m_ipdomsEmitted(m_graph.m_nodes.size(), false),
         m_knownTypes(known_types),
-        m_typeMapPath(type_map_path) {};
+        m_functionScopes(function_scopes) {};
 
         [[nodiscard]] ast::function_definition decompile(const OPTIMIZATION_KIND optimizations = OPTIMIZATION_KIND::NONE);
 
@@ -54,7 +54,7 @@ namespace dconstruct::dcompiler {
         ControlFlowGraph m_graph;
         std::unordered_map<reg_idx, std::stack<std::unique_ptr<ast::identifier>>> m_registersToVars;
         const std::unordered_map<sid64, ast::full_type>* m_knownTypes;
-        const std::unordered_map<sid64, compilation::scope>* m_functionScopes;
+        const ast::function_to_mapped_vars* m_functionScopes;
         std::array<expr_uptr, MAX_REGISTER> m_transformableExpressions;
         std::vector<ast::variable_declaration> m_arguments;
         std::stack<std::reference_wrapper<ast::block>> m_blockStack;
@@ -63,7 +63,6 @@ namespace dconstruct::dcompiler {
         const BinaryFile& m_file;
         const SIDBase& m_sidbase;
         std::optional<std::filesystem::path> m_graphPath;
-        const std::filesystem::path* m_typeMapPath = nullptr;
         std::unique_ptr<ast::function_definition> m_functionDefinition;
         node_set m_parsedNodes;
         node_set m_ipdomsEmitted;

@@ -119,12 +119,25 @@ target_link_libraries(dconstruct_lib
     # dxbc_shader_decomp
 )
 
-# add_custom_command(
-# TARGET dconstruct POST_BUILD
-# COMMAND ${CMAKE_COMMAND} -E copy_directory
-# " ${CMAKE_SOURCE_DIR}/Graphviz-13.1.0-win64/bin "
-# ${CMAKE_CURRENT_BINARY_DIR}
-# )
+if(WIN32)
+    set(GRAPHVIZ_BIN "${SOURCE_DIR}/Graphviz-13.1.0-win64/bin")
+    set(DCONSTRUCT_RUNTIME_DLLS
+        "${GRAPHVIZ_BIN}/cdt.dll"
+        "${GRAPHVIZ_BIN}/cgraph.dll"
+        "${GRAPHVIZ_BIN}/gvc.dll"
+        "${GRAPHVIZ_BIN}/gvplugin_core.dll"
+        "${GRAPHVIZ_BIN}/gvplugin_dot_layout.dll"
+        "${GRAPHVIZ_BIN}/gvplugin_pango.dll"
+        "${GRAPHVIZ_BIN}/libexpat.dll"
+        "${GRAPHVIZ_BIN}/pathplan.dll"
+        "${GRAPHVIZ_BIN}/xdot.dll"
+    )
+    add_custom_command(TARGET dconstruct_lib POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${DCONSTRUCT_RUNTIME_DLLS} "$<TARGET_FILE_DIR:dconstruct_lib>"
+        COMMENT "Copying runtime DLLs next to dconstruct_lib"
+        VERBATIM
+    )
+endif()
 
 
 set(CMAKE_CURRENT_TEST_DIR "${CMAKE_CURRENT_SOURCE_DIR}/test")
@@ -251,6 +264,18 @@ target_link_libraries(dconstruct_ui PRIVATE
 
 target_include_directories(dconstruct_ui PRIVATE ${SOURCE_DIR}/qui/source/stb)
 add_dependencies(dconstruct_ui generate_buildinfo)
+
+add_custom_command(TARGET dconstruct_ui POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E make_directory "$<TARGET_FILE_DIR:dconstruct_ui>/fonts"
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "${CMAKE_SOURCE_DIR}/resources/GeistMono-Medium.ttf"
+        "${CMAKE_SOURCE_DIR}/resources/GeistMono-SemiBold.ttf"
+        "${CMAKE_SOURCE_DIR}/resources/GeistMono-Bold.ttf"
+        "${CMAKE_SOURCE_DIR}/resources/OFL.txt"
+        "$<TARGET_FILE_DIR:dconstruct_ui>/fonts"
+    COMMENT "Copying fonts and license into $<TARGET_FILE_DIR:dconstruct_ui>/fonts"
+    VERBATIM
+)
 
 if(WIN32)
     target_link_libraries(dconstruct_ui PRIVATE comdlg32)

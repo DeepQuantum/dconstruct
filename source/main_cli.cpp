@@ -58,15 +58,20 @@ int main(int argc, char *argv[]) {
         type_map = *type_def_res;
     }
 
-    std::vector<std::filesystem::path> type_map_paths;
-    if (opts.count("type_maps") > 0) {
-        for (const auto& type_map_path : opts["type_maps"].as<std::vector<std::string>>()) {
+    dconstruct::disassembly::parsed_type_maps_t type_maps;
+    if (opts.count("type_map") > 0) {
+        for (const auto& type_map_path : opts["type_map"].as<std::vector<std::string>>()) {
             const std::filesystem::path path = type_map_path;
             if (!std::filesystem::exists(path)) {
                 std::println(stderr, "error: type map filepath {} doesn't exist", path.string());
                 return -1;
             }
-            type_map_paths.emplace_back(path);
+            auto scopes_res = dconstruct::disassembly::parse_var_type_map_file(path, &type_map);
+            if (!scopes_res) {
+                std::println(stderr, "error parsing type map file {}: {}", path.string(), scopes_res.error());
+                return -1;
+            }
+            type_maps.emplace(path, std::move(*scopes_res));
         }
     }
 
@@ -169,7 +174,7 @@ int main(int argc, char *argv[]) {
             if (generate_graphs) {
                 std::filesystem::create_directory(output / "graphs");
             }
-            dconstruct::disassembly::decompile_multiple(filepath, output, base, type_map, generate_graphs, show_warnings, optimize, language_flags, game, type_map_paths);
+            dconstruct::disassembly::decompile_multiple(filepath, output, base, type_map, generate_graphs, show_warnings, optimize, language_flags, game, type_maps);
         }
         else {
             dconstruct::disassembly::disassemble_multiple(filepath, output, base, type_map, game);
@@ -178,7 +183,7 @@ int main(int argc, char *argv[]) {
         const auto start = std::chrono::high_resolution_clock::now();
         if (decompile) {
             std::println("disassembling & decompiling {}...", filepath.filename().string());
-            dconstruct::disassembly::decomp_file(filepath, output, std::filesystem::path(output).replace_extension(".dcpl"), base, type_map, generate_graphs, language_flags, show_warnings, optimize ? dconstruct::dcompiler::OPTIMIZATION_KIND::AST : dconstruct::dcompiler::OPTIMIZATION_KIND::NONE, edits, game, type_map_paths);
+            dconstruct::disassembly::decomp_file(filepath, output, std::filesystem::path(output).replace_extension(".dcpl"), base, type_map, generate_graphs, language_flags, show_warnings, optimize ? dconstruct::dcompiler::OPTIMIZATION_KIND::AST : dconstruct::dcompiler::OPTIMIZATION_KIND::NONE, edits, game, type_maps);
         }
         else {
             std::println("disassembling {}...", filepath.filename().string());

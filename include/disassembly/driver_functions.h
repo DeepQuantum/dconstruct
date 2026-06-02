@@ -15,6 +15,8 @@
 
 namespace dconstruct::disassembly {
 
+using parsed_type_maps_t = std::unordered_map<std::filesystem::path, ast::function_to_mapped_vars>;
+
 void decomp_file(
     const std::filesystem::path &inpath, 
     const std::filesystem::path &out_disasm_filename, 
@@ -27,7 +29,7 @@ void decomp_file(
     const dconstruct::dcompiler::OPTIMIZATION_KIND optimizations,
     const std::vector<std::string> &edits = {},
     const dconstruct::game_type game = dconstruct::game_type::T2R,
-    const std::vector<std::filesystem::path> &type_map_paths = {});
+    const parsed_type_maps_t &type_maps = {});
 
 void disasm_file(
     const std::filesystem::path &inpath,
@@ -47,7 +49,7 @@ void decompile_multiple(
     const bool optimize,
     const dconstruct::ast::LANGUAGE_FLAGS language_flags,
     const dconstruct::game_type game = dconstruct::game_type::T2R,
-    const std::vector<std::filesystem::path> &type_map_paths = {}
+    const parsed_type_maps_t &type_maps = {}
 );
 
 void disassemble_multiple(
@@ -92,7 +94,7 @@ using type_map_t = std::unordered_map<sid64, ast::full_type>;
 
 // function -> <var, type>
 
-[[nodiscard]] std::expected<std::unordered_map<sid64, compilation::scope>, std::string> parse_var_type_map_file(const std::filesystem::path& filepath, const std::unordered_map<sid64, ast::full_type>* mapped_types = nullptr);
+[[nodiscard]] std::expected<ast::function_to_mapped_vars, std::string> parse_var_type_map_file(const std::filesystem::path& filepath, const std::unordered_map<sid64, ast::full_type>* mapped_types = nullptr);
 
 [[nodiscard]] std::optional<std::pair<cxxopts::Options, cxxopts::ParseResult>> get_command_line_options(int argc, char* argv[]);
 

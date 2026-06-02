@@ -221,7 +221,7 @@ template<typename... Args> requires (std::same_as<Args, token_type> && ...)
     if (match(token_type::IDENTIFIER)) {
         type_name = type_token.m_lexeme;
     } else if (match(token_type::SID)) {
-        type_name = type_token.m_lexeme.substr(1, type_token.m_lexeme.size() - 2);
+        type_name = type_token.m_lexeme.substr(1, type_token.m_lexeme.size() - 1);
     } else {
         m_errors.emplace_back(type_token, "expected type name or identifier");
     }
@@ -1474,18 +1474,17 @@ template<typename ...Args> requires (std::constructible_from<ast::literal, Args>
 }
 
 void Parser::add_mapped_types(const std::unordered_map<sid64, ast::full_type>& types) {
-    m_mappedTypes.insert(types.begin(), types.end());
-}
-
-[[nodiscard]] std::optional<ast::full_type> Parser::make_mapped_sid_type() {
-    if (!consume(token_type::SID, "expected SID as type name")) {
-        return std::nullopt;
+    for (const auto& [sid, type] : types) {
+        if (const ast::struct_type* struct_t_ptr = std::get_if<ast::struct_type>(&type)) {
+            m_knownTypes.emplace(struct_t_ptr->m_name, *struct_t_ptr);
+        } else if (const ast::enum_type* enum_t_ptr = std::get_if<ast::enum_type>(&type)) {
+            m_knownTypes.emplace(enum_t_ptr->m_name, *enum_t_ptr);
+        }
     }
-
-
 }
 
-[[nodiscard]] std::optional<std::unordered_map<sid64, compilation::scope>> Parser::make_typemap() {
+
+[[nodiscard]] std::optional<ast::function_to_mapped_vars> Parser::make_typemap() {
     if (!consume(token_type::TYPEMAP, "expected type map keyword")) {
         return std::nullopt;
     }
@@ -1494,22 +1493,38 @@ void Parser::add_mapped_types(const std::unordered_map<sid64, ast::full_type>& t
         return std::nullopt;
     }
 
-
-    std::unordered_map<sid64, compilation::scope> function_scopes;
+    ast::function_to_mapped_vars function_scopes;
 
     while (match(token_type::SID)) {
         const std::string name = previous().m_lexeme.substr(1, previous().m_lexeme.size() - 2);
         if (!consume(token_type::LEFT_BRACE, "expected {")) {
             return std::nullopt;
         }
-        compilation::scope scope;
-        while (match(token_type::IDENTIFIER)) {
-            std::string var_name = previous().m_lexeme;
+
+        ast::mapped_var_scope var_scope;
+        
+        while (match(token_type::INT)) {
+            u64 var_index;
+            if (const auto num = ast::get_raw_number(previous().m_literal)) {
+                var_index = *num;
+            } else {
+                m_errors.emplace_back(previous(), "expected variable index");
+                return std::nullopt;
+            }
             std::optional type_res = make_type();
             if (!type_res) {
                 return std::nullopt;
             }
-            scope.define(std::move(var_name), std::move(*type_res));
+            std::optional<std::string> alias{};
+            if (match(token_type::ARROW)) {
+                if (!consume(token_type::IDENTIFIER, "expected identifier name after ->")) {
+                    return std::nullopt;
+                }
+                alias = previous().m_lexeme;
+            }
+
+            var_scope.emplace(var_index, std::make_pair(std::move(*type_res), std::move(alias)));
+
             if (!consume(token_type::SEMICOLON, "expected ; at end of variable mapping")) {
                 return std::nullopt;
             }
@@ -1517,7 +1532,7 @@ void Parser::add_mapped_types(const std::unordered_map<sid64, ast::full_type>& t
         if (!consume(token_type::RIGHT_BRACE, "expected }")) {
             return std::nullopt;
         }
-        function_scopes.emplace(SID(name.c_str()), std::move(scope));
+        function_scopes.emplace(SID(name.c_str()), std::move(var_scope));
     }
     if (!consume(token_type::RIGHT_BRACE, "expected }")) {
         return std::nullopt;
