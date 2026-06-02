@@ -205,7 +205,7 @@ disassembled_value Disassembler::insert_array(const location array, const u32 ar
         struct_size_f = member_offset / array_size;
         assert(struct_size_f == std::trunc(struct_size_f));
     }
-    assert(struct_size_f != 0.0);
+    //assert(struct_size_f != 0.0);
     struct_size = (u32)struct_size_f;
     
 

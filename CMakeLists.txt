@@ -14,6 +14,7 @@ include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}
     "${CMAKE_CURRENT_SOURCE_DIR}/include"
     "${SOURCE_DIR}/Graphviz-13.1.0-win64/include"
+    "${SOURCE_DIR}/qui/source/ctre/single-header"
     # "${LLVM_BINARY_DIR}/include"
     # "${LLVM_SOURCE_DIR}/include"
 )
@@ -177,8 +178,10 @@ add_custom_command(
 )
 
 
-target_compile_options(dconstruct_lib PRIVATE 
+target_compile_options(dconstruct_lib PRIVATE
     $<$<CONFIG:Release>:/GL>
+    $<$<CXX_COMPILER_ID:GNU,Clang>:-ftemplate-depth=4096>
+    $<$<CXX_COMPILER_ID:MSVC>:/templateDepth:8192>
 )
 
 target_link_options(dconstruct_lib PRIVATE

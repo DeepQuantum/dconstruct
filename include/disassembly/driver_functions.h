@@ -80,4 +80,5 @@ std::vector<std::string> edits_from_file(const std::filesystem::path &path);
 
 [[nodiscard]] std::optional<std::pair<cxxopts::Options, cxxopts::ParseResult>> get_command_line_options(int argc, char* argv[]);
 
+
 }

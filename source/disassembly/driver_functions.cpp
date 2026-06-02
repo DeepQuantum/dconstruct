@@ -1,9 +1,10 @@
-#include "disassembly/disassembly_functions.h"
+#include "disassembly/driver_functions.h"
 
 #include "disassembly/disassembler.h"
 #include "disassembly/edit_disassembler.h"
 #include "disassembly/mapping_disassembler.h"
 #include "decompilation/decomp_function.h"
+#include "decompilation/regex_transformations.h"
 #include "buildinfo.h"
 #include "windows.h"
 #include <cstddef>
@@ -246,7 +247,9 @@ void decomp_file(
         output_functions.to_string(out);
 
         std::ofstream file_out(out_decomp_filename, std::ios::binary);
-        file_out << out.str();
+        std::string out_str = out.str();
+        std::string transformed = apply_decomp_regex_transformations(std::move(out_str));
+        file_out << transformed;
     }
 }
 
