@@ -1,3 +1,5 @@
+#pragma once
+
 #include "cxxopts.hpp"
 #include "about.h"
 #include "compilation/lexer.h"
@@ -49,7 +51,6 @@ void add_global_functions(compilation::scope& scope) {
     for (const auto& function : global_functions) {
         const std::string name{function.m_name};
         scope.define(name, function.m_type);
-        //scope.m_sidAliases[name] = {SID(name.c_str() + 1), name};
     }
 }
 

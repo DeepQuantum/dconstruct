@@ -16,6 +16,7 @@ namespace dconstruct::compilation {
 
     class Parser {
     public:
+
         explicit Parser(const std::vector<token> &tokens) : m_tokens(tokens) {};
         [[nodiscard]] ast::program parse();
 
@@ -24,7 +25,8 @@ namespace dconstruct::compilation {
         const std::vector<parsing_error>& get_errors() const noexcept;
 
         const std::unordered_map<std::string, ast::full_type>& get_known_types() const noexcept;
-    
+        [[nodiscard]] std::optional<std::unordered_map<sid64, compilation::scope>> make_typemap();
+        void add_mapped_types(const std::unordered_map<sid64, ast::full_type>& types);
     private:
         std::vector<token> m_tokens;
         std::vector<parsing_error> m_errors;
@@ -47,6 +49,8 @@ namespace dconstruct::compilation {
             {"symbol", make_type_from_prim(ast::primitive_kind::U64)},
             {"u0", make_type_from_prim(ast::primitive_kind::NOTHING)}
         };
+
+        std::unordered_map<sid64, ast::full_type> m_mappedTypes;
 
         u32 m_current = 0;
 
@@ -116,6 +120,7 @@ namespace dconstruct::compilation {
         [[nodiscard]] std::vector<ast::state_script_block> make_statescript_blocks();
         [[nodiscard]] std::vector<ast::state_script_track> make_statescript_tracks();
         [[nodiscard]] std::vector<ast::function_definition> make_statescript_lambdas();
+        [[nodiscard]] std::optional<ast::full_type> make_mapped_sid_type();
     };
 
     [[nodiscard]] bool operator==(const parsing_error& lhs, const parsing_error& rhs) noexcept;

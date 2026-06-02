@@ -75,7 +75,8 @@ private:
         {"end", token_type::END},
         {"event", token_type::EVENT},
         {"update", token_type::UPDATE},
-        {"virtual", token_type::VIRTUAL}
+        {"virtual", token_type::VIRTUAL},
+        {"typemap", token_type::TYPEMAP},
     };
     std::vector<token> m_tokens;
     std::vector<lexing_error> m_errors;

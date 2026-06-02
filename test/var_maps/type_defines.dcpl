@@ -7,7 +7,8 @@ struct #gas-mask-setup {
     symbol gas_mask_name;
     symbol target;
     u8 gas_mask_state;
-    u8 unused0;
+    u8 unknown0;
     u16 unused1;
+    u32 unused2;
     symbol futz;
-};
+}

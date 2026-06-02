@@ -22,6 +22,7 @@
 #include "disassembly/disassembler.h"
 #include "disassembly/edit_disassembler.h"
 #include "decompilation/decomp_function.h"
+#include "decompilation/regex_transformations.h"
 
 #include <qui.h>
 #include <qui/code_window_ctre.hpp>
@@ -106,7 +107,7 @@ struct document {
     std::unordered_map<const function_disassembly *, std::string> m_decompErrors;
     std::unordered_map<const function_disassembly *, bool> m_lambdaViewDcpl;
     bool m_dirty = false;
-    const void *m_editingValue = nullptr;
+    ImGuiID m_editingValue = 0;
     bool m_editFocus = false;
     std::string m_editBuffer;
     std::vector<pending_edit> m_pendingEdits;
@@ -144,6 +145,8 @@ struct app_state {
     qui::message_box m_closeBox;
     bool m_closeRequested = false;
     bool m_defaultViewDcpl = true;
+    bool m_astOptimization = true;
+    bool m_regexOptimization = true;
 };
 
 void glfw_error_callback(int error, const char *description) {
@@ -291,10 +294,17 @@ void decompile_document(app_state &state, document &doc) {
         return;
     }
 
+    const dcompiler::OPTIMIZATION_KIND optimizations =
+        state.m_astOptimization ? dcompiler::OPTIMIZATION_KIND::AST : dcompiler::OPTIMIZATION_KIND::NONE;
+
     for (const function_disassembly *func : doc.m_disassembler->get_all_functions()) {
         auto decomp_func = dcompiler::decomp_function{*func, *doc.m_file, *state.m_sidbase, ControlFlowGraph::build(*func)};
-        const ast::function_definition &def = decomp_func.decompile(dcompiler::OPTIMIZATION_KIND::AST);
-        doc.m_decompiled.emplace(func, def.to_pseudo_c_string());
+        const ast::function_definition &def = decomp_func.decompile(optimizations);
+        std::string text = def.to_pseudo_c_string();
+        if (state.m_regexOptimization) {
+            text = apply_decomp_regex_transformations(std::move(text));
+        }
+        doc.m_decompiled.emplace(func, std::move(text));
         if (decomp_func.m_error) {
             doc.m_decompErrors.emplace(func, *decomp_func.m_error);
         }
@@ -306,7 +316,7 @@ void disassemble_document(app_state &state, document &doc) {
     doc.m_selectedEntry = -1;
     doc.m_disassembler.reset();
     doc.m_editor.reset();
-    doc.m_editingValue = nullptr;
+    doc.m_editingValue = 0;
     doc.m_decompiled.clear();
     doc.m_decompErrors.clear();
     doc.m_lambdaViewDcpl.clear();
@@ -495,6 +505,120 @@ void draw_about_popup(bool open_requested) {
     ImGui::PopStyleVar(3);
 }
 
+ImVec2 view_switch_size();
+bool draw_view_switch(const char *str_id, bool *dcpl, const ImVec2 &size);
+ImVec2 toggle_switch_size();
+bool draw_toggle_switch(const char *str_id, bool *value);
+
+void draw_setting_description(const char *text) {
+    ImGui::PushStyleColor(ImGuiCol_Text, qui::color::retina_dark::TextDisabled);
+    ImGui::PushTextWrapPos(ImGui::GetContentRegionMax().x);
+    ImGui::TextUnformatted(text);
+    ImGui::PopTextWrapPos();
+    ImGui::PopStyleColor();
+}
+
+void draw_settings_popup(app_state &state, bool open_requested) {
+    if (open_requested) {
+        ImGui::OpenPopup("##dconstruct_settings");
+    }
+
+    const ImGuiViewport *viewport = ImGui::GetMainViewport();
+    ImGui::SetNextWindowPos(viewport->GetCenter(), ImGuiCond_Appearing, ImVec2(0.5F, 0.5F));
+
+    constexpr f32 settings_width = 560.0F;
+    ImGui::SetNextWindowSizeConstraints(ImVec2(settings_width, 0.0F), ImVec2(settings_width, FLT_MAX));
+
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(28.0F, 24.0F));
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 8.0F);
+    ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(8.0F, 8.0F));
+    ImGui::PushStyleColor(ImGuiCol_PopupBg, qui::color::retina_dark::WindowBackground);
+
+    if (ImGui::BeginPopupModal("##dconstruct_settings", nullptr,
+            ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove)) {
+
+        if (ImFont *title_font = qui::font_bold(); title_font != nullptr) {
+            ImGui::PushFont(title_font, title_font->LegacySize * 1.4F);
+            ImGui::PushStyleColor(ImGuiCol_Text, qui::color::retina_dark::Highlight);
+            ImGui::TextUnformatted("Settings");
+            ImGui::PopStyleColor();
+            ImGui::PopFont();
+        }
+
+        ImGui::Dummy(ImVec2(0.0F, 6.0F));
+        ImGui::Separator();
+        ImGui::Dummy(ImVec2(0.0F, 6.0F));
+
+        const ImVec2 sw_size = view_switch_size();
+        ImGui::TextUnformatted("Default function view");
+        ImGui::SameLine();
+        ImGui::SetCursorPosX(ImGui::GetContentRegionMax().x - sw_size.x);
+        if (draw_view_switch("##settings_default_view", &state.m_defaultViewDcpl, sw_size)) {
+            ImGui::MarkIniSettingsDirty();
+        }
+
+        ImGui::Dummy(ImVec2(0.0F, 12.0F));
+        ImGui::Separator();
+        ImGui::Dummy(ImVec2(0.0F, 6.0F));
+
+        if (ImFont *section_font = qui::font_semi_bold(); section_font != nullptr) {
+            ImGui::PushFont(section_font);
+            ImGui::TextUnformatted("Decompilation optimizations");
+            ImGui::PopFont();
+        } else {
+            ImGui::TextUnformatted("Decompilation optimizations");
+        }
+        ImGui::Dummy(ImVec2(0.0F, 6.0F));
+
+        const ImVec2 toggle_size = toggle_switch_size();
+        bool optimizations_changed = false;
+
+        ImGui::TextUnformatted("AST optimization");
+        ImGui::SameLine();
+        ImGui::SetCursorPosX(ImGui::GetContentRegionMax().x - toggle_size.x);
+        if (draw_toggle_switch("##settings_ast_opt", &state.m_astOptimization)) {
+            ImGui::MarkIniSettingsDirty();
+            optimizations_changed = true;
+        }
+        draw_setting_description(
+            "Cleans up the decompiled syntax tree before it is printed: removes unused temporary "
+            "variables and rewrites common patterns into 'foreach' loops and 'match' expressions, "
+            "so the output reads closer to hand-written code.");
+
+        ImGui::Dummy(ImVec2(0.0F, 8.0F));
+
+        ImGui::TextUnformatted("Regex optimization");
+        ImGui::SameLine();
+        ImGui::SetCursorPosX(ImGui::GetContentRegionMax().x - toggle_size.x);
+        if (draw_toggle_switch("##settings_regex_opt", &state.m_regexOptimization)) {
+            ImGui::MarkIniSettingsDirty();
+            optimizations_changed = true;
+        }
+        draw_setting_description(
+            "Runs text replacements over the finished output: rewrites 'new-boxed-value' calls into "
+            "typed 'boxed_*' helpers, turns pointer arithmetic like '(*var + (i * n))' into 'var[i]', "
+            "and collapses foreach boilerplate. Purely cosmetic touch-ups to the printed code.");
+
+        if (optimizations_changed) {
+            for (document &doc : state.m_documents) {
+                decompile_document(state, doc);
+            }
+        }
+
+        ImGui::Dummy(ImVec2(0.0F, 12.0F));
+        constexpr f32 button_width = 110.0F;
+        ImGui::SetCursorPosX((ImGui::GetWindowSize().x - button_width) * 0.5F);
+        if (ImGui::Button("Close", ImVec2(button_width, 0.0F))) {
+            ImGui::CloseCurrentPopup();
+        }
+
+        ImGui::EndPopup();
+    }
+
+    ImGui::PopStyleColor();
+    ImGui::PopStyleVar(3);
+}
+
 f32 draw_title_menu_bar(app_state &state, GLFWwindow *window) {
     const ImGuiViewport *viewport = ImGui::GetMainViewport();
     const ImVec2 pos = viewport->Pos;
@@ -544,6 +668,7 @@ f32 draw_title_menu_bar(app_state &state, GLFWwindow *window) {
     const f32 minimize_x = bar_max.x - buttons_total;
 
     bool about_clicked = false;
+    bool settings_clicked = false;
     if (ImGui::BeginMenuBar()) {
         ImGui::SetCursorPosX(logo_max.x - bar_min.x + 8.0F);
         {
@@ -601,6 +726,9 @@ f32 draw_title_menu_bar(app_state &state, GLFWwindow *window) {
             }
             ImGui::EndMenu();
         }
+        if (ImGui::MenuItem("Settings")) {
+            settings_clicked = true;
+        }
         ImGui::PopStyleVar(3);
 
         const char *donate_label = "Donate";
@@ -624,6 +752,7 @@ f32 draw_title_menu_bar(app_state &state, GLFWwindow *window) {
     }
 
     draw_about_popup(about_clicked);
+    draw_settings_popup(state, settings_clicked);
 
     if (const document *doc = active_document(state); doc != nullptr && !doc->m_name.empty()) {
         const std::string title = doc->m_dirty ? doc->m_name + " \xE2\x97\x8F" : doc->m_name;
@@ -1137,7 +1266,8 @@ std::optional<std::string> known_sid_name(value_view v, sid64 hash) {
 
 void dv_editable_table_value(value_view v, const void *id, const void *data_ptr, const typed_value_text &value) {
     document *doc = v.doc;
-    if (doc->m_editingValue == id && value.editKind.has_value()) {
+    const ImGuiID edit_id = ImGui::GetID(id);
+    if (doc->m_editingValue == edit_id && value.editKind.has_value()) {
         ImGui::PushID(id);
         const f32 text_w = ImGui::CalcTextSize(doc->m_editBuffer.c_str()).x;
         ImGui::SetNextItemWidth(std::max(text_w + ImGui::GetStyle().FramePadding.x * 2.0F + 24.0F, 80.0F));
@@ -1149,9 +1279,9 @@ void dv_editable_table_value(value_view v, const void *id, const void *data_ptr,
             ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_AutoSelectAll);
         if (entered) {
             doc->m_pendingEdits.emplace_back(file_offset(*doc, data_ptr), *value.editKind, doc->m_editBuffer);
-            doc->m_editingValue = nullptr;
+            doc->m_editingValue = 0;
         } else if (ImGui::IsKeyPressed(ImGuiKey_Escape) || ImGui::IsItemDeactivated()) {
-            doc->m_editingValue = nullptr;
+            doc->m_editingValue = 0;
         }
         ImGui::PopID();
         return;
@@ -1164,17 +1294,21 @@ void dv_editable_table_value(value_view v, const void *id, const void *data_ptr,
     const bool double_clicked = ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left);
     ImGui::GetWindowDrawList()->AddText(text_pos, ImGui::ColorConvertFloat4ToU32(value.color), value.text.c_str());
     if (double_clicked && value.editKind.has_value() && ptr_in_file(*doc, data_ptr)) {
-        doc->m_editingValue = id;
+        doc->m_editingValue = edit_id;
         doc->m_editFocus = true;
         doc->m_editBuffer = read_value_string(v, data_ptr, *value.editKind);
     }
 }
 
 void dv_editable_leaf(value_view v, const void *id, const void *data_ptr, edit_kind kind,
-                      const ImVec4 &color, const char *label, const char *suffix) {
+                      const ImVec4 &color, const char *label, const char *suffix, const char *prefix) {
     document *doc = v.doc;
-    if (doc->m_editingValue == id) {
+    const ImGuiID edit_id = ImGui::GetID(id);
+    if (doc->m_editingValue == edit_id) {
         ImGui::PushID(id);
+        const f32 value_offset = ImGui::GetTreeNodeToLabelSpacing() +
+            (prefix != nullptr ? ImGui::CalcTextSize(prefix).x : 0.0F);
+        ImGui::SetCursorPosX(ImGui::GetCursorPosX() + value_offset);
         const f32 text_w = ImGui::CalcTextSize(doc->m_editBuffer.c_str()).x;
         ImGui::SetNextItemWidth(std::max(text_w + ImGui::GetStyle().FramePadding.x * 2.0F + 24.0F, 60.0F));
         if (doc->m_editFocus) {
@@ -1185,9 +1319,9 @@ void dv_editable_leaf(value_view v, const void *id, const void *data_ptr, edit_k
             ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_AutoSelectAll);
         if (entered) {
             doc->m_pendingEdits.emplace_back(file_offset(*doc, data_ptr), kind, doc->m_editBuffer);
-            doc->m_editingValue = nullptr;
+            doc->m_editingValue = 0;
         } else if (ImGui::IsKeyPressed(ImGuiKey_Escape) || ImGui::IsItemDeactivated()) {
-            doc->m_editingValue = nullptr;
+            doc->m_editingValue = 0;
         }
         ImGui::PopID();
         return;
@@ -1206,7 +1340,7 @@ void dv_editable_leaf(value_view v, const void *id, const void *data_ptr, edit_k
     }
     ImGui::PopStyleVar(2);
     if (double_clicked && ptr_in_file(*doc, data_ptr)) {
-        doc->m_editingValue = id;
+        doc->m_editingValue = edit_id;
         doc->m_editFocus = true;
         doc->m_editBuffer = read_value_string(v, data_ptr, kind);
     }
@@ -1227,14 +1361,14 @@ void dv_draw_value(value_view v, const disassembled_values_t::value_type &value,
             dv_draw_state_script(v, *entry, index);
         } else if constexpr (std::is_same_v<T, const i32 *>) {
             std::snprintf(label, sizeof(label), "%s%d", prefix, *entry);
-            dv_editable_leaf(v, entry, entry, edit_kind::Int, *entry == 0 ? val_color::IntZero : val_color::Int, label, ": int");
+            dv_editable_leaf(v, entry, entry, edit_kind::Int, *entry == 0 ? val_color::IntZero : val_color::Int, label, ": int", prefix);
         } else if constexpr (std::is_same_v<T, const u64 *>) {
             const std::string resolved = v.state->m_sidbase->lookup(*entry, v.doc->m_file->m_sidCache);
             std::snprintf(label, sizeof(label), "%s%s", prefix, resolved.c_str());
-            dv_editable_leaf(v, entry, entry, edit_kind::Sid, val_color::Sid, label, ": sid");
+            dv_editable_leaf(v, entry, entry, edit_kind::Sid, val_color::Sid, label, ": sid", prefix);
         } else if constexpr (std::is_same_v<T, const f32 *>) {
             std::snprintf(label, sizeof(label), "%s%.2f", prefix, *entry);
-            dv_editable_leaf(v, entry, entry, edit_kind::Float, val_color::Float, label, ": float");
+            dv_editable_leaf(v, entry, entry, edit_kind::Float, val_color::Float, label, ": float", prefix);
         } else if constexpr (std::is_same_v<T, const char *>) {
             std::snprintf(label, sizeof(label), "%s\"%s\"", prefix, entry != nullptr ? entry : "");
             dv_node(v, entry, val_color::String, label, ": string", true);
@@ -1536,6 +1670,62 @@ bool draw_view_switch(const char *str_id, bool *dcpl, const ImVec2 &size) {
     if (font != nullptr) {
         ImGui::PopFont();
     }
+
+    ImGui::PopID();
+    return changed;
+}
+
+ImVec2 toggle_switch_size() {
+    const f32 h = ImGui::GetTextLineHeight();
+    return ImVec2(h * 1.9F, h);
+}
+
+bool draw_toggle_switch(const char *str_id, bool *value) {
+    const ImVec2 size = toggle_switch_size();
+    ImGui::PushID(str_id);
+    const ImVec2 pos = ImGui::GetCursorScreenPos();
+    ImGui::InvisibleButton("##toggle", size);
+    bool changed = false;
+    if (ImGui::IsItemClicked()) {
+        *value = !*value;
+        changed = true;
+    }
+    const bool hovered = ImGui::IsItemHovered();
+    if (hovered) {
+        ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
+    }
+
+    ImGuiStorage *storage = ImGui::GetStateStorage();
+    const ImGuiID key = ImGui::GetID("##t");
+    const f32 target = *value ? 1.0F : 0.0F;
+    f32 t = storage->GetFloat(key, target);
+    t += (target - t) * std::clamp(ImGui::GetIO().DeltaTime * 14.0F, 0.0F, 1.0F);
+    if (std::fabs(target - t) < 0.001F) {
+        t = target;
+    }
+    storage->SetFloat(key, t);
+
+    ImDrawList *draw_list = ImGui::GetWindowDrawList();
+    const f32 radius = size.y * 0.5F;
+    const ImVec2 max(pos.x + size.x, pos.y + size.y);
+
+    const ImVec4 off_col = qui::color::retina_dark::Border;
+    ImVec4 on_col = qui::color::retina_dark::Highlight;
+    if (!hovered) {
+        on_col.w = 0.85F;
+    }
+    const ImVec4 track_col(
+        off_col.x + (on_col.x - off_col.x) * t,
+        off_col.y + (on_col.y - off_col.y) * t,
+        off_col.z + (on_col.z - off_col.z) * t,
+        off_col.w + (on_col.w - off_col.w) * t
+    );
+    draw_list->AddRectFilled(pos, max, ImGui::ColorConvertFloat4ToU32(track_col), radius);
+
+    const f32 knob_r = radius - 2.0F;
+    const f32 knob_x = pos.x + radius + t * (size.x - size.y);
+    const ImVec2 knob_center(knob_x, pos.y + radius);
+    draw_list->AddCircleFilled(knob_center, knob_r, ImGui::ColorConvertFloat4ToU32(qui::color::retina_dark::WindowBackground));
 
     ImGui::PopID();
     return changed;
@@ -2084,6 +2274,42 @@ void draw_content_area(f32 top_offset, app_state &state) {
     ImGui::End();
 }
 
+void *settings_read_open(ImGuiContext *, ImGuiSettingsHandler *handler, const char *name) {
+    return std::strcmp(name, "Data") == 0 ? handler->UserData : nullptr;
+}
+
+void settings_read_line(ImGuiContext *, ImGuiSettingsHandler *, void *entry, const char *line) {
+    auto *state = static_cast<app_state *>(entry);
+    int value = 0;
+    if (std::sscanf(line, "DefaultViewDcpl=%d", &value) == 1) {
+        state->m_defaultViewDcpl = value != 0;
+    } else if (std::sscanf(line, "AstOptimization=%d", &value) == 1) {
+        state->m_astOptimization = value != 0;
+    } else if (std::sscanf(line, "RegexOptimization=%d", &value) == 1) {
+        state->m_regexOptimization = value != 0;
+    }
+}
+
+void settings_write_all(ImGuiContext *, ImGuiSettingsHandler *handler, ImGuiTextBuffer *buf) {
+    const auto *state = static_cast<const app_state *>(handler->UserData);
+    buf->appendf("[%s][Data]\n", handler->TypeName);
+    buf->appendf("DefaultViewDcpl=%d\n", state->m_defaultViewDcpl ? 1 : 0);
+    buf->appendf("AstOptimization=%d\n", state->m_astOptimization ? 1 : 0);
+    buf->appendf("RegexOptimization=%d\n", state->m_regexOptimization ? 1 : 0);
+    buf->append("\n");
+}
+
+void register_ini_settings(app_state &state) {
+    ImGuiSettingsHandler handler;
+    handler.TypeName = "dconstruct";
+    handler.TypeHash = ImHashStr("dconstruct");
+    handler.ReadOpenFn = settings_read_open;
+    handler.ReadLineFn = settings_read_line;
+    handler.WriteAllFn = settings_write_all;
+    handler.UserData = &state;
+    ImGui::AddSettingsHandler(&handler);
+}
+
 }
 
 int main() {
@@ -2127,6 +2353,7 @@ int main() {
     ImGui_ImplOpenGL3_Init(glsl_version);
 
     dconstruct::ui::app_state state;
+    dconstruct::ui::register_ini_settings(state);
     state.m_window = window;
     state.m_iconTexture = dconstruct::ui::create_icon_texture();
     state.m_errorBox.popup_id = "##dconstruct_error_box";
@@ -2171,6 +2398,10 @@ int main() {
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
         glfwSwapBuffers(window);
+    }
+
+    if (io.IniFilename != nullptr) {
+        ImGui::SaveIniSettingsToDisk(io.IniFilename);
     }
 
     ImGui_ImplOpenGL3_Shutdown();

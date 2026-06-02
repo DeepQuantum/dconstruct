@@ -63,15 +63,16 @@ void decomp_function::append_to_current_block(expr_uptr&& expr) {
 //#define _TRACE
 
 
-const ast::function_definition& decomp_function::decompile(const OPTIMIZATION_KIND optimizations) &
+[[nodiscard]] ast::function_definition decomp_function::decompile(const OPTIMIZATION_KIND optimizations)
 {
     if (m_graphPath && m_graph.m_nodes.size() > MIN_GRAPH_SIZE) {
         m_graph.write_image(m_graphPath->string());
     }
 
-    m_functionDefinition.m_name = m_disassembly.m_id;
+    m_functionDefinition = std::make_unique<ast::function_definition>();
+    m_functionDefinition->m_name = m_disassembly.m_id;
 
-    m_blockStack.push(std::ref(m_functionDefinition.m_body));
+    m_blockStack.push(std::ref(m_functionDefinition->m_body));
     for (reg_idx i = 0; i < ARGUMENT_REGISTERS_IDX; ++i) {
         m_registersToVars.emplace(i, std::stack<std::unique_ptr<ast::identifier>>());
     }
@@ -83,23 +84,19 @@ const ast::function_definition& decomp_function::decompile(const OPTIMIZATION_KI
     for (reg_idx i = 0; i < m_disassembly.m_stackFrame.m_registerArgs.size(); ++i) {
         const auto& arg_type = m_disassembly.m_stackFrame.m_registerArgs.at(i);
         m_arguments.push_back(ast::variable_declaration(arg_type, "arg_" + std::to_string(i)));
-        m_functionDefinition.m_parameters.emplace_back(arg_type, "arg_" + std::to_string(i));
+        m_functionDefinition->m_parameters.emplace_back(arg_type, "arg_" + std::to_string(i));
     }
 
     emit_node(m_graph[0], m_graph.m_nodes.back().m_index);
     parse_basic_block(m_graph.m_nodes.back());
 
     if ((u8)optimizations & (u8)OPTIMIZATION_KIND::AST) {
-        optimize_ast();
+        optimize_ast(*m_functionDefinition);
     }
 
-    return m_functionDefinition;
-}
-
-
-[[nodiscard]] ast::function_definition decomp_function::decompile(const OPTIMIZATION_KIND optimizations) && {
-    decompile(optimizations);
-    return std::move(m_functionDefinition);
+    ast::function_definition result = std::move(*m_functionDefinition);
+    m_functionDefinition.reset();
+    return result;
 }
 
 state_script_functions::state_script_functions(const std::vector<ast::function_definition>& funcs, const BinaryFile* binary_file, const SIDBase* sidbase) noexcept : m_binFile(binary_file), m_sidbase(sidbase) {
@@ -545,7 +542,7 @@ void decomp_function::parse_basic_block(const control_flow_node &node) {
 
             case Opcode::Return: {
 				if (!m_disassembly.m_isScriptFunction) {
-                    insert_return(istr.destination); 
+                    insert_return(istr.destination);
                 }
                 return;
             }
@@ -1200,7 +1197,7 @@ template<typename to>
 
 
 void decomp_function::insert_return(const reg_idx dest) {
-    *m_functionDefinition.m_type.m_return = m_transformableExpressions[dest]->get_type_unchecked(m_env);
+    *m_functionDefinition->m_type.m_return = m_transformableExpressions[dest]->get_type_unchecked(m_env);
     append_to_current_block(std::make_unique<ast::return_stmt>(std::move(m_transformableExpressions[dest])));
 }
 
@@ -1215,14 +1212,14 @@ template<ast::primitive_kind kind>
 }
 
 
-void decomp_function::optimize_ast() {
+void decomp_function::optimize_ast(ast::function_definition& func) {
     ast::var_optimization_env var_base{};
-    m_functionDefinition.m_body.var_optimization_pass(var_base);
+    func.m_body.var_optimization_pass(var_base);
     ast::foreach_optimization_env foreach_base{};
-    m_functionDefinition.m_body.foreach_optimization_pass(foreach_base);
+    func.m_body.foreach_optimization_pass(foreach_base);
     ast::match_optimization_env match_base{};
-    m_functionDefinition.m_body.match_optimization_pass(match_base);
+    func.m_body.match_optimization_pass(match_base);
     ast::var_optimization_env var_base1{};
-    m_functionDefinition.m_body.var_optimization_pass(var_base1);
+    func.m_body.var_optimization_pass(var_base1);
 }
 }

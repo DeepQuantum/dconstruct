@@ -47,15 +47,27 @@ int main(int argc, char *argv[]) {
         edits = dconstruct::disassembly::edits_from_file(test);
     }
 
-    std::map<sid64, dconstruct::ast::full_type> type_map;
-    if (opts.count("type_map") > 0) {
-        const auto type_map_path = opts["type_map"].as<std::string>();
+    std::unordered_map<sid64, dconstruct::ast::full_type> type_map;
+    if (opts.count("type_defines") > 0) {
+        const auto type_map_path = opts["type_defines"].as<std::string>();
         auto type_def_res = dconstruct::disassembly::parse_type_defs_file(type_map_path);
         if (!type_def_res) {
             std::println(stderr, "error parsing type defs file {}: {}", type_map_path, type_def_res.error());
             return -1;
         }
         type_map = *type_def_res;
+    }
+
+    std::vector<std::filesystem::path> type_map_paths;
+    if (opts.count("type_maps") > 0) {
+        for (const auto& type_map_path : opts["type_maps"].as<std::vector<std::string>>()) {
+            const std::filesystem::path path = type_map_path;
+            if (!std::filesystem::exists(path)) {
+                std::println(stderr, "error: type map filepath {} doesn't exist", path.string());
+                return -1;
+            }
+            type_map_paths.emplace_back(path);
+        }
     }
 
     std::filesystem::path output;
@@ -157,7 +169,7 @@ int main(int argc, char *argv[]) {
             if (generate_graphs) {
                 std::filesystem::create_directory(output / "graphs");
             }
-            dconstruct::disassembly::decompile_multiple(filepath, output, base, type_map, generate_graphs, show_warnings, optimize, language_flags, game);
+            dconstruct::disassembly::decompile_multiple(filepath, output, base, type_map, generate_graphs, show_warnings, optimize, language_flags, game, type_map_paths);
         }
         else {
             dconstruct::disassembly::disassemble_multiple(filepath, output, base, type_map, game);
@@ -166,7 +178,7 @@ int main(int argc, char *argv[]) {
         const auto start = std::chrono::high_resolution_clock::now();
         if (decompile) {
             std::println("disassembling & decompiling {}...", filepath.filename().string());
-            dconstruct::disassembly::decomp_file(filepath, output, std::filesystem::path(output).replace_extension(".dcpl"), base, type_map, generate_graphs, language_flags, show_warnings, optimize ? dconstruct::dcompiler::OPTIMIZATION_KIND::AST : dconstruct::dcompiler::OPTIMIZATION_KIND::NONE, edits, game);
+            dconstruct::disassembly::decomp_file(filepath, output, std::filesystem::path(output).replace_extension(".dcpl"), base, type_map, generate_graphs, language_flags, show_warnings, optimize ? dconstruct::dcompiler::OPTIMIZATION_KIND::AST : dconstruct::dcompiler::OPTIMIZATION_KIND::NONE, edits, game, type_map_paths);
         }
         else {
             std::println("disassembling {}...", filepath.filename().string());

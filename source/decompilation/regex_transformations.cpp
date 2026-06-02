@@ -39,7 +39,7 @@ template <ctll::fixed_string Pattern, typename Replacer>
 
 [[nodiscard]] std::string replace_foreach_check(const std::string& in) {
     static constexpr ctll::fixed_string head_pattern =
-        R"(foreach \([a-zA-Z\d_]*\? var_(?<foreach_var>\d+)\ : .*?\) \{)";
+        R"(foreach \([a-zA-Z\d_]*\? var_(?<foreach_var>\d+) : .*?\) \{)";
     static constexpr ctll::fixed_string body_pattern =
         R"(\s*(?<full_body>u16 var_(?<decl_var>\d+);)"
         R"(\s*if \(var_(\d+) && \*\(u16\*\)\(var_(\d+) \+ 12\) == 7\) \{)"

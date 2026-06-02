@@ -198,13 +198,14 @@ void decomp_file(
     const std::filesystem::path& out_disasm_filename,
     const std::filesystem::path& out_decomp_filename,
     const dconstruct::SIDBase& base,
-    const std::map<sid64, dconstruct::ast::full_type>& type_map,
+    const std::unordered_map<sid64, dconstruct::ast::full_type>& type_map,
     const bool write_graphs,
     const dconstruct::ast::LANGUAGE_FLAGS language_flags,
     const bool show_warnings,
     dconstruct::dcompiler::OPTIMIZATION_KIND optimizations,
     const std::vector<std::string>& edits,
-    const dconstruct::game_type game
+    const dconstruct::game_type game,
+    const std::vector<std::filesystem::path>& type_map_paths
 ) {
     if (optimizations != dconstruct::dcompiler::OPTIMIZATION_KIND::NONE && game != dconstruct::game_type::T2R) {
         std::println("warning: optimization is only supported for t2r; disabling optimization");
@@ -252,6 +253,15 @@ void decomp_file(
         out.m_flags = language_flags;
         std::set<u64> emitted_funcs;
 
+        const std::filesystem::path* type_map_path = nullptr;
+        const std::string bin_stem = inpath.stem().string();
+        for (const auto& candidate : type_map_paths) {
+            if (candidate.stem().string() == bin_stem) {
+                type_map_path = &candidate;
+                break;
+            }
+        }
+
         for (const auto& func : funcs) {
             std::optional<std::filesystem::path> graph_path = std::nullopt;
             if (write_graphs) {
@@ -259,12 +269,12 @@ void decomp_file(
                 std::filesystem::create_directories(graph_dir);
                 graph_path = get_sanitized_graph_path(graph_dir, func->get_id());
             }
-            auto decomp_func = dconstruct::dcompiler::decomp_function{*func, file, base, dconstruct::ControlFlowGraph::build(*func), std::move(graph_path)};
-            const auto& function_body = decomp_func.decompile(optimizations);
+            dconstruct::dcompiler::decomp_function decomp_func{*func, file, base, dconstruct::ControlFlowGraph::build(*func), std::move(graph_path), nullptr, type_map_path};
+            ast::function_definition function_body = decomp_func.decompile(optimizations);
             if (show_warnings && decomp_func.m_error) {
                 std::println(stderr, "warning: the decompilation for <{}> will be inaccurate: {}", func->get_id(), *decomp_func.m_error);
             }
-            functions.emplace_back(std::move(decomp_func));
+            functions.emplace_back(std::move(function_body));
         }
         dconstruct::dcompiler::state_script_functions output_functions{functions, &file, &base};
         output_functions.to_string(out);
@@ -280,7 +290,7 @@ void disasm_file(
     const std::filesystem::path& inpath,
     const std::filesystem::path& out_filename,
     const dconstruct::SIDBase& base,
-    const std::map<sid64, dconstruct::ast::full_type>& type_map,
+    const std::unordered_map<sid64, dconstruct::ast::full_type>& type_map,
     const std::vector<std::string>& edits,
     const dconstruct::game_type game
 ) {
@@ -312,12 +322,13 @@ void decompile_multiple(
     const std::filesystem::path& in,
     const std::filesystem::path& out,
     const dconstruct::SIDBase& sidbase,
-    const std::map<sid64, dconstruct::ast::full_type>& type_map,
+    const std::unordered_map<sid64, dconstruct::ast::full_type>& type_map,
     const bool generate_graphs,
     const bool show_warnings,
     const bool optimize,
     const dconstruct::ast::LANGUAGE_FLAGS language_flags,
-    const dconstruct::game_type game
+    const dconstruct::game_type game,
+    const std::vector<std::filesystem::path>& type_map_paths
 ) {
     const bool effective_optimize = optimize && game == dconstruct::game_type::T2R;
     if (optimize && !effective_optimize) {
@@ -345,7 +356,7 @@ void decompile_multiple(
             const std::filesystem::path disasm_outpath = (out / std::filesystem::relative(entry, in)).concat(".asm");
             const std::filesystem::path decomp_outpath = (out / std::filesystem::relative(entry, in)).concat(".dcpl");
             std::filesystem::create_directories(disasm_outpath.parent_path());
-            decomp_file(entry.string(), disasm_outpath, decomp_outpath, sidbase, type_map, generate_graphs, language_flags, show_warnings, effective_optimize ? dconstruct::dcompiler::OPTIMIZATION_KIND::AST : dconstruct::dcompiler::OPTIMIZATION_KIND::NONE, {}, game);
+            decomp_file(entry.string(), disasm_outpath, decomp_outpath, sidbase, type_map, generate_graphs, language_flags, show_warnings, effective_optimize ? dconstruct::dcompiler::OPTIMIZATION_KIND::AST : dconstruct::dcompiler::OPTIMIZATION_KIND::NONE, {}, game, type_map_paths);
         }
     );
 
@@ -358,7 +369,7 @@ void disassemble_multiple(
     const std::filesystem::path& in,
     const std::filesystem::path& out,
     const dconstruct::SIDBase& sidbase,
-    const std::map<sid64, dconstruct::ast::full_type>& type_map,
+    const std::unordered_map<sid64, dconstruct::ast::full_type>& type_map,
     const dconstruct::game_type game
 ) {
     std::vector<std::filesystem::path> filepaths;
@@ -442,7 +453,7 @@ std::vector<std::string> edits_from_file(const std::filesystem::path& path) {
     return std::nullopt;
 }
 
-[[nodiscard]] std::expected<std::map<sid64, ast::full_type>, std::string> parse_type_defs_file(const std::filesystem::path& filepath) {
+[[nodiscard]] std::expected<type_map_t, std::string> parse_type_defs_file(const std::filesystem::path& filepath) {
 
     using namespace compilation;
 
@@ -457,9 +468,7 @@ std::vector<std::string> edits_from_file(const std::filesystem::path& path) {
 
     std::string type_def_source = input.str();
 
-    global_state global{};
 
-    const auto compilation_results = run_compilation(type_def_source, global);
     
     Lexer lexer{type_def_source};
     const auto& [tokens, lex_errors] = lexer.get_results();
@@ -487,19 +496,21 @@ std::vector<std::string> edits_from_file(const std::filesystem::path& path) {
     }
 
     std::ostringstream oss;
-    std::map<sid64, ast::full_type> type_results;
+    type_map_t type_results;
     for (auto& [name, type] : types) {
-        if (ast::struct_type *struct_t_ptr = std::get_if<ast::struct_type>(&type)) {
+        if (std::holds_alternative<ast::primitive_type>(type)) {
+            continue;
+        } else if (ast::struct_type *struct_t_ptr = std::get_if<ast::struct_type>(&type)) {
             if (!struct_t_ptr->m_typeHash) {
                 oss << "[logic error] struct " << name << " muts have an sid identifier (#*name*) as its struct name\n";
             } else {
-                type_results.emplace(struct_t_ptr->m_typeHash, std::move(*struct_t_ptr));
+                type_results.emplace(*struct_t_ptr->m_typeHash, std::move(*struct_t_ptr));
             }
         } else if (ast::enum_type *enum_t_ptr = std::get_if<ast::enum_type>(&type)) {
             if (!enum_t_ptr->m_typeHash) {
                 oss << "[logic error] enum " << name << " muts have an sid identifier (#*name*) as its enum name\n";
             } else {
-                type_results.emplace(enum_t_ptr->m_typeHash, std::move(*enum_t_ptr));
+                type_results.emplace(*enum_t_ptr->m_typeHash, std::move(*enum_t_ptr));
             }
         } else {    
             oss << "[logic error] type " << name << " must be enum or struct type\n";
@@ -510,6 +521,48 @@ std::vector<std::string> edits_from_file(const std::filesystem::path& path) {
     }
 
     return type_results;
+}
+
+[[nodiscard]] std::expected<std::unordered_map<sid64, compilation::scope>, std::string> parse_var_type_map_file(const std::filesystem::path& filepath, const std::unordered_map<sid64, ast::full_type>* mapped_types) {
+    using namespace compilation;
+
+    std::ifstream file(filepath);
+
+    if (!file) {
+        return std::unexpected{"couldn't open filepath " + filepath.string()};
+    }
+
+    std::stringstream input;
+    input << file.rdbuf();
+
+    std::string type_map_source = input.str();
+
+    Lexer lexer{type_map_source};
+    const auto& [tokens, lex_errors] = lexer.get_results();
+
+    if (!lex_errors.empty()) {
+        std::ostringstream oss;
+        for (const auto& err : lex_errors) {
+            oss << "[syntax error] " << err << '\n';
+        }
+        return std::unexpected{oss.str()};
+    }
+
+    Parser parser{tokens};
+    if (mapped_types != nullptr) {
+        parser.add_mapped_types(*mapped_types);
+    }
+    auto typemap = parser.make_typemap();
+    const auto parse_errors = parser.get_errors();
+    if (!typemap || !parse_errors.empty()) {
+        std::ostringstream oss;
+        for (const auto& err : parse_errors) {
+            oss << "[parsing error] " << err.m_message << " at " << format_source_location({err.m_token.m_file, err.m_token.m_line}) << '\n';
+        }
+        return std::unexpected{oss.str()};
+    }
+
+    return std::move(*typemap);
 }
 
 [[nodiscard]] std::optional<std::pair<cxxopts::Options, cxxopts::ParseResult>> get_command_line_options(int argc, char* argv[]) {
@@ -528,7 +581,8 @@ std::vector<std::string> edits_from_file(const std::filesystem::path& path) {
         ("i,input", "input DC file or folder", cxxopts::value<std::string>(), "<path>")
         ("o,output", "output file or folder", cxxopts::value<std::string>()->default_value(""), DEFAULT_OUT)
         ("s,sidbase", "sidbase file", cxxopts::value<std::string>()->default_value((current_program_path.parent_path() / "sidbase.bin").string()), "<path>")
-        ("type_map", "a .dcpl file for mapping out types", cxxopts::value<std::string>()->default_value(""));
+        ("type_defines", "a .dcpl file for defining new types", cxxopts::value<std::string>()->default_value(""))
+        ("type_maps", "one or more .dcplmap files for declaring the types of variables for the decompiler. a map file is matched to a .bin file by having the same filename (without extension).", cxxopts::value<std::vector<std::string>>());
     options.add_options("configuration")
         ("no_decompile", "don't emit a file containing the decompiled functions (excluding those nested inside structs).", cxxopts::value<bool>()->default_value("false"))
         ("no_optimize", "don't optimize/cleanup the decompiled code output, e.g. replacing some 'for' loops with 'foreach' loops, some if-else chains with match expressions, and removing unused variables.", cxxopts::value<bool>()->default_value("false"))

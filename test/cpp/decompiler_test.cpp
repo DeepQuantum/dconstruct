@@ -38,8 +38,7 @@ namespace dconstruct::testing {
         Disassembler da{ &file, &base };
         auto fd = *da.create_function_disassembly(std::move(istrs), name, table.m_location);
         auto dc_func = dconstruct::dcompiler::decomp_function(fd, file, base, ControlFlowGraph::build(fd));
-        auto& test = const_cast<ast::function_definition&>(dc_func.decompile(dcompiler::OPTIMIZATION_KIND::NONE));
-        return std::move(test);
+        return dc_func.decompile(dcompiler::OPTIMIZATION_KIND::NONE);
     }
 
     static std::string get_decompiled_function_from_file(const std::string& path, const std::string& function_id, const bool optimize = false) {

@@ -53,7 +53,7 @@ namespace dconstruct {
         Disassembler(BinaryFile* file, const SIDBase* sidbase, const game_type game = game_type::T2R) noexcept 
             : m_currentFile(file), m_sidbase(sidbase), m_game(game) {};
 
-        Disassembler(BinaryFile* file, const SIDBase* sidbase, const std::map<sid64, ast::full_type>* known_types, const game_type game = game_type::T2R) noexcept 
+        Disassembler(BinaryFile* file, const SIDBase* sidbase, const std::unordered_map<sid64, ast::full_type>* known_types, const game_type game = game_type::T2R) noexcept 
             : m_currentFile(file), m_sidbase(sidbase), m_knownTypes(known_types), m_game(game) {};
 
         const std::vector<disassembled_entry>& disassemble();
@@ -89,8 +89,8 @@ namespace dconstruct {
         BinaryFile* m_currentFile = nullptr;
         const SIDBase* m_sidbase = nullptr;
 
-        inline static const std::map<sid64, ast::full_type> s_emptyTypes;
-        const std::map<sid64, ast::full_type>* m_knownTypes = &s_emptyTypes;
+        inline static const std::unordered_map<sid64, ast::full_type> s_emptyTypes;
+        const std::unordered_map<sid64, ast::full_type>* m_knownTypes = &s_emptyTypes;
 
 
         std::vector<std::shared_ptr<function_disassembly>> m_functions;

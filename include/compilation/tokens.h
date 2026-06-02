@@ -16,8 +16,8 @@ namespace dconstruct::compilation {
     [[nodiscard]] std::string format_source_location(const source_location& location);
 
     enum class token_type {
-        LEFT_PAREN, RIGHT_PAREN, 
-        LEFT_BRACE, RIGHT_BRACE, 
+        LEFT_PAREN, RIGHT_PAREN,
+        LEFT_BRACE, RIGHT_BRACE,
         LEFT_SQUARE, RIGHT_SQUARE,
         COMMA, DOT, SEMICOLON, COLON, ARROW, DOT_DOT_DOT, DOLLAR,
 
@@ -39,22 +39,23 @@ namespace dconstruct::compilation {
 
         AND, OR,
 
-        IDENTIFIER, 
+        IDENTIFIER,
 
         AUTO, USING, AS, FAR, NEAR,
 
         BREAK, CONTINUE,
-        
+
         STRING, INT, DOUBLE, HEX, SID_NUM, SID, _NULL,
 
         ELSE, FALSE, IF, RETURN, STRUCT, ENUM, TRUE, WHILE, FOR, FOREACH, MATCH,
-        
+
         BREAKPOINT,
 
         STATESCRIPT, DECLARATIONS, OPTIONS, STATE, BLOCK, TRACK, LAMBDA,
 
-        START, END, EVENT, UPDATE, VIRTUAL,
+        TYPEMAP,
 
+        START, END, EVENT, UPDATE, VIRTUAL,
 
         _EOF, EMPTY
     };

@@ -216,14 +216,18 @@ template<typename... Args> requires (std::same_as<Args, token_type> && ...)
         return std::move(*fty);
     }
 
-    const token* type_token = consume(token_type::IDENTIFIER, "expected type name");
-    if (!type_token) {
-        return std::nullopt;
+    const token& type_token = peek();
+    std::string type_name;
+    if (match(token_type::IDENTIFIER)) {
+        type_name = type_token.m_lexeme;
+    } else if (match(token_type::SID)) {
+        type_name = type_token.m_lexeme.substr(1, type_token.m_lexeme.size() - 2);
+    } else {
+        m_errors.emplace_back(type_token, "expected type name or identifier");
     }
 
-    const std::string type_name = type_token->m_lexeme;
     if (!m_knownTypes.contains(type_name)) {
-        m_errors.emplace_back(*type_token, "unknown type " + type_name);
+        m_errors.emplace_back(type_token, "unknown type " + type_name);
         return std::nullopt;
     }
 
@@ -1468,5 +1472,58 @@ template<typename ...Args> requires (std::constructible_from<ast::literal, Args>
     }
     return lambdas;
 }
+
+void Parser::add_mapped_types(const std::unordered_map<sid64, ast::full_type>& types) {
+    m_mappedTypes.insert(types.begin(), types.end());
+}
+
+[[nodiscard]] std::optional<ast::full_type> Parser::make_mapped_sid_type() {
+    if (!consume(token_type::SID, "expected SID as type name")) {
+        return std::nullopt;
+    }
+
+
+}
+
+[[nodiscard]] std::optional<std::unordered_map<sid64, compilation::scope>> Parser::make_typemap() {
+    if (!consume(token_type::TYPEMAP, "expected type map keyword")) {
+        return std::nullopt;
+    }
+
+    if (!consume(token_type::LEFT_BRACE, "expected {")) {
+        return std::nullopt;
+    }
+
+
+    std::unordered_map<sid64, compilation::scope> function_scopes;
+
+    while (match(token_type::SID)) {
+        const std::string name = previous().m_lexeme.substr(1, previous().m_lexeme.size() - 2);
+        if (!consume(token_type::LEFT_BRACE, "expected {")) {
+            return std::nullopt;
+        }
+        compilation::scope scope;
+        while (match(token_type::IDENTIFIER)) {
+            std::string var_name = previous().m_lexeme;
+            std::optional type_res = make_type();
+            if (!type_res) {
+                return std::nullopt;
+            }
+            scope.define(std::move(var_name), std::move(*type_res));
+            if (!consume(token_type::SEMICOLON, "expected ; at end of variable mapping")) {
+                return std::nullopt;
+            }
+        }
+        if (!consume(token_type::RIGHT_BRACE, "expected }")) {
+            return std::nullopt;
+        }
+        function_scopes.emplace(SID(name.c_str()), std::move(scope));
+    }
+    if (!consume(token_type::RIGHT_BRACE, "expected }")) {
+        return std::nullopt;
+    }
+
+    return function_scopes;
+} 
 
 }

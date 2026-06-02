@@ -1,9 +1,12 @@
+#pragma once
+
 #include "base.h"
 #include "ast/type.h"
 #include "ast/ast.h"
 #include "binaryfile.h"
 #include "decompilation/control_flow_graph.h"
 #include "ast/ast_source.h"
+#include "compilation/environment.h"
 #include <set>
 #include <stack>
 
@@ -23,18 +26,25 @@ namespace dconstruct::dcompiler {
     };
     
     struct decomp_function {
-        decomp_function(const function_disassembly& func, const BinaryFile& file, const SIDBase& sidbase, ControlFlowGraph graph, std::optional<std::filesystem::path> graph_path = std::nullopt) noexcept :
+        decomp_function(
+            const function_disassembly& func, 
+            const BinaryFile& file, 
+            const SIDBase& sidbase, 
+            ControlFlowGraph graph,
+            std::optional<std::filesystem::path> graph_path = std::nullopt,
+            const std::unordered_map<sid64, ast::full_type>* known_types = nullptr,
+            const std::filesystem::path* type_map_path = nullptr) noexcept :
         m_disassembly(func),
         m_file(file),
         m_sidbase(sidbase),
         m_graphPath(graph_path),
-        m_graph(graph), 
-        m_parsedNodes(graph.m_nodes.size(), false), 
+        m_graph(graph),
+        m_parsedNodes(graph.m_nodes.size(), false),
         m_ipdomsEmitted(m_graph.m_nodes.size(), false),
-        m_functionDefinition{} {};
+        m_knownTypes(known_types),
+        m_typeMapPath(type_map_path) {};
 
-        const ast::function_definition& decompile(const OPTIMIZATION_KIND optimizations = OPTIMIZATION_KIND::NONE) & ;
-        [[nodiscard]] ast::function_definition decompile(const OPTIMIZATION_KIND optimizations = OPTIMIZATION_KIND::NONE) && ;
+        [[nodiscard]] ast::function_definition decompile(const OPTIMIZATION_KIND optimizations = OPTIMIZATION_KIND::NONE);
 
         decomp_function& operator=(decomp_function&&) noexcept = default;
 
@@ -43,6 +53,8 @@ namespace dconstruct::dcompiler {
         
         ControlFlowGraph m_graph;
         std::unordered_map<reg_idx, std::stack<std::unique_ptr<ast::identifier>>> m_registersToVars;
+        const std::unordered_map<sid64, ast::full_type>* m_knownTypes;
+        const std::unordered_map<sid64, compilation::scope>* m_functionScopes;
         std::array<expr_uptr, MAX_REGISTER> m_transformableExpressions;
         std::vector<ast::variable_declaration> m_arguments;
         std::stack<std::reference_wrapper<ast::block>> m_blockStack;
@@ -51,7 +63,8 @@ namespace dconstruct::dcompiler {
         const BinaryFile& m_file;
         const SIDBase& m_sidbase;
         std::optional<std::filesystem::path> m_graphPath;
-        ast::function_definition m_functionDefinition;
+        const std::filesystem::path* m_typeMapPath = nullptr;
+        std::unique_ptr<ast::function_definition> m_functionDefinition;
         node_set m_parsedNodes;
         node_set m_ipdomsEmitted;
         std::optional<std::string> m_error;
@@ -66,7 +79,7 @@ namespace dconstruct::dcompiler {
         void emit_if_else(const control_flow_node &node, const node_id stop_node);
 
         void emit_if(const control_flow_node& node, const node_id stop_node);
- 
+
         void emit_branch(ast::block& block, node_id proper_destination, const node_id idom, reg_set regs_to_emit, std::unordered_map<reg_idx, dconstruct::ast::full_type> &regs_to_type);
 
         void emit_loop(const control_flow_loop &loop, const node_id stop_node);
@@ -87,7 +100,7 @@ namespace dconstruct::dcompiler {
         void load_expression_into_new_var(const reg_idx dst);
         void load_expression_into_existing_var(const reg_idx dst, std::unique_ptr<ast::identifier>&& var);
 
-        void optimize_ast();
+        void optimize_ast(ast::function_definition& func);
 
         [[nodiscard]] std::unique_ptr<ast::call_expr> make_call(const Instruction& istr);
 

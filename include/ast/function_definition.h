@@ -11,6 +11,10 @@ namespace dconstruct::ast {
         [[nodiscard]] std::vector<semantic_check_error> check_semantics(compilation::scope&) const noexcept final;
         [[nodiscard]] program_binary_result emit_dc(compilation::global_state& global) const noexcept final;
 
+        function_definition() noexcept = default;
+        function_definition(function_definition&& rhs) noexcept = default;
+        function_definition& operator=(function_definition&& rhs) noexcept = default;
+
         std::vector<ast::parameter> m_parameters;
         ast::block m_body;
         ast::function_type m_type;

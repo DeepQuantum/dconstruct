@@ -1,1 +1,5 @@
-internal-put-on-gas-mask@var_1 #gas-mask-setup*;
+typemap {
+    #internal-put-on-gas-mask {
+        var_1 #gas-mask-setup *;
+    }   
+}
