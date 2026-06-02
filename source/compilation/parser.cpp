@@ -262,10 +262,12 @@ template<typename... Args> requires (std::same_as<Args, token_type> && ...)
 
 [[nodiscard]] std::optional<ast::struct_type> Parser::make_struct_type() {
     std::string struct_name;
+    bool is_sid_name = false;
     if (match(token_type::IDENTIFIER)) {
         struct_name = previous().m_lexeme;
     } else if (match(token_type::SID)) {
         struct_name = previous().m_lexeme.substr(1, peek().m_lexeme.size() - 2);
+        is_sid_name = true;
     } else {
         m_errors.emplace_back(previous(), "expected name after struct keyword");
     }
@@ -276,6 +278,9 @@ template<typename... Args> requires (std::same_as<Args, token_type> && ...)
 
     ast::struct_type struct_t;
     struct_t.m_name = std::move(struct_name);
+    if (is_sid_name) {
+        struct_t.m_typeHash = SID(struct_t.m_name.c_str());
+    }
 
     while (!check(token_type::RIGHT_BRACE) && !is_at_end()) {
         std::unique_ptr<ast::variable_declaration> decl = make_var_declaration();
@@ -295,8 +300,16 @@ template<typename... Args> requires (std::same_as<Args, token_type> && ...)
 }
 
 [[nodiscard]] std::optional<ast::enum_type> Parser::make_enum_type() {
-    const token* enum_name = consume(token_type::IDENTIFIER, "expected name after enum keyword");
-    if (!enum_name) {
+    std::string enum_name;
+    bool is_sid_name = false;
+
+    if (match(token_type::IDENTIFIER)) {
+        enum_name = previous().m_lexeme;
+    } else if (match(token_type::SID)) {
+        enum_name = previous().m_lexeme.substr(1, previous().m_lexeme.size() - 2);
+        is_sid_name = true;
+    } else {
+        m_errors.emplace_back(previous(), "expected name after enum keyword");
         return std::nullopt;
     }
 
@@ -305,7 +318,10 @@ template<typename... Args> requires (std::same_as<Args, token_type> && ...)
     }
 
     ast::enum_type enum_t;
-    enum_t.m_name = enum_name->m_lexeme;
+    enum_t.m_name = std::move(enum_name);
+    if (is_sid_name) {
+        enum_t.m_typeHash = SID(enum_t.m_name.c_str());
+    }
 
     u64 counter = 0;
     bool has_assignments = false;

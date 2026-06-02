@@ -8,6 +8,7 @@
 #include "cxxopts.hpp"
 #include <chrono>
 #include <filesystem>
+#include <map>
 #include <optional>
 #include <string>
 #include <vector>
@@ -19,6 +20,7 @@ void decomp_file(
     const std::filesystem::path &out_disasm_filename, 
     const std::filesystem::path &out_decomp_filename,
     const dconstruct::SIDBase &base,
+    const std::map<sid64, dconstruct::ast::full_type> &type_map,
     const bool write_graphs,
     const dconstruct::ast::LANGUAGE_FLAGS language_flags,
     const bool show_warnings,
@@ -27,9 +29,10 @@ void decomp_file(
     const dconstruct::game_type game = dconstruct::game_type::T2R);
 
 void disasm_file(
-    const std::filesystem::path &inpath, 
+    const std::filesystem::path &inpath,
     const std::filesystem::path &out_filename,
     const dconstruct::SIDBase &base,
+    const std::map<sid64, dconstruct::ast::full_type> &type_map,
     const std::vector<std::string> &edits = {},
     const dconstruct::game_type game = dconstruct::game_type::T2R);
 
@@ -37,6 +40,7 @@ void decompile_multiple(
     const std::filesystem::path &in, 
     const std::filesystem::path &out,
     const dconstruct::SIDBase &sidbase,
+    const std::map<sid64, dconstruct::ast::full_type> &type_map,
     const bool generate_graphs,
     const bool show_warnings,
     const bool optimize,
@@ -45,9 +49,10 @@ void decompile_multiple(
 );
 
 void disassemble_multiple(
-    const std::filesystem::path &in, 
+    const std::filesystem::path &in,
     const std::filesystem::path &out,
     const dconstruct::SIDBase &sidbase,
+    const std::map<sid64, dconstruct::ast::full_type> &type_map,
     const dconstruct::game_type game = dconstruct::game_type::T2R
 );
 
@@ -78,6 +83,8 @@ std::vector<std::string> edits_from_file(const std::filesystem::path &path);
 [[nodiscard]] std::optional<dconstruct::ast::LANGUAGE_FLAGS> get_print_type(const std::string& input_string);
 
 [[nodiscard]] std::optional<dconstruct::game_type> get_game_type(const std::string& input_string);
+
+[[nodiscard]] std::expected<std::map<sid64, ast::full_type>, std::string> parse_type_defs_file(const std::filesystem::path& filepath);
 
 [[nodiscard]] std::optional<std::pair<cxxopts::Options, cxxopts::ParseResult>> get_command_line_options(int argc, char* argv[]);
 

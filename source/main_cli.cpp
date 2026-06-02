@@ -47,6 +47,17 @@ int main(int argc, char *argv[]) {
         edits = dconstruct::disassembly::edits_from_file(test);
     }
 
+    std::map<sid64, dconstruct::ast::full_type> type_map;
+    if (opts.count("type_map") > 0) {
+        const auto type_map_path = opts["type_map"].as<std::string>();
+        auto type_def_res = dconstruct::disassembly::parse_type_defs_file(type_map_path);
+        if (!type_def_res) {
+            std::println(stderr, "error parsing type defs file {}: {}", type_map_path, type_def_res.error());
+            return -1;
+        }
+        type_map = *type_def_res;
+    }
+
     std::filesystem::path output;
     if (opts.count("o") == 0) {
         if (!std::filesystem::is_directory(filepath)) {
@@ -106,8 +117,6 @@ int main(int argc, char *argv[]) {
     const bool generate_graphs = opts["graphs"].as<bool>();
     const bool show_warnings = opts["show_warnings"].as<bool>();
 
-
-
     const std::string language_type = opts["language"].as<std::string>();
 
     const auto opt_print_func = dconstruct::disassembly::get_print_type(language_type);
@@ -148,20 +157,20 @@ int main(int argc, char *argv[]) {
             if (generate_graphs) {
                 std::filesystem::create_directory(output / "graphs");
             }
-            dconstruct::disassembly::decompile_multiple(filepath, output, base, generate_graphs, show_warnings, optimize, language_flags, game);
+            dconstruct::disassembly::decompile_multiple(filepath, output, base, type_map, generate_graphs, show_warnings, optimize, language_flags, game);
         }
         else {
-            dconstruct::disassembly::disassemble_multiple(filepath, output, base, game);
+            dconstruct::disassembly::disassemble_multiple(filepath, output, base, type_map, game);
         }
     } else {
         const auto start = std::chrono::high_resolution_clock::now();
         if (decompile) {
             std::println("disassembling & decompiling {}...", filepath.filename().string());
-            dconstruct::disassembly::decomp_file(filepath, output, std::filesystem::path(output).replace_extension(".dcpl"), base, generate_graphs, language_flags, show_warnings, optimize ? dconstruct::dcompiler::OPTIMIZATION_KIND::AST : dconstruct::dcompiler::OPTIMIZATION_KIND::NONE, edits, game);
+            dconstruct::disassembly::decomp_file(filepath, output, std::filesystem::path(output).replace_extension(".dcpl"), base, type_map, generate_graphs, language_flags, show_warnings, optimize ? dconstruct::dcompiler::OPTIMIZATION_KIND::AST : dconstruct::dcompiler::OPTIMIZATION_KIND::NONE, edits, game);
         }
         else {
             std::println("disassembling {}...", filepath.filename().string());
-            dconstruct::disassembly::disasm_file(filepath, output, base, edits, game);
+            dconstruct::disassembly::disasm_file(filepath, output, base, type_map, edits, game);
         }
         const auto time_taken = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - start);
         std::println("took {}ms", time_taken.count());

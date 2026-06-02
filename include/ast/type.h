@@ -72,14 +72,15 @@ namespace dconstruct::ast {
 
     struct struct_type {
         std::string m_name;
+        std::optional<sid64> m_typeHash;
+
         std::vector<std::pair<std::string, ref_full_type>> m_members;
         bool operator==(const struct_type&) const = default;
     };
 
     struct enum_type {
         std::string m_name;
-
-        struct literal;
+        std::optional<sid64> m_typeHash;
 
         std::map<std::string, u64> m_enumerators;
         bool operator==(const enum_type&) const = default;

@@ -1,0 +1,7 @@
+* interactive cfg viewer (for fun)
+* disassembly search panel
+* toggle all dcpl/asm
+* allow force set sid 
+* colored asm
+* moved regex cleanup to cpp and always run
+* add optimization levels none/ast/regex

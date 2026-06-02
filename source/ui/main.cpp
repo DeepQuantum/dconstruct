@@ -143,6 +143,7 @@ struct app_state {
     qui::message_box m_errorBox;
     qui::message_box m_closeBox;
     bool m_closeRequested = false;
+    bool m_defaultViewDcpl = true;
 };
 
 void glfw_error_callback(int error, const char *description) {
@@ -1495,7 +1496,7 @@ bool draw_view_switch(const char *str_id, bool *dcpl, const ImVec2 &size) {
 
     ImGuiStorage *storage = ImGui::GetStateStorage();
     const ImGuiID key = ImGui::GetID("##t");
-    const f32 target = *dcpl ? 1.0F : 0.0F;
+    const f32 target = *dcpl ? 0.0F : 1.0F;
     f32 t = storage->GetFloat(key, target);
     t += (target - t) * std::clamp(ImGui::GetIO().DeltaTime * 14.0F, 0.0F, 1.0F);
     if (std::fabs(target - t) < 0.001F) {
@@ -1524,12 +1525,12 @@ bool draw_view_switch(const char *str_id, bool *dcpl, const ImVec2 &size) {
     }
     const ImU32 active = ImGui::ColorConvertFloat4ToU32(qui::color::retina_dark::WindowBackground);
     const ImU32 inactive = ImGui::ColorConvertFloat4ToU32(qui::color::retina_dark::TextDisabled);
-    const char *labels[2] = {"ASM", "DCPL"};
+    const char *labels[2] = {"DCPL", "ASM"};
     for (int i = 0; i < 2; ++i) {
         const ImVec2 text_size = ImGui::CalcTextSize(labels[i]);
         const f32 text_x = pos.x + seg * static_cast<f32>(i) + (seg - text_size.x) * 0.5F;
         const f32 text_y = pos.y + (size.y - text_size.y) * 0.5F;
-        const bool is_active = (i == 1) == *dcpl;
+        const bool is_active = (i == 0) == *dcpl;
         draw_list->AddText(ImVec2(text_x, text_y), is_active ? active : inactive, labels[i]);
     }
     if (font != nullptr) {
@@ -1541,7 +1542,7 @@ bool draw_view_switch(const char *str_id, bool *dcpl, const ImVec2 &size) {
 }
 
 void dv_function_switch_and_body(value_view v, const function_disassembly &func, const void *id, bool open) {
-    bool &show_dcpl = v.doc->m_lambdaViewDcpl[&func];
+    bool &show_dcpl = v.doc->m_lambdaViewDcpl.try_emplace(&func, v.state->m_defaultViewDcpl).first->second;
 
     const ImVec2 sw_size = view_switch_size();
     ImGui::SameLine();

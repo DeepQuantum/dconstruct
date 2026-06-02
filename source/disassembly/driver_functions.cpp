@@ -5,6 +5,7 @@
 #include "disassembly/mapping_disassembler.h"
 #include "decompilation/decomp_function.h"
 #include "decompilation/regex_transformations.h"
+#include "compilation/compiler_funcs.h"
 #include "buildinfo.h"
 #include "windows.h"
 #include <cstddef>
@@ -16,6 +17,7 @@
 #include <set>
 #include <sstream>
 #include <print>
+#include <algorithm>
 
 namespace dconstruct {
 
@@ -196,6 +198,7 @@ void decomp_file(
     const std::filesystem::path& out_disasm_filename,
     const std::filesystem::path& out_decomp_filename,
     const dconstruct::SIDBase& base,
+    const std::map<sid64, dconstruct::ast::full_type>& type_map,
     const bool write_graphs,
     const dconstruct::ast::LANGUAGE_FLAGS language_flags,
     const bool show_warnings,
@@ -224,7 +227,7 @@ void decomp_file(
         }
     }
 
-    dconstruct::Disassembler disassembler(&file, &base, game);
+    dconstruct::Disassembler disassembler(&file, &base, &type_map, game);
 
     if (game == dconstruct::game_type::UC4) {
         disassembler.disassemble_functions_from_bin_file();
@@ -277,6 +280,7 @@ void disasm_file(
     const std::filesystem::path& inpath,
     const std::filesystem::path& out_filename,
     const dconstruct::SIDBase& base,
+    const std::map<sid64, dconstruct::ast::full_type>& type_map,
     const std::vector<std::string>& edits,
     const dconstruct::game_type game
 ) {
@@ -296,7 +300,7 @@ void disasm_file(
         }
     }
 
-    dconstruct::Disassembler disassembler(&file, &base, game);
+    dconstruct::Disassembler disassembler(&file, &base, &type_map, game);
     disassembler.disassemble();
     const auto funcs = disassembler.get_all_functions();
     std::ofstream out(out_filename, std::ios::binary);
@@ -308,6 +312,7 @@ void decompile_multiple(
     const std::filesystem::path& in,
     const std::filesystem::path& out,
     const dconstruct::SIDBase& sidbase,
+    const std::map<sid64, dconstruct::ast::full_type>& type_map,
     const bool generate_graphs,
     const bool show_warnings,
     const bool optimize,
@@ -340,7 +345,7 @@ void decompile_multiple(
             const std::filesystem::path disasm_outpath = (out / std::filesystem::relative(entry, in)).concat(".asm");
             const std::filesystem::path decomp_outpath = (out / std::filesystem::relative(entry, in)).concat(".dcpl");
             std::filesystem::create_directories(disasm_outpath.parent_path());
-            decomp_file(entry.string(), disasm_outpath, decomp_outpath, sidbase, generate_graphs, language_flags, show_warnings, effective_optimize ? dconstruct::dcompiler::OPTIMIZATION_KIND::AST : dconstruct::dcompiler::OPTIMIZATION_KIND::NONE, {}, game);
+            decomp_file(entry.string(), disasm_outpath, decomp_outpath, sidbase, type_map, generate_graphs, language_flags, show_warnings, effective_optimize ? dconstruct::dcompiler::OPTIMIZATION_KIND::AST : dconstruct::dcompiler::OPTIMIZATION_KIND::NONE, {}, game);
         }
     );
 
@@ -353,6 +358,7 @@ void disassemble_multiple(
     const std::filesystem::path& in,
     const std::filesystem::path& out,
     const dconstruct::SIDBase& sidbase,
+    const std::map<sid64, dconstruct::ast::full_type>& type_map,
     const dconstruct::game_type game
 ) {
     std::vector<std::filesystem::path> filepaths;
@@ -375,7 +381,7 @@ void disassemble_multiple(
         [&](const std::filesystem::path& entry) {
             const std::filesystem::path outpath = (out / std::filesystem::relative(entry, in)).concat(".asm");
             std::filesystem::create_directories(outpath.parent_path());
-            disasm_file(entry.string(), outpath, sidbase, {}, game);
+            disasm_file(entry.string(), outpath, sidbase, type_map, {}, game);
         }
     );
 
@@ -436,6 +442,76 @@ std::vector<std::string> edits_from_file(const std::filesystem::path& path) {
     return std::nullopt;
 }
 
+[[nodiscard]] std::expected<std::map<sid64, ast::full_type>, std::string> parse_type_defs_file(const std::filesystem::path& filepath) {
+
+    using namespace compilation;
+
+    std::ifstream file(filepath);
+
+    if (!file) {
+        return std::unexpected{"couldn't open filepath " + filepath.string()}; 
+    } 
+
+    std::stringstream input;
+    input << file.rdbuf();
+
+    std::string type_def_source = input.str();
+
+    global_state global{};
+
+    const auto compilation_results = run_compilation(type_def_source, global);
+    
+    Lexer lexer{type_def_source};
+    const auto& [tokens, lex_errors] = lexer.get_results();
+
+    if (!lex_errors.empty()) {
+        std::ostringstream oss;
+        for (const auto& err : lex_errors) {
+            oss << "[syntax error] " << err << '\n';
+        }
+        return std::unexpected{oss.str()};
+    }
+
+    Parser parser{tokens};
+    auto [program, types, parse_errors] = parser.get_results();
+    if (!parse_errors.empty()) {
+        std::ostringstream oss;
+        for (const auto& err : parse_errors) {
+            oss << "[parsing error] " << err.m_message << " at " << format_source_location({err.m_token.m_file, err.m_token.m_line}) << '\n';
+        }
+        return std::unexpected{oss.str()};
+    }
+
+    if (!program.m_declarations.empty()) {
+        return std::unexpected{"[logic error] you cannot have any code inside a type definition file\n"};
+    }
+
+    std::ostringstream oss;
+    std::map<sid64, ast::full_type> type_results;
+    for (auto& [name, type] : types) {
+        if (ast::struct_type *struct_t_ptr = std::get_if<ast::struct_type>(&type)) {
+            if (!struct_t_ptr->m_typeHash) {
+                oss << "[logic error] struct " << name << " muts have an sid identifier (#*name*) as its struct name\n";
+            } else {
+                type_results.emplace(struct_t_ptr->m_typeHash, std::move(*struct_t_ptr));
+            }
+        } else if (ast::enum_type *enum_t_ptr = std::get_if<ast::enum_type>(&type)) {
+            if (!enum_t_ptr->m_typeHash) {
+                oss << "[logic error] enum " << name << " muts have an sid identifier (#*name*) as its enum name\n";
+            } else {
+                type_results.emplace(enum_t_ptr->m_typeHash, std::move(*enum_t_ptr));
+            }
+        } else {    
+            oss << "[logic error] type " << name << " must be enum or struct type\n";
+        }
+    }
+    if (std::string errors = oss.str(); !errors.empty()) {
+        return std::unexpected{errors};
+    }
+
+    return type_results;
+}
+
 [[nodiscard]] std::optional<std::pair<cxxopts::Options, cxxopts::ParseResult>> get_command_line_options(int argc, char* argv[]) {
     cxxopts::Options options("dconstruct", "\na program for disassembling, editing and decompiling tlouii dc files. use --about for a more detailed description.\n");
 
@@ -451,7 +527,8 @@ std::vector<std::string> edits_from_file(const std::filesystem::path& path) {
     options.add_options("input/output")
         ("i,input", "input DC file or folder", cxxopts::value<std::string>(), "<path>")
         ("o,output", "output file or folder", cxxopts::value<std::string>()->default_value(""), DEFAULT_OUT)
-        ("s,sidbase", "sidbase file", cxxopts::value<std::string>()->default_value((current_program_path.parent_path() / "sidbase.bin").string()), "<path>");
+        ("s,sidbase", "sidbase file", cxxopts::value<std::string>()->default_value((current_program_path.parent_path() / "sidbase.bin").string()), "<path>")
+        ("type_map", "a .dcpl file for mapping out types", cxxopts::value<std::string>()->default_value(""));
     options.add_options("configuration")
         ("no_decompile", "don't emit a file containing the decompiled functions (excluding those nested inside structs).", cxxopts::value<bool>()->default_value("false"))
         ("no_optimize", "don't optimize/cleanup the decompiled code output, e.g. replacing some 'for' loops with 'foreach' loops, some if-else chains with match expressions, and removing unused variables.", cxxopts::value<bool>()->default_value("false"))
