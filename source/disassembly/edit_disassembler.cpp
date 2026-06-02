@@ -73,7 +73,7 @@ namespace dconstruct {
                 break;
             }
             case EditType::SID_STR: {
-                const char* old_sid = lookup(edit_location.get<sid64>());
+                const char* old_sid = m_sidbase->lookup(edit_location.get<sid64>(), m_currentFile->m_sidCache);
                 const u64 new_sid = SID(value.string->c_str());
                 if (m_sidbase->search(new_sid) != nullptr) {
                     std::cout << old_sid << "->" << *value.string << '\n';
@@ -86,7 +86,7 @@ namespace dconstruct {
                 break;
             }
             case EditType::SID_HASH: {
-                const char* old_sid = lookup(edit_location.get<sid64>());
+                const char* old_sid = m_sidbase->lookup(edit_location.get<sid64>(), m_currentFile->m_sidCache);
                 const std::string new_sid = int_to_string_id(value.U64);
                 std::cout << old_sid << '=' << new_sid << '\n';
                 *reinterpret_cast<sid64*>(const_cast<std::byte*>(edit_location.m_ptr)) = value.U64;

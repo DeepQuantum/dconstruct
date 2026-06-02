@@ -37,8 +37,8 @@ namespace dconstruct::testing {
         BinaryFile file = *BinaryFile::from_path(TEST_DIR + R"(\dummy.bin)");
         Disassembler da{ &file, &base };
         auto fd = *da.create_function_disassembly(std::move(istrs), name, table.m_location);
-        auto dc_func = dconstruct::dcompiler::decomp_function(fd, file, ControlFlowGraph::build(fd));
-        auto& test = const_cast<ast::function_definition&>(dc_func.decompile(false));
+        auto dc_func = dconstruct::dcompiler::decomp_function(fd, file, base, ControlFlowGraph::build(fd));
+        auto& test = const_cast<ast::function_definition&>(dc_func.decompile(dcompiler::OPTIMIZATION_KIND::NONE));
         return std::move(test);
     }
 
@@ -53,8 +53,8 @@ namespace dconstruct::testing {
         da.disassemble();
         for (const auto* func : da.get_all_functions()) {
             if (func->get_id() == function_id) {
-                auto fd = dcompiler::decomp_function{*func, file, ControlFlowGraph::build(*func)};
-                return fd.decompile(optimize).to_pseudo_c_string();
+                auto fd = dcompiler::decomp_function{*func, file, base, ControlFlowGraph::build(*func)};
+                return fd.decompile(optimize ? dcompiler::OPTIMIZATION_KIND::AST : dcompiler::OPTIMIZATION_KIND::NONE).to_pseudo_c_string();
             }
         }
         return "";
@@ -71,7 +71,7 @@ namespace dconstruct::testing {
         da.disassemble();
         for (const auto* func : da.get_all_functions()) {
             if (func->get_id() == function_id) {
-                auto fd = dcompiler::decomp_function{*func, file, ControlFlowGraph::build(*func)};
+                auto fd = dcompiler::decomp_function{*func, file, base, ControlFlowGraph::build(*func)};
                 return fd.decompile().to_pseudo_c_string();
             }
         }
@@ -92,14 +92,14 @@ namespace dconstruct::testing {
         const auto funcs = da.get_all_functions();
         const auto func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly* f) { return f->get_id() == id; });
         ASSERT_NE(func, funcs.end());
-        auto dc_func = dcompiler::decomp_function{ **func, file,  ControlFlowGraph::build(**func), DCPL_PATH + dconstruct::sanitize_dc_string(id) + ".svg" };
+        auto dc_func = dcompiler::decomp_function{ **func, file, base, ControlFlowGraph::build(**func), DCPL_PATH + dconstruct::sanitize_dc_string(id) + ".svg" };
         std::ofstream file_out(DCPL_PATH + dconstruct::sanitize_dc_string(id) + ".dcpl");
         ast::ast_serialization_buffer out;
         out.m_flags = stream_lang;
         if (use_pascal) {
             out.set_flag(ast::LANGUAGE_FLAGS::FUNCTION_NAMES_PASCAL);
         }
-        out.append(dc_func.decompile(optimize));
+        out.append(dc_func.decompile(optimize ? dcompiler::OPTIMIZATION_KIND::AST : dcompiler::OPTIMIZATION_KIND::NONE));
         file_out << out.str();
         ASSERT_EQ(expected, out.str());
     }
@@ -272,7 +272,7 @@ namespace dconstruct::testing {
         const auto funcs = da.get_all_functions();
         const auto func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly* f) { return f->get_id() == id; });
         ASSERT_NE(func, funcs.end());
-        const auto dc_func = dcompiler::decomp_function{ **func, file, ControlFlowGraph::build(**func)};
+        const auto dc_func = dcompiler::decomp_function{ **func, file, base, ControlFlowGraph::build(**func)};
         for (const auto& node : dc_func.m_graph.m_nodes) {
             ASSERT_EQ(node.m_ipdom, 0x3);
         }
@@ -310,7 +310,7 @@ namespace dconstruct::testing {
         const auto funcs = da.get_all_functions();
         const auto func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly* f) { return f->get_id() == id; });
         ASSERT_NE(func, funcs.end());
-        const auto dc_func = dcompiler::decomp_function{ **func, file, ControlFlowGraph::build(**func) };
+        const auto dc_func = dcompiler::decomp_function{ **func, file, base, ControlFlowGraph::build(**func) };
         const reg_set registers_to_emit = dc_func.m_graph.get_branch_phi_registers(dc_func.m_graph[0]);
         ASSERT_TRUE(registers_to_emit.test(0));
     }
@@ -355,7 +355,7 @@ namespace dconstruct::testing {
         const auto funcs = da.get_all_functions();
         const auto func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly* f) { return f->get_id() == id; });
         ASSERT_NE(func, funcs.end());
-        const auto dc_func = dcompiler::decomp_function{ **func, file, ControlFlowGraph::build(**func) }.decompile();
+        const auto dc_func = dcompiler::decomp_function{ **func, file, base, ControlFlowGraph::build(**func) }.decompile();
         const std::string expected =
             "string #BC06CBDEAE8344C7(u16 arg_0) {\n"
             "    string var_0;\n"
@@ -462,7 +462,7 @@ namespace dconstruct::testing {
         const auto funcs = da.get_all_functions();
         const auto func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly* f) { return f->get_id() == id; });
         ASSERT_NE(func, funcs.end());
-		const auto dc_func = dcompiler::decomp_function{ **func, file, ControlFlowGraph::build(**func) };
+		const auto dc_func = dcompiler::decomp_function{ **func, file, base, ControlFlowGraph::build(**func) };
         const auto& node0 = dc_func.m_graph.m_nodes[0];
         ASSERT_EQ(node0.m_regs.m_readFirst, 0b0);
         ASSERT_EQ(node0.m_regs.m_written, 0b1);
@@ -509,7 +509,7 @@ namespace dconstruct::testing {
             emitted.insert(func->get_id());
             try {
                 std::cout << func->get_id() << "\n";
-                const auto dc_func = dcompiler::decomp_function{ *func, file, ControlFlowGraph::build(*func) }.decompile(true);
+                const auto dc_func = dcompiler::decomp_function{ *func, file, base, ControlFlowGraph::build(*func) }.decompile(dcompiler::OPTIMIZATION_KIND::AST);
                 buffer.append(dc_func);
             }
             catch (const std::exception& e) {
@@ -549,7 +549,7 @@ namespace dconstruct::testing {
                 emitted.insert(func->get_id());
                 try {
                     //std::cout << func->get_id() << "\n";
-                    const auto dc_func = dcompiler::decomp_function{ *func, file, ControlFlowGraph::build(*func) }.decompile(false);
+                    const auto dc_func = dcompiler::decomp_function{ *func, file, base, ControlFlowGraph::build(*func) }.decompile(dcompiler::OPTIMIZATION_KIND::NONE);
                     std::ofstream out(new_path, std::ios::app);
                     out << dc_func.to_pseudo_c_string() << "\n\n";
                 }
@@ -879,7 +879,7 @@ namespace dconstruct::testing {
         const auto funcs = da.get_all_functions();
         std::vector<ast::function_definition> decompiled_funcs;
         for (const auto* func : funcs) {
-            decompiled_funcs.push_back(dcompiler::decomp_function{*func, file,  ControlFlowGraph::build(*func), DCPL_PATH + "animal_behavior.svg"}.decompile());
+            decompiled_funcs.push_back(dcompiler::decomp_function{*func, file, base, ControlFlowGraph::build(*func), DCPL_PATH + "animal_behavior.svg"}.decompile());
         }
         dcompiler::state_script_functions full_file_decomp(decompiled_funcs);
 

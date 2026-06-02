@@ -2,6 +2,7 @@
 #include <fstream>
 #include <filesystem>
 #include <iostream>
+#include <cstring>
 
 namespace dconstruct {
 
@@ -27,7 +28,55 @@ namespace dconstruct {
         const sid64 lowest = entries[0].hash;
         const sid64 highest = entries[num_entries - 1 - sizeof(u64)].hash;
 
-        return SIDBase{num_entries, std::move(bytes), entries, lowest, highest};
+        return SIDBase{num_entries, std::move(bytes), entries, lowest, highest, fsize};
+    }
+
+    [[nodiscard]] SIDBase SIDBase::from_caches(const std::vector<std::map<sid64, std::string>>& caches) {
+        std::map<sid64, std::string> merged;
+        for (const auto& cache : caches) {
+            for (const auto& [hash, name] : cache) {
+                merged.emplace(hash, name);
+            }
+        }
+
+        const u64 entry_count = merged.size();
+        const std::size_t table_size = entry_count * sizeof(SIDBaseEntry);
+        std::size_t string_size = 0;
+        for (const auto& [hash, name] : merged) {
+            string_size += name.size() + 1;
+        }
+        const std::size_t total_size = sizeof(u64) + table_size + string_size;
+
+        auto buffer = std::make_unique<std::byte[]>(total_size);
+        std::byte* base = buffer.get();
+
+        const u64 header = entry_count + 1;
+        std::memcpy(base, &header, sizeof(u64));
+
+        auto* entries = reinterpret_cast<SIDBaseEntry*>(base + sizeof(u64));
+        std::size_t string_off = sizeof(u64) + table_size;
+        u64 i = 0;
+        for (const auto& [hash, name] : merged) {
+            entries[i].hash = hash;
+            entries[i].offset = string_off;
+            std::memcpy(base + string_off, name.c_str(), name.size() + 1);
+            string_off += name.size() + 1;
+            ++i;
+        }
+
+        const sid64 lowest = entry_count > 0 ? merged.begin()->first : 0;
+        const sid64 highest = entry_count > 0 ? merged.rbegin()->first : 0;
+
+        return SIDBase{header, std::move(buffer), entries, lowest, highest, total_size};
+    }
+
+    bool SIDBase::dump(const std::filesystem::path& path) const {
+        std::ofstream out(path, std::ios::binary);
+        if (!out.is_open()) {
+            return false;
+        }
+        out.write(reinterpret_cast<const char*>(m_sidbytes.get()), static_cast<std::streamsize>(m_byteSize));
+        return out.good();
     }
 
     [[nodiscard]] const char* SIDBase::search(const sid64 hash) const noexcept {
@@ -52,5 +101,33 @@ namespace dconstruct {
 
     [[nodiscard]] bool SIDBase::sid_exists(const sid64 hash) const noexcept {
         return search(hash) != nullptr;
+    }
+
+    [[nodiscard]] const char* SIDBase::lookup(const sid64 hash) const noexcept {
+        return search(hash);
+    }
+
+    [[nodiscard]] const char* SIDBase::lookup(const sid32 hash) const noexcept {
+        return search(hash);
+    }
+
+    [[nodiscard]] const char* SIDBase::lookup(const sid64 hash, std::map<sid64, std::string>& cache) const {
+        if (auto res = cache.find(hash); res != cache.end()) {
+            return res->second.c_str();
+        }
+        if (const char* hash_string = search(hash)) {
+            return cache.emplace(hash, hash_string).first->second.c_str();
+        }
+        return cache.emplace(hash, int_to_string_id<sid64>(hash)).first->second.c_str();
+    }
+
+    [[nodiscard]] const char* SIDBase::lookup(const sid32 hash, std::map<sid64, std::string>& cache) const {
+        if (auto res = cache.find(hash); res != cache.end()) {
+            return res->second.c_str();
+        }
+        if (const char* hash_string = search(hash)) {
+            return cache.emplace(hash, hash_string).first->second.c_str();
+        }
+        return cache.emplace(hash, int_to_string_id<sid32>(hash)).first->second.c_str();
     }
 }

@@ -62,7 +62,7 @@ namespace dconstruct::testing {
         std::ofstream out("test/fixtures/uc4/ss-isl-cave-get-piton.dcpl");
 
         for (const auto* func : dis.get_all_functions()) {
-            auto decomp = dconstruct::dcompiler::decomp_function{*func, file, ControlFlowGraph::build(*func)}.decompile(true);
+            auto decomp = dconstruct::dcompiler::decomp_function{*func, file, base, ControlFlowGraph::build(*func)}.decompile(dconstruct::dcompiler::OPTIMIZATION_KIND::AST);
             out << decomp.to_pseudo_c_string() << "\n\n";
         }
 

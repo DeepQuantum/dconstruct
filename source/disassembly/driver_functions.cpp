@@ -15,6 +15,7 @@
 #include <locale>
 #include <set>
 #include <sstream>
+#include <print>
 
 namespace dconstruct {
 
@@ -80,13 +81,34 @@ constexpr i32 BOX_WIDTH = 100;
     return "unknown";
 }
 
+[[nodiscard]] std::string get_optimizations_string(const dconstruct::dcompiler::OPTIMIZATION_KIND optimizations) {
+    using dconstruct::dcompiler::OPTIMIZATION_KIND;
+    if (optimizations == OPTIMIZATION_KIND::NONE) {
+        return "none";
+    }
+    std::string result;
+    const auto append = [&](const char* name) {
+        if (!result.empty()) {
+            result += ", ";
+        }
+        result += name;
+    };
+    if (static_cast<u8>(optimizations) & static_cast<u8>(OPTIMIZATION_KIND::AST)) {
+        append("AST");
+    }
+    if (static_cast<u8>(optimizations) & static_cast<u8>(OPTIMIZATION_KIND::REGEX)) {
+        append("REGEX");
+    }
+    return result;
+}
+
 [[nodiscard]] std::string get_output_header(
     const dconstruct::BinaryFile& file,
     const u32 total_entries,
     const size_t function_count,
     const bool has_state_script,
     const dconstruct::game_type game,
-    const bool optimize,
+    const dconstruct::dcompiler::OPTIMIZATION_KIND optimizations,
     const std::string& line_prefix = {}
 ) {
     std::ostringstream out;
@@ -117,7 +139,7 @@ constexpr i32 BOX_WIDTH = 100;
     append_line(get_box_line(std::string("#   functions: ") + std::to_string(function_count)));
     append_line(get_box_line(std::string("#   has state script: ") + (has_state_script ? "true" : "false")));
     append_line(get_box_line(std::string("#   game type: ") + get_game_type_string(game)));
-    append_line(get_box_line(std::string("#   optimizations enabled: ") + (optimize ? "true" : "false")));
+    append_line(get_box_line(std::string("#   optimizations enabled: ") + get_optimizations_string(optimizations)));
     append_line(get_box_line("#"));
     append_line(std::string(BOX_WIDTH, '#'));
     out << '\n';
@@ -144,7 +166,7 @@ void map_types_multiple(
         filepaths.begin(),
         filepaths.end(),
         [&](const std::filesystem::path& entry) {
-            std::cout << "mapping types in " << entry << "...\n";
+            std::println("mapping types in {}...", entry.string());
             auto file_res = dconstruct::BinaryFile::from_path(entry.string());
             if (!file_res) {
                 return;
@@ -177,19 +199,19 @@ void decomp_file(
     const bool write_graphs,
     const dconstruct::ast::LANGUAGE_FLAGS language_flags,
     const bool show_warnings,
-    const bool optimize,
+    dconstruct::dcompiler::OPTIMIZATION_KIND optimizations,
     const std::vector<std::string>& edits,
     const dconstruct::game_type game
 ) {
-    const bool effective_optimize = optimize && game == dconstruct::game_type::T2R;
-    if (optimize && !effective_optimize) {
-        std::cout << "warning: optimization is only supported for t2r; disabling optimization\n";
+    if (optimizations != dconstruct::dcompiler::OPTIMIZATION_KIND::NONE && game != dconstruct::game_type::T2R) {
+        std::println("warning: optimization is only supported for t2r; disabling optimization");
+        optimizations = dconstruct::dcompiler::OPTIMIZATION_KIND::NONE;
     }
 
     auto file_res = dconstruct::BinaryFile::from_path(inpath.string());
 
     if (!file_res) {
-        std::cerr << file_res.error() << "\n";
+        std::println(stderr, "{}", file_res.error());
         std::terminate();
     }
 
@@ -198,7 +220,7 @@ void decomp_file(
     if (game != dconstruct::game_type::UC4 && !edits.empty()) {
         dconstruct::EditDisassembler ed(&file, &base, edits, game);
         if (const dconstruct::error_msg err = ed.apply_file_edits(); err.has_value()) {
-            std::cerr << *err << "\n";
+            std::println(stderr, "{}", *err);
         }
     }
 
@@ -214,7 +236,7 @@ void decomp_file(
     const auto funcs = disassembler.get_all_functions();
     {
         std::ofstream out(out_disasm_filename, std::ios::binary);
-        out << get_output_header(file, file.m_dcheader ? file.m_dcheader->m_numEntries : 0, funcs.size(), disassembler.has_state_script(), game, effective_optimize);
+        out << get_output_header(file, file.m_dcheader ? file.m_dcheader->m_numEntries : 0, funcs.size(), disassembler.has_state_script(), game, optimizations);
         out << disassembler.disassembly_to_string(disassembler.get_disassembled_entries());
     }
 
@@ -223,7 +245,7 @@ void decomp_file(
         functions.reserve(funcs.size());
 
         dconstruct::ast::ast_serialization_buffer out{100'000};
-        out.append(get_output_header(file, file.m_dcheader ? file.m_dcheader->m_numEntries : 0, funcs.size(), disassembler.has_state_script(), game, effective_optimize, get_dcpl_comment_prefix(language_flags)));
+        out.append(get_output_header(file, file.m_dcheader ? file.m_dcheader->m_numEntries : 0, funcs.size(), disassembler.has_state_script(), game, optimizations, get_dcpl_comment_prefix(language_flags)));
         out.m_flags = language_flags;
         std::set<u64> emitted_funcs;
 
@@ -234,16 +256,14 @@ void decomp_file(
                 std::filesystem::create_directories(graph_dir);
                 graph_path = get_sanitized_graph_path(graph_dir, func->get_id());
             }
-            try {
-                functions.emplace_back(dconstruct::dcompiler::decomp_function{*func, file, dconstruct::ControlFlowGraph::build(*func), std::move(graph_path)}.decompile(effective_optimize));
+            auto decomp_func = dconstruct::dcompiler::decomp_function{*func, file, base, dconstruct::ControlFlowGraph::build(*func), std::move(graph_path)};
+            const auto& function_body = decomp_func.decompile(optimizations);
+            if (show_warnings && decomp_func.m_error) {
+                std::println(stderr, "warning: the decompilation for <{}> will be inaccurate: {}", func->get_id(), *decomp_func.m_error);
             }
-            catch (const std::exception& e) {
-                if (show_warnings) {
-                    std::cout << "warning: couldn't decompile <" << func->get_id() << ">: " << e.what() << "\n";
-                }
-            }
+            functions.emplace_back(std::move(decomp_func));
         }
-        dconstruct::dcompiler::state_script_functions output_functions{functions, &file};
+        dconstruct::dcompiler::state_script_functions output_functions{functions, &file, &base};
         output_functions.to_string(out);
 
         std::ofstream file_out(out_decomp_filename, std::ios::binary);
@@ -263,7 +283,7 @@ void disasm_file(
     auto file_res = dconstruct::BinaryFile::from_path(inpath.string());
 
     if (!file_res) {
-        std::cerr << file_res.error() << "\n";
+        std::println(stderr, "{}", file_res.error());
         std::terminate();
     }
     
@@ -272,7 +292,7 @@ void disasm_file(
     if (!edits.empty() && game != dconstruct::game_type::UC4) {
         dconstruct::EditDisassembler ed(&file, &base, edits, game);
         if (const dconstruct::error_msg err = ed.apply_file_edits(); err.has_value()) {
-            std::cerr << *err << "\n";
+            std::println(stderr, "{}", *err);
         }
     }
 
@@ -280,7 +300,7 @@ void disasm_file(
     disassembler.disassemble();
     const auto funcs = disassembler.get_all_functions();
     std::ofstream out(out_filename, std::ios::binary);
-    out << get_output_header(file, file.m_dcheader ? file.m_dcheader->m_numEntries : 0, funcs.size(), disassembler.has_state_script(), game, false);
+    out << get_output_header(file, file.m_dcheader ? file.m_dcheader->m_numEntries : 0, funcs.size(), disassembler.has_state_script(), game, dconstruct::dcompiler::OPTIMIZATION_KIND::NONE);
     out << disassembler.disassembly_to_string(disassembler.get_disassembled_entries());
 }
 
@@ -296,7 +316,7 @@ void decompile_multiple(
 ) {
     const bool effective_optimize = optimize && game == dconstruct::game_type::T2R;
     if (optimize && !effective_optimize) {
-        std::cout << "warning: optimization is only supported for t2r; disabling optimization\n";
+        std::println("warning: optimization is only supported for t2r; disabling optimization");
     }
 
     std::vector<std::filesystem::path> filepaths;
@@ -310,7 +330,7 @@ void decompile_multiple(
 
     const auto start = std::chrono::high_resolution_clock::now();
 
-    std::cout << "disassembling & decompiling " << filepaths.size() << " files into " << out << "...\n";
+    std::println("disassembling & decompiling {} files into {}...", filepaths.size(), out.string());
 
     std::for_each(
         std::execution::par_unseq,
@@ -320,13 +340,13 @@ void decompile_multiple(
             const std::filesystem::path disasm_outpath = (out / std::filesystem::relative(entry, in)).concat(".asm");
             const std::filesystem::path decomp_outpath = (out / std::filesystem::relative(entry, in)).concat(".dcpl");
             std::filesystem::create_directories(disasm_outpath.parent_path());
-            decomp_file(entry.string(), disasm_outpath, decomp_outpath, sidbase, generate_graphs, language_flags, show_warnings, effective_optimize, {}, game);
+            decomp_file(entry.string(), disasm_outpath, decomp_outpath, sidbase, generate_graphs, language_flags, show_warnings, effective_optimize ? dconstruct::dcompiler::OPTIMIZATION_KIND::AST : dconstruct::dcompiler::OPTIMIZATION_KIND::NONE, {}, game);
         }
     );
 
     const auto time_taken = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - start);
 
-    std::cout << "took " << time_taken.count() << "ms\n";
+    std::println("took {}ms", time_taken.count());
 }
 
 void disassemble_multiple(
@@ -346,7 +366,7 @@ void disassemble_multiple(
 
     const auto start = std::chrono::high_resolution_clock::now();
 
-    std::cout << "disassembling " << filepaths.size() << " files into " << out << "...\n";
+    std::println("disassembling {} files into {}...", filepaths.size(), out.string());
 
     std::for_each(
         std::execution::par_unseq,
@@ -361,7 +381,7 @@ void disassemble_multiple(
 
     const auto time_taken = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - start);
 
-    std::cout << "took " << time_taken.count() << "ms\n";
+    std::println("took {}ms", time_taken.count());
 }
 
 void map_types_multiple_to_file(
@@ -380,7 +400,7 @@ std::vector<std::string> edits_from_file(const std::filesystem::path& path) {
     std::vector<std::string> result;
 
     if (!edit_in.is_open()) {
-        std::cout << "warning: couldn't open " << path << '\n';
+        std::println("warning: couldn't open {}", path.string());
     }
     std::string edit_str;
     while (edit_in >> edit_str) {
@@ -452,7 +472,7 @@ std::vector<std::string> edits_from_file(const std::filesystem::path& path) {
         opts = options.parse(argc, argv);
     }
     catch (const std::exception& e) {
-        std::cerr << e.what() << "\n";
+        std::println(stderr, "{}", e.what());
         return std::nullopt;
     }
 

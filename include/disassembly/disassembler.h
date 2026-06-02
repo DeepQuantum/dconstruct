@@ -104,8 +104,6 @@ namespace dconstruct {
 
         disassembled_entry insert_entry(const Entry* entry);
         disassembled_value insert_struct(const structs::unmapped* entry, const sid64 name_id = 0, const sid64 type_id = 0);
-        [[nodiscard]] const char* lookup(const sid64 hash);
-        [[nodiscard]] const char* lookup(const sid32 hash);
         [[nodiscard]] bool is_unmapped_sid(const location) const noexcept;
         [[nodiscard]] bool is_possible_float(const f32* ptr) const noexcept;
         [[nodiscard]] bool is_possible_i32(const i32* ptr) const noexcept;

@@ -63,7 +63,7 @@ namespace dconstruct {
         byte_uptr m_pointedAtTable;
         location m_strings;
         location m_relocTable;
-        std::map<sid64, const std::string> m_sidCache;
+        mutable std::map<sid64, std::string> m_sidCache;
         [[nodiscard]] bool is_file_ptr(const location) const noexcept;
         [[nodiscard]] bool gets_pointed_at(const location) const noexcept;
         [[nodiscard]] bool is_string(const location) const noexcept;

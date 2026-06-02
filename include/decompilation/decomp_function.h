@@ -10,18 +10,31 @@
 constexpr u8 MAX_EXPRESSION_COMPLEXITY = 4;
 
 namespace dconstruct::dcompiler {
+
+    static const auto and_token = compilation::token{ compilation::token_type::AMPERSAND_AMPERSAND, "&&" };
+    static const auto or_token = compilation::token{ compilation::token_type::PIPE_PIPE, "||" };
+
+    static const auto error_replacement_expr = std::make_unique<ast::identifier>("EXPRESSION_ERROR_PLACEHOLDER");
+
+    enum class OPTIMIZATION_KIND {
+        NONE = 0,
+        AST = 1,
+        REGEX = 2,
+    };
+    
     struct decomp_function {
-        decomp_function(const function_disassembly& func, const BinaryFile& file, ControlFlowGraph graph, std::optional<std::filesystem::path> graph_path = std::nullopt) noexcept : 
-        m_disassembly(func), 
-        m_file(file), 
-        m_graphPath(graph_path), 
+        decomp_function(const function_disassembly& func, const BinaryFile& file, const SIDBase& sidbase, ControlFlowGraph graph, std::optional<std::filesystem::path> graph_path = std::nullopt) noexcept :
+        m_disassembly(func),
+        m_file(file),
+        m_sidbase(sidbase),
+        m_graphPath(graph_path),
         m_graph(graph), 
         m_parsedNodes(graph.m_nodes.size(), false), 
         m_ipdomsEmitted(m_graph.m_nodes.size(), false),
         m_functionDefinition{} {};
 
-        const ast::function_definition& decompile(const bool optimization_passes = false) & ;
-        [[nodiscard]] ast::function_definition decompile(const bool optimization_passes = false) && ;
+        const ast::function_definition& decompile(const OPTIMIZATION_KIND optimizations = OPTIMIZATION_KIND::NONE) & ;
+        [[nodiscard]] ast::function_definition decompile(const OPTIMIZATION_KIND optimizations = OPTIMIZATION_KIND::NONE) && ;
 
         decomp_function& operator=(decomp_function&&) noexcept = default;
 
@@ -36,13 +49,17 @@ namespace dconstruct::dcompiler {
         compilation::scope m_env{{}};
         const function_disassembly& m_disassembly;
         const BinaryFile& m_file;
+        const SIDBase& m_sidbase;
         std::optional<std::filesystem::path> m_graphPath;
         ast::function_definition m_functionDefinition;
         node_set m_parsedNodes;
         node_set m_ipdomsEmitted;
+        std::optional<std::string> m_error;
         char m_loopVar = 'i';
 		u16 m_varCount = 0;
         bool m_is64Bit = true;
+
+        static constexpr u8 MIN_GRAPH_SIZE = 0;
 
         void emit_node(const control_flow_node &node, const node_id stop_node);
 
@@ -88,7 +105,7 @@ namespace dconstruct::dcompiler {
 
         [[nodiscard]] expr_uptr make_loop_condition(const node_id head_start, const node_id head_end, const node_id loop_entry, const node_id loop_exit);
 
-        [[nodiscard]] expr_uptr get_expression_as_condition(const reg_idx from) const;
+        [[nodiscard]] expr_uptr get_expression_as_condition(const reg_idx from);
 
         void insert_return(const reg_idx dest);
 
@@ -162,8 +179,9 @@ namespace dconstruct::dcompiler {
         std::vector<const ast::function_definition*> m_nonStateScriptFuncs;
 
         const BinaryFile* m_binFile = nullptr;
+        const SIDBase* m_sidbase = nullptr;
 
-        state_script_functions(const std::vector<ast::function_definition>& funcs, const BinaryFile* binary_file = nullptr) noexcept;
+        state_script_functions(const std::vector<ast::function_definition>& funcs, const BinaryFile* binary_file = nullptr, const SIDBase* sidbase = nullptr) noexcept;
 
         [[nodiscard]] void to_string(ast::ast_serialization_buffer& buffer) const noexcept;
 

@@ -3,6 +3,7 @@
 #include "ast/ast_source.h"
 #include "disassembly/disassembler.h"
 #include "disassembly/mapping_registry.h"
+#include "decompilation/decomp_function.h"
 #include "about.h"
 #include "cxxopts.hpp"
 #include <chrono>
@@ -21,7 +22,7 @@ void decomp_file(
     const bool write_graphs,
     const dconstruct::ast::LANGUAGE_FLAGS language_flags,
     const bool show_warnings,
-    const bool optimize,
+    const dconstruct::dcompiler::OPTIMIZATION_KIND optimizations,
     const std::vector<std::string> &edits = {},
     const dconstruct::game_type game = dconstruct::game_type::T2R);
 

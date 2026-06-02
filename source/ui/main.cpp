@@ -103,6 +103,7 @@ struct document {
     std::vector<i32> m_depthStack;
     std::vector<ImGuiID> m_closeIds;
     std::unordered_map<const function_disassembly *, std::string> m_decompiled;
+    std::unordered_map<const function_disassembly *, std::string> m_decompErrors;
     std::unordered_map<const function_disassembly *, bool> m_lambdaViewDcpl;
     bool m_dirty = false;
     const void *m_editingValue = nullptr;
@@ -143,17 +144,6 @@ struct app_state {
     qui::message_box m_closeBox;
     bool m_closeRequested = false;
 };
-
-std::string lookup_sid(const SIDBase &sidbase, const BinaryFile &file, const sid64 hash) {
-    const auto cached = file.m_sidCache.find(hash);
-    if (cached != file.m_sidCache.end()) {
-        return cached->second;
-    }
-    if (const char *resolved = sidbase.search(hash)) {
-        return resolved;
-    }
-    return int_to_string_id<sid64>(hash);
-}
 
 void glfw_error_callback(int error, const char *description) {
     std::fprintf(stderr, "GLFW error %d: %s\n", error, description);
@@ -283,8 +273,8 @@ f32 measure_entry_list_width(const app_state &state, const document &doc) {
     const ImGuiStyle &style = ImGui::GetStyle();
     for (const disassembled_entry &entry : *doc.m_entries) {
         const f32 width =
-            measure_text(qui::font_bold(), lookup_sid(*state.m_sidbase, *doc.m_file, entry.m_nameId).c_str()) +
-            measure_text(qui::font_medium(), lookup_sid(*state.m_sidbase, *doc.m_file, entry.m_typeId).c_str()) +
+            measure_text(qui::font_bold(), state.m_sidbase->lookup(entry.m_nameId, doc.m_file->m_sidCache)) +
+            measure_text(qui::font_medium(), state.m_sidbase->lookup(entry.m_typeId, doc.m_file->m_sidCache)) +
             style.CellPadding.x * 4.0F +
             ENTRY_CELL_LEFT_PADDING * 2.0F;
         max_width = std::max(max_width, width);
@@ -292,19 +282,20 @@ f32 measure_entry_list_width(const app_state &state, const document &doc) {
     return max_width;
 }
 
-void decompile_document(document &doc) {
+void decompile_document(app_state &state, document &doc) {
     doc.m_decompiled.clear();
+    doc.m_decompErrors.clear();
     doc.m_lambdaViewDcpl.clear();
-    if (doc.m_disassembler == nullptr || doc.m_file == nullptr) {
+    if (doc.m_disassembler == nullptr || doc.m_file == nullptr || state.m_sidbase == nullptr) {
         return;
     }
 
     for (const function_disassembly *func : doc.m_disassembler->get_all_functions()) {
-        try {
-            ast::function_definition def = dcompiler::decomp_function{*func, *doc.m_file, ControlFlowGraph::build(*func)}.decompile(true);
-            doc.m_decompiled.emplace(func, def.to_pseudo_c_string());
-        } catch (const std::exception &) {
-        } catch (...) {
+        auto decomp_func = dcompiler::decomp_function{*func, *doc.m_file, *state.m_sidbase, ControlFlowGraph::build(*func)};
+        const ast::function_definition &def = decomp_func.decompile(dcompiler::OPTIMIZATION_KIND::AST);
+        doc.m_decompiled.emplace(func, def.to_pseudo_c_string());
+        if (decomp_func.m_error) {
+            doc.m_decompErrors.emplace(func, *decomp_func.m_error);
         }
     }
 }
@@ -316,6 +307,7 @@ void disassemble_document(app_state &state, document &doc) {
     doc.m_editor.reset();
     doc.m_editingValue = nullptr;
     doc.m_decompiled.clear();
+    doc.m_decompErrors.clear();
     doc.m_lambdaViewDcpl.clear();
 
     if (state.m_sidbase == nullptr || doc.m_file == nullptr) {
@@ -326,7 +318,7 @@ void disassemble_document(app_state &state, document &doc) {
     doc.m_disassembler->disassemble();
     doc.m_entries = &doc.m_disassembler->get_disassembled_entries();
     doc.m_editor = std::make_unique<EditDisassembler>(doc.m_file.get(), state.m_sidbase.get(), std::vector<std::string>{});
-    decompile_document(doc);
+    decompile_document(state, doc);
 
     const ImGuiStyle &style = ImGui::GetStyle();
     doc.m_listWidth = measure_entry_list_width(state, doc) + style.WindowPadding.x * 2.0F + style.ScrollbarSize + 8.0F;
@@ -767,7 +759,7 @@ void draw_entry_list(app_state &state, document &doc) {
         std::vector<std::string> choices;
         choices.reserve(entries.size());
         for (const disassembled_entry &entry : entries) {
-            choices.push_back(lookup_sid(*state.m_sidbase, *doc.m_file, entry.m_nameId));
+            choices.push_back(state.m_sidbase->lookup(entry.m_nameId, doc.m_file->m_sidCache));
         }
         matches = qui::fuzzy_search(doc.m_entrySearch, choices);
     }
@@ -817,8 +809,8 @@ void draw_entry_list(app_state &state, document &doc) {
             std::stable_sort(row_indices.begin(), row_indices.end(), [&](const i32 lhs, const i32 rhs) {
                 const disassembled_entry &left = entries[static_cast<u32>(lhs)];
                 const disassembled_entry &right = entries[static_cast<u32>(rhs)];
-                const std::string left_name = lookup_sid(*state.m_sidbase, *doc.m_file, left.m_nameId);
-                const std::string right_name = lookup_sid(*state.m_sidbase, *doc.m_file, right.m_nameId);
+                const std::string left_name = state.m_sidbase->lookup(left.m_nameId, doc.m_file->m_sidCache);
+                const std::string right_name = state.m_sidbase->lookup(right.m_nameId, doc.m_file->m_sidCache);
                 if (doc.m_entrySortDescending) {
                     return right_name < left_name;
                 }
@@ -832,8 +824,8 @@ void draw_entry_list(app_state &state, document &doc) {
             for (int i = clipper.DisplayStart; i < clipper.DisplayEnd; ++i) {
                 const int entry_index = row_indices[static_cast<u32>(i)];
                 const disassembled_entry &entry = entries[static_cast<u32>(entry_index)];
-                const std::string name = lookup_sid(*state.m_sidbase, *doc.m_file, entry.m_nameId);
-                const std::string type = lookup_sid(*state.m_sidbase, *doc.m_file, entry.m_typeId);
+                const char* name = state.m_sidbase->lookup(entry.m_nameId, doc.m_file->m_sidCache);
+                const char* type = state.m_sidbase->lookup(entry.m_typeId, doc.m_file->m_sidCache);
 
                 ImGui::TableNextRow();
                 ImGui::TableSetColumnIndex(0);
@@ -843,7 +835,7 @@ void draw_entry_list(app_state &state, document &doc) {
                 if (ImFont *font = qui::font_bold()) {
                     ImGui::PushFont(font);
                 }
-                if (ImGui::Selectable(name.c_str(), doc.m_selectedEntry == entry_index, ImGuiSelectableFlags_SpanAllColumns)) {
+                if (ImGui::Selectable(name, doc.m_selectedEntry == entry_index, ImGuiSelectableFlags_SpanAllColumns)) {
                     doc.m_selectedEntry = entry_index;
                 }
                 if (qui::font_bold() != nullptr) {
@@ -857,7 +849,7 @@ void draw_entry_list(app_state &state, document &doc) {
                     ImGui::PushFont(font);
                 }
                 ImGui::PushStyleColor(ImGuiCol_Text, qui::color::retina_dark::TextDisabled);
-                ImGui::TextUnformatted(type.c_str());
+                ImGui::TextUnformatted(type);
                 ImGui::PopStyleColor();
                 if (qui::font_medium() != nullptr) {
                     ImGui::PopFont();
@@ -1045,7 +1037,7 @@ void dv_draw_struct_like(value_view v, const disassembled_value &entry, const vo
     std::string type_storage;
     const char *type_name = "anonymous struct";
     if (entry.m_typeId != 0) {
-        type_storage = lookup_sid(*v.state->m_sidbase, *v.doc->m_file, entry.m_typeId);
+        type_storage = v.state->m_sidbase->lookup(entry.m_typeId, v.doc->m_file->m_sidCache);
         type_name = type_storage.c_str();
         if (entry.m_typeId == SID("state-script")) {
             color = val_color::StateScript;
@@ -1081,7 +1073,7 @@ std::string read_value_string(value_view v, const void *data_ptr, edit_kind kind
         case edit_kind::Float:
             return std::format("{}", *reinterpret_cast<const f32 *>(data_ptr));
         case edit_kind::Sid:
-            return lookup_sid(*v.state->m_sidbase, *v.doc->m_file, *reinterpret_cast<const sid64 *>(data_ptr));
+            return v.state->m_sidbase->lookup(*reinterpret_cast<const sid64 *>(data_ptr), v.doc->m_file->m_sidCache);
     }
     return {};
 }
@@ -1132,16 +1124,14 @@ typed_value_text make_typed_value_text(std::string text) {
 }
 
 std::optional<std::string> known_sid_name(value_view v, sid64 hash) {
-    if (v.doc == nullptr || v.doc->m_file == nullptr || v.state == nullptr || v.state->m_sidbase == nullptr) {
+    if (v.state == nullptr || v.state->m_sidbase == nullptr) {
         return std::nullopt;
     }
-    if (const auto cached = v.doc->m_file->m_sidCache.find(hash); cached != v.doc->m_file->m_sidCache.end() && !cached->second.starts_with('#')) {
-        return cached->second;
+    const char* name = v.state->m_sidbase->lookup(hash);
+    if (name == nullptr) {
+        return std::nullopt;
     }
-    if (const char *resolved = v.state->m_sidbase->search(hash)) {
-        return std::string(resolved);
-    }
-    return std::nullopt;
+    return name;
 }
 
 void dv_editable_table_value(value_view v, const void *id, const void *data_ptr, const typed_value_text &value) {
@@ -1238,7 +1228,7 @@ void dv_draw_value(value_view v, const disassembled_values_t::value_type &value,
             std::snprintf(label, sizeof(label), "%s%d", prefix, *entry);
             dv_editable_leaf(v, entry, entry, edit_kind::Int, *entry == 0 ? val_color::IntZero : val_color::Int, label, ": int");
         } else if constexpr (std::is_same_v<T, const u64 *>) {
-            const std::string resolved = lookup_sid(*v.state->m_sidbase, *v.doc->m_file, *entry);
+            const std::string resolved = v.state->m_sidbase->lookup(*entry, v.doc->m_file->m_sidCache);
             std::snprintf(label, sizeof(label), "%s%s", prefix, resolved.c_str());
             dv_editable_leaf(v, entry, entry, edit_kind::Sid, val_color::Sid, label, ": sid");
         } else if constexpr (std::is_same_v<T, const f32 *>) {
@@ -1367,7 +1357,7 @@ typed_value_text symbol_table_value_text(value_view v, const SymbolTable &symbol
                     text = std::format("string: \"{}\"", value_location.get<const char *>() != nullptr ? value_location.get<const char *>() : "");
                     break;
                 case ast::primitive_kind::SID:
-                    text = std::format("sid: {}", lookup_sid(*v.state->m_sidbase, *v.doc->m_file, value_location.get<sid64>()));
+                    text = std::format("sid: {}", v.state->m_sidbase->lookup(value_location.get<sid64>(), v.doc->m_file->m_sidCache));
                     break;
                 default:
                     if (const std::optional<std::string> sid_name = known_sid_name(v, value_location.get<sid64>())) {
@@ -1378,9 +1368,9 @@ typed_value_text symbol_table_value_text(value_view v, const SymbolTable &symbol
                     break;
             }
         } else if constexpr (std::is_same_v<T, ast::function_type>) {
-            text = std::format("function: {}", lookup_sid(*v.state->m_sidbase, *v.doc->m_file, value_location.get<sid64>()));
+            text = std::format("function: {}", v.state->m_sidbase->lookup(value_location.get<sid64>(), v.doc->m_file->m_sidCache));
         } else if constexpr (std::is_same_v<T, ast::ptr_type>) {
-            text = std::format("pointer: {}", lookup_sid(*v.state->m_sidbase, *v.doc->m_file, value_location.get<sid64>()));
+            text = std::format("pointer: {}", v.state->m_sidbase->lookup(value_location.get<sid64>(), v.doc->m_file->m_sidCache));
         } else {
             if (const std::optional<std::string> sid_name = known_sid_name(v, value_location.get<sid64>())) {
                 text = std::format("sid: {}", *sid_name);
@@ -1570,6 +1560,12 @@ void dv_function_switch_and_body(value_view v, const function_disassembly &func,
     if (show_dcpl) {
         const auto it = v.doc->m_decompiled.find(&func);
         if (it != v.doc->m_decompiled.end()) {
+            const auto err_it = v.doc->m_decompErrors.find(&func);
+            if (err_it != v.doc->m_decompErrors.end()) {
+                ImGui::PushStyleColor(ImGuiCol_Text, qui::color::retina_dark::AccentRed);
+                ImGui::TextUnformatted(err_it->second.c_str());
+                ImGui::PopStyleColor();
+            }
             const std::string &text = it->second;
             qui::code::code_window("##dcpl_view", text, dcpl_rules());
         } else {
@@ -1701,11 +1697,11 @@ void draw_entry_detail(app_state &state, document &doc) {
     }
 
     const disassembled_entry &entry = (*doc.m_entries)[static_cast<u32>(doc.m_selectedEntry)];
-    const std::string name = lookup_sid(*state.m_sidbase, *doc.m_file, entry.m_nameId);
-    const std::string type = lookup_sid(*state.m_sidbase, *doc.m_file, entry.m_typeId);
+    const char* name = state.m_sidbase->lookup(entry.m_nameId, doc.m_file->m_sidCache);
+    const char* type = state.m_sidbase->lookup(entry.m_typeId, doc.m_file->m_sidCache);
 
     char suffix[256];
-    std::snprintf(suffix, sizeof(suffix), ": %s  [0x%05X]", type.c_str(), static_cast<u32>(entry.m_offset));
+    std::snprintf(suffix, sizeof(suffix), ": %s  [0x%05X]", type, static_cast<u32>(entry.m_offset));
 
     doc.m_opTarget = doc.m_opPendingTarget;
     doc.m_opMode = doc.m_opPendingMode;
@@ -1722,7 +1718,7 @@ void draw_entry_detail(app_state &state, document &doc) {
     ImGui::PushID(doc.m_selectedEntry);
     const bool entry_is_map = entry.m_typeId == SID("map") || entry.m_typeId == SID("map-32") || entry.m_typeId == SID("render-settings-map") || entry.m_typeId == SID("hash-table");
     const void *entry_id = stable_id(doc, entry.m_offset);
-    const bool open = dv_node(v, entry_id, val_color::EntryName, name.c_str(), suffix, entry.m_values.empty());
+    const bool open = dv_node(v, entry_id, val_color::EntryName, name, suffix, entry.m_values.empty());
     if (open && !entry.m_values.empty()) {
         if (entry_is_map) {
             const structs::map *header = nullptr;

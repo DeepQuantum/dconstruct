@@ -48,40 +48,6 @@ namespace dconstruct {
 }
 
 
-[[nodiscard]] const char *Disassembler::lookup(const sid64 sid) {
-    auto res = m_currentFile->m_sidCache.find(sid);
-    if (res != m_currentFile->m_sidCache.end()) {
-        return res->second.c_str();
-    }
-
-    const char *hash_string = m_sidbase->search(sid);
-    if (hash_string == nullptr) {
-        auto [iter, inserted] = m_currentFile->m_sidCache.emplace(sid, int_to_string_id<sid64>(sid));
-        hash_string = iter->second.c_str();
-    } else {
-        m_currentFile->m_sidCache.emplace(sid, hash_string);
-    }
-    return hash_string;
-}
-
-[[nodiscard]] const char *Disassembler::lookup(const sid32 sid) {
-    auto res = m_currentFile->m_sidCache.find(sid);
-    if (res != m_currentFile->m_sidCache.end()) {
-        return res->second.c_str();
-    }
-
-    const char *hash_string = m_sidbase->search(sid);
-    if (hash_string == nullptr) {
-        auto [iter, inserted] = m_currentFile->m_sidCache.emplace(sid, int_to_string_id<sid32>(sid));
-        hash_string = iter->second.c_str();
-    } else {
-        m_currentFile->m_sidCache.emplace(sid, hash_string);
-    }
-    return hash_string;
-}
-
-
-
 [[nodiscard]] bool Disassembler::is_unmapped_sid(const location loc) const noexcept {
     const bool in_range = loc.get<sid64>() >= m_sidbase->m_lowestSid && loc.get<sid64>() <= m_sidbase->m_highestSid;
     const bool is_fileptr = m_currentFile->is_file_ptr(loc);
@@ -426,17 +392,17 @@ std::string Disassembler::disassembly_to_string(const std::vector<disassembled_e
                         case ast::primitive_kind::U64: append_format("uint64: %llu\n", value_location.get<u64>()); break;
                         case ast::primitive_kind::F32: append_format("float: %f\n", value_location.get<f32>()); break;
                         case ast::primitive_kind::STRING: append_format("string: \"%s\"\n", value_location.get<const char*>()); break;
-                        case ast::primitive_kind::SID: append_format("sid: %s\n", lookup(value_location.get<sid64>())); break;
+                        case ast::primitive_kind::SID: append_format("sid: %s\n", m_sidbase->lookup(value_location.get<sid64>(), m_currentFile->m_sidCache)); break;
                         default: append_format("unknown: %llu\n", value_location.get<u64>()); break;
                     }
                 } else if constexpr (std::is_same_v<T, ast::function_type>) {
                     if (entry.m_return != nullptr && !is_unknown(*entry.m_return)) {
-                        append_format("function: %s%s\n", lookup(value_location.get<sid64>()), ast::type_to_declaration_string(entry).c_str());
+                        append_format("function: %s%s\n", m_sidbase->lookup(value_location.get<sid64>(), m_currentFile->m_sidCache), ast::type_to_declaration_string(entry).c_str());
                     } else {
-                        append_format("function: %s\n", lookup(value_location.get<sid64>()));
+                        append_format("function: %s\n", m_sidbase->lookup(value_location.get<sid64>(), m_currentFile->m_sidCache));
                     }
                 } else if constexpr (std::is_same_v<T, ast::ptr_type>) {
-                    append_format("pointer: \"%s\" (%s)\n", lookup(value_location.get<sid64>()), ast::type_to_declaration_string(entry).c_str());
+                    append_format("pointer: \"%s\" (%s)\n", m_sidbase->lookup(value_location.get<sid64>(), m_currentFile->m_sidCache), ast::type_to_declaration_string(entry).c_str());
                 } else if constexpr (std::is_same_v<T, std::monostate>) {
                     append_format("unknown: %llu\n", value_location.get<u64>());
                 } else {
@@ -482,7 +448,7 @@ std::string Disassembler::disassembly_to_string(const std::vector<disassembled_e
         if (type_id == 0) {
             append_format("anonymous struct [0x%05X] {\n", offset);
         } else {
-            append_format("%s [0x%05X] {\n", lookup(type_id), offset);
+            append_format("%s [0x%05X] {\n", m_sidbase->lookup(type_id, m_currentFile->m_sidCache), offset);
         }
 
         if (type_id == SID("script-lambda")) {
@@ -556,7 +522,7 @@ std::string Disassembler::disassembly_to_string(const std::vector<disassembled_e
             } else if constexpr (std::is_same_v<T, const i32*> || std::is_same_v<T, const u32*>) {
                 append_format("int: %d\n", *entry);
             } else if constexpr (std::is_same_v<T, const u64*>) {
-                append_format("sid: %s\n", lookup(*entry));
+                append_format("sid: %s\n", m_sidbase->lookup(*entry, m_currentFile->m_sidCache));
             } else if constexpr (std::is_same_v<T, const f32*>) {
                 append_format("float: %.2f\n", *entry);
             } else if constexpr (std::is_same_v<T, const char*>) {
@@ -574,7 +540,7 @@ std::string Disassembler::disassembly_to_string(const std::vector<disassembled_e
         append_format("  ENTRY %u  ", i);
         out += ENTRY_SEP;
         out += "\n\n";
-        append_format("%s = ", lookup(entry.m_nameId));
+        append_format("%s = ", m_sidbase->lookup(entry.m_nameId, m_currentFile->m_sidCache));
         append_struct_like(entry.m_typeId, entry.m_offset, entry.m_values, 0);
     }
 
@@ -591,7 +557,7 @@ std::string Disassembler::disassembly_to_string(const std::vector<disassembled_e
 disassembled_entry Disassembler::insert_entry(const Entry *entry) {
     m_currentEmbeddedFunctionId = embedded_function_id{};
     const structs::unmapped *struct_ptr = reinterpret_cast<const structs::unmapped*>(reinterpret_cast<const u64*>(entry->m_entryPtr) - 1);
-    const char* entry_name = lookup(entry->m_nameID);
+    const char* entry_name = m_sidbase->lookup(entry->m_nameID, m_currentFile->m_sidCache);
     m_currentEmbeddedFunctionId.m_entry = entry_name;
     disassembled_value entry_value = insert_struct(struct_ptr, entry->m_nameID, entry->m_typeId);
     return disassembled_entry{
@@ -609,7 +575,7 @@ disassembled_value Disassembler::insert_struct(const structs::unmapped *struct_p
     const u64 offset = get_offset(&struct_ptr->m_data);
     
     sid64 effective_type_id = type_id != 0 ? type_id : struct_ptr->typeID;
-    const char* struct_name = lookup(effective_type_id);
+    const char* struct_name = m_sidbase->lookup(effective_type_id, m_currentFile->m_sidCache);
     disassembled_value value{
         .m_typeId = effective_type_id,
         .m_offset = offset,
@@ -649,7 +615,7 @@ disassembled_value Disassembler::insert_struct(const structs::unmapped *struct_p
                     break;
                 }
             } else {
-                name = lookup(name_id);
+                name = m_sidbase->lookup(name_id, m_currentFile->m_sidCache);
             }
             std::shared_ptr<function_disassembly> function = create_function_disassembly(script_lambda, std::move(name));
             function->m_isEmbeddedFunction = name_id == 0;
@@ -765,8 +731,8 @@ std::optional<ast::variable_declaration> Disassembler::insert_variable(const SsD
         return std::nullopt;
     }
 
-    ast::full_type type = state_script_decl_type(var->m_declTypeId, lookup(var->m_declTypeId));
-    std::string name = sid_lexeme(lookup(var->m_declId));
+    ast::full_type type = state_script_decl_type(var->m_declTypeId, m_sidbase->lookup(var->m_declTypeId, m_currentFile->m_sidCache));
+    std::string name = sid_lexeme(m_sidbase->lookup(var->m_declId, m_currentFile->m_sidCache));
     if (var->m_pDeclValue == nullptr) {
         return ast::variable_declaration(std::move(type), std::move(name));
     }
@@ -785,7 +751,7 @@ std::optional<ast::variable_declaration> Disassembler::insert_variable(const SsD
             return ast::variable_declaration(std::move(type), std::move(name), std::string(str != nullptr ? str : ""));
         }
         case SID("symbol"): {
-            expr_uptr sid = std::make_unique<ast::sid_identifier>(sid_lexeme(lookup(*reinterpret_cast<sid64*>(var->m_pDeclValue))));
+            expr_uptr sid = std::make_unique<ast::sid_identifier>(sid_lexeme(m_sidbase->lookup(*reinterpret_cast<sid64*>(var->m_pDeclValue), m_currentFile->m_sidCache)));
             return ast::variable_declaration(std::move(type), std::move(name), std::move(sid));
         }
         case SID("int32"): {
@@ -815,7 +781,7 @@ ast::state_script_block Disassembler::insert_on_block(const SsOnBlock *block, st
             break;
         }
         case BLOCK_TYPE::EVENT: {
-            function_name.m_event.m_name = std::string("event ").append(raw_sid_name(lookup(block->m_blockEventId)));
+            function_name.m_event.m_name = std::string("event ").append(raw_sid_name(m_sidbase->lookup(block->m_blockEventId, m_currentFile->m_sidCache)));
             break;
         }
         case BLOCK_TYPE::UPDATE: {
@@ -834,7 +800,7 @@ ast::state_script_block Disassembler::insert_on_block(const SsOnBlock *block, st
 
     for (i16 i = 0; i < block->m_trackGroup.m_numTracks; ++i) {
         SsTrack *track_ptr = block->m_trackGroup.m_aTracks + i;
-        function_name.m_track = {raw_sid_name(lookup(track_ptr->m_trackId)), static_cast<u32>(i)};
+        function_name.m_track = {raw_sid_name(m_sidbase->lookup(track_ptr->m_trackId, m_currentFile->m_sidCache)), static_cast<u32>(i)};
         std::vector<ast::state_script_lambda> lambdas;
         lambdas.reserve(track_ptr->m_totalLambdaCount);
 
@@ -851,7 +817,7 @@ ast::state_script_block Disassembler::insert_on_block(const SsOnBlock *block, st
     }
 
     if (block->m_blockType == BLOCK_TYPE::EVENT) {
-        return ast::state_script_block(raw_sid_name(lookup(block->m_blockEventId)), std::move(tracks));
+        return ast::state_script_block(raw_sid_name(m_sidbase->lookup(block->m_blockEventId, m_currentFile->m_sidCache)), std::move(tracks));
     }
     return ast::state_script_block(block->m_blockType, std::move(tracks));
 }
@@ -863,7 +829,7 @@ ast::state_script Disassembler::insert_state_script(const StateScript *stateScri
         const SymbolArray *s_array = stateScript->m_pSsOptions->m_pSymbolArray;
         options.reserve(s_array->m_numEntries);
         for (i32 i = 0; i < s_array->m_numEntries; ++i) {
-            options.emplace_back(sid_lexeme(lookup(s_array->m_pSymbols[i])));
+            options.emplace_back(sid_lexeme(m_sidbase->lookup(s_array->m_pSymbols[i], m_currentFile->m_sidCache)));
         }
     }
 
@@ -884,7 +850,7 @@ ast::state_script Disassembler::insert_state_script(const StateScript *stateScri
     state_script_function_id anon_name;
     for (i16 i = 0; i < stateScript->m_stateCount; ++i) {
         SsState *state_ptr = stateScript->m_pSsStateTable + i;
-        anon_name.m_state = {raw_sid_name(lookup(state_ptr->m_stateId)), static_cast<u32>(i)};
+        anon_name.m_state = {raw_sid_name(m_sidbase->lookup(state_ptr->m_stateId, m_currentFile->m_sidCache)), static_cast<u32>(i)};
         std::vector<ast::state_script_block> blocks;
         blocks.reserve(state_ptr->m_numSsOnBlocks);
         for (i64 j = 0; j < state_ptr->m_numSsOnBlocks; ++j) {
@@ -895,7 +861,7 @@ ast::state_script Disassembler::insert_state_script(const StateScript *stateScri
     }
 
     ast::state_script script{
-        raw_sid_name(lookup(stateScript->m_stateScriptId)),
+        raw_sid_name(m_sidbase->lookup(stateScript->m_stateScriptId, m_currentFile->m_sidCache)),
         std::move(options),
         std::move(declarations),
         std::move(states)
@@ -1104,7 +1070,7 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
     char op2_str[interpreted_buffer_size] = {0}; 
 
     if (!istr.destination_is_immediate()) {
-        frame.to_string(dst_str, interpreted_buffer_size, dest, lookup(frame[dest].m_value));
+        frame.to_string(dst_str, interpreted_buffer_size, dest, m_sidbase->lookup(frame[dest].m_value, m_currentFile->m_sidCache));
         if (!is_unknown(frame[dest].m_type) && frame[dest].m_containsArg) {
             if (const auto *ft_ptr = std::get_if<ast::function_type>(&frame[dest].m_type)) {
                 frame.m_registerArgs[frame[dest].m_argNum] = *ft_ptr->m_return;
@@ -1118,10 +1084,10 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
         }
     }
     if (!istr.operand1_is_immediate()) {
-        frame.to_string(op1_str, interpreted_buffer_size, op1, lookup(frame[op1].m_value));
+        frame.to_string(op1_str, interpreted_buffer_size, op1, m_sidbase->lookup(frame[op1].m_value, m_currentFile->m_sidCache));
     }
     if (!istr.operand2_is_immediate()) {
-        frame.to_string(op2_str, interpreted_buffer_size, op2, lookup(frame[op2].m_value));
+        frame.to_string(op2_str, interpreted_buffer_size, op2, m_sidbase->lookup(frame[op2].m_value, m_currentFile->m_sidCache));
     }
     const Opcode opcode = istr.opcode;
     switch (opcode) {
@@ -1143,7 +1109,7 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
                 frame[dest].m_value = frame[op1].m_value;
                 frame[dest].m_pointerOffset += frame[op2].m_pointerOffset;
             }
-            frame.to_string(dst_str, interpreted_buffer_size, dest, lookup(frame[dest].m_value));
+            frame.to_string(dst_str, interpreted_buffer_size, dest, m_sidbase->lookup(frame[dest].m_value, m_currentFile->m_sidCache));
             std::snprintf(interpreted, interpreted_buffer_size, "r%d = %s + %s", dest, op1_str, op2_str);
             break;
         }
@@ -1219,7 +1185,7 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
             frame[dest].m_type = ast::ptr_type{};
             frame[dest].m_value = frame[op1].m_value;
             frame[dest].m_pointerOffset = frame[op1].m_pointerOffset;
-            frame.to_string(dst_str, interpreted_buffer_size, op1, lookup(frame[op1].m_value));
+            frame.to_string(dst_str, interpreted_buffer_size, op1, m_sidbase->lookup(frame[op1].m_value, m_currentFile->m_sidCache));
             std::snprintf(interpreted, interpreted_buffer_size, "r%d = *(p64*)%s", dest, dst_str);
             break;
         }
@@ -1252,12 +1218,12 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
                 const i64 value = frame.m_symbolTable.get<i64>(op1);
                 frame[dest].m_type = make_type_from_prim(ast::primitive_kind::I64);
                 table_entry = make_type_from_prim(ast::primitive_kind::I64);
-                std::snprintf(interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%s>", dest, op1, lookup(static_cast<sid64>(value)));
+                std::snprintf(interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%s>", dest, op1, m_sidbase->lookup(static_cast<sid64>(value), m_currentFile->m_sidCache));
             } else {
                 const i32 value = frame.m_symbolTable.get<i32>(op1);
                 frame[dest].m_type = make_type_from_prim(ast::primitive_kind::I32);
                 table_entry = make_type_from_prim(ast::primitive_kind::I32);
-                std::snprintf(interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%s>", dest, op1, lookup(static_cast<sid32>(value)));
+                std::snprintf(interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%s>", dest, op1, m_sidbase->lookup(static_cast<sid32>(value), m_currentFile->m_sidCache));
             }
             break;
         }
@@ -1266,7 +1232,7 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
             const f32 value = frame.m_symbolTable.get<f32>(op1);
             frame[dest].m_type = make_type_from_prim(ast::primitive_kind::F32);
             table_entry = make_type_from_prim(ast::primitive_kind::F32);
-            std::snprintf(interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%s>", dest, op1, lookup(static_cast<sid64>(value)));
+            std::snprintf(interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%s>", dest, op1, m_sidbase->lookup(static_cast<sid64>(value), m_currentFile->m_sidCache));
             break;
         }
         case Opcode::LookupPointer: {
@@ -1282,7 +1248,7 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
             frame[dest].m_fromSymbolTable = op1;
             const bool is_function = pointer_gets_called(dest, istr_idx + 1, fn);
             const ast::full_type existing_type = ast::function_type{};
-            std::snprintf(interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%s>", dest, op1, lookup(value));
+            std::snprintf(interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%s>", dest, op1, m_sidbase->lookup(value, m_currentFile->m_sidCache));
             if (is_function) {
                 table_entry = existing_type;
                 frame[dest].m_type = existing_type;
@@ -1311,7 +1277,7 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
             frame[op1].set_first_type(ast::ptr_type{});
             std::snprintf(varying, disassembly_text_size, "r%d, %d", dest, op1);
             frame[dest].m_type = ast::ptr_type{};
-            std::snprintf(interpreted, interpreted_buffer_size, "r%d = r%d <%s>", dest, op1, lookup(frame[op1].m_value));
+            std::snprintf(interpreted, interpreted_buffer_size, "r%d = r%d <%s>", dest, op1, m_sidbase->lookup(frame[op1].m_value, m_currentFile->m_sidCache));
             break;
         }
         case Opcode::CastInteger: {
@@ -1331,7 +1297,7 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
         case Opcode::CallFf: {
             std::snprintf(varying, disassembly_text_size, "r%d, r%d, %d", dest, op1, op2);
             char comment_str[300];
-            const char* function_name = lookup(frame[op1].m_value);
+            const char* function_name = m_sidbase->lookup(frame[op1].m_value, m_currentFile->m_sidCache);
             u8 offset = std::snprintf(comment_str, sizeof(comment_str), "r%d = %s(", dest, function_name);
             for (u64 i = 0; i < op2; ++i) {
                 if (i != 0) {
@@ -1343,7 +1309,7 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
                     ftype = ast::function_type{};
                 }
                 std::get<ast::function_type>(ftype).m_arguments.emplace_back("", arg_type);
-                frame.to_string(dst_str, interpreted_buffer_size, ARGUMENT_REGISTERS_IDX + i, lookup(frame[i + ARGUMENT_REGISTERS_IDX].m_value));
+                frame.to_string(dst_str, interpreted_buffer_size, ARGUMENT_REGISTERS_IDX + i, m_sidbase->lookup(frame[i + ARGUMENT_REGISTERS_IDX].m_value, m_currentFile->m_sidCache));
                 offset += std::snprintf(comment_str + offset, sizeof(comment_str) - offset, "%s", dst_str);
             }
             if (auto* ft_ptr = std::get_if<ast::function_type>(&frame[dest].m_type)) {
@@ -1551,7 +1517,7 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
             if (frame[op1].is_pointer()) {
                 frame[dest].m_value = frame[op1].m_value;
                 frame[dest].m_pointerOffset =  frame[op1].m_pointerOffset + op2;
-                resolved = lookup(frame[dest].m_value);
+                resolved = m_sidbase->lookup(frame[dest].m_value, m_currentFile->m_sidCache);
             }
             frame[dest].m_type = frame[op1].m_type;
             frame.to_string(dst_str, interpreted_buffer_size, op1, resolved);
@@ -1588,7 +1554,7 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
         case Opcode::LoadStaticU64Imm: {
             std::snprintf(varying, disassembly_text_size,"r%d, %d", dest, op1);
             const u64 value = frame.m_symbolTable.get<u64>(op1);
-            const char *hash_str = lookup(value);
+            const char *hash_str = m_sidbase->lookup(value, m_currentFile->m_sidCache);
             frame[dest].m_type = make_type_from_prim(ast::primitive_kind::SID);
             frame[dest].m_value = value;
             table_entry = make_type_from_prim(ast::primitive_kind::SID);
@@ -1614,7 +1580,7 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
             if (m_game == game_type::UC4) {
                 std::snprintf(varying, disassembly_text_size,"r%d, %d", dest, op1);
                 const sid32 value = frame.m_symbolTable.get<sid32>(op1);
-                const char *hash_str = lookup(value);
+                const char *hash_str = m_sidbase->lookup(value, m_currentFile->m_sidCache);
                 frame[dest].m_type = make_type_from_prim(ast::primitive_kind::SID);
                 frame[dest].m_value = value;
                 table_entry = make_type_from_prim(ast::primitive_kind::SID);

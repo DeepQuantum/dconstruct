@@ -5,26 +5,6 @@ using namespace std::literals;
 
 namespace dconstruct::dcompiler {
 
-static constexpr u8 MIN_GRAPH_SIZE = 0;
-
-static const auto and_token = compilation::token{ compilation::token_type::AMPERSAND_AMPERSAND, "&&" };
-static const auto or_token = compilation::token{ compilation::token_type::PIPE_PIPE, "||" };
-static const auto equal_nullptr_token = compilation::token{ compilation::token_type::EQUAL_EQUAL, "==" };
-static const auto not_equal_nullptr_token = compilation::token{ compilation::token_type::BANG_EQUAL, "!=" };
-
-namespace {
-
-[[nodiscard]] bool is_explicit_condition_expression(const ast::expression& expression) noexcept {
-    if (const std::optional<ast::full_type> type = expression.get_type();
-        type && std::holds_alternative<ast::primitive_type>(*type) &&
-        std::get<ast::primitive_type>(*type).m_type == ast::primitive_kind::BOOL) {
-        return true;
-    }
-    return dynamic_cast<const ast::compare_expr*>(&expression) != nullptr ||
-        dynamic_cast<const ast::logical_expr*>(&expression) != nullptr;
-}
-
-}
 
 
 std::string decomp_function::get_next_var() {
@@ -83,7 +63,7 @@ void decomp_function::append_to_current_block(expr_uptr&& expr) {
 //#define _TRACE
 
 
-const ast::function_definition& decomp_function::decompile(const bool optimization_passes) &
+const ast::function_definition& decomp_function::decompile(const OPTIMIZATION_KIND optimizations) &
 {
     if (m_graphPath && m_graph.m_nodes.size() > MIN_GRAPH_SIZE) {
         m_graph.write_image(m_graphPath->string());
@@ -109,7 +89,7 @@ const ast::function_definition& decomp_function::decompile(const bool optimizati
     emit_node(m_graph[0], m_graph.m_nodes.back().m_index);
     parse_basic_block(m_graph.m_nodes.back());
 
-    if (optimization_passes) {
+    if ((u8)optimizations & (u8)OPTIMIZATION_KIND::AST) {
         optimize_ast();
     }
 
@@ -117,12 +97,12 @@ const ast::function_definition& decomp_function::decompile(const bool optimizati
 }
 
 
-[[nodiscard]] ast::function_definition decomp_function::decompile(const bool optimization_passes) && {
-    decompile(optimization_passes);
+[[nodiscard]] ast::function_definition decomp_function::decompile(const OPTIMIZATION_KIND optimizations) && {
+    decompile(optimizations);
     return std::move(m_functionDefinition);
 }
 
-state_script_functions::state_script_functions(const std::vector<ast::function_definition>& funcs, const BinaryFile* binary_file) noexcept : m_binFile(binary_file) {
+state_script_functions::state_script_functions(const std::vector<ast::function_definition>& funcs, const BinaryFile* binary_file, const SIDBase* sidbase) noexcept : m_binFile(binary_file), m_sidbase(sidbase) {
     for (const auto& func : funcs) {
         if (std::holds_alternative<std::string>(func.m_name)) {
             m_nonStateScriptFuncs.push_back(&func);
@@ -215,7 +195,7 @@ void state_script_functions::emit_script_metadata(ast::ast_serialization_buffer&
         buffer.indent_more();
         for (i32 i = 0; i < array->m_numEntries; ++i){
             buffer.append_indent();
-            buffer.append(m_binFile->m_sidCache.at(array->m_pSymbols[i]), '\n');
+            buffer.append(std::string_view{m_sidbase->lookup(array->m_pSymbols[i], m_binFile->m_sidCache)}, '\n');
         }
         buffer.indent_less();
         buffer.append_indent();
@@ -231,7 +211,7 @@ void state_script_functions::emit_script_metadata(ast::ast_serialization_buffer&
             const bool is_nullptr = decl->m_pDeclValue == nullptr;
             if (decl->m_isVar) {
                 buffer.append_indent();
-                std::string decl_name = m_binFile->m_sidCache.at(decl->m_declId);
+                std::string_view decl_name = m_sidbase->lookup(decl->m_declId, m_binFile->m_sidCache);
                 switch (decl->m_declTypeId) {
                     case SID("boolean"): {
                         buffer.append("bool "sv, decl_name, " = "sv);
@@ -283,7 +263,7 @@ void state_script_functions::emit_script_metadata(ast::ast_serialization_buffer&
                     case SID("symbol"): {
                         buffer.append("symbol "sv, decl_name, " = "sv);
                         if (!is_nullptr) {
-                            buffer.append(m_binFile->m_sidCache.at(*reinterpret_cast<const sid64*>(decl->m_pDeclValue)));
+                            buffer.append(std::string_view{m_sidbase->lookup(*reinterpret_cast<const sid64*>(decl->m_pDeclValue), m_binFile->m_sidCache)});
                         } else {
                             buffer.append("nullptr"sv);
                         }
@@ -448,7 +428,7 @@ void decomp_function::parse_basic_block(const control_flow_node &node) {
                     generated_expression = std::make_unique<ast::literal>(symbol_table.get<u32>(istr.operand1)); break;
                 } else {
                     const sid32 sid = symbol_table.get<sid32>(istr.operand1);
-                    const std::string& name = m_file.m_sidCache.at(sid);
+                    const char* name = m_sidbase.lookup(sid, m_file.m_sidCache);
                     expr_uptr lit = std::make_unique<ast::sid_identifier>(name);
                     const auto& type = m_disassembly.m_stackFrame.m_symbolTable.m_types[istr.operand1];
                     if (!std::holds_alternative<ast::function_type>(type)) {
@@ -507,12 +487,12 @@ void decomp_function::parse_basic_block(const control_flow_node &node) {
                 expr_uptr lit = nullptr;
                 if (m_is64Bit) {
                     const sid64 sid = symbol_table.get<sid64>(istr.operand1);
-                    const std::string& name = m_file.m_sidCache.at(sid);
+                    const char* name = m_sidbase.lookup(sid, m_file.m_sidCache);
                     lit = std::make_unique<ast::sid_identifier>(name);
-                    
+
                 } else {
                     const sid32 sid = symbol_table.get<sid32>(istr.operand1);
-                    const std::string& name = m_file.m_sidCache.at(sid);
+                    const char* name = m_sidbase.lookup(sid, m_file.m_sidCache);
                     lit = std::make_unique<ast::sid_identifier>(name);
                 }
                 const auto& type = m_disassembly.m_stackFrame.m_symbolTable.m_types[istr.operand1];
@@ -757,7 +737,8 @@ void decomp_function::emit_for_loop(const control_flow_loop& loop, const node_id
         parse_basic_block(current_node);
         auto current_expression = get_expression_as_condition(last_line.m_instruction.operand1);
         if (current_expression == nullptr) {
-            throw std::runtime_error("error: current expression was nullptr");
+            current_expression = error_replacement_expr->clone();
+            m_error = "current expression was nullptr in make loop condition";
         }
         if (!condition) {
             condition = std::move(current_expression);
@@ -931,7 +912,8 @@ void decomp_function::emit_branch(ast::block &else_block, const node_id target, 
         const reg_idx reg = std::countr_zero(bits);
         bits &= bits - 1;
         if (m_registersToVars[reg].empty()) {
-            throw std::runtime_error("error: register_to_vars is empty");
+            m_registersToVars[reg].push(ast::clone_cast<ast::identifier>(error_replacement_expr));
+            m_error = "register_to_vars is empty in emit_branch";
         }
         load_expression_into_existing_var(reg, m_registersToVars[reg].top()->copy());
         if (!is_unknown(m_transformableExpressions[reg]->get_type_unchecked(m_env))) {
@@ -959,7 +941,8 @@ void decomp_function::load_expression_into_new_var(const reg_idx dst) {
 
 void decomp_function::load_expression_into_existing_var(const reg_idx dst, std::unique_ptr<ast::identifier>&& var) {
     if (!m_transformableExpressions[dst]) {
-        throw std::runtime_error("error: expressions was empty at " + std::to_string(dst));
+        m_transformableExpressions[dst] = error_replacement_expr->clone();
+        m_error = std::format("expressions was empty at {}", dst);
     }
     auto& expr = m_transformableExpressions[dst];
     if (expr->identifier_name_equals(var->m_name.m_lexeme)) {
@@ -992,9 +975,7 @@ template<ast::primitive_kind kind>
     expr_uptr callee = m_transformableExpressions[istr.destination]->clone();
     std::vector<expr_uptr> args;
     const auto& callee_type = callee->get_type_unchecked(m_env);
-    if (!std::holds_alternative<ast::function_type>(callee_type)) {
-        throw std::runtime_error("error: trying to call non-function");
-    }
+    assert(std::holds_alternative<ast::function_type>(callee_type));
     ast::function_type func_type = std::get<ast::function_type>(callee_type);
 
     for (reg_idx i = 0; i < istr.operand2; ++i) {
@@ -1032,25 +1013,14 @@ template<typename to>
 }
 
 
-[[nodiscard]] expr_uptr decomp_function::get_expression_as_condition(const reg_idx src) const {
+[[nodiscard]] expr_uptr decomp_function::get_expression_as_condition(const reg_idx src) {
     if (m_transformableExpressions[src] == nullptr) {
-        throw std::runtime_error("error: empty expression at " + std::to_string(src));
+        m_transformableExpressions[src] = error_replacement_expr->clone();
+        m_error = std::format("empty expression at {}", src);
     }
     expr_uptr condition = m_transformableExpressions[src]->clone();
-    if (!is_explicit_condition_expression(*condition)) {
-        if (const auto* logical_not = dynamic_cast<const ast::logical_not_expr*>(condition.get())) {
-            condition = std::make_unique<ast::compare_expr>(
-                equal_nullptr_token,
-                logical_not->m_rhs->clone(),
-                std::make_unique<ast::literal>(nullptr)
-            );
-        } else {
-            condition = std::make_unique<ast::compare_expr>(
-                not_equal_nullptr_token,
-                std::move(condition),
-                std::make_unique<ast::literal>(nullptr)
-            );
-        }
+    if (std::holds_alternative<ast::ptr_type>(condition->get_type_unchecked(m_env)) || std::holds_alternative<ast::function_type>(condition->get_type_unchecked(m_env))) {
+        condition = std::make_unique<ast::compare_expr>(compilation::token{ compilation::token_type::BANG_EQUAL, "!=" }, std::move(condition), std::make_unique<ast::literal>(nullptr));
     }
     return condition;
 }
