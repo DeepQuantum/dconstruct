@@ -11,6 +11,14 @@ std::string decomp_function::get_next_var() {
     return "var_" + std::to_string(m_varCount++);
 }
 
+[[nodiscar]] std::unique_ptr<ast::identifier> decomp_function::make_current_var(const ast::full_type& type, expr_uptr expr) {
+    if (auto var_mapped_entry = m_functionScope->find(m_varCount); var_mapped_entry != m_functionScope->end()) {
+
+    }
+
+    return std::make_unique<ast::identifier>(get_next_var());
+} 
+
 void decomp_function::append_to_current_block(stmnt_uptr&& statement) {
     m_blockStack.top().get().m_statements.push_back(std::move(statement));
 }
@@ -617,7 +625,8 @@ void decomp_function::emit_if(const control_flow_node& node, const node_id stop_
         parse_basic_block(*current_node);
         const auto& token = current_node->m_lines.back().m_instruction.opcode == Opcode::BranchIf ? or_token : and_token;
         if (!m_transformableExpressions[check_register]) {
-            m_transformableExpressions[check_register] = std::make_unique<ast::identifier>("CHECK_REGISTER_INSERT");
+            m_transformableExpressions[check_register] = error_replacement_expr->clone();
+            m_error = "if statement check register empty";
         }
         final_condition = std::make_unique<ast::compare_expr>(token, std::move(final_condition), m_transformableExpressions[check_register]->clone());
         current_node = current_node->has_following() ? &m_graph[current_node->m_followingNode] : target;
@@ -686,8 +695,19 @@ void decomp_function::emit_for_loop(const control_flow_loop& loop, const node_id
     while (bits != 0) {
         const reg_idx reg = std::countr_zero(bits);
         bits &= bits - 1;
-        m_registersToVars[reg].push(std::make_unique<ast::identifier>(get_next_var()));
-        regs_to_type.emplace(reg, std::monostate());
+        if (const auto* scope_entry = find_in_scope()) {
+            const auto& [type, opt_alias] = *scope_entry;
+            if (opt_alias) {
+                m_varCount++;
+            }
+            auto id = std::make_unique<ast::identifier>(opt_alias ? *opt_alias : get_next_var());
+            id->set_type(type);
+            regs_to_type.emplace(reg, type);
+            m_registersToVars[reg].push(std::move(id));
+        } else {
+            m_registersToVars[reg].push(std::make_unique<ast::identifier>(get_next_var()));
+            regs_to_type.emplace(reg, std::monostate());
+        }
     }
 
     m_blockStack.push(*loop_block);
@@ -863,8 +883,19 @@ void decomp_function::emit_if_else(const control_flow_node &node, node_id stop_n
         while (bits != 0) {
             const reg_idx reg = std::countr_zero(bits);
             bits &= bits - 1;
-            m_registersToVars[reg].push(std::make_unique<ast::identifier>(get_next_var()));
-            regs_to_type.emplace(reg, std::monostate());
+            if (const auto* scope_entry = find_in_scope()) {
+                const auto& [type, opt_alias] = *scope_entry;
+                if (opt_alias) {
+                    m_varCount++;
+                }
+                auto id = std::make_unique<ast::identifier>(opt_alias ? *opt_alias : get_next_var());
+                id->set_type(type);
+                regs_to_type.emplace(reg, type);
+                m_registersToVars[reg].push(std::move(id));
+            } else {
+                m_registersToVars[reg].push(std::make_unique<ast::identifier>(get_next_var()));
+                regs_to_type.emplace(reg, std::monostate());
+            }
         }
     }
 
@@ -924,9 +955,22 @@ void decomp_function::emit_branch(ast::block &else_block, const node_id target, 
 
 void decomp_function::load_expression_into_new_var(const reg_idx dst) {
     auto& expr = m_transformableExpressions[dst];
-    auto id = std::make_unique<ast::identifier>(get_next_var());
+    std::unique_ptr<ast::identifier> id;
+    ast::full_type type;
+    if (const auto* entry = find_in_scope()) {
+        const auto& [mapped_type, opt_alias] = *entry;
+        // refactor ofc
+        if (opt_alias) {
+            m_varCount++;
+        }
+        id = std::make_unique<ast::identifier>(opt_alias ? *opt_alias : get_next_var());
+        type = mapped_type;
+    } else {
+        id = std::make_unique<ast::identifier>(get_next_var());
+        type = expr->get_type_unchecked(m_env);
+
+    }
     const std::string name = id->m_name.m_lexeme;
-    const ast::full_type type = expr->get_type_unchecked(m_env);
 
     auto var_declaration = std::make_unique<ast::variable_declaration>(type, name, std::move(expr));
 

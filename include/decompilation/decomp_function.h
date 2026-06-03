@@ -33,7 +33,7 @@ namespace dconstruct::dcompiler {
             ControlFlowGraph graph,
             std::optional<std::filesystem::path> graph_path = std::nullopt,
             const std::unordered_map<sid64, ast::full_type>* known_types = nullptr,
-            const ast::function_to_mapped_vars* function_scopes = nullptr) noexcept :
+            const ast::mapped_var_scope* function_scope = nullptr) noexcept :
         m_disassembly(func),
         m_file(file),
         m_sidbase(sidbase),
@@ -42,9 +42,19 @@ namespace dconstruct::dcompiler {
         m_parsedNodes(graph.m_nodes.size(), false),
         m_ipdomsEmitted(m_graph.m_nodes.size(), false),
         m_knownTypes(known_types),
-        m_functionScopes(function_scopes) {};
+        m_functionScope(function_scope) {};
 
         [[nodiscard]] ast::function_definition decompile(const OPTIMIZATION_KIND optimizations = OPTIMIZATION_KIND::NONE);
+
+        [[nodiscard]] const std::pair<ast::full_type, std::optional<std::string>>* find_in_scope() {
+            if (m_functionScope) {
+                if (const auto scope_entry = m_functionScope->find(m_varCount); scope_entry != m_functionScope->end()) {
+                    return &scope_entry->second;
+                }
+                return nullptr;
+            }
+            return nullptr;
+        }
 
         decomp_function& operator=(decomp_function&&) noexcept = default;
 
@@ -54,7 +64,7 @@ namespace dconstruct::dcompiler {
         ControlFlowGraph m_graph;
         std::unordered_map<reg_idx, std::stack<std::unique_ptr<ast::identifier>>> m_registersToVars;
         const std::unordered_map<sid64, ast::full_type>* m_knownTypes;
-        const ast::function_to_mapped_vars* m_functionScopes;
+        const ast::mapped_var_scope* m_functionScope;
         std::array<expr_uptr, MAX_REGISTER> m_transformableExpressions;
         std::vector<ast::variable_declaration> m_arguments;
         std::stack<std::reference_wrapper<ast::block>> m_blockStack;
@@ -118,6 +128,8 @@ namespace dconstruct::dcompiler {
         [[nodiscard]] expr_uptr make_loop_condition(const node_id head_start, const node_id head_end, const node_id loop_entry, const node_id loop_exit);
 
         [[nodiscard]] expr_uptr get_expression_as_condition(const reg_idx from);
+
+        [[nodiscard]] std::unique_ptr<ast::identifier> make_current_var(const ast::full_type& type, expr_uptr expr = nullptr);
 
         void insert_return(const reg_idx dest);
 

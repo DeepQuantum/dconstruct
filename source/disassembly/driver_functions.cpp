@@ -263,14 +263,25 @@ void decomp_file(
         }
 
         for (const auto& func : funcs) {
+
             std::optional<std::filesystem::path> graph_path = std::nullopt;
             if (write_graphs) {
                 auto graph_dir = std::filesystem::path(out_decomp_filename).replace_extension("").concat("_graphs");
                 std::filesystem::create_directories(graph_dir);
                 graph_path = get_sanitized_graph_path(graph_dir, func->get_id());
             }
-            dconstruct::dcompiler::decomp_function decomp_func{*func, file, base, dconstruct::ControlFlowGraph::build(*func), std::move(graph_path), nullptr, function_scopes};
+
+            const std::string& func_id = func->get_id();
+            const ast::mapped_var_scope* function_scope = nullptr;
+            if (function_scopes) {
+                if (auto entry = function_scopes->find(SID(func_id.c_str())); entry != function_scopes->end()) {
+                    function_scope = &entry->second;
+                }
+            }
+
+            dconstruct::dcompiler::decomp_function decomp_func{*func, file, base, dconstruct::ControlFlowGraph::build(*func), std::move(graph_path), nullptr, function_scope};
             ast::function_definition function_body = decomp_func.decompile(optimizations);
+            
             if (show_warnings && decomp_func.m_error) {
                 std::println(stderr, "warning: the decompilation for <{}> will be inaccurate: {}", func->get_id(), *decomp_func.m_error);
             }

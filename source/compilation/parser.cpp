@@ -1496,7 +1496,7 @@ void Parser::add_mapped_types(const std::unordered_map<sid64, ast::full_type>& t
     ast::function_to_mapped_vars function_scopes;
 
     while (match(token_type::SID)) {
-        const std::string name = previous().m_lexeme.substr(1, previous().m_lexeme.size() - 2);
+        const std::string name = previous().m_lexeme.substr(1, previous().m_lexeme.size() - 1);
         if (!consume(token_type::LEFT_BRACE, "expected {")) {
             return std::nullopt;
         }
