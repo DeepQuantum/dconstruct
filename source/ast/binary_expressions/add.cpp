@@ -51,11 +51,13 @@ namespace dconstruct::ast {
 
         const u64 member_offset = *member_offset_res;
         
-        if (const struct_type* struct_t_ptr = std::get_if<struct_type>(&lhs_type)) {
-            const auto* member = struct_t_ptr->get_member_type_by_offset(member_offset);
-            std::unique_ptr res = std::make_unique<struct_access>(std::move(m_lhs), compilation::token{compilation::token_type::IDENTIFIER, member->first});
-            res->set_type(*member->second);
-            return res;
+        if (const ptr_type* ptr_t_ptr = std::get_if<ptr_type>(&lhs_type)) {
+            if (const struct_type* struct_t_ptr = std::get_if<struct_type>(ptr_t_ptr->m_pointedAt.get())) {
+                const auto* member = struct_t_ptr->get_member_type_by_offset(member_offset);
+                std::unique_ptr res = std::make_unique<struct_access>(std::move(m_lhs), compilation::token{compilation::token_type::IDENTIFIER, member->first});
+                res->set_type(*member->second);
+                return res;
+            }
         }
 
         return nullptr;

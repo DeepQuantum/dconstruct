@@ -39,7 +39,11 @@ namespace dconstruct::ast {
     struct_access::struct_access(expr_uptr&& lhs, compilation::token member_name) noexcept : m_lhs(std::move(lhs)), m_memberName(std::move(member_name)) {}
 
     void struct_access::pseudo_c(ast_serialization_buffer& buffer) const {
-        buffer.append(*m_lhs, '.', m_memberName.m_lexeme);
+        if (std::holds_alternative<ptr_type>(m_lhs->get_type().value_or(std::monostate()))) {
+            buffer.append(*m_lhs, "->"sv, m_memberName.m_lexeme);
+        } else {
+            buffer.append(*m_lhs, '.', m_memberName.m_lexeme);
+        }
     }
 
     void struct_access::pseudo_py(ast_serialization_buffer& buffer) const {

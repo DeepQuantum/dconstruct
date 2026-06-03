@@ -58,10 +58,7 @@ namespace dconstruct::ast {
     }
 
     [[nodiscard]] std::unique_ptr<struct_access> grouping::to_struct_access() noexcept {
-        if (auto replacement = m_expr->to_struct_access()) {
-            m_expr = std::move(replacement);
-        }
-        return nullptr;
+        return m_expr->to_struct_access();
     }
 
 }

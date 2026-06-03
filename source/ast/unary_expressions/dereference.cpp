@@ -106,25 +106,6 @@ namespace dconstruct::ast {
     }
 
     [[nodiscard]] std::unique_ptr<struct_access> dereference_expr::to_struct_access() noexcept {
-        std::unique_ptr add_expr_temp_access = m_rhs->to_struct_access();
-
-        if (add_expr_temp_access) {
-            return add_expr_temp_access;
-        }
-
-        const auto& rhs_type_res = m_rhs->get_type();
-
-        if (!rhs_type_res) {
-            return nullptr;
-        }
-
-        if (const struct_type* struct_t_ptr = std::get_if<struct_type>(&*rhs_type_res)) {
-            const auto* member = struct_t_ptr->get_member_type_by_offset(0);
-            std::unique_ptr res = std::make_unique<struct_access>(std::move(m_rhs), compilation::token{compilation::token_type::IDENTIFIER, member->first});
-            res->set_type(*member->second);
-            return res;
-        }
-
-        return nullptr;
+        return m_rhs->to_struct_access();
     }
 }

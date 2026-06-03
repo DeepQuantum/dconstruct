@@ -86,7 +86,26 @@ namespace dconstruct::ast {
         std::unique_ptr sub = m_rhs->to_struct_access();
         
         if (sub) {
-            assert(sub->get_type().value_or(std::monostate()) == m_castType && "the type we're casting to has to always be equal to the member type.");
+            assert(std::holds_alternative<ptr_type>(m_castType));
+            assert(sub->get_type().value_or(std::monostate()) == *std::get<ptr_type>(m_castType).m_pointedAt && "the type we're casting to has to always be equal to the member type.");
+            return sub;
+        }
+
+        const auto& rhs_type_res = m_rhs->get_type();
+
+        if (!rhs_type_res) {
+            return nullptr;
+        }
+
+        const full_type& rhs_type = *rhs_type_res;
+
+        if (const ptr_type* ptr_t_ptr = std::get_if<ptr_type>(&rhs_type)) {
+            if (const struct_type* struct_t_ptr = std::get_if<struct_type>(ptr_t_ptr->m_pointedAt.get())) {
+                const auto& member = struct_t_ptr->m_members[0];
+                std::unique_ptr res = std::make_unique<struct_access>(std::move(m_rhs), compilation::token{compilation::token_type::IDENTIFIER, member.first});
+                res->set_type(*member.second);
+                return res;
+            }
         }
 
         return sub;

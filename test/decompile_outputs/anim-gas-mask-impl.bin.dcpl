@@ -7,7 +7,7 @@
 // #   functions: 11                                                                                  #
 // #   has state script: false                                                                        #
 // #   game type: t2r                                                                                 #
-// #   optimizations enabled: none                                                                    #
+// #   optimizations enabled: AST                                                                     #
 // #                                                                                                  #
 // ####################################################################################################
 
@@ -35,11 +35,11 @@ u64? internal-put-on-gas-mask(u64? arg_0, u16 arg_1) {
     wait-one-frame();
     u64? var_0 = get-gas-mask-setting-id(arg_0);
     #gas-mask-setup* gas_mask = lookup-symbol(var_0, gas-mask-setup);
-    u8 var_2 = *(u8*)(gas_mask + 56);
+    u8 var_2 = gas_mask.gas_mask_state;
     wait-until-in-valid-gas-mask-state(arg_0, var_2);
     u64? var_3;
     if (arg_1 == 0) {
-        u64 var_4 = *(u64*)(gas_mask + 40);
+        u64 var_4 = gas_mask.gas_mask_name;
         u64? var_5 = spawn-object(
             var_4,
             SimpleAttachable,
@@ -71,19 +71,19 @@ u64? internal-put-on-gas-mask(u64? arg_0, u16 arg_1) {
     u64? var_8 = boxed_f32(0.30);
     send-event(tuck-hair, arg_0, var_8);
     u64? var_9 = #%alloc-array(single-frame, 16, 0, 1);
-    u64 var_10 = *(u64*)(gas_mask + 16);
+    u64 var_10 = gas_mask.on_gas_mask;
     animate_(var_3, var_10, var_9);
     u64? var_11 = alloc-gesture-play-params();
     *(u8*)(var_11 + 33) = 1;
     *(i32*)(var_11 + 36) = 19;
     *(u8*)(var_11 + 32) = 1;
     *(u8*)(var_11 + 34) = 1;
-    u64? var_12 = gesture_(arg_0, *(u64*)gas_mask, var_11);
+    u64? var_12 = gesture_(arg_0, gas_mask.on_gesture, var_11);
     while (!(var_12 == 0)) {
         wait-one-frame();
     }
     u64? var_13 = #%alloc-array(single-frame, 16, 0, 1);
-    u64 var_14 = *(u64*)(gas_mask + 24);
+    u64 var_14 = gas_mask.idle_gas_mask;
     u64? var_15 = animate_(var_3, var_14, var_13);
     return var_15;
 }
