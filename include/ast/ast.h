@@ -27,6 +27,7 @@
 #include "primary_expressions/sid_identifier.h"
 #include "primary_expressions/match.h"
 #include "primary_expressions/subscript.h"
+#include "primary_expressions/struct_access.h"
 #include "primary_expressions/sizeof_expression.h"
 #include "external_declaration.h"
 #include "using_declaration.h"

@@ -13,6 +13,7 @@ namespace dconstruct::ast {
         virtual VAR_OPTIMIZATION_ACTION var_optimization_pass(var_optimization_env& optimization_env) noexcept = 0;
         virtual FOREACH_OPTIMIZATION_ACTION foreach_optimization_pass(foreach_optimization_env& optimization_env) noexcept { return FOREACH_OPTIMIZATION_ACTION::NONE; }
         virtual MATCH_OPTIMIZATION_ACTION match_optimization_pass(match_optimization_env& optimization_env) noexcept { return MATCH_OPTIMIZATION_ACTION::NONE; }
+        virtual void member_access_optimization_pass() noexcept = 0;
         [[nodiscard]] virtual std::unique_ptr<statement> clone() const noexcept = 0;
         [[nodiscard]] virtual const statement* inlineable_else_statement() const noexcept { return nullptr; }
         [[nodiscard]] virtual std::vector<semantic_check_error> check_semantics(compilation::scope& env) const noexcept = 0;

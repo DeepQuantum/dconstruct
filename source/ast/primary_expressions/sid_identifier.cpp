@@ -1,4 +1,5 @@
 #include "ast/primary_expressions/sid_identifier.h"
+#include "ast/primary_expressions/struct_access.h"
 #include "ast/assign.h"
 
 namespace dconstruct::ast {
@@ -114,6 +115,10 @@ namespace dconstruct::ast {
 
     FOREACH_OPTIMIZATION_ACTION sid_identifier::foreach_optimization_pass(foreach_optimization_env&) noexcept {
         return FOREACH_OPTIMIZATION_ACTION::NONE;
+    }
+
+    [[nodiscard]] std::unique_ptr<struct_access> sid_identifier::to_struct_access() noexcept {
+        return nullptr;
     }
 
 }

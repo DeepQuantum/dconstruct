@@ -1,4 +1,5 @@
 #include "ast/primary_expressions/literal.h"
+#include "ast/primary_expressions/struct_access.h"
 
 // #include "llvm/IR/Constant.h"
 
@@ -87,6 +88,10 @@ namespace dconstruct::ast {
 
     MATCH_OPTIMIZATION_ACTION literal::match_optimization_pass(match_optimization_env& env) noexcept {
         return MATCH_OPTIMIZATION_ACTION::LITERAL;
+    }
+
+    [[nodiscard]] std::unique_ptr<struct_access> literal::to_struct_access() noexcept {
+        return nullptr;
     }
 
     [[nodiscard]] semantic_check_res literal::compute_type_checked(compilation::scope& env) const noexcept {

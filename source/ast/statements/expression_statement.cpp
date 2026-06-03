@@ -1,4 +1,5 @@
 #include "ast/statements/expression_statement.h"
+#include "ast/primary_expressions/struct_access.h"
 
 namespace dconstruct::ast {
 
@@ -61,6 +62,12 @@ namespace dconstruct::ast {
 
     MATCH_OPTIMIZATION_ACTION expression_stmt::match_optimization_pass(match_optimization_env& env) noexcept {
         return m_expression->match_optimization_pass(env);
+    }
+
+    void expression_stmt::member_access_optimization_pass() noexcept {
+        if (auto replacement = m_expression->to_struct_access()) {
+            m_expression = std::move(replacement);
+        }
     }
 
     [[nodiscard]] bool expression_stmt::is_dead_code() const noexcept {

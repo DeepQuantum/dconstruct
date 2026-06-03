@@ -232,6 +232,12 @@ namespace dconstruct::ast {
         return MATCH_OPTIMIZATION_ACTION::NONE;
     }
 
+    void block::member_access_optimization_pass() noexcept {
+        for (auto& statement : m_statements) {
+            statement->member_access_optimization_pass();
+        }
+    }
+
     [[nodiscard]] emission_err block::emit_dc(
         compilation::function& fn,
         compilation::global_state& global

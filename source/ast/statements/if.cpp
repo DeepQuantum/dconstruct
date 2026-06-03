@@ -1,4 +1,5 @@
 #include "ast/statements/if.h"
+#include "ast/primary_expressions/struct_access.h"
 #include "ast/statements/block.h"
 #include "ast/assign.h"
 
@@ -158,5 +159,15 @@ namespace dconstruct::ast {
             }
         }
         return MATCH_OPTIMIZATION_ACTION::NONE;
+    }
+
+    void if_stmt::member_access_optimization_pass() noexcept {
+        if (auto replacement = m_condition->to_struct_access()) {
+            m_condition = std::move(replacement);
+        }
+        m_then->member_access_optimization_pass();
+        if (m_else) {
+            m_else->member_access_optimization_pass();
+        }
     }
 }

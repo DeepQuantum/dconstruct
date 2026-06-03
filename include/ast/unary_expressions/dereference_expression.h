@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ast/unary_expression.h"
+#include "ast/primary_expressions/struct_access.h"
 
 namespace dconstruct::ast {
     struct dereference_expr : public clonable_unary_expr<dereference_expr> {
@@ -15,6 +16,7 @@ namespace dconstruct::ast {
         [[nodiscard]] semantic_check_res compute_type_checked(compilation::scope&) const noexcept override;
         [[nodiscard]] emission_res emit_dc(compilation::function& fn, compilation::global_state& global, const std::optional<reg_idx> opt_destination) const noexcept final;
         [[nodiscard]] lvalue_emission_res emit_dc_lvalue(compilation::function& fn, compilation::global_state& global) const noexcept final;
+        [[nodiscard]] std::unique_ptr<struct_access> to_struct_access() noexcept final;
         [[nodiscard]] bool is_l_evaluable() const noexcept final;
     };
 }

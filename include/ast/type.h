@@ -73,6 +73,10 @@ namespace dconstruct::ast {
 
         std::vector<std::pair<std::string, ref_full_type>> m_members;
         bool operator==(const struct_type&) const = default;
+
+        [[nodiscard]] u64 get_members_size() const noexcept;
+
+        [[nodiscard]] const std::pair<std::string, ref_full_type>* get_member_type_by_offset(const u64 offset) const noexcept;
     };
 
     struct enum_type {

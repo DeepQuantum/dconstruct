@@ -1,4 +1,5 @@
 #include "ast/assign.h"
+#include "ast/primary_expressions/struct_access.h"
 #include "ast/statements/variable_declaration.h"
 
 namespace dconstruct::ast {
@@ -128,6 +129,16 @@ namespace dconstruct::ast {
         env.check_action(&m_lhs);
         env.check_action(&m_rhs);
         return FOREACH_OPTIMIZATION_ACTION::NONE;
+    }
+
+    [[nodiscard]] std::unique_ptr<struct_access> assign_expr::to_struct_access() noexcept {
+        if (auto replacement = m_lhs->to_struct_access()) {
+            m_lhs = std::move(replacement);
+        }
+        if (auto replacement = m_rhs->to_struct_access()) {
+            m_rhs = std::move(replacement);
+        }
+        return nullptr;
     }
 
     MATCH_OPTIMIZATION_ACTION assign_expr::match_optimization_pass(match_optimization_env& env) noexcept {

@@ -1,5 +1,6 @@
 #include "ast/primary_expressions/grouping.h"
 #include "ast/primary_expressions/identifier.h"
+#include "ast/primary_expressions/struct_access.h"
 
 namespace dconstruct::ast {
 
@@ -54,6 +55,13 @@ namespace dconstruct::ast {
     FOREACH_OPTIMIZATION_ACTION grouping::foreach_optimization_pass(foreach_optimization_env& env) noexcept {
         env.check_action(&m_expr);
         return FOREACH_OPTIMIZATION_ACTION::NONE;
+    }
+
+    [[nodiscard]] std::unique_ptr<struct_access> grouping::to_struct_access() noexcept {
+        if (auto replacement = m_expr->to_struct_access()) {
+            m_expr = std::move(replacement);
+        }
+        return nullptr;
     }
 
 }

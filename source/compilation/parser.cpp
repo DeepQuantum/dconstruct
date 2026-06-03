@@ -1035,6 +1035,8 @@ namespace dconstruct::compilation {
                 expr = std::make_unique<ast::post_arithmetic_expression>(previous(), std::move(expr));
             } else if (match(token_type::LEFT_SQUARE)) {
                 expr = finish_subscript(std::move(expr));
+            } else if (match(token_type::DOT)) {
+                expr = finish_struct_access(std::move(expr));
             } else {
                 break;
             }
@@ -1070,6 +1072,15 @@ namespace dconstruct::compilation {
         }
 
         return nullptr;
+    }
+
+    [[nodiscard]] expr_uptr Parser::finish_struct_access(expr_uptr&& lhs) {
+        const token* member_name = consume(token_type::IDENTIFIER, "expected struct member name after '.'");
+        if (!member_name) {
+            return nullptr;
+        }
+
+        return std::make_unique<ast::struct_access>(std::move(lhs), *member_name);
     }
 
     [[nodiscard]] expr_uptr Parser::make_enum_access(const token& enum_name_token) {

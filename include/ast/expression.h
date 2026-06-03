@@ -53,6 +53,7 @@ namespace dconstruct::ast {
     };
 
     using lvalue_emission_res = std::expected<std::pair<reg_idx, Opcode>, std::string>;
+    struct struct_access;
 
     struct expression : public ast_element {
         virtual ~expression() = default;
@@ -70,6 +71,8 @@ namespace dconstruct::ast {
         [[nodiscard]] virtual FOREACH_OPTIMIZATION_ACTION foreach_optimization_pass(foreach_optimization_env& optimization_env) noexcept = 0;
         [[nodiscard]] virtual MATCH_OPTIMIZATION_ACTION match_optimization_pass(match_optimization_env& optimization_env) noexcept { return MATCH_OPTIMIZATION_ACTION::NONE; }
 
+        [[nodiscard]] virtual std::unique_ptr<struct_access> to_struct_access() noexcept = 0;
+
         [[nodiscard]] virtual bool identifier_name_equals(const std::string& name) const noexcept { return false; }
         [[nodiscard]] virtual const std::string* get_name() const noexcept { return nullptr; }
 
@@ -84,17 +87,20 @@ namespace dconstruct::ast {
         [[nodiscard]] virtual full_type compute_type_unchecked(const compilation::scope& env) const noexcept = 0;
         [[nodiscard]] virtual semantic_check_res compute_type_checked(compilation::scope& env) const noexcept = 0;
         [[nodiscard]] virtual std::optional<i64> raw_pattern_number() const noexcept { return std::nullopt; }
+
         [[nodiscard]] virtual std::expected<u16, std::string> emit_to_symbol_table(
             compilation::function&,
             compilation::global_state&
         ) const noexcept {
             return std::unexpected{"expression cannot be emitted to symbol table"};
         }
+
         [[nodiscard]] virtual emission_res emit_dc(
             compilation::function& fn,
             compilation::global_state& global,
             const std::optional<reg_idx> destination = std::nullopt
         ) const noexcept { return 0; }
+
         [[nodiscard]] virtual condition_branch_res emit_dc_branch(
             compilation::function& fn,
             compilation::global_state& global,
@@ -225,6 +231,8 @@ namespace dconstruct::ast {
             return 1 + m_rhs->get_complexity();
         }
 
+        [[nodiscard]] std::unique_ptr<struct_access> to_struct_access() noexcept override;
+
         compilation::token m_operator;
         std::unique_ptr<expression> m_rhs;
     };
@@ -284,6 +292,8 @@ namespace dconstruct::ast {
                 return rhs_type;
             }
         }
+
+        [[nodiscard]] std::unique_ptr<struct_access> to_struct_access() noexcept override;
 
         compilation::token m_operator;
         std::unique_ptr<expression> m_lhs;

@@ -1,5 +1,6 @@
 #include "ast/statements/variable_declaration.h"
 #include "ast/statements/for.h"
+#include "ast/primary_expressions/struct_access.h"
 #include "ast/optimization/var_optimization.h"
 #include "ast/optimization/match_optimization.h"
 #include "ast/optimization/foreach_optimization.h"
@@ -150,6 +151,19 @@ namespace dconstruct::ast {
 
     MATCH_OPTIMIZATION_ACTION for_stmt::match_optimization_pass(match_optimization_env& env) noexcept {
         return m_body->match_optimization_pass(env);
+    }
+
+    void for_stmt::member_access_optimization_pass() noexcept {
+        if (m_init) {
+            m_init->member_access_optimization_pass();
+        }
+        if (auto replacement = m_condition->to_struct_access()) {
+            m_condition = std::move(replacement);
+        }
+        if (auto replacement = m_incr->to_struct_access()) {
+            m_incr = std::move(replacement);
+        }
+        m_body->member_access_optimization_pass();
     }
 
 }

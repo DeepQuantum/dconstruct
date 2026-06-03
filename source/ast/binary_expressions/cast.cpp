@@ -82,6 +82,16 @@ namespace dconstruct::ast {
         return m_rhs->is_l_evaluable();
     }
 
+    [[nodiscard]] std::unique_ptr<struct_access> cast_expr::to_struct_access() noexcept {
+        std::unique_ptr sub = m_rhs->to_struct_access();
+        
+        if (sub) {
+            assert(sub->get_type().value_or(std::monostate()) == m_castType && "the type we're casting to has to always be equal to the member type.");
+        }
+
+        return sub;
+    }
+
     [[nodiscard]] emission_res cast_expr::emit_dc(
         compilation::function& fn,
         compilation::global_state& global,

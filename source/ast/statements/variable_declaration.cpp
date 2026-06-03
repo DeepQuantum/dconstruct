@@ -1,4 +1,5 @@
 #include "ast/statements/variable_declaration.h"
+#include "ast/primary_expressions/struct_access.h"
 
 namespace dconstruct::ast {
 
@@ -95,6 +96,15 @@ namespace dconstruct::ast {
 
     MATCH_OPTIMIZATION_ACTION variable_declaration::match_optimization_pass(match_optimization_env& env) noexcept {
         return !m_init ? MATCH_OPTIMIZATION_ACTION::RESULT_VAR_DECLARATION : MATCH_OPTIMIZATION_ACTION::NONE;
+    }
+
+    void variable_declaration::member_access_optimization_pass() noexcept {
+        if (!m_init) {
+            return;
+        }
+        if (auto replacement = m_init->to_struct_access()) {
+            m_init = std::move(replacement);
+        }
     }
 
 }

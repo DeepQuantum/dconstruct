@@ -1,4 +1,5 @@
 #include "ast/statements/while.h"
+#include "ast/primary_expressions/struct_access.h"
 
 namespace dconstruct::ast {
 
@@ -105,6 +106,13 @@ namespace dconstruct::ast {
 
     MATCH_OPTIMIZATION_ACTION while_stmt::match_optimization_pass(match_optimization_env& env) noexcept {
         return m_body->match_optimization_pass(env);
+    }
+
+    void while_stmt::member_access_optimization_pass() noexcept {
+        if (auto replacement = m_condition->to_struct_access()) {
+            m_condition = std::move(replacement);
+        }
+        m_body->member_access_optimization_pass();
     }
 
 }

@@ -1,4 +1,5 @@
 #include "ast/primary_expressions/sizeof_expression.h"
+#include "ast/primary_expressions/struct_access.h"
 
 namespace dconstruct::ast {
 
@@ -111,6 +112,16 @@ namespace dconstruct::ast {
 
     [[nodiscard]] FOREACH_OPTIMIZATION_ACTION sizeof_expr::foreach_optimization_pass(foreach_optimization_env& env) noexcept {
         return FOREACH_OPTIMIZATION_ACTION::NONE;
+    }
+
+    [[nodiscard]] std::unique_ptr<struct_access> sizeof_expr::to_struct_access() noexcept {
+        if (std::holds_alternative<expr_uptr>(m_operand)) {
+            auto& expr = std::get<expr_uptr>(m_operand);
+            if (auto replacement = expr->to_struct_access()) {
+                expr = std::move(replacement);
+            }
+        }
+        return nullptr;
     }
 
 }

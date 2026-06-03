@@ -1,6 +1,7 @@
 #include "ast/primary_expressions/call.h"
 #include "ast/primary_expressions/identifier.h"
 #include "ast/primary_expressions/sid_identifier.h"
+#include "ast/primary_expressions/struct_access.h"
 #include "ast//primary_expressions/literal.h"
 
 namespace dconstruct::ast {
@@ -272,6 +273,18 @@ namespace dconstruct::ast {
 
     MATCH_OPTIMIZATION_ACTION call_expr::match_optimization_pass(match_optimization_env& env) noexcept {
         return MATCH_OPTIMIZATION_ACTION::NONE;
+    }
+
+    [[nodiscard]] std::unique_ptr<struct_access> call_expr::to_struct_access() noexcept {
+        if (auto replacement = m_callee->to_struct_access()) {
+            m_callee = std::move(replacement);
+        }
+        for (auto& argument : m_arguments) {
+            if (auto replacement = argument->to_struct_access()) {
+                argument = std::move(replacement);
+            }
+        }
+        return nullptr;
     }
 
     // [[nodiscard]] llvm_res call_expr::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>& builder, llvm::Module& module, const compilation::scope& env) const noexcept {

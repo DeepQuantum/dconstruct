@@ -18,6 +18,7 @@ namespace dconstruct::ast {
         [[nodiscard]] full_type compute_type_unchecked(const compilation::scope& env) const noexcept final;
         [[nodiscard]] semantic_check_res compute_type_checked(compilation::scope& env) const noexcept final;
         [[nodiscard]] u16 calc_complexity() const noexcept final;
+        [[nodiscard]] std::unique_ptr<struct_access> to_struct_access() noexcept final;
         [[nodiscard]] expr_uptr* get_first_argument() noexcept final;
         [[nodiscard]] std::optional<compilation::source_location> source_location() const noexcept final { return compilation::source_location{m_token.m_file, m_token.m_line}; }
         [[nodiscard]] emission_res emit_dc(compilation::function& fn, compilation::global_state& global, std::optional<reg_idx> destination) const noexcept final;

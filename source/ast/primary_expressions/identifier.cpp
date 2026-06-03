@@ -1,4 +1,5 @@
 #include "ast/primary_expressions/identifier.h"
+#include "ast/primary_expressions/struct_access.h"
 #include "ast/assign.h"
 
 namespace dconstruct::ast {
@@ -126,6 +127,10 @@ namespace dconstruct::ast {
 
     FOREACH_OPTIMIZATION_ACTION identifier::foreach_optimization_pass(foreach_optimization_env&) noexcept {
         return FOREACH_OPTIMIZATION_ACTION::NONE;
+    }
+
+    [[nodiscard]] std::unique_ptr<struct_access> identifier::to_struct_access() noexcept {
+        return nullptr;
     }
 
 }

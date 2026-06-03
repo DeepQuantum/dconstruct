@@ -1,4 +1,5 @@
 #include "ast/primary_expressions/ternary.h"
+#include "ast/primary_expressions/struct_access.h"
 
 namespace dconstruct::ast {
 
@@ -96,6 +97,19 @@ namespace dconstruct::ast {
         env.check_action(&m_then);
         env.check_action(&m_else);
         return FOREACH_OPTIMIZATION_ACTION::NONE;
+    }
+
+    [[nodiscard]] std::unique_ptr<struct_access> ternary_expr::to_struct_access() noexcept {
+        if (auto replacement = m_condition->to_struct_access()) {
+            m_condition = std::move(replacement);
+        }
+        if (auto replacement = m_then->to_struct_access()) {
+            m_then = std::move(replacement);
+        }
+        if (auto replacement = m_else->to_struct_access()) {
+            m_else = std::move(replacement);
+        }
+        return nullptr;
     }
 
 }

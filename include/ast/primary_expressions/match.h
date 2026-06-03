@@ -35,6 +35,7 @@ namespace dconstruct::ast {
         [[nodiscard]] full_type compute_type_unchecked(const compilation::scope& env) const noexcept final;
         [[nodiscard]] semantic_check_res compute_type_checked(compilation::scope& env) const noexcept final;
         [[nodiscard]] u16 calc_complexity() const noexcept final;
+        [[nodiscard]] std::unique_ptr<struct_access> to_struct_access() noexcept final;
         [[nodiscard]] emission_res emit_dc(compilation::function& fn, compilation::global_state& global, const std::optional<reg_idx> destination = std::nullopt) const noexcept final;
 
         //[[nodiscard]] llvm_res emit_llvm(llvm::LLVMContext&, llvm::IRBuilder<>&, llvm::Module&, const compiler::scope&) const noexcept final {return std::};

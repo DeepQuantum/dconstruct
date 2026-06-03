@@ -20,6 +20,47 @@ namespace dconstruct::ast {
         return std::make_unique<add_expr>(m_operator, std::move(lhs_ptr), std::move(rhs_ptr));
     }
 
+    [[nodiscard]] std::unique_ptr<struct_access> add_expr::to_struct_access() noexcept {
+        std::unique_ptr lhs_recursive_member_access = m_lhs->to_struct_access();
+
+        if (lhs_recursive_member_access) {
+            m_lhs = std::move(lhs_recursive_member_access);
+        }
+
+        std::unique_ptr rhs_recursive_member_access = m_rhs->to_struct_access();
+
+        if (rhs_recursive_member_access) {
+            m_rhs = std::move(rhs_recursive_member_access);
+        }
+
+        const auto& lhs_type_res = m_lhs->get_type();
+
+        if (!lhs_type_res) {
+            return nullptr;
+        }
+
+        const full_type& lhs_type = *lhs_type_res;
+
+        const literal* rhs_lit = m_rhs->as_literal();
+        if (!rhs_lit) {
+            return nullptr;
+        }
+
+        const std::optional member_offset_res = get_raw_number(rhs_lit->m_value);
+        assert(member_offset_res);
+
+        const u64 member_offset = *member_offset_res;
+        
+        if (const struct_type* struct_t_ptr = std::get_if<struct_type>(&lhs_type)) {
+            const auto* member = struct_t_ptr->get_member_type_by_offset(member_offset);
+            std::unique_ptr res = std::make_unique<struct_access>(std::move(m_lhs), compilation::token{compilation::token_type::IDENTIFIER, member->first});
+            res->set_type(*member->second);
+            return res;
+        }
+
+        return nullptr;
+    }
+
     template <typename T, typename U>
     using larger_t = std::conditional_t<(sizeof(T) >= sizeof(U)), T, U>;
 

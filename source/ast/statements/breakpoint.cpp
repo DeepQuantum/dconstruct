@@ -26,6 +26,8 @@ namespace dconstruct::ast {
         return VAR_OPTIMIZATION_ACTION::NONE;
     }
 
+    void breakpoint::member_access_optimization_pass() noexcept {}
+
     [[nodiscard]] std::vector<semantic_check_error> breakpoint::check_semantics(compilation::scope& scope) const noexcept {
         return {};
     }

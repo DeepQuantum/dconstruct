@@ -1,4 +1,5 @@
 #include "ast/primary_expressions/enum_access.h"
+#include "ast/primary_expressions/struct_access.h"
 
 namespace dconstruct::ast {
 
@@ -79,6 +80,10 @@ namespace dconstruct::ast {
 
     MATCH_OPTIMIZATION_ACTION enum_access::match_optimization_pass(match_optimization_env& env) noexcept {
         return MATCH_OPTIMIZATION_ACTION::LITERAL;
+    }
+
+    [[nodiscard]] std::unique_ptr<struct_access> enum_access::to_struct_access() noexcept {
+        return nullptr;
     }
 
 }

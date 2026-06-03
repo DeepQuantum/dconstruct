@@ -20,6 +20,7 @@ namespace dconstruct::ast {
         [[nodiscard]] u16 calc_complexity() const noexcept final;
         [[nodiscard]] const literal* as_literal() const noexcept final;
         [[nodiscard]] bool is_dead_code() const noexcept final { return true; }
+        [[nodiscard]] std::unique_ptr<struct_access> to_struct_access() noexcept final;
         [[nodiscard]] semantic_check_res compute_type_checked(compilation::scope& env) const noexcept final;
         [[nodiscard]] emission_res emit_dc(compilation::function& fn, compilation::global_state& global, const std::optional<reg_idx> destination) const noexcept final;
 

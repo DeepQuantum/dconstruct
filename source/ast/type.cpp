@@ -67,6 +67,22 @@ namespace dconstruct::ast {
         return type;
     }
 
+    [[nodiscard]] const std::pair<std::string, ref_full_type>* struct_type::get_member_type_by_offset(const u64 offset) const noexcept {
+        if (offset >= get_members_size()) {
+            return nullptr;
+        }
+
+        u64 member_offset_counter = 0;
+        for (const auto& member : m_members) {
+            if (member_offset_counter == offset) {
+                return &member;
+            }
+            member_offset_counter += get_size(*member.second);
+        }
+
+        return nullptr;
+    }
+
     [[nodiscard]] primitive_kind kind_from_primitive_value(const primitive_value& prim) noexcept {
         return std::visit(
             [](auto&& arg) -> primitive_kind {
@@ -285,6 +301,17 @@ namespace dconstruct::ast {
         );
     }
 
+    [[nodiscard]] u64 struct_type::get_members_size() const noexcept {
+        return std::accumulate(
+            m_members.begin(),
+            m_members.end(),
+            u64{0},
+            [this](u64 acc, const auto& member) {
+                return acc + get_size(*member.second.get());
+            }
+        );
+    }
+
     [[nodiscard]] u64 get_size(const full_type& type) noexcept {
         return std::visit([](auto&& arg) -> u64 {
             using T = std::decay_t<decltype(arg)>;
@@ -332,8 +359,7 @@ namespace dconstruct::ast {
             } else {
                 return 0;
             }
-        },
-                          type);
+        }, type);
     }
 
     [[nodiscard]] std::expected<Opcode, std::string> get_load_opcode(const full_type& type) {

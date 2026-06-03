@@ -1,5 +1,6 @@
 #include "ast/primary_expressions/match.h"
 #include "ast/primary_expressions/literal.h"
+#include "ast/primary_expressions/struct_access.h"
 #include <algorithm>
 #include <numeric>
 #include <string_view>
@@ -479,6 +480,28 @@ namespace dconstruct::ast {
             env.check_action(&expression);
         }
         return FOREACH_OPTIMIZATION_ACTION::NONE;
+    }
+
+    [[nodiscard]] std::unique_ptr<struct_access> match_expr::to_struct_access() noexcept {
+        for (auto& condition : m_conditions) {
+            if (auto replacement = condition->to_struct_access()) {
+                condition = std::move(replacement);
+            }
+        }
+        for (auto& [pattern, expression] : m_matchPairs) {
+            if (auto replacement = pattern->to_struct_access()) {
+                pattern = std::move(replacement);
+            }
+            if (auto replacement = expression->to_struct_access()) {
+                expression = std::move(replacement);
+            }
+        }
+        if (m_default) {
+            if (auto replacement = m_default->to_struct_access()) {
+                m_default = std::move(replacement);
+            }
+        }
+        return nullptr;
     }
 
 }

@@ -30,6 +30,7 @@ namespace dconstruct::ast {
         [[nodiscard]] u16 calc_complexity() const noexcept final;
         [[nodiscard]] const literal* as_literal() const noexcept final;
         [[nodiscard]] bool is_dead_code() const noexcept final { return true; }
+        [[nodiscard]] std::unique_ptr<struct_access> to_struct_access() noexcept final;
         [[nodiscard]] semantic_check_res compute_type_checked(compilation::scope& env) const noexcept final;
         [[nodiscard]] std::optional<i64> raw_pattern_number() const noexcept final;
         [[nodiscard]] std::expected<u16, std::string> emit_to_symbol_table(compilation::function& fn, compilation::global_state& global) const noexcept final;

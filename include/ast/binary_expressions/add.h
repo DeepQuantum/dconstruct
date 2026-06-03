@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ast/binary_expression.h"
+#include "ast/primary_expressions/struct_access.h"
 
 namespace dconstruct::ast {
     struct add_expr : public clonable_binary_expr<add_expr> {
@@ -11,6 +12,7 @@ namespace dconstruct::ast {
         // [[nodiscard]] llvm_res emit_llvm(llvm::LLVMContext&, llvm::IRBuilder<>&, llvm::Module&, const compilation::scope&) const final;
         [[nodiscard]] expr_uptr simplify() const final;
         [[nodiscard]] semantic_check_res compute_type_checked(compilation::scope& env) const noexcept final;
+        [[nodiscard]] std::unique_ptr<struct_access> to_struct_access() noexcept final; 
         [[nodiscard]] emission_res emit_dc(compilation::function& fn, compilation::global_state& global, const std::optional<reg_idx> destination) const noexcept final;
     };
 }
