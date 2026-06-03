@@ -14,7 +14,6 @@
 #include <utility>
 #include <array>
 
-
 namespace dconstruct::hooking {
     using QWORD = DWORD64;
 
@@ -46,7 +45,7 @@ namespace dconstruct::hooking {
 
     QWORD* __fastcall display_hook(QWORD*, QWORD*, const char**);
 
-    char __fastcall invoke_function_hook(i64 a1, i64 a2, u32 a3, QWORD *a4, i64 a5);
+    char __fastcall invoke_function_hook(i64 a1, i64 a2, u32 a3, QWORD* a4, i64 a5);
 
     QWORD* __fastcall lookup_hook(u64 a1);
 
@@ -55,7 +54,7 @@ namespace dconstruct::hooking {
     decltype(&invoke_function_hook) invoke_function_orig = nullptr;
     decltype(&lookup_hook) lookup_orig = nullptr;
 
-    static constexpr p64 IMAGE_BASE                 = 0x140000000;
+    static constexpr p64 IMAGE_BASE = 0x140000000;
 
     p64 module_base = 0;
     p64 module_end = 0;
@@ -91,8 +90,7 @@ namespace dconstruct::hooking {
         }
 
         const auto* nt_headers = reinterpret_cast<const IMAGE_NT_HEADERS*>(
-            reinterpret_cast<const std::byte*>(module) + dos_header->e_lfanew
-        );
+            reinterpret_cast<const std::byte*>(module) + dos_header->e_lfanew);
         if (nt_headers->Signature != IMAGE_NT_SIGNATURE) {
             return 0;
         }
@@ -110,8 +108,8 @@ namespace dconstruct::hooking {
     }
 
     QWORD* __fastcall is_final_build_hook(QWORD* a1) {
-       // log("called is_final_build?");
-       // char orig_res = is_final_build_orig(a1, a2, a3, a4, a5);
+        // log("called is_final_build?");
+        // char orig_res = is_final_build_orig(a1, a2, a3, a4, a5);
         *a1 = false;
         return a1;
     }
@@ -122,7 +120,7 @@ namespace dconstruct::hooking {
         return a1;
     }
 
-    char __fastcall invoke_function_hook(i64 a1, i64 a2, u32 a3, QWORD *a4, i64 a5) {
+    char __fastcall invoke_function_hook(i64 a1, i64 a2, u32 a3, QWORD* a4, i64 a5) {
         p64 function_address = 0;
         if (!try_ida_address(*(p64*)(a1 + 0x8), function_address)) {
             return invoke_function_orig(a1, a2, a3, a4, a5);
@@ -156,31 +154,54 @@ namespace dconstruct::hooking {
 
         return res;
     }
-    
-    static constexpr p64 STORE_ARRAY_RUN_SCRIPT           = 0x1413566EE - IMAGE_BASE;
-    static constexpr u64 NOP_LENGTH_RUN_SCRIPT            = 0x141356709 - 0x1413566EE;
 
+    static constexpr p64 STORE_ARRAY_RUN_SCRIPT = 0x1413566EE - IMAGE_BASE;
+    static constexpr u64 NOP_LENGTH_RUN_SCRIPT = 0x141356709 - 0x1413566EE;
 
-    static constexpr p64 STORE_ARRAY_PARSE_INSTRUCTION    = 0x1414B7084 - IMAGE_BASE;
-    static constexpr u64 NOP_LENGTH_PARSE_INSTRUCTION     = 0x1414B70A1 - 0x1414B7084;
+    static constexpr p64 STORE_ARRAY_PARSE_INSTRUCTION = 0x1414B7084 - IMAGE_BASE;
+    static constexpr u64 NOP_LENGTH_PARSE_INSTRUCTION = 0x1414B70A1 - 0x1414B7084;
 
     static constexpr p64 DEFAULT_CASE_RUN_SCRIPT = 0x141356969 - IMAGE_BASE;
 
     static constexpr p64 CONTINUE_ADDRESS = 0x1413560A0 - IMAGE_BASE;
 
-    static constexpr p64 IS_FINAL_BUILD_OFFSET      = 0x140D4B800 - IMAGE_BASE;
-    static constexpr p64 DISPLAY_OFFSET             = 0x140D3DA40 - IMAGE_BASE;
-    static constexpr p64 INVOKE_FUNCTION_OFFSET     = 0x141613510 - IMAGE_BASE;
-    static constexpr p64 LOOKUP_OFFSET              = 0x141356D60 - IMAGE_BASE;
+    static constexpr p64 IS_FINAL_BUILD_OFFSET = 0x140D4B800 - IMAGE_BASE;
+    static constexpr p64 DISPLAY_OFFSET = 0x140D3DA40 - IMAGE_BASE;
+    static constexpr p64 INVOKE_FUNCTION_OFFSET = 0x141613510 - IMAGE_BASE;
+    static constexpr p64 LOOKUP_OFFSET = 0x141356D60 - IMAGE_BASE;
 
     void create_opcode_default_switch_override(p64 start_default_block, p64 target_location, p64 continue_location) {
         log("target_location: {:x}, start_default_block: {:x}", target_location, start_default_block);
 
         constexpr std::array patch_bytes = {
-            0xFF_b, 0x35_b, 0x06_b, 0x00_b, 0x00_b, 0x00_b,
-            0xFF_b, 0x25_b, 0x08_b, 0x00_b, 0x00_b, 0x00_b,
-            0x00_b, 0x00_b, 0x00_b, 0x00_b, 0x00_b, 0x00_b, 0x00_b, 0x00_b,
-            0x00_b, 0x00_b, 0x00_b, 0x00_b, 0x00_b, 0x00_b, 0x00_b, 0x00_b,
+            0xFF_b,
+            0x35_b,
+            0x06_b,
+            0x00_b,
+            0x00_b,
+            0x00_b,
+            0xFF_b,
+            0x25_b,
+            0x08_b,
+            0x00_b,
+            0x00_b,
+            0x00_b,
+            0x00_b,
+            0x00_b,
+            0x00_b,
+            0x00_b,
+            0x00_b,
+            0x00_b,
+            0x00_b,
+            0x00_b,
+            0x00_b,
+            0x00_b,
+            0x00_b,
+            0x00_b,
+            0x00_b,
+            0x00_b,
+            0x00_b,
+            0x00_b,
         };
 
         DWORD old_protect;
@@ -195,7 +216,7 @@ namespace dconstruct::hooking {
     void create_breakpoint_entry(p64 start_loc, u64 length) {
         std::vector<std::byte> nops{length, 0x90_b};
         nops.back() = 0xCC_b;
-        
+
         DWORD old_protect;
         VirtualProtect((void*)start_loc, length, PAGE_EXECUTE_READWRITE, &old_protect);
         std::memcpy((void*)start_loc, nops.data(), length);
@@ -205,7 +226,6 @@ namespace dconstruct::hooking {
     }
 
     DWORD WINAPI init_thread(void*) {
-
         MH_Initialize();
         HMODULE executable_module = GetModuleHandle(nullptr);
         module_base = reinterpret_cast<p64>(executable_module);
@@ -214,13 +234,12 @@ namespace dconstruct::hooking {
         create_breakpoint_entry(module_base + STORE_ARRAY_RUN_SCRIPT, NOP_LENGTH_RUN_SCRIPT);
         create_breakpoint_entry(module_base + STORE_ARRAY_PARSE_INSTRUCTION, NOP_LENGTH_PARSE_INSTRUCTION);
 
-
         const p64 jump_extended_opcode_switch_location = (p64)&extended_opcode_switch;
         const p64 extended_opcode_switch_location = (jump_extended_opcode_switch_location + 5) + (*(i32*)(jump_extended_opcode_switch_location + 1));
         create_opcode_default_switch_override(module_base + DEFAULT_CASE_RUN_SCRIPT, extended_opcode_switch_location, module_base + CONTINUE_ADDRESS);
 
-        //load_sidbase();
-       // log("module base: {:016X}, ida image base: {:016X}", module_base, IMAGE_BASE);
+        // load_sidbase();
+        // log("module base: {:016X}, ida image base: {:016X}", module_base, IMAGE_BASE);
 
         void* display_target = (void*)(module_base + DISPLAY_OFFSET);
         MH_CreateHook(display_target, &display_hook, reinterpret_cast<void**>(&display_orig));

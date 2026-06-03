@@ -3,1542 +3,1544 @@
 
 namespace dconstruct::compilation {
 
-[[nodiscard]] static std::string statescript_name_from_token(const token& t) {
-    if (!t.m_lexeme.empty() && t.m_lexeme[0] == '#') {
-        return t.m_lexeme.substr(1);
+    [[nodiscard]] static std::string statescript_name_from_token(const token& t) {
+        if (!t.m_lexeme.empty() && t.m_lexeme[0] == '#') {
+            return t.m_lexeme.substr(1);
+        }
+        return t.m_lexeme;
     }
-    return t.m_lexeme;
-}
 
-
-[[nodiscard]] std::tuple<ast::program, std::unordered_map<std::string, ast::full_type>, std::vector<compilation::parsing_error>> Parser::get_results() {
-    return { parse(), get_known_types(), get_errors() };
-}
-
-const std::vector<parsing_error>& Parser::get_errors() const noexcept {
-    return m_errors;
-}
-
-const std::unordered_map<std::string, ast::full_type>& Parser::get_known_types() const noexcept {
-    return m_knownTypes;
-}
-
-[[nodiscard]] bool operator==(const parsing_error& lhs, const parsing_error& rhs) noexcept {
-    return lhs.m_token == rhs.m_token && lhs.m_message == rhs.m_message;
-}
-
-void Parser::synchronize_statements() {
-    advance();
-    while (!is_at_end()) {
-        if (previous().m_type == token_type::SEMICOLON) {
-            return;
-        }
-        switch (peek().m_type) {
-            case token_type::FOR:
-            case token_type::FOREACH:
-            case token_type::WHILE:
-            case token_type::IF:
-            case token_type::RETURN: return;
-            default: advance();
-        }
+    [[nodiscard]] std::tuple<ast::program, std::unordered_map<std::string, ast::full_type>, std::vector<compilation::parsing_error>> Parser::get_results() {
+        return {parse(), get_known_types(), get_errors()};
     }
-}
 
-void Parser::synchronize_external_definitions() {
-    advance();
-    while (!is_at_end()) {
-        if (previous().m_type == token_type::SEMICOLON) {
-            return;
-        }
-        switch (peek().m_type) {
-            case token_type::STRUCT:
-            case token_type::ENUM:
-            case token_type::USING:
-            case token_type::STATESCRIPT: return;
-            default: advance();
+    const std::vector<parsing_error>& Parser::get_errors() const noexcept {
+        return m_errors;
+    }
+
+    const std::unordered_map<std::string, ast::full_type>& Parser::get_known_types() const noexcept {
+        return m_knownTypes;
+    }
+
+    [[nodiscard]] bool operator==(const parsing_error& lhs, const parsing_error& rhs) noexcept {
+        return lhs.m_token == rhs.m_token && lhs.m_message == rhs.m_message;
+    }
+
+    void Parser::synchronize_statements() {
+        advance();
+        while (!is_at_end()) {
+            if (previous().m_type == token_type::SEMICOLON) {
+                return;
+            }
+            switch (peek().m_type) {
+                case token_type::FOR:
+                case token_type::FOREACH:
+                case token_type::WHILE:
+                case token_type::IF:
+                case token_type::RETURN:
+                    return;
+                default:
+                    advance();
+            }
         }
     }
-}
 
-
-[[nodiscard]] const token& Parser::peek() const {
-    return m_tokens[m_current];
-}
-
-[[nodiscard]] const token& Parser::previous() const {
-    return m_tokens[m_current - 1];
-}
-
-[[nodiscard]] bool Parser::is_at_end() const {
-    return peek().m_type == token_type::_EOF;
-}
-
-const token& Parser::advance() {
-    if (!is_at_end()) {
-        m_current++;
+    void Parser::synchronize_external_definitions() {
+        advance();
+        while (!is_at_end()) {
+            if (previous().m_type == token_type::SEMICOLON) {
+                return;
+            }
+            switch (peek().m_type) {
+                case token_type::STRUCT:
+                case token_type::ENUM:
+                case token_type::USING:
+                case token_type::STATESCRIPT:
+                    return;
+                default:
+                    advance();
+            }
+        }
     }
-    return previous();
-}
 
-const token* Parser::consume(const token_type type, const std::string& message) {
-    if (check(type)) {
-        return &advance();
+    [[nodiscard]] const token& Parser::peek() const {
+        return m_tokens[m_current];
     }
-    std::string full_message = message;
-    if (is_at_end()) {
-        full_message += " but got end of file";
-    } else {
-        full_message += " but got '" + peek().m_lexeme + "'";
-    }
-    m_errors.emplace_back(peek(), full_message);
-    return nullptr;
-}
 
-const token* Parser::consume(const std::initializer_list<token_type> types, const std::string& message) {
-    for (const token_type tt : types) {
-        if (check(tt)) {
+    [[nodiscard]] const token& Parser::previous() const {
+        return m_tokens[m_current - 1];
+    }
+
+    [[nodiscard]] bool Parser::is_at_end() const {
+        return peek().m_type == token_type::_EOF;
+    }
+
+    const token& Parser::advance() {
+        if (!is_at_end()) {
+            m_current++;
+        }
+        return previous();
+    }
+
+    const token* Parser::consume(const token_type type, const std::string& message) {
+        if (check(type)) {
             return &advance();
         }
+        std::string full_message = message;
+        if (is_at_end()) {
+            full_message += " but got end of file";
+        } else {
+            full_message += " but got '" + peek().m_lexeme + "'";
+        }
+        m_errors.emplace_back(peek(), full_message);
+        return nullptr;
     }
-    std::string full_message = message;
-    if (is_at_end()) {
-        full_message += " but got end of file";
-    } else {
-        full_message += " but got '" + peek().m_lexeme + "'";
-    }
-    m_errors.emplace_back(peek(), full_message);
-    return nullptr;
-}
 
-[[nodiscard]] bool Parser::check(const token_type type) const {
-    if (is_at_end()) {
+    const token* Parser::consume(const std::initializer_list<token_type> types, const std::string& message) {
+        for (const token_type tt : types) {
+            if (check(tt)) {
+                return &advance();
+            }
+        }
+        std::string full_message = message;
+        if (is_at_end()) {
+            full_message += " but got end of file";
+        } else {
+            full_message += " but got '" + peek().m_lexeme + "'";
+        }
+        m_errors.emplace_back(peek(), full_message);
+        return nullptr;
+    }
+
+    [[nodiscard]] bool Parser::check(const token_type type) const {
+        if (is_at_end()) {
+            return false;
+        }
+        return peek().m_type == type;
+    }
+
+    template <typename... Args>
+        requires(std::same_as<Args, token_type> && ...)
+    [[nodiscard]] bool Parser::match(Args... token_types) {
+        for (const token_type tt : {token_types...}) {
+            if (check(tt)) {
+                advance();
+                return true;
+            }
+        }
         return false;
     }
-    return peek().m_type == type;
-}
 
-template<typename... Args> requires (std::same_as<Args, token_type> && ...)
-[[nodiscard]] bool Parser::match(Args ...token_types) {
-    for (const token_type tt : {token_types...}) {
-        if (check(tt)) {
-            advance();
-            return true;
-        }
-    }
-    return false;
-}
-
-[[nodiscard]] std::optional<std::variant<ast::full_type, ast::ellipse>> Parser::peek_type_or_ellipse() {
-    if (match(token_type::DOT_DOT_DOT)) {
-        return ast::ellipse{};
-    } else {
-        return peek_type();
-    }
-}
-
-[[nodiscard]] std::optional<ast::function_type> Parser::match_function_type() {
-    // e.g. (u32, f32*, ...) -> bool
-    if (!check(token_type::LEFT_PAREN)) {
-        return std::nullopt;
-    }
-
-    u32 temp_current = m_current;
-    m_current = temp_current + 1;
-    std::vector<ast::full_type> param_types;
-    bool has_ellipse = false;
-
-    if (!match(token_type::RIGHT_PAREN)) {
-        do {
-            if (has_ellipse) {
-                m_errors.emplace_back(peek(), "ellipse must be last paramter inside function type");
-                return std::nullopt;
-            }
-            auto param_type = peek_type_or_ellipse();
-            if (!param_type) {
-                m_current = temp_current;
-                return std::nullopt;
-            }
-            if (std::holds_alternative<ast::ellipse>(*param_type)) {
-                has_ellipse = true;
-            } else {
-                param_types.push_back(std::get<ast::full_type>(*param_type)); // starting here we can be sure we're parsing a function type because there's no other construct like '(type...'
-            }
-        }
-        while (match(token_type::COMMA) && !is_at_end());
-
-        if (!consume(token_type::RIGHT_PAREN, "expected ')' after function parameter types")) {
-            return std::nullopt;
-        }
-    }
-    
-    if (!consume(token_type::ARROW, "expected '->' after function parameter types")) {
-        return std::nullopt;
-    }
-
-    std::optional<ast::full_type> return_type = make_type();
-    if (!return_type) {
-        return std::nullopt;
-    }
-    ast::function_type func_type;
-    func_type.m_return = std::make_unique<ast::full_type>(std::move(*return_type));
-    for (auto& param_type : param_types) {
-        func_type.m_arguments.emplace_back("", std::make_unique<ast::full_type>(std::move(param_type)));
-    }
-    func_type.m_isVariadic = has_ellipse;
-    return func_type;
-}
-
-[[nodiscard]] std::optional<ast::full_type> Parser::peek_type() {
-    if (!check(token_type::IDENTIFIER)) {
-        return match_function_type();
-    }
-
-    const std::string type_name = peek().m_lexeme;
-    if (!m_knownTypes.contains(type_name)) {
-        return std::nullopt;
-    }
-
-    advance();
-
-    ast::full_type res = m_knownTypes.at(type_name);
-
-    while (match(token_type::STAR) && !is_at_end()) {
-        res = ast::ptr_type{std::make_unique<ast::full_type>(std::move(res))};
-    }
-
-    return res;
-}
-
-[[nodiscard]] std::optional<ast::full_type> Parser::make_type() {
-    // when we require a type and always error out if we don't get one
-
-    if (std::optional<ast::function_type> fty = match_function_type()) {
-        return std::move(*fty);
-    }
-
-    const token& type_token = peek();
-    std::string type_name;
-    if (match(token_type::IDENTIFIER)) {
-        type_name = type_token.m_lexeme;
-    } else if (match(token_type::SID)) {
-        type_name = type_token.m_lexeme.substr(1, type_token.m_lexeme.size() - 1);
-    } else {
-        m_errors.emplace_back(type_token, "expected type name or identifier");
-    }
-
-    if (!m_knownTypes.contains(type_name)) {
-        m_errors.emplace_back(type_token, "unknown type " + type_name);
-        return std::nullopt;
-    }
-
-    ast::full_type res = m_knownTypes.at(type_name);
-
-    while (match(token_type::STAR) && !is_at_end()) {
-        res = ast::ptr_type{std::make_unique<ast::full_type>(std::move(res))};
-    }
-    
-    return res;
-}
-
-[[nodiscard]] std::optional<global> Parser::make_global() {
-    std::optional<global> res;
-    if (match(token_type::STRUCT)) {
-        res = make_struct_type();
-    } else if (match(token_type::ENUM)) {
-        res = make_enum_type();
-    } else if (match(token_type::USING)) {
-        res = make_using_declaration();
-    } else if (match(token_type::STATESCRIPT)) {
-        res = make_state_script();
-    } else if (std::unique_ptr<ast::function_definition> func_def = make_function_definition()) {
-        res = std::move(func_def);
-    } else {
-        m_errors.emplace_back(peek(), "expected struct, enum, or function definition but got '" + peek().m_lexeme + "'");
-        synchronize_external_definitions();
-        return std::nullopt;
-    }
-    if (!res) {
-        synchronize_external_definitions();
-        return std::nullopt;
-    }
-    return res;
-}
-
-[[nodiscard]] std::optional<ast::struct_type> Parser::make_struct_type() {
-    std::string struct_name;
-    bool is_sid_name = false;
-    if (match(token_type::IDENTIFIER)) {
-        struct_name = previous().m_lexeme;
-    } else if (match(token_type::SID)) {
-        struct_name = previous().m_lexeme.substr(1, peek().m_lexeme.size() - 2);
-        is_sid_name = true;
-    } else {
-        m_errors.emplace_back(previous(), "expected name after struct keyword");
-    }
-
-    if (!consume(token_type::LEFT_BRACE, "expected '{'")) {
-        return std::nullopt;
-    }
-
-    ast::struct_type struct_t;
-    struct_t.m_name = std::move(struct_name);
-    if (is_sid_name) {
-        struct_t.m_typeHash = SID(struct_t.m_name.c_str());
-    }
-
-    while (!check(token_type::RIGHT_BRACE) && !is_at_end()) {
-        std::unique_ptr<ast::variable_declaration> decl = make_var_declaration();
-        if (!decl) {
-            return std::nullopt;
-        }
-        struct_t.m_members.emplace_back(std::move(decl->m_identifier), std::make_unique<ast::full_type>(std::move(decl->m_type)));
-    }
-
-    if (!consume(token_type::RIGHT_BRACE, "expected '}' after struct definition")) {
-        return std::nullopt;
-    }
-
-    m_knownTypes[struct_t.m_name] = struct_t;
-
-    return struct_t;
-}
-
-[[nodiscard]] std::optional<ast::enum_type> Parser::make_enum_type() {
-    std::string enum_name;
-    bool is_sid_name = false;
-
-    if (match(token_type::IDENTIFIER)) {
-        enum_name = previous().m_lexeme;
-    } else if (match(token_type::SID)) {
-        enum_name = previous().m_lexeme.substr(1, previous().m_lexeme.size() - 2);
-        is_sid_name = true;
-    } else {
-        m_errors.emplace_back(previous(), "expected name after enum keyword");
-        return std::nullopt;
-    }
-
-    if (!consume(token_type::LEFT_BRACE, "expected '{")) {
-        return std::nullopt;
-    }
-
-    ast::enum_type enum_t;
-    enum_t.m_name = std::move(enum_name);
-    if (is_sid_name) {
-        enum_t.m_typeHash = SID(enum_t.m_name.c_str());
-    }
-
-    u64 counter = 0;
-    bool has_assignments = false;
-    do {
-        const token* enum_value = consume(token_type::IDENTIFIER, "expected enumeration name");
-        if (!enum_value) {
-            return std::nullopt;
-        }
-
-        u64 value = counter;
-        if (match(token_type::EQUAL)) {
-            if (!has_assignments && counter > 0) {
-                m_errors.emplace_back(peek(), "expected all enums to have an assigned value, but the previous ones don't");
-                return std::nullopt;
-            }
-            has_assignments = true;
-            const auto *literal_token = consume(token_type::INT, "expected integer literal");
-            if (!literal_token) { 
-                return std::nullopt;
-            }
-            value = std::get<u16>(literal_token->m_literal);
-        } else if (has_assignments) {
-            m_errors.emplace_back(peek(), "expected either all enums to have an assigned value but " + enum_value->m_lexeme + " doesn't");
-            return std::nullopt;
-        }
-        counter++;
-        enum_t.m_enumerators[enum_value->m_lexeme] = value;
-    } while (match(token_type::COMMA));
-
-    if (!consume(token_type::RIGHT_BRACE, "expected '}' after enum definition")) {
-        return std::nullopt;
-    }
-
-    m_knownTypes[enum_t.m_name] = enum_t;
-
-    return enum_t;
-}
-
-[[nodiscard]] std::unique_ptr<ast::function_definition> Parser::make_function_definition() {
-    std::optional<ast::full_type> return_type = make_type();
-    if (!return_type) {
-        return nullptr;
-    }
-
-    std::string func_name;
-    if (match(token_type::IDENTIFIER)) {
-        func_name = previous().m_lexeme;
-    } else if (match(token_type::SID)) {
-        func_name = previous().m_lexeme.substr(1, peek().m_lexeme.size() - 2);
-    } else {
-        m_errors.emplace_back(previous(), "expected function name or sid");
-        return nullptr;
-    }
-
-    if (!consume(token_type::LEFT_PAREN, "expected '(' after function name")) {
-        return nullptr;
-    }
-
-    std::unique_ptr<ast::function_definition> func_def = std::make_unique<ast::function_definition>();
-    func_def->m_name = func_name;
-    func_def->m_type.m_return = std::make_unique<ast::full_type>(std::move(*return_type));
-
-    while (!check(token_type::RIGHT_PAREN) && !is_at_end()) {
-        std::optional<ast::full_type> param_type = make_type();
-        if (!param_type) {
-            return nullptr;
-        }
-        const token* param_name = consume(token_type::IDENTIFIER, "expected parameter name");
-        if (!param_name) {
-            return nullptr;
-        }
-        func_def->m_type.m_arguments.emplace_back(param_name->m_lexeme, std::make_shared<ast::full_type>(*param_type));
-        func_def->m_parameters.emplace_back(std::move(*param_type), param_name->m_lexeme);
-
-        if (!check(token_type::RIGHT_PAREN)) {
-            if (!consume(token_type::COMMA, "expected ',' between parameters")) {
-                return nullptr;
-            }
-        }
-    }
-
-    if (!consume(token_type::RIGHT_PAREN, "expected ')' after function parameters")) {
-        return nullptr;
-    }
-
-    if (!consume(token_type::LEFT_BRACE, "expected '{' before function body")) {
-        return nullptr;
-    }
-
-    std::unique_ptr<ast::block> body = make_block();
-    if (!body) {
-        return nullptr;
-    }
-    func_def->m_body = std::move(*body);
-
-    return func_def;
-}
-
-[[nodiscard]] std::optional<std::unique_ptr<ast::using_declaration>> Parser::make_using_declaration() {
-    const token* old_sid = consume(token_type::SID, "expected an sid to redefine");
-    if (!old_sid) {
-        return std::nullopt;
-    }
-
-    if (!consume(token_type::AS, "expected 'as'")) {
-        return std::nullopt;
-    }
-
-    const token* far_spec = nullptr;
-    if (match(token_type::FAR, token_type::NEAR)) {
-        far_spec = &previous();
-    }
-
-    std::optional<ast::full_type> new_type = make_type();
-    if (!new_type) {
-        return std::nullopt;
-    }
-
-    if (std::holds_alternative<ast::function_type>(*new_type)) {
-        if (!far_spec) {
-            m_errors.emplace_back(previous(), "expected either 'near' or 'far' specification after 'using' when defining a function alias but got neither");
-            return std::nullopt;
+    [[nodiscard]] std::optional<std::variant<ast::full_type, ast::ellipse>> Parser::peek_type_or_ellipse() {
+        if (match(token_type::DOT_DOT_DOT)) {
+            return ast::ellipse{};
         } else {
-            std::get<ast::function_type>(*new_type).m_distanceType = far_spec->m_type == token_type::FAR
-                ? ast::function_type::DISTANCE::FAR
-                : ast::function_type::DISTANCE::NEAR;
+            return peek_type();
         }
-    } else { 
-        if (far_spec) {
-            m_errors.emplace_back(previous(), "unexpected 'near' or 'far' specification on non-function alias but got '" + far_spec->m_lexeme + "'");
+    }
+
+    [[nodiscard]] std::optional<ast::function_type> Parser::match_function_type() {
+        // e.g. (u32, f32*, ...) -> bool
+        if (!check(token_type::LEFT_PAREN)) {
             return std::nullopt;
         }
-    }
 
-    if (!consume(token_type::SEMICOLON, "expected ';' at end of using declaration")) {
-        return std::nullopt;
-    }
-    return std::make_unique<ast::using_declaration>(ast::sid_identifier(*old_sid), std::move(*new_type));
-}
-
-[[nodiscard]] ast::program Parser::parse() {
-    std::vector<ast::global_decl_uptr> definitions;
-    while (!is_at_end()) {
-        auto declaration = make_global();
-        if (declaration && !std::holds_alternative<ast::full_type>(*declaration)) {
-            definitions.push_back(std::move(std::get<ast::global_decl_uptr>(*declaration)));
-        }
-    }
-    return ast::program{std::move(definitions)};
-}
-
-
-[[nodiscard]] ast::full_type Parser::make_type_from_string(const std::string& type_str) {
-    if (!m_knownTypes.contains(type_str)) {
-        return ast::full_type{std::monostate()};
-    }
-    return m_knownTypes[type_str];
-}
-
-[[nodiscard]] std::unique_ptr<ast::variable_declaration> Parser::make_var_declaration() {
-    std::optional<ast::full_type> type = make_type();
-
-    if (!type) {
-        return nullptr;
-    }
-    
-    const token* name = consume(token_type::IDENTIFIER, "expected variable name");
-    if (!name) {
-        return nullptr;
-    }
-
-    expr_uptr init = nullptr;
-    if (match(token_type::EQUAL)) {
-        init = make_expression();
-    }
-    if (!consume(token_type::SEMICOLON, "expected ';' after variable declaration")) {
-        return nullptr;
-    }
-
-    if (init) {
-        return std::make_unique<ast::variable_declaration>(std::move(*type), name->m_lexeme, std::move(init));
-    } else {
-        return std::make_unique<ast::variable_declaration>(std::move(*type), name->m_lexeme); 
-    }
-}
-
-[[nodiscard]] std::unique_ptr<ast::variable_declaration> Parser::make_var_declaration(ast::full_type type) {
-    const token* name = consume(token_type::IDENTIFIER, "expected variable name");
-    if (!name) {
-        return nullptr;
-    }
-
-    expr_uptr init = nullptr;
-    if (match(token_type::EQUAL)) {
-        init = make_expression();
-    }
-    if (!consume(token_type::SEMICOLON, "expected ';' after variable declaration")) {
-        return nullptr;
-    }
-
-    if (init) {
-        return std::make_unique<ast::variable_declaration>(std::move(type), name->m_lexeme, std::move(init));
-    } else {
-        return std::make_unique<ast::variable_declaration>(std::move(type), name->m_lexeme);
-    }
-}
-
-
-[[nodiscard]] stmnt_uptr Parser::make_declaration() {
-    stmnt_uptr res = nullptr;
-    if (std::optional<ast::full_type> type = peek_type()) {
-        res = make_var_declaration(std::move(*type));
-    } else {
-        res = make_statement();
-    }
-    if (!res) {
-        synchronize_statements();
-        return nullptr;
-    }
-    return res;
-}
-
-[[nodiscard]] std::unique_ptr<ast::while_stmt> Parser::make_while() {
-    if (!consume(token_type::LEFT_PAREN, "expected '(' after 'while'")) {
-        return nullptr;
-    }
-    expr_uptr condition = make_expression();
-    if (!condition) {
-        return nullptr;
-    }
-    if (!consume(token_type::RIGHT_PAREN, "expected ')' after while-condition")) {
-        return nullptr;
-    }
-    stmnt_uptr body = make_statement();
-    if (!body) {
-        return nullptr;
-    }
-    return std::make_unique<ast::while_stmt>(std::move(condition), std::move(body));
-}
-
-[[nodiscard]] stmnt_uptr Parser::make_for() {
-    if (!consume(token_type::LEFT_PAREN, "expected '(' after 'for'.")) {
-        return nullptr;
-    }
-    stmnt_uptr initializer = nullptr;
-    if (match(token_type::SEMICOLON)) {
-        initializer = nullptr;
-    } else if (std::optional<ast::full_type> type = peek_type()) {
-        initializer = make_var_declaration(std::move(*type));
-    } else {
-        initializer = make_expression_statement();
-    }
-    if (!initializer) {
-        return nullptr;
-    }
-    expr_uptr condition = nullptr;
-    if (!check(token_type::SEMICOLON)) {
-        condition = make_expression();
-    }
-    if (!condition) {
-        return nullptr;
-    }
-    if (!consume(token_type::SEMICOLON, "expected ';' after loop condition.")) {
-        return nullptr;
-    }
-    expr_uptr increment = nullptr;
-    if (!check(token_type::RIGHT_PAREN)) {
-        increment = make_expression();
-    }
-    if (!increment) {
-        return nullptr;
-    }
-    if (!consume(token_type::RIGHT_PAREN, "expected ')' at end of for-loop header")) {
-        return nullptr;
-    }
-    stmnt_uptr body = make_statement();
-    if (!body) {
-        return nullptr;
-    }
-    // if (increment) {
-    //     std::vector<stmnt_uptr> statements;  
-    //     statements.push_back(std::move(body));
-    //     statements.push_back(std::make_unique<ast::expression_stmt>(std::move(increment)));
-    //     body = std::make_unique<ast::block>(std::move(statements));
-    // }
-    // if (initializer) {
-    //     std::vector<stmnt_uptr> statements;
-    //     statements.push_back(std::move(initializer));
-    //     statements.push_back(std::move(body));
-    //     body = std::make_unique<ast::block>(std::move(statements));
-    // }
-
-    return std::make_unique<ast::for_stmt>(std::move(initializer), std::move(condition), std::move(increment), std::move(body));
-}
-
-[[nodiscard]] stmnt_uptr Parser::make_foreach() {
-    if (!consume(token_type::LEFT_PAREN, "expected '(' after 'foreach'")) {
-        return nullptr;
-    }
-
-    std::optional<ast::full_type> type = make_type();
-    if (!type) {
-        return nullptr;
-    }
-    const token* name = consume(token_type::IDENTIFIER, "expected variable name");
-    if (!name) {
-        return nullptr;
-    }
-
-    if (!consume(token_type::COLON, "expected ':' after variable declaration")) {
-        return nullptr;
-    }
-
-    expr_uptr iterable = make_expression();
-    if (!iterable) {
-        m_errors.emplace_back(peek(), "expected iterable expression in foreach-loop but got '" + peek().m_lexeme + "'");
-        return nullptr;
-    }
-
-    if (!consume(token_type::RIGHT_PAREN, "expected ')' at end of foreach-loop header")) {
-        return nullptr;
-    }
-
-    stmnt_uptr body = make_statement();
-    if (!body) {
-        m_errors.emplace_back(peek(), "expected body statement in foreach-loop but got '" + peek().m_lexeme + "'");
-        return nullptr;
-    }
-
-    return std::make_unique<ast::foreach_stmt>(ast::parameter{std::move(*type), name->m_lexeme}, std::move(iterable), std::move(body));
-}
-
-[[nodiscard]] stmnt_uptr Parser::make_statement() {
-    if (match(token_type::IF)) {
-        return make_if();
-    } else if (match(token_type::WHILE)) {
-        return make_while();
-    } else if (match(token_type::FOR)) {
-        return make_for();
-    } else if (match(token_type::FOREACH)) {
-        return make_foreach();
-    } else if (match(token_type::LEFT_BRACE)) {
-        return make_block();
-    } else if (match(token_type::RETURN)) {
-        return make_return();
-    } else if (match(token_type::BREAKPOINT)) {
-        return make_breakpoint();
-    } else {
-        return make_expression_statement();
-    }
-}
-
-[[nodiscard]] std::unique_ptr<ast::breakpoint> Parser::make_breakpoint() {
-    if (!consume(token_type::SEMICOLON, "expected ';' after breakpoint value")) {
-        return nullptr;
-    }
-
-    return std::make_unique<ast::breakpoint>();
-}
-
-[[nodiscard]] std::unique_ptr<ast::if_stmt> Parser::make_if() {
-    if (!consume(token_type::LEFT_PAREN, "expected '(' after 'if'")) {
-        return nullptr;
-    }
-    expr_uptr condition = make_expression();
-    if (!condition) {
-        return nullptr;
-    }
-    if (!consume(token_type::RIGHT_PAREN, "expected ')' after if-condition")) {
-        return nullptr;
-    }
-    stmnt_uptr then_branch = make_statement();
-    if (!then_branch) {
-        return nullptr;
-    }
-    stmnt_uptr else_branch = nullptr;
-    if (match(token_type::ELSE)) {
-        else_branch = make_statement();
-        if (!else_branch) {
-            return nullptr;
-        }
-    }
-
-    return std::make_unique<ast::if_stmt>(std::move(condition), std::move(then_branch), std::move(else_branch));
-}
-
-[[nodiscard]] std::unique_ptr<ast::block> Parser::make_block() {
-    std::vector<stmnt_uptr> statements{};
-    while (!check(token_type::RIGHT_BRACE) && !is_at_end()) {
-        auto decl = make_declaration();
-        statements.push_back(std::move(decl));
-    }
-    if (!consume(token_type::RIGHT_BRACE, "expected '}' after block.")) {
-        return nullptr;
-    }
-    return std::make_unique<ast::block>(std::move(statements));
-}
-
-[[nodiscard]] std::unique_ptr<ast::return_stmt> Parser::make_return() {
-    if (match(token_type::SEMICOLON)) {
-        return std::make_unique<ast::return_stmt>(nullptr); 
-    }
-    expr_uptr expression = make_expression();
-
-    if (!consume(token_type::SEMICOLON, "expected ';' after return value")) {
-        return nullptr;
-    }
-
-    return std::make_unique<ast::return_stmt>(std::move(expression));
-}
-
-[[nodiscard]] std::unique_ptr<ast::expression_stmt> Parser::make_expression_statement() {
-    expr_uptr expr = make_expression();
-    if (!expr) {
-        return nullptr;
-    }
-    if (!consume(token_type::SEMICOLON, "expected ';' after expression")) {
-        return nullptr;
-    }
-    return std::make_unique<ast::expression_stmt>(std::move(expr));
-}
-
-[[nodiscard]] expr_uptr Parser::make_or() {
-    expr_uptr expr = make_and();
-    if (!expr) {
-        return nullptr;
-    }
-    while (match(token_type::OR, token_type::PIPE_PIPE)) {
-        const token op = previous();
-        expr_uptr right = make_and();
-        if (!right) {
-            return nullptr;
-        }
-        expr = std::make_unique<ast::logical_expr>(op, std::move(expr), std::move(right));
-    }
-    return expr;
-}
-
-[[nodiscard]] expr_uptr Parser::make_and() {
-    expr_uptr expr = make_equality();
-    if (!expr) {
-        return nullptr;
-    }
-    while (match(token_type::AND, token_type::AMPERSAND_AMPERSAND)) {
-        const token op = previous();
-        expr_uptr right = make_equality();
-        if (!right) {
-            return nullptr;
-        }
-        expr = std::make_unique<ast::logical_expr>(op, std::move(expr), std::move(right));
-    }
-    return expr;
-}
-
-[[nodiscard]] expr_uptr Parser::make_assignment() {
-    expr_uptr expr = make_or();
-    if (!expr) {
-        return nullptr;
-    }
-    if (match(token_type::EQUAL)) {
-        const token equals = previous();
-        expr_uptr value = make_assignment();
-        return std::make_unique<ast::assign_expr>(std::move(expr), std::move(value));
-    }
-    return expr;
-}
-
-[[nodiscard]] expr_uptr Parser::make_format() {
-    expr_uptr expr = make_postfix();
-    if (!expr) {
-        return nullptr;
-    }
-
-    while (match(token_type::DOLLAR)) {
-        const token op = previous();
-
-        std::vector<expr_uptr> args;
-        args.push_back(std::move(expr));
-
-        do {
-            expr_uptr replacement = make_assignment();
-            if (!replacement) {
-                return nullptr;
-            }
-            args.push_back(std::move(replacement));
-        } while (match(token_type::COMMA));
-
-        expr = std::make_unique<ast::call_expr>(
-            op,
-            std::make_unique<ast::sid_identifier>("#dc:format"),
-            std::move(args)
-        );
-    }
-
-    return expr;
-}
-
-[[nodiscard]] expr_uptr Parser::make_expression() {
-    return make_assignment();
-}
-
-[[nodiscard]] expr_uptr Parser::make_equality() {
-    expr_uptr expr = make_comparison();
-    if (!expr) {
-        return nullptr;
-    }
-    while (match(token_type::BANG_EQUAL, token_type::EQUAL_EQUAL)) {
-        const token& op = previous();
-        expr_uptr right = make_comparison();
-        if (!right) {
-            return nullptr;
-        }
-        switch (op.m_type) {
-            case token_type::BANG_EQUAL:
-            case token_type::EQUAL_EQUAL: {
-                expr = std::make_unique<ast::compare_expr>(op, std::move(expr), std::move(right));
-                break;
-            }
-            default: {
-                m_errors.emplace_back(op, "expected expression or operand but got '" + op.m_lexeme + "'");
-                return nullptr;
-            }
-        }
-    }
-    return expr;
-}
-
-[[nodiscard]] expr_uptr Parser::make_comparison() {
-    expr_uptr expr = make_term();
-    if (!expr) {
-        return nullptr;
-    }
-    while (match(token_type::GREATER, token_type::GREATER_EQUAL, token_type::LESS, token_type::LESS_EQUAL)) {
-        const token& op = previous();
-        expr_uptr right = make_term();
-        if (!right) {
-            return nullptr;
-        }
-        switch (op.m_type) {
-            case token_type::GREATER:
-            case token_type::GREATER_EQUAL:
-            case token_type::LESS:
-            case token_type::LESS_EQUAL: {
-                expr = std::make_unique<ast::compare_expr>(op, std::move(expr), std::move(right));
-                break;
-            }
-            default: {
-                m_errors.emplace_back(op, "expected expression or operand but got '" + op.m_lexeme + "'");
-                return nullptr;
-            }
-        }
-    }
-    return expr;
-}
-
-[[nodiscard]] expr_uptr Parser::make_term() {
-    expr_uptr expr = make_factor();
-    if (!expr) {
-        return nullptr;
-    }
-    while (match(token_type::MINUS, token_type::PLUS)) {
-        const token& op = previous();
-        expr_uptr right = make_factor();
-        if (!right) {
-            return nullptr;
-        }
-        switch (op.m_type) {
-            case token_type::PLUS: {
-                expr = std::make_unique<ast::add_expr>(op, std::move(expr), std::move(right));
-                break;
-            }
-            case token_type::MINUS: {
-                expr = std::make_unique<ast::sub_expr>(op, std::move(expr), std::move(right));
-                break;
-            }
-            default: {
-                m_errors.emplace_back(op, "expected expression or operand but got '" + op.m_lexeme + "'");
-                return nullptr;
-            }
-        }
-    }
-    return expr;
-}
-
-[[nodiscard]] expr_uptr Parser::make_factor() {
-    expr_uptr expr = make_unary();
-    if (!expr) {
-        return nullptr;
-    }
-    while (match(token_type::SLASH, token_type::STAR)) {
-        const token& op = previous();
-        expr_uptr right = make_unary();
-        if (!right) {
-            return nullptr;
-        }
-        switch (op.m_type) {
-            case token_type::SLASH: {
-                expr = std::make_unique<ast::div_expr>(op, std::move(expr), std::move(right));
-                break;
-            }
-            case token_type::STAR: {
-                expr = std::make_unique<ast::mul_expr>(op, std::move(expr), std::move(right));
-                break;
-            }
-            default: {
-                m_errors.emplace_back(op, "expected expression or operand but got '" + op.m_lexeme + "'");
-                return nullptr;
-            }
-        }
-    }
-    return expr;
-}
-
-[[nodiscard]] expr_uptr Parser::make_unary() {
-    if (match(
-        token_type::BANG, 
-        token_type::PLUS, 
-        token_type::MINUS, 
-        token_type::TILDE, 
-        token_type::PLUS_PLUS, 
-        token_type::MINUS_MINUS, 
-        token_type::STAR, 
-        token_type::AMPERSAND, 
-        token_type::GREATER_GREATER, 
-        token_type::EQUAL_GREATER
-    )) {
-        const token& op = previous();
-        expr_uptr right = make_unary();
-        if (!right) {
-            return nullptr;
-        }
-        switch (op.m_type) {
-            case token_type::BANG: {
-                return std::make_unique<ast::logical_not_expr>(op, std::move(right));
-            }
-            case token_type::PLUS: {
-                return right;
-            }
-            case token_type::MINUS: {
-                return std::make_unique<ast::negate_expr>(op, std::move(right));
-            }
-            case token_type::TILDE: {
-                return std::make_unique<ast::bitwise_not_expr>(op, std::move(right));
-            }
-            case token_type::PLUS_PLUS: {
-                return std::make_unique<ast::post_arithmetic_expression>(op, std::move(right));
-            }
-            case token_type::MINUS_MINUS: {
-                return std::make_unique<ast::post_arithmetic_expression>(op, std::move(right));
-            }
-            case token_type::STAR: {
-                return std::make_unique<ast::dereference_expr>(op, std::move(right));
-            }
-            case token_type::AMPERSAND: {
-                //return std::make_unique<ast::address_of_expr>(op, std::move(right));
-            }
-            case token_type::GREATER_GREATER: {
-                return make_call_from_operator(op, "#display", std::move(right));
-            }
-            case token_type::EQUAL_GREATER: {
-                return make_call_from_operator(op, "#go", std::move(right), (u16)1);
-            }
-            default: {
-                m_errors.emplace_back(op, "expected expression or operand but got '" + op.m_lexeme + "'");
-                return nullptr;
-            }
-        }
-    }
-    return make_format();
-}
-
-template<typename ...Args> requires (std::constructible_from<ast::literal, Args> && ...)
-[[nodiscard]] std::unique_ptr<ast::call_expr> Parser::make_call_from_operator(const token& op, const std::string& func_name, expr_uptr primary_operand, Args ...extra_function_args) {
-    expr_uptr callee = std::make_unique<ast::sid_identifier>(func_name);
-
-    std::vector<expr_uptr> args;
-    args.reserve(1 + sizeof...(extra_function_args));
-
-    args.push_back(std::move(primary_operand));
-
-    (args.push_back(std::make_unique<ast::literal>(extra_function_args)), ...);
-
-    std::unique_ptr call = std::make_unique<ast::call_expr>(op, std::move(callee), std::move(args));
-
-    return call;
-}
-
-[[nodiscard]] expr_uptr Parser::make_postfix() {
-    expr_uptr expr = make_primary();
-
-    if (!expr) {
-        return nullptr;
-    }
-
-    while (true) {
-        if (match(token_type::LEFT_PAREN)) {
-            expr = finish_call(std::move(expr));
-        } else if (match(token_type::PLUS_PLUS)) {
-            expr = std::make_unique<ast::post_arithmetic_expression>(previous(), std::move(expr));
-        } else if (match(token_type::MINUS_MINUS)) {
-            expr = std::make_unique<ast::post_arithmetic_expression>(previous(), std::move(expr));
-        } else if (match(token_type::LEFT_SQUARE)) {
-            expr = finish_subscript(std::move(expr));
-        } else {
-            break;
-        }
-    }
-
-    return expr;
-}
-
-[[nodiscard]] std::unique_ptr<ast::call_expr> Parser::finish_call(expr_uptr&& callee) {
-    std::vector<expr_uptr> args;
-
-    if (!check(token_type::RIGHT_PAREN)) {
-        do {
-            args.push_back(make_expression());
-        } while (match(token_type::COMMA));
-    }
-
-    if (const token* t = consume({token_type::RIGHT_PAREN}, "expcected ')' at end of function call")) {
-        return std::make_unique<ast::call_expr>(*t, std::move(callee), std::move(args));
-    }
-
-    return nullptr;
-}
-
-[[nodiscard]] std::unique_ptr<ast::subscript_expr> Parser::finish_subscript(expr_uptr&& subscriptee) {
-    expr_uptr index = make_expression();
-    if (!index) {
-        return nullptr;
-    }
-    
-    if (const token* t = consume({token_type::RIGHT_SQUARE}, "expected ']' at end of subscript")) {
-        return std::make_unique<ast::subscript_expr>(std::move(subscriptee), std::move(index));
-    }
-    
-    return nullptr;
-}
-
-[[nodiscard]] expr_uptr Parser::make_enum_access(const token& enum_name_token) {
-    if (!consume(token_type::DOT, "expected '.' after enum name")) {
-        return nullptr;
-    }
-
-    const token* member_name = consume(token_type::IDENTIFIER, "expected enum member name after '.'");
-    if (!member_name) {
-        return nullptr;
-    }
-
-    const std::string& enum_name = enum_name_token.m_lexeme;
-    const std::string qualified_name = enum_name + "." + member_name->m_lexeme;
-    const auto enum_it = m_knownTypes.find(enum_name);
-    if (enum_it == m_knownTypes.end() || !std::holds_alternative<ast::enum_type>(enum_it->second)) {
-        m_errors.emplace_back(enum_name_token, "unknown enum '" + enum_name + "' in enum member access " + qualified_name);
-        return nullptr;
-    }
-
-    const ast::enum_type& enum_type = std::get<ast::enum_type>(enum_it->second);
-    const auto member_it = enum_type.m_enumerators.find(member_name->m_lexeme);
-    if (member_it == enum_type.m_enumerators.end()) {
-        m_errors.emplace_back(*member_name, "unknown enum member " + qualified_name);
-        return nullptr;
-    }
-
-    return std::make_unique<ast::enum_access>(*member_name, enum_name, member_name->m_lexeme, ast::literal{member_it->second});
-}
-
-[[nodiscard]] expr_uptr Parser::make_match() {
-    if (!consume(token_type::LEFT_PAREN, "expected '(' after match")) {
-        return nullptr;
-    }
-
-    std::vector<expr_uptr> conditions;
-
-    while (expr_uptr cond = make_expression()) {
-        conditions.push_back(std::move(cond));
-        if (!match(token_type::SEMICOLON)) {
-            break;
-        }
-    }
-    
-    if (!consume(token_type::RIGHT_PAREN, "expected ')' after match conditions")) {
-        return nullptr;
-    }
-
-    if (!consume(token_type::LEFT_BRACE, "expected '{' after match header")) {
-        return nullptr;
-    }
-    
-    std::vector<ast::match_expr::matches_t> matches;
-    std::vector<expr_uptr> patterns;
-    expr_uptr default_pattern = nullptr;
-    while (!check(token_type::RIGHT_BRACE) && !is_at_end()) {
-        bool default_pattern_reached = false;
-        do {
-            if (match(token_type::ELSE)) {
-                default_pattern_reached = true;
-            } else {
-                expr_uptr literal = make_literal();
-                if (!literal) {
-                    m_errors.emplace_back(peek(), "expected literal but got '" + peek().m_lexeme + "'");
-                    return nullptr;
-                } else {
-                    patterns.push_back(std::move(literal)); 
+        u32 temp_current = m_current;
+        m_current = temp_current + 1;
+        std::vector<ast::full_type> param_types;
+        bool has_ellipse = false;
+
+        if (!match(token_type::RIGHT_PAREN)) {
+            do {
+                if (has_ellipse) {
+                    m_errors.emplace_back(peek(), "ellipse must be last paramter inside function type");
+                    return std::nullopt;
                 }
+                auto param_type = peek_type_or_ellipse();
+                if (!param_type) {
+                    m_current = temp_current;
+                    return std::nullopt;
+                }
+                if (std::holds_alternative<ast::ellipse>(*param_type)) {
+                    has_ellipse = true;
+                } else {
+                    param_types.push_back(std::get<ast::full_type>(*param_type)); // starting here we can be sure we're parsing a function type because there's no other construct like '(type...'
+                }
+            } while (match(token_type::COMMA) && !is_at_end());
+
+            if (!consume(token_type::RIGHT_PAREN, "expected ')' after function parameter types")) {
+                return std::nullopt;
             }
-        } while (match(token_type::COMMA));
-
-        if (!consume({token_type::ARROW}, "expected '->' after pattern list")) {
-            return nullptr;
         }
 
-        expr_uptr matched_expression = make_expression();
-        if (!matched_expression) {
-            m_errors.emplace_back(peek(), "expected expression after '->' but got '" + peek().m_lexeme + "'");
-            return nullptr;
+        if (!consume(token_type::ARROW, "expected '->' after function parameter types")) {
+            return std::nullopt;
         }
 
-        if (!default_pattern_reached && !check(token_type::RIGHT_BRACE) && !consume({token_type::COMMA}, "expected ',' at end of pattern-match expression")) {
-            return nullptr;
+        std::optional<ast::full_type> return_type = make_type();
+        if (!return_type) {
+            return std::nullopt;
         }
-        
-        if (default_pattern_reached) {
-            default_pattern = std::move(matched_expression);
-            break;
+        ast::function_type func_type;
+        func_type.m_return = std::make_unique<ast::full_type>(std::move(*return_type));
+        for (auto& param_type : param_types) {
+            func_type.m_arguments.emplace_back("", std::make_unique<ast::full_type>(std::move(param_type)));
+        }
+        func_type.m_isVariadic = has_ellipse;
+        return func_type;
+    }
+
+    [[nodiscard]] std::optional<ast::full_type> Parser::peek_type() {
+        if (!check(token_type::IDENTIFIER)) {
+            return match_function_type();
+        }
+
+        const std::string type_name = peek().m_lexeme;
+        if (!m_knownTypes.contains(type_name)) {
+            return std::nullopt;
+        }
+
+        advance();
+
+        ast::full_type res = m_knownTypes.at(type_name);
+
+        while (match(token_type::STAR) && !is_at_end()) {
+            res = ast::ptr_type{std::make_unique<ast::full_type>(std::move(res))};
+        }
+
+        return res;
+    }
+
+    [[nodiscard]] std::optional<ast::full_type> Parser::make_type() {
+        // when we require a type and always error out if we don't get one
+
+        if (std::optional<ast::function_type> fty = match_function_type()) {
+            return std::move(*fty);
+        }
+
+        const token& type_token = peek();
+        std::string type_name;
+        if (match(token_type::IDENTIFIER)) {
+            type_name = type_token.m_lexeme;
+        } else if (match(token_type::SID)) {
+            type_name = type_token.m_lexeme.substr(1, type_token.m_lexeme.size() - 1);
         } else {
-            for (u64 i = 0; i < patterns.size(); ++i) {
-                expr_uptr case_expression =
-                    i + 1 == patterns.size() ? std::move(matched_expression) : matched_expression->clone();
-                matches.emplace_back(std::move(patterns[i]), std::move(case_expression));
-            }
+            m_errors.emplace_back(type_token, "expected type name or identifier");
         }
-        patterns.clear();
-    }
 
-    if (!consume(token_type::RIGHT_BRACE, "expected '}' after match patterns")) {
-        return nullptr;
-    }
-    
-    return std::make_unique<ast::match_expr>(std::move(conditions), std::move(matches), std::move(default_pattern));
-}
-
-[[nodiscard]] expr_uptr Parser::make_literal() {
-    if (match(token_type::TRUE)) {
-        return std::make_unique<ast::literal>(true);
-    } else if (match(token_type::FALSE)) {
-        return std::make_unique<ast::literal>(false);
-    } else if (match(token_type::_NULL)) {
-        return std::make_unique<ast::literal>(nullptr);
-    } else if (match(token_type::INT)) {
-        return std::make_unique<ast::literal>(previous().m_literal);
-    } else if (match(token_type::DOUBLE)) {
-        return std::make_unique<ast::literal>(previous().m_literal);
-    } else if (match(token_type::STRING)) {
-        const std::string str = std::get<std::string>(previous().m_literal);
-        return std::make_unique<ast::literal>(str);
-    }
-    return nullptr;
-}
-
-[[nodiscard]] std::optional<std::unique_ptr<ast::cast_expr>> Parser::make_cast() {
-    std::optional<ast::full_type> cast_type = peek_type();
-    if (!cast_type) {
-        return std::nullopt;
-    }
-    if (!consume(token_type::RIGHT_PAREN, "expected ')' after cast expression")) {
-        return nullptr;
-    }
-    expr_uptr expr = make_expression();
-    if (!expr) {
-        return nullptr;
-    }
-    return std::make_unique<ast::cast_expr>(std::move(*cast_type), std::move(expr));
-}
-
-[[nodiscard]] std::unique_ptr<ast::sizeof_expr> Parser::make_sizeof() {
-    if (!consume(token_type::LEFT_PAREN, "expected '(' after 'sizeof'")) {
-        return nullptr;
-    }
-
-    std::optional<ast::full_type> sizeof_type = peek_type();
-    if (sizeof_type) {
-        if (!consume(token_type::RIGHT_PAREN, "expected ')' after type inside 'sizeof'")) {
-            return nullptr;
+        if (!m_knownTypes.contains(type_name)) {
+            m_errors.emplace_back(type_token, "unknown type " + type_name);
+            return std::nullopt;
         }
-        return std::make_unique<ast::sizeof_expr>(std::move(*sizeof_type));
-    }
 
-    expr_uptr sizeof_expr = make_expression();
-    if (!sizeof_expr) {
-        return nullptr;
-    }
+        ast::full_type res = m_knownTypes.at(type_name);
 
-    if (!consume(token_type::RIGHT_PAREN, "expected ')' after expression inside 'sizeof'")) {
-        return nullptr;
-    }
-
-    return std::make_unique<ast::sizeof_expr>(std::move(sizeof_expr));
-}
-
-[[nodiscard]] expr_uptr Parser::make_primary() {
-    if (expr_uptr literal = make_literal()) {
-        return literal;
-    } else if (match(token_type::IDENTIFIER)) {
-        const token identifier = previous();
-        if (m_knownTypes.contains(identifier.m_lexeme)) {
-            return make_enum_access(identifier);
+        while (match(token_type::STAR) && !is_at_end()) {
+            res = ast::ptr_type{std::make_unique<ast::full_type>(std::move(res))};
         }
-        return std::make_unique<ast::identifier>(identifier);
-    } else if (match(token_type::SID)) {
-        return std::make_unique<ast::sid_identifier>(previous());
-    } else if (match(token_type::MATCH)) {
-        return make_match();
-    } else if (match(token_type::SIZEOF)) {
-        return make_sizeof();
-    } else if (match(token_type::LEFT_PAREN)) {
-        if (std::optional<std::unique_ptr<ast::cast_expr>> cast = make_cast()) {
-            return std::move(*cast);
+
+        return res;
+    }
+
+    [[nodiscard]] std::optional<global> Parser::make_global() {
+        std::optional<global> res;
+        if (match(token_type::STRUCT)) {
+            res = make_struct_type();
+        } else if (match(token_type::ENUM)) {
+            res = make_enum_type();
+        } else if (match(token_type::USING)) {
+            res = make_using_declaration();
+        } else if (match(token_type::STATESCRIPT)) {
+            res = make_state_script();
+        } else if (std::unique_ptr<ast::function_definition> func_def = make_function_definition()) {
+            res = std::move(func_def);
         } else {
-            expr_uptr expr = make_expression();
-            if(!consume(token_type::RIGHT_PAREN, "expected ')' after expression")) {
-                return nullptr;
-            }
-            return std::make_unique<ast::grouping>(std::move(expr));
+            m_errors.emplace_back(peek(), "expected struct, enum, or function definition but got '" + peek().m_lexeme + "'");
+            synchronize_external_definitions();
+            return std::nullopt;
         }
-    }
-
-    m_errors.emplace_back(peek(), "expected expression after '" + previous().m_lexeme + "' but got '" + peek().m_lexeme + "'");
-    return nullptr;
-}
-
-
-[[nodiscard]] std::unique_ptr<ast::state_script> Parser::make_state_script() {
-    if (!consume({token_type::SID, token_type::IDENTIFIER}, "expected statescript name after 'statescript'")) {
-        return nullptr;
-    }
-
-    const std::string script_name = statescript_name_from_token(previous());
-
-    if (!consume(token_type::LEFT_BRACE, "expected '{' after 'statescript'")) {
-        return nullptr;
-    }
-    
-    if (!consume(token_type::OPTIONS, "expected 'options' section in statescript definition")) {
-        return nullptr;
-    }
-
-    if (!consume(token_type::LEFT_BRACE, "expected '{' after 'options' in statescript definition")) {
-        return nullptr;
-    }
-
-    std::vector<ast::sid_identifier> options;
-
-    while (!check(token_type::RIGHT_BRACE) && !is_at_end()) {
-        const token* option_name = consume(token_type::SID, "expected an SID as an option name in statescript options section");
-        if (!option_name) {
-            return nullptr;
+        if (!res) {
+            synchronize_external_definitions();
+            return std::nullopt;
         }
-        options.push_back(ast::sid_identifier(option_name->m_lexeme));
+        return res;
     }
 
-    if (!consume(token_type::RIGHT_BRACE, "expected '}' after statescript options section")) {
-        return nullptr;
-    }
+    [[nodiscard]] std::optional<ast::struct_type> Parser::make_struct_type() {
+        std::string struct_name;
+        bool is_sid_name = false;
+        if (match(token_type::IDENTIFIER)) {
+            struct_name = previous().m_lexeme;
+        } else if (match(token_type::SID)) {
+            struct_name = previous().m_lexeme.substr(1, peek().m_lexeme.size() - 2);
+            is_sid_name = true;
+        } else {
+            m_errors.emplace_back(previous(), "expected name after struct keyword");
+        }
 
-    std::vector<ast::variable_declaration> declarations;
-    if (match(token_type::DECLARATIONS)) {
-        if (!consume(token_type::LEFT_BRACE, "expected '{' after 'declarations' in statescript definition")) {
-            return nullptr;
+        if (!consume(token_type::LEFT_BRACE, "expected '{'")) {
+            return std::nullopt;
+        }
+
+        ast::struct_type struct_t;
+        struct_t.m_name = std::move(struct_name);
+        if (is_sid_name) {
+            struct_t.m_typeHash = SID(struct_t.m_name.c_str());
         }
 
         while (!check(token_type::RIGHT_BRACE) && !is_at_end()) {
-            std::unique_ptr<ast::variable_declaration> decl = make_statescript_var_declaration();
+            std::unique_ptr<ast::variable_declaration> decl = make_var_declaration();
             if (!decl) {
-                return nullptr;
+                return std::nullopt;
             }
-            declarations.push_back(std::move(*decl));
+            struct_t.m_members.emplace_back(std::move(decl->m_identifier), std::make_unique<ast::full_type>(std::move(decl->m_type)));
         }
 
-        if (!consume(token_type::RIGHT_BRACE, "expected '}' after statescript declarations section")) {
+        if (!consume(token_type::RIGHT_BRACE, "expected '}' after struct definition")) {
+            return std::nullopt;
+        }
+
+        m_knownTypes[struct_t.m_name] = struct_t;
+
+        return struct_t;
+    }
+
+    [[nodiscard]] std::optional<ast::enum_type> Parser::make_enum_type() {
+        std::string enum_name;
+        bool is_sid_name = false;
+
+        if (match(token_type::IDENTIFIER)) {
+            enum_name = previous().m_lexeme;
+        } else if (match(token_type::SID)) {
+            enum_name = previous().m_lexeme.substr(1, previous().m_lexeme.size() - 2);
+            is_sid_name = true;
+        } else {
+            m_errors.emplace_back(previous(), "expected name after enum keyword");
+            return std::nullopt;
+        }
+
+        if (!consume(token_type::LEFT_BRACE, "expected '{")) {
+            return std::nullopt;
+        }
+
+        ast::enum_type enum_t;
+        enum_t.m_name = std::move(enum_name);
+        if (is_sid_name) {
+            enum_t.m_typeHash = SID(enum_t.m_name.c_str());
+        }
+
+        u64 counter = 0;
+        bool has_assignments = false;
+        do {
+            const token* enum_value = consume(token_type::IDENTIFIER, "expected enumeration name");
+            if (!enum_value) {
+                return std::nullopt;
+            }
+
+            u64 value = counter;
+            if (match(token_type::EQUAL)) {
+                if (!has_assignments && counter > 0) {
+                    m_errors.emplace_back(peek(), "expected all enums to have an assigned value, but the previous ones don't");
+                    return std::nullopt;
+                }
+                has_assignments = true;
+                const auto* literal_token = consume(token_type::INT, "expected integer literal");
+                if (!literal_token) {
+                    return std::nullopt;
+                }
+                value = std::get<u16>(literal_token->m_literal);
+            } else if (has_assignments) {
+                m_errors.emplace_back(peek(), "expected either all enums to have an assigned value but " + enum_value->m_lexeme + " doesn't");
+                return std::nullopt;
+            }
+            counter++;
+            enum_t.m_enumerators[enum_value->m_lexeme] = value;
+        } while (match(token_type::COMMA));
+
+        if (!consume(token_type::RIGHT_BRACE, "expected '}' after enum definition")) {
+            return std::nullopt;
+        }
+
+        m_knownTypes[enum_t.m_name] = enum_t;
+
+        return enum_t;
+    }
+
+    [[nodiscard]] std::unique_ptr<ast::function_definition> Parser::make_function_definition() {
+        std::optional<ast::full_type> return_type = make_type();
+        if (!return_type) {
             return nullptr;
         }
-    }
 
-    std::vector<ast::state_script_state> states = make_statescript_states();
-
-    if (states.empty()) {
-        m_errors.emplace_back(peek(), "expected at least one state in statescript definition");
-    }
-
-    if (!consume(token_type::RIGHT_BRACE, "expected '}' at end of statescript definition")) {
-        return nullptr;
-    }
-
-    return std::make_unique<ast::state_script>(std::move(script_name), std::move(options), std::move(declarations), std::move(states));
-}
-
-
-[[nodiscard]] std::vector<ast::state_script_state> Parser::make_statescript_states() {
-    std::vector<ast::state_script_state> states;
-    while (match(token_type::STATE) && !is_at_end()) {
-        const token* state_name = consume({token_type::SID, token_type::IDENTIFIER}, "expected state name after 'state' in statescript definition");
-        if (!state_name) {
-            return {};
+        std::string func_name;
+        if (match(token_type::IDENTIFIER)) {
+            func_name = previous().m_lexeme;
+        } else if (match(token_type::SID)) {
+            func_name = previous().m_lexeme.substr(1, peek().m_lexeme.size() - 2);
+        } else {
+            m_errors.emplace_back(previous(), "expected function name or sid");
+            return nullptr;
         }
 
-        if (!consume(token_type::LEFT_BRACE, "expected '{' after state name in statescript definition")) {
-            return {};
+        if (!consume(token_type::LEFT_PAREN, "expected '(' after function name")) {
+            return nullptr;
         }
 
-        std::vector<ast::state_script_block> blocks = make_statescript_blocks();
-        if (blocks.empty()) {
-            m_errors.emplace_back(peek(), "expected at least one block in state " + state_name->m_lexeme + " definition but got none");
-        }
+        std::unique_ptr<ast::function_definition> func_def = std::make_unique<ast::function_definition>();
+        func_def->m_name = func_name;
+        func_def->m_type.m_return = std::make_unique<ast::full_type>(std::move(*return_type));
 
-        if (!consume(token_type::RIGHT_BRACE, "expected '}' after state body in statescript definition")) {
-            return {};
-        }
-
-        states.emplace_back(statescript_name_from_token(*state_name), std::move(blocks));
-    }
-    return states;
-}
-
-[[nodiscard]] std::unique_ptr<ast::variable_declaration> Parser::make_statescript_var_declaration() {
-    std::optional<ast::full_type> type = make_type();
-
-    if (!type) {
-        return nullptr;
-    }
-    
-    const token* name = consume(token_type::SID, "expected sid in statescript declaration");
-    if (!name) {
-        return nullptr;
-    }
-
-    expr_uptr init = nullptr;
-    if (match(token_type::EQUAL)) {
-        init = make_expression();
-    }
-    if (!consume(token_type::SEMICOLON, "expected ';' after variable declaration in statescript declaration section")) {
-        return nullptr;
-    }
-
-    if (init) {
-        return std::make_unique<ast::variable_declaration>(std::move(*type), name->m_lexeme, std::move(init));
-    } else {
-        return std::make_unique<ast::variable_declaration>(std::move(*type), name->m_lexeme); 
-    }
-}
-
-[[nodiscard]] std::vector<ast::state_script_block> Parser::make_statescript_blocks() {
-    std::vector<ast::state_script_block> blocks;
-    while (match(token_type::BLOCK) && !is_at_end()) {
-
-        BLOCK_TYPE block_type;
-        std::string event_name = "";
-        if (match(token_type::START)) {
-            block_type = BLOCK_TYPE::START;
-        } else if (match(token_type::END)) {
-            block_type = BLOCK_TYPE::END;
-        } else if (match(token_type::EVENT)) {
-            block_type = BLOCK_TYPE::EVENT;
-            const token* block_name = consume({token_type::SID, token_type::IDENTIFIER}, "expected name after 'event'");
-            if (!block_name) {
-                return {};
+        while (!check(token_type::RIGHT_PAREN) && !is_at_end()) {
+            std::optional<ast::full_type> param_type = make_type();
+            if (!param_type) {
+                return nullptr;
             }
-            event_name = statescript_name_from_token(*block_name);
-        } else if (match(token_type::UPDATE)) {
-            block_type = BLOCK_TYPE::UPDATE;
-        } else if (match(token_type::VIRTUAL)) {
-            block_type = BLOCK_TYPE::VIRTUAL;
+            const token* param_name = consume(token_type::IDENTIFIER, "expected parameter name");
+            if (!param_name) {
+                return nullptr;
+            }
+            func_def->m_type.m_arguments.emplace_back(param_name->m_lexeme, std::make_shared<ast::full_type>(*param_type));
+            func_def->m_parameters.emplace_back(std::move(*param_type), param_name->m_lexeme);
+
+            if (!check(token_type::RIGHT_PAREN)) {
+                if (!consume(token_type::COMMA, "expected ',' between parameters")) {
+                    return nullptr;
+                }
+            }
+        }
+
+        if (!consume(token_type::RIGHT_PAREN, "expected ')' after function parameters")) {
+            return nullptr;
+        }
+
+        if (!consume(token_type::LEFT_BRACE, "expected '{' before function body")) {
+            return nullptr;
+        }
+
+        std::unique_ptr<ast::block> body = make_block();
+        if (!body) {
+            return nullptr;
+        }
+        func_def->m_body = std::move(*body);
+
+        return func_def;
+    }
+
+    [[nodiscard]] std::optional<std::unique_ptr<ast::using_declaration>> Parser::make_using_declaration() {
+        const token* old_sid = consume(token_type::SID, "expected an sid to redefine");
+        if (!old_sid) {
+            return std::nullopt;
+        }
+
+        if (!consume(token_type::AS, "expected 'as'")) {
+            return std::nullopt;
+        }
+
+        const token* far_spec = nullptr;
+        if (match(token_type::FAR, token_type::NEAR)) {
+            far_spec = &previous();
+        }
+
+        std::optional<ast::full_type> new_type = make_type();
+        if (!new_type) {
+            return std::nullopt;
+        }
+
+        if (std::holds_alternative<ast::function_type>(*new_type)) {
+            if (!far_spec) {
+                m_errors.emplace_back(previous(), "expected either 'near' or 'far' specification after 'using' when defining a function alias but got neither");
+                return std::nullopt;
+            } else {
+                std::get<ast::function_type>(*new_type).m_distanceType = far_spec->m_type == token_type::FAR
+                                                                             ? ast::function_type::DISTANCE::FAR
+                                                                             : ast::function_type::DISTANCE::NEAR;
+            }
         } else {
-            m_errors.emplace_back(peek(), "expected one of 'start', 'end', 'event', 'update' or 'virtual' but got " + peek().m_lexeme);
-            return {};
+            if (far_spec) {
+                m_errors.emplace_back(previous(), "unexpected 'near' or 'far' specification on non-function alias but got '" + far_spec->m_lexeme + "'");
+                return std::nullopt;
+            }
         }
 
-        if (!consume(token_type::LEFT_BRACE, "expected '{' after block name in statescript definition")) {
-            return {};
+        if (!consume(token_type::SEMICOLON, "expected ';' at end of using declaration")) {
+            return std::nullopt;
+        }
+        return std::make_unique<ast::using_declaration>(ast::sid_identifier(*old_sid), std::move(*new_type));
+    }
+
+    [[nodiscard]] ast::program Parser::parse() {
+        std::vector<ast::global_decl_uptr> definitions;
+        while (!is_at_end()) {
+            auto declaration = make_global();
+            if (declaration && !std::holds_alternative<ast::full_type>(*declaration)) {
+                definitions.push_back(std::move(std::get<ast::global_decl_uptr>(*declaration)));
+            }
+        }
+        return ast::program{std::move(definitions)};
+    }
+
+    [[nodiscard]] ast::full_type Parser::make_type_from_string(const std::string& type_str) {
+        if (!m_knownTypes.contains(type_str)) {
+            return ast::full_type{std::monostate()};
+        }
+        return m_knownTypes[type_str];
+    }
+
+    [[nodiscard]] std::unique_ptr<ast::variable_declaration> Parser::make_var_declaration() {
+        std::optional<ast::full_type> type = make_type();
+
+        if (!type) {
+            return nullptr;
         }
 
-        std::vector<ast::state_script_track> tracks = make_statescript_tracks();
-        if (tracks.empty()) {
-            m_errors.emplace_back(peek(), "expected at least one track in block definition but got none");
+        const token* name = consume(token_type::IDENTIFIER, "expected variable name");
+        if (!name) {
+            return nullptr;
         }
 
-        if (!consume(token_type::RIGHT_BRACE, "expected '}' after block body in statescript definition")) {
-            return {};
+        expr_uptr init = nullptr;
+        if (match(token_type::EQUAL)) {
+            init = make_expression();
+        }
+        if (!consume(token_type::SEMICOLON, "expected ';' after variable declaration")) {
+            return nullptr;
         }
 
-        if (event_name != "") {
-            blocks.emplace_back(std::move(event_name), std::move(tracks));
+        if (init) {
+            return std::make_unique<ast::variable_declaration>(std::move(*type), name->m_lexeme, std::move(init));
         } else {
-            blocks.emplace_back(block_type, std::move(tracks));
+            return std::make_unique<ast::variable_declaration>(std::move(*type), name->m_lexeme);
         }
     }
 
-    return blocks;
-}
-
-[[nodiscard]] std::vector<ast::state_script_track> Parser::make_statescript_tracks() {
-    std::vector<ast::state_script_track> tracks;
-    while (match(token_type::TRACK) && !is_at_end()) {
-        const token* track_name = consume({token_type::SID, token_type::IDENTIFIER}, "expected track name after 'track' in statescript definition");
-        if (!track_name) {
-            return {};
+    [[nodiscard]] std::unique_ptr<ast::variable_declaration> Parser::make_var_declaration(ast::full_type type) {
+        const token* name = consume(token_type::IDENTIFIER, "expected variable name");
+        if (!name) {
+            return nullptr;
         }
 
-        if (!consume(token_type::LEFT_BRACE, "expected '{' after track " + track_name->m_lexeme + " in statescript definition")) {
-            return {};
+        expr_uptr init = nullptr;
+        if (match(token_type::EQUAL)) {
+            init = make_expression();
+        }
+        if (!consume(token_type::SEMICOLON, "expected ';' after variable declaration")) {
+            return nullptr;
         }
 
-        std::vector<ast::function_definition> lambdas = make_statescript_lambdas();
-        if (lambdas.empty()) {
-            m_errors.emplace_back(peek(), "expected at least one lambda in track " + track_name->m_lexeme + " definition but got none");
+        if (init) {
+            return std::make_unique<ast::variable_declaration>(std::move(type), name->m_lexeme, std::move(init));
+        } else {
+            return std::make_unique<ast::variable_declaration>(std::move(type), name->m_lexeme);
         }
-
-        if (!consume(token_type::RIGHT_BRACE, "expected '}' after track body in statescript definition")) {
-            return {};
-        }
-
-        tracks.emplace_back(statescript_name_from_token(*track_name), std::move(lambdas));
     }
 
-    return tracks;
-}
+    [[nodiscard]] stmnt_uptr Parser::make_declaration() {
+        stmnt_uptr res = nullptr;
+        if (std::optional<ast::full_type> type = peek_type()) {
+            res = make_var_declaration(std::move(*type));
+        } else {
+            res = make_statement();
+        }
+        if (!res) {
+            synchronize_statements();
+            return nullptr;
+        }
+        return res;
+    }
 
-[[nodiscard]] std::vector<ast::function_definition> Parser::make_statescript_lambdas() {
-    std::vector<ast::function_definition> lambdas;
-    while (match(token_type::LAMBDA) && !is_at_end()) {
+    [[nodiscard]] std::unique_ptr<ast::while_stmt> Parser::make_while() {
+        if (!consume(token_type::LEFT_PAREN, "expected '(' after 'while'")) {
+            return nullptr;
+        }
+        expr_uptr condition = make_expression();
+        if (!condition) {
+            return nullptr;
+        }
+        if (!consume(token_type::RIGHT_PAREN, "expected ')' after while-condition")) {
+            return nullptr;
+        }
         stmnt_uptr body = make_statement();
         if (!body) {
-            m_errors.emplace_back(peek(), "expected lambda body statement but got '" + peek().m_lexeme + "'");
-            return {};
+            return nullptr;
         }
-        assert(body);
-        assert(dynamic_cast<ast::block*>(body.get()));
-        ast::function_definition lambda;
-        lambda.m_name = state_script_function_id{};
-        lambda.m_type.m_return = std::make_shared<ast::full_type>(ast::make_type_from_prim(ast::primitive_kind::NOTHING));
-        lambda.m_body = std::move(*static_cast<ast::block*>(body.release()));
-        lambdas.push_back(std::move(lambda));
+        return std::make_unique<ast::while_stmt>(std::move(condition), std::move(body));
     }
-    return lambdas;
-}
 
-void Parser::add_mapped_types(const std::unordered_map<sid64, ast::full_type>& types) {
-    for (const auto& [sid, type] : types) {
-        if (const ast::struct_type* struct_t_ptr = std::get_if<ast::struct_type>(&type)) {
-            m_knownTypes.emplace(struct_t_ptr->m_name, *struct_t_ptr);
-        } else if (const ast::enum_type* enum_t_ptr = std::get_if<ast::enum_type>(&type)) {
-            m_knownTypes.emplace(enum_t_ptr->m_name, *enum_t_ptr);
+    [[nodiscard]] stmnt_uptr Parser::make_for() {
+        if (!consume(token_type::LEFT_PAREN, "expected '(' after 'for'.")) {
+            return nullptr;
+        }
+        stmnt_uptr initializer = nullptr;
+        if (match(token_type::SEMICOLON)) {
+            initializer = nullptr;
+        } else if (std::optional<ast::full_type> type = peek_type()) {
+            initializer = make_var_declaration(std::move(*type));
+        } else {
+            initializer = make_expression_statement();
+        }
+        if (!initializer) {
+            return nullptr;
+        }
+        expr_uptr condition = nullptr;
+        if (!check(token_type::SEMICOLON)) {
+            condition = make_expression();
+        }
+        if (!condition) {
+            return nullptr;
+        }
+        if (!consume(token_type::SEMICOLON, "expected ';' after loop condition.")) {
+            return nullptr;
+        }
+        expr_uptr increment = nullptr;
+        if (!check(token_type::RIGHT_PAREN)) {
+            increment = make_expression();
+        }
+        if (!increment) {
+            return nullptr;
+        }
+        if (!consume(token_type::RIGHT_PAREN, "expected ')' at end of for-loop header")) {
+            return nullptr;
+        }
+        stmnt_uptr body = make_statement();
+        if (!body) {
+            return nullptr;
+        }
+        // if (increment) {
+        //     std::vector<stmnt_uptr> statements;
+        //     statements.push_back(std::move(body));
+        //     statements.push_back(std::make_unique<ast::expression_stmt>(std::move(increment)));
+        //     body = std::make_unique<ast::block>(std::move(statements));
+        // }
+        // if (initializer) {
+        //     std::vector<stmnt_uptr> statements;
+        //     statements.push_back(std::move(initializer));
+        //     statements.push_back(std::move(body));
+        //     body = std::make_unique<ast::block>(std::move(statements));
+        // }
+
+        return std::make_unique<ast::for_stmt>(std::move(initializer), std::move(condition), std::move(increment), std::move(body));
+    }
+
+    [[nodiscard]] stmnt_uptr Parser::make_foreach() {
+        if (!consume(token_type::LEFT_PAREN, "expected '(' after 'foreach'")) {
+            return nullptr;
+        }
+
+        std::optional<ast::full_type> type = make_type();
+        if (!type) {
+            return nullptr;
+        }
+        const token* name = consume(token_type::IDENTIFIER, "expected variable name");
+        if (!name) {
+            return nullptr;
+        }
+
+        if (!consume(token_type::COLON, "expected ':' after variable declaration")) {
+            return nullptr;
+        }
+
+        expr_uptr iterable = make_expression();
+        if (!iterable) {
+            m_errors.emplace_back(peek(), "expected iterable expression in foreach-loop but got '" + peek().m_lexeme + "'");
+            return nullptr;
+        }
+
+        if (!consume(token_type::RIGHT_PAREN, "expected ')' at end of foreach-loop header")) {
+            return nullptr;
+        }
+
+        stmnt_uptr body = make_statement();
+        if (!body) {
+            m_errors.emplace_back(peek(), "expected body statement in foreach-loop but got '" + peek().m_lexeme + "'");
+            return nullptr;
+        }
+
+        return std::make_unique<ast::foreach_stmt>(ast::parameter{std::move(*type), name->m_lexeme}, std::move(iterable), std::move(body));
+    }
+
+    [[nodiscard]] stmnt_uptr Parser::make_statement() {
+        if (match(token_type::IF)) {
+            return make_if();
+        } else if (match(token_type::WHILE)) {
+            return make_while();
+        } else if (match(token_type::FOR)) {
+            return make_for();
+        } else if (match(token_type::FOREACH)) {
+            return make_foreach();
+        } else if (match(token_type::LEFT_BRACE)) {
+            return make_block();
+        } else if (match(token_type::RETURN)) {
+            return make_return();
+        } else if (match(token_type::BREAKPOINT)) {
+            return make_breakpoint();
+        } else {
+            return make_expression_statement();
         }
     }
-}
 
+    [[nodiscard]] std::unique_ptr<ast::breakpoint> Parser::make_breakpoint() {
+        if (!consume(token_type::SEMICOLON, "expected ';' after breakpoint value")) {
+            return nullptr;
+        }
 
-[[nodiscard]] std::optional<ast::function_to_mapped_vars> Parser::make_typemap() {
-    if (!consume(token_type::TYPEMAP, "expected type map keyword")) {
-        return std::nullopt;
+        return std::make_unique<ast::breakpoint>();
     }
 
-    if (!consume(token_type::LEFT_BRACE, "expected {")) {
-        return std::nullopt;
+    [[nodiscard]] std::unique_ptr<ast::if_stmt> Parser::make_if() {
+        if (!consume(token_type::LEFT_PAREN, "expected '(' after 'if'")) {
+            return nullptr;
+        }
+        expr_uptr condition = make_expression();
+        if (!condition) {
+            return nullptr;
+        }
+        if (!consume(token_type::RIGHT_PAREN, "expected ')' after if-condition")) {
+            return nullptr;
+        }
+        stmnt_uptr then_branch = make_statement();
+        if (!then_branch) {
+            return nullptr;
+        }
+        stmnt_uptr else_branch = nullptr;
+        if (match(token_type::ELSE)) {
+            else_branch = make_statement();
+            if (!else_branch) {
+                return nullptr;
+            }
+        }
+
+        return std::make_unique<ast::if_stmt>(std::move(condition), std::move(then_branch), std::move(else_branch));
     }
 
-    ast::function_to_mapped_vars function_scopes;
+    [[nodiscard]] std::unique_ptr<ast::block> Parser::make_block() {
+        std::vector<stmnt_uptr> statements{};
+        while (!check(token_type::RIGHT_BRACE) && !is_at_end()) {
+            auto decl = make_declaration();
+            statements.push_back(std::move(decl));
+        }
+        if (!consume(token_type::RIGHT_BRACE, "expected '}' after block.")) {
+            return nullptr;
+        }
+        return std::make_unique<ast::block>(std::move(statements));
+    }
 
-    while (match(token_type::SID)) {
-        const std::string name = previous().m_lexeme.substr(1, previous().m_lexeme.size() - 1);
+    [[nodiscard]] std::unique_ptr<ast::return_stmt> Parser::make_return() {
+        if (match(token_type::SEMICOLON)) {
+            return std::make_unique<ast::return_stmt>(nullptr);
+        }
+        expr_uptr expression = make_expression();
+
+        if (!consume(token_type::SEMICOLON, "expected ';' after return value")) {
+            return nullptr;
+        }
+
+        return std::make_unique<ast::return_stmt>(std::move(expression));
+    }
+
+    [[nodiscard]] std::unique_ptr<ast::expression_stmt> Parser::make_expression_statement() {
+        expr_uptr expr = make_expression();
+        if (!expr) {
+            return nullptr;
+        }
+        if (!consume(token_type::SEMICOLON, "expected ';' after expression")) {
+            return nullptr;
+        }
+        return std::make_unique<ast::expression_stmt>(std::move(expr));
+    }
+
+    [[nodiscard]] expr_uptr Parser::make_or() {
+        expr_uptr expr = make_and();
+        if (!expr) {
+            return nullptr;
+        }
+        while (match(token_type::OR, token_type::PIPE_PIPE)) {
+            const token op = previous();
+            expr_uptr right = make_and();
+            if (!right) {
+                return nullptr;
+            }
+            expr = std::make_unique<ast::logical_expr>(op, std::move(expr), std::move(right));
+        }
+        return expr;
+    }
+
+    [[nodiscard]] expr_uptr Parser::make_and() {
+        expr_uptr expr = make_equality();
+        if (!expr) {
+            return nullptr;
+        }
+        while (match(token_type::AND, token_type::AMPERSAND_AMPERSAND)) {
+            const token op = previous();
+            expr_uptr right = make_equality();
+            if (!right) {
+                return nullptr;
+            }
+            expr = std::make_unique<ast::logical_expr>(op, std::move(expr), std::move(right));
+        }
+        return expr;
+    }
+
+    [[nodiscard]] expr_uptr Parser::make_assignment() {
+        expr_uptr expr = make_or();
+        if (!expr) {
+            return nullptr;
+        }
+        if (match(token_type::EQUAL)) {
+            const token equals = previous();
+            expr_uptr value = make_assignment();
+            return std::make_unique<ast::assign_expr>(std::move(expr), std::move(value));
+        }
+        return expr;
+    }
+
+    [[nodiscard]] expr_uptr Parser::make_format() {
+        expr_uptr expr = make_postfix();
+        if (!expr) {
+            return nullptr;
+        }
+
+        while (match(token_type::DOLLAR)) {
+            const token op = previous();
+
+            std::vector<expr_uptr> args;
+            args.push_back(std::move(expr));
+
+            do {
+                expr_uptr replacement = make_assignment();
+                if (!replacement) {
+                    return nullptr;
+                }
+                args.push_back(std::move(replacement));
+            } while (match(token_type::COMMA));
+
+            expr = std::make_unique<ast::call_expr>(
+                op,
+                std::make_unique<ast::sid_identifier>("#dc:format"),
+                std::move(args)
+            );
+        }
+
+        return expr;
+    }
+
+    [[nodiscard]] expr_uptr Parser::make_expression() {
+        return make_assignment();
+    }
+
+    [[nodiscard]] expr_uptr Parser::make_equality() {
+        expr_uptr expr = make_comparison();
+        if (!expr) {
+            return nullptr;
+        }
+        while (match(token_type::BANG_EQUAL, token_type::EQUAL_EQUAL)) {
+            const token& op = previous();
+            expr_uptr right = make_comparison();
+            if (!right) {
+                return nullptr;
+            }
+            switch (op.m_type) {
+                case token_type::BANG_EQUAL:
+                case token_type::EQUAL_EQUAL: {
+                    expr = std::make_unique<ast::compare_expr>(op, std::move(expr), std::move(right));
+                    break;
+                }
+                default: {
+                    m_errors.emplace_back(op, "expected expression or operand but got '" + op.m_lexeme + "'");
+                    return nullptr;
+                }
+            }
+        }
+        return expr;
+    }
+
+    [[nodiscard]] expr_uptr Parser::make_comparison() {
+        expr_uptr expr = make_term();
+        if (!expr) {
+            return nullptr;
+        }
+        while (match(token_type::GREATER, token_type::GREATER_EQUAL, token_type::LESS, token_type::LESS_EQUAL)) {
+            const token& op = previous();
+            expr_uptr right = make_term();
+            if (!right) {
+                return nullptr;
+            }
+            switch (op.m_type) {
+                case token_type::GREATER:
+                case token_type::GREATER_EQUAL:
+                case token_type::LESS:
+                case token_type::LESS_EQUAL: {
+                    expr = std::make_unique<ast::compare_expr>(op, std::move(expr), std::move(right));
+                    break;
+                }
+                default: {
+                    m_errors.emplace_back(op, "expected expression or operand but got '" + op.m_lexeme + "'");
+                    return nullptr;
+                }
+            }
+        }
+        return expr;
+    }
+
+    [[nodiscard]] expr_uptr Parser::make_term() {
+        expr_uptr expr = make_factor();
+        if (!expr) {
+            return nullptr;
+        }
+        while (match(token_type::MINUS, token_type::PLUS)) {
+            const token& op = previous();
+            expr_uptr right = make_factor();
+            if (!right) {
+                return nullptr;
+            }
+            switch (op.m_type) {
+                case token_type::PLUS: {
+                    expr = std::make_unique<ast::add_expr>(op, std::move(expr), std::move(right));
+                    break;
+                }
+                case token_type::MINUS: {
+                    expr = std::make_unique<ast::sub_expr>(op, std::move(expr), std::move(right));
+                    break;
+                }
+                default: {
+                    m_errors.emplace_back(op, "expected expression or operand but got '" + op.m_lexeme + "'");
+                    return nullptr;
+                }
+            }
+        }
+        return expr;
+    }
+
+    [[nodiscard]] expr_uptr Parser::make_factor() {
+        expr_uptr expr = make_unary();
+        if (!expr) {
+            return nullptr;
+        }
+        while (match(token_type::SLASH, token_type::STAR)) {
+            const token& op = previous();
+            expr_uptr right = make_unary();
+            if (!right) {
+                return nullptr;
+            }
+            switch (op.m_type) {
+                case token_type::SLASH: {
+                    expr = std::make_unique<ast::div_expr>(op, std::move(expr), std::move(right));
+                    break;
+                }
+                case token_type::STAR: {
+                    expr = std::make_unique<ast::mul_expr>(op, std::move(expr), std::move(right));
+                    break;
+                }
+                default: {
+                    m_errors.emplace_back(op, "expected expression or operand but got '" + op.m_lexeme + "'");
+                    return nullptr;
+                }
+            }
+        }
+        return expr;
+    }
+
+    [[nodiscard]] expr_uptr Parser::make_unary() {
+        if (match(
+            token_type::BANG,
+            token_type::PLUS,
+            token_type::MINUS,
+            token_type::TILDE,
+            token_type::PLUS_PLUS,
+            token_type::MINUS_MINUS,
+            token_type::STAR,
+            token_type::AMPERSAND,
+            token_type::GREATER_GREATER,
+            token_type::EQUAL_GREATER
+        )) {
+            const token& op = previous();
+            expr_uptr right = make_unary();
+            if (!right) {
+                return nullptr;
+            }
+            switch (op.m_type) {
+                case token_type::BANG: {
+                    return std::make_unique<ast::logical_not_expr>(op, std::move(right));
+                }
+                case token_type::PLUS: {
+                    return right;
+                }
+                case token_type::MINUS: {
+                    return std::make_unique<ast::negate_expr>(op, std::move(right));
+                }
+                case token_type::TILDE: {
+                    return std::make_unique<ast::bitwise_not_expr>(op, std::move(right));
+                }
+                case token_type::PLUS_PLUS: {
+                    return std::make_unique<ast::post_arithmetic_expression>(op, std::move(right));
+                }
+                case token_type::MINUS_MINUS: {
+                    return std::make_unique<ast::post_arithmetic_expression>(op, std::move(right));
+                }
+                case token_type::STAR: {
+                    return std::make_unique<ast::dereference_expr>(op, std::move(right));
+                }
+                case token_type::AMPERSAND: {
+                    // return std::make_unique<ast::address_of_expr>(op, std::move(right));
+                }
+                case token_type::GREATER_GREATER: {
+                    return make_call_from_operator(op, "#display", std::move(right));
+                }
+                case token_type::EQUAL_GREATER: {
+                    return make_call_from_operator(op, "#go", std::move(right), (u16)1);
+                }
+                default: {
+                    m_errors.emplace_back(op, "expected expression or operand but got '" + op.m_lexeme + "'");
+                    return nullptr;
+                }
+            }
+        }
+        return make_format();
+    }
+
+    template <typename... Args>
+        requires(std::constructible_from<ast::literal, Args> && ...)
+    [[nodiscard]] std::unique_ptr<ast::call_expr> Parser::make_call_from_operator(
+        const token& op,
+        const std::string& func_name,
+        expr_uptr primary_operand,
+        Args... extra_function_args
+    ) {
+        expr_uptr callee = std::make_unique<ast::sid_identifier>(func_name);
+
+        std::vector<expr_uptr> args;
+        args.reserve(1 + sizeof...(extra_function_args));
+
+        args.push_back(std::move(primary_operand));
+
+        (args.push_back(std::make_unique<ast::literal>(extra_function_args)), ...);
+
+        std::unique_ptr call = std::make_unique<ast::call_expr>(op, std::move(callee), std::move(args));
+
+        return call;
+    }
+
+    [[nodiscard]] expr_uptr Parser::make_postfix() {
+        expr_uptr expr = make_primary();
+
+        if (!expr) {
+            return nullptr;
+        }
+
+        while (true) {
+            if (match(token_type::LEFT_PAREN)) {
+                expr = finish_call(std::move(expr));
+            } else if (match(token_type::PLUS_PLUS)) {
+                expr = std::make_unique<ast::post_arithmetic_expression>(previous(), std::move(expr));
+            } else if (match(token_type::MINUS_MINUS)) {
+                expr = std::make_unique<ast::post_arithmetic_expression>(previous(), std::move(expr));
+            } else if (match(token_type::LEFT_SQUARE)) {
+                expr = finish_subscript(std::move(expr));
+            } else {
+                break;
+            }
+        }
+
+        return expr;
+    }
+
+    [[nodiscard]] std::unique_ptr<ast::call_expr> Parser::finish_call(expr_uptr&& callee) {
+        std::vector<expr_uptr> args;
+
+        if (!check(token_type::RIGHT_PAREN)) {
+            do {
+                args.push_back(make_expression());
+            } while (match(token_type::COMMA));
+        }
+
+        if (const token* t = consume({token_type::RIGHT_PAREN}, "expcected ')' at end of function call")) {
+            return std::make_unique<ast::call_expr>(*t, std::move(callee), std::move(args));
+        }
+
+        return nullptr;
+    }
+
+    [[nodiscard]] std::unique_ptr<ast::subscript_expr> Parser::finish_subscript(expr_uptr&& subscriptee) {
+        expr_uptr index = make_expression();
+        if (!index) {
+            return nullptr;
+        }
+
+        if (const token* t = consume({token_type::RIGHT_SQUARE}, "expected ']' at end of subscript")) {
+            return std::make_unique<ast::subscript_expr>(std::move(subscriptee), std::move(index));
+        }
+
+        return nullptr;
+    }
+
+    [[nodiscard]] expr_uptr Parser::make_enum_access(const token& enum_name_token) {
+        if (!consume(token_type::DOT, "expected '.' after enum name")) {
+            return nullptr;
+        }
+
+        const token* member_name = consume(token_type::IDENTIFIER, "expected enum member name after '.'");
+        if (!member_name) {
+            return nullptr;
+        }
+
+        const std::string& enum_name = enum_name_token.m_lexeme;
+        const std::string qualified_name = enum_name + "." + member_name->m_lexeme;
+        const auto enum_it = m_knownTypes.find(enum_name);
+        if (enum_it == m_knownTypes.end() || !std::holds_alternative<ast::enum_type>(enum_it->second)) {
+            m_errors.emplace_back(enum_name_token, "unknown enum '" + enum_name + "' in enum member access " + qualified_name);
+            return nullptr;
+        }
+
+        const ast::enum_type& enum_type = std::get<ast::enum_type>(enum_it->second);
+        const auto member_it = enum_type.m_enumerators.find(member_name->m_lexeme);
+        if (member_it == enum_type.m_enumerators.end()) {
+            m_errors.emplace_back(*member_name, "unknown enum member " + qualified_name);
+            return nullptr;
+        }
+
+        return std::make_unique<ast::enum_access>(*member_name, enum_name, member_name->m_lexeme, ast::literal{member_it->second});
+    }
+
+    [[nodiscard]] expr_uptr Parser::make_match() {
+        if (!consume(token_type::LEFT_PAREN, "expected '(' after match")) {
+            return nullptr;
+        }
+
+        std::vector<expr_uptr> conditions;
+
+        while (expr_uptr cond = make_expression()) {
+            conditions.push_back(std::move(cond));
+            if (!match(token_type::SEMICOLON)) {
+                break;
+            }
+        }
+
+        if (!consume(token_type::RIGHT_PAREN, "expected ')' after match conditions")) {
+            return nullptr;
+        }
+
+        if (!consume(token_type::LEFT_BRACE, "expected '{' after match header")) {
+            return nullptr;
+        }
+
+        std::vector<ast::match_expr::matches_t> matches;
+        std::vector<expr_uptr> patterns;
+        expr_uptr default_pattern = nullptr;
+        while (!check(token_type::RIGHT_BRACE) && !is_at_end()) {
+            bool default_pattern_reached = false;
+            do {
+                if (match(token_type::ELSE)) {
+                    default_pattern_reached = true;
+                } else {
+                    expr_uptr literal = make_literal();
+                    if (!literal) {
+                        m_errors.emplace_back(peek(), "expected literal but got '" + peek().m_lexeme + "'");
+                        return nullptr;
+                    } else {
+                        patterns.push_back(std::move(literal));
+                    }
+                }
+            } while (match(token_type::COMMA));
+
+            if (!consume({token_type::ARROW}, "expected '->' after pattern list")) {
+                return nullptr;
+            }
+
+            expr_uptr matched_expression = make_expression();
+            if (!matched_expression) {
+                m_errors.emplace_back(peek(), "expected expression after '->' but got '" + peek().m_lexeme + "'");
+                return nullptr;
+            }
+
+            if (!default_pattern_reached && !check(token_type::RIGHT_BRACE) && !consume({token_type::COMMA}, "expected ',' at end of pattern-match expression")) {
+                return nullptr;
+            }
+
+            if (default_pattern_reached) {
+                default_pattern = std::move(matched_expression);
+                break;
+            } else {
+                for (u64 i = 0; i < patterns.size(); ++i) {
+                    expr_uptr case_expression =
+                        i + 1 == patterns.size() ? std::move(matched_expression) : matched_expression->clone();
+                    matches.emplace_back(std::move(patterns[i]), std::move(case_expression));
+                }
+            }
+            patterns.clear();
+        }
+
+        if (!consume(token_type::RIGHT_BRACE, "expected '}' after match patterns")) {
+            return nullptr;
+        }
+
+        return std::make_unique<ast::match_expr>(std::move(conditions), std::move(matches), std::move(default_pattern));
+    }
+
+    [[nodiscard]] expr_uptr Parser::make_literal() {
+        if (match(token_type::TRUE)) {
+            return std::make_unique<ast::literal>(true);
+        } else if (match(token_type::FALSE)) {
+            return std::make_unique<ast::literal>(false);
+        } else if (match(token_type::_NULL)) {
+            return std::make_unique<ast::literal>(nullptr);
+        } else if (match(token_type::INT)) {
+            return std::make_unique<ast::literal>(previous().m_literal);
+        } else if (match(token_type::DOUBLE)) {
+            return std::make_unique<ast::literal>(previous().m_literal);
+        } else if (match(token_type::STRING)) {
+            const std::string str = std::get<std::string>(previous().m_literal);
+            return std::make_unique<ast::literal>(str);
+        }
+        return nullptr;
+    }
+
+    [[nodiscard]] std::optional<std::unique_ptr<ast::cast_expr>> Parser::make_cast() {
+        std::optional<ast::full_type> cast_type = peek_type();
+        if (!cast_type) {
+            return std::nullopt;
+        }
+        if (!consume(token_type::RIGHT_PAREN, "expected ')' after cast expression")) {
+            return nullptr;
+        }
+        expr_uptr expr = make_expression();
+        if (!expr) {
+            return nullptr;
+        }
+        return std::make_unique<ast::cast_expr>(std::move(*cast_type), std::move(expr));
+    }
+
+    [[nodiscard]] std::unique_ptr<ast::sizeof_expr> Parser::make_sizeof() {
+        if (!consume(token_type::LEFT_PAREN, "expected '(' after 'sizeof'")) {
+            return nullptr;
+        }
+
+        std::optional<ast::full_type> sizeof_type = peek_type();
+        if (sizeof_type) {
+            if (!consume(token_type::RIGHT_PAREN, "expected ')' after type inside 'sizeof'")) {
+                return nullptr;
+            }
+            return std::make_unique<ast::sizeof_expr>(std::move(*sizeof_type));
+        }
+
+        expr_uptr sizeof_expr = make_expression();
+        if (!sizeof_expr) {
+            return nullptr;
+        }
+
+        if (!consume(token_type::RIGHT_PAREN, "expected ')' after expression inside 'sizeof'")) {
+            return nullptr;
+        }
+
+        return std::make_unique<ast::sizeof_expr>(std::move(sizeof_expr));
+    }
+
+    [[nodiscard]] expr_uptr Parser::make_primary() {
+        if (expr_uptr literal = make_literal()) {
+            return literal;
+        } else if (match(token_type::IDENTIFIER)) {
+            const token identifier = previous();
+            if (m_knownTypes.contains(identifier.m_lexeme)) {
+                return make_enum_access(identifier);
+            }
+            return std::make_unique<ast::identifier>(identifier);
+        } else if (match(token_type::SID)) {
+            return std::make_unique<ast::sid_identifier>(previous());
+        } else if (match(token_type::MATCH)) {
+            return make_match();
+        } else if (match(token_type::SIZEOF)) {
+            return make_sizeof();
+        } else if (match(token_type::LEFT_PAREN)) {
+            if (std::optional<std::unique_ptr<ast::cast_expr>> cast = make_cast()) {
+                return std::move(*cast);
+            } else {
+                expr_uptr expr = make_expression();
+                if (!consume(token_type::RIGHT_PAREN, "expected ')' after expression")) {
+                    return nullptr;
+                }
+                return std::make_unique<ast::grouping>(std::move(expr));
+            }
+        }
+
+        m_errors.emplace_back(peek(), "expected expression after '" + previous().m_lexeme + "' but got '" + peek().m_lexeme + "'");
+        return nullptr;
+    }
+
+    [[nodiscard]] std::unique_ptr<ast::state_script> Parser::make_state_script() {
+        if (!consume({token_type::SID, token_type::IDENTIFIER}, "expected statescript name after 'statescript'")) {
+            return nullptr;
+        }
+
+        const std::string script_name = statescript_name_from_token(previous());
+
+        if (!consume(token_type::LEFT_BRACE, "expected '{' after 'statescript'")) {
+            return nullptr;
+        }
+
+        if (!consume(token_type::OPTIONS, "expected 'options' section in statescript definition")) {
+            return nullptr;
+        }
+
+        if (!consume(token_type::LEFT_BRACE, "expected '{' after 'options' in statescript definition")) {
+            return nullptr;
+        }
+
+        std::vector<ast::sid_identifier> options;
+
+        while (!check(token_type::RIGHT_BRACE) && !is_at_end()) {
+            const token* option_name = consume(token_type::SID, "expected an SID as an option name in statescript options section");
+            if (!option_name) {
+                return nullptr;
+            }
+            options.push_back(ast::sid_identifier(option_name->m_lexeme));
+        }
+
+        if (!consume(token_type::RIGHT_BRACE, "expected '}' after statescript options section")) {
+            return nullptr;
+        }
+
+        std::vector<ast::variable_declaration> declarations;
+        if (match(token_type::DECLARATIONS)) {
+            if (!consume(token_type::LEFT_BRACE, "expected '{' after 'declarations' in statescript definition")) {
+                return nullptr;
+            }
+
+            while (!check(token_type::RIGHT_BRACE) && !is_at_end()) {
+                std::unique_ptr<ast::variable_declaration> decl = make_statescript_var_declaration();
+                if (!decl) {
+                    return nullptr;
+                }
+                declarations.push_back(std::move(*decl));
+            }
+
+            if (!consume(token_type::RIGHT_BRACE, "expected '}' after statescript declarations section")) {
+                return nullptr;
+            }
+        }
+
+        std::vector<ast::state_script_state> states = make_statescript_states();
+
+        if (states.empty()) {
+            m_errors.emplace_back(peek(), "expected at least one state in statescript definition");
+        }
+
+        if (!consume(token_type::RIGHT_BRACE, "expected '}' at end of statescript definition")) {
+            return nullptr;
+        }
+
+        return std::make_unique<ast::state_script>(std::move(script_name), std::move(options), std::move(declarations), std::move(states));
+    }
+
+    [[nodiscard]] std::vector<ast::state_script_state> Parser::make_statescript_states() {
+        std::vector<ast::state_script_state> states;
+        while (match(token_type::STATE) && !is_at_end()) {
+            const token* state_name = consume({token_type::SID, token_type::IDENTIFIER}, "expected state name after 'state' in statescript definition");
+            if (!state_name) {
+                return {};
+            }
+
+            if (!consume(token_type::LEFT_BRACE, "expected '{' after state name in statescript definition")) {
+                return {};
+            }
+
+            std::vector<ast::state_script_block> blocks = make_statescript_blocks();
+            if (blocks.empty()) {
+                m_errors.emplace_back(peek(), "expected at least one block in state " + state_name->m_lexeme + " definition but got none");
+            }
+
+            if (!consume(token_type::RIGHT_BRACE, "expected '}' after state body in statescript definition")) {
+                return {};
+            }
+
+            states.emplace_back(statescript_name_from_token(*state_name), std::move(blocks));
+        }
+        return states;
+    }
+
+    [[nodiscard]] std::unique_ptr<ast::variable_declaration> Parser::make_statescript_var_declaration() {
+        std::optional<ast::full_type> type = make_type();
+
+        if (!type) {
+            return nullptr;
+        }
+
+        const token* name = consume(token_type::SID, "expected sid in statescript declaration");
+        if (!name) {
+            return nullptr;
+        }
+
+        expr_uptr init = nullptr;
+        if (match(token_type::EQUAL)) {
+            init = make_expression();
+        }
+        if (!consume(token_type::SEMICOLON, "expected ';' after variable declaration in statescript declaration section")) {
+            return nullptr;
+        }
+
+        if (init) {
+            return std::make_unique<ast::variable_declaration>(std::move(*type), name->m_lexeme, std::move(init));
+        } else {
+            return std::make_unique<ast::variable_declaration>(std::move(*type), name->m_lexeme);
+        }
+    }
+
+    [[nodiscard]] std::vector<ast::state_script_block> Parser::make_statescript_blocks() {
+        std::vector<ast::state_script_block> blocks;
+        while (match(token_type::BLOCK) && !is_at_end()) {
+            BLOCK_TYPE block_type;
+            std::string event_name = "";
+            if (match(token_type::START)) {
+                block_type = BLOCK_TYPE::START;
+            } else if (match(token_type::END)) {
+                block_type = BLOCK_TYPE::END;
+            } else if (match(token_type::EVENT)) {
+                block_type = BLOCK_TYPE::EVENT;
+                const token* block_name = consume({token_type::SID, token_type::IDENTIFIER}, "expected name after 'event'");
+                if (!block_name) {
+                    return {};
+                }
+                event_name = statescript_name_from_token(*block_name);
+            } else if (match(token_type::UPDATE)) {
+                block_type = BLOCK_TYPE::UPDATE;
+            } else if (match(token_type::VIRTUAL)) {
+                block_type = BLOCK_TYPE::VIRTUAL;
+            } else {
+                m_errors.emplace_back(peek(), "expected one of 'start', 'end', 'event', 'update' or 'virtual' but got " + peek().m_lexeme);
+                return {};
+            }
+
+            if (!consume(token_type::LEFT_BRACE, "expected '{' after block name in statescript definition")) {
+                return {};
+            }
+
+            std::vector<ast::state_script_track> tracks = make_statescript_tracks();
+            if (tracks.empty()) {
+                m_errors.emplace_back(peek(), "expected at least one track in block definition but got none");
+            }
+
+            if (!consume(token_type::RIGHT_BRACE, "expected '}' after block body in statescript definition")) {
+                return {};
+            }
+
+            if (event_name != "") {
+                blocks.emplace_back(std::move(event_name), std::move(tracks));
+            } else {
+                blocks.emplace_back(block_type, std::move(tracks));
+            }
+        }
+
+        return blocks;
+    }
+
+    [[nodiscard]] std::vector<ast::state_script_track> Parser::make_statescript_tracks() {
+        std::vector<ast::state_script_track> tracks;
+        while (match(token_type::TRACK) && !is_at_end()) {
+            const token* track_name = consume({token_type::SID, token_type::IDENTIFIER}, "expected track name after 'track' in statescript definition");
+            if (!track_name) {
+                return {};
+            }
+
+            if (!consume(token_type::LEFT_BRACE, "expected '{' after track " + track_name->m_lexeme + " in statescript definition")) {
+                return {};
+            }
+
+            std::vector<ast::function_definition> lambdas = make_statescript_lambdas();
+            if (lambdas.empty()) {
+                m_errors.emplace_back(peek(), "expected at least one lambda in track " + track_name->m_lexeme + " definition but got none");
+            }
+
+            if (!consume(token_type::RIGHT_BRACE, "expected '}' after track body in statescript definition")) {
+                return {};
+            }
+
+            tracks.emplace_back(statescript_name_from_token(*track_name), std::move(lambdas));
+        }
+
+        return tracks;
+    }
+
+    [[nodiscard]] std::vector<ast::function_definition> Parser::make_statescript_lambdas() {
+        std::vector<ast::function_definition> lambdas;
+        while (match(token_type::LAMBDA) && !is_at_end()) {
+            stmnt_uptr body = make_statement();
+            if (!body) {
+                m_errors.emplace_back(peek(), "expected lambda body statement but got '" + peek().m_lexeme + "'");
+                return {};
+            }
+            assert(body);
+            assert(dynamic_cast<ast::block*>(body.get()));
+            ast::function_definition lambda;
+            lambda.m_name = state_script_function_id{};
+            lambda.m_type.m_return = std::make_shared<ast::full_type>(ast::make_type_from_prim(ast::primitive_kind::NOTHING));
+            lambda.m_body = std::move(*static_cast<ast::block*>(body.release()));
+            lambdas.push_back(std::move(lambda));
+        }
+        return lambdas;
+    }
+
+    void Parser::add_mapped_types(const std::unordered_map<sid64, ast::full_type>& types) {
+        for (const auto& [sid, type] : types) {
+            if (const ast::struct_type* struct_t_ptr = std::get_if<ast::struct_type>(&type)) {
+                m_knownTypes.emplace(struct_t_ptr->m_name, *struct_t_ptr);
+            } else if (const ast::enum_type* enum_t_ptr = std::get_if<ast::enum_type>(&type)) {
+                m_knownTypes.emplace(enum_t_ptr->m_name, *enum_t_ptr);
+            }
+        }
+    }
+
+    [[nodiscard]] std::optional<ast::function_to_mapped_vars> Parser::make_typemap() {
+        if (!consume(token_type::TYPEMAP, "expected type map keyword")) {
+            return std::nullopt;
+        }
+
         if (!consume(token_type::LEFT_BRACE, "expected {")) {
             return std::nullopt;
         }
 
-        ast::mapped_var_scope var_scope;
-        
-        while (match(token_type::INT)) {
-            u64 var_index;
-            if (const auto num = ast::get_raw_number(previous().m_literal)) {
-                var_index = *num;
-            } else {
-                m_errors.emplace_back(previous(), "expected variable index");
+        ast::function_to_mapped_vars function_scopes;
+
+        while (match(token_type::SID)) {
+            const std::string name = previous().m_lexeme.substr(1, previous().m_lexeme.size() - 1);
+            if (!consume(token_type::LEFT_BRACE, "expected {")) {
                 return std::nullopt;
             }
-            std::optional type_res = make_type();
-            if (!type_res) {
-                return std::nullopt;
-            }
-            std::optional<std::string> alias{};
-            if (match(token_type::ARROW)) {
-                if (!consume(token_type::IDENTIFIER, "expected identifier name after ->")) {
+
+            ast::mapped_var_scope var_scope;
+
+            while (match(token_type::INT)) {
+                u64 var_index;
+                if (const auto num = ast::get_raw_number(previous().m_literal)) {
+                    var_index = *num;
+                } else {
+                    m_errors.emplace_back(previous(), "expected variable index");
                     return std::nullopt;
                 }
-                alias = previous().m_lexeme;
+                std::optional type_res = make_type();
+                if (!type_res) {
+                    return std::nullopt;
+                }
+                std::optional<std::string> alias{};
+                if (match(token_type::ARROW)) {
+                    if (!consume(token_type::IDENTIFIER, "expected identifier name after ->")) {
+                        return std::nullopt;
+                    }
+                    alias = previous().m_lexeme;
+                }
+
+                var_scope.emplace(var_index, std::make_pair(std::move(*type_res), std::move(alias)));
+
+                if (!consume(token_type::SEMICOLON, "expected ; at end of variable mapping")) {
+                    return std::nullopt;
+                }
             }
-
-            var_scope.emplace(var_index, std::make_pair(std::move(*type_res), std::move(alias)));
-
-            if (!consume(token_type::SEMICOLON, "expected ; at end of variable mapping")) {
+            if (!consume(token_type::RIGHT_BRACE, "expected }")) {
                 return std::nullopt;
             }
+            function_scopes.emplace(SID(name.c_str()), std::move(var_scope));
         }
         if (!consume(token_type::RIGHT_BRACE, "expected }")) {
             return std::nullopt;
         }
-        function_scopes.emplace(SID(name.c_str()), std::move(var_scope));
-    }
-    if (!consume(token_type::RIGHT_BRACE, "expected }")) {
-        return std::nullopt;
-    }
 
-    return function_scopes;
-} 
+        return function_scopes;
+    }
 
 }

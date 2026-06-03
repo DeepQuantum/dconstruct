@@ -8,7 +8,6 @@
 namespace dconstruct::ast {
 
     struct state_script_state : public ast_element {
-
         state_script_state(std::string name, std::vector<state_script_block> blocks) noexcept
             : m_name(std::move(name)), m_blocks(std::move(blocks)) {}
 

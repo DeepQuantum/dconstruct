@@ -4,17 +4,15 @@
 
 namespace dconstruct::ast {
     struct subscript_expr : public expression {
-
-        explicit subscript_expr(expr_uptr&& lhs, expr_uptr&& rhs) noexcept : m_lhs(std::move(lhs)), m_rhs(std::move(rhs)) { };
-
+        explicit subscript_expr(expr_uptr&& lhs, expr_uptr&& rhs) noexcept : m_lhs(std::move(lhs)), m_rhs(std::move(rhs)) {};
 
         void pseudo_c(ast_serialization_buffer& buffer) const final;
         void pseudo_py(ast_serialization_buffer& buffer) const final;
-		void pseudo_racket(ast_serialization_buffer& buffer) const final;
+        void pseudo_racket(ast_serialization_buffer& buffer) const final;
         [[nodiscard]] expr_uptr simplify() const final;
         [[nodiscard]] full_type compute_type_unchecked(const compilation::scope& env) const noexcept final;
         [[nodiscard]] semantic_check_res compute_type_checked(compilation::scope& env) const noexcept final;
-        [[nodiscard]] expr_uptr clone() const noexcept final;   
+        [[nodiscard]] expr_uptr clone() const noexcept final;
         [[nodiscard]] bool equals(const expression& other) const noexcept final;
         [[nodiscard]] u16 calc_complexity() const noexcept final;
         [[nodiscard]] bool is_l_evaluable() const noexcept final { return true; }

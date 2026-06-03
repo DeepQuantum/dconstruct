@@ -18,7 +18,6 @@ namespace dconstruct {
         UC4,
     };
 
-
     struct disassembled_value;
 
     struct mapped_value;
@@ -45,15 +44,13 @@ namespace dconstruct {
         p64 m_offset;
         disassembled_values_t m_values;
     };
-    
 
     class Disassembler {
     public:
-
-        Disassembler(BinaryFile* file, const SIDBase* sidbase, const game_type game = game_type::T2R) noexcept 
+        Disassembler(BinaryFile* file, const SIDBase* sidbase, const game_type game = game_type::T2R) noexcept
             : m_currentFile(file), m_sidbase(sidbase), m_game(game) {};
 
-        Disassembler(BinaryFile* file, const SIDBase* sidbase, const std::unordered_map<sid64, ast::full_type>* known_types, const game_type game = game_type::T2R) noexcept 
+        Disassembler(BinaryFile* file, const SIDBase* sidbase, const std::unordered_map<sid64, ast::full_type>* known_types, const game_type game = game_type::T2R) noexcept
             : m_currentFile(file), m_sidbase(sidbase), m_knownTypes(known_types), m_game(game) {};
 
         const std::vector<disassembled_entry>& disassemble();
@@ -63,7 +60,7 @@ namespace dconstruct {
         }
         virtual ~Disassembler() = default;
 
-        template<typename T>
+        template <typename T>
         [[nodiscard]] const T* get_value_ptr_at(const u64 offset) const noexcept {
             return reinterpret_cast<const T*>(&this->m_currentFile->m_bytes[offset]);
         }
@@ -85,22 +82,9 @@ namespace dconstruct {
         std::unordered_map<u64, std::vector<std::string>> m_offsetsToFunctionNames;
 
     protected:
-        std::map<sid64, std::vector<const structs::unmapped*>> m_unmappedEntries;
-        BinaryFile* m_currentFile = nullptr;
-        const SIDBase* m_sidbase = nullptr;
-
         inline static const std::unordered_map<sid64, ast::full_type> s_emptyTypes;
-        const std::unordered_map<sid64, ast::full_type>* m_knownTypes = &s_emptyTypes;
-
-
-        std::vector<std::shared_ptr<function_disassembly>> m_functions;
-        std::optional<ast::state_script> m_stateScript;
-        embedded_function_id m_currentEmbeddedFunctionId;
-        game_type m_game = game_type::T2R;
-        std::vector<disassembled_entry> m_disassembledEntries;
-
-
-        FILE* m_perfFile = nullptr;
+        static constexpr u32 INTERPRETED_BUFFER_SIZE = 512;
+        static constexpr u32 DISASSEMBLY_BUFFER_SIZE = 256;
 
         disassembled_entry insert_entry(const Entry* entry);
         disassembled_value insert_struct(const structs::unmapped* entry, const sid64 name_id = 0, const sid64 type_id = 0);
@@ -119,13 +103,20 @@ namespace dconstruct {
         [[nodiscard]] std::optional<ast::variable_declaration> insert_variable(const SsDeclaration* var);
         [[nodiscard]] ast::state_script_block insert_on_block(const SsOnBlock* block, state_script_function_id& state_name);
         void set_register_types(Register&, Register&, const ast::full_type type);
-        void process_instruction(const u32, function_disassembly &);
+        void process_instruction(const u32, function_disassembly&);
         [[nodiscard]] u32 get_offset(const location) const noexcept;
         [[nodiscard]] u32 get_offset(const void*) const noexcept;
         [[nodiscard]] bool pointer_gets_called(const u32, const u32, const function_disassembly&) const;
-        
 
-        static constexpr u32 INTERPRETED_BUFFER_SIZE = 512;
-        static constexpr u32 DISASSEMBLY_BUFFER_SIZE = 256;
+        std::optional<ast::state_script> m_stateScript;
+        embedded_function_id m_currentEmbeddedFunctionId;
+        std::vector<std::shared_ptr<function_disassembly>> m_functions;
+        std::vector<disassembled_entry> m_disassembledEntries;
+        std::map<sid64, std::vector<const structs::unmapped*>> m_unmappedEntries;
+        const std::unordered_map<sid64, ast::full_type>* m_knownTypes = &s_emptyTypes;
+        const SIDBase* m_sidbase = nullptr;
+        BinaryFile* m_currentFile = nullptr;
+        FILE* m_perfFile = nullptr;
+        game_type m_game = game_type::T2R;
     };
 }

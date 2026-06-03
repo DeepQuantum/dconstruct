@@ -11,12 +11,12 @@
 namespace dconstruct::ast {
 
     struct state_script : public global_declaration {
-
         state_script(
             std::string name,
             std::vector<sid_identifier> options,
             std::vector<variable_declaration> declarations,
-            std::vector<state_script_state> states) noexcept
+            std::vector<state_script_state> states
+        ) noexcept
             : m_name(std::move(name)),
               m_options(std::move(options)),
               m_declarations(std::move(declarations)),
@@ -43,7 +43,6 @@ namespace dconstruct::ast {
         std::vector<state_script_state> m_states;
 
         u64 m_initialStateIdx = 0;
-        
     };
 
     [[nodiscard]] bool operator==(const state_script& lhs, const state_script& rhs) noexcept;

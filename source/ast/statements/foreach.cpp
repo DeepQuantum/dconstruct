@@ -6,45 +6,42 @@
 
 namespace dconstruct::ast {
 
-
-void foreach_stmt::pseudo_c(ast_serialization_buffer& buffer) const {
-    buffer.append("foreach ("sv, m_var, " : "sv, *m_iterable, ") "sv, *m_body);
-}
-
-
-void foreach_stmt::pseudo_py(ast_serialization_buffer& buffer) const {
-    buffer.append("for "sv, m_var, " in "sv, *m_iterable, ':', *m_body);
-}
-
-void foreach_stmt::pseudo_racket(ast_serialization_buffer& buffer) const {
-    buffer.append("(for (["sv, m_var, ' ', *m_iterable, "]) "sv, *m_body, ')');
-}
-
-[[nodiscard]] bool foreach_stmt::equals(const statement& rhs) const noexcept {
-    const foreach_stmt* rhs_ptr = dynamic_cast<const foreach_stmt*>(&rhs);
-    if (rhs_ptr == nullptr) {
-        return false;
+    void foreach_stmt::pseudo_c(ast_serialization_buffer& buffer) const {
+        buffer.append("foreach ("sv, m_var, " : "sv, *m_iterable, ") "sv, *m_body);
     }
-    return m_var == rhs_ptr->m_var && m_iterable == rhs_ptr->m_iterable && m_body == rhs_ptr->m_body;
-}
 
-[[nodiscard]] std::unique_ptr<statement> foreach_stmt::clone() const noexcept {
-    return std::make_unique<foreach_stmt>(m_var, m_iterable->clone(), m_body->clone());
-}
+    void foreach_stmt::pseudo_py(ast_serialization_buffer& buffer) const {
+        buffer.append("for "sv, m_var, " in "sv, *m_iterable, ':', *m_body);
+    }
 
+    void foreach_stmt::pseudo_racket(ast_serialization_buffer& buffer) const {
+        buffer.append("(for (["sv, m_var, ' ', *m_iterable, "]) "sv, *m_body, ')');
+    }
 
-VAR_OPTIMIZATION_ACTION foreach_stmt::var_optimization_pass(var_optimization_env& env) noexcept {
-    env.check_action(&m_iterable);
-    env.check_action(&m_body);
-    return VAR_OPTIMIZATION_ACTION::NONE;
-}
+    [[nodiscard]] bool foreach_stmt::equals(const statement& rhs) const noexcept {
+        const foreach_stmt* rhs_ptr = dynamic_cast<const foreach_stmt*>(&rhs);
+        if (rhs_ptr == nullptr) {
+            return false;
+        }
+        return m_var == rhs_ptr->m_var && m_iterable == rhs_ptr->m_iterable && m_body == rhs_ptr->m_body;
+    }
 
-FOREACH_OPTIMIZATION_ACTION foreach_stmt::foreach_optimization_pass(foreach_optimization_env& env) noexcept {
-    return FOREACH_OPTIMIZATION_ACTION::NONE;
-}
+    [[nodiscard]] std::unique_ptr<statement> foreach_stmt::clone() const noexcept {
+        return std::make_unique<foreach_stmt>(m_var, m_iterable->clone(), m_body->clone());
+    }
 
-MATCH_OPTIMIZATION_ACTION foreach_stmt::match_optimization_pass(match_optimization_env& env) noexcept {
-    return m_body->match_optimization_pass(env);
-}
+    VAR_OPTIMIZATION_ACTION foreach_stmt::var_optimization_pass(var_optimization_env& env) noexcept {
+        env.check_action(&m_iterable);
+        env.check_action(&m_body);
+        return VAR_OPTIMIZATION_ACTION::NONE;
+    }
+
+    FOREACH_OPTIMIZATION_ACTION foreach_stmt::foreach_optimization_pass(foreach_optimization_env& env) noexcept {
+        return FOREACH_OPTIMIZATION_ACTION::NONE;
+    }
+
+    MATCH_OPTIMIZATION_ACTION foreach_stmt::match_optimization_pass(match_optimization_env& env) noexcept {
+        return m_body->match_optimization_pass(env);
+    }
 
 }

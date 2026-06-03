@@ -14,7 +14,6 @@ namespace dconstruct::testing {
     static const std::filesystem::path TEST_ROOT = DCONSTRUCT_TEST_ROOT;
     static SIDBase base = *SIDBase::from_binary(TEST_ROOT / "fixtures" / "uc4" / "sidbase_sorted.bin");
 
-
     TEST(DISASSEMBLER, NonExistingFile) {
         const std::string filepath = "dc_test_files/not_found.bin";
         const std::string crash_msg = "coudln't open \"" + filepath + "\"\n";
@@ -69,4 +68,3 @@ namespace dconstruct::testing {
         ASSERT_GT(dis.get_all_functions().size(), 0);
     }
 }
-

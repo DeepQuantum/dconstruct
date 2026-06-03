@@ -4,8 +4,7 @@
 
 namespace dconstruct::ast {
     struct for_stmt : public statement {
-        explicit for_stmt(stmnt_uptr&& init, expr_uptr&& condition, expr_uptr&& incr, stmnt_uptr&& body) noexcept :
-        m_init(std::move(init)), m_condition(std::move(condition)), m_incr(std::move(incr)), m_body(std::move(body)) {};
+        explicit for_stmt(stmnt_uptr&& init, expr_uptr&& condition, expr_uptr&& incr, stmnt_uptr&& body) noexcept : m_init(std::move(init)), m_condition(std::move(condition)), m_incr(std::move(incr)), m_body(std::move(body)) {};
 
         void pseudo_c(ast_serialization_buffer& buffer) const final;
         void pseudo_py(ast_serialization_buffer& buffer) const final;
@@ -15,12 +14,10 @@ namespace dconstruct::ast {
         FOREACH_OPTIMIZATION_ACTION foreach_optimization_pass(foreach_optimization_env& env) noexcept final;
         MATCH_OPTIMIZATION_ACTION match_optimization_pass(match_optimization_env& env) noexcept final;
 
-
         [[nodiscard]] bool equals(const statement& rhs) const noexcept final;
         [[nodiscard]] std::unique_ptr<statement> clone() const noexcept final;
         [[nodiscard]] std::vector<semantic_check_error> check_semantics(compilation::scope& env) const noexcept final;
         [[nodiscard]] emission_err emit_dc(compilation::function& fn, compilation::global_state& global) const noexcept final;
-
 
         stmnt_uptr m_init;
         expr_uptr m_condition;

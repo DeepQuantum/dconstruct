@@ -5,29 +5,24 @@
 #include "ast/optimization/match_optimization.h"
 #include "ast/optimization/foreach_optimization.h"
 
-
 namespace dconstruct::ast {
     struct match_expr : public expression {
         using matches_t = std::pair<expr_uptr, expr_uptr>;
 
-        match_expr(std::vector<matches_t>&& match_pairs) noexcept :
-        m_matchPairs(std::move(match_pairs)) {
+        match_expr(std::vector<matches_t>&& match_pairs) noexcept : m_matchPairs(std::move(match_pairs)) {
             init_match_metrics();
         };
 
-        match_expr(std::vector<matches_t>&& match_pairs, expr_uptr&& _default) noexcept :
-        m_matchPairs(std::move(match_pairs)), m_default(std::move(_default)) {
+        match_expr(std::vector<matches_t>&& match_pairs, expr_uptr&& _default) noexcept : m_matchPairs(std::move(match_pairs)), m_default(std::move(_default)) {
             init_match_metrics();
         };
 
-        match_expr(expr_uptr&& condition, std::vector<matches_t>&& match_pairs, expr_uptr&& _default) noexcept : 
-        m_conditions(1), m_matchPairs(std::move(match_pairs)), m_default(std::move(_default)) {
+        match_expr(expr_uptr&& condition, std::vector<matches_t>&& match_pairs, expr_uptr&& _default) noexcept : m_conditions(1), m_matchPairs(std::move(match_pairs)), m_default(std::move(_default)) {
             m_conditions[0] = std::move(condition);
             init_match_metrics();
         };
 
-        match_expr(std::vector<expr_uptr>&& conditions, std::vector<matches_t>&& match_pairs, expr_uptr&& _default) : 
-        m_conditions(std::move(conditions)), m_matchPairs(std::move(match_pairs)), m_default(std::move(_default)) {
+        match_expr(std::vector<expr_uptr>&& conditions, std::vector<matches_t>&& match_pairs, expr_uptr&& _default) : m_conditions(std::move(conditions)), m_matchPairs(std::move(match_pairs)), m_default(std::move(_default)) {
             init_match_metrics();
         };
 
@@ -35,7 +30,7 @@ namespace dconstruct::ast {
         void pseudo_py(ast_serialization_buffer& buffer) const final;
         void pseudo_racket(ast_serialization_buffer& buffer) const final;
         [[nodiscard]] expr_uptr simplify() const final;
-        [[nodiscard]] bool equals(const expression &rhs) const noexcept final;
+        [[nodiscard]] bool equals(const expression& rhs) const noexcept final;
         [[nodiscard]] expr_uptr clone() const final;
         [[nodiscard]] full_type compute_type_unchecked(const compilation::scope& env) const noexcept final;
         [[nodiscard]] semantic_check_res compute_type_checked(compilation::scope& env) const noexcept final;
@@ -50,16 +45,8 @@ namespace dconstruct::ast {
 
         std::vector<expr_uptr> m_conditions;
         expr_uptr m_default;
+
     private:
-        std::vector<matches_t> m_matchPairs;
-        bool m_hasDensity = false;
-        u32 m_R = 0;
-        f32 m_density = 0;
-        i64 m_min = 0;
-        i64 m_max = 0;
-
-        mutable std::optional<Opcode> m_loadOpcode;
-
         [[nodiscard]] std::vector<std::pair<std::vector<const expr_uptr*>, const expr_uptr*>> group_patterns() const noexcept;
         void init_match_metrics() noexcept;
         void sort_matches() noexcept;
@@ -71,5 +58,13 @@ namespace dconstruct::ast {
             reg_idx condition,
             const std::optional<reg_idx> destination = std::nullopt
         ) const noexcept;
+
+        std::vector<matches_t> m_matchPairs;
+        i64 m_min = 0;
+        i64 m_max = 0;
+        u32 m_R = 0;
+        f32 m_density = 0;
+        mutable std::optional<Opcode> m_loadOpcode;
+        bool m_hasDensity = false;
     };
 }

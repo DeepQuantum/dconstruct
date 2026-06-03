@@ -52,10 +52,12 @@ namespace dconstruct::compilation {
 
     [[nodiscard]] std::optional<std::string> validate_pak68_edits(
         const std::filesystem::path& path,
-        const std::vector<pak68_edit_request>& requests) noexcept;
+        const std::vector<pak68_edit_request>& requests
+    ) noexcept;
 
     [[nodiscard]] std::expected<std::vector<pak68_edit_summary>, std::string> apply_pak68_edits(
         const std::filesystem::path& path,
-        const std::vector<pak68_edit_request>& requests) noexcept;
+        const std::vector<pak68_edit_request>& requests
+    ) noexcept;
 
 }

@@ -9,8 +9,7 @@ namespace dconstruct {
 
     class MappingDisassembler : public Disassembler {
     public:
-        MappingDisassembler(BinaryFile* file, const SIDBase* sidbase, MappingRegistry& registry, const game_type game = game_type::T2R) noexcept :
-        Disassembler(file, sidbase, game), m_registry(registry) {}
+        MappingDisassembler(BinaryFile* file, const SIDBase* sidbase, MappingRegistry& registry, const game_type game = game_type::T2R) noexcept : Disassembler(file, sidbase, game), m_registry(registry) {}
 
         ~MappingDisassembler() override = default;
 

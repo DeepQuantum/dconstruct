@@ -6,11 +6,10 @@
 #include "ast/optimization/foreach_optimization.h"
 #include <list>
 
-
 namespace dconstruct::ast {
     struct block : public statement {
         explicit block() noexcept : m_statements{} {};
-        explicit block(std::list<stmnt_uptr>&& stmnts) noexcept : m_statements{ std::move(stmnts) } {};
+        explicit block(std::list<stmnt_uptr>&& stmnts) noexcept : m_statements{std::move(stmnts)} {};
         explicit block(std::vector<stmnt_uptr>&& stmnts) noexcept {
             for (auto& stmnt : stmnts) {
                 m_statements.push_back(std::move(stmnt));
@@ -24,7 +23,7 @@ namespace dconstruct::ast {
 
         void pseudo_c(ast_serialization_buffer&) const final;
         void pseudo_py(ast_serialization_buffer&) const final;
-		void pseudo_racket(ast_serialization_buffer&) const final;
+        void pseudo_racket(ast_serialization_buffer&) const final;
         [[nodiscard]] bool equals(const statement& rhs) const noexcept final;
         [[nodiscard]] std::unique_ptr<statement> clone() const noexcept final;
         VAR_OPTIMIZATION_ACTION var_optimization_pass(var_optimization_env& env) noexcept final;
@@ -37,8 +36,7 @@ namespace dconstruct::ast {
 
         void clear_dead_statements() noexcept;
 
-
         std::list<stmnt_uptr> m_statements;
-       // std::vector<u32> m_removedStatementsIndices;
+        // std::vector<u32> m_removedStatementsIndices;
     };
 }

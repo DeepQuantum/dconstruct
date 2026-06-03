@@ -2,13 +2,12 @@
 
 #include "ast/statement.h"
 
-
 namespace dconstruct::ast {
 
     struct match_optimization_env {
-        //std::vector<std::unique_ptr<statement>*> m_resultDeclarations;
+        // std::vector<std::unique_ptr<statement>*> m_resultDeclarations;
         std::unique_ptr<statement>* m_resultDeclaration;
-        //std::unique_ptr<statement>* m_checkDeclaration;
+        // std::unique_ptr<statement>* m_checkDeclaration;
         std::string m_checkIdentifier;
         std::unique_ptr<statement>* m_outerIf;
         std::unique_ptr<expression>* m_checkVar;

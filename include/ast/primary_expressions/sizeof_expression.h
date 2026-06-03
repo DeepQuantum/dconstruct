@@ -4,13 +4,11 @@
 #include "ast/optimization/var_optimization.h"
 #include "ast/optimization/foreach_optimization.h"
 
-
 namespace dconstruct::ast {
 
     struct sizeof_expr : public expression {
-
         using operand_t = std::variant<full_type, expr_uptr>;
-        
+
         explicit sizeof_expr(operand_t&& rhs) noexcept : m_operand(std::move(rhs)) {};
 
         [[nodiscard]] bool equals(const expression& rhs) const noexcept final;
@@ -30,12 +28,11 @@ namespace dconstruct::ast {
 
         [[nodiscard]] expr_uptr simplify() const final;
         [[nodiscard]] emission_res emit_dc(compilation::function& fn, compilation::global_state& global, const std::optional<reg_idx> destination = std::nullopt) const noexcept override;
-    
+
         [[nodiscard]] VAR_OPTIMIZATION_ACTION var_optimization_pass(var_optimization_env& env) noexcept final;
         [[nodiscard]] FOREACH_OPTIMIZATION_ACTION foreach_optimization_pass(foreach_optimization_env& env) noexcept final;
 
         operand_t m_operand;
     };
-
 
 }

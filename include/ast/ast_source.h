@@ -11,7 +11,6 @@
 #include <type_traits>
 #include <utility>
 
-
 using namespace std::literals;
 
 namespace dconstruct::ast {
@@ -85,7 +84,8 @@ namespace dconstruct::ast {
             m_buffer.append(value);
         }
 
-        template<typename T> requires (std::is_arithmetic_v<std::remove_cvref_t<T>> && !std::is_same_v<std::remove_cvref_t<T>, char>)
+        template <typename T>
+            requires(std::is_arithmetic_v<std::remove_cvref_t<T>> && !std::is_same_v<std::remove_cvref_t<T>, char>)
         void _append(T value) {
             append_format("{}", value);
         }
@@ -100,7 +100,7 @@ namespace dconstruct::ast {
 
         void _append(const ast_element& element);
 
-        template<typename... Args>
+        template <typename... Args>
         void append(Args&&... args) {
             (_append(std::forward<Args>(args)), ...);
         }
@@ -112,22 +112,22 @@ namespace dconstruct::ast {
             }
         }
 
-        template<typename... Args>
+        template <typename... Args>
         void append_format(std::format_string<Args...> fmt, Args&&... args) {
             std::format_to(std::back_inserter(m_buffer), fmt, std::forward<Args>(args)...);
         }
 
         void append_indent() {
-            m_buffer.append(static_cast<size_t>(m_current_indent) * m_indent_width, ' ');
+            m_buffer.append(static_cast<size_t>(m_currentIndent) * m_indentWidth, ' ');
         }
 
         void indent_more() noexcept {
-            ++m_current_indent;
+            ++m_currentIndent;
         }
 
         void indent_less() noexcept {
-            if (m_current_indent != 0) {
-                --m_current_indent;
+            if (m_currentIndent != 0) {
+                --m_currentIndent;
             }
         }
 
@@ -151,8 +151,8 @@ namespace dconstruct::ast {
             return std::move(m_buffer);
         }
 
-        u8 m_current_indent = 0;
-        u8 m_indent_width = 4;
+        u8 m_currentIndent = 0;
+        u8 m_indentWidth = 4;
         LANGUAGE_FLAGS m_flags = LANGUAGE_FLAGS::C;
         std::string m_buffer;
     };
@@ -185,7 +185,6 @@ namespace dconstruct::ast {
     }
 
     inline void serialize_ast(ast_serialization_buffer& buffer, const ast_element& element) {
-        
     }
 
     inline void ast_serialization_buffer::_append(const ast_element& element) {

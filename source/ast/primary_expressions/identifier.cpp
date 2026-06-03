@@ -1,125 +1,131 @@
 #include "ast/primary_expressions/identifier.h"
 #include "ast/assign.h"
 
-
 namespace dconstruct::ast {
 
-    
-void identifier::pseudo_c(ast_serialization_buffer& buffer) const {
-    buffer.append(m_name.m_lexeme);
-}
-
-void identifier::pseudo_py(ast_serialization_buffer& buffer) const {
-    buffer.append(m_name.m_lexeme);
-}
-
-void identifier::pseudo_racket(ast_serialization_buffer& buffer) const {
-    buffer.append(m_name.m_lexeme);
-}
-
-[[nodiscard]] bool identifier::equals(const expression &rhs) const noexcept {
-    const identifier* rhs_id = dynamic_cast<const identifier*>(&rhs);
-    if (rhs_id == nullptr) {
-        return false;
-    }
-    return m_name == rhs_id->m_name;
-}
-
-[[nodiscard]] expr_uptr identifier::simplify() const {
-    return std::make_unique<identifier>(*this);
-}
-
-[[nodiscard]] expr_uptr identifier::clone() const {
-    auto expr = std::make_unique<identifier>(m_name);
-    if (m_type) expr->set_type(*m_type);
-    return expr;
-}
-
-
-[[nodiscard]] u16 identifier::calc_complexity() const noexcept {
-    return 1;
-}
-
-[[nodiscard]] std::unique_ptr<identifier> identifier::copy() const noexcept {
-    return std::unique_ptr<ast::identifier>{ static_cast<ast::identifier*>(this->clone().release()) };
-}
-
-[[nodiscard]] bool identifier::identifier_name_equals(const std::string& name) const noexcept {
-    return name == m_name.m_lexeme;
-}
-
-[[nodiscard]] semantic_check_res identifier::compute_type_checked(compilation::scope& scope) const noexcept {
-    const full_type *type = scope.lookup(m_name.m_lexeme);
-    if (!type) {
-        return std::unexpected{semantic_check_error{"undeclared identifier: " + m_name.m_lexeme, this}};
-    }
-    return *type;
-}
-
-[[nodiscard]] lvalue_emission_res identifier::emit_dc_lvalue(compilation::function& fn, compilation::global_state& global) const noexcept {
-    const reg_idx* var_location = fn.m_varsToRegs.lookup(m_name.m_lexeme);
-
-    if (!var_location) {
-        return std::unexpected{"variable " + m_name.m_lexeme + " doesn't have a register."};
+    void identifier::pseudo_c(ast_serialization_buffer& buffer) const {
+        buffer.append(m_name.m_lexeme);
     }
 
-    return std::tuple{*var_location, Opcode::Move};
-}
-
-
-
-[[nodiscard]] emission_res identifier::emit_dc_callee(compilation::function& fn, compilation::global_state& global, const std::optional<reg_idx> destination) const noexcept {
-    const sid64 name_sid = std::holds_alternative<u64>(m_name.m_literal) ? std::get<u64>(m_name.m_literal) : SID(m_name.m_lexeme.c_str());
-    const u8 index = fn.add_to_symbol_table(name_sid);
-    RETURN_UNEXP(reg_idx true_destination, fn.fix_destination(destination));
-    fn.emit_instruction(Opcode::LookupPointer, true_destination, index);
-    return true_destination;
-}
-
-[[nodiscard]] emission_res identifier::emit_dc(compilation::function& fn, compilation::global_state& global, const std::optional<reg_idx> destination) const noexcept {
-    const reg_idx* var_location = fn.m_varsToRegs.lookup(m_name.m_lexeme);
-
-    if (!var_location) {
-        return std::unexpected{"variable " + m_name.m_lexeme + " doesn't have a register."};
+    void identifier::pseudo_py(ast_serialization_buffer& buffer) const {
+        buffer.append(m_name.m_lexeme);
     }
 
-    return *var_location;
-}
-
-
-VAR_OPTIMIZATION_ACTION identifier::var_optimization_pass(var_optimization_env& env) noexcept {
-    if (!m_name.m_lexeme.starts_with("var")) {
-        return VAR_OPTIMIZATION_ACTION::NONE;
+    void identifier::pseudo_racket(ast_serialization_buffer& buffer) const {
+        buffer.append(m_name.m_lexeme);
     }
-    auto* ctx = env.m_env.lookup(m_name.m_lexeme); 
-    if (!ctx) {
-        return VAR_OPTIMIZATION_ACTION::NONE;
-    }
-    return VAR_OPTIMIZATION_ACTION::VAR_READ;
-}
 
-MATCH_OPTIMIZATION_ACTION identifier::match_optimization_pass(match_optimization_env& env) noexcept {
-    if (env.m_checkingCondition) {
-        if (env.m_checkIdentifier.empty()) {
-            env.m_checkIdentifier = m_name.m_lexeme;
-            return MATCH_OPTIMIZATION_ACTION::CHECK_VAR_SET;
-        } else if (env.m_checkIdentifier == m_name.m_lexeme) {
-            return MATCH_OPTIMIZATION_ACTION::CHECK_VAR_READ;
-        } else {
+    [[nodiscard]] bool identifier::equals(const expression& rhs) const noexcept {
+        const identifier* rhs_id = dynamic_cast<const identifier*>(&rhs);
+        if (rhs_id == nullptr) {
+            return false;
+        }
+        return m_name == rhs_id->m_name;
+    }
+
+    [[nodiscard]] expr_uptr identifier::simplify() const {
+        return std::make_unique<identifier>(*this);
+    }
+
+    [[nodiscard]] expr_uptr identifier::clone() const {
+        auto expr = std::make_unique<identifier>(m_name);
+        if (m_type)
+            expr->set_type(*m_type);
+        return expr;
+    }
+
+    [[nodiscard]] u16 identifier::calc_complexity() const noexcept {
+        return 1;
+    }
+
+    [[nodiscard]] std::unique_ptr<identifier> identifier::copy() const noexcept {
+        return std::unique_ptr<ast::identifier>{static_cast<ast::identifier*>(this->clone().release())};
+    }
+
+    [[nodiscard]] bool identifier::identifier_name_equals(const std::string& name) const noexcept {
+        return name == m_name.m_lexeme;
+    }
+
+    [[nodiscard]] semantic_check_res identifier::compute_type_checked(compilation::scope& scope) const noexcept {
+        const full_type* type = scope.lookup(m_name.m_lexeme);
+        if (!type) {
+            return std::unexpected{semantic_check_error{"undeclared identifier: " + m_name.m_lexeme, this}};
+        }
+        return *type;
+    }
+
+    [[nodiscard]] lvalue_emission_res identifier::emit_dc_lvalue(
+        compilation::function& fn,
+        compilation::global_state& global
+    ) const noexcept {
+        const reg_idx* var_location = fn.m_varsToRegs.lookup(m_name.m_lexeme);
+
+        if (!var_location) {
+            return std::unexpected{"variable " + m_name.m_lexeme + " doesn't have a register."};
+        }
+
+        return std::tuple{*var_location, Opcode::Move};
+    }
+
+    [[nodiscard]] emission_res identifier::emit_dc_callee(
+        compilation::function& fn,
+        compilation::global_state& global,
+        const std::optional<reg_idx> destination
+    ) const noexcept {
+        const sid64 name_sid = std::holds_alternative<u64>(m_name.m_literal) ? std::get<u64>(m_name.m_literal) : SID(m_name.m_lexeme.c_str());
+        const u8 index = fn.add_to_symbol_table(name_sid);
+        RETURN_UNEXP(reg_idx true_destination, fn.fix_destination(destination));
+        fn.emit_instruction(Opcode::LookupPointer, true_destination, index);
+        return true_destination;
+    }
+
+    [[nodiscard]] emission_res identifier::emit_dc(
+        compilation::function& fn,
+        compilation::global_state& global,
+        const std::optional<reg_idx> destination
+    ) const noexcept {
+        const reg_idx* var_location = fn.m_varsToRegs.lookup(m_name.m_lexeme);
+
+        if (!var_location) {
+            return std::unexpected{"variable " + m_name.m_lexeme + " doesn't have a register."};
+        }
+
+        return *var_location;
+    }
+
+    VAR_OPTIMIZATION_ACTION identifier::var_optimization_pass(var_optimization_env& env) noexcept {
+        if (!m_name.m_lexeme.starts_with("var")) {
+            return VAR_OPTIMIZATION_ACTION::NONE;
+        }
+        auto* ctx = env.m_env.lookup(m_name.m_lexeme);
+        if (!ctx) {
+            return VAR_OPTIMIZATION_ACTION::NONE;
+        }
+        return VAR_OPTIMIZATION_ACTION::VAR_READ;
+    }
+
+    MATCH_OPTIMIZATION_ACTION identifier::match_optimization_pass(match_optimization_env& env) noexcept {
+        if (env.m_checkingCondition) {
+            if (env.m_checkIdentifier.empty()) {
+                env.m_checkIdentifier = m_name.m_lexeme;
+                return MATCH_OPTIMIZATION_ACTION::CHECK_VAR_SET;
+            } else if (env.m_checkIdentifier == m_name.m_lexeme) {
+                return MATCH_OPTIMIZATION_ACTION::CHECK_VAR_READ;
+            } else {
+                return MATCH_OPTIMIZATION_ACTION::NONE;
+            }
+        }
+        if (!m_name.m_lexeme.starts_with("var")) {
             return MATCH_OPTIMIZATION_ACTION::NONE;
         }
+        if (!env.m_resultDeclaration) {
+            return MATCH_OPTIMIZATION_ACTION::NONE;
+        }
+        return MATCH_OPTIMIZATION_ACTION::RESULT_VAR_WRITE;
     }
-    if (!m_name.m_lexeme.starts_with("var")) {
-        return MATCH_OPTIMIZATION_ACTION::NONE;
-    }
-    if (!env.m_resultDeclaration) {
-        return MATCH_OPTIMIZATION_ACTION::NONE;
-    }
-    return MATCH_OPTIMIZATION_ACTION::RESULT_VAR_WRITE;
-}
 
-FOREACH_OPTIMIZATION_ACTION identifier::foreach_optimization_pass(foreach_optimization_env&) noexcept {
-    return FOREACH_OPTIMIZATION_ACTION::NONE;
-}
+    FOREACH_OPTIMIZATION_ACTION identifier::foreach_optimization_pass(foreach_optimization_env&) noexcept {
+        return FOREACH_OPTIMIZATION_ACTION::NONE;
+    }
 
 }

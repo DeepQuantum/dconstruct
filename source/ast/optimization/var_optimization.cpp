@@ -2,47 +2,46 @@
 #include "ast/assign.h"
 #include "ast/statements/variable_declaration.h"
 
-
 namespace dconstruct::ast {
 
-void var_optimization_env::check_action(expr_uptr* expr) {
-    const auto pass_action = expr->get()->var_optimization_pass(*this);
-    switch (pass_action) {
-        case VAR_OPTIMIZATION_ACTION::VAR_READ: {
-            const std::string& var_name = static_cast<identifier&>(**expr).m_name.m_lexeme;
-            if (!m_isLvalueDereference) {
-                m_env.lookup(var_name)->m_reads.push_back(expr);
-            } else {
-                m_env.undefine(var_name);
+    void var_optimization_env::check_action(expr_uptr* expr) {
+        const auto pass_action = expr->get()->var_optimization_pass(*this);
+        switch (pass_action) {
+            case VAR_OPTIMIZATION_ACTION::VAR_READ: {
+                const std::string& var_name = static_cast<identifier&>(**expr).m_name.m_lexeme;
+                if (!m_isLvalueDereference) {
+                    m_env.lookup(var_name)->m_reads.push_back(expr);
+                } else {
+                    m_env.undefine(var_name);
+                }
+                break;
             }
-            break;
-        }
-        case VAR_OPTIMIZATION_ACTION::VAR_WRITE: {
-            auto* assign = static_cast<assign_expr*>(expr->get());
-            assert(dynamic_cast<identifier*>(assign->m_lhs.get()));
-            if (auto* var = m_env.lookup(static_cast<identifier&>(*assign->m_lhs).m_name.m_lexeme)) {
-                var->m_assigns.push_back(expr);
+            case VAR_OPTIMIZATION_ACTION::VAR_WRITE: {
+                auto* assign = static_cast<assign_expr*>(expr->get());
+                assert(dynamic_cast<identifier*>(assign->m_lhs.get()));
+                if (auto* var = m_env.lookup(static_cast<identifier&>(*assign->m_lhs).m_name.m_lexeme)) {
+                    var->m_assigns.push_back(expr);
+                }
+                break;
             }
-            break;
-        }
-        default: {
-            break;
+            default: {
+                break;
+            }
         }
     }
-}
 
-void var_optimization_env::check_action(stmnt_uptr* stmt) {
-    const auto pass_action = stmt->get()->var_optimization_pass(*this);
-    switch (pass_action) {
-        case VAR_OPTIMIZATION_ACTION::VAR_DECLARATION: {
-            auto& decl = static_cast<variable_declaration&>(**stmt);
-            auto context = variable_folding_context{stmt, {}, {}};
-            m_env.define(decl.m_identifier, std::move(context));
-            break;
-        }
-        default: {
-            break;
+    void var_optimization_env::check_action(stmnt_uptr* stmt) {
+        const auto pass_action = stmt->get()->var_optimization_pass(*this);
+        switch (pass_action) {
+            case VAR_OPTIMIZATION_ACTION::VAR_DECLARATION: {
+                auto& decl = static_cast<variable_declaration&>(**stmt);
+                auto context = variable_folding_context{stmt, {}, {}};
+                m_env.define(decl.m_identifier, std::move(context));
+                break;
+            }
+            default: {
+                break;
+            }
         }
     }
-}
 }

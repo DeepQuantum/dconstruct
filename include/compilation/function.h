@@ -17,8 +17,7 @@ namespace dconstruct {
 
 namespace dconstruct::compilation {
     struct function {
-
-        static constexpr u8 BRANCH_PLACEHOLDER = 0xFF; 
+        static constexpr u8 BRANCH_PLACEHOLDER = 0xFF;
 
         enum class SYMBOL_TABLE_POINTER_KIND {
             NONE,
@@ -26,9 +25,9 @@ namespace dconstruct::compilation {
             GENERAL,
         };
 
-        function() noexcept = default; 
+        function() noexcept = default;
 
-        function(const function& rhs) noexcept : 
+        function(const function& rhs) noexcept :
             m_instructions(rhs.m_instructions),
             m_symbolTable(rhs.m_symbolTable),
             m_symbolTableEntryPointers(rhs.m_symbolTableEntryPointers),
@@ -47,7 +46,6 @@ namespace dconstruct::compilation {
 
         [[nodiscard]] program_binary_element to_binary_element() const noexcept;
 
-
         void emit_instruction(const Opcode opcode, const u8 destination, const u8 operand1 = 0, const u8 operand2 = 0) noexcept;
         void emit_lohi_instruction(const Opcode opcode, const u8 destination, const u16 lo_hi) noexcept;
 
@@ -57,7 +55,7 @@ namespace dconstruct::compilation {
 
         std::optional<std::string> save_used_argument_registers(const u8 count) noexcept;
         void restore_used_argument_registers() noexcept;
-        
+
         [[nodiscard]] u16 add_to_symbol_table(const u64 value, const SYMBOL_TABLE_POINTER_KIND pointer_kind = SYMBOL_TABLE_POINTER_KIND::NONE) noexcept;
 
         [[nodiscard]] u64 get_size_in_bytes() const noexcept;

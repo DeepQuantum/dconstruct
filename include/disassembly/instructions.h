@@ -11,436 +11,478 @@
 #include <ostream>
 #include "opcodes.h"
 
-
 namespace dconstruct {
-    
 
+    template <u8 padding>
+    struct UP_Instruction {
+        Opcode opcode;
+        u8 destination;
+        u8 operand1;
+        u8 operand2;
+        std::array<std::byte, padding> m_padding;
 
-template<u8 padding>
-struct UP_Instruction {
-    Opcode opcode;
-    u8 destination;
-    u8 operand1;
-    u8 operand2;
-    std::array<std::byte, padding> m_padding;
+        [[nodiscard]] bool operator==(const UP_Instruction<padding>& rhs) const noexcept = default;
 
-    [[nodiscard]] bool operator==(const UP_Instruction<padding>& rhs) const noexcept = default;
+        [[nodiscard]] bool destination_is_immediate() const noexcept;
 
-    [[nodiscard]] bool destination_is_immediate() const noexcept;
+        [[nodiscard]] bool operand1_is_immediate() const noexcept;
+        [[nodiscard]] bool operand2_is_immediate() const noexcept;
+        [[nodiscard]] bool operand1_is_used() const noexcept;
+        [[nodiscard]] bool operand2_is_used() const noexcept;
 
-    [[nodiscard]] bool operand1_is_immediate() const noexcept;
-    [[nodiscard]] bool operand2_is_immediate() const noexcept;
-    [[nodiscard]] bool operand1_is_used() const noexcept;
-    [[nodiscard]] bool operand2_is_used() const noexcept;
+        [[nodiscard]] bool op1_is_reg() const noexcept;
+        [[nodiscard]] bool op2_is_reg() const noexcept;
 
-    [[nodiscard]] bool op1_is_reg() const noexcept;
-    [[nodiscard]] bool op2_is_reg() const noexcept;
+        void set_lo_hi(const u16 value) noexcept {
+            destination = value & 0xFF;
+            operand2 = (value >> 8) & 0xFF;
+        }
 
-    void set_lo_hi(const u16 value) noexcept {
-        destination = value & 0xFF;
-        operand2 = (value >> 8) & 0xFF;
+        const char* opcode_to_string() const noexcept;
+    };
+
+    template <>
+    struct UP_Instruction<0> {
+        Opcode opcode;
+        u8 destination;
+        u8 operand1;
+        u8 operand2;
+
+        [[nodiscard]] bool operator==(const UP_Instruction<0>& rhs) const noexcept = default;
+
+        [[nodiscard]] bool destination_is_immediate() const noexcept;
+
+        [[nodiscard]] bool operand1_is_immediate() const noexcept;
+        [[nodiscard]] bool operand2_is_immediate() const noexcept;
+        [[nodiscard]] bool operand1_is_used() const noexcept;
+        [[nodiscard]] bool operand2_is_used() const noexcept;
+
+        [[nodiscard]] bool op1_is_reg() const noexcept;
+        [[nodiscard]] bool op2_is_reg() const noexcept;
+
+        const char* opcode_to_string() const noexcept;
+    };
+
+    template <u8 padding>
+    const char* UP_Instruction<padding>::opcode_to_string() const noexcept {
+        switch (opcode) {
+            case Opcode::Return:
+                return "Return";
+            case Opcode::IAdd:
+                return "IAdd";
+            case Opcode::ISub:
+                return "ISub";
+            case Opcode::IMul:
+                return "IMul";
+            case Opcode::IDiv:
+                return "IDiv";
+            case Opcode::FAdd:
+                return "FAdd";
+            case Opcode::FSub:
+                return "FSub";
+            case Opcode::FMul:
+                return "FMul";
+            case Opcode::FDiv:
+                return "FDiv";
+            case Opcode::LoadStaticInt:
+                return "LoadStaticInt";
+            case Opcode::LoadStaticFloat:
+                return "LoadStaticFloat";
+            case Opcode::LoadStaticPointer:
+                return "LoadStaticPointer";
+            case Opcode::LoadU16Imm:
+                return "LoadU16Imm";
+            case Opcode::LoadU32:
+                return "LoadU32";
+            case Opcode::LoadFloat:
+                return "LoadFloat";
+            case Opcode::LoadPointer:
+                return "LoadPointer";
+            case Opcode::StoreInt:
+                return "StoreInt";
+            case Opcode::StoreFloat:
+                return "StoreFloat";
+            case Opcode::StorePointer:
+                return "StorePointer";
+            case Opcode::LookupInt:
+                return "LookupInt";
+            case Opcode::LookupFloat:
+                return "LookupFloat";
+            case Opcode::LookupPointer:
+                return "LookupPointer";
+            case Opcode::MoveInt:
+                return "MoveInt";
+            case Opcode::MoveFloat:
+                return "MoveFloat";
+            case Opcode::MovePointer:
+                return "MovePointer";
+            case Opcode::CastInteger:
+                return "CastInteger";
+            case Opcode::CastFloat:
+                return "CastFloat";
+            case Opcode::Call:
+                return "Call";
+            case Opcode::CallFf:
+                return "CallFf";
+            case Opcode::IEqual:
+                return "IEqual";
+            case Opcode::IGreaterThan:
+                return "IGreaterThan";
+            case Opcode::IGreaterThanEqual:
+                return "IGreaterThanEqual";
+            case Opcode::ILessThan:
+                return "ILessThan";
+            case Opcode::ILessThanEqual:
+                return "ILessThanEqual";
+            case Opcode::FEqual:
+                return "FEqual";
+            case Opcode::FGreaterThan:
+                return "FGreaterThan";
+            case Opcode::FGreaterThanEqual:
+                return "FGreaterThanEqual";
+            case Opcode::FLessThan:
+                return "FLessThan";
+            case Opcode::FLessThanEqual:
+                return "FLessThanEqual";
+            case Opcode::IMod:
+                return "IMod";
+            case Opcode::FMod:
+                return "FMod";
+            case Opcode::IAbs:
+                return "IAbs";
+            case Opcode::FAbs:
+                return "FAbs";
+            case Opcode::GoTo:
+                return "GoTo";
+            case Opcode::Label:
+                return "Label";
+            case Opcode::Branch:
+                return "Branch";
+            case Opcode::BranchIf:
+                return "BranchIf";
+            case Opcode::BranchIfNot:
+                return "BranchIfNot";
+            case Opcode::OpLogNot:
+                return "OpLogNot";
+            case Opcode::OpBitAnd:
+                return "OpBitAnd";
+            case Opcode::OpBitNot:
+                return "OpBitNot";
+            case Opcode::OpBitOr:
+                return "OpBitOr";
+            case Opcode::OpBitXor:
+                return "OpBitXor";
+            case Opcode::OpBitNor:
+                return "OpBitNor";
+            case Opcode::OpLogAnd:
+                return "OpLogAnd";
+            case Opcode::OpLogOr:
+                return "OpLogOr";
+            case Opcode::INeg:
+                return "INeg";
+            case Opcode::FNeg:
+                return "FNeg";
+            case Opcode::LoadParamCnt:
+                return "LoadParamCnt";
+            case Opcode::IAddImm:
+                return "IAddImm";
+            case Opcode::ISubImm:
+                return "ISubImm";
+            case Opcode::IMulImm:
+                return "IMulImm";
+            case Opcode::IDivImm:
+                return "IDivImm";
+            case Opcode::LoadStaticI32Imm:
+                return "LoadStaticI32Imm";
+            case Opcode::LoadStaticFloatImm:
+                return "LoadStaticFloatImm";
+            case Opcode::LoadStaticPointerImm:
+                return "LoadStaticPointerImm";
+            case Opcode::IntAsh:
+                return "IntAsh";
+            case Opcode::Move:
+                return "Move";
+            case Opcode::LoadStaticU32Imm:
+                return "LoadStaticU32Imm";
+            case Opcode::LoadStaticI8Imm:
+                return "LoadStaticI8Imm";
+            case Opcode::LoadStaticU8Imm:
+                return "LoadStaticU8Imm";
+            case Opcode::LoadStaticI16Imm:
+                return "LoadStaticI16Imm";
+            case Opcode::LoadStaticU16Imm:
+                return "LoadStaticU16Imm";
+            case Opcode::LoadStaticI64Imm:
+                return "LoadStaticI64Imm";
+            case Opcode::LoadStaticU64Imm:
+                return "LoadStaticU64Imm";
+            case Opcode::LoadI8:
+                return "LoadI8";
+            case Opcode::LoadU8:
+                return "LoadU8";
+            case Opcode::LoadI16:
+                return "LoadI16";
+            case Opcode::LoadU16:
+                return "LoadU16";
+            case Opcode::LoadI32:
+                return "LoadI32";
+            case Opcode::LoadI64:
+                return "LoadI64";
+            case Opcode::LoadU64:
+                return "LoadU64";
+            case Opcode::StoreI8:
+                return "StoreI8";
+            case Opcode::StoreU8:
+                return "StoreU8";
+            case Opcode::StoreI16:
+                return "StoreI16";
+            case Opcode::StoreU16:
+                return "StoreU16";
+            case Opcode::StoreI32:
+                return "StoreI32";
+            case Opcode::StoreU32:
+                return "StoreU32";
+            case Opcode::StoreI64:
+                return "StoreI64";
+            case Opcode::StoreU64:
+                return "StoreU64";
+            case Opcode::INotEqual:
+                return "INotEqual";
+            case Opcode::FNotEqual:
+                return "FNotEqual";
+            case Opcode::StoreArray:
+                return "StoreArray";
+            case Opcode::AssertPointer:
+                return "AssertPointer";
+            case Opcode::BreakFlag:
+                return "BreakFlag";
+            case Opcode::Breakpoint:
+                return "Breakpoint";
+            case Opcode::QEX_InRangeI:
+                return "QEX_InRangeI";
+            default:
+                return "Unknown Opcode";
+        }
     }
 
-
-    const char* opcode_to_string() const noexcept;
-};
-
-template<>
-struct UP_Instruction<0> {
-    Opcode opcode;
-    u8 destination;
-    u8 operand1;
-    u8 operand2;
-
-    [[nodiscard]] bool operator==(const UP_Instruction<0>& rhs) const noexcept = default;
-
-    [[nodiscard]] bool destination_is_immediate() const noexcept;
-
-
-    [[nodiscard]] bool operand1_is_immediate() const noexcept;
-    [[nodiscard]] bool operand2_is_immediate() const noexcept;
-    [[nodiscard]] bool operand1_is_used() const noexcept;
-    [[nodiscard]] bool operand2_is_used() const noexcept;
-
-    [[nodiscard]] bool op1_is_reg() const noexcept;
-    [[nodiscard]] bool op2_is_reg() const noexcept;
-
-
-    const char* opcode_to_string() const noexcept;
-};
-
-template<u8 padding>
-const char* UP_Instruction<padding>::opcode_to_string() const noexcept {
-    switch (opcode) {
-        case Opcode::Return: return "Return";
-        case Opcode::IAdd: return "IAdd";
-        case Opcode::ISub: return "ISub";
-        case Opcode::IMul: return "IMul";
-        case Opcode::IDiv: return "IDiv";
-        case Opcode::FAdd: return "FAdd";
-        case Opcode::FSub: return "FSub";
-        case Opcode::FMul: return "FMul";
-        case Opcode::FDiv: return "FDiv";
-        case Opcode::LoadStaticInt: return "LoadStaticInt";
-        case Opcode::LoadStaticFloat: return "LoadStaticFloat";
-        case Opcode::LoadStaticPointer: return "LoadStaticPointer";
-        case Opcode::LoadU16Imm: return "LoadU16Imm";
-        case Opcode::LoadU32: return "LoadU32";
-        case Opcode::LoadFloat: return "LoadFloat";
-        case Opcode::LoadPointer: return "LoadPointer";
-        case Opcode::StoreInt: return "StoreInt";
-        case Opcode::StoreFloat: return "StoreFloat";
-        case Opcode::StorePointer: return "StorePointer";
-        case Opcode::LookupInt: return "LookupInt";
-        case Opcode::LookupFloat: return "LookupFloat";
-        case Opcode::LookupPointer: return "LookupPointer";
-        case Opcode::MoveInt: return "MoveInt";
-        case Opcode::MoveFloat: return "MoveFloat";
-        case Opcode::MovePointer: return "MovePointer";
-        case Opcode::CastInteger: return "CastInteger";
-        case Opcode::CastFloat: return "CastFloat";
-        case Opcode::Call: return "Call";
-        case Opcode::CallFf: return "CallFf";
-        case Opcode::IEqual: return "IEqual";
-        case Opcode::IGreaterThan: return "IGreaterThan";
-        case Opcode::IGreaterThanEqual: return "IGreaterThanEqual";
-        case Opcode::ILessThan: return "ILessThan";
-        case Opcode::ILessThanEqual: return "ILessThanEqual";
-        case Opcode::FEqual: return "FEqual";
-        case Opcode::FGreaterThan: return "FGreaterThan";
-        case Opcode::FGreaterThanEqual: return "FGreaterThanEqual";
-        case Opcode::FLessThan: return "FLessThan";
-        case Opcode::FLessThanEqual: return "FLessThanEqual";
-        case Opcode::IMod: return "IMod";
-        case Opcode::FMod: return "FMod";
-        case Opcode::IAbs: return "IAbs";
-        case Opcode::FAbs: return "FAbs";
-        case Opcode::GoTo: return "GoTo";
-        case Opcode::Label: return "Label";
-        case Opcode::Branch: return "Branch";
-        case Opcode::BranchIf: return "BranchIf";
-        case Opcode::BranchIfNot: return "BranchIfNot";
-        case Opcode::OpLogNot: return "OpLogNot";
-        case Opcode::OpBitAnd: return "OpBitAnd";
-        case Opcode::OpBitNot: return "OpBitNot";
-        case Opcode::OpBitOr: return "OpBitOr";
-        case Opcode::OpBitXor: return "OpBitXor";
-        case Opcode::OpBitNor: return "OpBitNor";
-        case Opcode::OpLogAnd: return "OpLogAnd";
-        case Opcode::OpLogOr: return "OpLogOr";
-        case Opcode::INeg: return "INeg";
-        case Opcode::FNeg: return "FNeg";
-        case Opcode::LoadParamCnt: return "LoadParamCnt";
-        case Opcode::IAddImm: return "IAddImm";
-        case Opcode::ISubImm: return "ISubImm";
-        case Opcode::IMulImm: return "IMulImm";
-        case Opcode::IDivImm: return "IDivImm";
-        case Opcode::LoadStaticI32Imm: return "LoadStaticI32Imm";
-        case Opcode::LoadStaticFloatImm: return "LoadStaticFloatImm";
-        case Opcode::LoadStaticPointerImm: return "LoadStaticPointerImm";
-        case Opcode::IntAsh: return "IntAsh";
-        case Opcode::Move: return "Move";
-        case Opcode::LoadStaticU32Imm: return "LoadStaticU32Imm";
-        case Opcode::LoadStaticI8Imm: return "LoadStaticI8Imm";
-        case Opcode::LoadStaticU8Imm: return "LoadStaticU8Imm";
-        case Opcode::LoadStaticI16Imm: return "LoadStaticI16Imm";
-        case Opcode::LoadStaticU16Imm: return "LoadStaticU16Imm";
-        case Opcode::LoadStaticI64Imm: return "LoadStaticI64Imm";
-        case Opcode::LoadStaticU64Imm: return "LoadStaticU64Imm";
-        case Opcode::LoadI8: return "LoadI8";
-        case Opcode::LoadU8: return "LoadU8";
-        case Opcode::LoadI16: return "LoadI16";
-        case Opcode::LoadU16: return "LoadU16";
-        case Opcode::LoadI32: return "LoadI32";
-        case Opcode::LoadI64: return "LoadI64";
-        case Opcode::LoadU64: return "LoadU64";
-        case Opcode::StoreI8: return "StoreI8";
-        case Opcode::StoreU8: return "StoreU8";
-        case Opcode::StoreI16: return "StoreI16";
-        case Opcode::StoreU16: return "StoreU16";
-        case Opcode::StoreI32: return "StoreI32";
-        case Opcode::StoreU32: return "StoreU32";
-        case Opcode::StoreI64: return "StoreI64";
-        case Opcode::StoreU64: return "StoreU64";
-        case Opcode::INotEqual: return "INotEqual";
-        case Opcode::FNotEqual: return "FNotEqual";
-        case Opcode::StoreArray: return "StoreArray";
-        case Opcode::AssertPointer: return "AssertPointer";
-        case Opcode::BreakFlag: return "BreakFlag";
-        case Opcode::Breakpoint: return "Breakpoint";
-        case Opcode::QEX_InRangeI: return "QEX_InRangeI";
-        default: return "Unknown Opcode";
+    [[nodiscard]] static constexpr bool is_store_opcode(const Opcode op) {
+        return op == Opcode::StoreI8 ||
+               op == Opcode::StoreU8 ||
+               op == Opcode::StoreI16 ||
+               op == Opcode::StoreU16 ||
+               op == Opcode::StoreI32 ||
+               op == Opcode::StoreU32 ||
+               op == Opcode::StoreI64 ||
+               op == Opcode::StoreU64 ||
+               op == Opcode::StoreFloat ||
+               op == Opcode::StorePointer ||
+               op == Opcode::StoreArray;
     }
-}
 
-[[nodiscard]] static constexpr bool is_store_opcode(const Opcode op) {
-    return 
-        op == Opcode::StoreI8 ||
-        op == Opcode::StoreU8 ||
-        op == Opcode::StoreI16 ||
-        op == Opcode::StoreU16 ||
-        op == Opcode::StoreI32 ||
-        op == Opcode::StoreU32 ||
-        op == Opcode::StoreI64 ||
-        op == Opcode::StoreU64 ||
-        op == Opcode::StoreFloat ||
-        op == Opcode::StorePointer ||
-        op == Opcode::StoreArray;
-}
+    template <u8 padding>
+    [[nodiscard]] bool UP_Instruction<padding>::destination_is_immediate() const noexcept {
+        return opcode == Opcode::Branch || opcode == Opcode::BranchIf || opcode == Opcode::BranchIfNot || opcode == Opcode::Return || opcode == Opcode::AssertPointer;
+    }
+    template <u8 padding>
+    [[nodiscard]] bool UP_Instruction<padding>::operand1_is_immediate() const noexcept {
+        return opcode == Opcode::LoadStaticI32Imm || opcode == Opcode::LoadStaticI16Imm || opcode == Opcode::LoadStaticU16Imm || opcode == Opcode::LoadStaticI8Imm || opcode == Opcode::LoadStaticU8Imm || opcode == Opcode::LoadStaticU32Imm || opcode == Opcode::LoadStaticI64Imm || opcode == Opcode::LoadStaticU64Imm || opcode == Opcode::LoadStaticFloatImm || opcode == Opcode::LoadStaticPointer || opcode == Opcode::LoadStaticPointerImm || opcode == Opcode::LoadU16Imm || opcode == Opcode::LookupPointer;
+    }
+    template <u8 padding>
+    [[nodiscard]] bool UP_Instruction<padding>::operand2_is_immediate() const noexcept {
+        return opcode == Opcode::Call || opcode == Opcode::CallFf || opcode == Opcode::IAddImm || opcode == Opcode::IMulImm || opcode == Opcode::ISubImm || opcode == Opcode::IDivImm || opcode == Opcode::LoadU16Imm || opcode == Opcode::QEX_InRangeI;
+    }
+    template <u8 padding>
+    [[nodiscard]] bool UP_Instruction<padding>::operand1_is_used() const noexcept {
+        return opcode != Opcode::Branch && opcode != Opcode::AssertPointer;
+    }
+    template <u8 padding>
+    [[nodiscard]] bool UP_Instruction<padding>::operand2_is_used() const noexcept {
+        u32 num = static_cast<u32>(opcode);
+        bool is_arithmetic = num >= static_cast<u32>(Opcode::IAdd) && num <= static_cast<u32>(Opcode::FDiv);
+        bool is_call = opcode == Opcode::CallFf || opcode == Opcode::Call;
+        bool is_comp = num >= static_cast<u32>(Opcode::IEqual) && num <= static_cast<u32>(Opcode::FMod);
+        bool is_bit = opcode == Opcode::OpBitAnd || (num >= static_cast<u32>(Opcode::OpBitOr) && num <= static_cast<u32>(Opcode::OpLogOr));
+        bool is_arithmetic_imm = num >= static_cast<u32>(Opcode::IAddImm) && num <= static_cast<u32>(Opcode::IDivImm);
+        bool is_store = num >= static_cast<u32>(Opcode::StoreI8) && num <= static_cast<u32>(Opcode::FNotEqual) || num >= static_cast<u32>(Opcode::StoreInt) && num <= static_cast<u32>(Opcode::StorePointer);
+        bool is_in_range = opcode == Opcode::QEX_InRangeI;
+        return is_arithmetic || is_call || is_comp || is_bit || is_arithmetic_imm || is_store || is_in_range;
+    }
+    template <u8 padding>
+    [[nodiscard]] bool UP_Instruction<padding>::op1_is_reg() const noexcept {
+        return operand1_is_used() && !operand1_is_immediate() && operand1 < ARGUMENT_REGISTERS_IDX;
+    }
+    template <u8 padding>
+    [[nodiscard]] bool UP_Instruction<padding>::op2_is_reg() const noexcept {
+        return operand2_is_used() && !operand2_is_immediate() && operand2 < ARGUMENT_REGISTERS_IDX;
+    }
 
-template<u8 padding>
-[[nodiscard]] bool UP_Instruction<padding>::destination_is_immediate() const noexcept {
-    return opcode == Opcode::Branch || opcode == Opcode::BranchIf
-        || opcode == Opcode::BranchIfNot || opcode == Opcode::Return || opcode == Opcode::AssertPointer;
-}
-template<u8 padding>
-[[nodiscard]] bool UP_Instruction<padding>::operand1_is_immediate() const noexcept {
-    return opcode == Opcode::LoadStaticI32Imm || opcode == Opcode::LoadStaticI16Imm
-        || opcode == Opcode::LoadStaticU16Imm || opcode == Opcode::LoadStaticI8Imm
-        || opcode == Opcode::LoadStaticU8Imm || opcode == Opcode::LoadStaticU32Imm
-        || opcode == Opcode::LoadStaticI64Imm || opcode == Opcode::LoadStaticU64Imm
-        || opcode == Opcode::LoadStaticFloatImm || opcode == Opcode::LoadStaticPointer
-        || opcode == Opcode::LoadStaticPointerImm
-        || opcode == Opcode::LoadU16Imm || opcode == Opcode::LookupPointer;
-}
-template<u8 padding>
-[[nodiscard]] bool UP_Instruction<padding>::operand2_is_immediate() const noexcept {
-    return opcode == Opcode::Call || opcode == Opcode::CallFf
-        || opcode == Opcode::IAddImm || opcode == Opcode::IMulImm
-        || opcode == Opcode::ISubImm || opcode == Opcode::IDivImm
-        || opcode == Opcode::LoadU16Imm || opcode == Opcode::QEX_InRangeI;
-}
-template<u8 padding>
-[[nodiscard]] bool UP_Instruction<padding>::operand1_is_used() const noexcept {
-    return opcode != Opcode::Branch && opcode != Opcode::AssertPointer;
-}
-template<u8 padding>
-[[nodiscard]] bool UP_Instruction<padding>::operand2_is_used() const noexcept {
-    u32 num = static_cast<u32>(opcode);
-    bool is_arithmetic = num >= static_cast<u32>(Opcode::IAdd) && num <= static_cast<u32>(Opcode::FDiv);
-    bool is_call = opcode == Opcode::CallFf || opcode == Opcode::Call;
-    bool is_comp = num >= static_cast<u32>(Opcode::IEqual) && num <= static_cast<u32>(Opcode::FMod);
-    bool is_bit = opcode == Opcode::OpBitAnd || (num >= static_cast<u32>(Opcode::OpBitOr) && num <= static_cast<u32>(Opcode::OpLogOr));
-    bool is_arithmetic_imm = num >= static_cast<u32>(Opcode::IAddImm) && num <= static_cast<u32>(Opcode::IDivImm);
-    bool is_store = num >= static_cast<u32>(Opcode::StoreI8) && num <= static_cast<u32>(Opcode::FNotEqual) || num >= static_cast<u32>(Opcode::StoreInt) && num <= static_cast<u32>(Opcode::StorePointer);
-    bool is_in_range = opcode == Opcode::QEX_InRangeI;
-    return is_arithmetic || is_call || is_comp || is_bit || is_arithmetic_imm || is_store || is_in_range;
-}
-template<u8 padding>
-[[nodiscard]] bool UP_Instruction<padding>::op1_is_reg() const noexcept {
-    return operand1_is_used() && !operand1_is_immediate() && operand1 < ARGUMENT_REGISTERS_IDX;
-}
-template<u8 padding>
-[[nodiscard]] bool UP_Instruction<padding>::op2_is_reg() const noexcept {
-    return operand2_is_used() && !operand2_is_immediate() && operand2 < ARGUMENT_REGISTERS_IDX;
-}
+    using Instruction = UP_Instruction<4>;
+    using ShortInstruction = UP_Instruction<0>;
 
-using Instruction = UP_Instruction<4>;
-using ShortInstruction = UP_Instruction<0>;
+    [[nodiscard]] static constexpr Instruction from_short(const ShortInstruction& short_ins) noexcept {
+        Instruction ins;
+        ins.opcode = short_ins.opcode;
+        ins.destination = short_ins.destination;
+        ins.operand1 = short_ins.operand1;
+        ins.operand2 = short_ins.operand2;
+        return ins;
+    }
 
-[[nodiscard]] static constexpr Instruction from_short(const ShortInstruction& short_ins) noexcept {
-    Instruction ins;
-    ins.opcode = short_ins.opcode;
-    ins.destination = short_ins.destination;
-    ins.operand1 = short_ins.operand1;
-    ins.operand2 = short_ins.operand2;
-    return ins;
-}
+    static_assert(sizeof(Instruction) == 8);
+    static_assert(sizeof(ShortInstruction) == 4);
 
-static_assert(sizeof(Instruction) == 8);
-static_assert(sizeof(ShortInstruction) == 4);
-
-template<u8 padding>
-inline std::ostream& operator<<(std::ostream& os, const UP_Instruction<padding>& ins) noexcept {
-    os << ins.opcode_to_string() << " " << static_cast<unsigned>(ins.destination)
-       << " " << static_cast<unsigned>(ins.operand1)
-       << " " << static_cast<unsigned>(ins.operand2);
-    return os;
-}
+    template <u8 padding>
+    inline std::ostream& operator<<(std::ostream& os, const UP_Instruction<padding>& ins) noexcept {
+        os << ins.opcode_to_string() << " " << static_cast<unsigned>(ins.destination)
+           << " " << static_cast<unsigned>(ins.operand1)
+           << " " << static_cast<unsigned>(ins.operand2);
+        return os;
+    }
 
 #undef max
 
-struct function_disassembly_line {
-    Instruction m_instruction;
-    istr_line m_location;
-    std::string m_text;
-    const Instruction* m_globalPointer;
-    std::string m_comment;
-    u16 m_target = std::numeric_limits<u16>::max();
-    bool m_isArgMove;
+    struct function_disassembly_line {
+        Instruction m_instruction;
+        istr_line m_location;
+        std::string m_text;
+        const Instruction* m_globalPointer;
+        std::string m_comment;
+        u16 m_target = std::numeric_limits<u16>::max();
+        bool m_isArgMove;
 
-    function_disassembly_line() noexcept = default;
+        function_disassembly_line() noexcept = default;
 
-    function_disassembly_line(u64 idx, const Instruction* ptr, const bool is_64_bit_instruction = true) noexcept :
-        m_instruction(is_64_bit_instruction ? ptr[idx] : from_short(reinterpret_cast<const ShortInstruction*>(ptr)[idx])),
-        m_location(idx),
-        m_globalPointer(ptr),
-        m_isArgMove(false)
-    {}
-};
+        function_disassembly_line(u64 idx, const Instruction* ptr, const bool is_64_bit_instruction = true) noexcept :
+            m_instruction(is_64_bit_instruction ? ptr[idx] : from_short(reinterpret_cast<const ShortInstruction*>(ptr)[idx])),
+            m_location(idx),
+            m_globalPointer(ptr),
+            m_isArgMove(false) {}
+    };
 
 #undef max
 
-struct Register {
-    ast::full_type m_type;
-    bool m_isReturn = false;
-    bool m_containsArg = false;
-    u8 m_argNum;
-    u64 m_value = 0;
-    u16 m_pointerOffset = std::numeric_limits<u16>::max();
-    u8 m_fromSymbolTable = std::numeric_limits<u8>::max();
+    struct Register {
+        ast::full_type m_type;
+        bool m_isReturn = false;
+        bool m_containsArg = false;
+        u8 m_argNum;
+        u64 m_value = 0;
+        u16 m_pointerOffset = std::numeric_limits<u16>::max();
+        u8 m_fromSymbolTable = std::numeric_limits<u8>::max();
 
-    static constexpr u64 UNKNOWN_VAL = std::numeric_limits<u64>::max() - 1;
+        static constexpr u64 UNKNOWN_VAL = std::numeric_limits<u64>::max() - 1;
 
-    inline void set_first_type(const ast::full_type& type) noexcept {
-        if (is_unknown(m_type)) {
-            m_type = type;
-        }
-    }
-
-    inline void set_first_type(const ast::primitive_kind& type) noexcept {
-        if (is_unknown(m_type)) {
-            m_type = make_type_from_prim(type);
-        }
-    }
-
-    [[nodiscard]] inline bool is_pointer() const noexcept {
-        return std::holds_alternative<ast::ptr_type>(m_type);
-    }
-};
-
-struct SymbolTable {
-    location m_location;
-    std::vector<ast::full_type> m_types;
-
-    template<typename T>
-    [[nodiscard]] const T& get(const u64 offset) const noexcept {
-        return m_location.get<T>(offset * 8);
-    }
-
-    [[nodiscard]] ast::full_type& get_type(const u64 idx) noexcept {
-        // if (idx > m_types.size()) {
-        //     m_types.resize(idx + 1);
-        // }
-        return m_types[idx];
-    }
-};
-
-
-struct StackFrame {
-    std::array<Register, MAX_REGISTER> m_registers;
-    SymbolTable m_symbolTable;
-    std::vector<u32> m_labels;
-    std::vector<function_disassembly_line> m_backwardsJumpLocs;
-    std::vector<ast::full_type> m_registerArgs;
-    ast::full_type m_returnType;
-
-    StackFrame(location symbol_table = location(nullptr)) noexcept : m_registers{}, m_symbolTable{symbol_table, {}} {
-        for (i32 i = ARGUMENT_REGISTERS_IDX; i < MAX_REGISTER; ++i) {
-            m_registers[i].m_containsArg = true;
-            m_registers[i].m_argNum = i - ARGUMENT_REGISTERS_IDX;
-        }
-    }
-
-    Register& operator[](const u64 idx) noexcept;
-
-    void to_string(char* buffer, const u64 buffer_size, const u64 idx, const char* resolved = "") const noexcept;
-
-    void add_target_label(const u32 target) {
-        auto res = std::find(m_labels.begin(), m_labels.end(), target);
-        if (res == m_labels.end()) {
-            m_labels.push_back(target);
-        }
-    }
-};
-
-struct ss_state {
-    std::string m_name;
-    u32 m_idx;
-};
-
-struct ss_track {
-    std::string m_name;
-    u32 m_idx;
-};
-
-struct ss_event {
-    std::string m_name;
-    u32 m_idx;
-};
-
-struct state_script_function_id {
-    ss_state m_state;
-    ss_track m_track;
-    ss_event m_event;
-    u64 m_idx;
-
-    static constexpr std::string_view SEP = "@";
-
-    [[nodiscard]] std::string to_string() const noexcept {
-        const std::string idx_str = std::to_string(m_idx);
-        const size_t total_size =
-            m_state.m_name.size() + m_track.m_name.size() + m_event.m_name.size() + idx_str.size() + 3 * SEP.size();
-        std::string result;
-        result.reserve(total_size);
-        result += m_state.m_name;
-        result += SEP;
-        result += m_track.m_name;
-        result += SEP;
-        result += m_event.m_name;
-        result += SEP;
-        result += idx_str;
-        return result;
-    }
-};
-
-struct embedded_function_id {
-    const char* m_entry;
-    std::vector<std::pair<const char*, u64>> m_outerStructs;
-
-    [[nodiscard]] std::string to_string() const noexcept {
-        std::ostringstream os;
-        os << m_entry;
-        bool first = true;
-        for (const auto &strct : m_outerStructs) {
-            os << "__";
-            os << std::hex << strct.first << "@" << strct.second;
-            if (!first) {
-                os << "__";
+        inline void set_first_type(const ast::full_type& type) noexcept {
+            if (is_unknown(m_type)) {
+                m_type = type;
             }
-            first = false;
         }
-        return os.str();
-    }
-};
 
-using function_name_variant = std::variant<std::string, state_script_function_id>;
-
-struct function_disassembly {
-    std::vector<function_disassembly_line> m_lines;
-    StackFrame m_stackFrame;
-    function_name_variant m_id;
-    u64 m_originalOffset = 0;
-    bool m_isScriptFunction;
-    bool m_isEmbeddedFunction = false;
-
-    function_disassembly(std::vector<function_disassembly_line> lines, StackFrame stack_frame, function_name_variant id, bool is_script_function) noexcept :
-    m_lines(std::move(lines)), m_stackFrame(std::move(stack_frame)), m_id(std::move(id)), m_isScriptFunction(is_script_function) {};
-    
-    [[nodiscard]] const std::string& get_id() const noexcept {
-        if (!m_isScriptFunction) {
-            return std::get<std::string>(m_id);
-        } else {
-            if (m_stateScriptId.empty()) {
-                m_stateScriptId = std::get<state_script_function_id>(m_id).to_string();
+        inline void set_first_type(const ast::primitive_kind& type) noexcept {
+            if (is_unknown(m_type)) {
+                m_type = make_type_from_prim(type);
             }
-            return m_stateScriptId;
         }
-    }
 
-private:
-    mutable std::string m_stateScriptId;
-}; 
+        [[nodiscard]] inline bool is_pointer() const noexcept {
+            return std::holds_alternative<ast::ptr_type>(m_type);
+        }
+    };
 
+    struct SymbolTable {
+        location m_location;
+        std::vector<ast::full_type> m_types;
+
+        template <typename T>
+        [[nodiscard]] const T& get(const u64 offset) const noexcept {
+            return m_location.get<T>(offset * 8);
+        }
+
+        [[nodiscard]] ast::full_type& get_type(const u64 idx) noexcept {
+            // if (idx > m_types.size()) {
+            //     m_types.resize(idx + 1);
+            // }
+            return m_types[idx];
+        }
+    };
+
+    struct StackFrame {
+        std::array<Register, MAX_REGISTER> m_registers;
+        SymbolTable m_symbolTable;
+        std::vector<u32> m_labels;
+        std::vector<function_disassembly_line> m_backwardsJumpLocs;
+        std::vector<ast::full_type> m_registerArgs;
+        ast::full_type m_returnType;
+
+        StackFrame(location symbol_table = location(nullptr)) noexcept :
+            m_registers{}, m_symbolTable{symbol_table, {}} {
+            for (i32 i = ARGUMENT_REGISTERS_IDX; i < MAX_REGISTER; ++i) {
+                m_registers[i].m_containsArg = true;
+                m_registers[i].m_argNum = i - ARGUMENT_REGISTERS_IDX;
+            }
+        }
+
+        Register& operator[](const u64 idx) noexcept;
+
+        void to_string(char* buffer, const u64 buffer_size, const u64 idx, const char* resolved = "") const noexcept;
+
+        void add_target_label(const u32 target) {
+            auto res = std::find(m_labels.begin(), m_labels.end(), target);
+            if (res == m_labels.end()) {
+                m_labels.push_back(target);
+            }
+        }
+    };
+
+    struct ss_state {
+        std::string m_name;
+        u32 m_idx;
+    };
+
+    struct ss_track {
+        std::string m_name;
+        u32 m_idx;
+    };
+
+    struct ss_event {
+        std::string m_name;
+        u32 m_idx;
+    };
+
+    struct state_script_function_id {
+        static constexpr std::string_view SEP = "@";
+
+        [[nodiscard]] std::string to_string() const noexcept;
+
+        ss_state m_state;
+        ss_track m_track;
+        ss_event m_event;
+        u64 m_idx;
+    };
+
+    struct embedded_function_id {
+        [[nodiscard]] std::string to_string() const noexcept;
+
+        std::vector<std::pair<const char*, u64>> m_outerStructs;
+        const char* m_entry;
+    };
+
+    using function_name_variant = std::variant<std::string, state_script_function_id>;
+
+    struct function_disassembly {
+        function_disassembly(std::vector<function_disassembly_line> lines, StackFrame stack_frame, function_name_variant id, bool is_script_function) noexcept : m_lines(std::move(lines)), m_stackFrame(std::move(stack_frame)), m_id(std::move(id)), m_isScriptFunction(is_script_function) {};
+
+        [[nodiscard]] const std::string& get_id() const noexcept;
+
+        StackFrame m_stackFrame;
+        function_name_variant m_id;
+        std::vector<function_disassembly_line> m_lines;
+        u64 m_originalOffset = 0;
+        bool m_isScriptFunction;
+        bool m_isEmbeddedFunction = false;
+
+    private:
+        mutable std::string m_stateScriptId;
+    };
 
 }

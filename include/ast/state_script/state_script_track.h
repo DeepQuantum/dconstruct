@@ -13,7 +13,6 @@ namespace dconstruct::ast {
     using state_script_lambda = std::variant<function_definition, std::shared_ptr<dconstruct::function_disassembly>>;
 
     struct state_script_track : public ast_element {
-
         state_script_track(std::string name, std::vector<function_definition> lambdas) noexcept
             : m_name(std::move(name)) {
             m_lambdas.reserve(lambdas.size());

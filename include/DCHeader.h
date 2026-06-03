@@ -6,33 +6,29 @@
 
 // Thanks to icemesh!
 
+// clang-format off
 namespace dconstruct {
 
-    struct Entry
-    {
-        sid64			    m_nameID;				///< <c>0x00</c>: StringId64 of the script name
-        sid64				m_typeId;				///< <c>0x08</c>: StringId64 of the script type eg SID("state-script")
-        const void*         m_entryPtr;				///< <c>0x10</c>: ptr to the scriptType cast this to the IdGroup || StateScript etc..
+    struct Entry {
+        sid64       m_nameID;   ///< <c>0x00</c>: StringId64 of the script name
+        sid64       m_typeId;   ///< <c>0x08</c>: StringId64 of the script type eg SID("state-script")
+        const void* m_entryPtr; ///< <c>0x10</c>: ptr to the scriptType cast this to the IdGroup || StateScript etc..
     };
 
-    struct DC_Header
-    {
-        uint32_t				m_magic;				///< <c>0x00</c>: magic 0x44433030 -> DC00
-        uint32_t				m_versionNumber;		///< <c>0x04</c>: always 0x1
-        uint32_t				m_textSize;				///< <c>0x08</c>: size from 0x0C to (0xC+m_TextSize)
-        uint32_t				m_stringsOffset;		///< <c>0x0C</c>: strings offset ?
+    struct DC_Header {
+        uint32_t m_magic;         ///< <c>0x00</c>: magic 0x44433030 -> DC00
+        uint32_t m_versionNumber; ///< <c>0x04</c>: always 0x1
+        uint32_t m_textSize;      ///< <c>0x08</c>: size from 0x0C to (0xC+m_TextSize)
+        uint32_t m_stringsOffset; ///< <c>0x0C</c>: strings offset ?
 
-        uint32_t				field_10;				///< <c>0x10</c>: always 1
-        uint32_t				m_numEntries;			///< <c>0x14</c>: num of entries
-        Entry*                  m_pStartOfData;			///< <c>0x18</c>: ptr to the start of data/state script(s)
+        uint32_t field_10;       ///< <c>0x10</c>: always 1
+        uint32_t m_numEntries;   ///< <c>0x14</c>: num of entries
+        Entry*   m_pStartOfData; ///< <c>0x18</c>: ptr to the start of data/state script(s)
     };
-
-    
 
     static constexpr u32 DC_MAGIC = 0x44433030;
     static constexpr u32 DC_VERSION = 0x1;
 }
-
-
+// clang-format on
 
 #endif // DCHEADER_H

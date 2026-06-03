@@ -12,8 +12,6 @@
 // #include "llvm/IR/IRBuilder.h"
 // #include "llvm/IR/Module.h"
 
-
-
 namespace dconstruct::ast {
 
     struct expression;
@@ -49,7 +47,7 @@ namespace dconstruct::ast {
     using condition_branch_res = std::expected<std::vector<u64>, std::string>;
 
     enum class DC_LVALUE_TYPE : u8 {
-        REGISTER, 
+        REGISTER,
         POINTER,
         NONE,
     };
@@ -67,28 +65,41 @@ namespace dconstruct::ast {
         // [[nodiscard]] virtual llvm_res emit_llvm(llvm::LLVMContext&, llvm::IRBuilder<>&, llvm::Module&, const compilation::scope&) const {
         //     return std::unexpected{llvm_error{"not implemented", *this}};
         // };
-        
+
         [[nodiscard]] virtual VAR_OPTIMIZATION_ACTION var_optimization_pass(var_optimization_env& optimization_env) noexcept = 0;
         [[nodiscard]] virtual FOREACH_OPTIMIZATION_ACTION foreach_optimization_pass(foreach_optimization_env& optimization_env) noexcept = 0;
         [[nodiscard]] virtual MATCH_OPTIMIZATION_ACTION match_optimization_pass(match_optimization_env& optimization_env) noexcept { return MATCH_OPTIMIZATION_ACTION::NONE; }
 
         [[nodiscard]] virtual bool identifier_name_equals(const std::string& name) const noexcept { return false; }
         [[nodiscard]] virtual const std::string* get_name() const noexcept { return nullptr; }
-        
+
         [[nodiscard]] virtual std::unique_ptr<expression> new_cast(const ast::full_type& type, const expression& expr) const noexcept;
 
         [[nodiscard]] virtual const literal* as_literal() const noexcept { return nullptr; }
+
+        [[nodiscard]] virtual const ast::full_type* member_access_struct_type() const noexcept { return nullptr; }
 
         [[nodiscard]] virtual std::unique_ptr<expression>* get_first_argument() noexcept { return nullptr; }
 
         [[nodiscard]] virtual full_type compute_type_unchecked(const compilation::scope& env) const noexcept = 0;
         [[nodiscard]] virtual semantic_check_res compute_type_checked(compilation::scope& env) const noexcept = 0;
         [[nodiscard]] virtual std::optional<i64> raw_pattern_number() const noexcept { return std::nullopt; }
-        [[nodiscard]] virtual std::expected<u16, std::string> emit_to_symbol_table(compilation::function&, compilation::global_state&) const noexcept {
+        [[nodiscard]] virtual std::expected<u16, std::string> emit_to_symbol_table(
+            compilation::function&,
+            compilation::global_state&
+        ) const noexcept {
             return std::unexpected{"expression cannot be emitted to symbol table"};
         }
-        [[nodiscard]] virtual emission_res emit_dc(compilation::function& fn, compilation::global_state& global, const std::optional<reg_idx> destination = std::nullopt) const noexcept { return 0; }
-        [[nodiscard]] virtual condition_branch_res emit_dc_branch(compilation::function& fn, compilation::global_state& global, const bool branch_when_true) const noexcept {
+        [[nodiscard]] virtual emission_res emit_dc(
+            compilation::function& fn,
+            compilation::global_state& global,
+            const std::optional<reg_idx> destination = std::nullopt
+        ) const noexcept { return 0; }
+        [[nodiscard]] virtual condition_branch_res emit_dc_branch(
+            compilation::function& fn,
+            compilation::global_state& global,
+            const bool branch_when_true
+        ) const noexcept {
             const emission_res condition = emit_dc(fn, global);
             if (!condition) {
                 return std::unexpected{condition.error()};
@@ -104,13 +115,18 @@ namespace dconstruct::ast {
             fn.free_register(*condition);
             return std::vector<u64>{branch_location};
         }
-        [[nodiscard]] virtual emission_res emit_dc_callee(compilation::function& fn, compilation::global_state& global, const std::optional<reg_idx> destination = std::nullopt) const noexcept { return emit_dc(fn, global, destination); }
+        [[nodiscard]] virtual emission_res emit_dc_callee(
+            compilation::function& fn,
+            compilation::global_state& global,
+            const std::optional<reg_idx> destination = std::nullopt
+        ) const noexcept { return emit_dc(fn, global, destination); }
         [[nodiscard]] virtual bool is_l_evaluable() const noexcept { return false; }
 
-        
-
-        [[nodiscard]] virtual lvalue_emission_res emit_dc_lvalue(compilation::function& fn, compilation::global_state& global) const noexcept { 
-            return std::unexpected{"not an lvalue"}; 
+        [[nodiscard]] virtual lvalue_emission_res emit_dc_lvalue(
+            compilation::function& fn,
+            compilation::global_state& global
+        ) const noexcept {
+            return std::unexpected{"not an lvalue"};
         }
 
         [[nodiscard]] semantic_check_res get_type_checked(compilation::scope& env) const noexcept {
@@ -153,7 +169,11 @@ namespace dconstruct::ast {
         mutable std::optional<u16> m_complexity;
     };
 
-    inline void patch_branch_targets(compilation::function& fn, const std::vector<u64>& branch_locations, const u16 target) noexcept {
+    inline void patch_branch_targets(
+        compilation::function& fn,
+        const std::vector<u64>& branch_locations,
+        const u16 target
+    ) noexcept {
         for (const u64 branch_location : branch_locations) {
             fn.m_instructions[branch_location].set_lo_hi(target);
         }
@@ -163,7 +183,10 @@ namespace dconstruct::ast {
         return lhs.equals(rhs);
     }
 
-    [[nodiscard]] inline bool operator==(const std::unique_ptr<expression>& lhs, const std::unique_ptr<expression>& rhs) noexcept {
+    [[nodiscard]] inline bool operator==(
+        const std::unique_ptr<expression>& lhs,
+        const std::unique_ptr<expression>& rhs
+    ) noexcept {
         if (lhs == nullptr || rhs == nullptr) {
             return lhs == nullptr && rhs == nullptr;
         }
@@ -216,8 +239,6 @@ namespace dconstruct::ast {
             PTR_INT,
             INT_PTR,
         };
-
-        
 
         binary_expr(compilation::token op, std::unique_ptr<expression>&& lhs, std::unique_ptr<expression>&& rhs) noexcept
             : m_operator(std::move(op)), m_lhs(std::move(lhs)), m_rhs(std::move(rhs)) {}

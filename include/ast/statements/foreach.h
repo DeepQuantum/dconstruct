@@ -5,8 +5,7 @@
 
 namespace dconstruct::ast {
     struct foreach_stmt : public statement {
-        explicit foreach_stmt(parameter var, expr_uptr&& iterable, stmnt_uptr&& body) noexcept :
-        m_var(std::move(var)), m_iterable(std::move(iterable)), m_body(std::move(body)) {};
+        explicit foreach_stmt(parameter var, expr_uptr&& iterable, stmnt_uptr&& body) noexcept : m_var(std::move(var)), m_iterable(std::move(iterable)), m_body(std::move(body)) {};
 
         void pseudo_c(ast_serialization_buffer& buffer) const final;
         void pseudo_py(ast_serialization_buffer& buffer) const final;
@@ -18,7 +17,6 @@ namespace dconstruct::ast {
         [[nodiscard]] bool equals(const statement& rhs) const noexcept final;
         [[nodiscard]] std::unique_ptr<statement> clone() const noexcept final;
         [[nodiscard]] std::vector<semantic_check_error> check_semantics(compilation::scope& env) const noexcept final { return {}; }
-
 
         parameter m_var;
         expr_uptr m_iterable;

@@ -3,10 +3,10 @@
 #include "ast/unary_expression.h"
 
 namespace dconstruct::ast {
-    struct post_arithmetic_expression : public clonable_unary_expr<post_arithmetic_expression>{
+    struct post_arithmetic_expression : public clonable_unary_expr<post_arithmetic_expression> {
         using clonable_unary_expr::clonable_unary_expr;
 
-        explicit post_arithmetic_expression(expr_uptr&& rhs) noexcept : clonable_unary_expr(compilation::token{ compilation::token_type::PLUS_PLUS, "++" }, std::move(rhs)) {};
+        explicit post_arithmetic_expression(expr_uptr&& rhs) noexcept : clonable_unary_expr(compilation::token{compilation::token_type::PLUS_PLUS, "++"}, std::move(rhs)) {};
 
         void pseudo_c(ast_serialization_buffer& buffer) const final;
         void pseudo_py(ast_serialization_buffer& buffer) const final;

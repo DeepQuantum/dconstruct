@@ -16,42 +16,18 @@ namespace dconstruct::compilation {
 
     class Parser {
     public:
-
-        explicit Parser(const std::vector<token> &tokens) : m_tokens(tokens) {};
+        explicit Parser(const std::vector<token>& tokens) : m_tokens(tokens) {};
         [[nodiscard]] ast::program parse();
 
         [[nodiscard]] std::tuple<ast::program, std::unordered_map<std::string, ast::full_type>, std::vector<compilation::parsing_error>> get_results();
-        
+
         const std::vector<parsing_error>& get_errors() const noexcept;
 
         const std::unordered_map<std::string, ast::full_type>& get_known_types() const noexcept;
         [[nodiscard]] std::optional<ast::function_to_mapped_vars> make_typemap();
         void add_mapped_types(const std::unordered_map<sid64, ast::full_type>& types);
+
     private:
-        std::vector<token> m_tokens;
-        std::vector<parsing_error> m_errors;
-
-        std::unordered_map<std::string, ast::full_type> m_knownTypes {
-            {"u8", make_type_from_prim(ast::primitive_kind::U8)},
-            {"u16", make_type_from_prim(ast::primitive_kind::U16)},
-            {"u32", make_type_from_prim(ast::primitive_kind::U32)},
-            {"u64", make_type_from_prim(ast::primitive_kind::U64)},
-            {"i8", make_type_from_prim(ast::primitive_kind::I8)},
-            {"i16", make_type_from_prim(ast::primitive_kind::I16)},
-            {"i32", make_type_from_prim(ast::primitive_kind::I32)},
-            {"i64", make_type_from_prim(ast::primitive_kind::I64)},
-            {"f32", make_type_from_prim(ast::primitive_kind::F32)},
-            {"f64", make_type_from_prim(ast::primitive_kind::F64)},
-            {"char", make_type_from_prim(ast::primitive_kind::CHAR)},
-            {"bool", make_type_from_prim(ast::primitive_kind::BOOL)},
-            {"string", make_type_from_prim(ast::primitive_kind::STRING)},
-            {"sid", make_type_from_prim(ast::primitive_kind::SID)},
-            {"symbol", make_type_from_prim(ast::primitive_kind::U64)},
-            {"u0", make_type_from_prim(ast::primitive_kind::NOTHING)}
-        };
-
-        u32 m_current = 0;
-
         void synchronize_statements();
         void synchronize_external_definitions();
 
@@ -63,17 +39,18 @@ namespace dconstruct::compilation {
         [[nodiscard]] bool is_at_end() const;
         [[nodiscard]] bool check(const token_type) const;
 
-        template<typename... Args> requires (std::same_as<Args, token_type> && ...)
-        [[nodiscard]] bool match(Args ...token_types);
+        template <typename... Args>
+            requires(std::same_as<Args, token_type> && ...)
+        [[nodiscard]] bool match(Args... token_types);
 
         [[nodiscard]] std::optional<ast::full_type> make_type();
         [[nodiscard]] std::optional<ast::full_type> peek_type();
         [[nodiscard]] std::optional<std::variant<ast::full_type, ast::ellipse>> peek_type_or_ellipse();
         [[nodiscard]] std::optional<ast::function_type> match_function_type();
 
-        template<typename ...Args> requires (std::constructible_from<ast::literal, Args> && ...)
-        [[nodiscard]] std::unique_ptr<ast::call_expr> make_call_from_operator(const token& token, const std::string& func_name, expr_uptr right, Args ...extra_function_args);
-
+        template <typename... Args>
+            requires(std::constructible_from<ast::literal, Args> && ...)
+        [[nodiscard]] std::unique_ptr<ast::call_expr> make_call_from_operator(const token& token, const std::string& func_name, expr_uptr right, Args... extra_function_args);
 
         [[nodiscard]] std::unique_ptr<ast::variable_declaration> make_var_declaration();
         [[nodiscard]] std::unique_ptr<ast::variable_declaration> make_var_declaration(ast::full_type type);
@@ -108,7 +85,7 @@ namespace dconstruct::compilation {
         [[nodiscard]] std::unique_ptr<ast::subscript_expr> finish_subscript(expr_uptr&& expr);
         [[nodiscard]] expr_uptr make_enum_access(const token& enum_name);
         [[nodiscard]] std::optional<ast::struct_type> make_struct_type();
-        [[nodiscard]] std::optional<std::unique_ptr<ast::using_declaration>> make_using_declaration(); 
+        [[nodiscard]] std::optional<std::unique_ptr<ast::using_declaration>> make_using_declaration();
         [[nodiscard]] std::optional<ast::enum_type> make_enum_type();
         [[nodiscard]] std::unique_ptr<ast::function_definition> make_function_definition();
         [[nodiscard]] std::optional<global> make_global();
@@ -118,6 +95,29 @@ namespace dconstruct::compilation {
         [[nodiscard]] std::vector<ast::state_script_block> make_statescript_blocks();
         [[nodiscard]] std::vector<ast::state_script_track> make_statescript_tracks();
         [[nodiscard]] std::vector<ast::function_definition> make_statescript_lambdas();
+
+        std::unordered_map<std::string, ast::full_type> m_knownTypes{
+            {"u8", make_type_from_prim(ast::primitive_kind::U8)},
+            {"u16", make_type_from_prim(ast::primitive_kind::U16)},
+            {"u32", make_type_from_prim(ast::primitive_kind::U32)},
+            {"u64", make_type_from_prim(ast::primitive_kind::U64)},
+            {"i8", make_type_from_prim(ast::primitive_kind::I8)},
+            {"i16", make_type_from_prim(ast::primitive_kind::I16)},
+            {"i32", make_type_from_prim(ast::primitive_kind::I32)},
+            {"i64", make_type_from_prim(ast::primitive_kind::I64)},
+            {"f32", make_type_from_prim(ast::primitive_kind::F32)},
+            {"f64", make_type_from_prim(ast::primitive_kind::F64)},
+            {"char", make_type_from_prim(ast::primitive_kind::CHAR)},
+            {"bool", make_type_from_prim(ast::primitive_kind::BOOL)},
+            {"string", make_type_from_prim(ast::primitive_kind::STRING)},
+            {"sid", make_type_from_prim(ast::primitive_kind::SID)},
+            {"symbol", make_type_from_prim(ast::primitive_kind::U64)},
+            {"u0", make_type_from_prim(ast::primitive_kind::NOTHING)}};
+
+        std::vector<parsing_error> m_errors;
+        std::vector<token> m_tokens;
+
+        u32 m_current = 0;
     };
 
     [[nodiscard]] bool operator==(const parsing_error& lhs, const parsing_error& rhs) noexcept;

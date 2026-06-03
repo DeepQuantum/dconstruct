@@ -13,7 +13,7 @@
 #include <algorithm>
 #include <functional>
 
-//#define _TRACE
+// #define _TRACE
 
 namespace dconstruct {
 
@@ -24,7 +24,6 @@ namespace dconstruct {
     constexpr const char* fallthrough_color = accent_color;
     constexpr const char* branch_color = "blue";
     constexpr const char* loop_upwards_color = "purple";
-
 
     [[nodiscard]] bool control_flow_node::has_target() const noexcept {
         return m_targetNode != invalid_node;
@@ -37,7 +36,6 @@ namespace dconstruct {
     [[nodiscard]] const control_flow_node& ControlFlowGraph::operator[](const node_id at) const {
         return m_nodes[at];
     }
-
 
     [[nodiscard]] const control_flow_loop* ControlFlowGraph::get_loop_with_head(const node_id node) const {
         for (const auto& loop : m_loops) {
@@ -57,12 +55,24 @@ namespace dconstruct {
                 continue;
             }
             switch (c) {
-            case '&':  output += "&amp;";  break;
-            case '<':  output += "&lt;";   break;
-            case '>':  output += "&gt;";   break;
-            case '"':  output += "&quot;"; break;
-            case '\'': output += "&#39;";  break;
-            default:   output += c;        break;
+                case '&':
+                    output += "&amp;";
+                    break;
+                case '<':
+                    output += "&lt;";
+                    break;
+                case '>':
+                    output += "&gt;";
+                    break;
+                case '"':
+                    output += "&quot;";
+                    break;
+                case '\'':
+                    output += "&#39;";
+                    break;
+                default:
+                    output += c;
+                    break;
             }
         }
         return output;
@@ -83,7 +93,6 @@ namespace dconstruct {
         }
 
         ss << "</FONT></TD></TR></TABLE>";
-
 
         return ss.str();
     }
@@ -108,7 +117,7 @@ namespace dconstruct {
         for (const auto& line : m_lines) {
             const auto& istr = line.m_instruction;
 
-            if (istr.destination == istr.operand1 && istr.op1_is_reg() && !m_regs.m_written[istr.destination])  {
+            if (istr.destination == istr.operand1 && istr.op1_is_reg() && !m_regs.m_written[istr.destination]) {
                 m_regs.m_readTwice[istr.destination] = m_regs.m_readTwice[istr.destination] || m_regs.m_readFirst[istr.destination];
                 m_regs.m_readFirst[istr.destination] = true;
                 m_regs.m_written[istr.destination] = true;
@@ -116,7 +125,7 @@ namespace dconstruct {
                 m_regs.m_readFirst[istr.operand2] = m_regs.m_readFirst[istr.operand2] || istr.op2_is_reg() && !m_regs.m_written[istr.operand2];
                 continue;
             }
-            
+
             if (!istr.destination_is_immediate() && istr.destination < ARGUMENT_REGISTERS_IDX) {
                 m_regs.m_written[istr.destination] = true;
             }
@@ -132,7 +141,10 @@ namespace dconstruct {
         }
     }
 
-    [[nodiscard]] register_nature control_flow_node::get_register_nature_starting_at(const istr_line start_line, const bool return_is_read) const noexcept {
+    [[nodiscard]] register_nature control_flow_node::get_register_nature_starting_at(
+        const istr_line start_line,
+        const bool return_is_read
+    ) const noexcept {
         reg_set read_first, multi_read, write_regs;
         for (istr_line i = start_line; i < m_lines.size(); ++i) {
             const auto& istr = m_lines[i].m_instruction;
@@ -146,18 +158,18 @@ namespace dconstruct {
                 break;
             }
 
-            if (istr.destination == istr.operand1 && istr.op1_is_reg() && !write_regs[istr.destination])  {
+            if (istr.destination == istr.operand1 && istr.op1_is_reg() && !write_regs[istr.destination]) {
                 multi_read[istr.destination] = multi_read[istr.destination] || read_first[istr.destination];
                 read_first[istr.destination] = true;
                 if (istr.op2_is_reg()) {
                     multi_read[istr.operand2] = multi_read[istr.operand2] || read_first[istr.operand2] && !write_regs[istr.operand2];
                     read_first[istr.operand2] = read_first[istr.operand2] || !write_regs[istr.operand2];
                 }
-                
+
                 write_regs[istr.destination] = true;
                 continue;
             }
-            
+
             if (!istr.destination_is_immediate() && istr.destination < ARGUMENT_REGISTERS_IDX) {
                 write_regs[istr.destination] = true;
             }
@@ -203,8 +215,7 @@ namespace dconstruct {
                 if (!visited[p]) {
                     stack.emplace_back(p, 0);
                 }
-            }
-            else {
+            } else {
                 result.push_back(n);
                 stack.pop_back();
             }
@@ -212,21 +223,20 @@ namespace dconstruct {
         return result;
     }
 
-
     [[nodiscard]] ControlFlowGraph ControlFlowGraph::build(const function_disassembly& func) noexcept {
-        const std::vector<u32> &labels = func.m_stackFrame.m_labels;
+        const std::vector<u32>& labels = func.m_stackFrame.m_labels;
         std::map<node_id, control_flow_node> nodes;
         nodes.emplace(0, 0);
         node_id current_node = 0;
         node_id following_node;
         for (u32 i = 0; i < func.m_lines.size(); ++i) {
-            const function_disassembly_line &current_line = func.m_lines[i];
+            const function_disassembly_line& current_line = func.m_lines[i];
             nodes[current_node].m_lines.push_back(current_line);
             if (i == func.m_lines.size() - 1) {
                 nodes[current_node].m_endLine = current_line.m_location;
                 break;
             }
-            const function_disassembly_line &next_line = func.m_lines[i + 1];
+            const function_disassembly_line& next_line = func.m_lines[i + 1];
 
             bool next_line_is_target = std::find(labels.begin(), labels.end(), next_line.m_location) != labels.end();
 
@@ -246,15 +256,14 @@ namespace dconstruct {
 
                 nodes[current_node].m_endLine = current_line.m_location;
                 current_node = following_node;
-            }
-            else if (next_line_is_target) {
+            } else if (next_line_is_target) {
                 following_node = next_line.m_location;
                 insert_node_at_line(following_node, nodes);
                 nodes[current_node].m_followingNode = following_node;
                 nodes[following_node].m_predecessors.push_back(current_node);
                 nodes[current_node].m_endLine = current_line.m_location;
                 current_node = following_node;
-            } 
+            }
         }
         std::vector<control_flow_node> ordered_nodes;
         ordered_nodes.resize(nodes.size());
@@ -320,7 +329,7 @@ namespace dconstruct {
         GVC_t* gvc = gvContext();
         Agraph_t* g = agopen((char*)"G", Agdirected, nullptr);
         std::lock_guard lock(g_graphviz_mutex);
-        
+
         const auto graph_nodes = insert_graphviz_nodes(g);
 
         insert_graphviz_edges(g, graph_nodes);
@@ -328,7 +337,7 @@ namespace dconstruct {
         Agraph_t* returng = agsubg(g, const_cast<char*>("return"), 1);
         Agnode_t* return_node = agnode(returng, const_cast<char*>(std::to_string(m_nodes.back().m_index).c_str()), 1);
 
-        //insert_loop_subgraphs(g);
+        // insert_loop_subgraphs(g);
 
         agsafeset(return_node, const_cast<char*>("peripheries"), "1", "");
         agsafeset(returng, const_cast<char*>("rank"), "max", "");
@@ -341,10 +350,10 @@ namespace dconstruct {
         gvFreeContext(gvc);
     }
 
-    void ControlFlowGraph::insert_loop_subgraphs(Agraph_t *g) const {
+    void ControlFlowGraph::insert_loop_subgraphs(Agraph_t* g) const {
         for (u32 i = 0; i < m_loops.size(); ++i) {
             const std::string loop_name = "cluster_loop_" + std::to_string(i);
-            Agraph_t *loopg = agsubg(g, const_cast<char *>(loop_name.c_str()), 1);
+            Agraph_t* loopg = agsubg(g, const_cast<char*>(loop_name.c_str()), 1);
 
             Agraph_t* loopheadg = agsubg(loopg, const_cast<char*>("head"), 1);
             agnode(loopheadg, const_cast<char*>(std::to_string(m_loops[i].m_headNode).c_str()), 1);
@@ -352,7 +361,7 @@ namespace dconstruct {
             Agraph_t* looplatchg = agsubg(loopg, const_cast<char*>("latch"), 1);
             agnode(looplatchg, const_cast<char*>(std::to_string(m_loops[i].m_latchNode).c_str()), 1);
 
-            for (const auto &loop_node : m_loops[i].m_body) {
+            for (const auto& loop_node : m_loops[i].m_body) {
                 std::string name = std::to_string(loop_node);
                 agnode(loopg, name.data(), 1);
             }
@@ -366,7 +375,7 @@ namespace dconstruct {
         }
     }
 
-    [[nodiscard]] std::vector<Agnode_t*> ControlFlowGraph::insert_graphviz_nodes(Agraph_t *g) const {
+    [[nodiscard]] std::vector<Agnode_t*> ControlFlowGraph::insert_graphviz_nodes(Agraph_t* g) const {
         std::vector<Agnode_t*> ag_nodes;
         ag_nodes.reserve(m_nodes.size());
         for (const auto& node : m_nodes) {
@@ -409,13 +418,14 @@ namespace dconstruct {
     void ControlFlowGraph::find_loops() {
         for (const auto& loc : m_func.m_stackFrame.m_backwardsJumpLocs) {
             const node_id loop_head = std::lower_bound(
-                m_nodes.begin(), 
-                m_nodes.end(), 
-                loc.m_target, 
-                [](const control_flow_node& node, const u64 target) -> bool { 
+                m_nodes.begin(),
+                m_nodes.end(),
+                loc.m_target,
+                [](const control_flow_node& node, const u64 target) -> bool {
                     return node.m_startLine < target;
                 }
-            )->m_index;
+            )
+                                          ->m_index;
             node_id loop_latch = 0;
             for (const auto& node : m_nodes) {
                 if (node.m_endLine == loc.m_location) {
@@ -426,7 +436,11 @@ namespace dconstruct {
         }
     }
 
-    [[nodiscard]] const control_flow_node& intersect(const node_id node_b1, const node_id node_b2, const std::vector<control_flow_node>& nodes) {
+    [[nodiscard]] const control_flow_node& intersect(
+        const node_id node_b1,
+        const node_id node_b2,
+        const std::vector<control_flow_node>& nodes
+    ) {
         const control_flow_node* b1 = &nodes[node_b1];
         const control_flow_node* b2 = &nodes[node_b2];
         while (b1->m_index != b2->m_index) {
@@ -441,7 +455,6 @@ namespace dconstruct {
     }
 
     void ControlFlowGraph::compute_postdominators() {
-
         auto order = postorder(m_nodes);
 
         for (u32 i = 0; i < m_nodes.size(); ++i) {
@@ -471,8 +484,7 @@ namespace dconstruct {
 
                 if (dir_s != control_flow_node::invalid_node && ipdom.at(dir_s) != control_flow_node::invalid_node) {
                     new_ipdom = dir_s;
-                }
-                else if (tar_s != control_flow_node::invalid_node && ipdom.at(tar_s) != control_flow_node::invalid_node) {
+                } else if (tar_s != control_flow_node::invalid_node && ipdom.at(tar_s) != control_flow_node::invalid_node) {
                     new_ipdom = tar_s;
                 }
                 if (new_ipdom == control_flow_node::invalid_node) {
@@ -495,7 +507,10 @@ namespace dconstruct {
         }
     }
 
-    [[nodiscard]] std::vector<node_id> ControlFlowGraph::collect_loop_body(const node_id head, const node_id latch) const {
+    [[nodiscard]] std::vector<node_id> ControlFlowGraph::collect_loop_body(
+        const node_id head,
+        const node_id latch
+    ) const {
         std::vector<node_id> body;
         for (node_id i = head; i < latch; ++i) {
             body.push_back(i);
@@ -509,13 +524,12 @@ namespace dconstruct {
         const node_id stop_node,
         const istr_line start_line
     ) const noexcept {
-
         struct node_reg_pair {
             const control_flow_node& node;
             reg_set regs_to_check;
-		};
+        };
 
-		reg_set read;
+        reg_set read;
         node_set checked(m_nodes.size(), false);
 
         std::vector<node_reg_pair> node_stack;
@@ -531,22 +545,21 @@ namespace dconstruct {
             if (start_node.has_target()) {
                 node_stack.emplace_back(m_nodes[start_node.m_targetNode], check_regs);
             }
-        }
-        else {
+        } else {
             node_stack.emplace_back(start_node, check_regs);
         }
 
-#ifdef _TRACE  
+#ifdef _TRACE
         std::cout << "check_regs: " << pretty_regset(check_regs) << '\n';
 #endif
         while (!node_stack.empty()) {
             auto [node, local_check_regs] = node_stack.back();
 #ifdef _TRACE
-			std::cout << "processing nature for node " << node.m_index 
-                << " read_first: " << pretty_regset(node.m_regs.m_readFirst) 
-                << " written: " << pretty_regset(node.m_regs.m_written) 
-                << '\n';
-			std::cout << "local check_regs before: " << pretty_regset(local_check_regs) << " read before: " << pretty_regset(read) << '\n';
+            std::cout << "processing nature for node " << node.m_index
+                      << " read_first: " << pretty_regset(node.m_regs.m_readFirst)
+                      << " written: " << pretty_regset(node.m_regs.m_written)
+                      << '\n';
+            std::cout << "local check_regs before: " << pretty_regset(local_check_regs) << " read before: " << pretty_regset(read) << '\n';
 #endif
             node_stack.pop_back();
             checked[node.m_index] = true;
@@ -588,10 +601,10 @@ namespace dconstruct {
             const auto [read_once, read_twice, written] = start_node.get_register_nature_starting_at(start_line, !m_func.m_isScriptFunction);
 #ifdef _TRACE
             std::cout << "using start line " << start_line << " , "
-                << " read_first: " << pretty_regset(read_once)
-                << " read_twice: " << pretty_regset(read_twice)
-                << " written: " << pretty_regset(written)
-                << '\n';
+                      << " read_first: " << pretty_regset(read_once)
+                      << " read_twice: " << pretty_regset(read_twice)
+                      << " written: " << pretty_regset(written)
+                      << '\n';
 #endif
 
             if (read_twice[reg_to_check]) {
@@ -611,8 +624,7 @@ namespace dconstruct {
             if (start_node.has_target()) {
                 node_stack.push_back(m_nodes[start_node.m_targetNode]);
             }
-        }
-        else {
+        } else {
             node_stack.push_back(start_node);
         }
 
@@ -620,18 +632,18 @@ namespace dconstruct {
             const auto& node = node_stack.back().get();
             node_stack.pop_back();
 #ifdef _TRACE
-            std::cout << "processing read count for node " << node.m_index 
-                << " read_first: " << pretty_regset(node.m_regs.m_readFirst) 
-                << " read_twice: " << pretty_regset(node.m_regs.m_readTwice) 
-                << " written: " << pretty_regset(node.m_regs.m_written) 
-                << " already read " << std::boolalpha << already_read
-				<< '\n';
+            std::cout << "processing read count for node " << node.m_index
+                      << " read_first: " << pretty_regset(node.m_regs.m_readFirst)
+                      << " read_twice: " << pretty_regset(node.m_regs.m_readTwice)
+                      << " written: " << pretty_regset(node.m_regs.m_written)
+                      << " already read " << std::boolalpha << already_read
+                      << '\n';
 #endif
             checked[node.m_index] = true;
 
             if (node.m_regs.m_readTwice[reg_to_check] || (node.m_regs.m_readFirst[reg_to_check] && already_read)) {
 #ifdef _TRACE
-				std::cout << "register " << static_cast<u32>(reg_to_check) << " read twice at node " << node.m_index << '\n';
+                std::cout << "register " << static_cast<u32>(reg_to_check) << " read twice at node " << node.m_index << '\n';
 #endif
                 return 2;
             }
@@ -640,7 +652,6 @@ namespace dconstruct {
                 continue;
             }
 
-            
 #ifdef _TRACE
             std::cout << "already read after: " << std::boolalpha << already_read << '\n';
 #endif
@@ -656,17 +667,20 @@ namespace dconstruct {
         return static_cast<u8>(already_read);
     }
 
-    [[nodiscard]] reg_set ControlFlowGraph::get_registers_written_to(const control_flow_node& start_node, const node_id stop) const {
+    [[nodiscard]] reg_set ControlFlowGraph::get_registers_written_to(
+        const control_flow_node& start_node,
+        const node_id stop
+    ) const {
         reg_set result;
         node_set checked(m_nodes.size(), false);
         std::vector<std::reference_wrapper<const control_flow_node>> node_stack = {start_node};
-        
+
         while (!node_stack.empty()) {
             const auto& current_node = node_stack.back().get();
             node_stack.pop_back();
             checked[current_node.m_index] = true;
             result |= current_node.m_regs.m_written;
-            
+
             if (current_node.has_following() && !checked[current_node.m_followingNode] && current_node.m_followingNode != stop) {
                 node_stack.push_back(m_nodes[current_node.m_followingNode]);
             }
@@ -677,7 +691,7 @@ namespace dconstruct {
 
         return result;
     }
-    
+
     [[nodiscard]] reg_set ControlFlowGraph::get_branch_phi_registers(const control_flow_node& start_node) const noexcept {
         reg_set result;
         node_set checked(m_nodes.size(), false);
@@ -697,7 +711,10 @@ namespace dconstruct {
         return result;
     }
 
-    [[nodiscard]] reg_set ControlFlowGraph::get_loop_phi_registers(const control_flow_node& first_head_node, const control_flow_node& last_head_node) const noexcept {
+    [[nodiscard]] reg_set ControlFlowGraph::get_loop_phi_registers(
+        const control_flow_node& first_head_node,
+        const control_flow_node& last_head_node
+    ) const noexcept {
         node_set checked(m_nodes.size(), false);
 
         const reg_set written = get_registers_written_to(m_nodes[last_head_node.m_followingNode], first_head_node.m_index);
@@ -706,7 +723,10 @@ namespace dconstruct {
         return res;
     }
 
-    [[nodiscard]] const control_flow_node& ControlFlowGraph::get_final_loop_condition_node(const control_flow_loop& loop, const node_id exit_node) const noexcept {
+    [[nodiscard]] const control_flow_node& ControlFlowGraph::get_final_loop_condition_node(
+        const control_flow_loop& loop,
+        const node_id exit_node
+    ) const noexcept {
         for (u16 i = loop.m_latchNode; i > loop.m_headNode; --i) {
             if (m_nodes[i].m_targetNode == exit_node) {
                 return m_nodes[i];

@@ -7,7 +7,6 @@
 namespace dconstruct {
 
     [[nodiscard]] std::expected<SIDBase, std::string> SIDBase::from_binary(const std::filesystem::path& path) noexcept {
-
         std::ifstream sidfile(path, std::ios::binary);
 
         if (!sidfile.is_open()) {
@@ -90,9 +89,9 @@ namespace dconstruct {
                 return reinterpret_cast<const char*>(m_sidbytes.get() + current->offset);
             if (current->hash < hash) {
                 low = mid + 1;
-            }
-            else {
-                if (mid == 0) break;
+            } else {
+                if (mid == 0)
+                    break;
                 high = mid - 1;
             }
         }

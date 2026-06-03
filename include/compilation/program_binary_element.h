@@ -8,12 +8,10 @@ namespace dconstruct::compilation {
     struct function;
     struct global_state;
 
-
     struct program_binary_element {
-
         program_binary_element(const u64 size) noexcept;
 
-        template<typename T, typename ... bits>
+        template <typename T, typename... bits>
         void push_bytes(const T& data, bits... b) noexcept {
             const std::byte* p = reinterpret_cast<const std::byte*>(std::addressof(data));
             m_rawData.insert(m_rawData.end(), p, p + sizeof(T));
@@ -31,12 +29,10 @@ namespace dconstruct::compilation {
 
         void adjust_offsets(const u64 offset) noexcept;
 
-
         Entry m_entry;
         std::vector<std::byte> m_rawData;
         std::vector<u64> m_stringOffsets;
         std::vector<bool> m_relocTable;
-    
 
         u64 m_byteOffset = 0;
         u8 m_bitOffset = 0;

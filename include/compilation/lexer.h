@@ -10,99 +10,97 @@
 
 namespace dconstruct::compilation {
 
-struct lexing_error {
-    lexing_error(u32 line, std::string message)
-        : m_line(line), m_message(std::move(message)) {}
+    struct lexing_error {
+        lexing_error(u32 line, std::string message)
+            : m_line(line), m_message(std::move(message)) {}
 
-    lexing_error(u32 line, std::filesystem::path file, std::string message)
-        : m_line(line), m_file(std::move(file)), m_message(std::move(message)) {}
+        lexing_error(u32 line, std::filesystem::path file, std::string message)
+            : m_line(line), m_file(std::move(file)), m_message(std::move(message)) {}
 
-    u32 m_line;
-    std::filesystem::path m_file;
-    std::string m_message;
+        u32 m_line;
+        std::filesystem::path m_file;
+        std::string m_message;
 
-    [[nodiscard]] bool operator==(const lexing_error &rhs) const noexcept;
-};
-
-
-std::ostream& operator<<(std::ostream& os, const lexing_error &l);
-
-std::ostream& operator<<(std::ostream& os, const token &t);
-
-
-class Lexer {
-public:
-    Lexer(std::string source, const std::vector<source_location>* line_map = nullptr)
-        : m_source(std::move(source)), m_lineMap(line_map) {};
-    [[nodiscard]] const std::vector<token>& scan_tokens();
-    [[nodiscard]] std::pair<std::vector<token>, std::vector<lexing_error>> get_results();
-
-    [[nodiscard]] const std::vector<lexing_error>& get_errors() const noexcept;
-
-private:
-    const std::unordered_map<std::string, token_type> m_keywords {
-        {"else", token_type::ELSE},
-        {"false", token_type::FALSE},
-        {"if", token_type::IF},
-        {"null", token_type::_NULL},
-        {"return", token_type::RETURN},
-        {"struct", token_type::STRUCT},
-        {"enum", token_type::ENUM},
-        {"true", token_type::TRUE},
-        {"while", token_type::WHILE},
-        {"foreach", token_type::FOREACH},
-        {"for", token_type::FOR},
-        {"match", token_type::MATCH},
-        {"and", token_type::AND},
-        {"or", token_type::OR},
-        {"auto", token_type::AUTO},
-        {"using", token_type::USING},
-        {"as", token_type::AS},
-        {"far", token_type::FAR},
-        {"near", token_type::NEAR},
-        {"break", token_type::BREAK},
-        {"continue", token_type::CONTINUE},
-        {"breakpoint", token_type::BREAKPOINT},
-        {"sizeof", token_type::SIZEOF},
-        {"statescript", token_type::STATESCRIPT},
-        {"declarations", token_type::DECLARATIONS},
-        {"options", token_type::OPTIONS},
-        {"state", token_type::STATE},
-        {"block", token_type::BLOCK},
-        {"track", token_type::TRACK},
-        {"lambda", token_type::LAMBDA},
-        {"start", token_type::START},
-        {"end", token_type::END},
-        {"event", token_type::EVENT},
-        {"update", token_type::UPDATE},
-        {"virtual", token_type::VIRTUAL},
-        {"typemap", token_type::TYPEMAP},
+        [[nodiscard]] bool operator==(const lexing_error& rhs) const noexcept;
     };
-    std::vector<token> m_tokens;
-    std::vector<lexing_error> m_errors;
-    std::string m_source;
-    const std::vector<source_location>* m_lineMap = nullptr;
 
-    u32 m_start = 0;
-    u32 m_current = 0;
-    u32 m_line = 1;
+    std::ostream& operator<<(std::ostream& os, const lexing_error& l);
 
-    [[nodiscard]] token scan_token();
-    [[nodiscard]] bool reached_eof() const noexcept;
-    char advance();
-    [[nodiscard]] std::string make_current_lexeme() const;
-    [[nodiscard]] source_location current_source_location() const;
-    [[nodiscard]] token make_current_token(const token_type, const ast::primitive_value& = 0) const;
-    [[nodiscard]] token make_string();
-    [[nodiscard]] token make_number();
-    [[nodiscard]] token make_hex();
-    [[nodiscard]] token make_identifier();
-    [[nodiscard]] token make_sid();
-    [[nodiscard]] bool is_valid_sid_char(const char) const noexcept;
-    [[nodiscard]] bool is_hex_char(const char) const noexcept;
-    [[nodiscard]] bool match(const char);
-    [[nodiscard]] char peek() const;
-    [[nodiscard]] char peek_next() const;
-};
+    std::ostream& operator<<(std::ostream& os, const token& t);
+
+    class Lexer {
+    public:
+        Lexer(std::string source, const std::vector<source_location>* line_map = nullptr)
+            : m_source(std::move(source)), m_lineMap(line_map) {};
+        [[nodiscard]] const std::vector<token>& scan_tokens();
+        [[nodiscard]] std::pair<std::vector<token>, std::vector<lexing_error>> get_results();
+
+        [[nodiscard]] const std::vector<lexing_error>& get_errors() const noexcept;
+
+    private:
+        [[nodiscard]] token scan_token();
+        [[nodiscard]] bool reached_eof() const noexcept;
+        char advance();
+        [[nodiscard]] std::string make_current_lexeme() const;
+        [[nodiscard]] source_location current_source_location() const;
+        [[nodiscard]] token make_current_token(const token_type, const ast::primitive_value& = 0) const;
+        [[nodiscard]] token make_string();
+        [[nodiscard]] token make_number();
+        [[nodiscard]] token make_hex();
+        [[nodiscard]] token make_identifier();
+        [[nodiscard]] token make_sid();
+        [[nodiscard]] bool is_valid_sid_char(const char) const noexcept;
+        [[nodiscard]] bool is_hex_char(const char) const noexcept;
+        [[nodiscard]] bool match(const char);
+        [[nodiscard]] char peek() const;
+        [[nodiscard]] char peek_next() const;
+
+        const std::unordered_map<std::string, token_type> m_keywords{
+            {"else", token_type::ELSE},
+            {"false", token_type::FALSE},
+            {"if", token_type::IF},
+            {"null", token_type::_NULL},
+            {"return", token_type::RETURN},
+            {"struct", token_type::STRUCT},
+            {"enum", token_type::ENUM},
+            {"true", token_type::TRUE},
+            {"while", token_type::WHILE},
+            {"foreach", token_type::FOREACH},
+            {"for", token_type::FOR},
+            {"match", token_type::MATCH},
+            {"and", token_type::AND},
+            {"or", token_type::OR},
+            {"auto", token_type::AUTO},
+            {"using", token_type::USING},
+            {"as", token_type::AS},
+            {"far", token_type::FAR},
+            {"near", token_type::NEAR},
+            {"break", token_type::BREAK},
+            {"continue", token_type::CONTINUE},
+            {"breakpoint", token_type::BREAKPOINT},
+            {"sizeof", token_type::SIZEOF},
+            {"statescript", token_type::STATESCRIPT},
+            {"declarations", token_type::DECLARATIONS},
+            {"options", token_type::OPTIONS},
+            {"state", token_type::STATE},
+            {"block", token_type::BLOCK},
+            {"track", token_type::TRACK},
+            {"lambda", token_type::LAMBDA},
+            {"start", token_type::START},
+            {"end", token_type::END},
+            {"event", token_type::EVENT},
+            {"update", token_type::UPDATE},
+            {"virtual", token_type::VIRTUAL},
+            {"typemap", token_type::TYPEMAP},
+        };
+        std::string m_source;
+        std::vector<lexing_error> m_errors;
+        std::vector<token> m_tokens;
+        const std::vector<source_location>* m_lineMap = nullptr;
+
+        u32 m_start = 0;
+        u32 m_current = 0;
+        u32 m_line = 1;
+    };
 
 }

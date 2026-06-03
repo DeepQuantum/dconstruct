@@ -126,7 +126,11 @@ namespace dconstruct {
         return struct_header.get<sid64>();
     }
 
-    void MappingDisassembler::map_temporary_members(const sid64 struct_type_id, const location member_start, const u32 inferred_size) {
+    void MappingDisassembler::map_temporary_members(
+        const sid64 struct_type_id,
+        const location member_start,
+        const u32 inferred_size
+    ) {
         m_registry.observe_struct(struct_type_id, inferred_size);
 
         if (inferred_size == 0 || inferred_size > 5'000) {

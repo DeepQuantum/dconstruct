@@ -16,18 +16,16 @@
 
 namespace dconstruct::testing {
 
-
-    
-const std::filesystem::path TEST_ROOT = DCONSTRUCT_TEST_ROOT;
-const std::string TEST_DIR = (TEST_ROOT / "fixtures" / "dc").string() + "/";
-const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
+    const std::filesystem::path TEST_ROOT = DCONSTRUCT_TEST_ROOT;
+    const std::string TEST_DIR = (TEST_ROOT / "fixtures" / "dc").string() + "/";
+    const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
 
     static SIDBase base = *SIDBase::from_binary(TEST_DIR + R"(\test_sidbase.bin)");
 
-    static std::pair<std::vector<compilation::token>, std::vector<compilation::lexing_error>> get_tokens(const std::string &string) {
+    static std::pair<std::vector<compilation::token>, std::vector<compilation::lexing_error>> get_tokens(const std::string& string) {
         dconstruct::compilation::Lexer lexer = dconstruct::compilation::Lexer(string);
-        return { lexer.scan_tokens(), lexer.get_errors() };
-    } 
+        return {lexer.scan_tokens(), lexer.get_errors()};
+    }
 
     static cxxopts::ParseResult get_empty_options() {
         cxxopts::Options options("compiler_test", "");
@@ -39,17 +37,17 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
         return "@output \"test/fixtures/compiler/include_out.bin\"\n@sidbase \"" + TEST_DIR + "test_sidbase.bin\"\n";
     }
 
-    static std::tuple<ast::program, std::unordered_map<std::string, ast::full_type>, std::vector<compilation::parsing_error>> get_parse_results(const std::vector<compilation::token> &tokens) {
+    static std::tuple<ast::program, std::unordered_map<std::string, ast::full_type>, std::vector<compilation::parsing_error>> get_parse_results(const std::vector<compilation::token>& tokens) {
         compilation::Parser parser{tokens};
-        return { parser.parse(), parser.get_known_types(), parser.get_errors() };
+        return {parser.parse(), parser.get_known_types(), parser.get_errors()};
     }
 
-    static std::pair<std::list<stmnt_uptr>, std::vector<compilation::parsing_error>> get_statements(std::vector<compilation::token> &tokens) {
+    static std::pair<std::list<stmnt_uptr>, std::vector<compilation::parsing_error>> get_statements(std::vector<compilation::token>& tokens) {
         if (tokens.back().m_type == compilation::token_type::_EOF) {
             tokens.pop_back();
         }
 
-        std::vector<compilation::token> function_def_tokens {
+        std::vector<compilation::token> function_def_tokens{
             compilation::token(compilation::token_type::IDENTIFIER, "i32", 0, 1),
             compilation::token(compilation::token_type::IDENTIFIER, "main", 0, 1),
             compilation::token(compilation::token_type::LEFT_PAREN, "(", 0, 1),
@@ -59,7 +57,6 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
 
         function_def_tokens.insert(function_def_tokens.end(), tokens.begin(), tokens.end());
 
-
         function_def_tokens.push_back(compilation::token(compilation::token_type::RIGHT_BRACE, "}", 0, 1));
         function_def_tokens.push_back(compilation::token(compilation::token_type::_EOF, "", 0, 1));
 
@@ -67,9 +64,8 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
 
         auto [program, _, errors] = get_parse_results(function_def_tokens);
 
-        return { !program.m_declarations.empty() ? std::move(static_cast<ast::function_definition*>(program.m_declarations[0].get())->m_body.m_statements) : std::list<stmnt_uptr>{}, errors };
+        return {!program.m_declarations.empty() ? std::move(static_cast<ast::function_definition*>(program.m_declarations[0].get())->m_body.m_statements) : std::list<stmnt_uptr>{}, errors};
     }
-
 
     [[nodiscard]] static std::expected<std::vector<compilation::function>, std::string> compile_to_functions(const std::string& code) {
         const auto [tokens, lex_errors] = get_tokens(code);
@@ -141,7 +137,7 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
         const std::string empty = "";
         const auto [tokens, errors] = get_tokens(empty);
         const compilation::token eof = compilation::token(compilation::token_type::_EOF, "", 0, 1);
-        
+
         EXPECT_EQ(tokens.back(), eof);
         EXPECT_EQ(errors.size(), 0);
     }
@@ -152,8 +148,7 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
             compilation::token(compilation::token_type::IDENTIFIER, "a", 0, 1),
             compilation::token(compilation::token_type::SEMICOLON, ";", 0, 1),
             compilation::token(compilation::token_type::RIGHT_BRACE, "}", 0, 1),
-            compilation::token(compilation::token_type::_EOF, "", 0, 1)
-        };
+            compilation::token(compilation::token_type::_EOF, "", 0, 1)};
 
         const auto [statements, errors] = get_statements(tokens);
 
@@ -170,8 +165,7 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
             compilation::token(compilation::token_type::IDENTIFIER, "a", 0, 1),
             compilation::token(compilation::token_type::SEMICOLON, ";", 0, 1),
             compilation::token(compilation::token_type::RIGHT_BRACE, "}", 0, 1),
-            compilation::token(compilation::token_type::_EOF, "", 0, 1)
-        };
+            compilation::token(compilation::token_type::_EOF, "", 0, 1)};
 
         const auto [statements, errors] = get_statements(tokens);
 
@@ -226,8 +220,7 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
         };
 
         const std::vector<compilation::lexing_error> expected_errors = {
-            compilation::lexing_error(1, "invalid token '@'")
-        };
+            compilation::lexing_error(1, "invalid token '@'")};
 
         EXPECT_EQ(tokens, expected);
         EXPECT_EQ(errors, expected_errors);
@@ -235,9 +228,9 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
 
     TEST(COMPILER, IncludeExpandsRecursivelyAndOnlyOnce) {
         std::string source = dcpl_prelude() +
-            "@include \"include_a.dcpl\"\n"
-            "@include \"include_a.dcpl\"\n"
-            "u32 main() { return included_b(); }\n";
+                             "@include \"include_a.dcpl\"\n"
+                             "@include \"include_a.dcpl\"\n"
+                             "u32 main() { return included_b(); }\n";
         std::vector<compilation::source_location> line_map;
 
         auto options = compilation::compiler_options::parse(get_empty_options(), source, "test/fixtures/compiler/include_main.dcpl", line_map);
@@ -248,9 +241,12 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
         ASSERT_TRUE(lex_errors.empty());
 
         const auto count_identifier = [&](const std::string& name) {
-            return std::ranges::count_if(tokens, [&](const compilation::token& token) {
-                return token.m_type == compilation::token_type::IDENTIFIER && token.m_lexeme == name;
-            });
+            return std::ranges::count_if(
+                tokens,
+                [&](const compilation::token& token) {
+                    return token.m_type == compilation::token_type::IDENTIFIER && token.m_lexeme == name;
+                }
+            );
         };
 
         EXPECT_EQ(count_identifier("included_a"), 1);
@@ -259,10 +255,10 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
 
     TEST(COMPILER, IncludeMapsErrorsToIncludedFile) {
         std::string source = dcpl_prelude() +
-            "@include \"include_error.dcpl\"\n"
-            "u32 main() {\n"
-            "    return 0;\n"
-            "}\n";
+                             "@include \"include_error.dcpl\"\n"
+                             "u32 main() {\n"
+                             "    return 0;\n"
+                             "}\n";
         std::vector<compilation::source_location> line_map;
 
         auto options = compilation::compiler_options::parse(get_empty_options(), source, "test/fixtures/compiler/include_main.dcpl", line_map);
@@ -280,10 +276,10 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
 
     TEST(COMPILER, IncludeDoesNotShiftOriginalFileErrors) {
         std::string source = dcpl_prelude() +
-            "@include \"include_a.dcpl\"\n"
-            "u32 main() {\n"
-            "    return 0\n"
-            "}\n";
+                             "@include \"include_a.dcpl\"\n"
+                             "u32 main() {\n"
+                             "    return 0\n"
+                             "}\n";
         std::vector<compilation::source_location> line_map;
 
         auto options = compilation::compiler_options::parse(get_empty_options(), source, "test/fixtures/compiler/include_main_error.dcpl", line_map);
@@ -314,12 +310,13 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
         std::string source =
             "@mod \"test/fixtures/compiler/pak68_macro_mod\"\n"
             "@output \"pak68-macro\"\n"
-            "@sidbase \"" + TEST_DIR + "test_sidbase.bin\"\n"
-            "@add_pak level-name sp-all {\n"
-            "  symbol #gas-mask-ellie\n"
-            "  actor dina\n"
-            "}\n"
-            "u32 main() { return 0; }\n";
+            "@sidbase \"" +
+            TEST_DIR + "test_sidbase.bin\"\n"
+                       "@add_pak level-name sp-all {\n"
+                       "  symbol #gas-mask-ellie\n"
+                       "  actor dina\n"
+                       "}\n"
+                       "u32 main() { return 0; }\n";
         std::vector<compilation::source_location> line_map;
 
         auto options = compilation::compiler_options::parse(get_empty_options(), source, "test/fixtures/compiler/pak68_macro_test.dcpl", line_map);
@@ -353,9 +350,10 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
         std::string source =
             "@mod \"test/fixtures/compiler/pak68_unknown_type_mod\"\n"
             "@output \"pak68-unknown-type\"\n"
-            "@sidbase \"" + TEST_DIR + "test_sidbase.bin\"\n"
-            "@add_pak level-name sp-all { nope #gas-mask-ellie }\n"
-            "u32 main() { return 0; }\n";
+            "@sidbase \"" +
+            TEST_DIR + "test_sidbase.bin\"\n"
+                       "@add_pak level-name sp-all { nope #gas-mask-ellie }\n"
+                       "u32 main() { return 0; }\n";
         std::vector<compilation::source_location> line_map;
 
         auto options = compilation::compiler_options::parse(get_empty_options(), source, "test/fixtures/compiler/pak68_unknown_type_test.dcpl", line_map);
@@ -372,9 +370,10 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
         std::string source =
             "@mod \"test/fixtures/compiler/pak68_missing_level_mod\"\n"
             "@output \"pak68-missing-level\"\n"
-            "@sidbase \"" + TEST_DIR + "test_sidbase.bin\"\n"
-            "@add_pak level-name missing-level { symbol #gas-mask-ellie }\n"
-            "u32 main() { return 0; }\n";
+            "@sidbase \"" +
+            TEST_DIR + "test_sidbase.bin\"\n"
+                       "@add_pak level-name missing-level { symbol #gas-mask-ellie }\n"
+                       "u32 main() { return 0; }\n";
         std::vector<compilation::source_location> line_map;
 
         auto options = compilation::compiler_options::parse(get_empty_options(), source, "test/fixtures/compiler/pak68_missing_level_test.dcpl", line_map);
@@ -409,8 +408,9 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
         std::string source =
             "@mod \"test/fixtures/compiler/derived_mod\"\n"
             "@output \"ss-rogue/test-script-qntm\"\n"
-            "@sidbase \"" + TEST_DIR + "test_sidbase.bin\"\n"
-            "u32 main() { return 0; }\n";
+            "@sidbase \"" +
+            TEST_DIR + "test_sidbase.bin\"\n"
+                       "u32 main() { return 0; }\n";
         std::vector<compilation::source_location> line_map;
 
         auto options = compilation::compiler_options::parse(get_empty_options(), source, "test/fixtures/compiler/derived_mod_test.dcpl", line_map);
@@ -427,10 +427,12 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
     TEST(COMPILER, RepackagePathUsesExactModFolderName) {
         EXPECT_EQ(
             compilation::repackage_psarc_path("test/fixtures/compiler/derived_mod"),
-            std::filesystem::path{"test/fixtures/compiler/derived_mod.psarc"});
+            std::filesystem::path{"test/fixtures/compiler/derived_mod.psarc"}
+        );
         EXPECT_EQ(
             compilation::repackage_psarc_path("test/fixtures/compiler/derived_mod_unpacked"),
-            std::filesystem::path{"test/fixtures/compiler/derived_mod_unpacked.psarc"});
+            std::filesystem::path{"test/fixtures/compiler/derived_mod_unpacked.psarc"}
+        );
     }
 
     TEST(COMPILER, ModOutputRootDirectoryRelativeToMod) {
@@ -440,8 +442,9 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
         std::string source =
             "@mod \"test/fixtures/compiler/rooted_output_mod\"\n"
             "@output \"/bin/dc1/script-callbacks\"\n"
-            "@sidbase \"" + TEST_DIR + "test_sidbase.bin\"\n"
-            "u32 main() { return 0; }\n";
+            "@sidbase \"" +
+            TEST_DIR + "test_sidbase.bin\"\n"
+                       "u32 main() { return 0; }\n";
         std::vector<compilation::source_location> line_map;
 
         auto options = compilation::compiler_options::parse(get_empty_options(), source, "test/fixtures/compiler/rooted_output_mod_test.dcpl", line_map);
@@ -451,8 +454,9 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
         std::string source_without_leading_slash =
             "@mod \"test/fixtures/compiler/rooted_output_mod\"\n"
             "@output \"bin/dc1/script-callbacks\"\n"
-            "@sidbase \"" + TEST_DIR + "test_sidbase.bin\"\n"
-            "u32 main() { return 0; }\n";
+            "@sidbase \"" +
+            TEST_DIR + "test_sidbase.bin\"\n"
+                       "u32 main() { return 0; }\n";
         line_map.clear();
 
         options = compilation::compiler_options::parse(get_empty_options(), source_without_leading_slash, "test/fixtures/compiler/rooted_output_mod_test.dcpl", line_map);
@@ -621,8 +625,7 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
             "level-name",
             "sp-all",
             {compilation::pak68_entry{compilation::pak68_type::ACTOR, "gas-mask-ellie"}},
-            {}
-        });
+            {}});
 
         const auto edits = compilation::pak68_edits_for_compile(options, {"gas-mask-toggle"});
         auto apply_res = compilation::apply_pak68_edits(pak_path, edits);
@@ -675,8 +678,7 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
         };
 
         const std::vector<compilation::lexing_error> expected_errors = {
-            compilation::lexing_error(1, "expected '\"' to close string literal but got end of file")
-        };
+            compilation::lexing_error(1, "expected '\"' to close string literal but got end of file")};
 
         EXPECT_EQ(tokens, expected);
         EXPECT_EQ(expected_errors, errors);
@@ -720,7 +722,7 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
             compilation::token(compilation::token_type::IDENTIFIER, "abc", 0, 1),
             compilation::token(compilation::token_type::_EOF, "", 0, 1),
         };
-        
+
         EXPECT_EQ(tokens, expected);
         EXPECT_EQ(errors.size(), 0);
     }
@@ -738,7 +740,6 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
         EXPECT_EQ(tokens, expected);
         EXPECT_EQ(errors.size(), 0);
     }
-
 
     TEST(COMPILER, LexerSimpleIdentifier) {
         const std::string chars = "abc\ndef;";
@@ -768,14 +769,14 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
     }
 
     TEST(COMPILER, LexerProgram1) {
-        const std::string chars = 
-            "int main()\n" 
-            "{" 
-            "\tint a = 0;" 
-            "\ta += 1;" 
+        const std::string chars =
+            "int main()\n"
+            "{"
+            "\tint a = 0;"
+            "\ta += 1;"
             "\treturn a;"
             "}";
-        
+
         const std::vector<compilation::token> expected = {
             compilation::token(compilation::token_type::IDENTIFIER, "int", 0, 1),
             compilation::token(compilation::token_type::IDENTIFIER, "main", 0, 1),
@@ -817,7 +818,7 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
     }
 
     TEST(COMPILER, LexerProgramWithExtendedFeatures) {
-        const std::string chars = 
+        const std::string chars =
             "struct Person {\n"
             "\tsid name = #ellie;\n"
             "\tdouble damage = 5.9;\n"
@@ -828,8 +829,7 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
             "\t} else {\n"
             "\t\tmsg = \"Test String\";\n"
             "\t}\n"
-            "};"
-            ;
+            "};";
 
         const std::vector<compilation::token> expected = {
             compilation::token(compilation::token_type::STRUCT, "struct", 0, 1),
@@ -900,11 +900,10 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
         std::vector<compilation::token> tokens = {
             compilation::token(compilation::token_type::INT, "1", 1, 1),
             compilation::token(compilation::token_type::SEMICOLON, ";", 1, 1),
-            compilation::token(compilation::token_type::_EOF, "", 0, 1) 
-        };
+            compilation::token(compilation::token_type::_EOF, "", 0, 1)};
 
         const auto [statements, errors] = get_statements(tokens);
-        
+
         const ast::literal expected = ast::literal(1);
 
         const ast::expression& actual = *dynamic_cast<const ast::expression_stmt*>(statements.front().get())->m_expression;
@@ -920,18 +919,16 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
             compilation::token(compilation::token_type::PLUS, "+", 0, 1),
             compilation::token(compilation::token_type::INT, "2", 2, 1),
             compilation::token(compilation::token_type::SEMICOLON, ";", 2, 1),
-            compilation::token(compilation::token_type::_EOF, "", 0, 1)
-        };
+            compilation::token(compilation::token_type::_EOF, "", 0, 1)};
 
         const auto [statements, errors] = get_statements(tokens);
 
         const ast::expression& actual = *dynamic_cast<const ast::expression_stmt*>(statements.front().get())->m_expression;
-        
+
         const ast::add_expr expected{
             compilation::token(compilation::token_type::PLUS, "+", 0, 1),
             std::make_unique<ast::literal>(1),
-            std::make_unique<ast::literal>(2)
-        };
+            std::make_unique<ast::literal>(2)};
 
         EXPECT_EQ(statements.size(), 1);
         EXPECT_EQ(errors.size(), 0);
@@ -946,13 +943,12 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
             compilation::token(compilation::token_type::STAR, "*", 0, 1),
             compilation::token(compilation::token_type::INT, "5", 5, 1),
             compilation::token(compilation::token_type::SEMICOLON, ";", 5, 1),
-            compilation::token(compilation::token_type::_EOF, "", 0, 1)
-        };
+            compilation::token(compilation::token_type::_EOF, "", 0, 1)};
 
         const auto [statements, errors] = get_statements(tokens);
 
         const ast::expression& actual = *dynamic_cast<const ast::expression_stmt*>(statements.front().get())->m_expression;
-        
+
         expr_uptr left = std::make_unique<ast::mul_expr>(
             compilation::token(compilation::token_type::STAR, "*", 0, 1),
             std::make_unique<ast::literal>(2),
@@ -962,8 +958,7 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
         const ast::add_expr expected{
             compilation::token(compilation::token_type::PLUS, "+", 0, 1),
             std::make_unique<ast::literal>(1),
-            std::move(left)
-        };
+            std::move(left)};
 
         EXPECT_EQ(statements.size(), 1);
         EXPECT_EQ(errors.size(), 0);
@@ -997,13 +992,12 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
             compilation::token(compilation::token_type::STAR, "*", 0, 1),
             compilation::token(compilation::token_type::INT, "5", 5, 1),
             compilation::token(compilation::token_type::SEMICOLON, ";", 5, 1),
-            compilation::token(compilation::token_type::_EOF, "", 0, 1)
-        };
+            compilation::token(compilation::token_type::_EOF, "", 0, 1)};
 
         const auto [statements, errors] = get_statements(tokens);
 
         const ast::expression& actual = *dynamic_cast<const ast::expression_stmt*>(statements.front().get())->m_expression;
-        
+
         auto left = std::make_unique<ast::grouping>(std::make_unique<ast::add_expr>(
             compilation::token(compilation::token_type::PLUS, "+", 0, 1),
             std::make_unique<ast::literal>(1),
@@ -1013,8 +1007,7 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
         const ast::mul_expr expected{
             compilation::token(compilation::token_type::STAR, "*", 0, 1),
             std::move(left),
-            std::make_unique<ast::literal>(5)
-        };
+            std::make_unique<ast::literal>(5)};
 
         EXPECT_EQ(statements.size(), 1);
         EXPECT_EQ(errors.size(), 0);
@@ -1026,8 +1019,7 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
             compilation::token(compilation::token_type::IDENTIFIER, "u16", 0, 1),
             compilation::token(compilation::token_type::IDENTIFIER, "number", 0, 1),
             compilation::token(compilation::token_type::SEMICOLON, ";", 0, 1),
-            compilation::token(compilation::token_type::_EOF, "", 0, 1)
-        };
+            compilation::token(compilation::token_type::_EOF, "", 0, 1)};
 
         const auto [statements, errors] = get_statements(tokens);
 
@@ -1047,8 +1039,7 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
             compilation::token(compilation::token_type::EQUAL, "=", 0, 1),
             compilation::token(compilation::token_type::INT, "2", 2, 1),
             compilation::token(compilation::token_type::SEMICOLON, ";", 0, 1),
-            compilation::token(compilation::token_type::_EOF, "", 0, 1)
-        };
+            compilation::token(compilation::token_type::_EOF, "", 0, 1)};
 
         const auto [statements, errors] = get_statements(tokens);
 
@@ -1067,8 +1058,7 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
             compilation::token(compilation::token_type::IDENTIFIER, "a", 0, 1),
             compilation::token(compilation::token_type::SEMICOLON, ";", 0, 1),
             compilation::token(compilation::token_type::RIGHT_BRACE, "}", 0, 1),
-            compilation::token(compilation::token_type::_EOF, "", 0, 1)
-        };
+            compilation::token(compilation::token_type::_EOF, "", 0, 1)};
 
         const auto [statements, errors] = get_statements(tokens);
 
@@ -1076,8 +1066,7 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
 
         std::list<stmnt_uptr> expected_statements{};
         expected_statements.push_back(std::move(std::make_unique<ast::expression_stmt>(
-            std::make_unique<ast::identifier>(compilation::token(compilation::token_type::IDENTIFIER, "a", 0, 1))
-        )));
+            std::make_unique<ast::identifier>(compilation::token(compilation::token_type::IDENTIFIER, "a", 0, 1)))));
 
         const ast::block expected{std::move(expected_statements)};
 
@@ -1092,8 +1081,7 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
             compilation::token(compilation::token_type::IDENTIFIER, "b", 0, 1),
             compilation::token(compilation::token_type::SEMICOLON, ";", 0, 1),
             compilation::token(compilation::token_type::RIGHT_BRACE, "}", 0, 1),
-            compilation::token(compilation::token_type::_EOF, "", 0, 1)
-        };
+            compilation::token(compilation::token_type::_EOF, "", 0, 1)};
 
         const auto [statements, errors] = get_statements(tokens);
 
@@ -1101,8 +1089,7 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
 
         std::list<stmnt_uptr> expected_statements{};
         expected_statements.push_back(std::move(std::make_unique<ast::expression_stmt>(
-            std::make_unique<ast::identifier>(compilation::token(compilation::token_type::IDENTIFIER, "a", 0, 1))
-        )));
+            std::make_unique<ast::identifier>(compilation::token(compilation::token_type::IDENTIFIER, "a", 0, 1)))));
 
         const ast::block expected{std::move(expected_statements)};
 
@@ -1128,14 +1115,12 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
 
         block_stmnt.push_back(std::make_unique<ast::expression_stmt>(
             std::make_unique<ast::assign_expr>(
-				std::make_unique<ast::identifier>("x"),
+                std::make_unique<ast::identifier>("x"),
                 std::make_unique<ast::add_expr>(
                     compilation::token(compilation::token_type::PLUS, "+", 0, 1),
                     std::make_unique<ast::identifier>("x"),
                     std::make_unique<ast::identifier>("y")
-                )
-            )
-        ));
+                ))));
         expected.push_back(std::make_unique<ast::variable_declaration>(ast::make_type_from_prim(ast::primitive_kind::I32), "x", (u16)0));
         expected.push_back(std::make_unique<ast::variable_declaration>(ast::make_type_from_prim(ast::primitive_kind::I32), "y", (u16)1));
         expected.push_back(std::make_unique<ast::while_stmt>(
@@ -1145,9 +1130,7 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
                 std::make_unique<ast::identifier>("y")
             ),
             std::make_unique<ast::block>(
-                std::move(block_stmnt)
-            )
-        ));
+                std::move(block_stmnt))));
 
         EXPECT_EQ(expected, statements);
     }
@@ -1166,24 +1149,21 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
         std::list<stmnt_uptr> expected;
 
         expected.push_back(std::make_unique<ast::variable_declaration>(ast::make_type_from_prim(ast::primitive_kind::U32), "x",
-            std::make_unique<ast::sub_expr>(
-                compilation::token(compilation::token_type::MINUS, "-", 0, 1),
-                std::make_unique<ast::add_expr>(
-                    compilation::token(compilation::token_type::PLUS, "+", 0, 1),
-                    std::make_unique<ast::literal>((u16)1),
-                    std::make_unique<ast::mul_expr>(
-                        compilation::token(compilation::token_type::STAR, "*", 0, 1),
-                        std::make_unique<ast::literal>((u16)2),
-                        std::make_unique<ast::literal>((u16)3)
-                    )
-                ),
-                std::make_unique<ast::div_expr>(
-                    compilation::token(compilation::token_type::SLASH, "/", 0, 1),
-                    std::make_unique<ast::literal>((u16)4),
-                    std::make_unique<ast::literal>((u16)5)
-                )
-            )
-        ));
+                                                                       std::make_unique<ast::sub_expr>(
+                                                                           compilation::token(compilation::token_type::MINUS, "-", 0, 1),
+                                                                           std::make_unique<ast::add_expr>(
+                                                                               compilation::token(compilation::token_type::PLUS, "+", 0, 1),
+                                                                               std::make_unique<ast::literal>((u16)1),
+                                                                               std::make_unique<ast::mul_expr>(
+                                                                                   compilation::token(compilation::token_type::STAR, "*", 0, 1),
+                                                                                   std::make_unique<ast::literal>((u16)2),
+                                                                                   std::make_unique<ast::literal>((u16)3)
+                                                                               )),
+                                                                           std::make_unique<ast::div_expr>(
+                                                                               compilation::token(compilation::token_type::SLASH, "/", 0, 1),
+                                                                               std::make_unique<ast::literal>((u16)4),
+                                                                               std::make_unique<ast::literal>((u16)5)
+                                                                           ))));
 
         EXPECT_EQ(expected, statements);
     }
@@ -1205,11 +1185,12 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
                     compilation::token(compilation::token_type::PLUS, "+", 0, 1),
                     std::make_unique<ast::identifier>("y"),
                     std::make_unique<ast::identifier>("item")
-                )
-            )
-        ));
+                ))));
         expected.push_back(std::make_unique<ast::foreach_stmt>(
-            ast::parameter{ast::make_type_from_prim(ast::primitive_kind::U32),"item",},
+            ast::parameter{
+                ast::make_type_from_prim(ast::primitive_kind::U32),
+                "item",
+            },
             std::make_unique<ast::identifier>("iterable"),
             std::make_unique<ast::block>(std::move(block_stmnts))
         ));
@@ -1223,7 +1204,7 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
         EXPECT_EQ(lex_errors.size(), 0);
         EXPECT_EQ(parse_errors.size(), 0);
         EXPECT_EQ(statements.size(), 1);
-        
+
         std::vector<expr_uptr> vars;
         vars.push_back(std::make_unique<ast::identifier>("var_0"));
         vars.push_back(std::make_unique<ast::identifier>("var_1"));
@@ -1240,8 +1221,7 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
                 std::move(vars),
                 std::move(outer),
                 std::make_unique<ast::literal>("Default")
-            )
-        ));
+            )));
 
         EXPECT_EQ(expected, statements);
     }
@@ -1268,8 +1248,7 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
                 compilation::token(compilation::token_type::IDENTIFIER, "doSomething", 0, 1),
                 std::make_unique<ast::identifier>("doSomething"),
                 std::move(args)
-            )
-        ));
+            )));
 
         EXPECT_EQ(expected, statements);
     }
@@ -1293,8 +1272,7 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
                 compilation::token(compilation::token_type::DOLLAR, "$", 0, 1),
                 std::make_unique<ast::sid_identifier>("#dc:format"),
                 std::move(args)
-            )
-        ));
+            )));
 
         EXPECT_EQ(expected, statements);
     }
@@ -1325,8 +1303,7 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
                 compilation::token(compilation::token_type::GREATER_GREATER, ">>", 0, 1),
                 std::make_unique<ast::sid_identifier>("#display"),
                 std::move(display_args)
-            )
-        ));
+            )));
 
         EXPECT_EQ(expected, statements);
     }
@@ -1410,15 +1387,12 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
                     compilation::token(compilation::token_type::SLASH, "/", 0, 1),
                     std::make_unique<ast::literal>((u16)2),
                     std::make_unique<ast::literal>((u16)1)
-                )
-            )
-        );
+                )));
 
         ast::if_stmt expected_if(
             std::make_unique<ast::literal>((u16)1),
             std::make_unique<ast::block>(
-                std::move(block)
-            )
+            std::move(block))
         );
 
         const auto& rhs = *dynamic_cast<ast::if_stmt*>(statements.front().get());
@@ -1439,8 +1413,7 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
         };
 
         const std::vector<compilation::lexing_error> expected_errors = {
-            compilation::lexing_error(1, "invalid token '@'")
-        };
+            compilation::lexing_error(1, "invalid token '@'")};
 
         EXPECT_EQ(tokens, expected);
         EXPECT_EQ(expected_errors, errors);
@@ -1450,15 +1423,13 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
         std::vector<compilation::token> tokens = {
             compilation::token(compilation::token_type::INT, "1", 1, 1),
             compilation::token(compilation::token_type::PLUS, "+", 0, 1),
-            compilation::token(compilation::token_type::_EOF, ";", 0, 1)
-        };
+            compilation::token(compilation::token_type::_EOF, ";", 0, 1)};
 
         const auto [statements, errors] = get_statements(tokens);
 
         ASSERT_EQ(errors.size(), 2);
 
-        const std::list<stmnt_uptr> expected_statements = {
-        };
+        const std::list<stmnt_uptr> expected_statements = {};
         EXPECT_EQ(statements, expected_statements);
     }
 
@@ -1524,7 +1495,6 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
         ASSERT_EQ(lambda->m_body.m_statements.size(), 1);
     }
 
-    
     TEST(COMPILER, CompileStateScriptBasicNoErrors) {
         const std::string code =
             "statescript #compile-basic {"
@@ -1674,12 +1644,12 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
     }
 
     TEST(COMPILER, ParseStructType) {
-        const std::string code = 
-        "struct Vector3 {\n"
-        "\tf32 x;\n"
-        "\tf32 y;\n"
-        "\tf32 z;\n"
-        "}";
+        const std::string code =
+            "struct Vector3 {\n"
+            "\tf32 x;\n"
+            "\tf32 y;\n"
+            "\tf32 z;\n"
+            "}";
 
         auto [tokens, lex_errors] = get_tokens(code);
         const auto [program, types, parse_errors] = get_parse_results(tokens);
@@ -1698,12 +1668,12 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
     }
 
     TEST(COMPILER, ParseEnumType) {
-        const std::string code = 
-        "enum Color {\n"
-        "\tRed,\n"
-        "\tGreen,\n"
-        "\tBlue\n"
-        "}";
+        const std::string code =
+            "enum Color {\n"
+            "\tRed,\n"
+            "\tGreen,\n"
+            "\tBlue\n"
+            "}";
 
         auto [tokens, lex_errors] = get_tokens(code);
         const auto [program, types, parse_errors] = get_parse_results(tokens);
@@ -1768,7 +1738,7 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
         EXPECT_EQ(lex_errors.size(), 0);
         EXPECT_EQ(parse_errors.size(), 0);
         EXPECT_EQ(program.m_declarations.size(), 1);
-        
+
         compilation::scope scope{types};
         const auto semantic_errors = program.m_declarations[0]->check_semantics(scope);
 
@@ -1783,7 +1753,7 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
         EXPECT_EQ(lex_errors.size(), 0) << lex_errors[0].m_message;
         EXPECT_EQ(parse_errors.size(), 0) << parse_errors[0].m_message;
         EXPECT_EQ(program.m_declarations.size(), 1);
-        
+
         compilation::scope scope{types};
         const auto semantic_errors = program.m_declarations[0]->check_semantics(scope);
 
@@ -1870,14 +1840,14 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
     }
 
     TEST(COMPILER, Using1) {
-        const std::string code = 
-        "using #display as far (string, u32) -> u0;"
-        "using #5445173390656D6D as near (string, u32, u32) -> string sprintf;"
-        "u32 main() {"
-        "    string message = sprintf(\"Hello World from DC version %d.%d\", 0, 0);"
-        "    display(message, 19);"
-        "    return 0;"
-        "}";
+        const std::string code =
+            "using #display as far (string, u32) -> u0;"
+            "using #5445173390656D6D as near (string, u32, u32) -> string sprintf;"
+            "u32 main() {"
+            "    string message = sprintf(\"Hello World from DC version %d.%d\", 0, 0);"
+            "    display(message, 19);"
+            "    return 0;"
+            "}";
         auto [tokens, lex_errors] = get_tokens(code);
         const auto [program, types, parse_errors] = get_parse_results(tokens);
         EXPECT_EQ(lex_errors.size(), 0);
@@ -1930,7 +1900,7 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
     }
 
     TEST(COMPILER, FullCompile1) {
-        const std::string code = 
+        const std::string code =
             "i32 main() {"
             "   u64 x = 1;"
             "   u64 y = x * 2;"
@@ -1955,66 +1925,87 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
     }
 
     TEST(COMPILER, CastInstructions1) {
-        expect_instructions("i32 main() { return (i32)1.0; }", {
-            Instruction{Opcode::LoadStaticFloatImm, 0, 0, 0},
-            Instruction{Opcode::CastInteger, 1, 0, 0},
-            Instruction{Opcode::Move, 0, 1, 0},
-            Instruction{Opcode::Return, 0, 0, 0_r},
-        });
+        expect_instructions(
+            "i32 main() { return (i32)1.0; }",
+            {
+                Instruction{Opcode::LoadStaticFloatImm, 0, 0, 0},
+                Instruction{Opcode::CastInteger, 1, 0, 0},
+                Instruction{Opcode::Move, 0, 1, 0},
+                Instruction{Opcode::Return, 0, 0, 0_r},
+            }
+        );
     }
 
     TEST(COMPILER, Load1) {
-        expect_instructions("i32 main(i32* p) { return *p; }", {
-            Instruction{Opcode::Move, 0, 49, 0},
-            Instruction{Opcode::LoadI32, 1, 0, 0},
-            Instruction{Opcode::Move, 0, 1, 0},
-            Instruction{Opcode::Return, 0, 0, 0},
-        });
+        expect_instructions(
+            "i32 main(i32* p) { return *p; }",
+            {
+                Instruction{Opcode::Move, 0, 49, 0},
+                Instruction{Opcode::LoadI32, 1, 0, 0},
+                Instruction{Opcode::Move, 0, 1, 0},
+                Instruction{Opcode::Return, 0, 0, 0},
+            }
+        );
     }
 
     TEST(COMPILER, Store1) {
-        expect_instructions("u16 main(i32* p) { *p = (i32)42; return 0; }", {
-            Instruction{Opcode::Move, 0, 49, 0},
-            Instruction{Opcode::LoadU16Imm, 1, 42, 0},
-            Instruction{Opcode::StoreI32, 2, 0, 1},
-            Instruction{Opcode::LoadU16Imm, 2, 0, 0},
-            Instruction{Opcode::Move, 0, 2, 0},
-            Instruction{Opcode::Return, 0, 0, 0},
-        });
+        expect_instructions(
+            "u16 main(i32* p) { *p = (i32)42; return 0; }",
+            {
+                Instruction{Opcode::Move, 0, 49, 0},
+                Instruction{Opcode::LoadU16Imm, 1, 42, 0},
+                Instruction{Opcode::StoreI32, 2, 0, 1},
+                Instruction{Opcode::LoadU16Imm, 2, 0, 0},
+                Instruction{Opcode::Move, 0, 2, 0},
+                Instruction{Opcode::Return, 0, 0, 0},
+            }
+        );
     }
 
     TEST(COMPILER, Load2) {
-        expect_instructions("u64 main(u64* p) { return *p; }", {
-            Instruction{Opcode::Move, 0, 49, 0},
-            Instruction{Opcode::LoadU64, 1, 0, 0},
-            Instruction{Opcode::Move, 0, 1, 0},
-            Instruction{Opcode::Return, 0, 0, 0},
-        });
+        expect_instructions(
+            "u64 main(u64* p) { return *p; }",
+            {
+                Instruction{Opcode::Move, 0, 49, 0},
+                Instruction{Opcode::LoadU64, 1, 0, 0},
+                Instruction{Opcode::Move, 0, 1, 0},
+                Instruction{Opcode::Return, 0, 0, 0},
+            }
+        );
     }
 
     TEST(COMPILER, Store2) {
-        expect_instructions("u16 main(u64* p) { *p = 42; return 0; }", {
-            Instruction{Opcode::Move, 0, 49, 0},
-            Instruction{Opcode::LoadU16Imm, 1, 42, 0},
-            Instruction{Opcode::StoreU64, 2, 0, 1},
-            Instruction{Opcode::LoadU16Imm, 2, 0, 0},
-            Instruction{Opcode::Move, 0, 2, 0},
-            Instruction{Opcode::Return, 0, 0, 0},
-        });
+        expect_instructions(
+            "u16 main(u64* p) { *p = 42; return 0; }",
+            {
+                Instruction{Opcode::Move, 0, 49, 0},
+                Instruction{Opcode::LoadU16Imm, 1, 42, 0},
+                Instruction{Opcode::StoreU64, 2, 0, 1},
+                Instruction{Opcode::LoadU16Imm, 2, 0, 0},
+                Instruction{Opcode::Move, 0, 2, 0},
+                Instruction{Opcode::Return, 0, 0, 0},
+            }
+        );
     }
 
     TEST(COMPILER, ReturnLiteral) {
-        expect_instructions("i32 main() { return 1; }", {
-            Instruction{Opcode::LoadU16Imm, 0, 1, 0},
-            Instruction{Opcode::Return, 0, 0, 0},
-        });
+        expect_instructions(
+            "i32 main() { return 1; }",
+            {
+                Instruction{Opcode::LoadU16Imm, 0, 1, 0},
+                Instruction{Opcode::Return, 0, 0, 0},
+            }
+        );
     }
 
     TEST(COMPILER, ReturnNullLoadsZero) {
-        expect_instructions("u64 main() { return null; }", {
-            Instruction{Opcode::LoadU16Imm, 0, 0, 0},
-            Instruction{Opcode::Return, 0, 0, 0},
-        });
+        expect_instructions(
+            "u64 main() { return null; }",
+            {
+                Instruction{Opcode::LoadU16Imm, 0, 0, 0},
+                Instruction{Opcode::Return, 0, 0, 0},
+            }
+        );
     }
 
     TEST(COMPILER, MatchArrayCompilationLoadsFromSymbolTable) {
@@ -2031,14 +2022,17 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
         ASSERT_EQ(functions->size(), 1);
 
         const compilation::function& fn = (*functions)[0];
-        EXPECT_EQ(fn.m_instructions, (std::vector<Instruction>{
-            Instruction{Opcode::LoadStaticPointerImm, 0, 0, 0},
-            Instruction{Opcode::LoadU16Imm, 1, 0, 0},
-            Instruction{Opcode::IAddImm, 1, 1, 1},
-            Instruction{Opcode::LoadStaticInt, 2, 1, 0},
-            Instruction{Opcode::Move, 0, 2, 0},
-            Instruction{Opcode::Return, 0, 0, 0},
-        }));
+        EXPECT_EQ(
+            fn.m_instructions,
+            (std::vector<Instruction>{
+                Instruction{Opcode::LoadStaticPointerImm, 0, 0, 0},
+                Instruction{Opcode::LoadU16Imm, 1, 0, 0},
+                Instruction{Opcode::IAddImm, 1, 1, 1},
+                Instruction{Opcode::LoadStaticInt, 2, 1, 0},
+                Instruction{Opcode::Move, 0, 2, 0},
+                Instruction{Opcode::Return, 0, 0, 0},
+            })
+        );
 
         ASSERT_EQ(fn.m_symbolTable.size(), 3);
         EXPECT_EQ(fn.m_symbolTable[0], 0);
@@ -2084,27 +2078,33 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
     }
 
     TEST(COMPILER, IfElseReturn) {
-        expect_instructions("i32 main() { if (1) { return 2; } return 3; }", {
-            Instruction{Opcode::LoadU16Imm, 0, 1, 0},
-            Instruction{Opcode::BranchIfNot, 4, 0, 0},
-            Instruction{Opcode::LoadU16Imm, 0, 2, 0},
-            Instruction{Opcode::Branch, 6, 0, 0},
-            Instruction{Opcode::LoadU16Imm, 1, 3, 0},
-            Instruction{Opcode::Move, 0, 1, 0},
-            Instruction{Opcode::Return, 0, 0, 0},
-        });
+        expect_instructions(
+            "i32 main() { if (1) { return 2; } return 3; }",
+            {
+                Instruction{Opcode::LoadU16Imm, 0, 1, 0},
+                Instruction{Opcode::BranchIfNot, 4, 0, 0},
+                Instruction{Opcode::LoadU16Imm, 0, 2, 0},
+                Instruction{Opcode::Branch, 6, 0, 0},
+                Instruction{Opcode::LoadU16Imm, 1, 3, 0},
+                Instruction{Opcode::Move, 0, 1, 0},
+                Instruction{Opcode::Return, 0, 0, 0},
+            }
+        );
     }
 
     TEST(COMPILER, WhileLoop) {
-        expect_instructions("i32 main() { i32 x = 0; i32 y = 1; while (x < y) { x = x + y; } return x; }", {
-            Instruction{Opcode::LoadU16Imm, 0, 0, 0},
-            Instruction{Opcode::LoadU16Imm, 1, 1, 0},
-            Instruction{Opcode::ILessThan, 2, 0, 1},
-            Instruction{Opcode::BranchIfNot, 6, 2, 0},
-            Instruction{Opcode::IAdd, 0, 0, 1},
-            Instruction{Opcode::Branch, 2, 0, 0},
-            Instruction{Opcode::Return, 0, 0, 0},
-        });
+        expect_instructions(
+            "i32 main() { i32 x = 0; i32 y = 1; while (x < y) { x = x + y; } return x; }",
+            {
+                Instruction{Opcode::LoadU16Imm, 0, 0, 0},
+                Instruction{Opcode::LoadU16Imm, 1, 1, 0},
+                Instruction{Opcode::ILessThan, 2, 0, 1},
+                Instruction{Opcode::BranchIfNot, 6, 2, 0},
+                Instruction{Opcode::IAdd, 0, 0, 1},
+                Instruction{Opcode::Branch, 2, 0, 0},
+                Instruction{Opcode::Return, 0, 0, 0},
+            }
+        );
     }
 
     TEST(COMPILER, LogicalAndShortCircuit) {
@@ -2115,14 +2115,22 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
         const auto& instructions = (*functions)[0].m_instructions;
         ASSERT_FALSE(instructions.empty());
 
-        const auto lhs_branch_it = std::find_if(instructions.begin(), instructions.end(), [](const Instruction& instruction) {
-            return instruction.opcode == Opcode::BranchIfNot;
-        });
+        const auto lhs_branch_it = std::find_if(
+            instructions.begin(),
+            instructions.end(),
+            [](const Instruction& instruction) {
+                return instruction.opcode == Opcode::BranchIfNot;
+            }
+        );
         ASSERT_NE(lhs_branch_it, instructions.end());
 
-        const auto rhs_load_it = std::find_if(instructions.begin(), instructions.end(), [](const Instruction& instruction) {
-            return instruction.opcode == Opcode::LoadU16Imm && instruction.operand1 == 42;
-        });
+        const auto rhs_load_it = std::find_if(
+            instructions.begin(),
+            instructions.end(),
+            [](const Instruction& instruction) {
+                return instruction.opcode == Opcode::LoadU16Imm && instruction.operand1 == 42;
+            }
+        );
         ASSERT_NE(rhs_load_it, instructions.end());
 
         const u16 lhs_branch_target = lhs_branch_it->destination | (lhs_branch_it->operand2 << 8);
@@ -2135,71 +2143,86 @@ const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
     }
 
     TEST(COMPILER, IfLogicalAndBranchesDirectly) {
-        expect_instructions("i32 main(i32 a, i32 b) { if (a && b) { return 1; } return 0; }", {
-            Instruction{Opcode::Move, 0, 49, 0},
-            Instruction{Opcode::Move, 1, 50, 0},
-            Instruction{Opcode::BranchIfNot, 7, 0, 0},
-            Instruction{Opcode::BranchIfNot, 7, 1, 0},
-            Instruction{Opcode::LoadU16Imm, 2, 1, 0},
-            Instruction{Opcode::Move, 0, 2, 0},
-            Instruction{Opcode::Branch, 9, 0, 0},
-            Instruction{Opcode::LoadU16Imm, 3, 0, 0},
-            Instruction{Opcode::Move, 0, 3, 0},
-            Instruction{Opcode::Return, 0, 0, 0},
-        });
+        expect_instructions(
+            "i32 main(i32 a, i32 b) { if (a && b) { return 1; } return 0; }",
+            {
+                Instruction{Opcode::Move, 0, 49, 0},
+                Instruction{Opcode::Move, 1, 50, 0},
+                Instruction{Opcode::BranchIfNot, 7, 0, 0},
+                Instruction{Opcode::BranchIfNot, 7, 1, 0},
+                Instruction{Opcode::LoadU16Imm, 2, 1, 0},
+                Instruction{Opcode::Move, 0, 2, 0},
+                Instruction{Opcode::Branch, 9, 0, 0},
+                Instruction{Opcode::LoadU16Imm, 3, 0, 0},
+                Instruction{Opcode::Move, 0, 3, 0},
+                Instruction{Opcode::Return, 0, 0, 0},
+            }
+        );
     }
 
     TEST(COMPILER, IfLogicalOrBranchesDirectly) {
-        expect_instructions("i32 main(i32 a, i32 b) { if (a || b) { return 1; } return 0; }", {
-            Instruction{Opcode::Move, 0, 49, 0},
-            Instruction{Opcode::Move, 1, 50, 0},
-            Instruction{Opcode::BranchIf, 4, 0, 0},
-            Instruction{Opcode::BranchIfNot, 7, 1, 0},
-            Instruction{Opcode::LoadU16Imm, 2, 1, 0},
-            Instruction{Opcode::Move, 0, 2, 0},
-            Instruction{Opcode::Branch, 9, 0, 0},
-            Instruction{Opcode::LoadU16Imm, 3, 0, 0},
-            Instruction{Opcode::Move, 0, 3, 0},
-            Instruction{Opcode::Return, 0, 0, 0},
-        });
+        expect_instructions(
+            "i32 main(i32 a, i32 b) { if (a || b) { return 1; } return 0; }",
+            {
+                Instruction{Opcode::Move, 0, 49, 0},
+                Instruction{Opcode::Move, 1, 50, 0},
+                Instruction{Opcode::BranchIf, 4, 0, 0},
+                Instruction{Opcode::BranchIfNot, 7, 1, 0},
+                Instruction{Opcode::LoadU16Imm, 2, 1, 0},
+                Instruction{Opcode::Move, 0, 2, 0},
+                Instruction{Opcode::Branch, 9, 0, 0},
+                Instruction{Opcode::LoadU16Imm, 3, 0, 0},
+                Instruction{Opcode::Move, 0, 3, 0},
+                Instruction{Opcode::Return, 0, 0, 0},
+            }
+        );
     }
 
     TEST(COMPILER, IfGroupedLogicalBranchesDirectly) {
-        expect_instructions("i32 main(i32 a, i32 b) { if ((a && b)) { return 1; } return 0; }", {
-            Instruction{Opcode::Move, 0, 49, 0},
-            Instruction{Opcode::Move, 1, 50, 0},
-            Instruction{Opcode::BranchIfNot, 7, 0, 0},
-            Instruction{Opcode::BranchIfNot, 7, 1, 0},
-            Instruction{Opcode::LoadU16Imm, 2, 1, 0},
-            Instruction{Opcode::Move, 0, 2, 0},
-            Instruction{Opcode::Branch, 9, 0, 0},
-            Instruction{Opcode::LoadU16Imm, 3, 0, 0},
-            Instruction{Opcode::Move, 0, 3, 0},
-            Instruction{Opcode::Return, 0, 0, 0},
-        });
+        expect_instructions(
+            "i32 main(i32 a, i32 b) { if ((a && b)) { return 1; } return 0; }",
+            {
+                Instruction{Opcode::Move, 0, 49, 0},
+                Instruction{Opcode::Move, 1, 50, 0},
+                Instruction{Opcode::BranchIfNot, 7, 0, 0},
+                Instruction{Opcode::BranchIfNot, 7, 1, 0},
+                Instruction{Opcode::LoadU16Imm, 2, 1, 0},
+                Instruction{Opcode::Move, 0, 2, 0},
+                Instruction{Opcode::Branch, 9, 0, 0},
+                Instruction{Opcode::LoadU16Imm, 3, 0, 0},
+                Instruction{Opcode::Move, 0, 3, 0},
+                Instruction{Opcode::Return, 0, 0, 0},
+            }
+        );
     }
 
     TEST(COMPILER, Subscript1) {
-        expect_instructions("i32 main(u16* bytes) { u16 my_byte = bytes[2]; }", {
-            Instruction{Opcode::Move, 0_r, 49_r},
-            Instruction{Opcode::LoadU16Imm, 2_r, 2_r, 0_r},
-            Instruction{Opcode::IMulImm, 1_r, 2_r, 2_imm},
-            Instruction{Opcode::IAdd, 1_r, 0_r, 1_r},
-            Instruction{Opcode::LoadU16, 1_r, 1_r},
-            Instruction{Opcode::Return, 0, 0, 0},
-        });
+        expect_instructions(
+            "i32 main(u16* bytes) { u16 my_byte = bytes[2]; }",
+            {
+                Instruction{Opcode::Move, 0_r, 49_r},
+                Instruction{Opcode::LoadU16Imm, 2_r, 2_r, 0_r},
+                Instruction{Opcode::IMulImm, 1_r, 2_r, 2_imm},
+                Instruction{Opcode::IAdd, 1_r, 0_r, 1_r},
+                Instruction{Opcode::LoadU16, 1_r, 1_r},
+                Instruction{Opcode::Return, 0, 0, 0},
+            }
+        );
     }
 
     TEST(COMPILER, Subscript2) {
-        expect_instructions("i32 main(f32* floats) { floats[2] = 0.69; }", {
-            Instruction{Opcode::Move, 0_r, 49_r},
-            Instruction{Opcode::LoadU16Imm, 1_r, 2_r, 0_r},
-            Instruction{Opcode::IMulImm, 2_r, 1_r, 4_imm},
-            Instruction{Opcode::IAdd, 2_r, 0_r, 2_r},
-            Instruction{Opcode::LoadStaticFloatImm, 1_r, 0, 0},
-            Instruction{Opcode::StoreFloat, 3_r, 2_r, 1_r},
-            Instruction{Opcode::Return, 0, 0, 0},
-        });
+        expect_instructions(
+            "i32 main(f32* floats) { floats[2] = 0.69; }",
+            {
+                Instruction{Opcode::Move, 0_r, 49_r},
+                Instruction{Opcode::LoadU16Imm, 1_r, 2_r, 0_r},
+                Instruction{Opcode::IMulImm, 2_r, 1_r, 4_imm},
+                Instruction{Opcode::IAdd, 2_r, 0_r, 2_r},
+                Instruction{Opcode::LoadStaticFloatImm, 1_r, 0, 0},
+                Instruction{Opcode::StoreFloat, 3_r, 2_r, 1_r},
+                Instruction{Opcode::Return, 0, 0, 0},
+            }
+        );
     }
 
     TEST(COMPILER, SizeofNormalType) {

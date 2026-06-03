@@ -13,7 +13,7 @@ namespace dconstruct::ast {
         void pseudo_py(ast_serialization_buffer& buffer) const final;
         void pseudo_racket(ast_serialization_buffer& buffer) const final;
         [[nodiscard]] expr_uptr simplify() const final;
-        [[nodiscard]] bool equals(const expression &rhs) const noexcept final;
+        [[nodiscard]] bool equals(const expression& rhs) const noexcept final;
         [[nodiscard]] expr_uptr clone() const final;
         [[nodiscard]] full_type compute_type_unchecked(const compilation::scope& env) const noexcept final;
         [[nodiscard]] semantic_check_res compute_type_checked(compilation::scope& env) const noexcept final;

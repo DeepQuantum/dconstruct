@@ -8,15 +8,15 @@
 
 namespace dconstruct::ast {
     struct identifier : public expression {
-        explicit identifier(compilation::token name) : m_name(std::move(name)){};
+        explicit identifier(compilation::token name) : m_name(std::move(name)) {};
 
-        explicit identifier(std::string name) : m_name(compilation::token{compilation::token_type::IDENTIFIER, std::move(name), 0, 1}){};
+        explicit identifier(std::string name) : m_name(compilation::token{compilation::token_type::IDENTIFIER, std::move(name), 0, 1}) {};
 
         void pseudo_c(ast_serialization_buffer& buffer) const final;
         void pseudo_py(ast_serialization_buffer& buffer) const final;
         void pseudo_racket(ast_serialization_buffer& buffer) const final;
         [[nodiscard]] expr_uptr simplify() const final;
-        [[nodiscard]] bool equals(const expression &rhs) const noexcept final;
+        [[nodiscard]] bool equals(const expression& rhs) const noexcept final;
         [[nodiscard]] expr_uptr clone() const final;
         [[nodiscard]] full_type compute_type_unchecked(const compilation::scope& env) const noexcept final { return std::monostate(); }
         [[nodiscard]] semantic_check_res compute_type_checked(compilation::scope& env) const noexcept final;
@@ -34,7 +34,6 @@ namespace dconstruct::ast {
         VAR_OPTIMIZATION_ACTION var_optimization_pass(var_optimization_env& env) noexcept;
         FOREACH_OPTIMIZATION_ACTION foreach_optimization_pass(foreach_optimization_env& env) noexcept;
         MATCH_OPTIMIZATION_ACTION match_optimization_pass(match_optimization_env& env) noexcept;
-
 
         compilation::token m_name;
     };

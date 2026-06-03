@@ -3,7 +3,6 @@
 #include "base.h"
 #include "compilation/environment.h"
 
-
 namespace dconstruct::ast {
 
     struct expression;
@@ -16,14 +15,14 @@ namespace dconstruct::ast {
     };
 
     struct var_optimization_env {
-        compilation::environment<variable_folding_context> m_env;
-        bool m_isLvalueDereference = false;
-
         explicit var_optimization_env(compilation::environment<variable_folding_context>* enclosing = nullptr) noexcept
             : m_env(enclosing) {}
 
         void check_action(std::unique_ptr<expression>* expr);
         void check_action(std::unique_ptr<statement>* stmt);
+
+        compilation::environment<variable_folding_context> m_env;
+        bool m_isLvalueDereference = false;
     };
 
 }

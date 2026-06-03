@@ -6,13 +6,12 @@
 #include <cstring>
 #include <memory>
 
-
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
     if (argc != 2) {
         std::println("error: expected one argument but got {}", argc);
         return -1;
     }
-    
+
     std::ifstream sidbase(argv[1], std::ios_base::binary | std::ios_base::ate);
 
     if (!sidbase) {
@@ -36,7 +35,7 @@ int main(int argc, char *argv[]) {
     std::ofstream out_file("out.txt");
 
     const std::size_t num_chars = sidbase_size - string_offset;
-    for (std::size_t i {0}; i < num_chars; ++i) {
+    for (std::size_t i{0}; i < num_chars; ++i) {
         const char in_c = static_cast<char>(raw_bytes[string_offset + i]);
         raw_bytes[string_offset + i] = static_cast<std::byte>(in_c == '\0' ? '\n' : in_c);
     }

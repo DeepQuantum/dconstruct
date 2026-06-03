@@ -1,6 +1,5 @@
 #include "ast/unary_expressions/dereference_expression.h"
 
-
 namespace dconstruct::ast {
 
     void dereference_expr::pseudo_racket(ast_serialization_buffer& buffer) const {
@@ -25,19 +24,22 @@ namespace dconstruct::ast {
             return rhs_type;
         }
 
-        const std::optional<std::string> invalid_dereference = std::visit([](auto&& rhs_type) -> std::optional<std::string> {
-            using T = std::decay_t<decltype(rhs_type)>;
+        const std::optional<std::string> invalid_dereference = std::visit(
+            [](auto&& rhs_type) -> std::optional<std::string> {
+                using T = std::decay_t<decltype(rhs_type)>;
 
-            if constexpr (is_pointer<T>) {
-                if (is_unknown(*rhs_type.m_pointedAt)) {
-                    return "cannot dereference void pointer";
-                } else{ 
-                    return std::nullopt;
+                if constexpr (is_pointer<T>) {
+                    if (is_unknown(*rhs_type.m_pointedAt)) {
+                        return "cannot dereference void pointer";
+                    } else {
+                        return std::nullopt;
+                    }
+                } else {
+                    return "expected pointer type for dereference but got " + type_to_declaration_string(rhs_type);
                 }
-            } else {
-                return "expected pointer type for dereference but got " + type_to_declaration_string(rhs_type);
-            }
-        }, *rhs_type);
+            },
+            *rhs_type
+        );
 
         if (!invalid_dereference) {
             return *std::get<ptr_type>(*rhs_type).m_pointedAt;
@@ -50,12 +52,16 @@ namespace dconstruct::ast {
         return m_rhs->is_l_evaluable();
     }
 
-    [[nodiscard]] emission_res dereference_expr::emit_dc(compilation::function& fn, compilation::global_state& global, const std::optional<reg_idx> opt_destination) const noexcept {
+    [[nodiscard]] emission_res dereference_expr::emit_dc(
+        compilation::function& fn,
+        compilation::global_state& global,
+        const std::optional<reg_idx> opt_destination
+    ) const noexcept {
         emission_res rhs = m_rhs->emit_dc(fn, global);
         if (!rhs) {
             return rhs;
         }
-        
+
         assert(std::holds_alternative<ptr_type>(*m_rhs->get_type()));
         const ptr_type& ptr_t = std::get<ptr_type>(*m_rhs->get_type());
 
@@ -75,11 +81,14 @@ namespace dconstruct::ast {
 
         fn.emit_instruction(*load_opcode, *load_destination, *rhs);
         fn.free_register(*rhs);
-        
+
         return *load_destination;
     }
 
-    [[nodiscard]] lvalue_emission_res dereference_expr::emit_dc_lvalue(compilation::function& fn, compilation::global_state& global) const noexcept {
+    [[nodiscard]] lvalue_emission_res dereference_expr::emit_dc_lvalue(
+        compilation::function& fn,
+        compilation::global_state& global
+    ) const noexcept {
         lvalue_emission_res rhs = m_rhs->emit_dc_lvalue(fn, global);
         if (!rhs) {
             return rhs;
@@ -87,12 +96,12 @@ namespace dconstruct::ast {
 
         assert(std::holds_alternative<ptr_type>(*m_rhs->get_type()));
         const ptr_type& ptr_t = std::get<ptr_type>(*m_rhs->get_type());
-        
+
         std::expected<Opcode, std::string> store_opcode = get_store_opcode(*ptr_t.m_pointedAt);
         if (!store_opcode) {
             return std::unexpected{std::move(store_opcode.error())};
         }
-        
+
         return std::pair{rhs->first, *store_opcode};
     }
 }

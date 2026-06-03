@@ -3,7 +3,7 @@
 #include <cstdio>
 #include <print>
 
-int main(int argc, char *argv[]) {  
+int main(int argc, char* argv[]) {
     const std::optional<std::pair<cxxopts::Options, cxxopts::ParseResult>> opts_res = dconstruct::disassembly::get_command_line_options(argc, argv);
     if (!opts_res) {
         return -1;
@@ -24,7 +24,7 @@ int main(int argc, char *argv[]) {
         print_about();
         return 0;
     }
-    
+
     std::filesystem::path filepath;
     if (opts.count("i") == 0) {
         std::println(stderr, "error: no input specified");
@@ -108,14 +108,14 @@ int main(int argc, char *argv[]) {
         std::println(stderr, "error: sidbase path {} doesn't exist", sidbase_path.string());
         return -1;
     }
-    
+
     const bool map_types = opts["map_types"].as<bool>();
 
     if (map_types) {
         if (std::filesystem::is_directory(output)) {
             std::println(stderr, "error: output path must be a file when using --map_types");
             return -1;
-        } 
+        }
         if (!std::filesystem::is_directory(filepath)) {
             std::println(stderr, "error: input path must be a folder when using --map_types");
             return -1;
@@ -146,7 +146,6 @@ int main(int argc, char *argv[]) {
         language_flags = language_flags | dconstruct::ast::LANGUAGE_FLAGS::FUNCTION_NAMES_PASCAL;
     }
 
-
     if (opts.count("e") > 0) {
         std::vector<std::string> edit_strings = opts["e"].as<std::vector<std::string>>();
         edits.insert(edits.end(), edit_strings.begin(), edit_strings.end());
@@ -175,8 +174,7 @@ int main(int argc, char *argv[]) {
                 std::filesystem::create_directory(output / "graphs");
             }
             dconstruct::disassembly::decompile_multiple(filepath, output, base, type_map, generate_graphs, show_warnings, optimize, language_flags, game, type_maps);
-        }
-        else {
+        } else {
             dconstruct::disassembly::disassemble_multiple(filepath, output, base, type_map, game);
         }
     } else {
@@ -184,8 +182,7 @@ int main(int argc, char *argv[]) {
         if (decompile) {
             std::println("disassembling & decompiling {}...", filepath.filename().string());
             dconstruct::disassembly::decomp_file(filepath, output, std::filesystem::path(output).replace_extension(".dcpl"), base, type_map, generate_graphs, language_flags, show_warnings, optimize ? dconstruct::dcompiler::OPTIMIZATION_KIND::AST : dconstruct::dcompiler::OPTIMIZATION_KIND::NONE, edits, game, type_maps);
-        }
-        else {
+        } else {
             std::println("disassembling {}...", filepath.filename().string());
             dconstruct::disassembly::disasm_file(filepath, output, base, type_map, edits, game);
         }

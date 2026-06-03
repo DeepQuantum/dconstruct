@@ -24,7 +24,10 @@ namespace dconstruct {
         return name;
     }
 
-    [[nodiscard]] static ast::full_type mapping_member_to_type(const mapping_member_type& member, const SIDBase& sidbase) {
+    [[nodiscard]] static ast::full_type mapping_member_to_type(
+        const mapping_member_type& member,
+        const SIDBase& sidbase
+    ) {
         if (member.m_kind == mapping_member_kind::Pointer) {
             if (member.m_pointedStructTypeId.has_value()) {
                 ast::struct_type pointed_type;
@@ -39,12 +42,15 @@ namespace dconstruct {
         return ast::make_type_from_prim(ast::primitive_kind::U8);
     }
 
-    [[nodiscard]] static ast::struct_type mapping_struct_to_ast_struct(const mapping_struct_type& mapping_struct, const SIDBase& sidbase) {
+    [[nodiscard]] static ast::struct_type mapping_struct_to_ast_struct(
+        const mapping_struct_type& mapping_struct,
+        const SIDBase& sidbase
+    ) {
         ast::struct_type result;
         result.m_name = get_type_name_from_sid(mapping_struct.m_typeId, sidbase);
 
         for (const auto& [offset, member] : mapping_struct.m_members) {
-           // result.m_members.emplace(member_name_from_offset(offset), std::make_shared<ast::full_type>(mapping_member_to_type(member, sidbase)));
+            // result.m_members.emplace(member_name_from_offset(offset), std::make_shared<ast::full_type>(mapping_member_to_type(member, sidbase)));
         }
 
         return result;
@@ -58,7 +64,11 @@ namespace dconstruct {
         return it->second;
     }
 
-    [[nodiscard]] mapping_member_type& MappingRegistry::get_or_create_member(mapping_struct_type& type, const u32 offset, const u32 size) {
+    [[nodiscard]] mapping_member_type& MappingRegistry::get_or_create_member(
+        mapping_struct_type& type,
+        const u32 offset,
+        const u32 size
+    ) {
         auto [it, inserted] = type.m_members.emplace(offset, mapping_member_type{});
         if (inserted) {
             it->second.m_offset = offset;
@@ -76,7 +86,12 @@ namespace dconstruct {
         type.m_totalSize = std::max(type.m_totalSize, total_size);
     }
 
-    void MappingRegistry::observe_pointer_member(const sid64 type_id, const u32 offset, const u32 size, const std::optional<sid64> pointed_type_id) {
+    void MappingRegistry::observe_pointer_member(
+        const sid64 type_id,
+        const u32 offset,
+        const u32 size,
+        const std::optional<sid64> pointed_type_id
+    ) {
         std::scoped_lock lock(m_mutex);
         mapping_struct_type& type = get_or_create_struct(type_id);
         mapping_member_type& member = get_or_create_member(type, offset, size);
@@ -94,7 +109,13 @@ namespace dconstruct {
         }
     }
 
-    void MappingRegistry::observe_primitive_member(const sid64 type_id, const u32 offset, const u32 size, const ast::primitive_kind kind, const u64 raw_value) {
+    void MappingRegistry::observe_primitive_member(
+        const sid64 type_id,
+        const u32 offset,
+        const u32 size,
+        const ast::primitive_kind kind,
+        const u64 raw_value
+    ) {
         std::scoped_lock lock(m_mutex);
         mapping_struct_type& type = get_or_create_struct(type_id);
         mapping_member_type& member = get_or_create_member(type, offset, size);
@@ -151,9 +172,13 @@ namespace dconstruct {
 
     void MappingRegistry::dump_types_file(const std::filesystem::path& out_path, const SIDBase& sidbase) const {
         std::vector<mapping_struct_type> types = get_all_structs();
-        std::sort(types.begin(), types.end(), [](const mapping_struct_type& lhs, const mapping_struct_type& rhs) {
-            return lhs.m_typeId < rhs.m_typeId;
-        });
+        std::sort(
+            types.begin(),
+            types.end(),
+            [](const mapping_struct_type& lhs, const mapping_struct_type& rhs) {
+                return lhs.m_typeId < rhs.m_typeId;
+            }
+        );
 
         const std::filesystem::path header_path = out_path.parent_path() / out_path.filename().replace_extension(".h");
 

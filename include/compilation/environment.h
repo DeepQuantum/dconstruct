@@ -6,10 +6,10 @@
 #include <unordered_map>
 
 namespace dconstruct::compilation {
-    template<typename T = ast::typed_value>
+    template <typename T = ast::typed_value>
     struct environment {
         environment() noexcept : m_enclosing(nullptr) {};
-        
+
         environment(const environment& rhs) = delete;
 
         environment& operator=(const environment& rhs) = delete;
@@ -18,8 +18,6 @@ namespace dconstruct::compilation {
         environment(environment&& rhs) = default;
 
         explicit environment(environment* enclosing) noexcept : m_enclosing(enclosing) {};
-
-        std::unordered_map<std::string, T> m_values;
 
         void define(const std::string& name, T value) {
             m_values[name] = value;
@@ -79,13 +77,12 @@ namespace dconstruct::compilation {
             return false;
         }
 
+        std::unordered_map<std::string, T> m_values;
         environment* m_enclosing;
     };
 
     struct scope : public environment<ast::full_type> {
-
-        explicit scope(std::unordered_map<std::string, ast::full_type> names_to_types) noexcept : 
-            m_namesToTypes(std::move(names_to_types)){};
+        explicit scope(std::unordered_map<std::string, ast::full_type> names_to_types) noexcept : m_namesToTypes(std::move(names_to_types)) {};
 
         explicit scope(scope* enclosing) noexcept {
             m_enclosing = enclosing;
@@ -94,7 +91,7 @@ namespace dconstruct::compilation {
         scope() noexcept {
             m_enclosing = nullptr;
         };
-        
+
         scope(const scope& rhs) = delete;
 
         scope& operator=(const scope& rhs) = delete;

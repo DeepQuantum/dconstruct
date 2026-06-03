@@ -14,7 +14,8 @@ namespace dconstruct::ast {
 
         [[nodiscard]] std::unique_ptr<expression> clone() const final {
             auto expr = std::make_unique<impl_unary_expr>(m_operator, m_rhs != nullptr ? m_rhs->clone() : nullptr);
-            if (m_type) expr->set_type(*m_type);
+            if (m_type)
+                expr->set_type(*m_type);
             return expr;
         }
 
@@ -22,7 +23,7 @@ namespace dconstruct::ast {
             env.check_action(&m_rhs);
             return VAR_OPTIMIZATION_ACTION::NONE;
         }
-        
+
         inline FOREACH_OPTIMIZATION_ACTION foreach_optimization_pass(foreach_optimization_env& env) noexcept override {
             env.check_action(&m_rhs);
             return FOREACH_OPTIMIZATION_ACTION::NONE;

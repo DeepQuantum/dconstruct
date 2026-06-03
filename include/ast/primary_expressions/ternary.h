@@ -5,17 +5,15 @@
 #include "ast/optimization/match_optimization.h"
 #include "ast/optimization/foreach_optimization.h"
 
-
 namespace dconstruct::ast {
     struct ternary_expr : public expression {
-        ternary_expr(expr_uptr&& condition, expr_uptr&& then, expr_uptr&& _else) noexcept : 
-        m_condition(std::move(condition)), m_then(std::move(then)), m_else(std::move(_else)) {};
-        
+        ternary_expr(expr_uptr&& condition, expr_uptr&& then, expr_uptr&& _else) noexcept : m_condition(std::move(condition)), m_then(std::move(then)), m_else(std::move(_else)) {};
+
         void pseudo_c(ast_serialization_buffer& buffer) const final;
         void pseudo_py(ast_serialization_buffer& buffer) const final;
         void pseudo_racket(ast_serialization_buffer& buffer) const final;
         [[nodiscard]] expr_uptr simplify() const final;
-        [[nodiscard]] bool equals(const expression &rhs) const noexcept final;
+        [[nodiscard]] bool equals(const expression& rhs) const noexcept final;
         [[nodiscard]] expr_uptr clone() const final;
         [[nodiscard]] full_type compute_type_unchecked(const compilation::scope& env) const noexcept final;
         [[nodiscard]] semantic_check_res compute_type_checked(compilation::scope& env) const noexcept final;

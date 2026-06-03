@@ -18,10 +18,6 @@ namespace dconstruct {
     struct mapping_value_profile {
         static constexpr u32 MAX_DISTINCT_VALUES = 16;
 
-        std::unordered_set<u64> m_distinctValues;
-        u64 m_totalObservations = 0;
-        u64 m_overflowObservations = 0;
-
         void observe(const u64 raw_value) {
             ++m_totalObservations;
             if (m_distinctValues.size() >= MAX_DISTINCT_VALUES && !m_distinctValues.contains(raw_value)) {
@@ -30,6 +26,10 @@ namespace dconstruct {
             }
             m_distinctValues.emplace(raw_value);
         }
+
+        std::unordered_set<u64> m_distinctValues;
+        u64 m_totalObservations = 0;
+        u64 m_overflowObservations = 0;
     };
 
     struct mapping_member_type {

@@ -1,108 +1,113 @@
 #include "ast/binary_expressions/bitwise_and.h"
 
-
 namespace dconstruct::ast {
 
-[[nodiscard]] expr_uptr bitwise_and_expr::simplify() const { 
-    return nullptr;
-}
-
-
-[[nodiscard]] emission_res bitwise_and_expr::emit_dc(compilation::function& fn, compilation::global_state& global, const std::optional<reg_idx> destination) const noexcept {
-    const emission_res lhs = m_lhs->emit_dc(fn, global);
-    if (lhs) {
-        return lhs;
+    [[nodiscard]] expr_uptr bitwise_and_expr::simplify() const {
+        return nullptr;
     }
 
-    const emission_res rhs = m_rhs->emit_dc(fn, global);
-    if (!rhs) {
-        return rhs;
-    }
+    [[nodiscard]] emission_res bitwise_and_expr::emit_dc(
+        compilation::function& fn,
+        compilation::global_state& global,
+        const std::optional<reg_idx> destination
+    ) const noexcept {
+        const emission_res lhs = m_lhs->emit_dc(fn, global);
+        if (lhs) {
+            return lhs;
+        }
 
-    assert(std::holds_alternative<primitive_type>(*m_type));
-    
-    const emission_res and_destination = fn.fix_destination(destination);
-    if (!and_destination) {
+        const emission_res rhs = m_rhs->emit_dc(fn, global);
+        if (!rhs) {
+            return rhs;
+        }
+
+        assert(std::holds_alternative<primitive_type>(*m_type));
+
+        const emission_res and_destination = fn.fix_destination(destination);
+        if (!and_destination) {
+            return and_destination;
+        }
+
+        fn.emit_instruction(Opcode::OpBitOr, *and_destination, *lhs, *rhs);
+        fn.free_register(*lhs);
+        fn.free_register(*rhs);
+
         return and_destination;
     }
 
-    fn.emit_instruction(Opcode::OpBitOr, *and_destination, *lhs, *rhs);
-    fn.free_register(*lhs);
-    fn.free_register(*rhs);
+    [[nodiscard]] semantic_check_res bitwise_and_expr::compute_type_checked(compilation::scope& env) const noexcept {
+        const semantic_check_res lhs_type = m_lhs->get_type_checked(env);
 
-    return and_destination;
-}
-
-[[nodiscard]] semantic_check_res bitwise_and_expr::compute_type_checked(compilation::scope& env) const noexcept {
-    const semantic_check_res lhs_type = m_lhs->get_type_checked(env);
-
-    if (!lhs_type) {
-        return lhs_type;
-    }
-
-    const semantic_check_res rhs_type = m_rhs->get_type_checked(env);
-
-    if (!rhs_type) {
-        return rhs_type;
-    }
-
-    const std::optional<std::string> invalid_bitwise_and = std::visit([](auto&& lhs_type, auto&& rhs_type) -> std::optional<std::string> {
-        using lhs_t = std::decay_t<decltype(lhs_type)>;
-        using rhs_t = std::decay_t<decltype(rhs_type)>;
-        
-        if constexpr (!is_primitive<lhs_t>) {
-            return "expected integral type for bitwise-and lhs but got " + type_to_declaration_string(lhs_type);
-        } else if constexpr (!is_primitive<rhs_t>) {
-            return "expected integral type for bitwise-and rhs but got " + type_to_declaration_string(rhs_type);
-        } else if (is_integral(lhs_type.m_type)) {
-            if (is_integral(rhs_type.m_type)) {
-                return std::nullopt;
-            }
-            return "expected integral type for bitwise-and rhs but got " + type_to_declaration_string(rhs_type);
-        } else {
-            return "expected integral type for bitwise-and lhs but got " + type_to_declaration_string(lhs_type);
+        if (!lhs_type) {
+            return lhs_type;
         }
-    }, *lhs_type, *rhs_type);
 
-    if (!invalid_bitwise_and) {
-        return make_type_from_prim(primitive_kind::U64);
+        const semantic_check_res rhs_type = m_rhs->get_type_checked(env);
+
+        if (!rhs_type) {
+            return rhs_type;
+        }
+
+        const std::optional<std::string> invalid_bitwise_and = std::visit(
+            [](auto&& lhs_type, auto&& rhs_type) -> std::optional<std::string> {
+                using lhs_t = std::decay_t<decltype(lhs_type)>;
+                using rhs_t = std::decay_t<decltype(rhs_type)>;
+
+                if constexpr (!is_primitive<lhs_t>) {
+                    return "expected integral type for bitwise-and lhs but got " + type_to_declaration_string(lhs_type);
+                } else if constexpr (!is_primitive<rhs_t>) {
+                    return "expected integral type for bitwise-and rhs but got " + type_to_declaration_string(rhs_type);
+                } else if (is_integral(lhs_type.m_type)) {
+                    if (is_integral(rhs_type.m_type)) {
+                        return std::nullopt;
+                    }
+                    return "expected integral type for bitwise-and rhs but got " + type_to_declaration_string(rhs_type);
+                } else {
+                    return "expected integral type for bitwise-and lhs but got " + type_to_declaration_string(lhs_type);
+                }
+            },
+            *lhs_type,
+            *rhs_type
+        );
+
+        if (!invalid_bitwise_and) {
+            return make_type_from_prim(primitive_kind::U64);
+        }
+
+        return std::unexpected{semantic_check_error{*invalid_bitwise_and, this}};
     }
-    
-    return std::unexpected{semantic_check_error{*invalid_bitwise_and, this}};
-}
 
-// [[nodiscard]] llvm_res bitwise_and_expr::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>& builder, llvm::Module& module, const compilation::scope& env) const {
-//     llvm_res lhs = m_lhs->emit_llvm(ctx, builder, module, env);
-//     if (!lhs) {
-//         return lhs;
-//     }
-//     llvm_res rhs = m_rhs->emit_llvm(ctx, builder, module, env);
-//     if (!rhs) {
-//         return rhs;
-//     }
-//     auto lhs_val = lhs.value();
-//     auto rhs_val = rhs.value();
-//     auto lhs_type = lhs_val->getType();
-//     auto rhs_type = rhs_val->getType();
-//     if (!lhs_type->isIntegerTy()) {
-//         return std::unexpected{llvm_error{"expected integral type for bitwise-and but got non-integral type", *this}};
-//     }
-//     if (!rhs_type->isIntegerTy()) {
-//         return std::unexpected{llvm_error{"expected integral type for bitwise-and but got non-integral type", *this}};
-//     }
-//     auto lhs_i_type_size = llvm::cast<llvm::IntegerType>(lhs_type)->getBitWidth();
-//     auto rhs_i_type_size = llvm::cast<llvm::IntegerType>(rhs_type)->getBitWidth();
-//     if (lhs_i_type_size > rhs_i_type_size) {
-//         lhs_val = builder.CreateZExt(lhs_val, rhs_type);
-//     } else if (rhs_i_type_size > lhs_i_type_size) {
-//         rhs_val = builder.CreateZExt(rhs_val, lhs_type);
-//     }
-//     llvm::Value* res = builder.CreateAnd(lhs_val, rhs_val);
-//     if (!res) {
-//         return std::unexpected{llvm_error{"expected non-null result from bitwise-and but got nullptr", *this}};
-//     }
-//     return res;
-// }
-
+    // [[nodiscard]] llvm_res bitwise_and_expr::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>& builder, llvm::Module& module, const compilation::scope& env) const {
+    //     llvm_res lhs = m_lhs->emit_llvm(ctx, builder, module, env);
+    //     if (!lhs) {
+    //         return lhs;
+    //     }
+    //     llvm_res rhs = m_rhs->emit_llvm(ctx, builder, module, env);
+    //     if (!rhs) {
+    //         return rhs;
+    //     }
+    //     auto lhs_val = lhs.value();
+    //     auto rhs_val = rhs.value();
+    //     auto lhs_type = lhs_val->getType();
+    //     auto rhs_type = rhs_val->getType();
+    //     if (!lhs_type->isIntegerTy()) {
+    //         return std::unexpected{llvm_error{"expected integral type for bitwise-and but got non-integral type", *this}};
+    //     }
+    //     if (!rhs_type->isIntegerTy()) {
+    //         return std::unexpected{llvm_error{"expected integral type for bitwise-and but got non-integral type", *this}};
+    //     }
+    //     auto lhs_i_type_size = llvm::cast<llvm::IntegerType>(lhs_type)->getBitWidth();
+    //     auto rhs_i_type_size = llvm::cast<llvm::IntegerType>(rhs_type)->getBitWidth();
+    //     if (lhs_i_type_size > rhs_i_type_size) {
+    //         lhs_val = builder.CreateZExt(lhs_val, rhs_type);
+    //     } else if (rhs_i_type_size > lhs_i_type_size) {
+    //         rhs_val = builder.CreateZExt(rhs_val, lhs_type);
+    //     }
+    //     llvm::Value* res = builder.CreateAnd(lhs_val, rhs_val);
+    //     if (!res) {
+    //         return std::unexpected{llvm_error{"expected non-null result from bitwise-and but got nullptr", *this}};
+    //     }
+    //     return res;
+    // }
 
 }

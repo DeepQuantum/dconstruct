@@ -20,7 +20,6 @@ namespace dconstruct::ast {
     using primitive_value = std::variant<u8, u16, u32, u64, i8, i16, i32, i64, f32, f64, char, bool, std::string, std::nullptr_t, std::monostate>;
     using primitive_number = std::variant<u8, u16, u32, u64, i8, i16, i32, i64, f32, f64, char>;
 
-
     enum class primitive_kind {
         U8,
         U16,
@@ -49,7 +48,6 @@ namespace dconstruct::ast {
 
     [[nodiscard]] std::optional<i64> get_raw_number(const primitive_value& prim) noexcept;
 
-
     struct primitive_type;
     struct struct_type;
     struct enum_type;
@@ -58,11 +56,9 @@ namespace dconstruct::ast {
     struct darray;
     struct full_type;
 
-    
     struct ellipse {};
 
     using ref_full_type = std::shared_ptr<full_type>;
-
 
     [[nodiscard]] full_type make_type_from_prim(const primitive_kind kind);
 
@@ -95,15 +91,15 @@ namespace dconstruct::ast {
             FAR
         };
 
-        ref_full_type m_return;
-        t_arg_list m_arguments;
-        DISTANCE m_distanceType;
-        bool m_isVariadic = false;
-
         explicit function_type() noexcept;
         explicit function_type(ref_full_type return_type, t_arg_list args) noexcept;
 
         bool operator==(const function_type&) const = default;
+
+        t_arg_list m_arguments;
+        ref_full_type m_return;
+        DISTANCE m_distanceType;
+        bool m_isVariadic = false;
     };
 
     // struct darray {
@@ -115,15 +111,16 @@ namespace dconstruct::ast {
 
     //     bool operator==(const darray&) const = default;
     // };
-    
+
     struct ptr_type {
-        ref_full_type m_pointedAt;
         explicit ptr_type() noexcept;
         explicit ptr_type(ref_full_type&& type) noexcept;
 
         explicit ptr_type(const ast::primitive_kind& kind) noexcept;
 
         bool operator==(const ptr_type&) const = default;
+
+        ref_full_type m_pointedAt;
     };
 
     struct full_type : std::variant<std::monostate, primitive_type, struct_type, enum_type, ptr_type, function_type> {
@@ -138,13 +135,11 @@ namespace dconstruct::ast {
         full_type& operator=(full_type&&);
     };
 
-
     [[nodiscard]] full_type make_type_from_prim(const primitive_kind kind);
 
     [[nodiscard]] bool is_unknown(const full_type& type) noexcept;
 
-    [[nodiscard]] bool is_signed(const full_type& type) noexcept; 
-
+    [[nodiscard]] bool is_signed(const full_type& type) noexcept;
 
     [[nodiscard]] function_type make_function(
         const ast::full_type& return_arg,
@@ -165,8 +160,7 @@ namespace dconstruct::ast {
         primitive_value,
         struct_instance,
         enum_instance,
-        ptr_instance
-    >;
+        ptr_instance>;
 
     struct typed_value {
         full_type type;
@@ -185,16 +179,13 @@ namespace dconstruct::ast {
 
     [[nodiscard]] bool is_integral(primitive_kind k) noexcept;
 
-    
     [[nodiscard]] bool is_floating_point(primitive_kind k) noexcept;
-    
+
     [[nodiscard]] bool is_arithmetic(primitive_kind k) noexcept;
 
     [[nodiscard]] bool is_unsigned(const primitive_kind k) noexcept;
 
     [[nodiscard]] bool is_signed(const primitive_kind k) noexcept;
-
-    
 
     [[nodiscard]] std::optional<primitive_kind> get_dominating_prim(const primitive_kind lhs, const primitive_kind rhs);
 
@@ -202,8 +193,10 @@ namespace dconstruct::ast {
 
     [[nodiscard]] std::expected<full_type, std::string> is_valid_binary_op(const full_type& lhs, const full_type& rhs, const std::string& op);
 
-    template<typename T> inline constexpr bool is_primitive = std::is_same_v<T, primitive_type>;
-    template<typename T> inline constexpr bool is_pointer = std::is_same_v<T, ptr_type>;
+    template <typename T>
+    inline constexpr bool is_primitive = std::is_same_v<T, primitive_type>;
+    template <typename T>
+    inline constexpr bool is_pointer = std::is_same_v<T, ptr_type>;
 
     [[nodiscard]] bool operator==(const ref_full_type& lhs, const ref_full_type& rhs) noexcept;
 
@@ -211,9 +204,9 @@ namespace dconstruct::ast {
 
     [[nodiscard]] const full_type* get_dominating_type(const full_type& lhs, const full_type& rhs);
 
-    [[nodiscard]] std::expected<Opcode, std::string> get_load_opcode(const full_type& type); 
+    [[nodiscard]] std::expected<Opcode, std::string> get_load_opcode(const full_type& type);
     [[nodiscard]] std::expected<Opcode, std::string> get_static_load_opcode(const full_type& type);
-    [[nodiscard]] std::expected<Opcode, std::string> get_store_opcode(const full_type& type); 
+    [[nodiscard]] std::expected<Opcode, std::string> get_store_opcode(const full_type& type);
 
     extern const std::string UNKNOWN_TYPE_NAME;
 

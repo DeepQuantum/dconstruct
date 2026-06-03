@@ -1,11 +1,9 @@
 #include "compilation/compiler_funcs.h"
 
-
 int main(int argc, char* argv[]) {
-
     // Qword(GetRegValue("RSP") + 0xC8 + 5*8)
     // GetString(Qword(GetRegValue("RSP") + 0xC8 + 5*8), -1, STRTYPE_C)
-    
+
     const std::optional<cxxopts::ParseResult> options = dconstruct::compilation::get_command_line_options(argc, argv);
     if (!options) {
         return -1;
@@ -27,7 +25,7 @@ int main(int argc, char* argv[]) {
 
     std::stringstream input;
     input << file_in.rdbuf();
-    
+
     std::string source = input.str();
     std::vector<dconstruct::compilation::source_location> line_map;
 
@@ -130,5 +128,3 @@ int main(int argc, char* argv[]) {
     }
     return 0;
 }
-
-

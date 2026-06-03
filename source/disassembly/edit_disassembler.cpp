@@ -13,36 +13,31 @@ namespace dconstruct {
         if (str_value.find(".") != std::string::npos) {
             return {
                 .m_editType = EditType::F32,
-                .F32 = std::stof(str_value.c_str())
-            };
-        }
-        else if (std::isalpha(str_value[0])) {
+                .F32 = std::stof(str_value.c_str())};
+        } else if (std::isalpha(str_value[0])) {
             return {
                 .m_editType = EditType::SID_STR,
-                .string = &str_value
-            };
-        }
-        else if (str_value[0] == '#') {
+                .string = &str_value};
+        } else if (str_value[0] == '#') {
             return {
                 .m_editType = EditType::SID_HASH,
-                .U64 = std::stoull(str_value.substr(1), nullptr, 16)
-            };
-        }
-        else if (str_value[0] == '0' && str_value[1] == 'x') {
+                .U64 = std::stoull(str_value.substr(1), nullptr, 16)};
+        } else if (str_value[0] == '0' && str_value[1] == 'x') {
             return {
                 .m_editType = EditType::PTR,
-                .U64 = std::stoull(str_value, nullptr, 0) + reinterpret_cast<p64>(m_currentFile->m_bytes.get())
-            };
-        }
-        else {
+                .U64 = std::stoull(str_value, nullptr, 0) + reinterpret_cast<p64>(m_currentFile->m_bytes.get())};
+        } else {
             return {
                 .m_editType = EditType::INT32,
-                .I32 = std::stol(str_value)
-            };
+                .I32 = std::stol(str_value)};
         }
     }
 
-    error_msg EditDisassembler::apply_edit(const u64 struct_offset, const u32 member_index, const BinaryFileEdit& value) noexcept {
+    error_msg EditDisassembler::apply_edit(
+        const u64 struct_offset,
+        const u32 member_index,
+        const BinaryFileEdit& value
+    ) noexcept {
         const location struct_member_start = location(m_currentFile->m_bytes.get()) + struct_offset;
         u32 member_location = 0;
         u32 last_member_size = 0;
@@ -78,10 +73,13 @@ namespace dconstruct {
                 if (m_sidbase->search(new_sid) != nullptr) {
                     std::cout << old_sid << "->" << *value.string << '\n';
                     *reinterpret_cast<sid64*>(const_cast<std::byte*>(edit_location.m_ptr)) = new_sid;
-                }
-                else {
-                    return std::format("the sid '{}' does not exist within the sidbase, so the edit will not be applied. " \
-                        "if this is intentional, please use the numerical hash instead (#{:016X}).", *value.string, new_sid);
+                } else {
+                    return std::format(
+                        "the sid '{}' does not exist within the sidbase, so the edit will not be applied. "\
+                        "if this is intentional, please use the numerical hash instead (#{:016X}).",
+                        *value.string,
+                        new_sid
+                    );
                 }
                 break;
             }
@@ -142,7 +140,7 @@ namespace dconstruct {
         std::cout << "writing edits to original file: " << file_path << '\n';
 
         auto unmapped_bytes = m_currentFile->get_unmapped();
-        FILE *out = fopen(file_path.string().c_str(), "wb");
+        FILE* out = fopen(file_path.string().c_str(), "wb");
         if (out == nullptr) {
             return std::format("error: could not open file for writing: {}\n", file_path.string());
         }
@@ -157,4 +155,3 @@ namespace dconstruct {
         return std::nullopt;
     }
 }
-
