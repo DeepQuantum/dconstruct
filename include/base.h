@@ -117,46 +117,46 @@ namespace dconstruct {
         location() noexcept {};
         location(const void* ptr) noexcept : m_ptr(reinterpret_cast<const std::byte*>(ptr)) {};
 
-        [[nodiscard]] location& from(const location& rhs, const i32 offset = 0) noexcept {
+        [[nodiscard]] [[always_inline]] location& from(const location& rhs, const i32 offset = 0) noexcept {
             m_ptr = rhs.get<std::byte*>() + offset;
             return *this;
         }
 
         template <typename T>
-        [[nodiscard]] const T* as(const i32 offset = 0) const noexcept {
+        [[nodiscard]] [[always_inline]] const T* as(const i32 offset = 0) const noexcept {
             return reinterpret_cast<const T*>(m_ptr + offset);
         }
 
         template <typename T>
-        [[nodiscard]] const T& get(const i32 offset = 0) const noexcept {
+        [[nodiscard]] [[always_inline]] const T& get(const i32 offset = 0) const noexcept {
             return *reinterpret_cast<const T*>(m_ptr + offset);
         }
 
-        [[nodiscard]] p64 num() const noexcept {
+        [[nodiscard]] [[always_inline]] p64 num() const noexcept {
             return reinterpret_cast<p64>(m_ptr);
         }
 
-        [[nodiscard]] location aligned() const noexcept {
+        [[nodiscard]] [[always_inline]] location aligned() const noexcept {
             return location(m_ptr - num() % 8);
         }
 
-        [[nodiscard]] location operator+(const u64 rhs) const noexcept {
+        [[nodiscard]] [[always_inline]] location operator+(const u64 rhs) const noexcept {
             return location(m_ptr + rhs);
         }
 
-        [[nodiscard]] location operator-(const u64 rhs) const noexcept {
+        [[nodiscard]] [[always_inline]] location operator-(const u64 rhs) const noexcept {
             return location(m_ptr - rhs);
         }
 
-        [[nodiscard]] bool operator>(const location& rhs) const noexcept {
+        [[nodiscard]][[always_inline]] bool operator>(const location& rhs) const noexcept {
             return reinterpret_cast<p64>(m_ptr) > reinterpret_cast<p64>(rhs.m_ptr);
         }
 
-        [[nodiscard]] bool operator>=(const location& rhs) const noexcept {
+        [[nodiscard]] [[always_inline]] bool operator>=(const location& rhs) const noexcept {
             return reinterpret_cast<p64>(m_ptr) >= reinterpret_cast<p64>(rhs.m_ptr);
         }
 
-        [[nodiscard]] bool is_aligned() const noexcept {
+        [[nodiscard]] [[always_inline]] bool is_aligned() const noexcept {
             return reinterpret_cast<p64>(m_ptr) % 8 == 0;
         }
     };

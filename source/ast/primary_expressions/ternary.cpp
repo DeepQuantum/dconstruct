@@ -115,15 +115,9 @@ namespace dconstruct::ast {
     }
 
     [[nodiscard]] std::unique_ptr<struct_access> ternary_expr::to_struct_access() noexcept {
-        if (auto replacement = m_condition->to_struct_access()) {
-            m_condition = std::move(replacement);
-        }
-        if (auto replacement = m_then->to_struct_access()) {
-            m_then = std::move(replacement);
-        }
-        if (auto replacement = m_else->to_struct_access()) {
-            m_else = std::move(replacement);
-        }
+        replace_if_struct_access(m_condition);
+        replace_if_struct_access(m_then);
+        replace_if_struct_access(m_else);
         return nullptr;
     }
 

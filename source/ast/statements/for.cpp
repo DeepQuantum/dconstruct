@@ -169,12 +169,8 @@ namespace dconstruct::ast {
         if (m_init) {
             m_init->member_access_optimization_pass();
         }
-        if (auto replacement = m_condition->to_struct_access()) {
-            m_condition = std::move(replacement);
-        }
-        if (auto replacement = m_incr->to_struct_access()) {
-            m_incr = std::move(replacement);
-        }
+        expression::replace_if_struct_access(m_condition);
+        expression::replace_if_struct_access(m_incr);
         m_body->member_access_optimization_pass();
     }
 

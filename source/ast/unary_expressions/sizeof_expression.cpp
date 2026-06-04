@@ -133,10 +133,7 @@ namespace dconstruct::ast {
 
     [[nodiscard]] std::unique_ptr<struct_access> sizeof_expr::to_struct_access() noexcept {
         if (expr_uptr* expr_ptr = std::get_if<expr_uptr>(&m_operand)) {
-            auto& expr = *expr_ptr;
-            if (auto replacement = expr->to_struct_access()) {
-                expr = std::move(replacement);
-            }
+            replace_if_struct_access(*expr_ptr);
         }
         return nullptr;
     }

@@ -244,9 +244,7 @@ namespace dconstruct::ast {
     }
 
     [[nodiscard]] std::unique_ptr<struct_access> struct_access::to_struct_access() noexcept {
-        if (auto replacement = m_lhs->to_struct_access()) {
-            m_lhs = std::move(replacement);
-        }
+        replace_if_struct_access(m_lhs);
         return nullptr;
     }
 

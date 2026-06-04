@@ -100,9 +100,7 @@ namespace dconstruct::ast {
     }
 
     void return_stmt::member_access_optimization_pass() noexcept {
-        if (auto replacement = m_expr->to_struct_access()) {
-            m_expr = std::move(replacement);
-        }
+        expression::replace_if_struct_access(m_expr);
     }
 
     void return_stmt::regex_optimization_pass() noexcept {

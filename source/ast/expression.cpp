@@ -3,20 +3,20 @@
 
 namespace dconstruct::ast {
 
-    [[nodiscard]] std::unique_ptr<struct_access> unary_expr::to_struct_access() noexcept {
-        if (auto replacement = m_rhs->to_struct_access()) {
-            m_rhs = std::move(replacement);
+    void expression::replace_if_struct_access(std::unique_ptr<expression>& expr) noexcept {
+        if (std::unique_ptr<struct_access> repl = expr->to_struct_access()) {
+            expr = std::move(repl);
         }
+    }
+
+    [[nodiscard]] std::unique_ptr<struct_access> unary_expr::to_struct_access() noexcept {
+        replace_if_struct_access(m_rhs);
         return nullptr;
     }
 
     [[nodiscard]] std::unique_ptr<struct_access> binary_expr::to_struct_access() noexcept {
-        if (auto replacement = m_lhs->to_struct_access()) {
-            m_lhs = std::move(replacement);
-        }
-        if (auto replacement = m_rhs->to_struct_access()) {
-            m_rhs = std::move(replacement);
-        }
+        replace_if_struct_access(m_lhs);
+        replace_if_struct_access(m_rhs);
         return nullptr;
     }
 

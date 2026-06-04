@@ -70,9 +70,7 @@ namespace dconstruct::ast {
     }
 
     void expression_stmt::member_access_optimization_pass() noexcept {
-        if (auto replacement = m_expression->to_struct_access()) {
-            m_expression = std::move(replacement);
-        }
+        expression::replace_if_struct_access(m_expression);
     }
 
     void expression_stmt::regex_optimization_pass() noexcept {

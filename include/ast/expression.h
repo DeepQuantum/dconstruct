@@ -169,6 +169,8 @@ namespace dconstruct::ast {
             m_type = type;
         }
 
+        static void replace_if_struct_access(std::unique_ptr<expression>& expr) noexcept;
+
     protected:
         [[nodiscard]] virtual u16 calc_complexity() const noexcept = 0;
 

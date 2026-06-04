@@ -116,9 +116,7 @@ namespace dconstruct::ast {
         if (!m_init) {
             return;
         }
-        if (auto replacement = m_init->to_struct_access()) {
-            m_init = std::move(replacement);
-        }
+        expression::replace_if_struct_access(m_init);
     }
 
     void variable_declaration::regex_optimization_pass() noexcept {

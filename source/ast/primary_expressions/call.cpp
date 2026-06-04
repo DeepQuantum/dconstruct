@@ -344,21 +344,18 @@ namespace dconstruct::ast {
         return MATCH_OPTIMIZATION_ACTION::NONE;
     }
 
+
     [[nodiscard]] std::unique_ptr<struct_access> call_expr::to_struct_access() noexcept {
-        if (auto replacement = m_callee->to_struct_access()) {
-            m_callee = std::move(replacement);
-        }
+        replace_if_struct_access(m_callee);
         for (auto& argument : m_arguments) {
-            if (auto replacement = argument->to_struct_access()) {
-                argument = std::move(replacement);
-            }
+            replace_if_struct_access(argument);
         }
         return nullptr;
     }
 
     void call_expr::regex_optimization_pass() noexcept {
         if (m_callee->to_pseudo_c_string() == "new-boxed-value") {
-            const literal* boxed_kind_literal = m_arguments[1]->as_literal();
+            const literal* boxed_kind_literal = m_arguments[0]->as_literal();
             const std::optional boxed_kind_num_res = get_raw_number(boxed_kind_literal->m_value);
             assert(boxed_kind_num_res);
 
@@ -366,7 +363,7 @@ namespace dconstruct::ast {
             
             m_callee = std::make_unique<identifier>(std::move(new_name));
 
-            m_arguments.pop_back();
+            m_arguments.erase(m_arguments.begin());
         }
 
         m_callee->regex_optimization_pass();

@@ -85,7 +85,9 @@ namespace dconstruct {
             } else if (next_struct_header.get<sid64>() == SID("array")) {
                 values.emplace_back(insert_array(struct_location, get_size_array(struct_location)));
             } else {
-                values.emplace_back(insert_struct(next_struct_header.as<structs::unmapped>()));
+                disassembled_value nested = insert_struct(next_struct_header.as<structs::unmapped>());
+                nested.m_pointerOffset = get_offset(struct_location);
+                values.emplace_back(std::move(nested));
             }
             bytes_inserted = 8;
         } else {

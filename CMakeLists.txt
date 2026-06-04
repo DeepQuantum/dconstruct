@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 
 project(dconstruct LANGUAGES CXX)
 
-set(VERSION_NUMBER "2.0.0")
+set(VERSION_NUMBER "2.1.0")
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -133,19 +133,19 @@ if(WIN32)
         "${GRAPHVIZ_BIN}/xdot.dll"
     )
     add_custom_command(TARGET dconstruct_lib POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E echo "Copying runtime DLLs next to dconstruct_lib"
         COMMAND ${CMAKE_COMMAND} -E copy_if_different ${DCONSTRUCT_RUNTIME_DLLS} "$<TARGET_FILE_DIR:dconstruct_lib>"
-        COMMENT "Copying runtime DLLs next to dconstruct_lib\n"
         VERBATIM
     )
 endif()
 
 add_custom_command(TARGET dconstruct_lib POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E echo "Copying optional runtime fixtures next to dconstruct_lib"
     COMMAND ${CMAKE_COMMAND}
         "-DSOURCE_SIDBASE=${CMAKE_CURRENT_SOURCE_DIR}/test/fixtures/dc/sidbase_new_fixed.bin"
         "-DSOURCE_VAR_MAPS=${CMAKE_CURRENT_SOURCE_DIR}/test/var_maps"
         "-DDEST_DIR=$<TARGET_FILE_DIR:dconstruct_lib>"
         -P "${CMAKE_CURRENT_SOURCE_DIR}/scripts/stage_runtime_fixtures.cmake"
-    COMMENT "Copying optional runtime fixtures next to dconstruct_lib"
     VERBATIM
 )
 

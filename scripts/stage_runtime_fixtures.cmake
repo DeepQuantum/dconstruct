@@ -20,7 +20,7 @@ if(DEFINED SOURCE_VAR_MAPS AND EXISTS "${SOURCE_VAR_MAPS}")
         COMMAND "${CMAKE_COMMAND}" -E copy_directory "${SOURCE_VAR_MAPS}" "${DEST_DIR}/var_maps"
         RESULT_VARIABLE var_maps_copy_result
     )
-    message("Copying Sidbase from ${SOURCE_DIR} into ${DEST_DIR}/var_maps")
+    message("Copying var_maps from ${SOURCE_VAR_MAPS} into ${DEST_DIR}/var_maps")
     if(NOT var_maps_copy_result EQUAL 0)
         message(FATAL_ERROR "Failed to copy ${SOURCE_VAR_MAPS} to ${DEST_DIR}/var_maps")
     endif()

@@ -5,6 +5,7 @@
 #include <cstddef>
 #include <cstdio>
 #include <cstring>
+#include <expected>
 #include <filesystem>
 #include <fstream>
 #include <memory>
@@ -20,6 +21,8 @@
 #include "base.h"
 #include "binaryfile.h"
 #include "sidbase.h"
+#include "compilation/dc_parser.h"
+#include "compilation/lexer.h"
 #include "disassembly/disassembler.h"
 #include "disassembly/edit_disassembler.h"
 #include "disassembly/driver_functions.h"
@@ -76,6 +79,15 @@ namespace dconstruct::ui {
         std::string m_text;
     };
 
+    using mapped_var_value = std::pair<ast::full_type, std::optional<std::string>>;
+
+    struct type_map_record {
+        sid64 m_function = 0;
+        u64 m_varIndex = 0;
+        std::optional<mapped_var_value> m_old;
+        std::optional<mapped_var_value> m_new;
+    };
+
     struct edit_record {
         u32 m_offset = 0;
         edit_kind m_kind = edit_kind::Int;
@@ -83,6 +95,29 @@ namespace dconstruct::ui {
         std::vector<std::byte> m_newBytes;
         std::string m_oldText;
         std::string m_newText;
+        std::optional<type_map_record> m_typeMap;
+    };
+
+    struct local_var_type_edit {
+        sid64 m_function = 0;
+        u64 m_varIndex = 0;
+        std::string m_oldName;
+        std::string m_name;
+        std::string m_typeText;
+        std::string m_error;
+        ImVec2 m_pos = ImVec2(0.0F, 0.0F);
+        int m_typeSuggestionIndex = 0;
+        std::string m_typeSuggestionFilter;
+        bool m_focusType = true;
+        bool m_focusCursorEnd = false;
+    };
+
+    struct struct_pointer_edit {
+        u64 m_pointerOffset = 0;
+        sid64 m_currentTypeId = 0;
+        std::string m_text;
+        bool m_focus = true;
+        ImVec2 m_pos = ImVec2(0.0F, 0.0F);
     };
 
     enum class tree_op {
@@ -105,6 +140,8 @@ namespace dconstruct::ui {
         bool m_entrySortDescending = false;
         ImGuiID m_menuTarget = 0;
         bool m_openMenu = false;
+        std::optional<u64> m_menuStructPtrOffset;
+        sid64 m_menuStructTypeId = 0;
         ImGuiID m_opTarget = 0;
         ImGuiID m_opPendingTarget = 0;
         tree_op m_opMode = tree_op::none;
@@ -126,7 +163,10 @@ namespace dconstruct::ui {
         std::vector<edit_record> m_undoStack;
         std::vector<edit_record> m_redoStack;
         std::size_t m_savedDepth = 0;
+        std::size_t m_savedTypeDepth = 0;
         ast::function_to_mapped_vars m_functionScopes;
+        std::optional<local_var_type_edit> m_localVarTypeEdit;
+        std::optional<struct_pointer_edit> m_structPointerEdit;
     };
 
     template <typename... Args>
@@ -590,6 +630,217 @@ namespace dconstruct::ui {
         }
     }
 
+    std::string trim_copy(std::string_view value) {
+        while (!value.empty() && std::isspace(static_cast<unsigned char>(value.front())) != 0) {
+            value.remove_prefix(1);
+        }
+        while (!value.empty() && std::isspace(static_cast<unsigned char>(value.back())) != 0) {
+            value.remove_suffix(1);
+        }
+        return std::string(value);
+    }
+
+    bool is_identifier_text(std::string_view text) {
+        if (text.empty()) {
+            return false;
+        }
+        const unsigned char first = static_cast<unsigned char>(text.front());
+        if (std::isalpha(first) == 0 && text.front() != '_') {
+            return false;
+        }
+        for (char c : text.substr(1)) {
+            const unsigned char ch = static_cast<unsigned char>(c);
+            if (std::isalnum(ch) == 0 && c != '_') {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    bool parse_generated_var_name(std::string_view name, u64& index) {
+        constexpr std::string_view prefix = "var_";
+        if (!name.starts_with(prefix) || name.size() == prefix.size()) {
+            return false;
+        }
+        u64 value = 0;
+        for (char c : name.substr(prefix.size())) {
+            if (std::isdigit(static_cast<unsigned char>(c)) == 0) {
+                return false;
+            }
+            value = value * 10 + static_cast<u64>(c - '0');
+        }
+        index = value;
+        return true;
+    }
+
+    bool token_is_member_access(const qui::code::hovered_token& token) {
+        if (token.column == 0 || token.column > token.line_text.size()) {
+            return false;
+        }
+        std::size_t prev = token.column;
+        while (prev > 0 && std::isspace(static_cast<unsigned char>(token.line_text[prev - 1])) != 0) {
+            --prev;
+        }
+        if (prev == 0) {
+            return false;
+        }
+        if (token.line_text[prev - 1] == '.') {
+            return true;
+        }
+        return token.line_text[prev - 1] == '>' && prev >= 2 && token.line_text[prev - 2] == '-';
+    }
+
+    bool token_is_call_name(const qui::code::hovered_token& token) {
+        const std::size_t end = token.column + token.text.size();
+        if (end >= token.line_text.size()) {
+            return false;
+        }
+        std::size_t next = end;
+        while (next < token.line_text.size() && std::isspace(static_cast<unsigned char>(token.line_text[next])) != 0) {
+            ++next;
+        }
+        return next < token.line_text.size() && token.line_text[next] == '(';
+    }
+
+    std::string plain_code_string(const ast::code_color_buffer& code) {
+        std::string result;
+        for (const auto& [_, text] : code) {
+            result += text;
+        }
+        return result;
+    }
+
+    std::string infer_declaration_type_text(const ast::code_color_buffer& code, const std::string& var_name) {
+        const std::string plain = plain_code_string(code);
+        std::size_t line_start = 0;
+        while (line_start <= plain.size()) {
+            std::size_t line_end = plain.find('\n', line_start);
+            if (line_end == std::string::npos) {
+                line_end = plain.size();
+            }
+            std::string_view line(plain.data() + line_start, line_end - line_start);
+            const std::size_t pos = line.find(var_name);
+            if (pos != std::string_view::npos) {
+                const bool left_ok = pos == 0 ||
+                    (!std::isalnum(static_cast<unsigned char>(line[pos - 1])) && line[pos - 1] != '_');
+                const std::size_t after = pos + var_name.size();
+                const bool right_ok = after >= line.size() ||
+                    (!std::isalnum(static_cast<unsigned char>(line[after])) && line[after] != '_');
+                if (left_ok && right_ok) {
+                    std::string prefix = trim_copy(line.substr(0, pos));
+                    if (!prefix.empty() &&
+                        prefix.find('=') == std::string::npos &&
+                        prefix.find(';') == std::string::npos &&
+                        prefix.find('+') == std::string::npos &&
+                        prefix.find('!') == std::string::npos &&
+                        prefix.find('.') == std::string::npos &&
+                        prefix != "return") {
+                        if (prefix == ast::UNKNOWN_TYPE_NAME) {
+                            return "u64";
+                        }
+                        return prefix;
+                    }
+                }
+            }
+            if (line_end == plain.size()) {
+                break;
+            }
+            line_start = line_end + 1;
+        }
+        return "u64";
+    }
+
+    std::expected<ast::full_type, std::string> parse_type_text(const app_state& state, const std::string& type_text) {
+        const std::string source = "typemap { #__dconstruct_type_probe { 0 " + type_text + "; } }";
+        compilation::Lexer lexer{source};
+        const auto [tokens, lex_errors] = lexer.get_results();
+        if (!lex_errors.empty()) {
+            std::ostringstream oss;
+            for (const auto& err : lex_errors) {
+                oss << "[syntax error] " << err << '\n';
+            }
+            return std::unexpected{oss.str()};
+        }
+
+        compilation::Parser parser{tokens};
+        parser.add_mapped_types(state.m_typeMap);
+        auto typemap = parser.make_typemap();
+        if (!typemap || !parser.get_errors().empty()) {
+            std::ostringstream oss;
+            for (const auto& err : parser.get_errors()) {
+                oss << "[parsing error] " << err.m_message << '\n';
+            }
+            return std::unexpected{oss.str()};
+        }
+
+        const auto func_it = typemap->find(SID("__dconstruct_type_probe"));
+        if (func_it == typemap->end()) {
+            return std::unexpected{"internal error: type probe was not parsed"};
+        }
+        const auto var_it = func_it->second.find(0);
+        if (var_it == func_it->second.end()) {
+            return std::unexpected{"internal error: type probe variable was not parsed"};
+        }
+        return var_it->second.first;
+    }
+
+    std::string document_stem(const document& doc) {
+        return std::filesystem::path(doc.m_name).stem().string();
+    }
+
+    std::string serialize_document_typemap(const document& doc) {
+        std::ostringstream oss;
+        oss << "typemap {\n";
+        if (doc.m_disassembler != nullptr) {
+            for (const function_disassembly* func : doc.m_disassembler->get_all_functions()) {
+                const auto scope_it = doc.m_functionScopes.find(SID(func->get_id().c_str()));
+                if (scope_it == doc.m_functionScopes.end() || scope_it->second.empty()) {
+                    continue;
+                }
+                oss << "    #" << func->get_id() << " {\n";
+                for (const auto& [var_index, mapped] : scope_it->second) {
+                    const auto& [type, alias] = mapped;
+                    oss << "        " << var_index << ' ' << ast::type_to_declaration_string(type);
+                    const std::string generated_name = "var_" + std::to_string(var_index);
+                    if (alias && *alias != generated_name) {
+                        oss << " -> " << *alias;
+                    }
+                    oss << ";\n";
+                }
+                oss << "    }\n";
+            }
+        }
+        oss << "}\n";
+        return oss.str();
+    }
+
+    bool write_document_typemap(app_state& state, document& doc, std::string& error) {
+        const std::filesystem::path dir = "var_maps";
+        std::error_code ec;
+        std::filesystem::create_directories(dir, ec);
+        if (ec) {
+            error = "Couldn't create var_maps directory: " + ec.message();
+            return false;
+        }
+
+        const std::filesystem::path path = dir / (document_stem(doc) + ".dcplmap");
+        const bool existed = std::filesystem::exists(path);
+        std::ofstream out(path, std::ios::trunc);
+        if (!out) {
+            error = "Couldn't open " + path.string() + " for writing.";
+            return false;
+        }
+        out << serialize_document_typemap(doc);
+        if (!out) {
+            error = "Couldn't write " + path.string() + ".";
+            return false;
+        }
+
+        state.m_pendingTypeMaps[document_stem(doc)] = doc.m_functionScopes;
+        log_event("{} type map: {}", existed ? "Updated" : "Created", path.string());
+        return true;
+    }
+
     bool path_is_bin(const char* path) {
         const std::filesystem::path parsed(path);
         std::string ext = parsed.extension().string();
@@ -689,6 +940,7 @@ namespace dconstruct::ui {
     void save_active_document(app_state& state);
     void undo_active_document(app_state& state);
     void redo_active_document(app_state& state);
+    void update_dirty(document& doc);
     void request_app_close(app_state& state);
 
     void window_close_callback(GLFWwindow* window) {
@@ -761,6 +1013,7 @@ namespace dconstruct::ui {
                 {"Speclizer", "the DC-Tool"},
                 {"uxh", "DC-file knowledge"},
                 {"icemesh", "DC structs"},
+                {"BigDragon", "beta testing"},
             };
 
             ImGui::PushStyleVar(ImGuiStyleVar_CellPadding, ImVec2(16.0F, 5.0F));
@@ -820,16 +1073,16 @@ namespace dconstruct::ui {
         }
 
         const ImGuiViewport* viewport = ImGui::GetMainViewport();
-        ImGui::SetNextWindowPos(viewport->GetCenter(), ImGuiCond_Appearing, ImVec2(0.5F, 0.5F));
+        ImGui::SetNextWindowPos(viewport->GetCenter(), ImGuiCond_Always, ImVec2(0.5F, 0.5F));
 
-        constexpr f32 settings_width = 560.0F;
+        constexpr f32 settings_width = 900.0F;
         ImGui::SetNextWindowSizeConstraints(ImVec2(settings_width, 0.0F), ImVec2(settings_width, FLT_MAX));
 
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(28.0F, 24.0F));
         ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 8.0F);
         ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(8.0F, 8.0F));
         ImGui::PushStyleColor(ImGuiCol_PopupBg, qui::color::active_palette().WindowBackground);
-
+        
         if (ImGui::BeginPopupModal(
             "##dconstruct_settings",
             nullptr,
@@ -848,28 +1101,19 @@ namespace dconstruct::ui {
             ImGui::Dummy(ImVec2(0.0F, 6.0F));
 
             const ImVec2 sw_size = view_switch_size();
-            ImGui::TextUnformatted("Default function view");
-            ImGui::SameLine();
-            ImGui::SetCursorPosX(ImGui::GetContentRegionMax().x - sw_size.x);
-            if (draw_view_switch("##settings_default_view", &state.m_defaultViewDcpl, sw_size)) {
-                ImGui::MarkIniSettingsDirty();
-            }
-
-            ImGui::Dummy(ImVec2(0.0F, 12.0F));
-            ImGui::Separator();
-            ImGui::Dummy(ImVec2(0.0F, 6.0F));
-
-            if (ImFont* section_font = qui::font_semi_bold(); section_font != nullptr) {
-                ImGui::PushFont(section_font);
-                ImGui::TextUnformatted("Decompilation optimizations");
-                ImGui::PopFont();
-            } else {
-                ImGui::TextUnformatted("Decompilation optimizations");
-            }
-            ImGui::Dummy(ImVec2(0.0F, 6.0F));
-
             const ImVec2 toggle_size = toggle_switch_size();
             bool optimizations_changed = false;
+
+            const auto section_header = [](const char* text) {
+                if (ImFont* section_font = qui::font_semi_bold(); section_font != nullptr) {
+                    ImGui::PushFont(section_font);
+                    ImGui::TextUnformatted(text);
+                    ImGui::PopFont();
+                } else {
+                    ImGui::TextUnformatted(text);
+                }
+                ImGui::Dummy(ImVec2(0.0F, 6.0F));
+            };
 
             const auto draw_optimization_toggle = [&](const char* label, const char* id, bool& value, const char* summary) {
                 ImGui::TextUnformatted(label);
@@ -883,43 +1127,21 @@ namespace dconstruct::ui {
                 ImGui::Dummy(ImVec2(0.0F, 6.0F));
             };
 
-            bool all_optimizations = all_decompilation_optimizations_enabled(state);
-            ImGui::TextUnformatted("All optimizations");
+            const f32 column_gap = 28.0F;
+            const f32 column_width = (ImGui::GetContentRegionAvail().x - column_gap) * 0.5F;
+
+            ImGui::BeginChild("##settings_col_left", ImVec2(column_width, 0.0F), ImGuiChildFlags_AutoResizeY);
+
+            section_header("General");
+            ImGui::TextUnformatted("Default function view");
             ImGui::SameLine();
-            ImGui::SetCursorPosX(ImGui::GetContentRegionMax().x - toggle_size.x);
-            if (draw_toggle_switch("##settings_opt_all", &all_optimizations)) {
-                set_all_decompilation_optimizations(state, all_optimizations);
+            ImGui::SetCursorPosX(ImGui::GetContentRegionMax().x - sw_size.x);
+            if (draw_view_switch("##settings_default_view", &state.m_defaultViewDcpl, sw_size)) {
                 ImGui::MarkIniSettingsDirty();
-                optimizations_changed = true;
-            }
-            draw_setting_description("Enables every AST cleanup pass below.");
-            ImGui::Dummy(ImVec2(0.0F, 6.0F));
-
-            draw_optimization_toggle("SSO var", "##settings_opt_sso_var", state.m_ssoVarOptimization, "Removes short-lived temporary variables.");
-            draw_optimization_toggle("Foreach", "##settings_opt_foreach", state.m_foreachOptimization, "Rewrites counted iterator loops into foreach loops.");
-            draw_optimization_toggle("Match", "##settings_opt_match", state.m_matchOptimization, "Collapses repeated condition branches into match expressions.");
-            draw_optimization_toggle("Second var", "##settings_opt_second_var", state.m_secondVarOptimization, "Runs temporary-variable cleanup after foreach and match rewrites.");
-            draw_optimization_toggle("Member access", "##settings_opt_member_access", state.m_memberAccessOptimization, "Turns typed pointer offsets into member access.");
-            draw_optimization_toggle("Regex", "##settings_opt_regex", state.m_regexOptimization, "Runs AST-hosted pattern rewrites such as boxed values and foreach cleanup.");
-
-            if (optimizations_changed) {
-                for (document& doc : state.m_documents) {
-                    decompile_document(state, doc);
-                }
             }
 
-            ImGui::Dummy(ImVec2(0.0F, 12.0F));
-            ImGui::Separator();
-            ImGui::Dummy(ImVec2(0.0F, 6.0F));
-
-            if (ImFont* section_font = qui::font_semi_bold(); section_font != nullptr) {
-                ImGui::PushFont(section_font);
-                ImGui::TextUnformatted("Color theme");
-                ImGui::PopFont();
-            } else {
-                ImGui::TextUnformatted("Color theme");
-            }
-            ImGui::Dummy(ImVec2(0.0F, 6.0F));
+            ImGui::Dummy(ImVec2(0.0F, 14.0F));
+            section_header("Color theme");
 
             const auto label_for = [](const std::string& key) -> const char* {
                 for (const scheme_entry& entry : scheme_list()) {
@@ -951,6 +1173,41 @@ namespace dconstruct::ui {
             draw_setting_description(
                 "Colors used for the decompiled code, the value tree and syntax highlighting. "
                 "Hover a theme to preview it instantly; the choice is saved when you click.");
+
+            ImGui::EndChild();
+
+            ImGui::SameLine(0.0F, column_gap);
+
+            ImGui::BeginChild("##settings_col_right", ImVec2(column_width, 0.0F), ImGuiChildFlags_AutoResizeY);
+
+            section_header("Decompilation optimizations");
+
+            bool all_optimizations = all_decompilation_optimizations_enabled(state);
+            ImGui::TextUnformatted("All optimizations");
+            ImGui::SameLine();
+            ImGui::SetCursorPosX(ImGui::GetContentRegionMax().x - toggle_size.x);
+            if (draw_toggle_switch("##settings_opt_all", &all_optimizations)) {
+                set_all_decompilation_optimizations(state, all_optimizations);
+                ImGui::MarkIniSettingsDirty();
+                optimizations_changed = true;
+            }
+            draw_setting_description("Enables every AST cleanup pass below.");
+            ImGui::Dummy(ImVec2(0.0F, 6.0F));
+
+            draw_optimization_toggle("SSO var", "##settings_opt_sso_var", state.m_ssoVarOptimization, "Removes short-lived temporary variables.");
+            draw_optimization_toggle("Foreach", "##settings_opt_foreach", state.m_foreachOptimization, "Rewrites counted iterator loops into foreach loops.");
+            draw_optimization_toggle("Match", "##settings_opt_match", state.m_matchOptimization, "Collapses repeated condition branches into match expressions.");
+            draw_optimization_toggle("Second var", "##settings_opt_second_var", state.m_secondVarOptimization, "Runs temporary-variable cleanup after foreach and match rewrites.");
+            draw_optimization_toggle("Member access", "##settings_opt_member_access", state.m_memberAccessOptimization, "Turns typed pointer offsets into member access.");
+            draw_optimization_toggle("Regex", "##settings_opt_regex", state.m_regexOptimization, "Runs AST-hosted pattern rewrites such as boxed values and foreach cleanup.");
+
+            ImGui::EndChild();
+
+            if (optimizations_changed) {
+                for (document& doc : state.m_documents) {
+                    decompile_document(state, doc);
+                }
+            }
 
             ImGui::Dummy(ImVec2(0.0F, 12.0F));
             constexpr f32 button_width = 110.0F;
@@ -1671,6 +1928,54 @@ namespace dconstruct::ui {
                 .highlight = rgba(0x1A, 0x7F, 0x37), .danger = rgba(0xD1, 0x34, 0x38),
                 .warning = rgba(0xBF, 0x88, 0x03),
             })},
+            {"ghidra", make_scheme({
+                .int_zero = rgba(0x78, 0x78, 0x78), .integer = rgba(0x70, 0xC0, 0x70),
+                .floating = rgba(0x70, 0xC0, 0x70), .sid = rgba(0x00, 0x8B, 0x8B),
+                .string = rgba(0xF0, 0x80, 0x80), .array = rgba(0x93, 0x70, 0xDB),
+                .map = rgba(0x87, 0xCE, 0xFA), .structure = rgba(0xAD, 0xD8, 0xE6),
+                .function = rgba(0x00, 0x8B, 0x8B), .state_script = rgba(0xFF, 0xA0, 0x70),
+                .entry_name = rgba(0xFF, 0xA0, 0x70), .group = rgba(0x78, 0x78, 0x78),
+                .code_bg = rgba(0x2B, 0x2B, 0x2B), .code_gutter_bg = rgba(0x31, 0x33, 0x35),
+                .code_gutter_text = rgba(0x60, 0x63, 0x66), .code_current_line = rgba(0xFF, 0xFF, 0xFF, 0x14),
+                .c_blank = rgba(0xBB, 0xBB, 0xBB), .c_number = rgba(0x70, 0xC0, 0x70),
+                .c_sid = rgba(0x00, 0x8B, 0x8B), .c_identifier = rgba(0xC0, 0xC0, 0x80),
+                .c_member = rgba(0xC0, 0xC0, 0x80), .c_type = rgba(0x87, 0xCE, 0xFA),
+                .c_call = rgba(0x00, 0x8B, 0x8B), .c_keyword = rgba(0x87, 0xCE, 0xFA),
+                .c_string = rgba(0x70, 0xC0, 0x70), .c_comment = rgba(0xEE, 0x82, 0xEE),
+                .c_operator = rgba(0xBB, 0xBB, 0xBB), .c_punctuation = rgba(0xBB, 0xBB, 0xBB),
+            }, {
+                .window_bg = rgba(0x3C, 0x3F, 0x41), .panel = rgba(0x3C, 0x3F, 0x41),
+                .panel_raised = rgba(0x4C, 0x50, 0x52), .menubar = rgba(0x3C, 0x3F, 0x41),
+                .title = rgba(0x3C, 0x3F, 0x41), .text = rgba(0xBB, 0xBB, 0xBB),
+                .text_dim = rgba(0x80, 0x80, 0x80), .border = rgba(0x55, 0x55, 0x55),
+                .accent = rgba(0x3D, 0x5B, 0x91), .accent_strong = rgba(0x2C, 0x44, 0x70),
+                .highlight = rgba(0x70, 0xC0, 0x70), .danger = rgba(0xF0, 0x80, 0x80),
+                .warning = rgba(0xFF, 0xA0, 0x70),
+            })},
+            {"ida", make_scheme({
+                .int_zero = rgba(0x80, 0x80, 0x80), .integer = rgba(0xAB, 0x98, 0x70),
+                .floating = rgba(0xAB, 0x98, 0x70), .sid = rgba(0xAB, 0x98, 0x70),
+                .string = rgba(0xFF, 0x66, 0x20), .array = rgba(0xFF, 0xD2, 0x00),
+                .map = rgba(0xFF, 0xD2, 0x00), .structure = rgba(0xFF, 0xD2, 0x00),
+                .function = rgba(0xFF, 0xEC, 0xBB), .state_script = rgba(0xFF, 0xD2, 0x00),
+                .entry_name = rgba(0xFF, 0xEC, 0xBB), .group = rgba(0x80, 0x80, 0x80),
+                .code_bg = rgba(0x2D, 0x2D, 0x2D), .code_gutter_bg = rgba(0x26, 0x26, 0x26),
+                .code_gutter_text = rgba(0x70, 0x70, 0x70), .code_current_line = rgba(0xFF, 0xFF, 0xFF, 0x14),
+                .c_blank = rgba(0xC8, 0xC8, 0xC8), .c_number = rgba(0xC8, 0xC8, 0xC8),
+                .c_sid = rgba(0xC8, 0xC8, 0xC8), .c_identifier = rgba(0x12, 0xFF, 0xFF),
+                .c_member = rgba(0x12, 0xFF, 0xFF), .c_type = rgba(0xFF, 0xD2, 0x00),
+                .c_call = rgba(0xFF, 0xEC, 0xBB), .c_keyword = rgba(0xC8, 0xC8, 0xC8),
+                .c_string = rgba(0xFF, 0x66, 0x20), .c_comment = rgba(0x7F, 0x9F, 0x7F),
+                .c_operator = rgba(0xC8, 0xC8, 0xC8), .c_punctuation = rgba(0xC8, 0xC8, 0xC8),
+            }, {
+                .window_bg = rgba(0x35, 0x35, 0x35), .panel = rgba(0x2D, 0x2D, 0x2D),
+                .panel_raised = rgba(0x3C, 0x3C, 0x3C), .menubar = rgba(0x35, 0x35, 0x35),
+                .title = rgba(0x35, 0x35, 0x35), .text = rgba(0xC8, 0xC8, 0xC8),
+                .text_dim = rgba(0x80, 0x80, 0x80), .border = rgba(0x48, 0x48, 0x48),
+                .accent = rgba(0x34, 0x5D, 0x8A), .accent_strong = rgba(0x26, 0x4A, 0x70),
+                .highlight = rgba(0xFF, 0xD2, 0x00), .danger = rgba(0xD8, 0x6C, 0x6C),
+                .warning = rgba(0xFF, 0xEC, 0xBB),
+            })},
             {"monokai", make_scheme({
                 .int_zero = rgba(0x75, 0x71, 0x5E), .integer = rgba(0xAE, 0x81, 0xFF),
                 .floating = rgba(0xAE, 0x81, 0xFF), .sid = rgba(0x66, 0xD9, 0xEF),
@@ -1727,6 +2032,8 @@ namespace dconstruct::ui {
         static const std::vector<scheme_entry> list = {
             {"qntm", "qntm (dark)"},
             {"qntm-light", "qntm light"},
+            {"ghidra", "ghidra"},
+            {"ida", "ida"},
             {"monokai", "monokai"},
             {"nord", "nord"},
         };
@@ -1796,7 +2103,7 @@ namespace dconstruct::ui {
         return th;
     }
 
-    void render_decompiled_code(const char* id, const app_state&, const ast::code_color_buffer& code) {
+    void render_decompiled_code(const char* id, const app_state&, const ast::code_color_buffer& code, qui::code::hovered_token* hovered = nullptr) {
         std::vector<qui::code::colored_span> spans;
         spans.reserve(code.size());
         for (const auto& [color, text] : code) {
@@ -1804,7 +2111,480 @@ namespace dconstruct::ui {
             spans.push_back({qui::code::to_u32(resolved), text});
         }
         const qui::code::theme th = scheme_code_theme();
-        qui::code::code_window_colored(id, spans, ImVec2(0.0F, 0.0F), th);
+        qui::code::code_window_colored(id, spans, ImVec2(0.0F, 0.0F), th, hovered);
+    }
+
+    std::vector<std::string> known_type_names(const app_state& state) {
+        std::vector<std::string> names = {
+            "u8", "u16", "u32", "u64", "i8", "i16", "i32", "i64",
+            "f32", "f64", "char", "bool", "string", "sid", "symbol", "u0"
+        };
+        for (const auto& [_, type] : state.m_typeMap) {
+            std::visit(
+                [&](auto&& value) {
+                    using T = std::decay_t<decltype(value)>;
+                    if constexpr (std::is_same_v<T, ast::struct_type> || std::is_same_v<T, ast::enum_type>) {
+                        names.push_back(value.m_typeHash ? "#" + value.m_name : value.m_name);
+                    }
+                },
+                type
+            );
+        }
+        std::sort(names.begin(), names.end());
+        names.erase(std::unique(names.begin(), names.end()), names.end());
+        return names;
+    }
+
+    bool contains_case_insensitive(std::string_view haystack, std::string_view needle) {
+        if (needle.empty()) {
+            return true;
+        }
+        auto lower = [](char c) {
+            return static_cast<char>(std::tolower(static_cast<unsigned char>(c)));
+        };
+        for (std::size_t start = 0; start + needle.size() <= haystack.size(); ++start) {
+            bool match = true;
+            for (std::size_t i = 0; i < needle.size(); ++i) {
+                if (lower(haystack[start + i]) != lower(needle[i])) {
+                    match = false;
+                    break;
+                }
+            }
+            if (match) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    bool local_var_index_from_token(const document& doc, sid64 function_id, std::string_view token, u64& var_index) {
+        if (parse_generated_var_name(token, var_index)) {
+            return true;
+        }
+        const auto scope_it = doc.m_functionScopes.find(function_id);
+        if (scope_it == doc.m_functionScopes.end()) {
+            return false;
+        }
+        for (const auto& [index, mapped] : scope_it->second) {
+            const auto& [_, alias] = mapped;
+            if (alias && *alias == token) {
+                var_index = index;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    void open_local_var_type_edit(
+        app_state&,
+        document& doc,
+        const function_disassembly& func,
+        const ast::code_color_buffer& code,
+        const qui::code::hovered_token& token
+    ) {
+        if (!token.hovered || token.text.empty() || token_is_member_access(token) || token_is_call_name(token)) {
+            return;
+        }
+
+        const sid64 function_id = SID(func.get_id().c_str());
+        u64 var_index = 0;
+        if (!local_var_index_from_token(doc, function_id, token.text, var_index)) {
+            return;
+        }
+
+        local_var_type_edit edit;
+        edit.m_function = function_id;
+        edit.m_varIndex = var_index;
+        edit.m_oldName = token.text;
+        edit.m_name = token.text;
+        edit.m_pos = ImVec2(token.screen_pos.x, token.screen_pos.y + ImGui::GetTextLineHeight() + 4.0F);
+
+        const auto scope_it = doc.m_functionScopes.find(function_id);
+        if (scope_it != doc.m_functionScopes.end()) {
+            const auto var_it = scope_it->second.find(var_index);
+            if (var_it != scope_it->second.end()) {
+                edit.m_typeText = ast::type_to_declaration_string(var_it->second.first);
+            }
+        }
+        if (edit.m_typeText.empty()) {
+            edit.m_typeText = infer_declaration_type_text(code, token.text);
+        }
+
+        doc.m_localVarTypeEdit = std::move(edit);
+    }
+
+    std::optional<mapped_var_value> current_mapped_var(const document& doc, sid64 function, u64 var_index) {
+        const auto scope_it = doc.m_functionScopes.find(function);
+        if (scope_it == doc.m_functionScopes.end()) {
+            return std::nullopt;
+        }
+        const auto var_it = scope_it->second.find(var_index);
+        if (var_it == scope_it->second.end()) {
+            return std::nullopt;
+        }
+        return var_it->second;
+    }
+
+    void set_mapped_var(document& doc, sid64 function, u64 var_index, const std::optional<mapped_var_value>& value) {
+        if (value) {
+            doc.m_functionScopes[function][var_index] = *value;
+            return;
+        }
+        const auto scope_it = doc.m_functionScopes.find(function);
+        if (scope_it != doc.m_functionScopes.end()) {
+            scope_it->second.erase(var_index);
+            if (scope_it->second.empty()) {
+                doc.m_functionScopes.erase(scope_it);
+            }
+        }
+    }
+
+    void apply_type_map_record(app_state& state, document& doc, const type_map_record& record, bool redo) {
+        set_mapped_var(doc, record.m_function, record.m_varIndex, redo ? record.m_new : record.m_old);
+        decompile_document(state, doc);
+    }
+
+    void commit_type_map_change(
+        app_state& state,
+        document& doc,
+        sid64 function,
+        u64 var_index,
+        std::optional<mapped_var_value> new_value
+    ) {
+        std::optional<mapped_var_value> old_value = current_mapped_var(doc, function, var_index);
+        set_mapped_var(doc, function, var_index, new_value);
+        decompile_document(state, doc);
+
+        doc.m_redoStack.clear();
+        edit_record record;
+        record.m_typeMap = type_map_record{function, var_index, std::move(old_value), std::move(new_value)};
+        doc.m_undoStack.push_back(std::move(record));
+        update_dirty(doc);
+        log_event("Type map edit [{}] var_{}", doc.m_name, var_index);
+    }
+
+    bool accept_local_var_type_edit(app_state& state, document& doc, local_var_type_edit& edit) {
+        edit.m_error.clear();
+        const std::string type_text = trim_copy(edit.m_typeText);
+        const std::string name = trim_copy(edit.m_name);
+        if (type_text.empty()) {
+            edit.m_error = "Type is required.";
+            return false;
+        }
+        if (!is_identifier_text(name)) {
+            edit.m_error = "Name must be an identifier using letters, digits, or underscores.";
+            return false;
+        }
+
+        auto type_res = parse_type_text(state, type_text);
+        if (!type_res) {
+            edit.m_error = type_res.error();
+            return false;
+        }
+
+        const std::string generated_name = "var_" + std::to_string(edit.m_varIndex);
+        std::optional<std::string> alias;
+        if (name != generated_name) {
+            alias = name;
+        }
+
+        commit_type_map_change(
+            state, doc, edit.m_function, edit.m_varIndex,
+            std::make_pair(std::move(*type_res), std::move(alias)));
+        return true;
+    }
+
+    bool clear_local_var_type_edit(app_state& state, document& doc, local_var_type_edit& edit) {
+        edit.m_error.clear();
+        commit_type_map_change(state, doc, edit.m_function, edit.m_varIndex, std::nullopt);
+        return true;
+    }
+
+    void draw_local_var_type_edit_popup(app_state& state, document& doc) {
+        if (!doc.m_localVarTypeEdit) {
+            return;
+        }
+
+        local_var_type_edit& edit = *doc.m_localVarTypeEdit;
+        ImGui::SetNextWindowPos(edit.m_pos, ImGuiCond_Appearing);
+        ImGui::SetNextWindowSize(ImVec2(560.0F, 0.0F), ImGuiCond_Appearing);
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(12.0F, 10.0F));
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 6.0F);
+        ImGui::PushStyleColor(ImGuiCol_WindowBg, qui::color::active_palette().PopupBackground);
+        constexpr ImGuiWindowFlags flags =
+            ImGuiWindowFlags_NoSavedSettings |
+            ImGuiWindowFlags_AlwaysAutoResize |
+            ImGuiWindowFlags_NoCollapse;
+
+        bool close = false;
+        if (ImGui::Begin("Local variable", nullptr, flags)) {
+            ImGui::Text("var_%llu", static_cast<unsigned long long>(edit.m_varIndex));
+
+            constexpr f32 field_width = 258.0F;
+            const f32 type_x = ImGui::GetCursorPosX();
+            const f32 input_y = ImGui::GetCursorPosY();
+
+            const std::vector<std::string> names = known_type_names(state);
+            const std::string filter = trim_copy(edit.m_typeText);
+            if (filter != edit.m_typeSuggestionFilter) {
+                edit.m_typeSuggestionFilter = filter;
+                edit.m_typeSuggestionIndex = 0;
+            }
+
+            std::vector<std::string> suggestions;
+            for (const std::string& name : names) {
+                if (!contains_case_insensitive(name, filter)) {
+                    continue;
+                }
+                suggestions.push_back(name);
+                if (suggestions.size() >= 8) {
+                    break;
+                }
+            }
+            edit.m_typeSuggestionIndex = suggestions.empty()
+                ? 0
+                : std::clamp(edit.m_typeSuggestionIndex, 0, static_cast<int>(suggestions.size()) - 1);
+
+            struct suggestion_nav {
+                int* index;
+                int count;
+                bool moved;
+                bool* cursor_to_end;
+            } nav{&edit.m_typeSuggestionIndex, static_cast<int>(suggestions.size()), false, &edit.m_focusCursorEnd};
+
+            const ImGuiInputTextCallback history_cb = [](ImGuiInputTextCallbackData* data) -> int {
+                auto* n = static_cast<suggestion_nav*>(data->UserData);
+                if (data->EventFlag == ImGuiInputTextFlags_CallbackHistory) {
+                    if (n->count > 0) {
+                        if (data->EventKey == ImGuiKey_UpArrow) {
+                            *n->index = (*n->index + n->count - 1) % n->count;
+                            n->moved = true;
+                        } else if (data->EventKey == ImGuiKey_DownArrow) {
+                            *n->index = (*n->index + 1) % n->count;
+                            n->moved = true;
+                        }
+                    }
+                } else if (data->EventFlag == ImGuiInputTextFlags_CallbackAlways && *n->cursor_to_end) {
+                    data->CursorPos = data->SelectionStart = data->SelectionEnd = data->BufTextLen;
+                    *n->cursor_to_end = false;
+                }
+                return 0;
+            };
+
+            ImGui::SetNextItemWidth(field_width);
+            if (edit.m_focusType) {
+                ImGui::SetKeyboardFocusHere();
+                edit.m_focusType = false;
+            }
+            const bool type_enter = ImGui::InputTextWithHint(
+                "##local_var_type", "type", &edit.m_typeText,
+                ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_CallbackHistory | ImGuiInputTextFlags_CallbackAlways,
+                history_cb, &nav);
+            const bool type_active = ImGui::IsItemActive();
+            const f32 after_input_y = ImGui::GetCursorPosY();
+
+            ImGui::SameLine();
+            ImGui::SetNextItemWidth(field_width);
+            const bool name_enter = ImGui::InputTextWithHint("##local_var_name", "name", &edit.m_name, ImGuiInputTextFlags_EnterReturnsTrue);
+
+            bool accepted_suggestion = false;
+            if (type_enter && !suggestions.empty()) {
+                edit.m_typeText = suggestions[static_cast<std::size_t>(edit.m_typeSuggestionIndex)];
+                edit.m_typeSuggestionFilter = trim_copy(edit.m_typeText);
+                accepted_suggestion = true;
+                edit.m_focusType = true;
+                edit.m_focusCursorEnd = true;
+            }
+
+            ImGui::SetCursorPos(ImVec2(type_x, after_input_y));
+            if (type_active) {
+                ImGui::BeginChild("##local_var_type_suggestions", ImVec2(field_width, 126.0F), ImGuiChildFlags_Borders);
+                if (suggestions.empty()) {
+                    ImGui::PushStyleColor(ImGuiCol_Text, qui::color::active_palette().TextDisabled);
+                    ImGui::TextUnformatted("No matches");
+                    ImGui::PopStyleColor();
+                } else {
+                    for (int i = 0; i < static_cast<int>(suggestions.size()); ++i) {
+                        const bool selected = i == edit.m_typeSuggestionIndex;
+                        if (ImGui::Selectable(suggestions[static_cast<std::size_t>(i)].c_str(), selected)) {
+                            edit.m_typeText = suggestions[static_cast<std::size_t>(i)];
+                            edit.m_typeSuggestionIndex = i;
+                            edit.m_typeSuggestionFilter = trim_copy(edit.m_typeText);
+                        }
+                        if (selected) {
+                            ImGui::SetItemDefaultFocus();
+                            if (nav.moved) {
+                                ImGui::SetScrollHereY();
+                            }
+                        }
+                    }
+                }
+                ImGui::EndChild();
+                ImGui::SetCursorPosY(std::max(ImGui::GetCursorPosY(), input_y + 126.0F + ImGui::GetFrameHeightWithSpacing()));
+            } else {
+                ImGui::SetCursorPosY(after_input_y);
+            }
+
+            if (!edit.m_error.empty()) {
+                ImGui::PushStyleColor(ImGuiCol_Text, qui::color::active_palette().AccentRed);
+                ImGui::TextWrapped("%s", edit.m_error.c_str());
+                ImGui::PopStyleColor();
+            }
+
+            if (ImGui::Button("OK", ImVec2(88.0F, 0.0F)) || (type_enter && !accepted_suggestion) || name_enter) {
+                if (accept_local_var_type_edit(state, doc, edit)) {
+                    close = true;
+                }
+            }
+            ImGui::SameLine();
+            if (ImGui::Button("Cancel", ImVec2(88.0F, 0.0F)) || ImGui::IsKeyPressed(ImGuiKey_Escape)) {
+                close = true;
+            }
+
+            const bool has_assignment = current_mapped_var(doc, edit.m_function, edit.m_varIndex).has_value();
+            ImGui::SameLine();
+            ImGui::BeginDisabled(!has_assignment);
+            if (ImGui::Button("Clear type assignment", ImVec2(168.0F, 0.0F))) {
+                if (clear_local_var_type_edit(state, doc, edit)) {
+                    close = true;
+                }
+            }
+            ImGui::EndDisabled();
+        }
+        ImGui::End();
+        ImGui::PopStyleColor();
+        ImGui::PopStyleVar(2);
+
+        if (close) {
+            doc.m_localVarTypeEdit.reset();
+        }
+    }
+
+    void draw_struct_pointer_edit_popup(app_state& state, document& doc) {
+        if (!doc.m_structPointerEdit || doc.m_file == nullptr) {
+            return;
+        }
+
+        struct_pointer_edit& edit = *doc.m_structPointerEdit;
+        const BinaryFile& file = *doc.m_file;
+
+        ImGui::SetNextWindowPos(edit.m_pos, ImGuiCond_Appearing);
+        ImGui::SetNextWindowSize(ImVec2(440.0F, 0.0F), ImGuiCond_Appearing);
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(12.0F, 10.0F));
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 6.0F);
+        ImGui::PushStyleColor(ImGuiCol_WindowBg, qui::color::active_palette().PopupBackground);
+        constexpr ImGuiWindowFlags flags =
+            ImGuiWindowFlags_NoSavedSettings |
+            ImGuiWindowFlags_AlwaysAutoResize |
+            ImGuiWindowFlags_NoCollapse;
+
+        bool close = false;
+        if (ImGui::Begin("Change struct pointer", nullptr, flags)) {
+            ImGui::PushStyleColor(ImGuiCol_Text, qui::color::active_palette().TextDisabled);
+            ImGui::Text("pointer at [0x%05X]", static_cast<u32>(edit.m_pointerOffset));
+            ImGui::PopStyleColor();
+
+            ImGui::TextUnformatted("New target offset");
+            ImGui::SetNextItemWidth(416.0F);
+            if (edit.m_focus) {
+                ImGui::SetKeyboardFocusHere();
+                edit.m_focus = false;
+            }
+            const bool enter = ImGui::InputTextWithHint(
+                "##struct_ptr_target", "0x...", &edit.m_text, ImGuiInputTextFlags_EnterReturnsTrue);
+
+            u64 target_offset = 0;
+            bool parse_ok = false;
+            {
+                std::string text = trim_copy(edit.m_text);
+                if (text.starts_with("0x") || text.starts_with("0X")) {
+                    text = text.substr(2);
+                }
+                if (!text.empty() && text.find_first_not_of("0123456789abcdefABCDEF") == std::string::npos) {
+                    try {
+                        target_offset = std::stoull(text, nullptr, 16);
+                        parse_ok = true;
+                    } catch (const std::exception&) {
+                        parse_ok = false;
+                    }
+                }
+            }
+
+            const u64 text_limit = file.m_dcheader->m_textSize;
+            const bool in_bounds = parse_ok && target_offset >= 8 && target_offset < text_limit && target_offset % 8 == 0;
+            const bool is_pointer_target = in_bounds && file.gets_pointed_at(location(file.m_bytes.get() + target_offset));
+
+            ImGui::Dummy(ImVec2(0.0F, 2.0F));
+
+            if (!parse_ok) {
+                ImGui::PushStyleColor(ImGuiCol_Text, qui::color::active_palette().AccentRed);
+                ImGui::TextWrapped("Enter a hexadecimal file offset (e.g. 0x1A2F0).");
+                ImGui::PopStyleColor();
+            } else if (!in_bounds) {
+                ImGui::PushStyleColor(ImGuiCol_Text, qui::color::active_palette().AccentRed);
+                ImGui::TextWrapped("0x%llX is not a valid 8-byte-aligned address inside this file.",
+                    static_cast<unsigned long long>(target_offset));
+                ImGui::PopStyleColor();
+            } else if (!is_pointer_target) {
+                ImGui::PushStyleColor(ImGuiCol_Text, qui::color::active_palette().AccentRed);
+                ImGui::TextWrapped("0x%llX is not a struct pointer target. Pointing the member here would "
+                    "reference raw data and break the file.", static_cast<unsigned long long>(target_offset));
+                ImGui::PopStyleColor();
+            } else {
+                const structs::unmapped* target_struct =
+                    reinterpret_cast<const structs::unmapped*>(file.m_bytes.get() + target_offset - 8);
+                const sid64 target_type_id = target_struct->typeID;
+                const char* type_text = state.m_sidbase != nullptr
+                    ? state.m_sidbase->lookup(target_type_id, file.m_sidCache)
+                    : nullptr;
+
+                ImGui::TextUnformatted("Type at target:");
+                ImGui::SameLine();
+                ImGui::PushStyleColor(ImGuiCol_Text, qui::color::active_palette().Highlight);
+                ImGui::TextUnformatted(type_text != nullptr ? type_text : "<unknown>");
+                ImGui::PopStyleColor();
+
+                if (target_type_id == edit.m_currentTypeId) {
+                    ImGui::PushStyleColor(ImGuiCol_Text, qui::color::active_palette().AccentGreen);
+                    ImGui::TextWrapped("Type ID matches the current struct.");
+                    ImGui::PopStyleColor();
+                } else {
+                    const char* current_text = state.m_sidbase != nullptr
+                        ? state.m_sidbase->lookup(edit.m_currentTypeId, file.m_sidCache)
+                        : nullptr;
+                    ImGui::PushStyleColor(ImGuiCol_Text, qui::color::active_palette().AccentYellow);
+                    ImGui::TextWrapped("Warning: type ID does not match the current struct (%s). "
+                        "The edit is allowed, but the data may not match this member.",
+                        current_text != nullptr ? current_text : "<unknown>");
+                    ImGui::PopStyleColor();
+                }
+            }
+
+            ImGui::Dummy(ImVec2(0.0F, 4.0F));
+
+            ImGui::BeginDisabled(!is_pointer_target);
+            const bool ok = ImGui::Button("OK", ImVec2(88.0F, 0.0F)) || (enter && is_pointer_target);
+            ImGui::EndDisabled();
+            if (ok && is_pointer_target) {
+                const p64 base = reinterpret_cast<p64>(file.m_bytes.get());
+                doc.m_pendingEdits.emplace_back(
+                    static_cast<u32>(edit.m_pointerOffset),
+                    edit_kind::Int64,
+                    std::to_string(base + target_offset));
+                close = true;
+            }
+            ImGui::SameLine();
+            if (ImGui::Button("Cancel", ImVec2(88.0F, 0.0F)) || ImGui::IsKeyPressed(ImGuiKey_Escape)) {
+                close = true;
+            }
+        }
+        ImGui::End();
+        ImGui::PopStyleColor();
+        ImGui::PopStyleVar(2);
+
+        if (close) {
+            doc.m_structPointerEdit.reset();
+        }
     }
 
     struct value_view {
@@ -1847,7 +2627,7 @@ namespace dconstruct::ui {
         return measure_text(qui::font_bold(), buffer);
     }
 
-    bool dv_node(value_view v, const void* id, const ImVec4& color, const char* label, const char* suffix, bool leaf, const char* member_name = nullptr, const char* index_prefix = nullptr) {
+    bool dv_node(value_view v, const void* id, const ImVec4& color, const char* label, const char* suffix, bool leaf, const char* member_name = nullptr, const char* index_prefix = nullptr, std::optional<u64> struct_ptr_offset = std::nullopt, sid64 struct_type_id = 0) {
         document* doc = v.doc;
         const ImGuiID node_im_id = ImGui::GetID(id);
         i32 node_depth = -1;
@@ -1893,6 +2673,8 @@ namespace dconstruct::ui {
         if (!leaf && ImGui::IsItemClicked(ImGuiMouseButton_Right)) {
             doc->m_menuTarget = node_im_id;
             doc->m_openMenu = true;
+            doc->m_menuStructPtrOffset = struct_ptr_offset;
+            doc->m_menuStructTypeId = struct_type_id;
         }
         if (use_name) {
             dv_draw_member_name(member_name);
@@ -1999,7 +2781,7 @@ namespace dconstruct::ui {
 
         std::snprintf(label, sizeof(label), "%s%s", prefix, type_name);
         std::snprintf(suffix, sizeof(suffix), "[0x%05X]", static_cast<u32>(entry.m_offset));
-        const bool open = dv_node(v, id, color, label, suffix, entry.m_values.empty(), member_name, prefix);
+        const bool open = dv_node(v, id, color, label, suffix, entry.m_values.empty(), member_name, prefix, entry.m_pointerOffset, entry.m_typeId);
         if (open && !entry.m_values.empty()) {
             dv_draw_values(v, entry.m_values);
             dv_tree_pop(v);
@@ -2490,6 +3272,7 @@ namespace dconstruct::ui {
         std::snprintf(label, sizeof(label), "[%d] function %s", index, func.get_id().c_str());
         const void* fid = stable_id(*v.doc, func.m_originalOffset);
         ImGui::SetNextItemAllowOverlap();
+        ImGui::SetNextItemOpen(true, ImGuiCond_Once);
         const bool open = dv_node(v, fid, gcol::Function(), label, nullptr, false);
         dv_function_switch_and_body(v, func, fid, open);
     }
@@ -2625,6 +3408,38 @@ namespace dconstruct::ui {
         return changed;
     }
 
+    void draw_decomp_warning_box(const char* reason) {
+        const ImVec4 warn = qui::color::active_palette().AccentYellow;
+        const ImGuiStyle& style = ImGui::GetStyle();
+
+        ImGui::PushStyleColor(ImGuiCol_Border, warn);
+        ImGui::PushStyleColor(ImGuiCol_ChildBg, qui::color::rgba(0xF1, 0xC4, 0x0F, 0x1A));
+        ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, style.FrameRounding);
+        ImGui::PushStyleVar(ImGuiStyleVar_ChildBorderSize, 1.0F);
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(10.0F, 8.0F));
+
+        ImGui::BeginChild("##decomp_warning", ImVec2(0.0F, 0.0F),
+                          ImGuiChildFlags_Borders | ImGuiChildFlags_AutoResizeY);
+
+        ImFont* bold = qui::font_bold();
+        if (bold != nullptr) {
+            ImGui::PushFont(bold);
+        }
+        ImGui::PushStyleColor(ImGuiCol_Text, warn);
+        ImGui::TextUnformatted("WARNING");
+        ImGui::PopStyleColor();
+        if (bold != nullptr) {
+            ImGui::PopFont();
+        }
+
+        ImGui::TextWrapped("This function decompilation might be inaccurate: %s", reason);
+
+        ImGui::EndChild();
+
+        ImGui::PopStyleVar(3);
+        ImGui::PopStyleColor(2);
+    }
+
     void dv_function_switch_and_body(value_view v, const function_disassembly& func, const void* id, bool open) {
         bool& show_dcpl = v.doc->m_lambdaViewDcpl.try_emplace(&func, v.state->m_defaultViewDcpl).first->second;
 
@@ -2647,11 +3462,18 @@ namespace dconstruct::ui {
             if (it != v.doc->m_decompiled.end()) {
                 const auto err_it = v.doc->m_decompErrors.find(&func);
                 if (err_it != v.doc->m_decompErrors.end()) {
-                    ImGui::PushStyleColor(ImGuiCol_Text, qui::color::active_palette().AccentRed);
-                    ImGui::TextUnformatted(err_it->second.c_str());
-                    ImGui::PopStyleColor();
+                    draw_decomp_warning_box(err_it->second.c_str());
+                    ImGui::Spacing();
                 }
-                render_decompiled_code("##dcpl_view", *v.state, it->second);
+                qui::code::hovered_token hovered;
+                render_decompiled_code("##dcpl_view", *v.state, it->second, &hovered);
+                const bool trigger_edit =
+                    hovered.hovered &&
+                    !ImGui::GetIO().WantTextInput &&
+                    (ImGui::IsKeyPressed(ImGuiKey_T) || ImGui::IsMouseClicked(ImGuiMouseButton_Right));
+                if (trigger_edit) {
+                    open_local_var_type_edit(*v.state, *v.doc, func, it->second, hovered);
+                }
             } else {
                 ImGui::PushStyleColor(ImGuiCol_Text, qui::color::active_palette().TextDisabled);
                 qui::text_label("Decompilation unavailable for this function.");
@@ -2684,6 +3506,7 @@ namespace dconstruct::ui {
         std::snprintf(suffix, sizeof(suffix), "[0x%05X]", static_cast<u32>(entry.m_offset));
         if (func != nullptr) {
             ImGui::SetNextItemAllowOverlap();
+            ImGui::SetNextItemOpen(true, ImGuiCond_Once);
         }
         const bool open = dv_node(v, id, gcol::Function(), label, suffix, func == nullptr);
 
@@ -2834,6 +3657,21 @@ namespace dconstruct::ui {
             doc.m_openMenu = false;
         }
         if (ImGui::BeginPopup("##dv_context_menu")) {
+            if (doc.m_menuStructPtrOffset.has_value() && doc.m_file != nullptr) {
+                if (ImGui::MenuItem("Change Struct Pointer")) {
+                    const u64 ptr_offset = *doc.m_menuStructPtrOffset;
+                    const p64 base = reinterpret_cast<p64>(doc.m_file->m_bytes.get());
+                    const u64 current_target = *reinterpret_cast<const u64*>(doc.m_file->m_bytes.get() + ptr_offset) - base;
+                    struct_pointer_edit edit;
+                    edit.m_pointerOffset = ptr_offset;
+                    edit.m_currentTypeId = doc.m_menuStructTypeId;
+                    edit.m_text = std::format("0x{:X}", static_cast<u32>(current_target));
+                    edit.m_pos = ImGui::GetMousePosOnOpeningCurrentPopup();
+                    edit.m_focus = true;
+                    doc.m_structPointerEdit = std::move(edit);
+                }
+                ImGui::Separator();
+            }
             if (ImGui::MenuItem("Expand all children")) {
                 doc.m_opPendingTarget = doc.m_menuTarget;
                 doc.m_opPendingMode = tree_op::expand;
@@ -2851,6 +3689,9 @@ namespace dconstruct::ui {
             }
             ImGui::EndPopup();
         }
+
+        draw_local_var_type_edit_popup(state, doc);
+        draw_struct_pointer_edit_popup(state, doc);
     }
 
     void draw_document(app_state& state, document& doc) {
@@ -2913,8 +3754,21 @@ namespace dconstruct::ui {
         return read_value_string(v, v.doc->m_file->m_bytes.get() + offset, kind);
     }
 
+    std::size_t byte_edit_depth(const document& doc) {
+        return static_cast<std::size_t>(std::count_if(
+            doc.m_undoStack.begin(), doc.m_undoStack.end(),
+            [](const edit_record& record) { return !record.m_typeMap.has_value(); }));
+    }
+
+    std::size_t type_edit_depth(const document& doc) {
+        return static_cast<std::size_t>(std::count_if(
+            doc.m_undoStack.begin(), doc.m_undoStack.end(),
+            [](const edit_record& record) { return record.m_typeMap.has_value(); }));
+    }
+
     void update_dirty(document& doc) {
-        doc.m_dirty = doc.m_undoStack.size() != doc.m_savedDepth;
+        doc.m_dirty = byte_edit_depth(doc) != doc.m_savedDepth ||
+                      type_edit_depth(doc) != doc.m_savedTypeDepth;
     }
 
     bool apply_one_edit(app_state& state, document& doc, const pending_edit& edit) {
@@ -2996,6 +3850,13 @@ namespace dconstruct::ui {
         }
         edit_record record = std::move(doc->m_undoStack.back());
         doc->m_undoStack.pop_back();
+        if (record.m_typeMap) {
+            apply_type_map_record(state, *doc, *record.m_typeMap, false);
+            log_event("Undo type map [{}] var_{}", doc->m_name, record.m_typeMap->m_varIndex);
+            doc->m_redoStack.push_back(std::move(record));
+            update_dirty(*doc);
+            return;
+        }
         apply_record_bytes(*doc, record, false);
         log_event("Undo [{}] 0x{:05X}: {} -> {}", doc->m_name, record.m_offset, record.m_newText, record.m_oldText);
         doc->m_redoStack.push_back(std::move(record));
@@ -3010,6 +3871,13 @@ namespace dconstruct::ui {
         }
         edit_record record = std::move(doc->m_redoStack.back());
         doc->m_redoStack.pop_back();
+        if (record.m_typeMap) {
+            apply_type_map_record(state, *doc, *record.m_typeMap, true);
+            log_event("Redo type map [{}] var_{}", doc->m_name, record.m_typeMap->m_varIndex);
+            doc->m_undoStack.push_back(std::move(record));
+            update_dirty(*doc);
+            return;
+        }
         apply_record_bytes(*doc, record, true);
         log_event("Redo [{}] 0x{:05X}: {} -> {}", doc->m_name, record.m_offset, record.m_oldText, record.m_newText);
         doc->m_undoStack.push_back(std::move(record));
@@ -3017,18 +3885,36 @@ namespace dconstruct::ui {
         redisassemble_preserving(state, *doc);
     }
 
+    bool save_document(app_state& state, document& doc) {
+        if (doc.m_editor == nullptr) {
+            return false;
+        }
+        if (byte_edit_depth(doc) != doc.m_savedDepth) {
+            if (const error_msg err = doc.m_editor->write_edited_file(); err.has_value()) {
+                show_error_box(state, *err);
+                return false;
+            }
+        }
+        if (type_edit_depth(doc) != doc.m_savedTypeDepth) {
+            std::string error;
+            if (!write_document_typemap(state, doc, error)) {
+                show_error_box(state, error);
+                return false;
+            }
+        }
+        doc.m_savedDepth = byte_edit_depth(doc);
+        doc.m_savedTypeDepth = type_edit_depth(doc);
+        update_dirty(doc);
+        log_event("Saved file: {}", doc.m_path);
+        return true;
+    }
+
     void save_active_document(app_state& state) {
         document* doc = active_document(state);
-        if (doc == nullptr || doc->m_editor == nullptr || !doc->m_dirty) {
+        if (doc == nullptr || !doc->m_dirty) {
             return;
         }
-        if (const error_msg err = doc->m_editor->write_edited_file(); err.has_value()) {
-            show_error_box(state, *err);
-            return;
-        }
-        doc->m_savedDepth = doc->m_undoStack.size();
-        update_dirty(*doc);
-        log_event("Saved file: {}", doc->m_path);
+        save_document(state, *doc);
     }
 
     bool any_document_dirty(const app_state& state) {
@@ -3042,16 +3928,10 @@ namespace dconstruct::ui {
 
     void save_all_documents(app_state& state) {
         for (document& doc : state.m_documents) {
-            if (!doc.m_dirty || doc.m_editor == nullptr) {
+            if (!doc.m_dirty) {
                 continue;
             }
-            if (const error_msg err = doc.m_editor->write_edited_file(); err.has_value()) {
-                show_error_box(state, *err);
-                continue;
-            }
-            doc.m_savedDepth = doc.m_undoStack.size();
-            update_dirty(doc);
-            log_event("Saved file: {}", doc.m_path);
+            save_document(state, doc);
         }
     }
 
@@ -3252,7 +4132,7 @@ int main() {
     glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
     glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
 
-    GLFWwindow* window = glfwCreateWindow(1600, 900, "dconstruct", nullptr, nullptr);
+    GLFWwindow* window = glfwCreateWindow(1900, 1200, "dconstruct", nullptr, nullptr);
     if (window == nullptr) {
         glfwTerminate();
         return 1;

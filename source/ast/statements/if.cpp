@@ -178,9 +178,7 @@ namespace dconstruct::ast {
     }
 
     void if_stmt::member_access_optimization_pass() noexcept {
-        if (auto replacement = m_condition->to_struct_access()) {
-            m_condition = std::move(replacement);
-        }
+        expression::replace_if_struct_access(m_condition);
         m_then->member_access_optimization_pass();
         if (m_else) {
             m_else->member_access_optimization_pass();

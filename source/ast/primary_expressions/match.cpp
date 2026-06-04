@@ -540,22 +540,14 @@ namespace dconstruct::ast {
 
     [[nodiscard]] std::unique_ptr<struct_access> match_expr::to_struct_access() noexcept {
         for (auto& condition : m_conditions) {
-            if (auto replacement = condition->to_struct_access()) {
-                condition = std::move(replacement);
-            }
+            replace_if_struct_access(condition);
         }
         for (auto& [pattern, expression] : m_matchPairs) {
-            if (auto replacement = pattern->to_struct_access()) {
-                pattern = std::move(replacement);
-            }
-            if (auto replacement = expression->to_struct_access()) {
-                expression = std::move(replacement);
-            }
+            replace_if_struct_access(pattern);
+            replace_if_struct_access(expression);
         }
         if (m_default) {
-            if (auto replacement = m_default->to_struct_access()) {
-                m_default = std::move(replacement);
-            }
+            replace_if_struct_access(m_default);
         }
         return nullptr;
     }

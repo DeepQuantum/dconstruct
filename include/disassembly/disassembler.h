@@ -31,6 +31,7 @@ namespace dconstruct {
         p64 m_offset;
         disassembled_values_t m_values;
         std::optional<u64> m_arraySize;
+        std::optional<u64> m_pointerOffset;
     };
 
     struct mapped_value {
