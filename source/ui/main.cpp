@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <cctype>
 #include <chrono>
 #include <cmath>
 #include <cstddef>
@@ -21,6 +22,7 @@
 #include "sidbase.h"
 #include "disassembly/disassembler.h"
 #include "disassembly/edit_disassembler.h"
+#include "disassembly/driver_functions.h"
 #include "decompilation/decomp_function.h"
 #include "decompilation/regex_transformations.h"
 
@@ -35,6 +37,8 @@
 #include <windows.h>
 #include <commdlg.h>
 #include <shellapi.h>
+#include <ole2.h>
+#include <shlobj.h>
 #ifndef GLFW_EXPOSE_NATIVE_WIN32
 #define GLFW_EXPOSE_NATIVE_WIN32
 #endif
@@ -123,6 +127,7 @@ namespace dconstruct::ui {
         std::vector<edit_record> m_undoStack;
         std::vector<edit_record> m_redoStack;
         std::size_t m_savedDepth = 0;
+        ast::function_to_mapped_vars m_functionScopes;
     };
 
     template <typename... Args>
@@ -156,6 +161,10 @@ namespace dconstruct::ui {
         bool m_defaultViewDcpl = true;
         bool m_astOptimization = true;
         bool m_regexOptimization = true;
+        bool m_dragHover = false;
+        std::vector<std::string> m_pendingDropPaths;
+        std::unordered_map<sid64, ast::full_type> m_typeMap;
+        std::unordered_map<std::string, ast::function_to_mapped_vars> m_pendingTypeMaps;
     };
 
     void glfw_error_callback(int error, const char* description) {
@@ -318,7 +327,13 @@ namespace dconstruct::ui {
             state.m_astOptimization ? dcompiler::OPTIMIZATION_KIND::AST : dcompiler::OPTIMIZATION_KIND::NONE;
 
         for (const function_disassembly* func : doc.m_disassembler->get_all_functions()) {
-            auto decomp_func = dcompiler::decomp_function{*func, *doc.m_file, *state.m_sidbase, ControlFlowGraph::build(*func)};
+            const ast::mapped_var_scope* function_scope = nullptr;
+            if (!doc.m_functionScopes.empty()) {
+                if (auto entry = doc.m_functionScopes.find(SID(func->get_id().c_str())); entry != doc.m_functionScopes.end()) {
+                    function_scope = &entry->second;
+                }
+            }
+            auto decomp_func = dcompiler::decomp_function{*func, *doc.m_file, *state.m_sidbase, ControlFlowGraph::build(*func), std::nullopt, nullptr, function_scope};
             const ast::function_definition& def = decomp_func.decompile(optimizations);
             std::string text = def.to_pseudo_c_string();
             if (state.m_regexOptimization) {
@@ -345,7 +360,7 @@ namespace dconstruct::ui {
             return;
         }
 
-        doc.m_disassembler = std::make_unique<Disassembler>(doc.m_file.get(), state.m_sidbase.get());
+        doc.m_disassembler = std::make_unique<Disassembler>(doc.m_file.get(), state.m_sidbase.get(), &state.m_typeMap);
         doc.m_disassembler->disassemble();
         doc.m_entries = &doc.m_disassembler->get_disassembled_entries();
         doc.m_editor = std::make_unique<EditDisassembler>(doc.m_file.get(), state.m_sidbase.get(), std::vector<std::string>{});
@@ -396,6 +411,9 @@ namespace dconstruct::ui {
         doc.m_file = std::make_unique<BinaryFile>(std::move(*file_res));
         doc.m_path = path;
         doc.m_name = filename_from_path(path);
+        if (auto it = state.m_pendingTypeMaps.find(std::filesystem::path(doc.m_name).stem().string()); it != state.m_pendingTypeMaps.end()) {
+            doc.m_functionScopes = it->second;
+        }
         state.m_documents.push_back(std::move(doc));
         state.m_activeDocument = static_cast<i32>(state.m_documents.size()) - 1;
         state.m_pendingSelect = state.m_activeDocument;
@@ -418,6 +436,185 @@ namespace dconstruct::ui {
             disassemble_document(state, doc);
         }
     }
+
+    void show_alert(app_state& state, std::string title, std::string message) {
+        qui::open_alert(state.m_errorBox, std::move(title), std::move(message));
+    }
+
+    void load_type_defs(app_state& state, const std::string& path) {
+        auto type_def_res = disassembly::parse_type_defs_file(path);
+        if (!type_def_res) {
+            show_alert(state, "Type definition error", "Couldn't parse type definition file " + path + ":\n\n" + type_def_res.error());
+            return;
+        }
+        state.m_typeMap = std::move(*type_def_res);
+        log_event("Loaded type definitions: {} ({} types)", path, state.m_typeMap.size());
+        for (document& doc : state.m_documents) {
+            disassemble_document(state, doc);
+        }
+    }
+
+    void load_type_map(app_state& state, const std::string& path) {
+        auto scopes_res = disassembly::parse_var_type_map_file(path, &state.m_typeMap);
+        if (!scopes_res) {
+            show_alert(state, "Type map error", "Couldn't parse type map " + path + ":\n\n" + scopes_res.error() +
+                "\nThe document will be decompiled without these types. Load a matching type definition file first if the type is unknown.");
+            return;
+        }
+
+        const std::string stem = std::filesystem::path(path).stem().string();
+        state.m_pendingTypeMaps[stem] = *scopes_res;
+
+        document* match = nullptr;
+        for (document& doc : state.m_documents) {
+            if (std::filesystem::path(doc.m_name).stem().string() == stem) {
+                match = &doc;
+                break;
+            }
+        }
+        if (match == nullptr) {
+            show_alert(state, "Type map loaded", "No open document matches '" + std::filesystem::path(path).filename().string() +
+                "'. It will be applied automatically when " + stem + ".bin is opened.");
+            return;
+        }
+        match->m_functionScopes = std::move(*scopes_res);
+        decompile_document(state, *match);
+        log_event("Loaded type map {} for {}", path, match->m_name);
+    }
+
+    void load_var_maps_directory(app_state& state) {
+        const std::filesystem::path dir = "var_maps";
+        if (!std::filesystem::is_directory(dir)) {
+            return;
+        }
+
+        std::string errors;
+
+        const std::filesystem::path type_defs_path = dir / "type_defines.dcpl";
+        if (std::filesystem::exists(type_defs_path)) {
+            auto type_def_res = disassembly::parse_type_defs_file(type_defs_path);
+            if (type_def_res) {
+                state.m_typeMap = std::move(*type_def_res);
+                log_event("Loaded type definitions: {} ({} types)", type_defs_path.string(), state.m_typeMap.size());
+            } else {
+                errors += "Couldn't parse " + type_defs_path.string() + ":\n" + type_def_res.error() + "\n";
+            }
+        }
+
+        for (const auto& entry : std::filesystem::directory_iterator(dir)) {
+            if (!entry.is_regular_file() || entry.path().extension() != ".dcplmap") {
+                continue;
+            }
+            auto scopes_res = disassembly::parse_var_type_map_file(entry.path(), &state.m_typeMap);
+            if (!scopes_res) {
+                errors += "Couldn't parse " + entry.path().filename().string() + ":\n" + scopes_res.error() + "\n";
+                continue;
+            }
+            state.m_pendingTypeMaps[entry.path().stem().string()] = std::move(*scopes_res);
+            log_event("Parsed type map: {}", entry.path().string());
+        }
+
+        if (!errors.empty()) {
+            show_alert(state, "Type map errors",
+                "Some type files in var_maps could not be parsed. Affected files will be decompiled without their types.\n\n" + errors);
+        }
+    }
+
+    bool path_is_bin(const char* path) {
+        const std::filesystem::path parsed(path);
+        std::string ext = parsed.extension().string();
+        std::transform(ext.begin(), ext.end(), ext.begin(), [](unsigned char c) {
+            return static_cast<char>(std::tolower(c));
+        });
+        return ext == ".bin";
+    }
+
+    std::vector<std::string> collect_bin_paths(IDataObject* data) {
+        std::vector<std::string> result;
+        if (data == nullptr) {
+            return result;
+        }
+
+        FORMATETC format = {CF_HDROP, nullptr, DVASPECT_CONTENT, -1, TYMED_HGLOBAL};
+        STGMEDIUM medium = {};
+        if (data->GetData(&format, &medium) != S_OK) {
+            return result;
+        }
+
+        if (auto drop = static_cast<HDROP>(GlobalLock(medium.hGlobal)); drop != nullptr) {
+            const UINT count = DragQueryFileA(drop, 0xFFFFFFFFU, nullptr, 0);
+            char buffer[MAX_PATH];
+            for (UINT i = 0; i < count; ++i) {
+                if (DragQueryFileA(drop, i, buffer, MAX_PATH) > 0 && path_is_bin(buffer)) {
+                    result.emplace_back(buffer);
+                }
+            }
+            GlobalUnlock(medium.hGlobal);
+        }
+        ReleaseStgMedium(&medium);
+        return result;
+    }
+
+    class file_drop_target : public IDropTarget {
+    public:
+        explicit file_drop_target(app_state* state) : m_state(state) {}
+
+        HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, void** out) override {
+            if (riid == IID_IUnknown || riid == IID_IDropTarget) {
+                *out = static_cast<IDropTarget*>(this);
+                AddRef();
+                return S_OK;
+            }
+            *out = nullptr;
+            return E_NOINTERFACE;
+        }
+
+        ULONG STDMETHODCALLTYPE AddRef() override {
+            return static_cast<ULONG>(InterlockedIncrement(&m_refCount));
+        }
+
+        ULONG STDMETHODCALLTYPE Release() override {
+            const LONG count = InterlockedDecrement(&m_refCount);
+            if (count == 0) {
+                delete this;
+            }
+            return static_cast<ULONG>(count);
+        }
+
+        HRESULT STDMETHODCALLTYPE DragEnter(IDataObject* data, DWORD, POINTL, DWORD* effect) override {
+            m_acceptable = !collect_bin_paths(data).empty();
+            m_state->m_dragHover = m_acceptable;
+            *effect = m_acceptable ? DROPEFFECT_COPY : DROPEFFECT_NONE;
+            return S_OK;
+        }
+
+        HRESULT STDMETHODCALLTYPE DragOver(DWORD, POINTL, DWORD* effect) override {
+            *effect = m_acceptable ? DROPEFFECT_COPY : DROPEFFECT_NONE;
+            return S_OK;
+        }
+
+        HRESULT STDMETHODCALLTYPE DragLeave() override {
+            m_state->m_dragHover = false;
+            m_acceptable = false;
+            return S_OK;
+        }
+
+        HRESULT STDMETHODCALLTYPE Drop(IDataObject* data, DWORD, POINTL, DWORD* effect) override {
+            std::vector<std::string> paths = collect_bin_paths(data);
+            for (std::string& path : paths) {
+                m_state->m_pendingDropPaths.push_back(std::move(path));
+            }
+            m_state->m_dragHover = false;
+            m_acceptable = false;
+            *effect = m_state->m_pendingDropPaths.empty() ? DROPEFFECT_NONE : DROPEFFECT_COPY;
+            return S_OK;
+        }
+
+    private:
+        app_state* m_state;
+        LONG m_refCount = 1;
+        bool m_acceptable = false;
+    };
 
     void save_active_document(app_state& state);
     void undo_active_document(app_state& state);
@@ -725,6 +922,19 @@ namespace dconstruct::ui {
                     }
                 }
                 ImGui::Separator();
+                if (ImGui::MenuItem("Parse type definition file...")) {
+                    const std::string path = prompt_open_file(window, "Type definition files (*.dcpl)\0*.dcpl\0All files (*.*)\0*.*\0", "Open type definition file");
+                    if (!path.empty()) {
+                        load_type_defs(state, path);
+                    }
+                }
+                if (ImGui::MenuItem("Load type map...")) {
+                    const std::string path = prompt_open_file(window, "Type map files (*.dcplmap)\0*.dcplmap\0All files (*.*)\0*.*\0", "Open type map file");
+                    if (!path.empty()) {
+                        load_type_map(state, path);
+                    }
+                }
+                ImGui::Separator();
                 {
                     document* save_doc = active_document(state);
                     const std::string save_label = save_doc != nullptr ? "Save " + save_doc->m_name : std::string("Save");
@@ -837,13 +1047,121 @@ namespace dconstruct::ui {
     void draw_status_text(const app_state& state) {
         if (state.m_sidbase == nullptr) {
             qui::status_label("No sidbase loaded \xE2\x80\x94 load one via File > Load Sidbase.", qui::color::retina_dark::AccentRed);
-        } else if (state.m_documents.empty()) {
-            qui::status_label("No file loaded \xE2\x80\x94 load a .bin via File > Load File.", qui::color::retina_dark::AccentRed);
         }
 
         if (!state.m_loadError.empty()) {
             qui::status_label(state.m_loadError.c_str(), qui::color::retina_dark::AccentRed);
         }
+    }
+
+    void draw_empty_state(const app_state& state) {
+        const ImVec2 region_min = ImGui::GetCursorScreenPos();
+        const ImVec2 available = ImGui::GetContentRegionAvail();
+        if (available.x <= 1.0F || available.y <= 1.0F) {
+            return;
+        }
+        const ImVec2 center(region_min.x + available.x * 0.5F, region_min.y + available.y * 0.5F);
+        ImDrawList* draw_list = ImGui::GetWindowDrawList();
+
+        constexpr f32 logo_size = 72.0F;
+        constexpr f32 logo_gap = 22.0F;
+        constexpr f32 line_gap = 10.0F;
+        const char* primary = "Drop a .bin file here or use File \xE2\x86\x92 Load... to start editing";
+
+        ImFont* primary_font = qui::font_semi_bold();
+        if (primary_font != nullptr) {
+            ImGui::PushFont(primary_font);
+        }
+        const ImVec2 primary_size = ImGui::CalcTextSize(primary);
+        const f32 primary_font_size = ImGui::GetFontSize();
+        if (primary_font != nullptr) {
+            ImGui::PopFont();
+        }
+
+        std::string secondary;
+        if (state.m_sidbase == nullptr) {
+            secondary = "No sidbase loaded \xE2\x80\x94 load one via File \xE2\x86\x92 Load Sidbase.";
+        } else if (!state.m_loadError.empty()) {
+            secondary = state.m_loadError;
+        }
+        const ImVec2 secondary_size = secondary.empty() ? ImVec2(0.0F, 0.0F) : ImGui::CalcTextSize(secondary.c_str());
+
+        f32 block_height = primary_size.y;
+        if (state.m_iconTexture != 0) {
+            block_height += logo_size + logo_gap;
+        }
+        if (!secondary.empty()) {
+            block_height += line_gap + secondary_size.y;
+        }
+
+        f32 y = center.y - block_height * 0.5F;
+        if (state.m_iconTexture != 0) {
+            const ImVec2 logo_min(center.x - logo_size * 0.5F, y);
+            const ImVec2 logo_max(logo_min.x + logo_size, logo_min.y + logo_size);
+            draw_list->AddImage(static_cast<ImTextureID>(state.m_iconTexture), logo_min, logo_max);
+            y += logo_size + logo_gap;
+        }
+
+        draw_list->AddText(
+            primary_font,
+            primary_font_size,
+            ImVec2(center.x - primary_size.x * 0.5F, y),
+            ImGui::ColorConvertFloat4ToU32(qui::color::retina_dark::TextDisabled),
+            primary
+        );
+        y += primary_size.y;
+
+        if (!secondary.empty()) {
+            y += line_gap;
+            draw_list->AddText(
+                ImVec2(center.x - secondary_size.x * 0.5F, y),
+                ImGui::ColorConvertFloat4ToU32(qui::color::retina_dark::AccentRed),
+                secondary.c_str()
+            );
+        }
+    }
+
+    void draw_drag_overlay(const app_state& state, f32 top_offset) {
+        if (!state.m_dragHover) {
+            return;
+        }
+        const ImGuiViewport* viewport = ImGui::GetMainViewport();
+        const ImVec2 area_min(viewport->Pos.x, viewport->Pos.y + top_offset);
+        const ImVec2 area_max(viewport->Pos.x + viewport->Size.x, viewport->Pos.y + viewport->Size.y);
+        ImDrawList* draw_list = ImGui::GetForegroundDrawList();
+
+        draw_list->AddRectFilled(area_min, area_max, ImGui::ColorConvertFloat4ToU32(qui::color::rgba(0x42, 0x96, 0xF9, 0x29)));
+
+        constexpr f32 inset = 14.0F;
+        const ImVec2 border_min(area_min.x + inset, area_min.y + inset);
+        const ImVec2 border_max(area_max.x - inset, area_max.y - inset);
+        draw_list->AddRect(
+            border_min,
+            border_max,
+            ImGui::ColorConvertFloat4ToU32(qui::color::rgba(0x42, 0x96, 0xF9, 0xE5)),
+            10.0F,
+            0,
+            3.0F
+        );
+
+        const char* text = "Drop to open .bin file";
+        ImFont* font = qui::font_bold();
+        if (font != nullptr) {
+            ImGui::PushFont(font);
+        }
+        const ImVec2 text_size = ImGui::CalcTextSize(text);
+        const f32 font_size = ImGui::GetFontSize();
+        if (font != nullptr) {
+            ImGui::PopFont();
+        }
+        const ImVec2 center((area_min.x + area_max.x) * 0.5F, (area_min.y + area_max.y) * 0.5F);
+        draw_list->AddText(
+            font,
+            font_size,
+            ImVec2(center.x - text_size.x * 0.5F, center.y - text_size.y * 0.5F),
+            ImGui::ColorConvertFloat4ToU32(qui::color::retina_dark::Text),
+            text
+        );
     }
 
     bool begin_labeled_table_frame(const char* label, ImVec2& table_size) {
@@ -1082,7 +1400,27 @@ namespace dconstruct::ui {
         return reinterpret_cast<const void*>(base | (std::uintptr_t{1} << 63));
     }
 
-    bool dv_node(value_view v, const void* id, const ImVec4& color, const char* label, const char* suffix, bool leaf) {
+    void dv_draw_member_name(const char* member_name) {
+        ImGui::SameLine(0.0F, 0.0F);
+        ImFont* bold = qui::font_bold();
+        if (bold != nullptr) {
+            ImGui::PushFont(bold);
+        }
+        ImGui::PushStyleColor(ImGuiCol_Text, qui::color::retina_dark::Text);
+        ImGui::Text("%s: ", member_name);
+        ImGui::PopStyleColor();
+        if (bold != nullptr) {
+            ImGui::PopFont();
+        }
+    }
+
+    f32 dv_member_name_width(const char* member_name) {
+        char buffer[160];
+        std::snprintf(buffer, sizeof(buffer), "%s: ", member_name);
+        return measure_text(qui::font_bold(), buffer);
+    }
+
+    bool dv_node(value_view v, const void* id, const ImVec4& color, const char* label, const char* suffix, bool leaf, const char* member_name = nullptr, const char* index_prefix = nullptr) {
         document* doc = v.doc;
         const ImGuiID node_im_id = ImGui::GetID(id);
         i32 node_depth = -1;
@@ -1115,16 +1453,39 @@ namespace dconstruct::ui {
         const f32 spacing_y = style.ItemSpacing.y;
         ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(style.FramePadding.x, spacing_y * 0.5F));
         ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(style.ItemSpacing.x, 0.0F));
+        const bool use_name = member_name != nullptr && member_name[0] != '\0';
+        const char* node_label = label;
+        const char* value_text = nullptr;
+        if (use_name) {
+            node_label = index_prefix != nullptr ? index_prefix : "";
+            value_text = label + (index_prefix != nullptr ? std::strlen(index_prefix) : 0);
+        }
         ImGui::PushStyleColor(ImGuiCol_Text, color);
-        const bool open = ImGui::TreeNodeEx(id, flags, "%s", label);
+        const bool open = ImGui::TreeNodeEx(id, flags, "%s", node_label);
         ImGui::PopStyleColor();
         if (!leaf && ImGui::IsItemClicked(ImGuiMouseButton_Right)) {
             doc->m_menuTarget = node_im_id;
             doc->m_openMenu = true;
         }
+        if (use_name) {
+            dv_draw_member_name(member_name);
+            if (value_text != nullptr && value_text[0] != '\0') {
+                ImGui::SameLine(0.0F, 0.0F);
+                ImGui::PushStyleColor(ImGuiCol_Text, color);
+                ImGui::TextUnformatted(value_text);
+                ImGui::PopStyleColor();
+            }
+        }
         if (suffix != nullptr && suffix[0] != '\0') {
+            const char* shown_suffix = suffix;
+            if (use_name && shown_suffix[0] == ':') {
+                ++shown_suffix;
+                while (*shown_suffix == ' ') {
+                    ++shown_suffix;
+                }
+            }
             ImGui::SameLine(0.0F, 0.0F);
-            ImGui::TextColored(qui::color::retina_dark::TextDisabled, "  %s", suffix);
+            ImGui::TextColored(qui::color::retina_dark::TextDisabled, "  %s", shown_suffix);
         }
         ImGui::PopStyleVar(2);
         if (!leaf && open) {
@@ -1146,7 +1507,7 @@ namespace dconstruct::ui {
     }
 
     void dv_draw_values(value_view v, const disassembled_values_t& values);
-    void dv_draw_value(value_view v, const disassembled_values_t::value_type& value, i32 index);
+    void dv_draw_value(value_view v, const disassembled_values_t::value_type& value, i32 index, const char* member_name = nullptr);
     void dv_draw_function(value_view v, const function_disassembly& func, i32 index);
     void dv_draw_function_body(value_view v, const function_disassembly& func);
     void dv_function_switch_and_body(value_view v, const function_disassembly& func, const void* id, bool open);
@@ -1168,10 +1529,10 @@ namespace dconstruct::ui {
         }
     }
 
-    void dv_draw_struct_like(value_view v, const disassembled_value& entry, const void* id, i32 index) {
+    void dv_draw_struct_like(value_view v, const disassembled_value& entry, const void* id, i32 index, const char* member_name = nullptr) {
         char label[256];
         char suffix[128];
-        char prefix[24];
+        char prefix[64];
         dv_index_prefix(prefix, sizeof(prefix), index);
         id = stable_id(*v.doc, entry.m_offset);
 
@@ -1188,7 +1549,7 @@ namespace dconstruct::ui {
         if (entry.m_typeId == SID("array")) {
             std::snprintf(label, sizeof(label), "%sarray", prefix);
             std::snprintf(suffix, sizeof(suffix), "[0x%05X] {size: %zu}", static_cast<u32>(entry.m_offset), entry.m_values.size());
-            const bool open = dv_node(v, id, val_color::Array, label, suffix, entry.m_values.empty());
+            const bool open = dv_node(v, id, val_color::Array, label, suffix, entry.m_values.empty(), member_name, prefix);
             if (open && !entry.m_values.empty()) {
                 dv_draw_values(v, entry.m_values);
                 dv_tree_pop(v);
@@ -1211,7 +1572,7 @@ namespace dconstruct::ui {
 
         std::snprintf(label, sizeof(label), "%s%s", prefix, type_name);
         std::snprintf(suffix, sizeof(suffix), "[0x%05X]", static_cast<u32>(entry.m_offset));
-        const bool open = dv_node(v, id, color, label, suffix, entry.m_values.empty());
+        const bool open = dv_node(v, id, color, label, suffix, entry.m_values.empty(), member_name, prefix);
         if (open && !entry.m_values.empty()) {
             dv_draw_values(v, entry.m_values);
             dv_tree_pop(v);
@@ -1344,14 +1705,17 @@ namespace dconstruct::ui {
         const ImVec4& color,
         const char* label,
         const char* suffix,
-        const char* prefix
+        const char* prefix,
+        const char* member_name = nullptr
     ) {
         document* doc = v.doc;
+        const bool use_name = member_name != nullptr && member_name[0] != '\0';
         const ImGuiID edit_id = ImGui::GetID(id);
         if (doc->m_editingValue == edit_id) {
             ImGui::PushID(id);
             const f32 value_offset = ImGui::GetTreeNodeToLabelSpacing() +
-                                     (prefix != nullptr ? ImGui::CalcTextSize(prefix).x : 0.0F);
+                                     (prefix != nullptr ? ImGui::CalcTextSize(prefix).x : 0.0F) +
+                                     (use_name ? dv_member_name_width(member_name) : 0.0F);
             ImGui::SetCursorPosX(ImGui::GetCursorPosX() + value_offset);
             const f32 text_w = ImGui::CalcTextSize(doc->m_editBuffer.c_str()).x;
             ImGui::SetNextItemWidth(std::max(text_w + ImGui::GetStyle().FramePadding.x * 2.0F + 24.0F, 60.0F));
@@ -1377,13 +1741,35 @@ namespace dconstruct::ui {
         const ImGuiStyle& style = ImGui::GetStyle();
         ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(style.FramePadding.x, style.ItemSpacing.y * 0.5F));
         ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(style.ItemSpacing.x, 0.0F));
+        const char* node_label = label;
+        const char* value_text = nullptr;
+        if (use_name) {
+            node_label = prefix != nullptr ? prefix : "";
+            value_text = label + (prefix != nullptr ? std::strlen(prefix) : 0);
+        }
         ImGui::PushStyleColor(ImGuiCol_Text, color);
-        ImGui::TreeNodeEx(id, ImGuiTreeNodeFlags_FramePadding | ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen | ImGuiTreeNodeFlags_Bullet, "%s", label);
+        ImGui::TreeNodeEx(id, ImGuiTreeNodeFlags_FramePadding | ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen | ImGuiTreeNodeFlags_Bullet, "%s", node_label);
         ImGui::PopStyleColor();
         const bool double_clicked = ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left);
+        if (use_name) {
+            dv_draw_member_name(member_name);
+            if (value_text != nullptr && value_text[0] != '\0') {
+                ImGui::SameLine(0.0F, 0.0F);
+                ImGui::PushStyleColor(ImGuiCol_Text, color);
+                ImGui::TextUnformatted(value_text);
+                ImGui::PopStyleColor();
+            }
+        }
         if (suffix != nullptr && suffix[0] != '\0') {
+            const char* shown_suffix = suffix;
+            if (use_name && shown_suffix[0] == ':') {
+                ++shown_suffix;
+                while (*shown_suffix == ' ') {
+                    ++shown_suffix;
+                }
+            }
             ImGui::SameLine(0.0F, 0.0F);
-            ImGui::TextColored(qui::color::retina_dark::TextDisabled, "  %s", suffix);
+            ImGui::TextColored(qui::color::retina_dark::TextDisabled, "  %s", shown_suffix);
         }
         ImGui::PopStyleVar(2);
         if (double_clicked && ptr_in_file(*doc, data_ptr)) {
@@ -1393,32 +1779,43 @@ namespace dconstruct::ui {
         }
     }
 
-    void dv_draw_value(value_view v, const disassembled_values_t::value_type& value, i32 index) {
+    void dv_draw_value(value_view v, const disassembled_values_t::value_type& value, i32 index, const char* member_name) {
         char label[512];
         char suffix[128];
-        char prefix[24];
+        char prefix[64];
         dv_index_prefix(prefix, sizeof(prefix), index);
         std::visit([&](auto&& entry) {
             using T = std::decay_t<decltype(entry)>;
-            if constexpr (std::is_same_v<T, disassembled_value>) {
-                dv_draw_struct_like(v, entry, &value, index);
+            if constexpr (std::is_same_v<T, mapped_value>) {
+                dv_draw_value(v, *entry.m_value, index, entry.m_name.c_str());
+            } else if constexpr (std::is_same_v<T, disassembled_value>) {
+                dv_draw_struct_like(v, entry, &value, index, member_name);
             } else if constexpr (std::is_same_v<T, std::shared_ptr<function_disassembly>>) {
                 dv_draw_function(v, *entry, index);
             } else if constexpr (std::is_same_v<T, const ast::state_script*>) {
                 dv_draw_state_script(v, *entry, index);
+            } else if constexpr (std::is_same_v<T, const u8*>) {
+                std::snprintf(label, sizeof(label), "%s%u", prefix, *entry);
+                dv_node(v, entry, *entry == 0 ? val_color::IntZero : val_color::Int, label, ": u8", true, member_name, prefix);
+            } else if constexpr (std::is_same_v<T, const u16*>) {
+                std::snprintf(label, sizeof(label), "%s%u", prefix, *entry);
+                dv_node(v, entry, *entry == 0 ? val_color::IntZero : val_color::Int, label, ": u16", true, member_name, prefix);
+            } else if constexpr (std::is_same_v<T, const u32*>) {
+                std::snprintf(label, sizeof(label), "%s%u", prefix, *entry);
+                dv_node(v, entry, *entry == 0 ? val_color::IntZero : val_color::Int, label, ": u32", true, member_name, prefix);
             } else if constexpr (std::is_same_v<T, const i32*>) {
                 std::snprintf(label, sizeof(label), "%s%d", prefix, *entry);
-                dv_editable_leaf(v, entry, entry, edit_kind::Int, *entry == 0 ? val_color::IntZero : val_color::Int, label, ": int", prefix);
+                dv_editable_leaf(v, entry, entry, edit_kind::Int, *entry == 0 ? val_color::IntZero : val_color::Int, label, ": int", prefix, member_name);
             } else if constexpr (std::is_same_v<T, const u64*>) {
                 const std::string resolved = v.state->m_sidbase->lookup(*entry, v.doc->m_file->m_sidCache);
                 std::snprintf(label, sizeof(label), "%s%s", prefix, resolved.c_str());
-                dv_editable_leaf(v, entry, entry, edit_kind::Sid, val_color::Sid, label, ": sid", prefix);
+                dv_editable_leaf(v, entry, entry, edit_kind::Sid, val_color::Sid, label, ": sid", prefix, member_name);
             } else if constexpr (std::is_same_v<T, const f32*>) {
                 std::snprintf(label, sizeof(label), "%s%.2f", prefix, *entry);
-                dv_editable_leaf(v, entry, entry, edit_kind::Float, val_color::Float, label, ": float", prefix);
+                dv_editable_leaf(v, entry, entry, edit_kind::Float, val_color::Float, label, ": float", prefix, member_name);
             } else if constexpr (std::is_same_v<T, const char*>) {
                 std::snprintf(label, sizeof(label), "%s\"%s\"", prefix, entry != nullptr ? entry : "");
-                dv_node(v, entry, val_color::String, label, ": string", true);
+                dv_node(v, entry, val_color::String, label, ": string", true, member_name, prefix);
             } else if constexpr (std::is_same_v<T, const structs::map*>) {
                 std::snprintf(label, sizeof(label), "%smap", prefix);
                 std::snprintf(
@@ -1428,7 +1825,7 @@ namespace dconstruct::ui {
                     file_offset(*v.doc, entry->keys.data),
                     file_offset(*v.doc, entry->values.data)
                 );
-                dv_node(v, entry, val_color::Map, label, suffix, true);
+                dv_node(v, entry, val_color::Map, label, suffix, true, member_name, prefix);
             }
         },
                    value);
@@ -2290,6 +2687,14 @@ namespace dconstruct::ui {
 
         ImGui::Begin("##dconstruct_content", nullptr, window_flags);
 
+        if (!state.m_pendingDropPaths.empty()) {
+            std::vector<std::string> paths = std::move(state.m_pendingDropPaths);
+            state.m_pendingDropPaths.clear();
+            for (const std::string& path : paths) {
+                load_bin_file(state, path);
+            }
+        }
+
         const ImGuiIO& io = ImGui::GetIO();
         if (io.KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_S, false)) {
             save_active_document(state);
@@ -2302,13 +2707,14 @@ namespace dconstruct::ui {
             redo_active_document(state);
         }
 
-        draw_status_text(state);
-        ImGui::Dummy(ImVec2(0.0F, 0.0F));
-
         if (state.m_documents.empty()) {
+            draw_empty_state(state);
             ImGui::End();
             return;
         }
+
+        draw_status_text(state);
+        ImGui::Dummy(ImVec2(0.0F, 0.0F));
 
         constexpr ImGuiTabBarFlags tab_bar_flags =
             ImGuiTabBarFlags_Reorderable |
@@ -2434,10 +2840,24 @@ int main() {
     state.m_closeBox.width = 540.0F * dpi_scale;
     glfwSetWindowUserPointer(window, &state);
     glfwSetWindowCloseCallback(window, dconstruct::ui::window_close_callback);
+
+    const HRESULT ole_result = OleInitialize(nullptr);
+    HWND drop_hwnd = glfwGetWin32Window(window);
+    dconstruct::ui::file_drop_target* drop_target = nullptr;
+    if (SUCCEEDED(ole_result) && drop_hwnd != nullptr) {
+        DragAcceptFiles(drop_hwnd, FALSE);
+        drop_target = new dconstruct::ui::file_drop_target(&state);
+        if (FAILED(RegisterDragDrop(drop_hwnd, drop_target))) {
+            drop_target->Release();
+            drop_target = nullptr;
+        }
+    }
+
     dconstruct::ui::log_event("Start");
     if (std::filesystem::exists("sidbase.bin")) {
         dconstruct::ui::load_sidbase(state, "sidbase.bin");
     }
+    dconstruct::ui::load_var_maps_directory(state);
 
     while (glfwWindowShouldClose(window) == GLFW_FALSE) {
         glfwPollEvents();
@@ -2457,6 +2877,7 @@ int main() {
         const f32 bar_height = dconstruct::ui::draw_title_menu_bar(state, window);
         dconstruct::ui::draw_content_area(bar_height, state);
         dconstruct::ui::process_message_boxes(state);
+        dconstruct::ui::draw_drag_overlay(state, bar_height);
 
         ImGui::Render();
 
@@ -2478,6 +2899,14 @@ int main() {
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
+
+    if (drop_target != nullptr) {
+        RevokeDragDrop(drop_hwnd);
+        drop_target->Release();
+    }
+    if (SUCCEEDED(ole_result)) {
+        OleUninitialize();
+    }
 
     dconstruct::ui::uninstall_window_proc(window);
     glfwDestroyWindow(window);

@@ -278,7 +278,7 @@ add_custom_command(TARGET dconstruct_ui POST_BUILD
 )
 
 if(WIN32)
-    target_link_libraries(dconstruct_ui PRIVATE comdlg32)
+    target_link_libraries(dconstruct_ui PRIVATE comdlg32 ole32 shell32)
     target_include_directories(dconstruct_ui PRIVATE ${CMAKE_SOURCE_DIR}/resources)
 endif()
 

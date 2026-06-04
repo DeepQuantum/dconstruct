@@ -1368,14 +1368,14 @@ namespace dconstruct::dcompiler {
     }
 
     void decomp_function::optimize_ast(ast::function_definition& func) {
-        // ast::var_optimization_env var_base{};
-        // func.m_body.var_optimization_pass(var_base);
-        // ast::foreach_optimization_env foreach_base{};
-        // func.m_body.foreach_optimization_pass(foreach_base);
-        // ast::match_optimization_env match_base{};
-        // func.m_body.match_optimization_pass(match_base);
-        // ast::var_optimization_env var_base1{};
-        // func.m_body.var_optimization_pass(var_base1);
+        ast::var_optimization_env var_base{};
+        func.m_body.var_optimization_pass(var_base);
+        ast::foreach_optimization_env foreach_base{};
+        func.m_body.foreach_optimization_pass(foreach_base);
+        ast::match_optimization_env match_base{};
+        func.m_body.match_optimization_pass(match_base);
+        ast::var_optimization_env var_base1{};
+        func.m_body.var_optimization_pass(var_base1);
 
         func.m_body.member_access_optimization_pass();
     }
