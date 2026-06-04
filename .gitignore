@@ -115,3 +115,4 @@ imgui.ini
 !ideas.txt
 !resources/OFL.txt
 !source/ui/name.txt
+!source/Graphviz-13.1.0-win64/bin/**
