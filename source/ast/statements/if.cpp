@@ -5,6 +5,22 @@
 
 namespace dconstruct::ast {
 
+    void if_stmt::to_pseudo_c_colored_string(code_color_serialization_buffer& buffer) const noexcept {
+        buffer.append(AST_COLOR::KEYWORD, "if "sv);
+        buffer.append(AST_COLOR::PUNCTUATION, '(');
+        buffer.append(*m_condition);
+        buffer.append(AST_COLOR::PUNCTUATION, ") "sv);
+        buffer.append(*m_then);
+        if (m_else && !m_else->is_dead_code()) {
+            buffer.append(AST_COLOR::KEYWORD, " else "sv);
+            if (const auto* statement = m_else->inlineable_else_statement()) {
+                buffer.append(*statement);
+            } else {
+                buffer.append(*m_else);
+            }
+        }
+    }
+
     void if_stmt::pseudo_c(ast_serialization_buffer& buffer) const {
         buffer.append("if ("sv, *m_condition, ") "sv, *m_then);
         if (m_else && !m_else->is_dead_code()) {

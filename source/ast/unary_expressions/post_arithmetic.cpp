@@ -14,6 +14,11 @@ namespace dconstruct::ast {
         buffer.append('(', m_operator.m_lexeme, ' ', *m_rhs, ')');
     }
 
+    void post_arithmetic_expression::to_pseudo_c_colored_string(code_color_serialization_buffer& buffer) const noexcept {
+        buffer.append(*m_rhs);
+        buffer.append(AST_COLOR::OPERATOR, m_operator.m_lexeme);
+    }
+
     [[nodiscard]] expr_uptr post_arithmetic_expression::simplify() const {
         return std::make_unique<ast::post_arithmetic_expression>(m_operator, m_rhs->simplify());
     }

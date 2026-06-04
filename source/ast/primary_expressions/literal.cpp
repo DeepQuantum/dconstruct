@@ -35,6 +35,20 @@ namespace dconstruct::ast {
         }
     }
 
+    void literal::to_pseudo_c_colored_string(code_color_serialization_buffer& buffer) const noexcept {
+        const AST_COLOR color = std::visit([](auto&& value) -> AST_COLOR {
+            using T = std::decay_t<decltype(value)>;
+            if constexpr (std::is_same_v<T, std::string> || std::is_same_v<T, char>) {
+                return AST_COLOR::STRING;
+            } else if constexpr (std::is_same_v<T, bool> || std::is_same_v<T, std::nullptr_t> || std::is_same_v<T, std::monostate>) {
+                return AST_COLOR::KEYWORD;
+            } else {
+                return AST_COLOR::NUMBER;
+            }
+        }, m_value);
+        buffer.append(color, primitive_to_string(m_value));
+    }
+
     [[nodiscard]] expr_uptr literal::simplify() const {
         return std::make_unique<literal>(m_value);
     }

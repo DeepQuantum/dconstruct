@@ -6,6 +6,11 @@ namespace dconstruct::ast {
         buffer.append("breakpoint;"sv);
     }
 
+    void breakpoint::to_pseudo_c_colored_string(code_color_serialization_buffer& buffer) const noexcept {
+        buffer.append(AST_COLOR::KEYWORD, "breakpoint"sv);
+        buffer.append(AST_COLOR::PUNCTUATION, ';');
+    }
+
     void breakpoint::pseudo_py(ast_serialization_buffer& buffer) const {
         buffer.append("breakpoint()"sv);
     }

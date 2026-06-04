@@ -16,6 +16,7 @@ namespace dconstruct::ast {
         void pseudo_c_for_compiler(ast_serialization_buffer& buffer) const final;
         void pseudo_py(ast_serialization_buffer& buffer) const final;
         void pseudo_racket(ast_serialization_buffer& buffer) const final;
+        void to_pseudo_c_colored_string(code_color_serialization_buffer& buffer) const noexcept final;
         [[nodiscard]] expr_uptr simplify() const final;
         [[nodiscard]] bool equals(const expression& rhs) const noexcept final;
         [[nodiscard]] expr_uptr clone() const final;

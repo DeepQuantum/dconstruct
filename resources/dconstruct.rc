@@ -4,3 +4,6 @@ GLFW_ICON ICON "dconstruct.ico"
 
 // PNG decoded at runtime with stb_image for the in-app title-bar logo.
 DCONSTRUCT_LOGO RCDATA "dconstruct.png"
+
+// ASCII name art shown in the initial empty state.
+DCONSTRUCT_NAME_ART RCDATA "../source/ui/name.txt"

@@ -13,6 +13,7 @@ namespace dconstruct::ast {
         void pseudo_c(ast_serialization_buffer& buffer) const override;
         void pseudo_py(ast_serialization_buffer& buffer) const override;
         void pseudo_racket(ast_serialization_buffer& buffer) const override;
+        void to_pseudo_c_colored_string(code_color_serialization_buffer& buffer) const noexcept override;
         [[nodiscard]] expr_uptr simplify() const final;
         [[nodiscard]] full_type compute_type_unchecked(const compilation::scope& env) const noexcept final;
         [[nodiscard]] semantic_check_res compute_type_checked(compilation::scope& env) const noexcept final;

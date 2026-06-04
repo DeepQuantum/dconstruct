@@ -16,6 +16,12 @@ namespace dconstruct::ast {
         buffer.append(*m_expr);
     }
 
+    void grouping::to_pseudo_c_colored_string(code_color_serialization_buffer& buffer) const noexcept {
+        buffer.append(AST_COLOR::PUNCTUATION, '(');
+        buffer.append(*m_expr);
+        buffer.append(AST_COLOR::PUNCTUATION, ')');
+    }
+
     [[nodiscard]] bool grouping::equals(const expression& rhs) const noexcept {
         const grouping* rhs_ptr = dynamic_cast<const grouping*>(&rhs);
         if (rhs_ptr == nullptr) {

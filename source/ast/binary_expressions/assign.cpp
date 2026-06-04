@@ -16,6 +16,12 @@ namespace dconstruct::ast {
         buffer.append("(set! "sv, *m_lhs, ' ', *m_rhs, ')');
     }
 
+    void assign_expr::to_pseudo_c_colored_string(code_color_serialization_buffer& buffer) const noexcept {
+        buffer.append(*m_lhs);
+        buffer.append(AST_COLOR::OPERATOR, " = "sv);
+        buffer.append(*m_rhs);
+    }
+
     [[nodiscard]] expr_uptr assign_expr::simplify() const {
         return m_rhs->simplify();
     }

@@ -23,6 +23,10 @@ namespace dconstruct::ast {
         buffer.append(m_name.m_lexeme);
     }
 
+    void sid_identifier::to_pseudo_c_colored_string(code_color_serialization_buffer& buffer) const noexcept {
+        buffer.append(AST_COLOR::SID, m_name.m_lexeme);
+    }
+
     [[nodiscard]] bool sid_identifier::equals(const expression& rhs) const noexcept {
         const sid_identifier* rhs_id = dynamic_cast<const sid_identifier*>(&rhs);
         if (rhs_id == nullptr) {

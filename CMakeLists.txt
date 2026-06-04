@@ -134,10 +134,20 @@ if(WIN32)
     )
     add_custom_command(TARGET dconstruct_lib POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different ${DCONSTRUCT_RUNTIME_DLLS} "$<TARGET_FILE_DIR:dconstruct_lib>"
-        COMMENT "Copying runtime DLLs next to dconstruct_lib"
+        COMMENT "Copying runtime DLLs next to dconstruct_lib\n"
         VERBATIM
     )
 endif()
+
+add_custom_command(TARGET dconstruct_lib POST_BUILD
+    COMMAND ${CMAKE_COMMAND}
+        "-DSOURCE_SIDBASE=${CMAKE_CURRENT_SOURCE_DIR}/test/fixtures/dc/sidbase_new_fixed.bin"
+        "-DSOURCE_VAR_MAPS=${CMAKE_CURRENT_SOURCE_DIR}/test/var_maps"
+        "-DDEST_DIR=$<TARGET_FILE_DIR:dconstruct_lib>"
+        -P "${CMAKE_CURRENT_SOURCE_DIR}/scripts/stage_runtime_fixtures.cmake"
+    COMMENT "Copying optional runtime fixtures next to dconstruct_lib"
+    VERBATIM
+)
 
 
 set(CMAKE_CURRENT_TEST_DIR "${CMAKE_CURRENT_SOURCE_DIR}/test")
@@ -212,6 +222,7 @@ target_link_options(dconstruct PRIVATE
 
 add_custom_target(generate_buildinfo ALL DEPENDS ${BUILDINFO_H})
 
+add_dependencies(dconstruct_lib generate_buildinfo)
 add_dependencies(dconstruct generate_buildinfo)
 
 add_executable(

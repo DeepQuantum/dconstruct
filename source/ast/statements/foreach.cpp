@@ -11,6 +11,16 @@ namespace dconstruct::ast {
         buffer.append("foreach ("sv, m_var, " : "sv, *m_iterable, ") "sv, *m_body);
     }
 
+    void foreach_stmt::to_pseudo_c_colored_string(code_color_serialization_buffer& buffer) const noexcept {
+        buffer.append(AST_COLOR::KEYWORD, "foreach "sv);
+        buffer.append(AST_COLOR::PUNCTUATION, '(');
+        buffer.append(m_var);
+        buffer.append(AST_COLOR::PUNCTUATION, " : "sv);
+        buffer.append(*m_iterable);
+        buffer.append(AST_COLOR::PUNCTUATION, ") "sv);
+        buffer.append(*m_body);
+    }
+
     void foreach_stmt::pseudo_py(ast_serialization_buffer& buffer) const {
         buffer.append("for "sv, m_var, " in "sv, *m_iterable, ':', *m_body);
     }

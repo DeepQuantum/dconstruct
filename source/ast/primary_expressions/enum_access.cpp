@@ -19,6 +19,12 @@ namespace dconstruct::ast {
         buffer.append(qualified_name());
     }
 
+    void enum_access::to_pseudo_c_colored_string(code_color_serialization_buffer& buffer) const noexcept {
+        buffer.append(AST_COLOR::MEMBER, m_enumName);
+        buffer.append(AST_COLOR::OPERATOR, '.');
+        buffer.append(AST_COLOR::MEMBER, m_memberName);
+    }
+
     [[nodiscard]] expr_uptr enum_access::simplify() const {
         return clone();
     }

@@ -11,6 +11,18 @@ namespace dconstruct::ast {
         buffer.append("for ("sv, *m_init, ' ', *m_condition, "; "sv, *m_incr, ") "sv, *m_body);
     }
 
+    void for_stmt::to_pseudo_c_colored_string(code_color_serialization_buffer& buffer) const noexcept {
+        buffer.append(AST_COLOR::KEYWORD, "for "sv);
+        buffer.append(AST_COLOR::PUNCTUATION, '(');
+        buffer.append(*m_init);
+        buffer.append(AST_COLOR::BLANK, ' ');
+        buffer.append(*m_condition);
+        buffer.append(AST_COLOR::PUNCTUATION, "; "sv);
+        buffer.append(*m_incr);
+        buffer.append(AST_COLOR::PUNCTUATION, ") "sv);
+        buffer.append(*m_body);
+    }
+
     void for_stmt::pseudo_py(ast_serialization_buffer& buffer) const {
         const auto& var = static_cast<const variable_declaration&>(*m_init).m_identifier;
         const auto& range = static_cast<const binary_expr&>(*m_condition).m_rhs;

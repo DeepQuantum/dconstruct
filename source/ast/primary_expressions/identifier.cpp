@@ -16,6 +16,14 @@ namespace dconstruct::ast {
         buffer.append(m_name.m_lexeme);
     }
 
+    void identifier::to_pseudo_c_colored_string(code_color_serialization_buffer& buffer) const noexcept {
+        const std::string& name = m_name.m_lexeme;
+        const bool is_temp_var =
+            (name.size() >= 5 && (name.compare(0, 4, "var_") == 0 || name.compare(0, 4, "arg_") == 0)) ||
+            (name.size() == 1 && (name[0] == 'i' || name[0] == 'j' || name[0] == 'k' || name[0] == 'l'));
+        buffer.append(is_temp_var ? AST_COLOR::IDENTIFIER : AST_COLOR::MEMBER, name);
+    }
+
     [[nodiscard]] bool identifier::equals(const expression& rhs) const noexcept {
         const identifier* rhs_id = dynamic_cast<const identifier*>(&rhs);
         if (rhs_id == nullptr) {

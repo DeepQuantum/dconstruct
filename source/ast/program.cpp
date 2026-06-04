@@ -12,6 +12,12 @@ namespace dconstruct::ast {
             buffer.append(*decl, "\n\n"sv);
         }
     }
+    void program::to_pseudo_c_colored_string(code_color_serialization_buffer& buffer) const noexcept {
+        for (const auto& decl : m_declarations) {
+            buffer.append(*decl);
+            buffer.append(AST_COLOR::BLANK, "\n\n"sv);
+        }
+    }
     void program::pseudo_py(ast_serialization_buffer& buffer) const {
         for (const auto& decl : m_declarations) {
             buffer.append(*decl, '\n');

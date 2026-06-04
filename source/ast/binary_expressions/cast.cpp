@@ -14,6 +14,13 @@ namespace dconstruct::ast {
         buffer.append("(cast "sv, type_to_declaration_string(m_castType), ' ', *m_rhs, ')');
     }
 
+    void cast_expr::to_pseudo_c_colored_string(code_color_serialization_buffer& buffer) const noexcept {
+        buffer.append(AST_COLOR::PUNCTUATION, '(');
+        type_to_colored_declaration_string(m_castType, buffer);
+        buffer.append(AST_COLOR::PUNCTUATION, ')');
+        buffer.append(*m_rhs);
+    }
+
     [[nodiscard]] expr_uptr cast_expr::simplify() const {
         return std::make_unique<cast_expr>(m_castType, m_rhs->simplify());
     }

@@ -54,6 +54,13 @@ namespace dconstruct::ast {
         buffer.append("(struct-ref "sv, *m_lhs, ' ', m_memberName.m_lexeme, ')');
     }
 
+    void struct_access::to_pseudo_c_colored_string(code_color_serialization_buffer& buffer) const noexcept {
+        buffer.append(*m_lhs);
+        const bool is_ptr = std::holds_alternative<ptr_type>(m_lhs->get_type().value_or(std::monostate()));
+        buffer.append(AST_COLOR::OPERATOR, is_ptr ? "->"sv : "."sv);
+        buffer.append(AST_COLOR::MEMBER, m_memberName.m_lexeme);
+    }
+
     [[nodiscard]] expr_uptr struct_access::simplify() const {
         return std::make_unique<struct_access>(m_lhs->simplify(), m_memberName);
     }

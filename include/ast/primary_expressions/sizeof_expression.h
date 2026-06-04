@@ -19,6 +19,8 @@ namespace dconstruct::ast {
 
         void pseudo_racket(ast_serialization_buffer& buffer) const override;
 
+        void to_pseudo_c_colored_string(code_color_serialization_buffer& buffer) const noexcept override;
+
         [[nodiscard]] expr_uptr clone() const noexcept final;
 
         [[nodiscard]] u16 calc_complexity() const noexcept final;

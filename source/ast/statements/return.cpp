@@ -11,6 +11,17 @@ namespace dconstruct::ast {
         }
     }
 
+    void return_stmt::to_pseudo_c_colored_string(code_color_serialization_buffer& buffer) const noexcept {
+        if (m_expr) {
+            buffer.append(AST_COLOR::KEYWORD, "return "sv);
+            buffer.append(*m_expr);
+            buffer.append(AST_COLOR::PUNCTUATION, ';');
+        } else {
+            buffer.append(AST_COLOR::KEYWORD, "return"sv);
+            buffer.append(AST_COLOR::PUNCTUATION, ';');
+        }
+    }
+
     void return_stmt::pseudo_py(ast_serialization_buffer& buffer) const {
         if (m_expr) {
             buffer.append("return "sv, *m_expr);

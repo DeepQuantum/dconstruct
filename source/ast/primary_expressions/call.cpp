@@ -40,6 +40,38 @@ namespace dconstruct::ast {
         }
     }
 
+    void call_expr::to_pseudo_c_colored_string(code_color_serialization_buffer& buffer) const noexcept {
+        if (const std::string* name = m_callee->get_name()) {
+            buffer.append(AST_COLOR::CALL, *name);
+        } else {
+            buffer.append(*m_callee);
+        }
+        buffer.append(AST_COLOR::PUNCTUATION, '(');
+        if (m_arguments.size() > 8 || (get_complexity() > MAX_NON_SPLIT_COMPLEXITY && m_arguments.size() > 3)) {
+            buffer.append(AST_COLOR::BLANK, '\n');
+            buffer.indent_more();
+            for (u16 i = 0; i < m_arguments.size(); ++i) {
+                buffer.append_indent();
+                buffer.append(*m_arguments[i]);
+                if (i != m_arguments.size() - 1) {
+                    buffer.append(AST_COLOR::PUNCTUATION, ",\n"sv);
+                }
+            }
+            buffer.indent_less();
+            buffer.append(AST_COLOR::BLANK, '\n');
+            buffer.append_indent();
+            buffer.append(AST_COLOR::PUNCTUATION, ')');
+        } else {
+            for (u16 i = 0; i < m_arguments.size(); ++i) {
+                buffer.append(*m_arguments[i]);
+                if (i != m_arguments.size() - 1) {
+                    buffer.append(AST_COLOR::PUNCTUATION, ", "sv);
+                }
+            }
+            buffer.append(AST_COLOR::PUNCTUATION, ')');
+        }
+    }
+
     void call_expr::pseudo_c_for_compiler(ast_serialization_buffer& buffer) const {
         buffer.set_flag(LANGUAGE_FLAGS::COMPILER);
 

@@ -7,6 +7,11 @@ namespace dconstruct::ast {
         buffer.append(*m_expression, ';');
     }
 
+    void expression_stmt::to_pseudo_c_colored_string(code_color_serialization_buffer& buffer) const noexcept {
+        buffer.append(*m_expression);
+        buffer.append(AST_COLOR::PUNCTUATION, ';');
+    }
+
     void expression_stmt::pseudo_py(ast_serialization_buffer& buffer) const {
         buffer.append(*m_expression);
     }

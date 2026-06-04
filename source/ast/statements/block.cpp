@@ -19,6 +19,23 @@ namespace dconstruct::ast {
         }
     }
 
+    void block::to_pseudo_c_colored_string(code_color_serialization_buffer& buffer) const noexcept {
+        if (m_statements.empty()) {
+            buffer.append(AST_COLOR::PUNCTUATION, "{}\n"sv);
+        } else {
+            buffer.append(AST_COLOR::PUNCTUATION, "{\n"sv);
+            buffer.indent_more();
+            for (const auto& stmnt : m_statements) {
+                buffer.append_indent();
+                buffer.append(*stmnt);
+                buffer.append(AST_COLOR::BLANK, '\n');
+            }
+            buffer.indent_less();
+            buffer.append_indent();
+            buffer.append(AST_COLOR::PUNCTUATION, '}');
+        }
+    }
+
     void block::clear_dead_statements() noexcept {
         m_statements.remove_if([](const auto& stmt) {
             return !stmt || stmt->is_dead_code();

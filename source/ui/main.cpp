@@ -24,10 +24,9 @@
 #include "disassembly/edit_disassembler.h"
 #include "disassembly/driver_functions.h"
 #include "decompilation/decomp_function.h"
-#include "decompilation/regex_transformations.h"
 
 #include <qui.h>
-#include <qui/code_window_ctre.hpp>
+#include <qui/code_window.hpp>
 #include <imgui_stdlib.h>
 #include <imgui_internal.h>
 
@@ -116,7 +115,7 @@ namespace dconstruct::ui {
         i32 m_forceOpenCount = 0;
         std::vector<i32> m_depthStack;
         std::vector<ImGuiID> m_closeIds;
-        std::unordered_map<const function_disassembly*, std::string> m_decompiled;
+        std::unordered_map<const function_disassembly*, ast::code_color_buffer> m_decompiled;
         std::unordered_map<const function_disassembly*, std::string> m_decompErrors;
         std::unordered_map<const function_disassembly*, bool> m_lambdaViewDcpl;
         bool m_dirty = false;
@@ -155,6 +154,7 @@ namespace dconstruct::ui {
         drag_state m_drag;
         GLFWwindow* m_window = nullptr;
         unsigned int m_iconTexture = 0;
+        std::string m_nameArt;
         qui::message_box m_errorBox;
         qui::message_box m_closeBox;
         bool m_closeRequested = false;
@@ -165,6 +165,7 @@ namespace dconstruct::ui {
         std::vector<std::string> m_pendingDropPaths;
         std::unordered_map<sid64, ast::full_type> m_typeMap;
         std::unordered_map<std::string, ast::function_to_mapped_vars> m_pendingTypeMaps;
+        std::string m_colorScheme = "qntm";
     };
 
     void glfw_error_callback(int error, const char* description) {
@@ -218,6 +219,26 @@ namespace dconstruct::ui {
         );
         stbi_image_free(pixels);
         return texture;
+    }
+
+    std::string load_name_art() {
+        HMODULE module = GetModuleHandleW(nullptr);
+        HRSRC resource = FindResourceW(module, L"DCONSTRUCT_NAME_ART", MAKEINTRESOURCEW(10));
+        if (resource == nullptr) {
+            return {};
+        }
+        HGLOBAL loaded = LoadResource(module, resource);
+        const void* data = loaded != nullptr ? LockResource(loaded) : nullptr;
+        const DWORD size = SizeofResource(module, resource);
+        if (data == nullptr || size == 0) {
+            return {};
+        }
+
+        std::string art(static_cast<const char*>(data), static_cast<std::size_t>(size));
+        if (art.size() >= 2 && art.front() == '"' && art.back() == '"') {
+            art = art.substr(1, art.size() - 2);
+        }
+        return art;
     }
 
     std::string filename_from_path(const std::string& path) {
@@ -326,6 +347,9 @@ namespace dconstruct::ui {
         const dcompiler::OPTIMIZATION_KIND optimizations =
             state.m_astOptimization ? dcompiler::OPTIMIZATION_KIND::AST : dcompiler::OPTIMIZATION_KIND::NONE;
 
+        // Reused across functions: take() moves the segment vector out into the
+        // document, then reserve() pre-grows the next one to avoid reallocations.
+        ast::code_color_serialization_buffer color_buffer;
         for (const function_disassembly* func : doc.m_disassembler->get_all_functions()) {
             const ast::mapped_var_scope* function_scope = nullptr;
             if (!doc.m_functionScopes.empty()) {
@@ -335,11 +359,10 @@ namespace dconstruct::ui {
             }
             auto decomp_func = dcompiler::decomp_function{*func, *doc.m_file, *state.m_sidbase, ControlFlowGraph::build(*func), std::nullopt, nullptr, function_scope};
             const ast::function_definition& def = decomp_func.decompile(optimizations);
-            std::string text = def.to_pseudo_c_string();
-            if (state.m_regexOptimization) {
-                text = apply_decomp_regex_transformations(std::move(text));
-            }
-            doc.m_decompiled.emplace(func, std::move(text));
+            color_buffer.m_currentIndent = 0;
+            color_buffer.reserve(256);
+            def.to_pseudo_c_colored_string(color_buffer);
+            doc.m_decompiled.emplace(func, color_buffer.take());
             if (decomp_func.m_error) {
                 doc.m_decompErrors.emplace(func, *decomp_func.m_error);
             }
@@ -1063,10 +1086,30 @@ namespace dconstruct::ui {
         const ImVec2 center(region_min.x + available.x * 0.5F, region_min.y + available.y * 0.5F);
         ImDrawList* draw_list = ImGui::GetWindowDrawList();
 
-        constexpr f32 logo_size = 72.0F;
-        constexpr f32 logo_gap = 22.0F;
+        constexpr f32 art_gap = 22.0F;
         constexpr f32 line_gap = 10.0F;
         const char* primary = "Drop a .bin file here or use File \xE2\x86\x92 Load... to start editing";
+
+        ImFont* art_font = qui::font_medium();
+        const char* art_begin = state.m_nameArt.c_str();
+        const char* art_end = art_begin + state.m_nameArt.size();
+        f32 art_font_size = ImGui::GetFontSize();
+        ImVec2 art_size(0.0F, 0.0F);
+        if (!state.m_nameArt.empty()) {
+            if (art_font != nullptr) {
+                art_size = art_font->CalcTextSizeA(art_font_size, FLT_MAX, 0.0F, art_begin, art_end);
+            } else {
+                art_size = ImGui::CalcTextSize(art_begin, art_end);
+            }
+            const f32 max_art_width = std::max(available.x - 48.0F, 1.0F);
+            if (art_size.x > max_art_width) {
+                const f32 scale = max_art_width / art_size.x;
+                art_font_size = std::max(8.0F, art_font_size * scale);
+                if (art_font != nullptr) {
+                    art_size = art_font->CalcTextSizeA(art_font_size, FLT_MAX, 0.0F, art_begin, art_end);
+                }
+            }
+        }
 
         ImFont* primary_font = qui::font_semi_bold();
         if (primary_font != nullptr) {
@@ -1087,19 +1130,24 @@ namespace dconstruct::ui {
         const ImVec2 secondary_size = secondary.empty() ? ImVec2(0.0F, 0.0F) : ImGui::CalcTextSize(secondary.c_str());
 
         f32 block_height = primary_size.y;
-        if (state.m_iconTexture != 0) {
-            block_height += logo_size + logo_gap;
+        if (!state.m_nameArt.empty()) {
+            block_height += art_size.y + art_gap;
         }
         if (!secondary.empty()) {
             block_height += line_gap + secondary_size.y;
         }
 
         f32 y = center.y - block_height * 0.5F;
-        if (state.m_iconTexture != 0) {
-            const ImVec2 logo_min(center.x - logo_size * 0.5F, y);
-            const ImVec2 logo_max(logo_min.x + logo_size, logo_min.y + logo_size);
-            draw_list->AddImage(static_cast<ImTextureID>(state.m_iconTexture), logo_min, logo_max);
-            y += logo_size + logo_gap;
+        if (!state.m_nameArt.empty()) {
+            draw_list->AddText(
+                art_font,
+                art_font_size,
+                ImVec2(center.x - art_size.x * 0.5F, y),
+                ImGui::ColorConvertFloat4ToU32(qui::color::retina_dark::Highlight),
+                art_begin,
+                art_end
+            );
+            y += art_size.y + art_gap;
         }
 
         draw_list->AddText(
@@ -1356,28 +1404,53 @@ namespace dconstruct::ui {
         inline const ImVec4 Group = qui::color::rgba(0xB0, 0xB0, 0xB8);
     } // namespace val_color
 
-    // dcpl syntax-highlighting rules for the code window. Pattern groups and their
-    // order are copied from dcpl-lint/syntaxes/dcpl.tmLanguage.json; the widget
-    // itself is language-agnostic and only consumes this collection.
-    std::span<const qui::code::rule> dcpl_rules() {
-        using qui::code::ctre_rule;
-        using qui::code::to_u32;
+    using code_color_map = std::unordered_map<ast::AST_COLOR, ImVec4>;
+
+    const code_color_map& qntm_color_map() {
         using qui::color::rgba;
-        static const std::vector<qui::code::rule> rules = {
-            ctre_rule<R"(//.*)">(to_u32(rgba(0x6A, 0x73, 0x80))),
-            ctre_rule<R"RE(\b(if|else|while|for|return|foreach|match|state|block|event|track|statescript|options|declarations|using|as|far|near|not|and|or|in|lambda|start|end|update|null|struct|enum)\b)RE">(to_u32(rgba(0xC6, 0x78, 0xDD))),
-            ctre_rule<R"(\b((var|arg)_\d+)\b)">(to_u32(rgba(0xE0, 0x6C, 0x75))),
-            ctre_rule<R"(\b(i|j|k|l)\b)">(to_u32(rgba(0xE0, 0x6C, 0x75))),
-            ctre_rule<R"RE("(\\.|[^"\\])*")RE">(to_u32(rgba(0x98, 0xC3, 0x79))),
-            ctre_rule<R"RE((?:--|\b)[A-Za-z0-9_/@>#\-]+\??(?=\s*\())RE">(to_u32(rgba(0x61, 0xAF, 0xEF))),
-            ctre_rule<R"RE(#[A-Z0-9]{16}(?=\())RE">(to_u32(rgba(0x61, 0xAF, 0xEF))),
-            ctre_rule<R"(>>|=>|\$)">(to_u32(rgba(0x61, 0xAF, 0xEF))),
-            ctre_rule<R"(\b(\d+)\b)">(to_u32(rgba(0xD1, 0x9A, 0x66))),
-            ctre_rule<R"RE(\b(u0|u8|i8|u16|i16|u32|i32|u64|i64|f32|f64|bool|string|timer|quaternion|bound-frame|vector|actor|cache|ir-pack|level-id|level-name|lut-table|package|particle-module|render-settings|sound-bank|symbol|vox-character)\b\??)RE">(to_u32(rgba(0xE5, 0xC0, 0x7B))),
-            ctre_rule<R"RE((\*(?!var)|\b)([\w/*\-]{3,}\??(?![\w\-])))RE">(to_u32(rgba(0x56, 0xB6, 0xC2))),
-            ctre_rule<R"(#[A-Z0-9]{16})">(to_u32(rgba(0x56, 0xB6, 0xC2))),
+        static const code_color_map map = {
+            {ast::AST_COLOR::BLANK, rgba(0xCC, 0xCC, 0xCC)},
+            {ast::AST_COLOR::NUMBER, rgba(0xB5, 0xCE, 0xA8)},
+            {ast::AST_COLOR::SID, rgba(0x4F, 0xC1, 0xFF)},
+            {ast::AST_COLOR::IDENTIFIER, rgba(0x9C, 0xDC, 0xFE)},
+            {ast::AST_COLOR::MEMBER, rgba(0x9C, 0xDC, 0xFE)},
+            {ast::AST_COLOR::TYPE, rgba(0x4E, 0xC9, 0xB0)},
+            {ast::AST_COLOR::CALL, rgba(0xDC, 0xDC, 0xAA)},
+            {ast::AST_COLOR::KEYWORD, rgba(0xC5, 0x86, 0xC0)},
+            {ast::AST_COLOR::STRING, rgba(0xAE, 0x33, 0x44)},
+            {ast::AST_COLOR::COMMENT, rgba(0x6A, 0x99, 0x55)},
+            {ast::AST_COLOR::OPERATOR, rgba(0xD4, 0xD4, 0xD4)},
+            {ast::AST_COLOR::PUNCTUATION, rgba(0xCC, 0xCC, 0xCC)},
         };
-        return rules;
+        return map;
+    }
+
+    const std::unordered_map<std::string, code_color_map>& color_schemes() {
+        static const std::unordered_map<std::string, code_color_map> schemes = {
+            {"qntm", qntm_color_map()},
+        };
+        return schemes;
+    }
+
+
+    const code_color_map& active_color_map(const app_state& state) {
+        const auto& schemes = color_schemes();
+        if (const auto it = schemes.find(state.m_colorScheme); it != schemes.end()) {
+            return it->second;
+        }
+        return qntm_color_map();
+    }
+
+    void render_decompiled_code(const char* id, const app_state& state, const ast::code_color_buffer& code) {
+        const code_color_map& scheme = active_color_map(state);
+        std::vector<qui::code::colored_span> spans;
+        spans.reserve(code.size());
+        for (const auto& [color, text] : code) {
+            const auto it = scheme.find(color);
+            const ImVec4 resolved = it != scheme.end() ? it->second : qui::color::retina_dark::Text;
+            spans.push_back({qui::code::to_u32(resolved), text});
+        }
+        qui::code::code_window_colored(id, spans);
     }
 
     struct value_view {
@@ -2224,8 +2297,7 @@ namespace dconstruct::ui {
                     ImGui::TextUnformatted(err_it->second.c_str());
                     ImGui::PopStyleColor();
                 }
-                const std::string& text = it->second;
-                qui::code::code_window("##dcpl_view", text, dcpl_rules());
+                render_decompiled_code("##dcpl_view", *v.state, it->second);
             } else {
                 ImGui::PushStyleColor(ImGuiCol_Text, qui::color::retina_dark::TextDisabled);
                 qui::text_label("Decompilation unavailable for this function.");
@@ -2833,6 +2905,7 @@ int main() {
     dconstruct::ui::register_ini_settings(state);
     state.m_window = window;
     state.m_iconTexture = dconstruct::ui::create_icon_texture();
+    state.m_nameArt = dconstruct::ui::load_name_art();
     state.m_errorBox.popup_id = "##dconstruct_error_box";
     state.m_errorBox.selectable = true;
     state.m_errorBox.width = 600.0F * dpi_scale;

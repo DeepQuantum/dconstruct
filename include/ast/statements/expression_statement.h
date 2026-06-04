@@ -11,6 +11,7 @@ namespace dconstruct::ast {
         void pseudo_c(ast_serialization_buffer&) const final;
         void pseudo_py(ast_serialization_buffer&) const final;
         void pseudo_racket(ast_serialization_buffer&) const final;
+        void to_pseudo_c_colored_string(code_color_serialization_buffer& buffer) const noexcept final;
         [[nodiscard]] bool equals(const statement& rhs) const noexcept final;
         [[nodiscard]] std::unique_ptr<statement> clone() const noexcept final;
         [[nodiscard]] bool is_dead_code() const noexcept override;

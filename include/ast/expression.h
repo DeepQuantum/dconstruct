@@ -126,6 +126,7 @@ namespace dconstruct::ast {
             compilation::global_state& global,
             const std::optional<reg_idx> destination = std::nullopt
         ) const noexcept { return emit_dc(fn, global, destination); }
+
         [[nodiscard]] virtual bool is_l_evaluable() const noexcept { return false; }
 
         [[nodiscard]] virtual lvalue_emission_res emit_dc_lvalue(
@@ -223,6 +224,8 @@ namespace dconstruct::ast {
             buffer.append('(', m_operator.m_lexeme, ' ', *m_rhs, ')');
         }
 
+        void to_pseudo_c_colored_string(code_color_serialization_buffer& buffer) const noexcept override;
+
         [[nodiscard]] inline full_type compute_type_unchecked(const compilation::scope& env) const noexcept override {
             return m_rhs->compute_type_unchecked(env);
         }
@@ -262,6 +265,8 @@ namespace dconstruct::ast {
         inline void pseudo_racket(ast_serialization_buffer& buffer) const override {
             buffer.append('(', m_operator.m_lexeme, ' ', *m_lhs, ' ', *m_rhs, ')');
         }
+
+        void to_pseudo_c_colored_string(code_color_serialization_buffer& buffer) const noexcept override;
 
         // [[nodiscard]] inline full_type compute_type(const compiler::scope&) const override {
         //     return full_type{ std::monostate() };

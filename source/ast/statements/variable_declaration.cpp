@@ -11,6 +11,20 @@ namespace dconstruct::ast {
         buffer.append(';');
     }
 
+    void variable_declaration::to_pseudo_c_colored_string(code_color_serialization_buffer& buffer) const noexcept {
+        type_to_colored_declaration_string(m_type, buffer);
+        buffer.append(AST_COLOR::BLANK, ' ');
+        const bool is_temp_var =
+            (m_identifier.size() >= 5 && (m_identifier.compare(0, 4, "var_") == 0 || m_identifier.compare(0, 4, "arg_") == 0)) ||
+            (m_identifier.size() == 1 && (m_identifier[0] == 'i' || m_identifier[0] == 'j' || m_identifier[0] == 'k' || m_identifier[0] == 'l'));
+        buffer.append(is_temp_var ? AST_COLOR::IDENTIFIER : AST_COLOR::MEMBER, m_identifier);
+        if (m_init != nullptr) {
+            buffer.append(AST_COLOR::OPERATOR, " = "sv);
+            buffer.append(*m_init);
+        }
+        buffer.append(AST_COLOR::PUNCTUATION, ';');
+    }
+
     void variable_declaration::pseudo_py(ast_serialization_buffer& buffer) const {
         buffer.append(m_identifier);
         if (m_init != nullptr) {

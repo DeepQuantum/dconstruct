@@ -14,6 +14,14 @@ namespace dconstruct::ast {
         pseudo_c(buffer);
     }
 
+    void using_declaration::to_pseudo_c_colored_string(code_color_serialization_buffer& buffer) const noexcept {
+        buffer.append(AST_COLOR::KEYWORD, "using "sv);
+        buffer.append(m_sidIdentifier);
+        buffer.append(AST_COLOR::KEYWORD, " as "sv);
+        type_to_colored_declaration_string(m_type, buffer);
+        buffer.append(AST_COLOR::PUNCTUATION, ";"sv);
+    }
+
     [[nodiscard]] std::vector<semantic_check_error> using_declaration::check_semantics(compilation::scope& scope) const noexcept {
         scope.define(m_sidIdentifier.m_name.m_lexeme, m_type);
         return {};

@@ -1,4 +1,5 @@
 #include "ast/type.h"
+#include "ast/ast_source.h"
 #include <format>
 #include <numeric>
 
@@ -265,6 +266,40 @@ namespace dconstruct::ast {
                     return "u64?";
                 } else {
                     return kind_to_string(arg.m_type);
+                }
+            },
+            type
+        );
+    }
+
+    void type_to_colored_declaration_string(const full_type& type, code_color_serialization_buffer& buffer) {
+        std::visit(
+            [&buffer](auto&& arg) {
+                using T = std::decay_t<decltype(arg)>;
+                if constexpr (std::is_same_v<T, struct_type> || std::is_same_v<T, enum_type>) {
+                    buffer.append(AST_COLOR::TYPE, arg.m_typeHash ? '#' + arg.m_name : arg.m_name);
+                } else if constexpr (std::is_same_v<T, ptr_type>) {
+                    type_to_colored_declaration_string(*arg.m_pointedAt, buffer);
+                    buffer.append(AST_COLOR::PUNCTUATION, '*');
+                } else if constexpr (std::is_same_v<T, function_type>) {
+                    buffer.append(AST_COLOR::PUNCTUATION, '(');
+                    for (u32 i = 0; i < arg.m_arguments.size(); ++i) {
+                        type_to_colored_declaration_string(*arg.m_arguments[i].second.get(), buffer);
+                        if (i < arg.m_arguments.size() - 1) {
+                            buffer.append(AST_COLOR::PUNCTUATION, ", "sv);
+                        }
+                    }
+                    buffer.append(AST_COLOR::PUNCTUATION, ')');
+                    buffer.append(AST_COLOR::OPERATOR, " -> "sv);
+                    if (arg.m_return != nullptr) {
+                        type_to_colored_declaration_string(*arg.m_return.get(), buffer);
+                    } else {
+                        buffer.append(AST_COLOR::TYPE, "void"sv);
+                    }
+                } else if constexpr (std::is_same_v<T, std::monostate>) {
+                    buffer.append(AST_COLOR::TYPE, "u64?"sv);
+                } else {
+                    buffer.append(AST_COLOR::TYPE, kind_to_string(arg.m_type));
                 }
             },
             type

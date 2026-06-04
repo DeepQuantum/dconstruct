@@ -20,4 +20,15 @@ namespace dconstruct::ast {
         return nullptr;
     }
 
+    void unary_expr::to_pseudo_c_colored_string(code_color_serialization_buffer& buffer) const noexcept {
+        buffer.append(AST_COLOR::OPERATOR, m_operator.m_lexeme);
+        buffer.append(*m_rhs);
+    }
+
+    void binary_expr::to_pseudo_c_colored_string(code_color_serialization_buffer& buffer) const noexcept {
+        buffer.append(*m_lhs);
+        buffer.append(AST_COLOR::OPERATOR, ' ', m_operator.m_lexeme, ' ');
+        buffer.append(*m_rhs);
+    }
+
 }

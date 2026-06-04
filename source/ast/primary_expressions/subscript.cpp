@@ -18,6 +18,13 @@ namespace dconstruct::ast {
         buffer.append("(vector-ref "sv, *m_lhs, ' ', *m_rhs, ')');
     }
 
+    void subscript_expr::to_pseudo_c_colored_string(code_color_serialization_buffer& buffer) const noexcept {
+        buffer.append(*m_lhs);
+        buffer.append(AST_COLOR::PUNCTUATION, '[');
+        buffer.append(*m_rhs);
+        buffer.append(AST_COLOR::PUNCTUATION, ']');
+    }
+
     [[nodiscard]] expr_uptr subscript_expr::simplify() const {
         return std::make_unique<subscript_expr>(m_lhs->clone(), m_rhs->simplify());
     }

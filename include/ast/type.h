@@ -173,6 +173,13 @@ namespace dconstruct::ast {
 
     [[nodiscard]] std::string type_to_declaration_string(const full_type& type);
 
+    struct code_color_serialization_buffer;
+
+    // Same output as type_to_declaration_string, but appends colored segments:
+    // type names get TYPE, while '*', '(', ')' and ',' get PUNCTUATION and the
+    // function-type arrow gets OPERATOR.
+    void type_to_colored_declaration_string(const full_type& type, code_color_serialization_buffer& buffer);
+
     [[nodiscard]] std::string type_to_definition_string(const full_type& type);
 
     [[nodiscard]] std::string primitive_to_string(const primitive_value& prim);

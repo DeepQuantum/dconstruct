@@ -29,6 +29,8 @@ namespace dconstruct::ast {
 
         void pseudo_racket(ast_serialization_buffer& buffer) const final;
 
+        void to_pseudo_c_colored_string(code_color_serialization_buffer& buffer) const noexcept final;
+
         [[nodiscard]] bool equals(const statement& rhs) const noexcept final;
 
         [[nodiscard]] std::unique_ptr<statement> clone() const noexcept final;

@@ -59,6 +59,49 @@ namespace dconstruct::ast {
         buffer.append('}');
     }
 
+    void match_expr::to_pseudo_c_colored_string(code_color_serialization_buffer& buffer) const noexcept {
+        buffer.append(AST_COLOR::KEYWORD, "match "sv);
+        buffer.append(AST_COLOR::PUNCTUATION, '(');
+        bool first = true;
+        for (const auto& condition : m_conditions) {
+            if (!first) {
+                buffer.append(AST_COLOR::PUNCTUATION, "; "sv);
+            }
+            first = false;
+            buffer.append(*condition);
+        }
+        buffer.append(AST_COLOR::PUNCTUATION, ") {\n"sv);
+        buffer.indent_more();
+
+        const auto grouped = group_patterns();
+        const u64 max_size = max_pattern_width(grouped);
+
+        for (const auto& [patterns, expression] : grouped) {
+            buffer.append_indent();
+            const u64 plain_width = pattern_list_string(patterns).length();
+            for (u64 i = 0; i < patterns.size(); ++i) {
+                if (i != 0) {
+                    buffer.append(AST_COLOR::PUNCTUATION, ", "sv);
+                }
+                buffer.append(**patterns[i]);
+            }
+            if (plain_width < max_size) {
+                buffer.append(AST_COLOR::BLANK, std::string(max_size - plain_width, ' '));
+            }
+            buffer.append(AST_COLOR::OPERATOR, " -> "sv);
+            buffer.append(**expression);
+            buffer.append(AST_COLOR::PUNCTUATION, ",\n"sv);
+        }
+        buffer.append_indent();
+        buffer.append_padded(AST_COLOR::KEYWORD, "else"sv, max_size);
+        buffer.append(AST_COLOR::OPERATOR, " -> "sv);
+        buffer.append(*m_default);
+        buffer.append(AST_COLOR::BLANK, '\n');
+        buffer.indent_less();
+        buffer.append_indent();
+        buffer.append(AST_COLOR::PUNCTUATION, '}');
+    }
+
     [[nodiscard]] std::vector<std::pair<std::vector<const expr_uptr*>, const expr_uptr*>> match_expr::group_patterns() const noexcept {
         std::vector<std::pair<std::vector<const expr_uptr*>, const expr_uptr*>> res;
 

@@ -7,6 +7,14 @@ namespace dconstruct::ast {
         buffer.append("while ("sv, *m_condition, ") "sv, *m_body);
     }
 
+    void while_stmt::to_pseudo_c_colored_string(code_color_serialization_buffer& buffer) const noexcept {
+        buffer.append(AST_COLOR::KEYWORD, "while "sv);
+        buffer.append(AST_COLOR::PUNCTUATION, '(');
+        buffer.append(*m_condition);
+        buffer.append(AST_COLOR::PUNCTUATION, ") "sv);
+        buffer.append(*m_body);
+    }
+
     void while_stmt::pseudo_py(ast_serialization_buffer& buffer) const {
         buffer.append("while "sv, *m_condition, ':', *m_body);
     }

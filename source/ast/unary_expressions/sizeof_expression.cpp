@@ -12,15 +12,15 @@ namespace dconstruct::ast {
     }
 
     [[nodiscard]] u16 sizeof_expr::calc_complexity() const noexcept {
-        if (std::holds_alternative<expr_uptr>(m_operand)) {
-            return 1 + std::get<expr_uptr>(m_operand)->get_complexity();
+        if (const expr_uptr* expr_ptr = std::get_if<expr_uptr>(&m_operand)) {
+            return 1 + (*expr_ptr)->get_complexity();
         }
         return 1;
     }
 
     [[nodiscard]] expr_uptr sizeof_expr::clone() const noexcept {
-        if (std::holds_alternative<full_type>(m_operand)) {
-            return std::make_unique<sizeof_expr>(std::get<full_type>(m_operand));
+        if (const full_type* type_ptr = std::get_if<full_type>(&m_operand)) {
+            return std::make_unique<sizeof_expr>(*type_ptr);
         } else {
             return std::make_unique<sizeof_expr>(std::get<expr_uptr>(m_operand)->clone());
         }
@@ -32,8 +32,8 @@ namespace dconstruct::ast {
 
     void sizeof_expr::pseudo_c(ast_serialization_buffer& buffer) const {
         buffer.append("sizeof("sv);
-        if (std::holds_alternative<full_type>(m_operand)) {
-            buffer.append(type_to_declaration_string(std::get<full_type>(m_operand)));
+        if (const full_type* type_ptr = std::get_if<full_type>(&m_operand)) {
+            buffer.append(type_to_declaration_string(*type_ptr));
         } else {
             buffer.append(*std::get<expr_uptr>(m_operand));
         }
@@ -41,8 +41,8 @@ namespace dconstruct::ast {
     }
 
     void sizeof_expr::pseudo_py(ast_serialization_buffer& buffer) const {
-        if (std::holds_alternative<full_type>(m_operand)) {
-            buffer.append("sizeof("sv, type_to_declaration_string(std::get<full_type>(m_operand)), ')');
+        if (const full_type* type_ptr = std::get_if<full_type>(&m_operand)) {
+            buffer.append("sizeof("sv, type_to_declaration_string(*type_ptr), ')');
         } else {
             buffer.append("sys.getsizeof("sv, *std::get<expr_uptr>(m_operand), ')');
         }
@@ -50,12 +50,23 @@ namespace dconstruct::ast {
 
     void sizeof_expr::pseudo_racket(ast_serialization_buffer& buffer) const {
         buffer.append("(sizeof "sv);
-        if (std::holds_alternative<full_type>(m_operand)) {
-            buffer.append(type_to_declaration_string(std::get<full_type>(m_operand)));
+        if (const full_type* type_ptr = std::get_if<full_type>(&m_operand)) {
+            buffer.append(type_to_declaration_string(*type_ptr));
         } else {
             buffer.append(*std::get<expr_uptr>(m_operand));
         }
         buffer.append(')');
+    }
+
+    void sizeof_expr::to_pseudo_c_colored_string(code_color_serialization_buffer& buffer) const noexcept {
+        buffer.append(AST_COLOR::KEYWORD, "sizeof"sv);
+        buffer.append(AST_COLOR::PUNCTUATION, '(');
+        if (const full_type* type_ptr = std::get_if<full_type>(&m_operand)) {
+            type_to_colored_declaration_string(*type_ptr, buffer);
+        } else {
+            buffer.append(*std::get<expr_uptr>(m_operand));
+        }
+        buffer.append(AST_COLOR::PUNCTUATION, ')');
     }
 
     [[nodiscard]] inline full_type sizeof_expr::compute_type_unchecked(const compilation::scope& env) const noexcept {
@@ -63,8 +74,8 @@ namespace dconstruct::ast {
     }
 
     [[nodiscard]] semantic_check_res sizeof_expr::compute_type_checked(compilation::scope& env) const noexcept {
-        if (std::holds_alternative<expr_uptr>(m_operand)) {
-            const semantic_check_res op_res = std::get<expr_uptr>(m_operand)->compute_type_checked(env);
+        if (const expr_uptr* expr_ptr = std::get_if<expr_uptr>(&m_operand)) {
+            const semantic_check_res op_res = (*expr_ptr)->compute_type_checked(env);
             if (!op_res) {
                 return op_res;
             }
@@ -79,8 +90,8 @@ namespace dconstruct::ast {
     ) const noexcept {
         u64 type_size;
 
-        if (std::holds_alternative<full_type>(m_operand)) {
-            type_size = get_size(std::get<full_type>(m_operand));
+        if (const full_type* type_ptr = std::get_if<full_type>(&m_operand)) {
+            type_size = get_size(*type_ptr);
         } else {
             std::optional<full_type> op_type = std::get<expr_uptr>(m_operand)->get_type();
             assert(op_type);
@@ -104,8 +115,8 @@ namespace dconstruct::ast {
     }
 
     [[nodiscard]] VAR_OPTIMIZATION_ACTION sizeof_expr::var_optimization_pass(var_optimization_env& env) noexcept {
-        if (std::holds_alternative<expr_uptr>(m_operand)) {
-            env.check_action(&std::get<expr_uptr>(m_operand));
+        if (expr_uptr* expr_ptr = std::get_if<expr_uptr>(&m_operand)) {
+            env.check_action(expr_ptr);
         }
         return VAR_OPTIMIZATION_ACTION::NONE;
     }
@@ -115,8 +126,8 @@ namespace dconstruct::ast {
     }
 
     [[nodiscard]] std::unique_ptr<struct_access> sizeof_expr::to_struct_access() noexcept {
-        if (std::holds_alternative<expr_uptr>(m_operand)) {
-            auto& expr = std::get<expr_uptr>(m_operand);
+        if (expr_uptr* expr_ptr = std::get_if<expr_uptr>(&m_operand)) {
+            auto& expr = *expr_ptr;
             if (auto replacement = expr->to_struct_access()) {
                 expr = std::move(replacement);
             }

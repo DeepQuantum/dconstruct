@@ -33,6 +33,27 @@ namespace dconstruct::ast {
         buffer.append(m_body);
     }
 
+    void function_definition::to_pseudo_c_colored_string(code_color_serialization_buffer& buffer) const noexcept {
+        if (const std::string* name = std::get_if<std::string>(&m_name)) {
+            type_to_colored_declaration_string(*m_type.m_return, buffer);
+            buffer.append(AST_COLOR::BLANK, ' ');
+            buffer.append(AST_COLOR::CALL, *name);
+            buffer.append(AST_COLOR::PUNCTUATION, '(');
+            bool first = true;
+            for (const auto& param : m_parameters) {
+                if (!first) {
+                    buffer.append(AST_COLOR::PUNCTUATION, ", "sv);
+                }
+                first = false;
+                buffer.append(param);
+            }
+            buffer.append(AST_COLOR::PUNCTUATION, ") "sv);
+        } else {
+            buffer.append(AST_COLOR::KEYWORD, "lambda "sv);
+        }
+        buffer.append(m_body);
+    }
+
     void function_definition::pseudo_py(ast_serialization_buffer& buffer) const {
         if (const std::string* name = std::get_if<std::string>(&m_name)) {
             buffer.append("def "sv, *name, '(');

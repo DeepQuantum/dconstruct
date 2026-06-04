@@ -15,6 +15,15 @@ namespace dconstruct::ast {
         buffer.append("(if "sv, *m_condition, ' ', *m_then, ' ', *m_else, ')');
     }
 
+    void ternary_expr::to_pseudo_c_colored_string(code_color_serialization_buffer& buffer) const noexcept {
+        buffer.append(AST_COLOR::KEYWORD, "if "sv);
+        buffer.append(*m_condition);
+        buffer.append(AST_COLOR::KEYWORD, " then "sv);
+        buffer.append(*m_then);
+        buffer.append(AST_COLOR::KEYWORD, " else "sv);
+        buffer.append(*m_else);
+    }
+
     [[nodiscard]] expr_uptr ternary_expr::simplify() const {
         return std::make_unique<ternary_expr>(m_condition->simplify(), m_then->simplify(), m_else->simplify());
     }
