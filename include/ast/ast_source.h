@@ -85,14 +85,59 @@ namespace dconstruct::ast {
         return static_cast<LANGUAGE_FLAGS>(~static_cast<u8>(flags));
     }
 
-    struct ast_serialization_buffer {
-        explicit ast_serialization_buffer(const u64 size = 0) {
+    template<typename T> 
+    concept reservable = requires(T& t, const u64 size) {
+        { t. reserve(size) } -> std::same_as<void>;
+    };
+
+    template<reservable T>
+    struct ast_buffer_wrapper {
+        explicit ast_buffer_wrapper(const u64 size = 0) {
             m_buffer.reserve(size);
         }
 
         void reserve(const u64 size) {
             m_buffer.reserve(size);
         }
+
+         void indent_more() noexcept {
+            ++m_currentIndent;
+        }
+
+        void indent_less() noexcept {
+            if (m_currentIndent != 0) {
+                --m_currentIndent;
+            }
+        }
+
+        [[nodiscard]] bool has_flag(const LANGUAGE_FLAGS flag) const noexcept {
+            return static_cast<u8>(m_flags & flag) != 0;
+        }
+
+        void set_flag(const LANGUAGE_FLAGS flag) noexcept {
+            m_flags = m_flags | flag;
+        }
+
+        void clear_flag(const LANGUAGE_FLAGS flag) noexcept {
+            m_flags = static_cast<LANGUAGE_FLAGS>(static_cast<u8>(m_flags) & ~static_cast<u8>(flag));
+        }
+
+        [[nodiscard]] const T& str() const noexcept {
+            return m_buffer;
+        }
+
+        [[nodiscard]] T take() noexcept {
+            return std::move(m_buffer);
+        }
+
+        u8 m_currentIndent = 0;
+        u8 m_indentWidth = 4;
+        LANGUAGE_FLAGS m_flags = LANGUAGE_FLAGS::C;
+        T m_buffer;
+    };
+
+    struct ast_serialization_buffer : ast_buffer_wrapper<std::string> {
+        using ast_buffer_wrapper::ast_buffer_wrapper;
 
         void _append(const char value) {
             m_buffer.push_back(value);
@@ -138,28 +183,6 @@ namespace dconstruct::ast {
             m_buffer.append(static_cast<size_t>(m_currentIndent) * m_indentWidth, ' ');
         }
 
-        void indent_more() noexcept {
-            ++m_currentIndent;
-        }
-
-        void indent_less() noexcept {
-            if (m_currentIndent != 0) {
-                --m_currentIndent;
-            }
-        }
-
-        [[nodiscard]] bool has_flag(const LANGUAGE_FLAGS flag) const noexcept {
-            return static_cast<u8>(m_flags & flag) != 0;
-        }
-
-        void set_flag(const LANGUAGE_FLAGS flag) noexcept {
-            m_flags = m_flags | flag;
-        }
-
-        void clear_flag(const LANGUAGE_FLAGS flag) noexcept {
-            m_flags = static_cast<LANGUAGE_FLAGS>(static_cast<u8>(m_flags) & ~static_cast<u8>(flag));
-        }
-
         [[nodiscard]] const std::string& str() const noexcept {
             return m_buffer;
         }
@@ -167,21 +190,10 @@ namespace dconstruct::ast {
         [[nodiscard]] std::string take() noexcept {
             return std::move(m_buffer);
         }
-
-        u8 m_currentIndent = 0;
-        u8 m_indentWidth = 4;
-        LANGUAGE_FLAGS m_flags = LANGUAGE_FLAGS::C;
-        std::string m_buffer;
     };
 
-    struct code_color_serialization_buffer {
-        explicit code_color_serialization_buffer(const u64 size = 0) {
-            m_buffer.reserve(size);
-        }
-
-        void reserve(const u64 size) {
-            m_buffer.reserve(size);
-        }
+    struct code_color_serialization_buffer : ast_buffer_wrapper<code_color_buffer>  {
+        using ast_buffer_wrapper::ast_buffer_wrapper;
 
         void _append(const AST_COLOR color, const char value) {
             m_buffer.emplace_back(color, std::string(1, value));
@@ -203,8 +215,7 @@ namespace dconstruct::ast {
             m_buffer.emplace_back(color, std::move(value));
         }
 
-        template <typename T>
-            requires(std::is_arithmetic_v<std::remove_cvref_t<T>> && !std::is_same_v<std::remove_cvref_t<T>, char>)
+        template <typename T> requires(std::is_arithmetic_v<std::remove_cvref_t<T>> && !std::is_same_v<std::remove_cvref_t<T>, char>)
         void _append(const AST_COLOR color, const T value) {
             m_buffer.emplace_back(color, std::format("{}", value));
         }
@@ -241,36 +252,6 @@ namespace dconstruct::ast {
             if (m_currentIndent != 0) {
                 m_buffer.emplace_back(AST_COLOR::BLANK, std::string(static_cast<size_t>(m_currentIndent) * m_indentWidth, ' '));
             }
-        }
-
-        void indent_more() noexcept {
-            ++m_currentIndent;
-        }
-
-        void indent_less() noexcept {
-            if (m_currentIndent != 0) {
-                --m_currentIndent;
-            }
-        }
-
-        [[nodiscard]] bool has_flag(const LANGUAGE_FLAGS flag) const noexcept {
-            return static_cast<u8>(m_flags & flag) != 0;
-        }
-
-        void set_flag(const LANGUAGE_FLAGS flag) noexcept {
-            m_flags = m_flags | flag;
-        }
-
-        void clear_flag(const LANGUAGE_FLAGS flag) noexcept {
-            m_flags = static_cast<LANGUAGE_FLAGS>(static_cast<u8>(m_flags) & ~static_cast<u8>(flag));
-        }
-
-        [[nodiscard]] const code_color_buffer& str() const noexcept {
-            return m_buffer;
-        }
-
-        [[nodiscard]] code_color_buffer take() noexcept {
-            return std::move(m_buffer);
         }
 
         u8 m_currentIndent = 0;
