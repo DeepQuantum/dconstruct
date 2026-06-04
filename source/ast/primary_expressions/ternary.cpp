@@ -108,6 +108,12 @@ namespace dconstruct::ast {
         return FOREACH_OPTIMIZATION_ACTION::NONE;
     }
 
+    void ternary_expr::regex_optimization_pass() noexcept {
+        m_condition->regex_optimization_pass();
+        m_then->regex_optimization_pass();
+        m_else->regex_optimization_pass();
+    }
+
     [[nodiscard]] std::unique_ptr<struct_access> ternary_expr::to_struct_access() noexcept {
         if (auto replacement = m_condition->to_struct_access()) {
             m_condition = std::move(replacement);

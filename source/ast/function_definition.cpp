@@ -84,6 +84,10 @@ namespace dconstruct::ast {
         }
     }
 
+    void function_definition::regex_optimization_pass() noexcept {
+        m_body.regex_optimization_pass();
+    }
+
     [[nodiscard]] std::vector<semantic_check_error> function_definition::check_semantics(compilation::scope& scope) const noexcept {
         scope.m_expectedReturnType = m_type.m_return.get();
         scope.m_computedReturnType = false;

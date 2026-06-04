@@ -152,6 +152,14 @@ namespace dconstruct::ast {
         buffer.append(')');
     }
 
+    void state_script_track::regex_optimization_pass() noexcept {
+        for (auto& lambda : m_lambdas) {
+            if (auto* function = std::get_if<function_definition>(&lambda)) {
+                function->regex_optimization_pass();
+            }
+        }
+    }
+
     [[nodiscard]] bool state_script_track::equals(const state_script_track& rhs) const noexcept {
         if (m_name != rhs.m_name || m_lambdas.size() != rhs.m_lambdas.size()) {
             return false;

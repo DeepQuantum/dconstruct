@@ -38,6 +38,7 @@ namespace dconstruct::ast {
         VAR_OPTIMIZATION_ACTION var_optimization_pass(var_optimization_env& env) noexcept;
         FOREACH_OPTIMIZATION_ACTION foreach_optimization_pass(foreach_optimization_env& env) noexcept;
         MATCH_OPTIMIZATION_ACTION match_optimization_pass(match_optimization_env& env) noexcept;
+        void regex_optimization_pass() noexcept final;
 
         compilation::token m_name;
         bool m_isNumeric = false;

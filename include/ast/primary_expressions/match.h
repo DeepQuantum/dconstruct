@@ -42,6 +42,7 @@ namespace dconstruct::ast {
         //[[nodiscard]] llvm_res emit_llvm(llvm::LLVMContext&, llvm::IRBuilder<>&, llvm::Module&, const compiler::scope&) const noexcept final {return std::};
         VAR_OPTIMIZATION_ACTION var_optimization_pass(var_optimization_env& env) noexcept final;
         FOREACH_OPTIMIZATION_ACTION foreach_optimization_pass(foreach_optimization_env& env) noexcept final;
+        void regex_optimization_pass() noexcept final;
 
         [[nodiscard]] const std::vector<matches_t>& get_match_pairs() const noexcept { return m_matchPairs; }
 

@@ -137,6 +137,11 @@ namespace dconstruct::ast {
         return FOREACH_OPTIMIZATION_ACTION::NONE;
     }
 
+    void assign_expr::regex_optimization_pass() noexcept {
+        m_lhs->regex_optimization_pass();
+        m_rhs->regex_optimization_pass();
+    }
+
     [[nodiscard]] std::unique_ptr<struct_access> assign_expr::to_struct_access() noexcept {
         if (auto replacement = m_lhs->to_struct_access()) {
             m_lhs = std::move(replacement);

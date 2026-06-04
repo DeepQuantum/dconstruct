@@ -13,6 +13,7 @@ namespace dconstruct::ast {
         void pseudo_py(ast_serialization_buffer& buffer) const final;
         void pseudo_racket(ast_serialization_buffer& buffer) const final;
         void to_pseudo_c_colored_string(code_color_serialization_buffer& buffer) const noexcept final;
+        void regex_optimization_pass() noexcept final;
         [[nodiscard]] expr_uptr simplify() const final;
         [[nodiscard]] bool equals(const expression& rhs) const noexcept final;
         [[nodiscard]] expr_uptr clone() const final;
@@ -23,6 +24,7 @@ namespace dconstruct::ast {
         [[nodiscard]] expr_uptr* get_first_argument() noexcept final;
         [[nodiscard]] std::optional<compilation::source_location> source_location() const noexcept final { return compilation::source_location{m_token.m_file, m_token.m_line}; }
         [[nodiscard]] emission_res emit_dc(compilation::function& fn, compilation::global_state& global, std::optional<reg_idx> destination) const noexcept final;
+        
 
         static constexpr u16 MAX_NON_SPLIT_COMPLEXITY = 10;
 

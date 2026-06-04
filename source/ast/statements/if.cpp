@@ -186,4 +186,12 @@ namespace dconstruct::ast {
             m_else->member_access_optimization_pass();
         }
     }
+
+    void if_stmt::regex_optimization_pass() noexcept {
+        m_condition->regex_optimization_pass();
+        m_then->regex_optimization_pass();
+        if (m_else) {
+            m_else->regex_optimization_pass();
+        }
+    }
 }

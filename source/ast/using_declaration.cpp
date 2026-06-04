@@ -22,6 +22,10 @@ namespace dconstruct::ast {
         buffer.append(AST_COLOR::PUNCTUATION, ";"sv);
     }
 
+    void using_declaration::regex_optimization_pass() noexcept {
+        m_sidIdentifier.regex_optimization_pass();
+    }
+
     [[nodiscard]] std::vector<semantic_check_error> using_declaration::check_semantics(compilation::scope& scope) const noexcept {
         scope.define(m_sidIdentifier.m_name.m_lexeme, m_type);
         return {};

@@ -125,6 +125,12 @@ namespace dconstruct::ast {
         return FOREACH_OPTIMIZATION_ACTION::NONE;
     }
 
+    void sizeof_expr::regex_optimization_pass() noexcept {
+        if (expr_uptr* expr_ptr = std::get_if<expr_uptr>(&m_operand)) {
+            (*expr_ptr)->regex_optimization_pass();
+        }
+    }
+
     [[nodiscard]] std::unique_ptr<struct_access> sizeof_expr::to_struct_access() noexcept {
         if (expr_uptr* expr_ptr = std::get_if<expr_uptr>(&m_operand)) {
             auto& expr = *expr_ptr;

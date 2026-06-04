@@ -88,6 +88,10 @@ namespace dconstruct::ast {
         return MATCH_OPTIMIZATION_ACTION::LITERAL;
     }
 
+    void enum_access::regex_optimization_pass() noexcept {
+        m_value.regex_optimization_pass();
+    }
+
     [[nodiscard]] std::unique_ptr<struct_access> enum_access::to_struct_access() noexcept {
         return nullptr;
     }

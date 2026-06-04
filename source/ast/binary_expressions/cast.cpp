@@ -173,4 +173,8 @@ namespace dconstruct::ast {
         return FOREACH_OPTIMIZATION_ACTION::NONE;
     }
 
+    void cast_expr::regex_optimization_pass() noexcept {
+        m_rhs->regex_optimization_pass();
+    }
+
 }

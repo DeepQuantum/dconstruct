@@ -9,8 +9,11 @@ namespace dconstruct::ast {
         virtual void pseudo_racket(ast_serialization_buffer&) const final;
         void to_pseudo_c_colored_string(code_color_serialization_buffer& buffer) const noexcept final;
 
+        void regex_optimization_pass() noexcept final;
+
         [[nodiscard]] std::vector<semantic_check_error> check_semantics(compilation::scope&) const noexcept final;
         [[nodiscard]] program_binary_result emit_dc(compilation::global_state& global) const noexcept final;
+        
 
         function_definition() noexcept = default;
         function_definition(function_definition&& rhs) noexcept = default;

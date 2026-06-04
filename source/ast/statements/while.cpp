@@ -123,4 +123,9 @@ namespace dconstruct::ast {
         m_body->member_access_optimization_pass();
     }
 
+    void while_stmt::regex_optimization_pass() noexcept {
+        m_condition->regex_optimization_pass();
+        m_body->regex_optimization_pass();
+    }
+
 }

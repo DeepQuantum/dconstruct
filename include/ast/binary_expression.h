@@ -63,5 +63,10 @@ namespace dconstruct::ast {
             }
             return MATCH_OPTIMIZATION_ACTION::NONE;
         }
+
+        inline void regex_optimization_pass() noexcept final {
+            m_lhs->regex_optimization_pass();
+            m_rhs->regex_optimization_pass();
+        }
     };
 }

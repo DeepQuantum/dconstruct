@@ -105,4 +105,10 @@ namespace dconstruct::ast {
         }
     }
 
+    void return_stmt::regex_optimization_pass() noexcept {
+        if (m_expr) {
+            m_expr->regex_optimization_pass();
+        }
+    }
+
 }

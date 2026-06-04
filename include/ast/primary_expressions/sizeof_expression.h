@@ -34,6 +34,7 @@ namespace dconstruct::ast {
 
         [[nodiscard]] VAR_OPTIMIZATION_ACTION var_optimization_pass(var_optimization_env& env) noexcept final;
         [[nodiscard]] FOREACH_OPTIMIZATION_ACTION foreach_optimization_pass(foreach_optimization_env& env) noexcept final;
+        void regex_optimization_pass() noexcept final;
 
         operand_t m_operand;
     };

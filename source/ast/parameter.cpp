@@ -27,4 +27,6 @@ namespace dconstruct::ast {
         buffer.append(is_temp_var ? AST_COLOR::IDENTIFIER : AST_COLOR::MEMBER, m_name);
     }
 
+    void parameter::regex_optimization_pass() noexcept {}
+
 }

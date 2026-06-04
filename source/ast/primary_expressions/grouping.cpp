@@ -63,6 +63,10 @@ namespace dconstruct::ast {
         return FOREACH_OPTIMIZATION_ACTION::NONE;
     }
 
+    void grouping::regex_optimization_pass() noexcept {
+        m_expr->regex_optimization_pass();
+    }
+
     [[nodiscard]] std::unique_ptr<struct_access> grouping::to_struct_access() noexcept {
         return m_expr->to_struct_access();
     }

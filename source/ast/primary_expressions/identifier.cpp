@@ -137,6 +137,8 @@ namespace dconstruct::ast {
         return FOREACH_OPTIMIZATION_ACTION::NONE;
     }
 
+    void identifier::regex_optimization_pass() noexcept {}
+
     [[nodiscard]] std::unique_ptr<struct_access> identifier::to_struct_access() noexcept {
         return nullptr;
     }

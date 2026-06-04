@@ -178,4 +178,11 @@ namespace dconstruct::ast {
         m_body->member_access_optimization_pass();
     }
 
+    void for_stmt::regex_optimization_pass() noexcept {
+        m_init->regex_optimization_pass();
+        m_condition->regex_optimization_pass();
+        m_incr->regex_optimization_pass();
+        m_body->regex_optimization_pass();
+    }
+
 }

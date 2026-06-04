@@ -33,6 +33,8 @@ namespace dconstruct::ast {
 
     void breakpoint::member_access_optimization_pass() noexcept {}
 
+    void breakpoint::regex_optimization_pass() noexcept {}
+
     [[nodiscard]] std::vector<semantic_check_error> breakpoint::check_semantics(compilation::scope& scope) const noexcept {
         return {};
     }

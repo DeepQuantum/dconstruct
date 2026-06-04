@@ -10,6 +10,7 @@ namespace dconstruct::ast {
         virtual void pseudo_py(ast_serialization_buffer&) const final;
         virtual void pseudo_racket(ast_serialization_buffer&) const final;
         void to_pseudo_c_colored_string(code_color_serialization_buffer& buffer) const noexcept final;
+        void regex_optimization_pass() noexcept final;
 
         [[nodiscard]] bool operator==(const parameter& rhs) const noexcept {
             return m_name == rhs.m_name;

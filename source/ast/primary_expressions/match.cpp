@@ -525,6 +525,19 @@ namespace dconstruct::ast {
         return FOREACH_OPTIMIZATION_ACTION::NONE;
     }
 
+    void match_expr::regex_optimization_pass() noexcept {
+        for (auto& condition : m_conditions) {
+            condition->regex_optimization_pass();
+        }
+        for (auto& [pattern, expression] : m_matchPairs) {
+            pattern->regex_optimization_pass();
+            expression->regex_optimization_pass();
+        }
+        if (m_default) {
+            m_default->regex_optimization_pass();
+        }
+    }
+
     [[nodiscard]] std::unique_ptr<struct_access> match_expr::to_struct_access() noexcept {
         for (auto& condition : m_conditions) {
             if (auto replacement = condition->to_struct_access()) {

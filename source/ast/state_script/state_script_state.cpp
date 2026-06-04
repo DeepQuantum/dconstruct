@@ -33,6 +33,12 @@ namespace dconstruct::ast {
         buffer.append(')');
     }
 
+    void state_script_state::regex_optimization_pass() noexcept {
+        for (auto& block : m_blocks) {
+            block.regex_optimization_pass();
+        }
+    }
+
     [[nodiscard]] bool state_script_state::equals(const state_script_state& rhs) const noexcept {
         if (m_name != rhs.m_name || m_blocks.size() != rhs.m_blocks.size()) {
             return false;

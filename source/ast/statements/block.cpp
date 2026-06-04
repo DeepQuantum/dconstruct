@@ -255,6 +255,12 @@ namespace dconstruct::ast {
         }
     }
 
+    void block::regex_optimization_pass() noexcept {
+        for (auto& statement : m_statements) {
+            statement->regex_optimization_pass();
+        }
+    }
+
     [[nodiscard]] emission_err block::emit_dc(
         compilation::function& fn,
         compilation::global_state& global

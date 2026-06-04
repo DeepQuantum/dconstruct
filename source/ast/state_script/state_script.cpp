@@ -74,6 +74,18 @@ namespace dconstruct::ast {
         buffer.append("))"sv);
     }
 
+    void state_script::regex_optimization_pass() noexcept {
+        for (auto& opt : m_options) {
+            opt.regex_optimization_pass();
+        }
+        for (auto& decl : m_declarations) {
+            decl.regex_optimization_pass();
+        }
+        for (auto& state : m_states) {
+            state.regex_optimization_pass();
+        }
+    }
+
     [[nodiscard]] std::vector<semantic_check_error> state_script::check_semantics(compilation::scope& scope) const noexcept {
         std::vector<semantic_check_error> errors;
 

@@ -28,5 +28,9 @@ namespace dconstruct::ast {
             env.check_action(&m_rhs);
             return FOREACH_OPTIMIZATION_ACTION::NONE;
         }
+
+        inline void regex_optimization_pass() noexcept final {
+            m_rhs->regex_optimization_pass();
+        }
     };
 }

@@ -102,8 +102,7 @@ namespace dconstruct::ast {
             m_buffer.append(value);
         }
 
-        template <typename T>
-            requires(std::is_arithmetic_v<std::remove_cvref_t<T>> && !std::is_same_v<std::remove_cvref_t<T>, char>)
+        template <typename T> requires(std::is_arithmetic_v<std::remove_cvref_t<T>> && !std::is_same_v<std::remove_cvref_t<T>, char>)
         void _append(T value) {
             append_format("{}", value);
         }
@@ -286,6 +285,8 @@ namespace dconstruct::ast {
         virtual void pseudo_py(ast_serialization_buffer& buffer) const = 0;
         virtual void pseudo_racket(ast_serialization_buffer& buffer) const = 0;
         virtual void pseudo_c_for_compiler(ast_serialization_buffer& buffer) const;
+
+        virtual void regex_optimization_pass() noexcept = 0;
         
 
         virtual bool is_dead_code() const noexcept { return false; }
@@ -297,11 +298,6 @@ namespace dconstruct::ast {
             return buffer.take();
         }
 
-
-        // Mirrors pseudo_c but records colored token segments into `buffer`. The
-        // concatenation of all segment strings equals to_pseudo_c_string(). The
-        // default falls back to a single uncolored segment; composite elements
-        // override this and append their children's segments in order.
         virtual void to_pseudo_c_colored_string(code_color_serialization_buffer& buffer) const noexcept {
             buffer.append(AST_COLOR::BLANK, to_pseudo_c_string());
         }

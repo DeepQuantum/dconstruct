@@ -22,6 +22,7 @@ namespace dconstruct::ast {
         [[nodiscard]] lvalue_emission_res emit_dc_lvalue(compilation::function& fn, compilation::global_state& global) const noexcept final;
         VAR_OPTIMIZATION_ACTION var_optimization_pass(var_optimization_env& env) noexcept final;
         FOREACH_OPTIMIZATION_ACTION foreach_optimization_pass(foreach_optimization_env& env) noexcept final;
+        void regex_optimization_pass() noexcept final;
 
         expr_uptr m_lhs;
         expr_uptr m_rhs;

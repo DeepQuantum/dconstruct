@@ -159,13 +159,18 @@ namespace dconstruct::ui {
         qui::message_box m_closeBox;
         bool m_closeRequested = false;
         bool m_defaultViewDcpl = true;
-        bool m_astOptimization = true;
+        bool m_ssoVarOptimization = true;
+        bool m_foreachOptimization = true;
+        bool m_matchOptimization = true;
+        bool m_secondVarOptimization = true;
+        bool m_memberAccessOptimization = true;
         bool m_regexOptimization = true;
         bool m_dragHover = false;
         std::vector<std::string> m_pendingDropPaths;
         std::unordered_map<sid64, ast::full_type> m_typeMap;
         std::unordered_map<std::string, ast::function_to_mapped_vars> m_pendingTypeMaps;
         std::string m_colorScheme = "qntm";
+        std::string m_previewScheme;
     };
 
     void glfw_error_callback(int error, const char* description) {
@@ -336,6 +341,49 @@ namespace dconstruct::ui {
         return max_width;
     }
 
+    dcompiler::OPTIMIZATION_KIND decompilation_optimizations(const app_state& state) {
+        using dcompiler::OPTIMIZATION_KIND;
+
+        auto optimizations = OPTIMIZATION_KIND::NONE;
+        if (state.m_ssoVarOptimization) {
+            optimizations = optimizations | OPTIMIZATION_KIND::SSO_VAR;
+        }
+        if (state.m_foreachOptimization) {
+            optimizations = optimizations | OPTIMIZATION_KIND::FOREACH;
+        }
+        if (state.m_matchOptimization) {
+            optimizations = optimizations | OPTIMIZATION_KIND::MATCH;
+        }
+        if (state.m_secondVarOptimization) {
+            optimizations = optimizations | OPTIMIZATION_KIND::SECOND_VAR;
+        }
+        if (state.m_memberAccessOptimization) {
+            optimizations = optimizations | OPTIMIZATION_KIND::MEMBER_ACCESS;
+        }
+        if (state.m_regexOptimization) {
+            optimizations = optimizations | OPTIMIZATION_KIND::REGEX;
+        }
+        return optimizations;
+    }
+
+    bool all_decompilation_optimizations_enabled(const app_state& state) {
+        return state.m_ssoVarOptimization &&
+               state.m_foreachOptimization &&
+               state.m_matchOptimization &&
+               state.m_secondVarOptimization &&
+               state.m_memberAccessOptimization &&
+               state.m_regexOptimization;
+    }
+
+    void set_all_decompilation_optimizations(app_state& state, const bool enabled) {
+        state.m_ssoVarOptimization = enabled;
+        state.m_foreachOptimization = enabled;
+        state.m_matchOptimization = enabled;
+        state.m_secondVarOptimization = enabled;
+        state.m_memberAccessOptimization = enabled;
+        state.m_regexOptimization = enabled;
+    }
+
     void decompile_document(app_state& state, document& doc) {
         doc.m_decompiled.clear();
         doc.m_decompErrors.clear();
@@ -344,8 +392,7 @@ namespace dconstruct::ui {
             return;
         }
 
-        const dcompiler::OPTIMIZATION_KIND optimizations =
-            state.m_astOptimization ? dcompiler::OPTIMIZATION_KIND::AST : dcompiler::OPTIMIZATION_KIND::NONE;
+        const dcompiler::OPTIMIZATION_KIND optimizations = decompilation_optimizations(state);
 
         // Reused across functions: take() moves the segment vector out into the
         // document, then reserve() pre-grows the next one to avoid reallocations.
@@ -662,7 +709,7 @@ namespace dconstruct::ui {
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(28.0F, 24.0F));
         ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 8.0F);
         ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(8.0F, 8.0F));
-        ImGui::PushStyleColor(ImGuiCol_PopupBg, qui::color::retina_dark::WindowBackground);
+        ImGui::PushStyleColor(ImGuiCol_PopupBg, qui::color::active_palette().WindowBackground);
 
         if (ImGui::BeginPopupModal(
             "##dconstruct_about",
@@ -671,13 +718,13 @@ namespace dconstruct::ui {
         )) {
             if (ImFont* title_font = qui::font_bold(); title_font != nullptr) {
                 ImGui::PushFont(title_font, title_font->LegacySize * 1.4F);
-                ImGui::PushStyleColor(ImGuiCol_Text, qui::color::retina_dark::Highlight);
+                ImGui::PushStyleColor(ImGuiCol_Text, qui::color::active_palette().Highlight);
                 ImGui::TextUnformatted("dconstruct");
                 ImGui::PopStyleColor();
                 ImGui::PopFont();
             }
 
-            ImGui::PushStyleColor(ImGuiCol_Text, qui::color::retina_dark::TextDisabled);
+            ImGui::PushStyleColor(ImGuiCol_Text, qui::color::active_palette().TextDisabled);
             ImGui::Text("Version %s", VERSION);
             ImGui::Text("Built %s", BUILD_DATE);
             ImGui::PopStyleColor();
@@ -721,11 +768,11 @@ namespace dconstruct::ui {
                 for (const credit& entry : credits) {
                     ImGui::TableNextRow();
                     ImGui::TableSetColumnIndex(0);
-                    ImGui::PushStyleColor(ImGuiCol_Text, qui::color::retina_dark::Highlight);
+                    ImGui::PushStyleColor(ImGuiCol_Text, qui::color::active_palette().Highlight);
                     ImGui::TextUnformatted(entry.name);
                     ImGui::PopStyleColor();
                     ImGui::TableSetColumnIndex(1);
-                    ImGui::PushStyleColor(ImGuiCol_Text, qui::color::retina_dark::TextDisabled);
+                    ImGui::PushStyleColor(ImGuiCol_Text, qui::color::active_palette().TextDisabled);
                     ImGui::TextUnformatted(entry.role);
                     ImGui::PopStyleColor();
                 }
@@ -752,8 +799,15 @@ namespace dconstruct::ui {
     ImVec2 toggle_switch_size();
     bool draw_toggle_switch(const char* str_id, bool* value);
 
+    struct scheme_entry {
+        const char* key;
+        const char* label;
+    };
+    const std::vector<scheme_entry>& scheme_list();
+    void set_active_scheme(const std::string& name);
+
     void draw_setting_description(const char* text) {
-        ImGui::PushStyleColor(ImGuiCol_Text, qui::color::retina_dark::TextDisabled);
+        ImGui::PushStyleColor(ImGuiCol_Text, qui::color::active_palette().TextDisabled);
         ImGui::PushTextWrapPos(ImGui::GetContentRegionMax().x);
         ImGui::TextUnformatted(text);
         ImGui::PopTextWrapPos();
@@ -774,7 +828,7 @@ namespace dconstruct::ui {
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(28.0F, 24.0F));
         ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 8.0F);
         ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(8.0F, 8.0F));
-        ImGui::PushStyleColor(ImGuiCol_PopupBg, qui::color::retina_dark::WindowBackground);
+        ImGui::PushStyleColor(ImGuiCol_PopupBg, qui::color::active_palette().WindowBackground);
 
         if (ImGui::BeginPopupModal(
             "##dconstruct_settings",
@@ -783,7 +837,7 @@ namespace dconstruct::ui {
         )) {
             if (ImFont* title_font = qui::font_bold(); title_font != nullptr) {
                 ImGui::PushFont(title_font, title_font->LegacySize * 1.4F);
-                ImGui::PushStyleColor(ImGuiCol_Text, qui::color::retina_dark::Highlight);
+                ImGui::PushStyleColor(ImGuiCol_Text, qui::color::active_palette().Highlight);
                 ImGui::TextUnformatted("Settings");
                 ImGui::PopStyleColor();
                 ImGui::PopFont();
@@ -817,37 +871,86 @@ namespace dconstruct::ui {
             const ImVec2 toggle_size = toggle_switch_size();
             bool optimizations_changed = false;
 
-            ImGui::TextUnformatted("AST optimization");
+            const auto draw_optimization_toggle = [&](const char* label, const char* id, bool& value, const char* summary) {
+                ImGui::TextUnformatted(label);
+                ImGui::SameLine();
+                ImGui::SetCursorPosX(ImGui::GetContentRegionMax().x - toggle_size.x);
+                if (draw_toggle_switch(id, &value)) {
+                    ImGui::MarkIniSettingsDirty();
+                    optimizations_changed = true;
+                }
+                draw_setting_description(summary);
+                ImGui::Dummy(ImVec2(0.0F, 6.0F));
+            };
+
+            bool all_optimizations = all_decompilation_optimizations_enabled(state);
+            ImGui::TextUnformatted("All optimizations");
             ImGui::SameLine();
             ImGui::SetCursorPosX(ImGui::GetContentRegionMax().x - toggle_size.x);
-            if (draw_toggle_switch("##settings_ast_opt", &state.m_astOptimization)) {
+            if (draw_toggle_switch("##settings_opt_all", &all_optimizations)) {
+                set_all_decompilation_optimizations(state, all_optimizations);
                 ImGui::MarkIniSettingsDirty();
                 optimizations_changed = true;
             }
-            draw_setting_description(
-                "Cleans up the decompiled syntax tree before it is printed: removes unused temporary "
-                "variables and rewrites common patterns into 'foreach' loops and 'match' expressions, "
-                "so the output reads closer to hand-written code.");
+            draw_setting_description("Enables every AST cleanup pass below.");
+            ImGui::Dummy(ImVec2(0.0F, 6.0F));
 
-            ImGui::Dummy(ImVec2(0.0F, 8.0F));
-
-            ImGui::TextUnformatted("Regex optimization");
-            ImGui::SameLine();
-            ImGui::SetCursorPosX(ImGui::GetContentRegionMax().x - toggle_size.x);
-            if (draw_toggle_switch("##settings_regex_opt", &state.m_regexOptimization)) {
-                ImGui::MarkIniSettingsDirty();
-                optimizations_changed = true;
-            }
-            draw_setting_description(
-                "Runs text replacements over the finished output: rewrites 'new-boxed-value' calls into "
-                "typed 'boxed_*' helpers, turns pointer arithmetic like '(*var + (i * n))' into 'var[i]', "
-                "and collapses foreach boilerplate. Purely cosmetic touch-ups to the printed code.");
+            draw_optimization_toggle("SSO var", "##settings_opt_sso_var", state.m_ssoVarOptimization, "Removes short-lived temporary variables.");
+            draw_optimization_toggle("Foreach", "##settings_opt_foreach", state.m_foreachOptimization, "Rewrites counted iterator loops into foreach loops.");
+            draw_optimization_toggle("Match", "##settings_opt_match", state.m_matchOptimization, "Collapses repeated condition branches into match expressions.");
+            draw_optimization_toggle("Second var", "##settings_opt_second_var", state.m_secondVarOptimization, "Runs temporary-variable cleanup after foreach and match rewrites.");
+            draw_optimization_toggle("Member access", "##settings_opt_member_access", state.m_memberAccessOptimization, "Turns typed pointer offsets into member access.");
+            draw_optimization_toggle("Regex", "##settings_opt_regex", state.m_regexOptimization, "Runs AST-hosted pattern rewrites such as boxed values and foreach cleanup.");
 
             if (optimizations_changed) {
                 for (document& doc : state.m_documents) {
                     decompile_document(state, doc);
                 }
             }
+
+            ImGui::Dummy(ImVec2(0.0F, 12.0F));
+            ImGui::Separator();
+            ImGui::Dummy(ImVec2(0.0F, 6.0F));
+
+            if (ImFont* section_font = qui::font_semi_bold(); section_font != nullptr) {
+                ImGui::PushFont(section_font);
+                ImGui::TextUnformatted("Color theme");
+                ImGui::PopFont();
+            } else {
+                ImGui::TextUnformatted("Color theme");
+            }
+            ImGui::Dummy(ImVec2(0.0F, 6.0F));
+
+            const auto label_for = [](const std::string& key) -> const char* {
+                for (const scheme_entry& entry : scheme_list()) {
+                    if (key == entry.key) {
+                        return entry.label;
+                    }
+                }
+                return key.c_str();
+            };
+
+            ImGui::SetNextItemWidth(-FLT_MIN);
+            if (ImGui::BeginCombo("##settings_color_theme", label_for(state.m_colorScheme))) {
+                for (const scheme_entry& entry : scheme_list()) {
+                    const bool selected = state.m_colorScheme == entry.key;
+                    if (ImGui::Selectable(entry.label, selected)) {
+                        state.m_colorScheme = entry.key;
+                        ImGui::MarkIniSettingsDirty();
+                    }
+                    if (ImGui::IsItemHovered()) {
+                        state.m_previewScheme = entry.key;
+                        set_active_scheme(entry.key);
+                    }
+                    if (selected) {
+                        ImGui::SetItemDefaultFocus();
+                    }
+                }
+                ImGui::EndCombo();
+            }
+            draw_setting_description(
+                "Colors used for the decompiled code, the value tree and syntax highlighting. "
+                "Hover a theme to preview it instantly; the choice is saved when you click.");
 
             ImGui::Dummy(ImVec2(0.0F, 12.0F));
             constexpr f32 button_width = 110.0F;
@@ -887,8 +990,8 @@ namespace dconstruct::ui {
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0F, 0.0F));
         ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0F);
         ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0F);
-        ImGui::PushStyleColor(ImGuiCol_WindowBg, qui::color::retina_dark::MenuBarBackground);
-        ImGui::PushStyleColor(ImGuiCol_MenuBarBg, qui::color::retina_dark::MenuBarBackground);
+        ImGui::PushStyleColor(ImGuiCol_WindowBg, qui::color::active_palette().MenuBarBackground);
+        ImGui::PushStyleColor(ImGuiCol_MenuBarBg, qui::color::active_palette().MenuBarBackground);
         ImGui::Begin("##dconstruct_title_menu_bar", nullptr, flags);
 
         ImDrawList* draw_list = ImGui::GetWindowDrawList();
@@ -898,7 +1001,7 @@ namespace dconstruct::ui {
         draw_list->AddLine(
             ImVec2(bar_min.x, bar_max.y - 1.0F),
             ImVec2(bar_max.x, bar_max.y - 1.0F),
-            ImGui::ColorConvertFloat4ToU32(qui::color::retina_dark::Border)
+            ImGui::ColorConvertFloat4ToU32(qui::color::active_palette().Border)
         );
 
         constexpr f32 logo_size = 16.0F;
@@ -920,7 +1023,7 @@ namespace dconstruct::ui {
                 if (app_name_font != nullptr) {
                     ImGui::PushFont(app_name_font);
                 }
-                ImGui::PushStyleColor(ImGuiCol_Text, qui::color::retina_dark::Highlight);
+                ImGui::PushStyleColor(ImGuiCol_Text, qui::color::active_palette().Highlight);
                 ImGui::TextUnformatted("dconstruct");
                 ImGui::PopStyleColor();
                 if (app_name_font != nullptr) {
@@ -999,7 +1102,7 @@ namespace dconstruct::ui {
             }
 
             ImGui::SetCursorPosX((minimize_x - bar_min.x) - donate_width);
-            ImGui::PushStyleColor(ImGuiCol_Text, qui::color::retina_dark::Highlight);
+            ImGui::PushStyleColor(ImGuiCol_Text, qui::color::active_palette().Highlight);
             if (ImGui::MenuItem(donate_label)) {
                 open_url(DONATE_URL);
             }
@@ -1030,7 +1133,7 @@ namespace dconstruct::ui {
                 title_font,
                 title_font_size,
                 title_pos,
-                ImGui::ColorConvertFloat4ToU32(qui::color::retina_dark::Text),
+                ImGui::ColorConvertFloat4ToU32(qui::color::active_palette().Text),
                 title.c_str()
             );
         }
@@ -1069,11 +1172,11 @@ namespace dconstruct::ui {
 
     void draw_status_text(const app_state& state) {
         if (state.m_sidbase == nullptr) {
-            qui::status_label("No sidbase loaded \xE2\x80\x94 load one via File > Load Sidbase.", qui::color::retina_dark::AccentRed);
+            qui::status_label("No sidbase loaded \xE2\x80\x94 load one via File > Load Sidbase.", qui::color::active_palette().AccentRed);
         }
 
         if (!state.m_loadError.empty()) {
-            qui::status_label(state.m_loadError.c_str(), qui::color::retina_dark::AccentRed);
+            qui::status_label(state.m_loadError.c_str(), qui::color::active_palette().AccentRed);
         }
     }
 
@@ -1143,7 +1246,7 @@ namespace dconstruct::ui {
                 art_font,
                 art_font_size,
                 ImVec2(center.x - art_size.x * 0.5F, y),
-                ImGui::ColorConvertFloat4ToU32(qui::color::retina_dark::Highlight),
+                ImGui::ColorConvertFloat4ToU32(qui::color::active_palette().Highlight),
                 art_begin,
                 art_end
             );
@@ -1154,7 +1257,7 @@ namespace dconstruct::ui {
             primary_font,
             primary_font_size,
             ImVec2(center.x - primary_size.x * 0.5F, y),
-            ImGui::ColorConvertFloat4ToU32(qui::color::retina_dark::TextDisabled),
+            ImGui::ColorConvertFloat4ToU32(qui::color::active_palette().TextDisabled),
             primary
         );
         y += primary_size.y;
@@ -1163,7 +1266,7 @@ namespace dconstruct::ui {
             y += line_gap;
             draw_list->AddText(
                 ImVec2(center.x - secondary_size.x * 0.5F, y),
-                ImGui::ColorConvertFloat4ToU32(qui::color::retina_dark::AccentRed),
+                ImGui::ColorConvertFloat4ToU32(qui::color::active_palette().AccentRed),
                 secondary.c_str()
             );
         }
@@ -1207,7 +1310,7 @@ namespace dconstruct::ui {
             font,
             font_size,
             ImVec2(center.x - text_size.x * 0.5F, center.y - text_size.y * 0.5F),
-            ImGui::ColorConvertFloat4ToU32(qui::color::retina_dark::Text),
+            ImGui::ColorConvertFloat4ToU32(qui::color::active_palette().Text),
             text
         );
     }
@@ -1235,8 +1338,8 @@ namespace dconstruct::ui {
         }
         const ImVec2 frame_max(frame_min.x + frame_size.x, frame_min.y + frame_size.y);
 
-        const ImU32 border = ImGui::ColorConvertFloat4ToU32(qui::color::retina_dark::TableBorderStrong);
-        const ImU32 background = ImGui::ColorConvertFloat4ToU32(qui::color::retina_dark::WindowBackground);
+        const ImU32 border = ImGui::ColorConvertFloat4ToU32(qui::color::active_palette().TableBorderStrong);
+        const ImU32 background = ImGui::ColorConvertFloat4ToU32(qui::color::active_palette().WindowBackground);
         draw_list->AddRect(frame_min, frame_max, border, style.ChildRounding, 0, 1.0F);
 
         const f32 label_x = frame_min.x + style.WindowPadding.x + 8.0F;
@@ -1248,7 +1351,7 @@ namespace dconstruct::ui {
         if (font != nullptr) {
             ImGui::PushFont(font);
         }
-        draw_list->AddText(ImVec2(label_x, label_y), ImGui::ColorConvertFloat4ToU32(qui::color::retina_dark::Highlight), label);
+        draw_list->AddText(ImVec2(label_x, label_y), ImGui::ColorConvertFloat4ToU32(qui::color::active_palette().Highlight), label);
         if (font != nullptr) {
             ImGui::PopFont();
         }
@@ -1377,7 +1480,7 @@ namespace dconstruct::ui {
                     if (ImFont* font = qui::font_medium()) {
                         ImGui::PushFont(font);
                     }
-                    ImGui::PushStyleColor(ImGuiCol_Text, qui::color::retina_dark::TextDisabled);
+                    ImGui::PushStyleColor(ImGuiCol_Text, qui::color::active_palette().TextDisabled);
                     ImGui::TextUnformatted(type);
                     ImGui::PopStyleColor();
                     if (qui::font_medium() != nullptr) {
@@ -1389,7 +1492,7 @@ namespace dconstruct::ui {
         }
     }
 
-    namespace val_color {
+    namespace val_color_default {
         inline const ImVec4 IntZero = qui::color::retina_dark::TextDisabled;
         inline const ImVec4 Int = qui::color::rgba(0x6F, 0xB8, 0xE8);
         inline const ImVec4 Float = qui::color::rgba(0xE5, 0xC0, 0x7B);
@@ -1402,55 +1505,306 @@ namespace dconstruct::ui {
         inline const ImVec4 StateScript = qui::color::retina_dark::AccentYellow;
         inline const ImVec4 EntryName = qui::color::retina_dark::AccentYellow;
         inline const ImVec4 Group = qui::color::rgba(0xB0, 0xB0, 0xB8);
-    } // namespace val_color
+    } // namespace val_color_default
 
-    using code_color_map = std::unordered_map<ast::AST_COLOR, ImVec4>;
+    // A color scheme fuses every color the UI can theme: a flat map of the
+    // value-tree / code colors (code-window colors are the AST_COLOR set
+    // prefixed with "CODE_") plus the chrome palette that drives the rest of
+    // the ImGui UI (window backgrounds, buttons, tabs, title bar, ...). Chrome
+    // defaults to retina_dark so a scheme that leaves it untouched looks
+    // identical to the original dark theme.
+    struct color_scheme {
+        std::unordered_map<std::string, ImVec4> colors;
+        qui::color::palette chrome = qui::color::make_retina_dark_palette();
+    };
 
-    const code_color_map& qntm_color_map() {
-        using qui::color::rgba;
-        static const code_color_map map = {
-            {ast::AST_COLOR::BLANK, rgba(0xCC, 0xCC, 0xCC)},
-            {ast::AST_COLOR::NUMBER, rgba(0xB5, 0xCE, 0xA8)},
-            {ast::AST_COLOR::SID, rgba(0x4F, 0xC1, 0xFF)},
-            {ast::AST_COLOR::IDENTIFIER, rgba(0x9C, 0xDC, 0xFE)},
-            {ast::AST_COLOR::MEMBER, rgba(0x9C, 0xDC, 0xFE)},
-            {ast::AST_COLOR::TYPE, rgba(0x4E, 0xC9, 0xB0)},
-            {ast::AST_COLOR::CALL, rgba(0xDC, 0xDC, 0xAA)},
-            {ast::AST_COLOR::KEYWORD, rgba(0xC5, 0x86, 0xC0)},
-            {ast::AST_COLOR::STRING, rgba(0xAE, 0x33, 0x44)},
-            {ast::AST_COLOR::COMMENT, rgba(0x6A, 0x99, 0x55)},
-            {ast::AST_COLOR::OPERATOR, rgba(0xD4, 0xD4, 0xD4)},
-            {ast::AST_COLOR::PUNCTUATION, rgba(0xCC, 0xCC, 0xCC)},
-        };
-        return map;
+    const char* code_color_key(ast::AST_COLOR color) {
+        switch (color) {
+            case ast::AST_COLOR::BLANK:       return "CODE_BLANK";
+            case ast::AST_COLOR::NUMBER:      return "CODE_NUMBER";
+            case ast::AST_COLOR::SID:         return "CODE_SID";
+            case ast::AST_COLOR::IDENTIFIER:  return "CODE_IDENTIFIER";
+            case ast::AST_COLOR::MEMBER:      return "CODE_MEMBER";
+            case ast::AST_COLOR::TYPE:        return "CODE_TYPE";
+            case ast::AST_COLOR::CALL:        return "CODE_CALL";
+            case ast::AST_COLOR::KEYWORD:     return "CODE_KEYWORD";
+            case ast::AST_COLOR::STRING:      return "CODE_STRING";
+            case ast::AST_COLOR::COMMENT:     return "CODE_COMMENT";
+            case ast::AST_COLOR::OPERATOR:    return "CODE_OPERATOR";
+            case ast::AST_COLOR::PUNCTUATION: return "CODE_PUNCTUATION";
+        }
+        return "CODE_BLANK";
     }
 
-    const std::unordered_map<std::string, code_color_map>& color_schemes() {
-        static const std::unordered_map<std::string, code_color_map> schemes = {
-            {"qntm", qntm_color_map()},
+    struct scheme_def {
+        ImVec4 int_zero, integer, floating, sid, string, array, map, structure;
+        ImVec4 function, state_script, entry_name, group;
+        ImVec4 code_bg, code_gutter_bg, code_gutter_text, code_current_line;
+        ImVec4 c_blank, c_number, c_sid, c_identifier, c_member, c_type;
+        ImVec4 c_call, c_keyword, c_string, c_comment, c_operator, c_punctuation;
+    };
+
+    color_scheme make_scheme(const scheme_def& d) {
+        color_scheme scheme;
+        scheme.colors = {
+            {"IntZero", d.int_zero}, {"Int", d.integer}, {"Float", d.floating}, {"Sid", d.sid},
+            {"String", d.string}, {"Array", d.array}, {"Map", d.map}, {"Struct", d.structure},
+            {"Function", d.function}, {"StateScript", d.state_script}, {"EntryName", d.entry_name}, {"Group", d.group},
+            {"CODE_BG", d.code_bg}, {"CODE_GUTTER_BG", d.code_gutter_bg},
+            {"CODE_GUTTER_TEXT", d.code_gutter_text}, {"CODE_CURRENT_LINE", d.code_current_line},
+            {"CODE_BLANK", d.c_blank}, {"CODE_NUMBER", d.c_number}, {"CODE_SID", d.c_sid},
+            {"CODE_IDENTIFIER", d.c_identifier}, {"CODE_MEMBER", d.c_member}, {"CODE_TYPE", d.c_type},
+            {"CODE_CALL", d.c_call}, {"CODE_KEYWORD", d.c_keyword}, {"CODE_STRING", d.c_string},
+            {"CODE_COMMENT", d.c_comment}, {"CODE_OPERATOR", d.c_operator}, {"CODE_PUNCTUATION", d.c_punctuation},
+        };
+        return scheme;
+    }
+
+    // Builds a full chrome palette from a handful of semantic base colors so a
+    // theme only needs to specify its identity colors; the alpha-blended
+    // interactive states are derived here, mirroring the structure of the
+    // retina_dark palette.
+    struct chrome_def {
+        ImVec4 window_bg, panel, panel_raised, menubar, title;
+        ImVec4 text, text_dim, border;
+        ImVec4 accent, accent_strong, highlight, danger, warning;
+    };
+
+    qui::color::palette make_chrome(const chrome_def& d) {
+        const auto a = [](ImVec4 v, int alpha) {
+            v.w = static_cast<float>(alpha) / 255.0F;
+            return v;
+        };
+        qui::color::palette p;
+        p.WindowBackground = d.window_bg;
+        p.Panel = d.panel;
+        p.PanelRaised = d.panel_raised;
+        p.PopupBackground = d.panel;
+        p.MenuBarBackground = d.menubar;
+        p.TitleBackground = d.title;
+        p.Text = d.text;
+        p.TextDisabled = d.text_dim;
+        p.Border = a(d.border, 0x7F);
+        p.Button = a(d.accent, 0x66);
+        p.ButtonHovered = d.accent;
+        p.ButtonActive = d.accent_strong;
+        p.FrameBackground = a(d.accent, 0x40);
+        p.FrameBackgroundHovered = a(d.accent, 0x66);
+        p.FrameBackgroundActive = a(d.accent, 0xAA);
+        p.Header = a(d.accent, 0x4F);
+        p.HeaderHovered = a(d.accent, 0xCC);
+        p.HeaderActive = d.accent;
+        p.ScrollbarBackground = a(d.window_bg, 0x87);
+        p.ScrollbarGrab = a(d.text_dim, 0x80);
+        p.ScrollbarGrabHovered = a(d.text_dim, 0xB0);
+        p.ScrollbarGrabActive = d.text_dim;
+        p.SeparatorActive = d.accent;
+        p.SeparatorHovered = a(d.accent, 0xC6);
+        p.SliderGrab = a(d.accent, 0xCC);
+        p.SliderGrabActive = d.accent;
+        p.Tab = a(d.accent, 0x88);
+        p.TabActive = d.accent_strong;
+        p.TabHovered = a(d.accent, 0xCC);
+        p.TabUnfocused = d.panel;
+        p.TabUnfocusedActive = d.panel_raised;
+        p.TableBorderStrong = a(d.border, 0xFF);
+        p.TableBorderLight = a(d.border, 0x80);
+        p.TableHeaderBackground = d.panel_raised;
+        p.TableRowBackground = qui::color::rgba(0x00, 0x00, 0x00, 0x00);
+        p.TableRowBackgroundAlt = a(d.text, 0x12);
+        p.TextSelectedBackground = a(d.accent, 0x59);
+        p.AccentBlue = d.accent_strong;
+        p.AccentGreen = d.highlight;
+        p.AccentPurple = d.accent;
+        p.AccentRed = d.danger;
+        p.AccentYellow = d.warning;
+        p.Highlight = d.highlight;
+        return p;
+    }
+
+    color_scheme make_scheme(const scheme_def& d, const chrome_def& c) {
+        color_scheme scheme = make_scheme(d);
+        scheme.chrome = make_chrome(c);
+        return scheme;
+    }
+
+    const std::unordered_map<std::string, color_scheme>& color_schemes() {
+        using qui::color::rgba;
+        static const std::unordered_map<std::string, color_scheme> schemes = {
+            {"qntm", make_scheme({
+                .int_zero = rgba(0x7F, 0x7F, 0x7F), .integer = rgba(0x6F, 0xB8, 0xE8),
+                .floating = rgba(0xE5, 0xC0, 0x7B), .sid = rgba(0xC2, 0x9E, 0xF0),
+                .string = rgba(0xE2, 0x8C, 0x6E), .array = rgba(0x9C, 0xD6, 0x8E),
+                .map = rgba(0x5C, 0xB8, 0xD6), .structure = rgba(0xCF, 0xCF, 0xD4),
+                .function = rgba(0x4D, 0xC6, 0x9B), .state_script = rgba(0xF1, 0xC4, 0x0F),
+                .entry_name = rgba(0xF1, 0xC4, 0x0F), .group = rgba(0xB0, 0xB0, 0xB8),
+                .code_bg = rgba(0x18, 0x18, 0x18), .code_gutter_bg = rgba(0x0F, 0x0F, 0x0F),
+                .code_gutter_text = rgba(0x7F, 0x7F, 0x7F), .code_current_line = rgba(0xFF, 0xFF, 0xFF, 0x0D),
+                .c_blank = rgba(0xCC, 0xCC, 0xCC), .c_number = rgba(0xB5, 0xCE, 0xA8),
+                .c_sid = rgba(0x4F, 0xC1, 0xFF), .c_identifier = rgba(0x9C, 0xDC, 0xFE),
+                .c_member = rgba(0x9C, 0xDC, 0xFE), .c_type = rgba(0x4E, 0xC9, 0xB0),
+                .c_call = rgba(0xDC, 0xDC, 0xAA), .c_keyword = rgba(0xC5, 0x86, 0xC0),
+                .c_string = rgba(0xAE, 0x33, 0x44), .c_comment = rgba(0x6A, 0x99, 0x55),
+                .c_operator = rgba(0xD4, 0xD4, 0xD4), .c_punctuation = rgba(0xCC, 0xCC, 0xCC),
+            })},
+            {"qntm-light", make_scheme({
+                .int_zero = rgba(0x7F, 0x7F, 0x7F), .integer = rgba(0x6F, 0xB8, 0xE8),
+                .floating = rgba(0xE5, 0xC0, 0x7B), .sid = rgba(0xC2, 0x9E, 0xF0),
+                .string = rgba(0xE2, 0x8C, 0x6E), .array = rgba(0x9C, 0xD6, 0x8E),
+                .map = rgba(0x5C, 0xB8, 0xD6), .structure = rgba(0xCF, 0xCF, 0xD4),
+                .function = rgba(0x4D, 0xC6, 0x9B), .state_script = rgba(0xF1, 0xC4, 0x0F),
+                .entry_name = rgba(0xF1, 0xC4, 0x0F), .group = rgba(0xB0, 0xB0, 0xB8),
+                .code_bg = rgba(0xFF, 0xFF, 0xFF), .code_gutter_bg = rgba(0xF3, 0xF3, 0xF3),
+                .code_gutter_text = rgba(0x23, 0x78, 0x93), .code_current_line = rgba(0x00, 0x00, 0x00, 0x0D),
+                .c_blank = rgba(0x00, 0x00, 0x00), .c_number = rgba(0x09, 0x86, 0x58),
+                .c_sid = rgba(0x00, 0x70, 0xC1), .c_identifier = rgba(0x00, 0x10, 0x80),
+                .c_member = rgba(0x00, 0x10, 0x80), .c_type = rgba(0x26, 0x7F, 0x99),
+                .c_call = rgba(0x79, 0x5E, 0x26), .c_keyword = rgba(0x00, 0x00, 0xFF),
+                .c_string = rgba(0xAE, 0x33, 0x44), .c_comment = rgba(0x00, 0x80, 0x00),
+                .c_operator = rgba(0x00, 0x00, 0x00), .c_punctuation = rgba(0x00, 0x00, 0x00),
+            }, {
+                .window_bg = rgba(0xF3, 0xF3, 0xF3), .panel = rgba(0xFF, 0xFF, 0xFF),
+                .panel_raised = rgba(0xEC, 0xEC, 0xEC), .menubar = rgba(0xDD, 0xDD, 0xDD),
+                .title = rgba(0xE5, 0xE5, 0xE5), .text = rgba(0x1E, 0x1E, 0x1E),
+                .text_dim = rgba(0x6E, 0x6E, 0x6E), .border = rgba(0xC8, 0xC8, 0xC8),
+                .accent = rgba(0x00, 0x78, 0xD4), .accent_strong = rgba(0x00, 0x5A, 0x9E),
+                .highlight = rgba(0x1A, 0x7F, 0x37), .danger = rgba(0xD1, 0x34, 0x38),
+                .warning = rgba(0xBF, 0x88, 0x03),
+            })},
+            {"monokai", make_scheme({
+                .int_zero = rgba(0x75, 0x71, 0x5E), .integer = rgba(0xAE, 0x81, 0xFF),
+                .floating = rgba(0xAE, 0x81, 0xFF), .sid = rgba(0x66, 0xD9, 0xEF),
+                .string = rgba(0xE6, 0xDB, 0x74), .array = rgba(0xA6, 0xE2, 0x2E),
+                .map = rgba(0x66, 0xD9, 0xEF), .structure = rgba(0xF8, 0xF8, 0xF2),
+                .function = rgba(0xA6, 0xE2, 0x2E), .state_script = rgba(0xFD, 0x97, 0x1F),
+                .entry_name = rgba(0xFD, 0x97, 0x1F), .group = rgba(0x75, 0x71, 0x5E),
+                .code_bg = rgba(0x27, 0x28, 0x22), .code_gutter_bg = rgba(0x1E, 0x1F, 0x1C),
+                .code_gutter_text = rgba(0x75, 0x71, 0x5E), .code_current_line = rgba(0xFF, 0xFF, 0xFF, 0x0D),
+                .c_blank = rgba(0xF8, 0xF8, 0xF2), .c_number = rgba(0xAE, 0x81, 0xFF),
+                .c_sid = rgba(0xAE, 0x81, 0xFF), .c_identifier = rgba(0xF8, 0xF8, 0xF2),
+                .c_member = rgba(0xFD, 0x97, 0x1F), .c_type = rgba(0x66, 0xD9, 0xEF),
+                .c_call = rgba(0xA6, 0xE2, 0x2E), .c_keyword = rgba(0xF9, 0x26, 0x72),
+                .c_string = rgba(0xE6, 0xDB, 0x74), .c_comment = rgba(0x75, 0x71, 0x5E),
+                .c_operator = rgba(0xF9, 0x26, 0x72), .c_punctuation = rgba(0xF8, 0xF8, 0xF2),
+            }, {
+                .window_bg = rgba(0x1E, 0x1F, 0x1C), .panel = rgba(0x27, 0x28, 0x22),
+                .panel_raised = rgba(0x3E, 0x3D, 0x32), .menubar = rgba(0x1E, 0x1F, 0x1C),
+                .title = rgba(0x1E, 0x1F, 0x1C), .text = rgba(0xF8, 0xF8, 0xF2),
+                .text_dim = rgba(0x75, 0x71, 0x5E), .border = rgba(0x49, 0x48, 0x3E),
+                .accent = rgba(0x66, 0xD9, 0xEF), .accent_strong = rgba(0x4E, 0xA8, 0xC0),
+                .highlight = rgba(0xA6, 0xE2, 0x2E), .danger = rgba(0xF9, 0x26, 0x72),
+                .warning = rgba(0xFD, 0x97, 0x1F),
+            })},
+            {"nord", make_scheme({
+                .int_zero = rgba(0x4C, 0x56, 0x6A), .integer = rgba(0x88, 0xC0, 0xD0),
+                .floating = rgba(0xB4, 0x8E, 0xAD), .sid = rgba(0x8F, 0xBC, 0xBB),
+                .string = rgba(0xA3, 0xBE, 0x8C), .array = rgba(0xA3, 0xBE, 0x8C),
+                .map = rgba(0x88, 0xC0, 0xD0), .structure = rgba(0xD8, 0xDE, 0xE9),
+                .function = rgba(0x88, 0xC0, 0xD0), .state_script = rgba(0xEB, 0xCB, 0x8B),
+                .entry_name = rgba(0xEB, 0xCB, 0x8B), .group = rgba(0x61, 0x6E, 0x88),
+                .code_bg = rgba(0x2E, 0x34, 0x40), .code_gutter_bg = rgba(0x27, 0x2C, 0x36),
+                .code_gutter_text = rgba(0x4C, 0x56, 0x6A), .code_current_line = rgba(0xFF, 0xFF, 0xFF, 0x0A),
+                .c_blank = rgba(0xD8, 0xDE, 0xE9), .c_number = rgba(0xB4, 0x8E, 0xAD),
+                .c_sid = rgba(0x8F, 0xBC, 0xBB), .c_identifier = rgba(0xD8, 0xDE, 0xE9),
+                .c_member = rgba(0x88, 0xC0, 0xD0), .c_type = rgba(0x8F, 0xBC, 0xBB),
+                .c_call = rgba(0x88, 0xC0, 0xD0), .c_keyword = rgba(0x81, 0xA1, 0xC1),
+                .c_string = rgba(0xA3, 0xBE, 0x8C), .c_comment = rgba(0x61, 0x6E, 0x88),
+                .c_operator = rgba(0x81, 0xA1, 0xC1), .c_punctuation = rgba(0xEC, 0xEF, 0xF4),
+            }, {
+                .window_bg = rgba(0x2E, 0x34, 0x40), .panel = rgba(0x3B, 0x42, 0x52),
+                .panel_raised = rgba(0x43, 0x4C, 0x5E), .menubar = rgba(0x2E, 0x34, 0x40),
+                .title = rgba(0x2E, 0x34, 0x40), .text = rgba(0xEC, 0xEF, 0xF4),
+                .text_dim = rgba(0x6C, 0x7A, 0x96), .border = rgba(0x4C, 0x56, 0x6A),
+                .accent = rgba(0x88, 0xC0, 0xD0), .accent_strong = rgba(0x5E, 0x81, 0xAC),
+                .highlight = rgba(0xA3, 0xBE, 0x8C), .danger = rgba(0xBF, 0x61, 0x6A),
+                .warning = rgba(0xEB, 0xCB, 0x8B),
+            })},
         };
         return schemes;
     }
 
-
-    const code_color_map& active_color_map(const app_state& state) {
-        const auto& schemes = color_schemes();
-        if (const auto it = schemes.find(state.m_colorScheme); it != schemes.end()) {
-            return it->second;
-        }
-        return qntm_color_map();
+    const std::vector<scheme_entry>& scheme_list() {
+        static const std::vector<scheme_entry> list = {
+            {"qntm", "qntm (dark)"},
+            {"qntm-light", "qntm light"},
+            {"monokai", "monokai"},
+            {"nord", "nord"},
+        };
+        return list;
     }
 
-    void render_decompiled_code(const char* id, const app_state& state, const ast::code_color_buffer& code) {
-        const code_color_map& scheme = active_color_map(state);
+    const color_scheme& scheme_by_name(const std::string& name) {
+        const auto& schemes = color_schemes();
+        if (const auto it = schemes.find(name); it != schemes.end()) {
+            return it->second;
+        }
+        return schemes.at("qntm");
+    }
+
+    // The scheme used to resolve colors for the frame currently being drawn.
+    // It mirrors a single-threaded ImGui frame, so a process-wide pointer is
+    // fine and lets the value tree resolve its colors without threading state
+    // through every node. Hover-preview in Settings can repoint this for one
+    // frame without changing the saved scheme.
+    const color_scheme*& active_scheme() {
+        static const color_scheme* ptr = nullptr;
+        return ptr;
+    }
+
+    // Activates a scheme for the rest of the frame: repoints the resolver used
+    // by the value tree / code window and pushes the scheme's chrome palette
+    // into qui and the live ImGui style so the entire UI re-themes. Used both at
+    // frame start (saved scheme) and on hover in Settings (preview).
+    void set_active_scheme(const std::string& name) {
+        const color_scheme& scheme = scheme_by_name(name);
+        active_scheme() = &scheme;
+        qui::color::active_palette() = scheme.chrome;
+        qui::apply_palette_colors(qui::color::active_palette());
+    }
+
+    ImVec4 scheme_lookup(const char* key, const ImVec4& fallback) {
+        if (const color_scheme* s = active_scheme(); s != nullptr) {
+            if (const auto it = s->colors.find(key); it != s->colors.end()) {
+                return it->second;
+            }
+        }
+        return fallback;
+    }
+
+    namespace gcol {
+        inline ImVec4 IntZero()     { return scheme_lookup("IntZero", val_color_default::IntZero); }
+        inline ImVec4 Int()         { return scheme_lookup("Int", val_color_default::Int); }
+        inline ImVec4 Float()       { return scheme_lookup("Float", val_color_default::Float); }
+        inline ImVec4 Sid()         { return scheme_lookup("Sid", val_color_default::Sid); }
+        inline ImVec4 String()      { return scheme_lookup("String", val_color_default::String); }
+        inline ImVec4 Array()       { return scheme_lookup("Array", val_color_default::Array); }
+        inline ImVec4 Map()         { return scheme_lookup("Map", val_color_default::Map); }
+        inline ImVec4 Struct()      { return scheme_lookup("Struct", val_color_default::Struct); }
+        inline ImVec4 Function()    { return scheme_lookup("Function", val_color_default::Function); }
+        inline ImVec4 StateScript() { return scheme_lookup("StateScript", val_color_default::StateScript); }
+        inline ImVec4 EntryName()   { return scheme_lookup("EntryName", val_color_default::EntryName); }
+        inline ImVec4 Group()       { return scheme_lookup("Group", val_color_default::Group); }
+    } // namespace gcol
+
+    qui::code::theme scheme_code_theme() {
+        qui::code::theme th = qui::code::default_theme();
+        th.background = qui::code::to_u32(scheme_lookup("CODE_BG", qui::color::active_palette().Panel));
+        th.gutter_background = qui::code::to_u32(scheme_lookup("CODE_GUTTER_BG", qui::color::active_palette().WindowBackground));
+        th.gutter_text = qui::code::to_u32(scheme_lookup("CODE_GUTTER_TEXT", qui::color::active_palette().TextDisabled));
+        th.current_line = qui::code::to_u32(scheme_lookup("CODE_CURRENT_LINE", qui::color::rgba(0xFF, 0xFF, 0xFF, 0x0D)));
+        th.text = qui::code::to_u32(scheme_lookup("CODE_BLANK", qui::color::active_palette().Text));
+        return th;
+    }
+
+    void render_decompiled_code(const char* id, const app_state&, const ast::code_color_buffer& code) {
         std::vector<qui::code::colored_span> spans;
         spans.reserve(code.size());
         for (const auto& [color, text] : code) {
-            const auto it = scheme.find(color);
-            const ImVec4 resolved = it != scheme.end() ? it->second : qui::color::retina_dark::Text;
+            const ImVec4 resolved = scheme_lookup(code_color_key(color), qui::color::active_palette().Text);
             spans.push_back({qui::code::to_u32(resolved), text});
         }
-        qui::code::code_window_colored(id, spans);
+        const qui::code::theme th = scheme_code_theme();
+        qui::code::code_window_colored(id, spans, ImVec2(0.0F, 0.0F), th);
     }
 
     struct value_view {
@@ -1479,7 +1833,7 @@ namespace dconstruct::ui {
         if (bold != nullptr) {
             ImGui::PushFont(bold);
         }
-        ImGui::PushStyleColor(ImGuiCol_Text, qui::color::retina_dark::Text);
+        ImGui::PushStyleColor(ImGuiCol_Text, qui::color::active_palette().Text);
         ImGui::Text("%s: ", member_name);
         ImGui::PopStyleColor();
         if (bold != nullptr) {
@@ -1558,7 +1912,7 @@ namespace dconstruct::ui {
                 }
             }
             ImGui::SameLine(0.0F, 0.0F);
-            ImGui::TextColored(qui::color::retina_dark::TextDisabled, "  %s", shown_suffix);
+            ImGui::TextColored(qui::color::active_palette().TextDisabled, "  %s", shown_suffix);
         }
         ImGui::PopStyleVar(2);
         if (!leaf && open) {
@@ -1590,7 +1944,7 @@ namespace dconstruct::ui {
 
     struct typed_value_text {
         std::string text;
-        ImVec4 color = val_color::Struct;
+        ImVec4 color = gcol::Struct();
         std::optional<edit_kind> editKind;
     };
 
@@ -1622,7 +1976,7 @@ namespace dconstruct::ui {
         if (entry.m_typeId == SID("array")) {
             std::snprintf(label, sizeof(label), "%sarray", prefix);
             std::snprintf(suffix, sizeof(suffix), "[0x%05X] {size: %zu}", static_cast<u32>(entry.m_offset), entry.m_values.size());
-            const bool open = dv_node(v, id, val_color::Array, label, suffix, entry.m_values.empty(), member_name, prefix);
+            const bool open = dv_node(v, id, gcol::Array(), label, suffix, entry.m_values.empty(), member_name, prefix);
             if (open && !entry.m_values.empty()) {
                 dv_draw_values(v, entry.m_values);
                 dv_tree_pop(v);
@@ -1630,16 +1984,16 @@ namespace dconstruct::ui {
             return;
         }
 
-        ImVec4 color = val_color::Struct;
+        ImVec4 color = gcol::Struct();
         std::string type_storage;
         const char* type_name = "anonymous struct";
         if (entry.m_typeId != 0) {
             type_storage = v.state->m_sidbase->lookup(entry.m_typeId, v.doc->m_file->m_sidCache);
             type_name = type_storage.c_str();
             if (entry.m_typeId == SID("state-script")) {
-                color = val_color::StateScript;
+                color = gcol::StateScript();
             } else if (entry.m_typeId == SID("script-lambda")) {
-                color = val_color::Function;
+                color = gcol::Function();
             }
         }
 
@@ -1677,21 +2031,21 @@ namespace dconstruct::ui {
 
     ImVec4 color_for_value_prefix(std::string_view prefix) {
         if (prefix == "int" || prefix == "int64" || prefix == "uint64") {
-            return val_color::Int;
+            return gcol::Int();
         }
         if (prefix == "float") {
-            return val_color::Float;
+            return gcol::Float();
         }
         if (prefix == "sid" || prefix == "pointer") {
-            return val_color::Sid;
+            return gcol::Sid();
         }
         if (prefix == "function") {
-            return val_color::Function;
+            return gcol::Function();
         }
         if (prefix == "string") {
-            return val_color::String;
+            return gcol::String();
         }
-        return val_color::Struct;
+        return gcol::Struct();
     }
 
     std::optional<edit_kind> edit_kind_for_value_prefix(std::string_view prefix) {
@@ -1842,7 +2196,7 @@ namespace dconstruct::ui {
                 }
             }
             ImGui::SameLine(0.0F, 0.0F);
-            ImGui::TextColored(qui::color::retina_dark::TextDisabled, "  %s", shown_suffix);
+            ImGui::TextColored(qui::color::active_palette().TextDisabled, "  %s", shown_suffix);
         }
         ImGui::PopStyleVar(2);
         if (double_clicked && ptr_in_file(*doc, data_ptr)) {
@@ -1869,26 +2223,26 @@ namespace dconstruct::ui {
                 dv_draw_state_script(v, *entry, index);
             } else if constexpr (std::is_same_v<T, const u8*>) {
                 std::snprintf(label, sizeof(label), "%s%u", prefix, *entry);
-                dv_node(v, entry, *entry == 0 ? val_color::IntZero : val_color::Int, label, ": u8", true, member_name, prefix);
+                dv_node(v, entry, *entry == 0 ? gcol::IntZero() : gcol::Int(), label, ": u8", true, member_name, prefix);
             } else if constexpr (std::is_same_v<T, const u16*>) {
                 std::snprintf(label, sizeof(label), "%s%u", prefix, *entry);
-                dv_node(v, entry, *entry == 0 ? val_color::IntZero : val_color::Int, label, ": u16", true, member_name, prefix);
+                dv_node(v, entry, *entry == 0 ? gcol::IntZero() : gcol::Int(), label, ": u16", true, member_name, prefix);
             } else if constexpr (std::is_same_v<T, const u32*>) {
                 std::snprintf(label, sizeof(label), "%s%u", prefix, *entry);
-                dv_node(v, entry, *entry == 0 ? val_color::IntZero : val_color::Int, label, ": u32", true, member_name, prefix);
+                dv_node(v, entry, *entry == 0 ? gcol::IntZero() : gcol::Int(), label, ": u32", true, member_name, prefix);
             } else if constexpr (std::is_same_v<T, const i32*>) {
                 std::snprintf(label, sizeof(label), "%s%d", prefix, *entry);
-                dv_editable_leaf(v, entry, entry, edit_kind::Int, *entry == 0 ? val_color::IntZero : val_color::Int, label, ": int", prefix, member_name);
+                dv_editable_leaf(v, entry, entry, edit_kind::Int, *entry == 0 ? gcol::IntZero() : gcol::Int(), label, ": int", prefix, member_name);
             } else if constexpr (std::is_same_v<T, const u64*>) {
                 const std::string resolved = v.state->m_sidbase->lookup(*entry, v.doc->m_file->m_sidCache);
                 std::snprintf(label, sizeof(label), "%s%s", prefix, resolved.c_str());
-                dv_editable_leaf(v, entry, entry, edit_kind::Sid, val_color::Sid, label, ": sid", prefix, member_name);
+                dv_editable_leaf(v, entry, entry, edit_kind::Sid, gcol::Sid(), label, ": sid", prefix, member_name);
             } else if constexpr (std::is_same_v<T, const f32*>) {
                 std::snprintf(label, sizeof(label), "%s%.2f", prefix, *entry);
-                dv_editable_leaf(v, entry, entry, edit_kind::Float, val_color::Float, label, ": float", prefix, member_name);
+                dv_editable_leaf(v, entry, entry, edit_kind::Float, gcol::Float(), label, ": float", prefix, member_name);
             } else if constexpr (std::is_same_v<T, const char*>) {
                 std::snprintf(label, sizeof(label), "%s\"%s\"", prefix, entry != nullptr ? entry : "");
-                dv_node(v, entry, val_color::String, label, ": string", true, member_name, prefix);
+                dv_node(v, entry, gcol::String(), label, ": string", true, member_name, prefix);
             } else if constexpr (std::is_same_v<T, const structs::map*>) {
                 std::snprintf(label, sizeof(label), "%smap", prefix);
                 std::snprintf(
@@ -1898,7 +2252,7 @@ namespace dconstruct::ui {
                     file_offset(*v.doc, entry->keys.data),
                     file_offset(*v.doc, entry->values.data)
                 );
-                dv_node(v, entry, val_color::Map, label, suffix, true, member_name, prefix);
+                dv_node(v, entry, gcol::Map(), label, suffix, true, member_name, prefix);
             }
         },
                    value);
@@ -1993,7 +2347,7 @@ namespace dconstruct::ui {
         }
 
         const bool empty = keys == nullptr || vals == nullptr || keys->m_values.empty();
-        const bool open = dv_node(v, id, val_color::Map, label, suffix, empty);
+        const bool open = dv_node(v, id, gcol::Map(), label, suffix, empty);
         if (!open || empty) {
             return;
         }
@@ -2072,7 +2426,7 @@ namespace dconstruct::ui {
         static const char symbols_node = 0;
 
         ImGui::SetNextItemOpen(true, ImGuiCond_Once);
-        if (dv_node(v, &instructions_node, val_color::Group, "Instructions", nullptr, false)) {
+        if (dv_node(v, &instructions_node, gcol::Group(), "Instructions", nullptr, false)) {
             if (ImGui::BeginTable("##instructions", 2, table_flags)) {
                 ImGui::TableSetupColumn("Instruction", ImGuiTableColumnFlags_WidthFixed, FUNCTION_INSTRUCTION_COLUMN_WIDTH);
                 ImGui::TableSetupColumn("Comment", ImGuiTableColumnFlags_WidthStretch);
@@ -2083,7 +2437,7 @@ namespace dconstruct::ui {
                     ImGui::TableSetColumnIndex(0);
                     ImGui::TextUnformatted(line.m_text.c_str());
                     ImGui::TableSetColumnIndex(1);
-                    ImGui::TextColored(qui::color::retina_dark::TextDisabled, "%s", line.m_comment.c_str());
+                    ImGui::TextColored(qui::color::active_palette().TextDisabled, "%s", line.m_comment.c_str());
                 }
                 ImGui::EndTable();
             }
@@ -2093,14 +2447,14 @@ namespace dconstruct::ui {
         const SymbolTable& symbols = func.m_stackFrame.m_symbolTable;
         if (symbols.m_location.m_ptr != nullptr && !symbols.m_types.empty()) {
             ImGui::SetNextItemOpen(true, ImGuiCond_Once);
-            if (dv_node(v, &symbols_node, val_color::Group, "Symbol Table", nullptr, false)) {
+            if (dv_node(v, &symbols_node, gcol::Group(), "Symbol Table", nullptr, false)) {
                 if (ImGui::BeginTable("##symbols", 3, table_flags)) {
                     ImGui::TableSetupColumn("#", ImGuiTableColumnFlags_WidthFixed);
                     ImGui::TableSetupColumn("Offset", ImGuiTableColumnFlags_WidthFixed);
                     ImGui::TableSetupColumn("Value");
                     ImGui::TableHeadersRow();
 
-                    const ImVec4 hl = qui::color::retina_dark::Highlight;
+                    const ImVec4 hl = qui::color::active_palette().Highlight;
                     const ImU32 row_hl = ImGui::ColorConvertFloat4ToU32(ImVec4(hl.x, hl.y, hl.z, 0.15F));
 
                     for (u32 i = 0; i < symbols.m_types.size(); ++i) {
@@ -2114,7 +2468,7 @@ namespace dconstruct::ui {
                         ImGui::TableSetColumnIndex(0);
                         ImGui::Text("%04X", i);
                         ImGui::TableSetColumnIndex(1);
-                        ImGui::TextColored(qui::color::retina_dark::TextDisabled, "0x%06X", file_offset(*v.doc, value_location.m_ptr));
+                        ImGui::TextColored(qui::color::active_palette().TextDisabled, "0x%06X", file_offset(*v.doc, value_location.m_ptr));
                         ImGui::TableSetColumnIndex(2);
                         ImGui::PushID(static_cast<i32>(i));
                         dv_editable_table_value(v, value_location.m_ptr, value_location.m_ptr, value);
@@ -2136,7 +2490,7 @@ namespace dconstruct::ui {
         std::snprintf(label, sizeof(label), "[%d] function %s", index, func.get_id().c_str());
         const void* fid = stable_id(*v.doc, func.m_originalOffset);
         ImGui::SetNextItemAllowOverlap();
-        const bool open = dv_node(v, fid, val_color::Function, label, nullptr, false);
+        const bool open = dv_node(v, fid, gcol::Function(), label, nullptr, false);
         dv_function_switch_and_body(v, func, fid, open);
     }
 
@@ -2182,12 +2536,12 @@ namespace dconstruct::ui {
         const f32 seg = size.x * 0.5F;
         const ImVec2 max(pos.x + size.x, pos.y + size.y);
 
-        draw_list->AddRectFilled(pos, max, ImGui::ColorConvertFloat4ToU32(qui::color::retina_dark::WindowBackground));
-        draw_list->AddRect(pos, max, ImGui::ColorConvertFloat4ToU32(qui::color::retina_dark::Border));
+        draw_list->AddRectFilled(pos, max, ImGui::ColorConvertFloat4ToU32(qui::color::active_palette().WindowBackground));
+        draw_list->AddRect(pos, max, ImGui::ColorConvertFloat4ToU32(qui::color::active_palette().Border));
 
         const ImVec2 knob_min(pos.x + t * seg, pos.y);
         const ImVec2 knob_max(knob_min.x + seg, pos.y + size.y);
-        ImVec4 accent = qui::color::retina_dark::Highlight;
+        ImVec4 accent = qui::color::active_palette().Highlight;
         if (!hovered) {
             accent.w = 0.85F;
         }
@@ -2197,8 +2551,8 @@ namespace dconstruct::ui {
         if (font != nullptr) {
             ImGui::PushFont(font);
         }
-        const ImU32 active = ImGui::ColorConvertFloat4ToU32(qui::color::retina_dark::WindowBackground);
-        const ImU32 inactive = ImGui::ColorConvertFloat4ToU32(qui::color::retina_dark::TextDisabled);
+        const ImU32 active = ImGui::ColorConvertFloat4ToU32(qui::color::active_palette().WindowBackground);
+        const ImU32 inactive = ImGui::ColorConvertFloat4ToU32(qui::color::active_palette().TextDisabled);
         const char* labels[2] = {"DCPL", "ASM"};
         for (int i = 0; i < 2; ++i) {
             const ImVec2 text_size = ImGui::CalcTextSize(labels[i]);
@@ -2249,8 +2603,8 @@ namespace dconstruct::ui {
         const f32 radius = size.y * 0.5F;
         const ImVec2 max(pos.x + size.x, pos.y + size.y);
 
-        const ImVec4 off_col = qui::color::retina_dark::Border;
-        ImVec4 on_col = qui::color::retina_dark::Highlight;
+        const ImVec4 off_col = qui::color::active_palette().Border;
+        ImVec4 on_col = qui::color::active_palette().Highlight;
         if (!hovered) {
             on_col.w = 0.85F;
         }
@@ -2265,7 +2619,7 @@ namespace dconstruct::ui {
         const f32 knob_r = radius - 2.0F;
         const f32 knob_x = pos.x + radius + t * (size.x - size.y);
         const ImVec2 knob_center(knob_x, pos.y + radius);
-        draw_list->AddCircleFilled(knob_center, knob_r, ImGui::ColorConvertFloat4ToU32(qui::color::retina_dark::WindowBackground));
+        draw_list->AddCircleFilled(knob_center, knob_r, ImGui::ColorConvertFloat4ToU32(qui::color::active_palette().WindowBackground));
 
         ImGui::PopID();
         return changed;
@@ -2293,13 +2647,13 @@ namespace dconstruct::ui {
             if (it != v.doc->m_decompiled.end()) {
                 const auto err_it = v.doc->m_decompErrors.find(&func);
                 if (err_it != v.doc->m_decompErrors.end()) {
-                    ImGui::PushStyleColor(ImGuiCol_Text, qui::color::retina_dark::AccentRed);
+                    ImGui::PushStyleColor(ImGuiCol_Text, qui::color::active_palette().AccentRed);
                     ImGui::TextUnformatted(err_it->second.c_str());
                     ImGui::PopStyleColor();
                 }
                 render_decompiled_code("##dcpl_view", *v.state, it->second);
             } else {
-                ImGui::PushStyleColor(ImGuiCol_Text, qui::color::retina_dark::TextDisabled);
+                ImGui::PushStyleColor(ImGuiCol_Text, qui::color::active_palette().TextDisabled);
                 qui::text_label("Decompilation unavailable for this function.");
                 ImGui::PopStyleColor();
             }
@@ -2331,7 +2685,7 @@ namespace dconstruct::ui {
         if (func != nullptr) {
             ImGui::SetNextItemAllowOverlap();
         }
-        const bool open = dv_node(v, id, val_color::Function, label, suffix, func == nullptr);
+        const bool open = dv_node(v, id, gcol::Function(), label, suffix, func == nullptr);
 
         if (func == nullptr) {
             return;
@@ -2351,25 +2705,25 @@ namespace dconstruct::ui {
     void dv_draw_state_script(value_view v, const ast::state_script& script, i32 index) {
         char label[256];
         std::snprintf(label, sizeof(label), "[%d] state-script %s", index, script.m_name.c_str());
-        const bool open = dv_node(v, &script, val_color::StateScript, label, nullptr, false);
+        const bool open = dv_node(v, &script, gcol::StateScript(), label, nullptr, false);
         if (!open) {
             return;
         }
         ImGui::PushID(&script);
 
         if (!script.m_options.empty()) {
-            if (dv_node(v, &script.m_options, val_color::Group, "options", nullptr, false)) {
+            if (dv_node(v, &script.m_options, gcol::Group(), "options", nullptr, false)) {
                 for (const ast::sid_identifier& option : script.m_options) {
-                    dv_draw_text_leaf(v, &option, val_color::Sid, option.to_pseudo_c_string());
+                    dv_draw_text_leaf(v, &option, gcol::Sid(), option.to_pseudo_c_string());
                 }
                 dv_tree_pop(v);
             }
         }
 
         if (!script.m_declarations.empty()) {
-            if (dv_node(v, &script.m_declarations, val_color::Group, "declarations", nullptr, false)) {
+            if (dv_node(v, &script.m_declarations, gcol::Group(), "declarations", nullptr, false)) {
                 for (const ast::variable_declaration& declaration : script.m_declarations) {
-                    dv_draw_text_leaf(v, &declaration, val_color::Struct, declaration.to_pseudo_c_string());
+                    dv_draw_text_leaf(v, &declaration, gcol::Struct(), declaration.to_pseudo_c_string());
                 }
                 dv_tree_pop(v);
             }
@@ -2378,14 +2732,14 @@ namespace dconstruct::ui {
         for (const ast::state_script_state& ss_state : script.m_states) {
             char state_label[256];
             std::snprintf(state_label, sizeof(state_label), "state %s", ss_state.m_name.c_str());
-            if (dv_node(v, &ss_state, val_color::StateScript, state_label, nullptr, ss_state.m_blocks.empty()) && !ss_state.m_blocks.empty()) {
+            if (dv_node(v, &ss_state, gcol::StateScript(), state_label, nullptr, ss_state.m_blocks.empty()) && !ss_state.m_blocks.empty()) {
                 for (const ast::state_script_block& block : ss_state.m_blocks) {
                     const std::string block_name = block.block_type_to_string();
-                    if (dv_node(v, &block, val_color::Group, block_name.c_str(), nullptr, block.m_tracks.empty()) && !block.m_tracks.empty()) {
+                    if (dv_node(v, &block, gcol::Group(), block_name.c_str(), nullptr, block.m_tracks.empty()) && !block.m_tracks.empty()) {
                         for (const ast::state_script_track& track : block.m_tracks) {
                             char track_label[256];
                             std::snprintf(track_label, sizeof(track_label), "track %s", track.m_name.c_str());
-                            if (dv_node(v, &track, val_color::Group, track_label, nullptr, track.m_lambdas.empty()) && !track.m_lambdas.empty()) {
+                            if (dv_node(v, &track, gcol::Group(), track_label, nullptr, track.m_lambdas.empty()) && !track.m_lambdas.empty()) {
                                 i32 lambda_index = 0;
                                 for (const ast::state_script_lambda& lambda : track.m_lambdas) {
                                     std::visit(
@@ -2396,7 +2750,7 @@ namespace dconstruct::ui {
                                                     dv_draw_function(v, *fn, lambda_index);
                                                 }
                                             } else {
-                                                dv_draw_text_leaf(v, &fn, val_color::Function, fn.to_pseudo_c_string());
+                                                dv_draw_text_leaf(v, &fn, gcol::Function(), fn.to_pseudo_c_string());
                                             }
                                         },
                                         lambda
@@ -2423,7 +2777,7 @@ namespace dconstruct::ui {
             return;
         }
         if (doc.m_selectedEntry < 0 || doc.m_selectedEntry >= static_cast<i32>(doc.m_entries->size())) {
-            ImGui::PushStyleColor(ImGuiCol_Text, qui::color::retina_dark::TextDisabled);
+            ImGui::PushStyleColor(ImGuiCol_Text, qui::color::active_palette().TextDisabled);
             qui::text_label("Select an entry to inspect.");
             ImGui::PopStyleColor();
             return;
@@ -2451,7 +2805,7 @@ namespace dconstruct::ui {
         ImGui::PushID(doc.m_selectedEntry);
         const bool entry_is_map = entry.m_typeId == SID("map") || entry.m_typeId == SID("map-32") || entry.m_typeId == SID("render-settings-map") || entry.m_typeId == SID("hash-table");
         const void* entry_id = stable_id(doc, entry.m_offset);
-        const bool open = dv_node(v, entry_id, val_color::EntryName, name, suffix, entry.m_values.empty());
+        const bool open = dv_node(v, entry_id, gcol::EntryName(), name, suffix, entry.m_values.empty());
         if (open && !entry.m_values.empty()) {
             if (entry_is_map) {
                 const structs::map* header = nullptr;
@@ -2516,8 +2870,8 @@ namespace dconstruct::ui {
         ImGui::SameLine(0.0F, 0.0F);
 
         ImGui::PushStyleColor(ImGuiCol_Button, qui::color::rgba(0x00, 0x00, 0x00, 0x00));
-        ImGui::PushStyleColor(ImGuiCol_ButtonHovered, qui::color::retina_dark::SeparatorHovered);
-        ImGui::PushStyleColor(ImGuiCol_ButtonActive, qui::color::retina_dark::SeparatorActive);
+        ImGui::PushStyleColor(ImGuiCol_ButtonHovered, qui::color::active_palette().SeparatorHovered);
+        ImGui::PushStyleColor(ImGuiCol_ButtonActive, qui::color::active_palette().SeparatorActive);
         ImGui::Button("##dconstruct_splitter", ImVec2(SPLITTER_WIDTH, avail_height));
         if (ImGui::IsItemHovered() || ImGui::IsItemActive()) {
             ImGui::SetMouseCursor(ImGuiMouseCursor_ResizeEW);
@@ -2710,7 +3064,7 @@ namespace dconstruct::ui {
         state.m_closeBox.title = "Unsaved changes";
         state.m_closeBox.message = "You have unsaved changes. Do you want to save them before exiting?";
         state.m_closeBox.buttons = {
-            qui::message_box_button{"Exit without saving", qui::color::retina_dark::AccentRed, true, true},
+            qui::message_box_button{"Exit without saving", qui::color::active_palette().AccentRed, true, true},
             qui::message_box_button{"Go back"},
             qui::message_box_button{"Save & Exit"},
         };
@@ -2833,9 +3187,29 @@ namespace dconstruct::ui {
         if (std::sscanf(line, "DefaultViewDcpl=%d", &value) == 1) {
             state->m_defaultViewDcpl = value != 0;
         } else if (std::sscanf(line, "AstOptimization=%d", &value) == 1) {
-            state->m_astOptimization = value != 0;
+            const bool enabled = value != 0;
+            state->m_ssoVarOptimization = enabled;
+            state->m_foreachOptimization = enabled;
+            state->m_matchOptimization = enabled;
+            state->m_secondVarOptimization = enabled;
+            state->m_memberAccessOptimization = enabled;
         } else if (std::sscanf(line, "RegexOptimization=%d", &value) == 1) {
             state->m_regexOptimization = value != 0;
+        } else if (std::sscanf(line, "SsoVarOptimization=%d", &value) == 1) {
+            state->m_ssoVarOptimization = value != 0;
+        } else if (std::sscanf(line, "ForeachOptimization=%d", &value) == 1) {
+            state->m_foreachOptimization = value != 0;
+        } else if (std::sscanf(line, "MatchOptimization=%d", &value) == 1) {
+            state->m_matchOptimization = value != 0;
+        } else if (std::sscanf(line, "SecondVarOptimization=%d", &value) == 1) {
+            state->m_secondVarOptimization = value != 0;
+        } else if (std::sscanf(line, "MemberAccessOptimization=%d", &value) == 1) {
+            state->m_memberAccessOptimization = value != 0;
+        } else {
+            char scheme[64];
+            if (std::sscanf(line, "ColorScheme=%63s", scheme) == 1) {
+                state->m_colorScheme = scheme;
+            }
         }
     }
 
@@ -2843,8 +3217,13 @@ namespace dconstruct::ui {
         const auto* state = static_cast<const app_state*>(handler->UserData);
         buf->appendf("[%s][Data]\n", handler->TypeName);
         buf->appendf("DefaultViewDcpl=%d\n", state->m_defaultViewDcpl ? 1 : 0);
-        buf->appendf("AstOptimization=%d\n", state->m_astOptimization ? 1 : 0);
+        buf->appendf("SsoVarOptimization=%d\n", state->m_ssoVarOptimization ? 1 : 0);
+        buf->appendf("ForeachOptimization=%d\n", state->m_foreachOptimization ? 1 : 0);
+        buf->appendf("MatchOptimization=%d\n", state->m_matchOptimization ? 1 : 0);
+        buf->appendf("SecondVarOptimization=%d\n", state->m_secondVarOptimization ? 1 : 0);
+        buf->appendf("MemberAccessOptimization=%d\n", state->m_memberAccessOptimization ? 1 : 0);
         buf->appendf("RegexOptimization=%d\n", state->m_regexOptimization ? 1 : 0);
+        buf->appendf("ColorScheme=%s\n", state->m_colorScheme.c_str());
         buf->append("\n");
     }
 
@@ -2946,6 +3325,12 @@ int main() {
 
         const ImGuiViewport* viewport = ImGui::GetMainViewport();
         qui::update_window_resize(window, viewport->Pos, viewport->Size, qui::default_window_bar_state());
+
+        // A hovered Settings entry requests a preview for the next frame so the
+        // whole UI (including the title/menu bar drawn first) re-themes, not
+        // just the content area drawn after the hover is detected.
+        dconstruct::ui::set_active_scheme(state.m_previewScheme.empty() ? state.m_colorScheme : state.m_previewScheme);
+        state.m_previewScheme.clear();
 
         const f32 bar_height = dconstruct::ui::draw_title_menu_bar(state, window);
         dconstruct::ui::draw_content_area(bar_height, state);

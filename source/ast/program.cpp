@@ -29,6 +29,12 @@ namespace dconstruct::ast {
         }
     }
 
+    void program::regex_optimization_pass() noexcept {
+        for (auto& decl : m_declarations) {
+            decl->regex_optimization_pass();
+        }
+    }
+
     [[nodiscard]] std::vector<semantic_check_error> program::check_semantics(compilation::scope& env) const noexcept {
         std::vector<semantic_check_error> res;
         for (const auto& decl : m_declarations) {

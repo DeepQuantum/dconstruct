@@ -105,8 +105,8 @@ namespace dconstruct::dcompiler {
         emit_node(m_graph[0], m_graph.m_nodes.back().m_index);
         parse_basic_block(m_graph.m_nodes.back());
 
-        if ((u8)optimizations & (u8)OPTIMIZATION_KIND::AST) {
-            optimize_ast(*m_functionDefinition);
+        if (optimizations != OPTIMIZATION_KIND::NONE) {
+            optimize_ast(*m_functionDefinition, optimizations);
         }
 
         ast::function_definition result = std::move(*m_functionDefinition);
@@ -1367,16 +1367,33 @@ namespace dconstruct::dcompiler {
         return rhs;
     }
 
-    void decomp_function::optimize_ast(ast::function_definition& func) {
-        ast::var_optimization_env var_base{};
-        func.m_body.var_optimization_pass(var_base);
-        ast::foreach_optimization_env foreach_base{};
-        func.m_body.foreach_optimization_pass(foreach_base);
-        ast::match_optimization_env match_base{};
-        func.m_body.match_optimization_pass(match_base);
-        ast::var_optimization_env var_base1{};
-        func.m_body.var_optimization_pass(var_base1);
+    void decomp_function::optimize_ast(ast::function_definition& func, const OPTIMIZATION_KIND optimizations) {
+        if (has_optimization(optimizations, OPTIMIZATION_KIND::SSO_VAR)) {
+            ast::var_optimization_env var_base{};
+            func.m_body.var_optimization_pass(var_base);
+        }
 
-        func.m_body.member_access_optimization_pass();
+        if (has_optimization(optimizations, OPTIMIZATION_KIND::FOREACH)) {
+            ast::foreach_optimization_env foreach_base{};
+            func.m_body.foreach_optimization_pass(foreach_base);
+        }
+
+        if (has_optimization(optimizations, OPTIMIZATION_KIND::MATCH)) {
+            ast::match_optimization_env match_base{};
+            func.m_body.match_optimization_pass(match_base);
+        }
+
+        if (has_optimization(optimizations, OPTIMIZATION_KIND::SECOND_VAR)) {
+            ast::var_optimization_env var_base{};
+            func.m_body.var_optimization_pass(var_base);
+        }
+
+        if (has_optimization(optimizations, OPTIMIZATION_KIND::MEMBER_ACCESS)) {
+            func.m_body.member_access_optimization_pass();
+        }
+
+        if (has_optimization(optimizations, OPTIMIZATION_KIND::REGEX)) {
+            func.m_body.regex_optimization_pass();
+        }
     }
 }

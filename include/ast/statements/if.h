@@ -29,6 +29,7 @@ namespace dconstruct::ast {
         FOREACH_OPTIMIZATION_ACTION foreach_optimization_pass(foreach_optimization_env& env) noexcept final;
         MATCH_OPTIMIZATION_ACTION match_optimization_pass(match_optimization_env& env) noexcept final;
         void member_access_optimization_pass() noexcept final;
+        void regex_optimization_pass() noexcept final;
 
         expr_uptr m_condition;
         stmnt_uptr m_then;

@@ -4,7 +4,44 @@
 #include "ast/primary_expressions/struct_access.h"
 #include "ast//primary_expressions/literal.h"
 
+#include <algorithm>
+#include <array>
+#include <format>
+#include <string_view>
+
 namespace dconstruct::ast {
+
+    namespace {
+        using namespace std::literals;
+
+        static constexpr std::array BOXED_VALUE_IDS = {
+            "invalid"sv,
+            "bool"sv,
+            "i32"sv,
+            "u32"sv,
+            "i64"sv,
+            "u64"sv,
+            "f32"sv,
+            "symbol"sv,
+            "timeframePOD"sv,
+            "unused"sv,
+            "netTrackerId"sv,
+            "processHandleMutable"sv,
+            "processHandle"sv,
+            "p64"sv,
+            "point"sv,
+            "vector"sv,
+            "quat"sv,
+            "locator"sv,
+            "boundframe"sv,
+            "stringcopy"sv,
+            "unused"sv,
+            "array"sv,
+            "color"sv,
+            "ssAnimateParams"sv,
+            "NDattackInfo"sv,
+        };
+    }
 
     void call_expr::pseudo_c(ast_serialization_buffer& buffer) const {
         const bool func_name_as_pascal = buffer.has_flag(LANGUAGE_FLAGS::FUNCTION_NAMES_PASCAL);
@@ -317,6 +354,25 @@ namespace dconstruct::ast {
             }
         }
         return nullptr;
+    }
+
+    void call_expr::regex_optimization_pass() noexcept {
+        if (m_callee->to_pseudo_c_string() == "new-boxed-value") {
+            const literal* boxed_kind_literal = m_arguments[1]->as_literal();
+            const std::optional boxed_kind_num_res = get_raw_number(boxed_kind_literal->m_value);
+            assert(boxed_kind_num_res);
+
+            std::string new_name = std::format("boxed_{}", BOXED_VALUE_IDS[*boxed_kind_num_res]);
+            
+            m_callee = std::make_unique<identifier>(std::move(new_name));
+
+            m_arguments.pop_back();
+        }
+
+        m_callee->regex_optimization_pass();
+        std::for_each(m_arguments.begin(), m_arguments.end(), [](expr_uptr& arg) {
+            arg->regex_optimization_pass();
+        });
     }
 
     // [[nodiscard]] llvm_res call_expr::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>& builder, llvm::Module& module, const compilation::scope& env) const noexcept {

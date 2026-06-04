@@ -239,6 +239,10 @@ namespace dconstruct::ast {
         return MATCH_OPTIMIZATION_ACTION::NONE;
     }
 
+    void struct_access::regex_optimization_pass() noexcept {
+        m_lhs->regex_optimization_pass();
+    }
+
     [[nodiscard]] std::unique_ptr<struct_access> struct_access::to_struct_access() noexcept {
         if (auto replacement = m_lhs->to_struct_access()) {
             m_lhs = std::move(replacement);

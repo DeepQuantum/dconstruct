@@ -4,7 +4,6 @@
 #include "disassembly/edit_disassembler.h"
 #include "disassembly/mapping_disassembler.h"
 #include "decompilation/decomp_function.h"
-#include "decompilation/regex_transformations.h"
 #include "compilation/compiler_funcs.h"
 #include "buildinfo.h"
 #include "windows.h"
@@ -98,11 +97,23 @@ namespace dconstruct {
             }
             result += name;
         };
-        if (static_cast<u8>(optimizations) & static_cast<u8>(OPTIMIZATION_KIND::AST)) {
-            append("AST");
+        if (has_optimization(optimizations, OPTIMIZATION_KIND::SSO_VAR)) {
+            append("sso var");
         }
-        if (static_cast<u8>(optimizations) & static_cast<u8>(OPTIMIZATION_KIND::REGEX)) {
-            append("REGEX");
+        if (has_optimization(optimizations, OPTIMIZATION_KIND::FOREACH)) {
+            append("foreach");
+        }
+        if (has_optimization(optimizations, OPTIMIZATION_KIND::MATCH)) {
+            append("match");
+        }
+        if (has_optimization(optimizations, OPTIMIZATION_KIND::SECOND_VAR)) {
+            append("second var");
+        }
+        if (has_optimization(optimizations, OPTIMIZATION_KIND::MEMBER_ACCESS)) {
+            append("member access");
+        }
+        if (has_optimization(optimizations, OPTIMIZATION_KIND::REGEX)) {
+            append("regex");
         }
         return result;
     }
@@ -292,9 +303,7 @@ namespace dconstruct::disassembly {
             output_functions.to_string(out);
 
             std::ofstream file_out(out_decomp_filename, std::ios::binary);
-            std::string out_str = out.str();
-            std::string transformed = apply_decomp_regex_transformations(std::move(out_str));
-            file_out << transformed;
+            file_out << out.str();
         }
     }
 
@@ -366,7 +375,7 @@ namespace dconstruct::disassembly {
                 const std::filesystem::path disasm_outpath = (out / std::filesystem::relative(entry, in)).concat(".asm");
                 const std::filesystem::path decomp_outpath = (out / std::filesystem::relative(entry, in)).concat(".dcpl");
                 std::filesystem::create_directories(disasm_outpath.parent_path());
-                decomp_file(entry.string(), disasm_outpath, decomp_outpath, sidbase, type_map, generate_graphs, language_flags, show_warnings, effective_optimize ? dconstruct::dcompiler::OPTIMIZATION_KIND::AST : dconstruct::dcompiler::OPTIMIZATION_KIND::NONE, {}, game, type_maps);
+                decomp_file(entry.string(), disasm_outpath, decomp_outpath, sidbase, type_map, generate_graphs, language_flags, show_warnings, effective_optimize ? dconstruct::dcompiler::OPTIMIZATION_KIND::ALL : dconstruct::dcompiler::OPTIMIZATION_KIND::NONE, {}, game, type_maps);
             });
 
         const auto time_taken = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - start);

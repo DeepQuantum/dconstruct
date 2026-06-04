@@ -104,6 +104,8 @@ namespace dconstruct::ast {
         return MATCH_OPTIMIZATION_ACTION::LITERAL;
     }
 
+    void literal::regex_optimization_pass() noexcept {}
+
     [[nodiscard]] std::unique_ptr<struct_access> literal::to_struct_access() noexcept {
         return nullptr;
     }

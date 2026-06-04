@@ -14,6 +14,7 @@ namespace dconstruct::ast {
         void pseudo_c(ast_serialization_buffer& buffer) const final;
         void pseudo_py(ast_serialization_buffer& buffer) const final;
         void pseudo_racket(ast_serialization_buffer& buffer) const final;
+        void regex_optimization_pass() noexcept final;
 
         [[nodiscard]] bool equals(const state_script_state& rhs) const noexcept;
 

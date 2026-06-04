@@ -19,11 +19,29 @@ namespace dconstruct::dcompiler {
 
     static const auto error_replacement_expr = std::make_unique<ast::identifier>("EXPRESSION_ERROR_PLACEHOLDER");
 
-    enum class OPTIMIZATION_KIND {
+    enum class OPTIMIZATION_KIND : u16 {
         NONE = 0,
-        AST = 1,
-        REGEX = 2,
+        SSO_VAR = 1 << 0,
+        FOREACH = 1 << 1,
+        MATCH = 1 << 2,
+        SECOND_VAR = 1 << 3,
+        MEMBER_ACCESS = 1 << 4,
+        REGEX = 1 << 5,
+        AST = (1 << 0) | (1 << 1) | (1 << 2) | (1 << 3) | (1 << 4) | (1 << 5),
+        ALL = AST,
     };
+
+    [[nodiscard]] constexpr OPTIMIZATION_KIND operator|(const OPTIMIZATION_KIND lhs, const OPTIMIZATION_KIND rhs) noexcept {
+        return static_cast<OPTIMIZATION_KIND>(static_cast<u16>(lhs) | static_cast<u16>(rhs));
+    }
+
+    [[nodiscard]] constexpr OPTIMIZATION_KIND operator&(const OPTIMIZATION_KIND lhs, const OPTIMIZATION_KIND rhs) noexcept {
+        return static_cast<OPTIMIZATION_KIND>(static_cast<u16>(lhs) & static_cast<u16>(rhs));
+    }
+
+    [[nodiscard]] constexpr bool has_optimization(const OPTIMIZATION_KIND optimizations, const OPTIMIZATION_KIND kind) noexcept {
+        return static_cast<u16>(optimizations & kind) != 0;
+    }
 
     struct decomp_function {
         static constexpr u8 MIN_GRAPH_SIZE = 0;
@@ -82,7 +100,7 @@ namespace dconstruct::dcompiler {
         void load_expression_into_new_var(const reg_idx dst);
         void load_expression_into_existing_var(const reg_idx dst, std::unique_ptr<ast::identifier>&& var);
 
-        void optimize_ast(ast::function_definition& func);
+        void optimize_ast(ast::function_definition& func, OPTIMIZATION_KIND optimizations);
 
         [[nodiscard]] std::unique_ptr<ast::call_expr> make_call(const Instruction& istr);
 

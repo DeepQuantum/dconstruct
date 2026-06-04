@@ -75,6 +75,10 @@ namespace dconstruct::ast {
         }
     }
 
+    void expression_stmt::regex_optimization_pass() noexcept {
+        m_expression->regex_optimization_pass();
+    }
+
     [[nodiscard]] bool expression_stmt::is_dead_code() const noexcept {
         return m_expression->is_dead_code();
     }

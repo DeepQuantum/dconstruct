@@ -181,7 +181,7 @@ int main(int argc, char* argv[]) {
         const auto start = std::chrono::high_resolution_clock::now();
         if (decompile) {
             std::println("disassembling & decompiling {}...", filepath.filename().string());
-            dconstruct::disassembly::decomp_file(filepath, output, std::filesystem::path(output).replace_extension(".dcpl"), base, type_map, generate_graphs, language_flags, show_warnings, optimize ? dconstruct::dcompiler::OPTIMIZATION_KIND::AST : dconstruct::dcompiler::OPTIMIZATION_KIND::NONE, edits, game, type_maps);
+            dconstruct::disassembly::decomp_file(filepath, output, std::filesystem::path(output).replace_extension(".dcpl"), base, type_map, generate_graphs, language_flags, show_warnings, optimize ? dconstruct::dcompiler::OPTIMIZATION_KIND::ALL : dconstruct::dcompiler::OPTIMIZATION_KIND::NONE, edits, game, type_maps);
         } else {
             std::println("disassembling {}...", filepath.filename().string());
             dconstruct::disassembly::disasm_file(filepath, output, base, type_map, edits, game);

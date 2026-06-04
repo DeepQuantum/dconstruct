@@ -58,6 +58,12 @@ namespace dconstruct::ast {
         buffer.append(')');
     }
 
+    void state_script_block::regex_optimization_pass() noexcept {
+        for (auto& track : m_tracks) {
+            track.regex_optimization_pass();
+        }
+    }
+
     [[nodiscard]] bool state_script_block::equals(const state_script_block& rhs) const noexcept {
         if (block_type_to_string() != rhs.block_type_to_string() || m_tracks.size() != rhs.m_tracks.size()) {
             return false;

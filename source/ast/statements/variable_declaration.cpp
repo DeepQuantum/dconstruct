@@ -121,4 +121,10 @@ namespace dconstruct::ast {
         }
     }
 
+    void variable_declaration::regex_optimization_pass() noexcept {
+        if (m_init) {
+            m_init->regex_optimization_pass();
+        }
+    }
+
 }
