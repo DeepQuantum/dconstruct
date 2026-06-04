@@ -176,7 +176,7 @@ namespace dconstruct {
 
             while (member_offset < struct_size) {
                 const location current_member_location = member + (array_entry_count * struct_size + member_offset);
-                const u32 last_member_size = insert_struct_or_arraylike(current_member_location.aligned(), array_entry.m_values);
+                const u32 last_member_size = insert_struct_or_arraylike(current_member_location, array_entry.m_values);
                 member_offset += last_member_size ? last_member_size : 8;
             }
 

@@ -87,7 +87,7 @@ namespace dconstruct::ast {
 
     template<typename T> 
     concept reservable = requires(T& t, const u64 size) {
-        { t. reserve(size) } -> std::same_as<void>;
+        { t.reserve(size) } -> std::same_as<void>;
     };
 
     template<reservable T>
@@ -186,10 +186,6 @@ namespace dconstruct::ast {
         [[nodiscard]] const std::string& str() const noexcept {
             return m_buffer;
         }
-
-        [[nodiscard]] std::string take() noexcept {
-            return std::move(m_buffer);
-        }
     };
 
     struct code_color_serialization_buffer : ast_buffer_wrapper<code_color_buffer>  {
@@ -253,11 +249,6 @@ namespace dconstruct::ast {
                 m_buffer.emplace_back(AST_COLOR::BLANK, std::string(static_cast<size_t>(m_currentIndent) * m_indentWidth, ' '));
             }
         }
-
-        u8 m_currentIndent = 0;
-        u8 m_indentWidth = 4;
-        LANGUAGE_FLAGS m_flags = LANGUAGE_FLAGS::C;
-        code_color_buffer m_buffer;
     };
 
     struct ast_element {
