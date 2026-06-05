@@ -280,7 +280,7 @@ namespace dconstruct::ast {
                     buffer.append(AST_COLOR::TYPE, arg.m_typeHash ? '#' + arg.m_name : arg.m_name);
                 } else if constexpr (std::is_same_v<T, ptr_type>) {
                     type_to_colored_declaration_string(*arg.m_pointedAt, buffer);
-                    buffer.append(AST_COLOR::PUNCTUATION, '*');
+                    buffer.append(AST_COLOR::PUNCTUATION, " *"sv);
                 } else if constexpr (std::is_same_v<T, function_type>) {
                     buffer.append(AST_COLOR::PUNCTUATION, '(');
                     for (u32 i = 0; i < arg.m_arguments.size(); ++i) {

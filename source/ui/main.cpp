@@ -220,7 +220,7 @@ namespace dconstruct::ui {
         std::fprintf(stderr, "GLFW error %d: %s\n", error, description);
     }
 
-    unsigned int create_icon_texture() {
+    u32 create_icon_texture() {
         HMODULE module = GetModuleHandleW(nullptr);
         HRSRC resource = FindResourceW(module, L"DCONSTRUCT_LOGO", MAKEINTRESOURCEW(10));
         if (resource == nullptr) {
@@ -1703,7 +1703,7 @@ namespace dconstruct::ui {
             for (const disassembled_entry& entry : entries) {
                 choices.push_back(state.m_sidbase->lookup(entry.m_nameId, doc.m_file->m_sidCache));
             }
-            doc.m_currentMatches = qui::fuzzy_search(doc.m_entrySearch, choices);
+            doc.m_currentMatches = qui::fuzzy_search(doc.m_entrySearch, choices, 75.f);
         }
         std::vector<i32> row_indices;
         if (currently_filtering) {

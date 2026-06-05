@@ -94,7 +94,10 @@ namespace dconstruct::ast {
         
         if (sub) {
             assert(std::holds_alternative<ptr_type>(m_castType));
-            assert(sub->get_type().value_or(std::monostate()) == *std::get<ptr_type>(m_castType).m_pointedAt && "the type we're casting to has to always be equal to the member type.");
+            if (sub->get_type().value_or(std::monostate()) != *std::get<ptr_type>(m_castType).m_pointedAt) {
+                m_rhs = std::move(sub);
+                return nullptr;
+            }
             return sub;
         }
 
@@ -115,7 +118,7 @@ namespace dconstruct::ast {
             }
         }
 
-        return sub;
+        return nullptr;
     }
 
     [[nodiscard]] emission_res cast_expr::emit_dc(

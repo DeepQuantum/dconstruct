@@ -21,15 +21,11 @@ namespace dconstruct::ast {
     }
 
     [[nodiscard]] std::unique_ptr<struct_access> add_expr::to_struct_access() noexcept {
-        std::unique_ptr lhs_recursive_member_access = m_lhs->to_struct_access();
-
-        if (lhs_recursive_member_access) {
+        if (std::unique_ptr lhs_recursive_member_access = m_lhs->to_struct_access()) {
             m_lhs = std::move(lhs_recursive_member_access);
         }
 
-        std::unique_ptr rhs_recursive_member_access = m_rhs->to_struct_access();
-
-        if (rhs_recursive_member_access) {
+        if (std::unique_ptr rhs_recursive_member_access = m_rhs->to_struct_access()) {
             m_rhs = std::move(rhs_recursive_member_access);
         }
 
@@ -54,6 +50,9 @@ namespace dconstruct::ast {
         if (const ptr_type* ptr_t_ptr = std::get_if<ptr_type>(&lhs_type)) {
             if (const struct_type* struct_t_ptr = std::get_if<struct_type>(ptr_t_ptr->m_pointedAt.get())) {
                 const auto* member = struct_t_ptr->get_member_type_by_offset(member_offset);
+                if (!member) {
+                    return nullptr;
+                }
                 std::unique_ptr res = std::make_unique<struct_access>(std::move(m_lhs), compilation::token{compilation::token_type::IDENTIFIER, member->first});
                 res->set_type(*member->second);
                 return res;
