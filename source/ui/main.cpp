@@ -140,6 +140,7 @@ namespace dconstruct::ui {
         bool m_entrySortDescending = false;
         ImGuiID m_menuTarget = 0;
         bool m_openMenu = false;
+        ImVec2 m_menuMousePos = ImVec2(0.0F, 0.0F);
         std::optional<u64> m_menuStructPtrOffset;
         sid64 m_menuStructTypeId = 0;
         ImGuiID m_opTarget = 0;
@@ -195,6 +196,7 @@ namespace dconstruct::ui {
         GLFWwindow* m_window = nullptr;
         unsigned int m_iconTexture = 0;
         std::string m_nameArt;
+        std::string m_wordmarkArt;
         qui::message_box m_errorBox;
         qui::message_box m_closeBox;
         bool m_closeRequested = false;
@@ -266,9 +268,9 @@ namespace dconstruct::ui {
         return texture;
     }
 
-    std::string load_name_art() {
+    std::string load_text_resource(const wchar_t* name) {
         HMODULE module = GetModuleHandleW(nullptr);
-        HRSRC resource = FindResourceW(module, L"DCONSTRUCT_NAME_ART", MAKEINTRESOURCEW(10));
+        HRSRC resource = FindResourceW(module, name, MAKEINTRESOURCEW(10));
         if (resource == nullptr) {
             return {};
         }
@@ -1292,26 +1294,26 @@ namespace dconstruct::ui {
             ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(12.0F, 6.0F));
             ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(10.0F, 6.0F));
             if (ImGui::BeginMenu("File")) {
-                if (ImGui::MenuItem("Load File...", "Ctrl+O")) {
+                if (ImGui::MenuItem("Load .bin File", "Ctrl+O")) {
                     const std::string path = prompt_open_file(window, "Binary files (*.bin)\0*.bin\0All files (*.*)\0*.*\0", "Open .bin file");
                     if (!path.empty()) {
                         load_bin_file(state, path);
                     }
                 }
-                if (ImGui::MenuItem("Load Sidbase...")) {
+                if (ImGui::MenuItem("Load Sidbase")) {
                     const std::string path = prompt_open_file(window, "Binary files (*.bin)\0*.bin\0All files (*.*)\0*.*\0", "Open sidbase");
                     if (!path.empty()) {
                         load_sidbase(state, path);
                     }
                 }
                 ImGui::Separator();
-                if (ImGui::MenuItem("Parse type definition file...")) {
+                if (ImGui::MenuItem("Parse type definition file")) {
                     const std::string path = prompt_open_file(window, "Type definition files (*.dcpl)\0*.dcpl\0All files (*.*)\0*.*\0", "Open type definition file");
                     if (!path.empty()) {
                         load_type_defs(state, path);
                     }
                 }
-                if (ImGui::MenuItem("Load type map...")) {
+                if (ImGui::MenuItem("Load type map")) {
                     const std::string path = prompt_open_file(window, "Type map files (*.dcplmap)\0*.dcplmap\0All files (*.*)\0*.*\0", "Open type map file");
                     if (!path.empty()) {
                         load_type_map(state, path);
@@ -1448,35 +1450,48 @@ namespace dconstruct::ui {
 
         constexpr f32 art_gap = 22.0F;
         constexpr f32 line_gap = 10.0F;
-        const char* primary = "Drop a .bin file here or use File \xE2\x86\x92 Load... to start editing";
+        const char* primary = "Drop a .bin file here or use 'File \xE2\x86\x92 Load .bin file' to start editing";
 
         ImFont* art_font = qui::font_medium();
-        const char* art_begin = state.m_nameArt.c_str();
-        const char* art_end = art_begin + state.m_nameArt.size();
-        f32 art_font_size = ImGui::GetFontSize();
-        ImVec2 art_size(0.0F, 0.0F);
-        if (!state.m_nameArt.empty()) {
-            if (art_font != nullptr) {
-                art_size = art_font->CalcTextSizeA(art_font_size, FLT_MAX, 0.0F, art_begin, art_end);
-            } else {
-                art_size = ImGui::CalcTextSize(art_begin, art_end);
+        auto measure_art = [&](const std::string& text, f32& out_font_size) -> ImVec2 {
+            out_font_size = ImGui::GetFontSize();
+            if (text.empty()) {
+                return ImVec2(0.0F, 0.0F);
             }
-            const f32 max_art_width = std::max(available.x - 48.0F, 1.0F);
-            if (art_size.x > max_art_width) {
-                const f32 scale = max_art_width / art_size.x;
-                art_font_size = std::max(8.0F, art_font_size * scale);
+            const char* begin = text.c_str();
+            const char* end = begin + text.size();
+            ImVec2 size = art_font != nullptr
+                ? art_font->CalcTextSizeA(out_font_size, FLT_MAX, 0.0F, begin, end)
+                : ImGui::CalcTextSize(begin, end);
+            const f32 max_width = std::max(available.x - 48.0F, 1.0F);
+            const f32 max_height = std::max(available.y * 0.75F, 1.0F);
+            f32 scale = 1.0F;
+            if (size.x > max_width) {
+                scale = std::min(scale, max_width / size.x);
+            }
+            if (size.y > max_height) {
+                scale = std::min(scale, max_height / size.y);
+            }
+            if (scale < 1.0F) {
+                out_font_size = std::max(4.0F, out_font_size * scale);
                 if (art_font != nullptr) {
-                    art_size = art_font->CalcTextSizeA(art_font_size, FLT_MAX, 0.0F, art_begin, art_end);
+                    size = art_font->CalcTextSizeA(out_font_size, FLT_MAX, 0.0F, begin, end);
                 }
             }
-        }
+            return size;
+        };
+
+        f32 art_font_size = 0.0F;
+        const ImVec2 art_size = measure_art(state.m_nameArt, art_font_size);
+        f32 wordmark_font_size = 0.0F;
+        const ImVec2 wordmark_size = measure_art(state.m_wordmarkArt, wordmark_font_size);
 
         ImFont* primary_font = qui::font_semi_bold();
         if (primary_font != nullptr) {
             ImGui::PushFont(primary_font);
         }
         const ImVec2 primary_size = ImGui::CalcTextSize(primary);
-        const f32 primary_font_size = ImGui::GetFontSize();
+        const f32 primary_font_size = ImGui::GetFontSize() * 1.5f;
         if (primary_font != nullptr) {
             ImGui::PopFont();
         }
@@ -1489,31 +1504,70 @@ namespace dconstruct::ui {
         }
         const ImVec2 secondary_size = secondary.empty() ? ImVec2(0.0F, 0.0F) : ImGui::CalcTextSize(secondary.c_str());
 
+        constexpr f32 logo_gap = 6.0F;
+        const bool has_logo = !state.m_nameArt.empty() || !state.m_wordmarkArt.empty();
+
         f32 block_height = primary_size.y;
         if (!state.m_nameArt.empty()) {
-            block_height += art_size.y + art_gap;
+            block_height += art_size.y;
+        }
+        if (!state.m_nameArt.empty() && !state.m_wordmarkArt.empty()) {
+            block_height += logo_gap;
+        }
+        if (!state.m_wordmarkArt.empty()) {
+            block_height += wordmark_size.y;
+        }
+        if (has_logo) {
+            block_height += art_gap;
         }
         if (!secondary.empty()) {
             block_height += line_gap + secondary_size.y;
         }
 
-        f32 y = center.y - block_height * 0.5F;
+        f32 y = center.y - block_height * 0.5F - available.y * 0.04F;
         if (!state.m_nameArt.empty()) {
+            constexpr f32 stretch_x = 1.15F;
+            const int vtx_start = draw_list->VtxBuffer.Size;
             draw_list->AddText(
                 art_font,
                 art_font_size,
                 ImVec2(center.x - art_size.x * 0.5F, y),
                 ImGui::ColorConvertFloat4ToU32(qui::color::active_palette().Highlight),
-                art_begin,
-                art_end
+                state.m_nameArt.c_str(),
+                state.m_nameArt.c_str() + state.m_nameArt.size()
             );
-            y += art_size.y + art_gap;
+            for (int i = vtx_start; i < draw_list->VtxBuffer.Size; ++i) {
+                ImDrawVert& vert = draw_list->VtxBuffer[i];
+                vert.pos.x = center.x + (vert.pos.x - center.x) * stretch_x;
+            }
+            y += art_size.y;
+            if (!state.m_wordmarkArt.empty()) {
+                y += logo_gap;
+            }
+        }
+
+        if (!state.m_wordmarkArt.empty()) {
+            const char* wordmark_begin = state.m_wordmarkArt.c_str();
+            const char* wordmark_end = wordmark_begin + state.m_wordmarkArt.size();
+            draw_list->AddText(
+                art_font,
+                wordmark_font_size,
+                ImVec2(center.x - wordmark_size.x * 0.5F, y),
+                ImGui::ColorConvertFloat4ToU32(qui::color::active_palette().Highlight),
+                wordmark_begin,
+                wordmark_end
+            );
+            y += wordmark_size.y;
+        }
+
+        if (has_logo) {
+            y += art_gap;
         }
 
         draw_list->AddText(
             primary_font,
             primary_font_size,
-            ImVec2(center.x - primary_size.x * 0.5F, y),
+            ImVec2(center.x - primary_size.x * 0.75F, y),
             ImGui::ColorConvertFloat4ToU32(qui::color::active_palette().TextDisabled),
             primary
         );
@@ -1526,6 +1580,7 @@ namespace dconstruct::ui {
                 ImGui::ColorConvertFloat4ToU32(qui::color::active_palette().AccentRed),
                 secondary.c_str()
             );
+            y += secondary_size.y;
         }
     }
 
@@ -1925,7 +1980,7 @@ namespace dconstruct::ui {
                 .title = rgba(0xE5, 0xE5, 0xE5), .text = rgba(0x1E, 0x1E, 0x1E),
                 .text_dim = rgba(0x6E, 0x6E, 0x6E), .border = rgba(0xC8, 0xC8, 0xC8),
                 .accent = rgba(0x00, 0x78, 0xD4), .accent_strong = rgba(0x00, 0x5A, 0x9E),
-                .highlight = rgba(0x1A, 0x7F, 0x37), .danger = rgba(0xD1, 0x34, 0x38),
+                .highlight = rgba(0x11, 0x63, 0x29), .danger = rgba(0xD1, 0x34, 0x38),
                 .warning = rgba(0xBF, 0x88, 0x03),
             })},
             {"ghidra", make_scheme({
@@ -2673,6 +2728,7 @@ namespace dconstruct::ui {
         if (!leaf && ImGui::IsItemClicked(ImGuiMouseButton_Right)) {
             doc->m_menuTarget = node_im_id;
             doc->m_openMenu = true;
+            doc->m_menuMousePos = ImGui::GetMousePos();
             doc->m_menuStructPtrOffset = struct_ptr_offset;
             doc->m_menuStructTypeId = struct_type_id;
         }
@@ -3506,7 +3562,6 @@ namespace dconstruct::ui {
         std::snprintf(suffix, sizeof(suffix), "[0x%05X]", static_cast<u32>(entry.m_offset));
         if (func != nullptr) {
             ImGui::SetNextItemAllowOverlap();
-            ImGui::SetNextItemOpen(true, ImGuiCond_Once);
         }
         const bool open = dv_node(v, id, gcol::Function(), label, suffix, func == nullptr);
 
@@ -3666,7 +3721,7 @@ namespace dconstruct::ui {
                     edit.m_pointerOffset = ptr_offset;
                     edit.m_currentTypeId = doc.m_menuStructTypeId;
                     edit.m_text = std::format("0x{:X}", static_cast<u32>(current_target));
-                    edit.m_pos = ImGui::GetMousePosOnOpeningCurrentPopup();
+                    edit.m_pos = doc.m_menuMousePos;
                     edit.m_focus = true;
                     doc.m_structPointerEdit = std::move(edit);
                 }
@@ -3682,7 +3737,7 @@ namespace dconstruct::ui {
                 doc.m_opPendingMode = tree_op::expand;
                 doc.m_opPendingMaxDepth = EXPAND_RECURSIVE_DEPTH;
             }
-            if (ImGui::MenuItem("Close all children")) {
+            if (ImGui::MenuItem("Collapse all children")) {
                 doc.m_opPendingTarget = doc.m_menuTarget;
                 doc.m_opPendingMode = tree_op::close;
                 doc.m_opPendingMaxDepth = 0;
@@ -4002,6 +4057,12 @@ namespace dconstruct::ui {
         }
 
         const ImGuiIO& io = ImGui::GetIO();
+        if (!io.WantTextInput && io.KeyCtrl && !io.KeyShift && ImGui::IsKeyPressed(ImGuiKey_O, false)) {
+            const std::string path = prompt_open_file(state.m_window, "Binary files (*.bin)\0*.bin\0All files (*.*)\0*.*\0", "Open .bin file");
+            if (!path.empty()) {
+                load_bin_file(state, path);
+            }
+        }
         if (io.KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_S, false)) {
             save_active_document(state);
         }
@@ -4164,7 +4225,8 @@ int main() {
     dconstruct::ui::register_ini_settings(state);
     state.m_window = window;
     state.m_iconTexture = dconstruct::ui::create_icon_texture();
-    state.m_nameArt = dconstruct::ui::load_name_art();
+    state.m_nameArt = dconstruct::ui::load_text_resource(L"DCONSTRUCT_NAME_ART");
+    state.m_wordmarkArt = dconstruct::ui::load_text_resource(L"DCONSTRUCT_WORDMARK_ART");
     state.m_errorBox.popup_id = "##dconstruct_error_box";
     state.m_errorBox.selectable = true;
     state.m_errorBox.width = 600.0F * dpi_scale;

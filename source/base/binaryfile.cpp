@@ -63,6 +63,9 @@ namespace dconstruct {
     }
 
     [[nodiscard]] bool BinaryFile::is_file_ptr(const location loc) const noexcept {
+        if (!loc.is_aligned()) {
+            return false;
+        }
         p64 offset = (loc.num() - reinterpret_cast<p64>(m_bytes.get()));
         if (offset >= m_size) {
             return false;
@@ -72,7 +75,7 @@ namespace dconstruct {
     }
 
     [[nodiscard]] bool BinaryFile::is_string(const location loc) const noexcept {
-        return loc >= m_strings;
+        return loc >= m_strings && loc.num() <= p64(m_bytes.get() + m_size);
     }
 
     // void print_m512i(__m512i *var) {

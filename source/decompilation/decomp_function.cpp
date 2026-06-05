@@ -1132,19 +1132,25 @@ namespace dconstruct::dcompiler {
         expr_uptr callee = m_transformableExpressions[istr.destination]->clone();
         std::vector<expr_uptr> args;
         const auto& callee_type = callee->get_type_unchecked(m_env);
-        assert(std::holds_alternative<ast::function_type>(callee_type));
-        ast::function_type func_type = std::get<ast::function_type>(callee_type);
+        const ast::function_type* func_type = std::get_if<ast::function_type>(&callee_type);
+        if (!func_type) {
+            m_error = "trying to call non function " + callee->to_pseudo_c_string();
+            callee->set_type(ast::function_type());
+            const auto& callee_type = callee->get_type_unchecked(m_env);
+            func_type = std::get_if<ast::function_type>(&callee_type);
+        }
+
 
         for (reg_idx i = 0; i < istr.operand2; ++i) {
             if (m_transformableExpressions[ARGUMENT_REGISTERS_IDX + i]->get_complexity() > MAX_EXPRESSION_COMPLEXITY) {
                 load_expression_into_new_var(ARGUMENT_REGISTERS_IDX + i);
             }
             args.push_back(m_transformableExpressions[ARGUMENT_REGISTERS_IDX + i]->clone());
-            args[i]->set_type(*func_type.m_arguments[i].second);
+            args[i]->set_type(*func_type->m_arguments[i].second);
         }
 
         auto expr = std::make_unique<ast::call_expr>(compilation::token{compilation::token_type::_EOF, ""}, std::move(callee), std::move(args));
-        expr->set_type(*func_type.m_return);
+        expr->set_type(*func_type->m_return);
         return expr;
     }
 
@@ -1368,6 +1374,10 @@ namespace dconstruct::dcompiler {
     }
 
     void decomp_function::optimize_ast(ast::function_definition& func, const OPTIMIZATION_KIND optimizations) {
+        if (m_error) {
+            return;
+        }
+
         if (has_optimization(optimizations, OPTIMIZATION_KIND::SSO_VAR)) {
             ast::var_optimization_env var_base{};
             func.m_body.var_optimization_pass(var_base);

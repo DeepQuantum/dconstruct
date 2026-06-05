@@ -7,6 +7,7 @@
 #include <functional>
 #include <sstream>
 #include <iostream>
+#include <print>
 
 namespace dconstruct {
 
@@ -74,6 +75,9 @@ namespace dconstruct {
         u8 bytes_inserted = 0;
         if (m_currentFile->is_file_ptr(struct_location)) {
             const location ptr_value = location().from(struct_location);
+            if (get_offset(ptr_value) >= m_currentFile->m_size) {
+                return 8;
+            }
             if (m_currentFile->is_string(ptr_value)) {
                 values.emplace_back(ptr_value.as<char>());
                 bytes_inserted = 8;
@@ -103,7 +107,7 @@ namespace dconstruct {
 
     void Disassembler::insert_anonymous_array(const location anon_array, disassembled_values_t& values) {
         const u32 anonymous_array_size = anon_array.get<u32>(8);
-        if (anonymous_array_size > 100'000) {
+        if (anonymous_array_size > 50'000) {
             return;
         }
 
@@ -151,7 +155,7 @@ namespace dconstruct {
         u32 member_offset = 8;
         const location member = location().from(array);
 
-        while (!m_currentFile->is_string(member + member_offset) && !m_currentFile->gets_pointed_at(member + member_offset)) {
+        while (!m_currentFile->is_string(member + member_offset) && !m_currentFile->gets_pointed_at(member + member_offset) && member_offset <= m_currentFile->m_size) {
             member_offset += 8;
         }
 
@@ -159,8 +163,10 @@ namespace dconstruct {
         u32 struct_size = 0;
         f32 struct_size_f = f32(member_offset - type_id_padding) / f32(array_size);
         if (struct_size_f != std::trunc(struct_size_f) || struct_size_f == .0) {
-            struct_size_f = member_offset / array_size;
-            assert(struct_size_f == std::trunc(struct_size_f));
+            struct_size_f = f32(member_offset) / f32(array_size);
+            if (struct_size_f != std::trunc(struct_size_f)) {
+                struct_size_f = std::round(struct_size_f / 8.f) * 8.f;
+            }
         }
         // assert(struct_size_f != 0.0);
         struct_size = (u32)struct_size_f;
@@ -530,8 +536,7 @@ namespace dconstruct {
                 } else if constexpr (std::is_same_v<T, const structs::map*>) {
                     append_format("keys: [0x%05X], values: [0x%05X]\n\n", get_offset(entry->keys.data), get_offset(entry->values.data));
                 }
-            },
-                       *value_to_use);
+            }, *value_to_use);
         };
 
         for (u32 i = 0; i < entries.size(); ++i) {
@@ -685,8 +690,7 @@ namespace dconstruct {
             }
 
             return mapped_values;
-        },
-                          mapped_type.second);
+        }, mapped_type.second);
     }
 
     [[nodiscard]] u32 Disassembler::get_offset(const location loc) const noexcept {

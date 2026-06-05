@@ -227,7 +227,6 @@ namespace dconstruct::disassembly {
         }
 
         auto file_res = dconstruct::BinaryFile::from_path(inpath.string());
-
         if (!file_res) {
             std::println(stderr, "{}", file_res.error());
             std::terminate();

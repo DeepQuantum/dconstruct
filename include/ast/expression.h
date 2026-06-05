@@ -148,7 +148,7 @@ namespace dconstruct::ast {
             return *m_type;
         }
 
-        [[nodiscard]] ast::full_type get_type_unchecked(const compilation::scope& env) const noexcept {
+        [[nodiscard]] ast::full_type& get_type_unchecked(const compilation::scope& env) const noexcept {
             if (!m_type) {
                 m_type = compute_type_unchecked(env);
             }
