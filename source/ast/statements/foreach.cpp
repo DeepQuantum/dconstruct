@@ -64,16 +64,17 @@ namespace dconstruct::ast {
     }
 
     void foreach_stmt::regex_optimization_pass() noexcept {
-        static constexpr ctll::fixed_string pattern =
-            R"(foreach \([a-zA-Z\d_]*\? var_\d+ : .*?\) \{)"
-            R"(\s*u16 var_\d+;)"
-            R"(\s*if \(var_\d+ && \*\(u16\*\)\(var_\d+ \+ 12\) == 7\) \{)"
-            R"(\s*var_\d+ = \*\(u64\*\)var_\d+;\s*\})"
-            R"(\s*else if \(var_\d+ && \*\(u16\*\)\(var_\d+ \+ 12\) == 5\) \{)"
-            R"(\s*var_\d+ = \*\(u64\*\)var_\d+;\s*\})"
-            R"(\s*else if \(var_\d+ && \*\(u16\*\)\(var_\d+ \+ 12\) == 4\) \{)"
-            R"(\s*var_\d+ = \*\(u64\*\)var_\d+;\s*\})"
-            R"(\s*else \{\s*var_\d+ = 0;\s*\})";
+        static constexpr ctll::fixed_string pattern = DCONSTRUCT_CTRE_LSP_NUKE_GUARD(
+                R"(foreach \([a-zA-Z\d_]*\? var_\d+ : [^\n]*?\) \{)"
+                R"(\s*u16 var_\d+;)"
+                R"(\s*if \(var_\d+ && \*\(u16 \*\)\(var_\d+ \+ 12\) == 7\) \{)"
+                R"(\s*var_\d+ = \*\(u64 \*\)var_\d+;\s*\})"
+                R"(\s*else if \(var_\d+ && \*\(u16 \*\)\(var_\d+ \+ 12\) == 5\) \{)"
+                R"(\s*var_\d+ = \*\(u64 \*\)var_\d+;\s*\})"
+                R"(\s*else if \(var_\d+ && \*\(u16 \*\)\(var_\d+ \+ 12\) == 4\) \{)"
+                R"(\s*var_\d+ = \*\(u64 \*\)var_\d+;\s*\})"
+                R"(\s*else \{\s*var_\d+ = 0;\s*\})"
+        );
 
         m_iterable->regex_optimization_pass();
         m_body->regex_optimization_pass();
@@ -88,7 +89,7 @@ namespace dconstruct::ast {
             m_var.m_name = std::move(decl_var->m_identifier);
 
             body_block->m_statements.erase(body_block->m_statements.begin());
-            body_block->m_statements.erase(std::next(body_block->m_statements.begin()));
+            body_block->m_statements.erase(body_block->m_statements.begin());
         }
     }
 

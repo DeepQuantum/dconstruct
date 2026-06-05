@@ -11,6 +11,14 @@
 #include <bit>
 #include <cassert>
 
+
+#ifdef __INTELLISENSE__
+#  define DCONSTRUCT_CTRE_LSP_NUKE_GUARD(P) ""
+#else
+#  define DCONSTRUCT_CTRE_LSP_NUKE_GUARD(P) P
+#endif
+
+
 using sid64 = uint64_t;
 using sid32 = uint32_t;
 
