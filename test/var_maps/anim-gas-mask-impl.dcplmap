@@ -1,5 +1,5 @@
 typemap {
     #internal-put-on-gas-mask {
-        11 #gas-mask-setup * -> gas_mask;
+        1 #gas-mask-setup * -> gas_mask;
     }   
 }

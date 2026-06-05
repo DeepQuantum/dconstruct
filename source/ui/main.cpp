@@ -1703,7 +1703,7 @@ namespace dconstruct::ui {
             for (const disassembled_entry& entry : entries) {
                 choices.push_back(state.m_sidbase->lookup(entry.m_nameId, doc.m_file->m_sidCache));
             }
-            doc.m_currentMatches = qui::fuzzy_search(doc.m_entrySearch, choices, 75.f);
+            doc.m_currentMatches = qui::fuzzy_search(new_search, choices, 75.f);
         }
         std::vector<i32> row_indices;
         if (currently_filtering) {
