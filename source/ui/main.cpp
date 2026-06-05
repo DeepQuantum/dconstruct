@@ -136,6 +136,7 @@ namespace dconstruct::ui {
         i32 m_selectedEntry = -1;
         f32 m_listWidth = 0.0F;
         std::string m_entrySearch;
+        std::vector<qui::fuzzy_match> m_currentMatches;
         bool m_entrySortAlphabetically = false;
         bool m_entrySortDescending = false;
         ImGuiID m_menuTarget = 0;
@@ -1680,7 +1681,8 @@ namespace dconstruct::ui {
 
     void draw_entry_list(app_state& state, document& doc) {
         ImGui::SetNextItemWidth(-1.0F);
-        ImGui::InputTextWithHint("##dconstruct_entry_search", "Search entries", &doc.m_entrySearch);
+        std::string new_search = doc.m_entrySearch;
+        ImGui::InputTextWithHint("##dconstruct_entry_search", "Search entries", &new_search);
 
         ImVec2 table_size;
         if (!begin_labeled_table_frame("Entries", table_size)) {
@@ -1693,20 +1695,20 @@ namespace dconstruct::ui {
         }
 
         const std::vector<disassembled_entry>& entries = *doc.m_entries;
-        const bool searching = !doc.m_entrySearch.empty();
-        std::vector<qui::fuzzy_match> matches;
-        if (searching) {
+        const bool currently_filtering = !new_search.empty();
+        const bool new_search_necessary = doc.m_entrySearch != new_search;
+        if (new_search_necessary) {
             std::vector<std::string> choices;
             choices.reserve(entries.size());
             for (const disassembled_entry& entry : entries) {
                 choices.push_back(state.m_sidbase->lookup(entry.m_nameId, doc.m_file->m_sidCache));
             }
-            matches = qui::fuzzy_search(doc.m_entrySearch, choices);
+            doc.m_currentMatches = qui::fuzzy_search(doc.m_entrySearch, choices);
         }
         std::vector<i32> row_indices;
-        if (searching) {
-            row_indices.reserve(matches.size());
-            for (const qui::fuzzy_match& match : matches) {
+        if (currently_filtering) {
+            row_indices.reserve(doc.m_currentMatches.size());
+            for (const qui::fuzzy_match& match : doc.m_currentMatches) {
                 row_indices.push_back(static_cast<i32>(match.index));
             }
         } else {
@@ -1715,6 +1717,8 @@ namespace dconstruct::ui {
                 row_indices.push_back(i);
             }
         }
+
+        doc.m_entrySearch = std::move(new_search);
 
         constexpr ImGuiTableFlags table_flags =
             ImGuiTableFlags_BordersInnerV |
