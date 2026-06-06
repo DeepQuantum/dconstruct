@@ -117,7 +117,6 @@ namespace dconstruct {
         const std::unordered_map<sid64, ast::full_type>* m_knownTypes = &s_emptyTypes;
         const SIDBase* m_sidbase = nullptr;
         BinaryFile* m_currentFile = nullptr;
-        FILE* m_perfFile = nullptr;
         game_type m_game = game_type::T2R;
     };
 }

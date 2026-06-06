@@ -238,6 +238,23 @@ add_executable(
     ${SOURCE_DIR}/sidbase/tools/decode_sidbase.cpp
 )
 
+if(WIN32)
+    add_executable(
+        dconstruct_debugger
+        ${SOURCE_DIR}/debugger/main.cpp
+    )
+
+    target_link_libraries(dconstruct_debugger PRIVATE dbgeng)
+
+    target_compile_options(dconstruct_debugger PRIVATE
+        $<$<CONFIG:Release>:/GL>
+    )
+
+    target_link_options(dconstruct_debugger PRIVATE
+        $<$<CONFIG:Release>:/LTCG>
+    )
+endif()
+
 set(BUILDINFO_H "${CMAKE_CURRENT_BINARY_DIR}/buildinfo.h")
 add_custom_command(
     OUTPUT ${BUILDINFO_H}

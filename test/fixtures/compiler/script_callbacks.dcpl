@@ -1,5 +1,5 @@
 @target "C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/script-callbacks.bin"
-@mod "C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/mods/gas-mask-toggle"
+@mod "C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/mods/ProjectFEDRA"
 @output "script-callbacks.bin"
 @sidbase "C:/Users/damix/Documents/GitHub/TLOU2Modding/dconstruct/test/fixtures/dc/sidbase_new_fixed.bin"
 

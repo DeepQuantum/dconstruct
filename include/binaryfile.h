@@ -60,7 +60,7 @@ namespace dconstruct {
         std::filesystem::path m_path;
         mutable std::map<sid64, std::string> m_sidCache;
         const StateScript* m_dcscript = nullptr;
-        const DC_Header* m_dcheader = nullptr;
+        DC_Header* m_dcheader = nullptr;
         std::size_t m_size = 0;
         byte_uptr m_bytes;
         byte_uptr m_pointedAtTable;
