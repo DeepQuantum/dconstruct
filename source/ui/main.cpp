@@ -136,8 +136,10 @@ namespace dconstruct::ui {
         i32 m_selectedEntry = -1;
         f32 m_listWidth = 0.0F;
         std::string m_entrySearch;
+        std::string m_typeSearch;
         std::vector<qui::fuzzy_match> m_currentMatches;
-        bool m_entrySortAlphabetically = false;
+        std::vector<qui::fuzzy_match> m_typeMatches;
+        i32 m_entrySortColumn = -1;
         bool m_entrySortDescending = false;
         ImGuiID m_menuTarget = 0;
         bool m_openMenu = false;
@@ -169,6 +171,7 @@ namespace dconstruct::ui {
         ast::function_to_mapped_vars m_functionScopes;
         std::optional<local_var_type_edit> m_localVarTypeEdit;
         std::optional<struct_pointer_edit> m_structPointerEdit;
+        std::unordered_map<const void*, i32> m_mapSortStates;
     };
 
     template <typename... Args>
@@ -1680,10 +1683,6 @@ namespace dconstruct::ui {
     }
 
     void draw_entry_list(app_state& state, document& doc) {
-        ImGui::SetNextItemWidth(-1.0F);
-        std::string new_search = doc.m_entrySearch;
-        ImGui::InputTextWithHint("##dconstruct_entry_search", "Search entries", &new_search);
-
         ImVec2 table_size;
         if (!begin_labeled_table_frame("Entries", table_size)) {
             return;
@@ -1695,30 +1694,6 @@ namespace dconstruct::ui {
         }
 
         const std::vector<disassembled_entry>& entries = *doc.m_entries;
-        const bool currently_filtering = !new_search.empty();
-        const bool new_search_necessary = doc.m_entrySearch != new_search;
-        if (new_search_necessary) {
-            std::vector<std::string> choices;
-            choices.reserve(entries.size());
-            for (const disassembled_entry& entry : entries) {
-                choices.push_back(state.m_sidbase->lookup(entry.m_nameId, doc.m_file->m_sidCache));
-            }
-            doc.m_currentMatches = qui::fuzzy_search(new_search, choices, 75.f);
-        }
-        std::vector<i32> row_indices;
-        if (currently_filtering) {
-            row_indices.reserve(doc.m_currentMatches.size());
-            for (const qui::fuzzy_match& match : doc.m_currentMatches) {
-                row_indices.push_back(static_cast<i32>(match.index));
-            }
-        } else {
-            row_indices.reserve(entries.size());
-            for (i32 i = 0; i < static_cast<i32>(entries.size()); ++i) {
-                row_indices.push_back(i);
-            }
-        }
-
-        doc.m_entrySearch = std::move(new_search);
 
         constexpr ImGuiTableFlags table_flags =
             ImGuiTableFlags_BordersInnerV |
@@ -1728,40 +1703,114 @@ namespace dconstruct::ui {
             ImGuiTableFlags_SizingStretchProp;
 
         if (ImGui::BeginTable("##dconstruct_entries", 2, table_flags, table_size)) {
-            const char* entry_name_header = doc.m_entrySortAlphabetically
+            const char* entry_name_header = doc.m_entrySortColumn == 0
                                                 ? (doc.m_entrySortDescending ? "Entry Name \xE2\x96\xBC" : "Entry Name \xE2\x96\xB2")
                                                 : "Entry Name";
+            const char* type_header = doc.m_entrySortColumn == 1
+                                          ? (doc.m_entrySortDescending ? "Type \xE2\x96\xBC" : "Type \xE2\x96\xB2")
+                                          : "Type";
 
             ImGui::TableSetupColumn(entry_name_header);
-            ImGui::TableSetupColumn("Type");
+            ImGui::TableSetupColumn(type_header);
+            ImGui::TableSetupScrollFreeze(0, 2);
+
+            ImGui::TableNextRow();
+            std::string new_name_search = doc.m_entrySearch;
+            std::string new_type_search = doc.m_typeSearch;
+            ImGui::TableSetColumnIndex(0);
+            ImGui::SetNextItemWidth(-FLT_MIN);
+            ImGui::InputTextWithHint("##dconstruct_entry_search", "Search entries", &new_name_search);
+            ImGui::TableSetColumnIndex(1);
+            ImGui::SetNextItemWidth(-FLT_MIN);
+            ImGui::InputTextWithHint("##dconstruct_type_search", "Search types", &new_type_search);
+
+            if (doc.m_entrySearch != new_name_search) {
+                std::vector<std::string> choices;
+                choices.reserve(entries.size());
+                for (const disassembled_entry& entry : entries) {
+                    choices.push_back(state.m_sidbase->lookup(entry.m_nameId, doc.m_file->m_sidCache));
+                }
+                // doc.m_currentMatches = qui::fuzzy_search(new_name_search, choices, 75.f);
+                doc.m_currentMatches = qui::substring_search(new_name_search, choices);
+                doc.m_entrySearch = std::move(new_name_search);
+            }
+            if (doc.m_typeSearch != new_type_search) {
+                std::vector<std::string> choices;
+                choices.reserve(entries.size());
+                for (const disassembled_entry& entry : entries) {
+                    choices.push_back(state.m_sidbase->lookup(entry.m_typeId, doc.m_file->m_sidCache));
+                }
+                // doc.m_typeMatches = qui::fuzzy_search(new_type_search, choices, 75.f);
+                doc.m_typeMatches = qui::substring_search(new_type_search, choices);
+                doc.m_typeSearch = std::move(new_type_search);
+            }
+
+            const bool name_filtering = !doc.m_entrySearch.empty();
+            const bool type_filtering = !doc.m_typeSearch.empty();
+            std::vector<i32> row_indices;
+            if (name_filtering && type_filtering) {
+                std::vector<char> in_type(entries.size(), 0);
+                for (const qui::fuzzy_match& match : doc.m_typeMatches) {
+                    if (match.index < in_type.size()) {
+                        in_type[match.index] = 1;
+                    }
+                }
+                row_indices.reserve(doc.m_currentMatches.size());
+                for (const qui::fuzzy_match& match : doc.m_currentMatches) {
+                    if (match.index < in_type.size() && in_type[match.index] != 0) {
+                        row_indices.push_back(static_cast<i32>(match.index));
+                    }
+                }
+            } else if (name_filtering) {
+                row_indices.reserve(doc.m_currentMatches.size());
+                for (const qui::fuzzy_match& match : doc.m_currentMatches) {
+                    row_indices.push_back(static_cast<i32>(match.index));
+                }
+            } else if (type_filtering) {
+                row_indices.reserve(doc.m_typeMatches.size());
+                for (const qui::fuzzy_match& match : doc.m_typeMatches) {
+                    row_indices.push_back(static_cast<i32>(match.index));
+                }
+            } else {
+                row_indices.reserve(entries.size());
+                for (i32 i = 0; i < static_cast<i32>(entries.size()); ++i) {
+                    row_indices.push_back(i);
+                }
+            }
+
             ImGui::TableNextRow(ImGuiTableRowFlags_Headers);
             for (int column = 0; column < 2; ++column) {
                 ImGui::TableSetColumnIndex(column);
                 ImGui::SetCursorPosX(ImGui::GetCursorPosX() + ENTRY_CELL_LEFT_PADDING);
                 ImGui::TableHeader(ImGui::TableGetColumnName(column));
-                if (column == 0 && ImGui::IsItemClicked(ImGuiMouseButton_Left)) {
-                    if (doc.m_entrySortAlphabetically) {
+                if (ImGui::IsItemClicked(ImGuiMouseButton_Left)) {
+                    if (doc.m_entrySortColumn == column) {
                         doc.m_entrySortDescending = !doc.m_entrySortDescending;
                     } else {
-                        doc.m_entrySortAlphabetically = true;
+                        doc.m_entrySortColumn = column;
                         doc.m_entrySortDescending = false;
                     }
                 }
             }
 
-            if (doc.m_entrySortAlphabetically) {
+            if (doc.m_entrySortColumn == 0 || doc.m_entrySortColumn == 1) {
+                const bool sort_by_type = doc.m_entrySortColumn == 1;
                 std::stable_sort(
                     row_indices.begin(),
                     row_indices.end(),
                     [&](const i32 lhs, const i32 rhs) {
                         const disassembled_entry& left = entries[static_cast<u32>(lhs)];
                         const disassembled_entry& right = entries[static_cast<u32>(rhs)];
-                        const std::string left_name = state.m_sidbase->lookup(left.m_nameId, doc.m_file->m_sidCache);
-                        const std::string right_name = state.m_sidbase->lookup(right.m_nameId, doc.m_file->m_sidCache);
+                        const std::string left_key = sort_by_type
+                            ? state.m_sidbase->lookup(left.m_typeId, doc.m_file->m_sidCache)
+                            : state.m_sidbase->lookup(left.m_nameId, doc.m_file->m_sidCache);
+                        const std::string right_key = sort_by_type
+                            ? state.m_sidbase->lookup(right.m_typeId, doc.m_file->m_sidCache)
+                            : state.m_sidbase->lookup(right.m_nameId, doc.m_file->m_sidCache);
                         if (doc.m_entrySortDescending) {
-                            return right_name < left_name;
+                            return right_key < left_key;
                         }
-                        return left_name < right_name;
+                        return left_key < right_key;
                     }
                 );
             }
@@ -3130,6 +3179,33 @@ namespace dconstruct::ui {
         }
     }
 
+    std::string map_key_sort_string(value_view v, const disassembled_value_content& value) {
+        std::string result;
+        std::visit([&](auto&& entry) {
+            using T = std::decay_t<decltype(entry)>;
+            if constexpr (std::is_same_v<T, mapped_value>) {
+                result = entry.m_name;
+            } else if constexpr (std::is_same_v<T, disassembled_value>) {
+                result = v.state->m_sidbase->lookup(entry.m_typeId, v.doc->m_file->m_sidCache);
+            } else if constexpr (std::is_same_v<T, const u8*>) {
+                result = std::format("{}", *entry);
+            } else if constexpr (std::is_same_v<T, const u16*>) {
+                result = std::format("{}", *entry);
+            } else if constexpr (std::is_same_v<T, const u32*>) {
+                result = std::format("{}", *entry);
+            } else if constexpr (std::is_same_v<T, const i32*>) {
+                result = std::format("{}", *entry);
+            } else if constexpr (std::is_same_v<T, const u64*>) {
+                result = v.state->m_sidbase->lookup(*entry, v.doc->m_file->m_sidCache);
+            } else if constexpr (std::is_same_v<T, const f32*>) {
+                result = std::format("{}", *entry);
+            } else if constexpr (std::is_same_v<T, const char*>) {
+                result = entry != nullptr ? entry : "";
+            }
+        }, value);
+        return result;
+    }
+
     void dv_draw_map_table(
         value_view v,
         const disassembled_value& keys,
@@ -3140,12 +3216,41 @@ namespace dconstruct::ui {
         constexpr ImGuiTableFlags table_flags =
             ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg | ImGuiTableFlags_Resizable;
         if (ImGui::BeginTable("##map", 2, table_flags)) {
-            ImGui::TableSetupColumn("Key", ImGuiTableColumnFlags_WidthFixed);
+            const i32 sort_state = v.doc->m_mapSortStates[id];
+            const char* key_header = sort_state == 1   ? "Key \xE2\x96\xB2"
+                                     : sort_state == 2 ? "Key \xE2\x96\xBC"
+                                                       : "Key";
+            ImGui::TableSetupColumn(key_header, ImGuiTableColumnFlags_WidthFixed);
             ImGui::TableSetupColumn("Value", ImGuiTableColumnFlags_WidthStretch);
-            ImGui::TableHeadersRow();
+
+            ImGui::TableNextRow(ImGuiTableRowFlags_Headers);
+            for (int column = 0; column < 2; ++column) {
+                ImGui::TableSetColumnIndex(column);
+                ImGui::TableHeader(ImGui::TableGetColumnName(column));
+                if (column == 0 && ImGui::IsItemClicked(ImGuiMouseButton_Left)) {
+                    v.doc->m_mapSortStates[id] = sort_state == 1 ? 2 : (sort_state == 2 ? 0 : 1);
+                }
+            }
 
             const std::size_t count = std::min(keys.m_values.size(), vals.m_values.size());
+            std::vector<std::size_t> order(count);
             for (std::size_t i = 0; i < count; ++i) {
+                order[i] = i;
+            }
+            if (sort_state != 0) {
+                std::vector<std::string> sort_keys(count);
+                for (std::size_t i = 0; i < count; ++i) {
+                    sort_keys[i] = map_key_sort_string(v, keys.m_values[i]);
+                }
+                std::stable_sort(order.begin(), order.end(), [&](const std::size_t lhs, const std::size_t rhs) {
+                    if (sort_state == 2) {
+                        return sort_keys[rhs] < sort_keys[lhs];
+                    }
+                    return sort_keys[lhs] < sort_keys[rhs];
+                });
+            }
+
+            for (const std::size_t i : order) {
                 ImGui::TableNextRow();
                 ImGui::PushID(static_cast<i32>(i));
                 ImGui::TableSetColumnIndex(0);
