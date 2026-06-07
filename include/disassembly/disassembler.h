@@ -67,7 +67,20 @@ namespace dconstruct {
         }
 
         [[nodiscard]] std::shared_ptr<function_disassembly> create_function_disassembly(const ScriptLambda* lambda, function_name_variant name, const bool is_script_function = false);
-        [[nodiscard]] std::shared_ptr<function_disassembly> create_function_disassembly(std::vector<Instruction>&&, function_name_variant, const location& symbol_table, const bool is_script_function = false);
+
+
+        [[nodiscard]] static std::shared_ptr<function_disassembly> create_function_disassembly(
+            const Instruction* istr_ptr,
+            const u64 num_instructions,
+            function_name_variant,
+            const location& symbol_table,
+            const u64 instruction_base_offset,
+            const u64 instruction_stride,
+            const game_type game,
+            const SIDBase& sidbase,
+            std::map<sid64, std::string>& sidcache,
+            const bool is_script_function = false
+        );
 
         [[nodiscard]] const std::vector<const function_disassembly*> get_all_functions() noexcept;
 
@@ -103,11 +116,11 @@ namespace dconstruct {
         [[nodiscard]] u8 insert_next_struct_member(const location, const ast::full_type&, disassembled_values_t& values);
         [[nodiscard]] std::optional<ast::variable_declaration> insert_variable(const SsDeclaration* var);
         [[nodiscard]] ast::state_script_block insert_on_block(const SsOnBlock* block, state_script_function_id& state_name);
-        void set_register_types(Register&, Register&, const ast::full_type type);
-        void process_instruction(const u32, function_disassembly&);
+        static void set_register_types(Register&, Register&, const ast::full_type type);
+        static void process_instruction(const u32, function_disassembly&, const u64, const game_type, const SIDBase&, std::map<sid64, std::string>&);
         [[nodiscard]] u32 get_offset(const location) const noexcept;
         [[nodiscard]] u32 get_offset(const void*) const noexcept;
-        [[nodiscard]] bool pointer_gets_called(const u32, const u32, const function_disassembly&) const;
+        [[nodiscard]] static bool pointer_gets_called(const u32, const u32, const function_disassembly&);
 
         std::optional<ast::state_script> m_stateScript;
         embedded_function_id m_currentEmbeddedFunctionId;

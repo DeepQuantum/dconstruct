@@ -1,6 +1,5 @@
 
 #pragma once
-#include "base.h"
 #include "ast/type.h"
 #include <string>
 #include <vector>
@@ -9,7 +8,6 @@
 #include <array>
 #include <limits>
 #include <ostream>
-#include "opcodes.h"
 
 namespace dconstruct {
 

@@ -241,10 +241,11 @@ add_executable(
 if(WIN32)
     add_executable(
         dconstruct_debugger
+        ${SOURCE_DIR}/debugger/debugger.cpp
         ${SOURCE_DIR}/debugger/main.cpp
     )
 
-    target_link_libraries(dconstruct_debugger PRIVATE dbgeng)
+    target_link_libraries(dconstruct_debugger PRIVATE dbgeng dconstruct_lib)
 
     target_compile_options(dconstruct_debugger PRIVATE
         $<$<CONFIG:Release>:/GL>
@@ -321,6 +322,53 @@ target_compile_options(dconstruct_ui PRIVATE
 )
 
 target_link_options(dconstruct_ui PRIVATE
+    $<$<CONFIG:Release>:/LTCG>
+    $<$<CXX_COMPILER_ID:MSVC>:/SUBSYSTEM:WINDOWS>
+    $<$<CXX_COMPILER_ID:MSVC>:/ENTRY:mainCRTStartup>
+)
+
+add_executable(dconstruct_debugger_ui
+    ${SOURCE_DIR}/ui/main_with_debugger.cpp
+    ${SOURCE_DIR}/debugger/debugger.cpp
+    $<$<BOOL:${WIN32}>:${CMAKE_SOURCE_DIR}/resources/dconstruct.rc>
+)
+
+target_link_libraries(dconstruct_debugger_ui PRIVATE
+    qui_base::qui_base
+    dconstruct_lib
+)
+
+target_include_directories(dconstruct_debugger_ui PRIVATE ${SOURCE_DIR}/qui/source/stb)
+add_dependencies(dconstruct_debugger_ui generate_buildinfo)
+
+add_custom_command(TARGET dconstruct_debugger_ui POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E make_directory "$<TARGET_FILE_DIR:dconstruct_debugger_ui>/fonts"
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "${CMAKE_SOURCE_DIR}/resources/GeistMono-Medium.ttf"
+        "${CMAKE_SOURCE_DIR}/resources/GeistMono-SemiBold.ttf"
+        "${CMAKE_SOURCE_DIR}/resources/GeistMono-Bold.ttf"
+        "${CMAKE_SOURCE_DIR}/resources/OFL.txt"
+        "$<TARGET_FILE_DIR:dconstruct_debugger_ui>/fonts"
+    COMMENT "Copying fonts and license into $<TARGET_FILE_DIR:dconstruct_debugger_ui>/fonts"
+    VERBATIM
+)
+
+if(WIN32)
+    target_link_libraries(dconstruct_debugger_ui PRIVATE comdlg32 ole32 shell32 dbgeng)
+    target_include_directories(dconstruct_debugger_ui PRIVATE ${CMAKE_SOURCE_DIR}/resources)
+endif()
+
+set_target_properties(dconstruct_debugger_ui PROPERTIES
+    CXX_STANDARD ${CMAKE_CXX_STANDARD}
+    CXX_STANDARD_REQUIRED ON
+    CXX_EXTENSIONS OFF
+)
+
+target_compile_options(dconstruct_debugger_ui PRIVATE
+    $<$<CONFIG:Release>:/GL>
+)
+
+target_link_options(dconstruct_debugger_ui PRIVATE
     $<$<CONFIG:Release>:/LTCG>
     $<$<CXX_COMPILER_ID:MSVC>:/SUBSYSTEM:WINDOWS>
     $<$<CXX_COMPILER_ID:MSVC>:/ENTRY:mainCRTStartup>

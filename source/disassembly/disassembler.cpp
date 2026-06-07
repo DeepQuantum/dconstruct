@@ -895,7 +895,7 @@ namespace dconstruct {
         const u32 dst,
         const u32 start_idx,
         const function_disassembly& fn
-    ) const {
+    ) {
         for (auto it = fn.m_lines.begin() + start_idx; it != fn.m_lines.end(); ++it) {
             if (it->m_instruction.destination == dst) {
                 return it->m_instruction.opcode == Opcode::Call || it->m_instruction.opcode == Opcode::CallFf;
@@ -931,7 +931,8 @@ namespace dconstruct {
         bool counting_args = true;
 
         for (u64 i = 0; i < instruction_count; ++i) {
-            process_instruction(i, *func);
+            const p64 offset = get_offset(reinterpret_cast<const void*>(func->m_lines[i].m_globalPointer + func->m_lines[i].m_location));
+            process_instruction(i, *func, offset, m_game, *m_sidbase, m_currentFile->m_sidCache);
             if (counting_args) {
                 if (func->m_lines[i].m_instruction.operand1 >= ARGUMENT_REGISTERS_IDX) {
                     func->m_stackFrame.m_registerArgs.push_back(std::monostate());
@@ -945,37 +946,45 @@ namespace dconstruct {
     }
 
     [[nodiscard]] std::shared_ptr<function_disassembly> Disassembler::create_function_disassembly(
-        std::vector<Instruction>&& instructions,
+        const Instruction* istr_ptr,
+        const u64 num_instructions,
         function_name_variant name,
         const location& symbol_table,
+        const u64 instruction_base_offset,
+        const u64 instruction_stride,
+        const game_type game,
+        const SIDBase& sidbase,
+        std::map<sid64, std::string>& sidcache,
         const bool is_script_function
     ) {
         std::vector<function_disassembly_line> lines;
-        lines.reserve(instructions.size());
+        lines.reserve(num_instructions);
 
-        for (u64 i = 0; i < instructions.size(); ++i) {
-            lines.emplace_back(i, instructions.data());
+        for (u64 i = 0; i < num_instructions; ++i) {
+            lines.emplace_back(i, istr_ptr);
         }
 
-        std::shared_ptr functionDisassembly = std::make_shared<function_disassembly>(
+        std::shared_ptr func = std::make_shared<function_disassembly>(
             std::move(lines),
             StackFrame(symbol_table),
             std::move(name),
-            is_script_function);
+            is_script_function
+        );
 
         bool counting_args = true;
 
-        for (u64 i = 0; i < instructions.size(); ++i) {
-            process_instruction(i, *functionDisassembly);
+        for (u64 i = 0; i < num_instructions; ++i) {
+            const u64 offset = instruction_base_offset + i * instruction_stride;
+            process_instruction(i, *func, offset, game, sidbase, sidcache);
             if (counting_args) {
-                if (functionDisassembly->m_lines[i].m_instruction.operand1 >= 49) {
-                    functionDisassembly->m_stackFrame.m_registerArgs.push_back(std::monostate());
+                if (func->m_lines[i].m_instruction.operand1 >= ARGUMENT_REGISTERS_IDX) {
+                    func->m_stackFrame.m_registerArgs.push_back(std::monostate());
                 } else {
                     counting_args = false;
                 }
             }
         }
-        return functionDisassembly;
+        return func;
     }
 
     void Disassembler::set_register_types(Register& op1, Register& op2, ast::full_type type) {
@@ -1062,7 +1071,7 @@ namespace dconstruct {
         }
     }
 
-    void Disassembler::process_instruction(const u32 istr_idx, function_disassembly& fn) {
+    void Disassembler::process_instruction(const u32 istr_idx, function_disassembly& fn, const u64 offset, const game_type game, const SIDBase& sidbase, std::map<sid64, std::string>& sidcache) {
         function_disassembly_line& line = fn.m_lines[istr_idx];
         StackFrame& frame = fn.m_stackFrame;
 
@@ -1071,7 +1080,7 @@ namespace dconstruct {
 
         char disassembly_text[disassembly_buffer_size] = {0};
         char interpreted[interpreted_buffer_size] = {0};
-        const Instruction istr = line.m_instruction;
+        const Instruction& istr = line.m_instruction;
         const u32 dest = istr.destination;
         const u32 op1 = istr.operand1;
         const u32 op2 = istr.operand2;
@@ -1080,9 +1089,9 @@ namespace dconstruct {
         std::snprintf(
             disassembly_text,
             disassembly_buffer_size,
-            "%04X   0x%06X   %02X %02X %02X %02X   %-21s",
+            "%04X   0x%06llX   %02X %02X %02X %02X   %-21s",
             line.m_location,
-            get_offset(reinterpret_cast<const void*>(line.m_globalPointer + line.m_location)),
+            static_cast<unsigned long long>(offset),
             static_cast<u32>(istr.opcode),
             dest,
             op1,
@@ -1097,7 +1106,7 @@ namespace dconstruct {
         char op2_str[interpreted_buffer_size] = {0};
 
         if (!istr.destination_is_immediate()) {
-            frame.to_string(dst_str, interpreted_buffer_size, dest, m_sidbase->lookup(frame[dest].m_value, m_currentFile->m_sidCache));
+            frame.to_string(dst_str, interpreted_buffer_size, dest, sidbase.lookup(frame[dest].m_value, sidcache));
             if (!is_unknown(frame[dest].m_type) && frame[dest].m_containsArg) {
                 if (const auto* ft_ptr = std::get_if<ast::function_type>(&frame[dest].m_type)) {
                     frame.m_registerArgs[frame[dest].m_argNum] = *ft_ptr->m_return;
@@ -1111,10 +1120,10 @@ namespace dconstruct {
             }
         }
         if (!istr.operand1_is_immediate()) {
-            frame.to_string(op1_str, interpreted_buffer_size, op1, m_sidbase->lookup(frame[op1].m_value, m_currentFile->m_sidCache));
+            frame.to_string(op1_str, interpreted_buffer_size, op1, sidbase.lookup(frame[op1].m_value, sidcache));
         }
         if (!istr.operand2_is_immediate()) {
-            frame.to_string(op2_str, interpreted_buffer_size, op2, m_sidbase->lookup(frame[op2].m_value, m_currentFile->m_sidCache));
+            frame.to_string(op2_str, interpreted_buffer_size, op2, sidbase.lookup(frame[op2].m_value, sidcache));
         }
         const Opcode opcode = istr.opcode;
         switch (opcode) {
@@ -1136,7 +1145,7 @@ namespace dconstruct {
                     frame[dest].m_value = frame[op1].m_value;
                     frame[dest].m_pointerOffset += frame[op2].m_pointerOffset;
                 }
-                frame.to_string(dst_str, interpreted_buffer_size, dest, m_sidbase->lookup(frame[dest].m_value, m_currentFile->m_sidCache));
+                frame.to_string(dst_str, interpreted_buffer_size, dest, sidbase.lookup(frame[dest].m_value, sidcache));
                 std::snprintf(interpreted, interpreted_buffer_size, "r%d = %s + %s", dest, op1_str, op2_str);
                 break;
             }
@@ -1212,7 +1221,7 @@ namespace dconstruct {
                 frame[dest].m_type = ast::ptr_type{};
                 frame[dest].m_value = frame[op1].m_value;
                 frame[dest].m_pointerOffset = frame[op1].m_pointerOffset;
-                frame.to_string(dst_str, interpreted_buffer_size, op1, m_sidbase->lookup(frame[op1].m_value, m_currentFile->m_sidCache));
+                frame.to_string(dst_str, interpreted_buffer_size, op1, sidbase.lookup(frame[op1].m_value, sidcache));
                 std::snprintf(interpreted, interpreted_buffer_size, "r%d = *(p64*)%s", dest, dst_str);
                 break;
             }
@@ -1241,16 +1250,16 @@ namespace dconstruct {
             }
             case Opcode::LookupInt: {
                 std::snprintf(varying, disassembly_text_size, "r%d, %d", dest, op1);
-                if (m_game != game_type::UC4) {
+                if (game != game_type::UC4) {
                     const i64 value = frame.m_symbolTable.get<i64>(op1);
                     frame[dest].m_type = make_type_from_prim(ast::primitive_kind::I64);
                     table_entry = make_type_from_prim(ast::primitive_kind::I64);
-                    std::snprintf(interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%s>", dest, op1, m_sidbase->lookup(static_cast<sid64>(value), m_currentFile->m_sidCache));
+                    std::snprintf(interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%s>", dest, op1, sidbase.lookup(static_cast<sid64>(value), sidcache));
                 } else {
                     const i32 value = frame.m_symbolTable.get<i32>(op1);
                     frame[dest].m_type = make_type_from_prim(ast::primitive_kind::I32);
                     table_entry = make_type_from_prim(ast::primitive_kind::I32);
-                    std::snprintf(interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%s>", dest, op1, m_sidbase->lookup(static_cast<sid32>(value), m_currentFile->m_sidCache));
+                    std::snprintf(interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%s>", dest, op1, sidbase.lookup(static_cast<sid32>(value), sidcache));
                 }
                 break;
             }
@@ -1259,13 +1268,13 @@ namespace dconstruct {
                 const f32 value = frame.m_symbolTable.get<f32>(op1);
                 frame[dest].m_type = make_type_from_prim(ast::primitive_kind::F32);
                 table_entry = make_type_from_prim(ast::primitive_kind::F32);
-                std::snprintf(interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%s>", dest, op1, m_sidbase->lookup(static_cast<sid64>(value), m_currentFile->m_sidCache));
+                std::snprintf(interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%s>", dest, op1, sidbase.lookup(static_cast<sid64>(value), sidcache));
                 break;
             }
             case Opcode::LookupPointer: {
                 std::snprintf(varying, disassembly_text_size, "r%d, %d", dest, op1);
                 p64 value = 0;
-                if (m_game != game_type::UC4) {
+                if (game != game_type::UC4) {
                     value = frame.m_symbolTable.get<p64>(op1);
 
                 } else {
@@ -1275,7 +1284,7 @@ namespace dconstruct {
                 frame[dest].m_fromSymbolTable = op1;
                 const bool is_function = pointer_gets_called(dest, istr_idx + 1, fn);
                 const ast::full_type existing_type = ast::function_type{};
-                std::snprintf(interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%s>", dest, op1, m_sidbase->lookup(value, m_currentFile->m_sidCache));
+                std::snprintf(interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%s>", dest, op1, sidbase.lookup(value, sidcache));
                 if (is_function) {
                     table_entry = existing_type;
                     frame[dest].m_type = existing_type;
@@ -1304,7 +1313,7 @@ namespace dconstruct {
                 frame[op1].set_first_type(ast::ptr_type{});
                 std::snprintf(varying, disassembly_text_size, "r%d, %d", dest, op1);
                 frame[dest].m_type = ast::ptr_type{};
-                std::snprintf(interpreted, interpreted_buffer_size, "r%d = r%d <%s>", dest, op1, m_sidbase->lookup(frame[op1].m_value, m_currentFile->m_sidCache));
+                std::snprintf(interpreted, interpreted_buffer_size, "r%d = r%d <%s>", dest, op1, sidbase.lookup(frame[op1].m_value, sidcache));
                 break;
             }
             case Opcode::CastInteger: {
@@ -1324,7 +1333,7 @@ namespace dconstruct {
             case Opcode::CallFf: {
                 std::snprintf(varying, disassembly_text_size, "r%d, r%d, %d", dest, op1, op2);
                 char comment_str[300];
-                const char* function_name = m_sidbase->lookup(frame[op1].m_value, m_currentFile->m_sidCache);
+                const char* function_name = sidbase.lookup(frame[op1].m_value, sidcache);
                 u8 offset = std::snprintf(comment_str, sizeof(comment_str), "r%d = %s(", dest, function_name);
                 for (u64 i = 0; i < op2; ++i) {
                     if (i != 0) {
@@ -1336,7 +1345,7 @@ namespace dconstruct {
                         ftype = ast::function_type{};
                     }
                     std::get<ast::function_type>(ftype).m_arguments.emplace_back("", arg_type);
-                    frame.to_string(dst_str, interpreted_buffer_size, ARGUMENT_REGISTERS_IDX + i, m_sidbase->lookup(frame[i + ARGUMENT_REGISTERS_IDX].m_value, m_currentFile->m_sidCache));
+                    frame.to_string(dst_str, interpreted_buffer_size, ARGUMENT_REGISTERS_IDX + i, sidbase.lookup(frame[i + ARGUMENT_REGISTERS_IDX].m_value, sidcache));
                     offset += std::snprintf(comment_str + offset, sizeof(comment_str) - offset, "%s", dst_str);
                 }
                 if (auto* ft_ptr = std::get_if<ast::function_type>(&frame[dest].m_type)) {
@@ -1538,7 +1547,7 @@ namespace dconstruct {
                 if (frame[op1].is_pointer()) {
                     frame[dest].m_value = frame[op1].m_value;
                     frame[dest].m_pointerOffset = frame[op1].m_pointerOffset + op2;
-                    resolved = m_sidbase->lookup(frame[dest].m_value, m_currentFile->m_sidCache);
+                    resolved = sidbase.lookup(frame[dest].m_value, sidcache);
                 }
                 frame[dest].m_type = frame[op1].m_type;
                 frame.to_string(dst_str, interpreted_buffer_size, op1, resolved);
@@ -1575,7 +1584,7 @@ namespace dconstruct {
             case Opcode::LoadStaticU64Imm: {
                 std::snprintf(varying, disassembly_text_size, "r%d, %d", dest, op1);
                 const u64 value = frame.m_symbolTable.get<u64>(op1);
-                const char* hash_str = m_sidbase->lookup(value, m_currentFile->m_sidCache);
+                const char* hash_str = sidbase.lookup(value, sidcache);
                 frame[dest].m_type = make_type_from_prim(ast::primitive_kind::SID);
                 frame[dest].m_value = value;
                 table_entry = make_type_from_prim(ast::primitive_kind::SID);
@@ -1598,10 +1607,10 @@ namespace dconstruct {
                 break;
             }
             case Opcode::LoadStaticU32Imm: {
-                if (m_game == game_type::UC4) {
+                if (game == game_type::UC4) {
                     std::snprintf(varying, disassembly_text_size, "r%d, %d", dest, op1);
                     const sid32 value = frame.m_symbolTable.get<sid32>(op1);
-                    const char* hash_str = m_sidbase->lookup(value, m_currentFile->m_sidCache);
+                    const char* hash_str = sidbase.lookup(value, sidcache);
                     frame[dest].m_type = make_type_from_prim(ast::primitive_kind::SID);
                     frame[dest].m_value = value;
                     table_entry = make_type_from_prim(ast::primitive_kind::SID);
@@ -1734,7 +1743,18 @@ namespace dconstruct {
                     instr_ptr++;
                 }
 
-                auto function_disassembly = create_function_disassembly(std::move(istrs), "0x" + std::to_string(i), location(instr_ptr), false);
+                auto function_disassembly = create_function_disassembly(
+                    istrs.data(),
+                    func_size,
+                    "0x" + std::to_string(i),
+                    location(instr_ptr),
+                    get_offset(instr_ptr) - func_size * sizeof(ShortInstruction),
+                    sizeof(ShortInstruction),
+                    m_game,
+                    *m_sidbase,
+                    m_currentFile->m_sidCache,
+                    false
+                );
                 m_functions.push_back(std::move(function_disassembly));
             }
         }
