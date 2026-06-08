@@ -37,7 +37,7 @@ namespace dconstruct::compilation {
             )},
         global_function{"#go", ast::make_function(ast::make_type_from_prim(ast::primitive_kind::NOTHING), ast::function_type::DISTANCE::FAR, {{"target", ast::make_type_from_prim(ast::primitive_kind::U16)}, {"mode", ast::make_type_from_prim(ast::primitive_kind::U16)}})}, global_function{"#dc:format", ast::make_function(ast::make_type_from_prim(ast::primitive_kind::STRING), ast::function_type::DISTANCE::FAR, {{"format", ast::make_type_from_prim(ast::primitive_kind::STRING)}}, true)}};
 
-    void add_global_functions(compilation::scope& scope) {
+    inline void add_global_functions(compilation::scope& scope) {
         for (const auto& function : global_functions) {
             const std::string name{function.m_name};
             scope.define(name, function.m_type);

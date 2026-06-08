@@ -69,7 +69,7 @@ namespace dconstruct::dcompiler {
 
         [[nodiscard]] const std::pair<ast::full_type, std::optional<std::string>>* find_in_scope();
 
-        decomp_function& operator=(decomp_function&&) noexcept = default;
+        decomp_function& operator=(decomp_function&&) noexcept = delete;
 
         decomp_function(const decomp_function&) = delete;
         decomp_function& operator=(const decomp_function&) = delete;
@@ -209,7 +209,7 @@ namespace dconstruct::dcompiler {
 
         state_script_functions(const std::vector<ast::function_definition>& funcs, const BinaryFile* binary_file = nullptr, const SIDBase* sidbase = nullptr) noexcept;
 
-        [[nodiscard]] void to_string(ast::ast_serialization_buffer& buffer) const noexcept;
+        void to_string(ast::ast_serialization_buffer& buffer) const noexcept;
 
         void emit_script_metadata(ast::ast_serialization_buffer& buffer) const;
 

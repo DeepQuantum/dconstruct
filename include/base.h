@@ -10,6 +10,7 @@
 #include <sstream>
 #include <bit>
 #include <cassert>
+#include <expected>
 
 
 #ifdef __INTELLISENSE__
@@ -18,6 +19,24 @@
 #  define DCONSTRUCT_CTRE_LSP_NUKE_GUARD(P) P
 #endif
 
+
+#if defined(_MSC_VER)
+#define DC_ALWAYS_INLINE __forceinline
+#elif defined(__GNUC__)
+#define DC_ALWAYS_INLINE [[gnu::always_inline]] inline
+#else
+#define DC_ALWAYS_INLINE inline
+#endif
+
+#define SID(str) (dconstruct::ToStringId64(str))
+
+#define CONCAT_(a, b) a##b
+#define CONCAT(a, b) CONCAT_(a, b)
+#define RETURN_UNEXP(decl, expr)                                            \
+    auto CONCAT(_tmp_, __LINE__) = (expr);                                  \
+    if (!CONCAT(_tmp_, __LINE__).has_value())                               \
+        return std::unexpected(std::move(CONCAT(_tmp_, __LINE__).error())); \
+    decl = std::move(*CONCAT(_tmp_, __LINE__))
 
 using sid64 = uint64_t;
 using sid32 = uint32_t;
@@ -41,6 +60,12 @@ namespace dconstruct {
     using sid64_literal = std::pair<sid64, std::string>;
     using sid32_literal = std::pair<sid32, std::string>;
 
+    template<typename R, typename T>
+    using res = std::expected<R, T>;
+
+    template<typename T>
+    using res_msg = res<T, std::string>;
+
     using error_msg = std::optional<std::string>;
 
     using reg_idx = u8;
@@ -53,16 +78,6 @@ namespace dconstruct {
     using reg_set = std::bitset<ARGUMENT_REGISTERS_IDX + 1>;
     using argument_reg_set = std::bitset<ARGUMENT_REGISTERS_IDX + 1>;
     using node_set = std::vector<bool>;
-
-#define SID(str) (dconstruct::ToStringId64(str))
-
-#define CONCAT_(a, b) a##b
-#define CONCAT(a, b) CONCAT_(a, b)
-#define RETURN_UNEXP(decl, expr)                                            \
-    auto CONCAT(_tmp_, __LINE__) = (expr);                                  \
-    if (!CONCAT(_tmp_, __LINE__).has_value())                               \
-        return std::unexpected(std::move(CONCAT(_tmp_, __LINE__).error())); \
-    decl = std::move(*CONCAT(_tmp_, __LINE__))
 
     static std::string sanitize_dc_string(const std::string& dc_string) {
         std::string sanitized;
@@ -125,46 +140,46 @@ namespace dconstruct {
         location() noexcept {};
         location(const void* ptr) noexcept : m_ptr(reinterpret_cast<const std::byte*>(ptr)) {};
 
-        [[nodiscard]] [[always_inline]] location& from(const location& rhs, const i32 offset = 0) noexcept {
+        [[nodiscard]] DC_ALWAYS_INLINE location& from(const location& rhs, const i32 offset = 0) noexcept {
             m_ptr = rhs.get<std::byte*>() + offset;
             return *this;
         }
 
         template <typename T>
-        [[nodiscard]] [[always_inline]] const T* as(const i32 offset = 0) const noexcept {
+        [[nodiscard]] DC_ALWAYS_INLINE const T* as(const i32 offset = 0) const noexcept {
             return reinterpret_cast<const T*>(m_ptr + offset);
         }
 
         template <typename T>
-        [[nodiscard]] [[always_inline]] const T& get(const i32 offset = 0) const noexcept {
+        [[nodiscard]] DC_ALWAYS_INLINE const T& get(const i32 offset = 0) const noexcept {
             return *reinterpret_cast<const T*>(m_ptr + offset);
         }
 
-        [[nodiscard]] [[always_inline]] p64 num() const noexcept {
+        [[nodiscard]] DC_ALWAYS_INLINE p64 num() const noexcept {
             return reinterpret_cast<p64>(m_ptr);
         }
 
-        [[nodiscard]] [[always_inline]] location aligned() const noexcept {
+        [[nodiscard]] DC_ALWAYS_INLINE location aligned() const noexcept {
             return location(m_ptr - num() % 8);
         }
 
-        [[nodiscard]] [[always_inline]] location operator+(const u64 rhs) const noexcept {
+        [[nodiscard]] DC_ALWAYS_INLINE location operator+(const u64 rhs) const noexcept {
             return location(m_ptr + rhs);
         }
 
-        [[nodiscard]] [[always_inline]] location operator-(const u64 rhs) const noexcept {
+        [[nodiscard]] DC_ALWAYS_INLINE location operator-(const u64 rhs) const noexcept {
             return location(m_ptr - rhs);
         }
 
-        [[nodiscard]][[always_inline]] bool operator>(const location& rhs) const noexcept {
+        [[nodiscard]]DC_ALWAYS_INLINE bool operator>(const location& rhs) const noexcept {
             return reinterpret_cast<p64>(m_ptr) > reinterpret_cast<p64>(rhs.m_ptr);
         }
 
-        [[nodiscard]] [[always_inline]] bool operator>=(const location& rhs) const noexcept {
+        [[nodiscard]] DC_ALWAYS_INLINE bool operator>=(const location& rhs) const noexcept {
             return reinterpret_cast<p64>(m_ptr) >= reinterpret_cast<p64>(rhs.m_ptr);
         }
 
-        [[nodiscard]] [[always_inline]] bool is_aligned() const noexcept {
+        [[nodiscard]] DC_ALWAYS_INLINE bool is_aligned() const noexcept {
             return reinterpret_cast<p64>(m_ptr) % 8 == 0;
         }
     };
@@ -219,15 +234,15 @@ namespace dconstruct {
         return ss.str();
     }
 
-    constexpr reg_idx operator"" _r(u64 v) {
+    constexpr reg_idx operator""_r(u64 v) {
         return reg_idx(v);
     }
 
-    constexpr u8 operator"" _imm(u64 v) {
+    constexpr u8 operator""_imm(u64 v) {
         return u8(v);
     }
 
-    constexpr std::byte operator"" _b(u64 v) {
+    constexpr std::byte operator""_b(u64 v) {
         return std::byte(v);
     }
 

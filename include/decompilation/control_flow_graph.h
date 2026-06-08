@@ -1,6 +1,7 @@
 #pragma once
 
 #include "base.h"
+#include "compilation/function.h"
 #include "disassembly/instructions.h"
 #include <vector>
 #include <unordered_set>
@@ -10,6 +11,7 @@
 #include <optional>
 #include <set>
 #include <bitset>
+#include <memory>
 
 namespace dconstruct {
 
@@ -60,7 +62,7 @@ namespace dconstruct {
     public:
         [[nodiscard]] static ControlFlowGraph build(const function_disassembly& func) noexcept;
 
-        void find_loops();
+        void find_loops(const function_disassembly& func);
         void write_to_txt_file(const std::string& path = "graph.txt") const;
         void write_image(const std::string& path = "graph.svg") const;
 
@@ -81,18 +83,17 @@ namespace dconstruct {
 
         std::vector<control_flow_node> m_nodes;
         std::vector<control_flow_loop> m_loops;
-        const function_disassembly& m_func;
 
     private:
-        ControlFlowGraph() = default;
-        explicit ControlFlowGraph(const function_disassembly& fn) noexcept : m_func(fn) {};
-        explicit ControlFlowGraph(const function_disassembly& func, std::vector<control_flow_node> nodes) : m_func(func), m_nodes(std::move(nodes)) {};
+        explicit ControlFlowGraph(std::vector<control_flow_node> nodes) : m_nodes(std::move(nodes)) {};
         void compute_postdominators();
 
         [[nodiscard]] std::vector<Agnode_t*> insert_graphviz_nodes(Agraph_t* g) const;
         void insert_graphviz_edges(Agraph_t* g, const std::vector<Agnode_t*>& nodes) const;
 
         [[nodiscard]] std::vector<node_id> collect_loop_body(const node_id, const node_id) const;
+
+        bool m_isScriptFunction;
     };
 
 }

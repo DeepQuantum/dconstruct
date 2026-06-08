@@ -115,3 +115,5 @@ imgui.ini
 !ideas.txt
 !resources/**
 !source/Graphviz-13.1.0-win64/bin/**
+.clangd
+.zed

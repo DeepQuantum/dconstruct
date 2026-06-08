@@ -1,6 +1,13 @@
 #include "debugger/debugger.h"
+#include "base.h"
 
+#include <DbgEng.h>
+#include <atomic>
 #include <disassembly/disassembler.h>
+#include <expected>
+#include <mutex>
+#include <optional>
+#include <string_view>
 
 
 namespace dconstruct::debugger {
@@ -52,46 +59,102 @@ template<typename T>
     }
 
     {
-        std::lock_guard lock(m_mutex);
-        m_lastError.reset();
-        m_attached = false;
+        std::lock_guard guard(m_mutex);
+        m_error.reset();
+        m_snapshot.reset();
     }
+
+    m_state.store(debugger::STATE::ATTACHING, std::memory_order_release);
 
     m_debugThread = std::jthread([this](std::stop_token stop) {
 
-        attach();
-
-        {
-            std::lock_guard lock(m_mutex);
-            m_attached = !m_lastError;
-        }
-
-        if (m_lastError) {
+        if (std::optional<std::string> attach_error = attach()) {
+            {
+                std::lock_guard guard(m_mutex);
+                m_error = std::move(*attach_error);
+            }
+            m_state.store(debugger::STATE::ERROR, std::memory_order_release);
             return;
         }
 
-        debug_loop(stop);
+        m_state.store(debugger::STATE::ATTACHED, std::memory_order_release);
+        loop(stop);
     });
 
-    return m_lastError;
+    return std::nullopt;
 }
 
-void debugger::attach() {
-    std::lock_guard g(m_mutex);
+void debugger::detach() {
+    if (m_debugThread.joinable()) {
+        m_debugThread.request_stop();
+        WRL::ComPtr<IDebugControl> control;
+        {
+            std::lock_guard guard(m_mutex);
+            control = m_control;
+        }
+        if (control) {
+            control->SetInterrupt(DEBUG_INTERRUPT_ACTIVE);
+        }
+        m_debugThread.join();
+    }
+
+    cleanup_session();
+
+    {
+        std::lock_guard guard(m_mutex);
+        m_snapshot.reset();
+    }
+    m_state.store(debugger::STATE::DETACHED, std::memory_order_release);
+}
+
+void debugger::cleanup_session() {
+    if (m_bp) {
+        m_bp->RemoveFlags(DEBUG_BREAKPOINT_ENABLED);
+        m_bp.Reset();
+    }
+
+    if (m_symbols && m_opts != 0) {
+        m_symbols->SetSymbolOptions(m_opts);
+    }
+
+    if (m_control) {
+        m_control->SetExecutionStatus(DEBUG_STATUS_GO);
+    }
+
+    if (m_client) {
+        m_client->SetOutputCallbacks(nullptr);
+        m_client->EndSession(DEBUG_END_ACTIVE_DETACH);
+        m_client->DetachProcesses();
+    }
+
+    m_symbols.Reset();
+    m_data.Reset();
+    m_registers.Reset();
+    m_control.Reset();
+    m_client.Reset();
+
+    m_functionData.clear();
+    m_debuggedFunctions.clear();
+    m_opts = 0;
+    rax = rdx = rbp = rsi = r15 = rdi = rcx = rsp = 0;
+}
+
+[[nodiscard]] std::optional<std::string> debugger::attach() {
     const std::expected<ULONG, std::string> tlou_pid_res = get_tlou_pid();
 
     if (!tlou_pid_res) {
-        m_lastError = std::move(tlou_pid_res.error());
-        return;
+        return std::move(tlou_pid_res.error());
     }
-    
-    CHECKED_THREAD(DebugCreate(__uuidof(IDebugClient), reinterpret_cast<void**>(m_client.GetAddressOf())), "couldn't create client");
-    
-    CHECKED_THREAD(m_client.As(&m_control), "couldn't create control");
-    CHECKED_THREAD(m_client.As(&m_registers), "couldn't create registers");
-    CHECKED_THREAD(m_client.As(&m_data), "couldn't create data");
-    CHECKED_THREAD(m_client.As(&m_symbols), "couldn't create symbols");
-    
+
+    {
+        std::lock_guard guard(m_mutex);
+        CHECKED_THREAD(DebugCreate(__uuidof(IDebugClient), reinterpret_cast<void**>(m_client.GetAddressOf())), "couldn't create client");
+        CHECKED_THREAD(m_client.As(&m_control), "couldn't create control");
+        CHECKED_THREAD(m_client.As(&m_registers), "couldn't create registers");
+        CHECKED_THREAD(m_client.As(&m_data), "couldn't create data");
+        CHECKED_THREAD(m_client.As(&m_symbols), "couldn't create symbols");
+    }
+
     m_client->SetOutputCallbacks(&m_sink);
 
     m_symbols->SetSymbolPath("");
@@ -107,7 +170,7 @@ void debugger::attach() {
     CHECKED_THREAD(m_control->WaitForEvent(DEBUG_WAIT_DEFAULT, INFINITE), "initial WaitForEvent failed");
 
     CHECKED_THREAD(m_control->AddBreakpoint(DEBUG_BREAKPOINT_CODE, DEBUG_ANY_ID, m_bp.GetAddressOf()), "couldn't create breakpoint");
-    
+
     const std::string target_name = std::format("tlou_ii+0x{:X}", PARSE_INSTRUCTION_LOOP_ENTRY);
     CHECKED_THREAD(m_bp->SetOffsetExpression(target_name.c_str()), "couldn't set bp expression");
     CHECKED_THREAD(m_bp->AddFlags(DEBUG_BREAKPOINT_ENABLED), "couldn't enable bp");
@@ -121,13 +184,35 @@ void debugger::attach() {
     m_registers->GetIndexByName("rcx", &rcx);
     m_registers->GetIndexByName("rsp", &rsp);
 
-    m_attached = true;
-    m_lastError = std::nullopt;
+    return std::nullopt;
 }
 
-template<typename sid_iter>
-[[nodiscard]] std::expected<std::shared_ptr<function_disassembly>, std::string> debugger::get_sid_matched_function_disassembly(sid_iter sids_begin, sid_iter sids_end) {
-    while (true) {
+[[nodiscard]] std::optional<std::string> debugger::poll_error() {
+    std::lock_guard guard(m_mutex);
+    return m_error;
+}
+
+[[nodiscard]] std::shared_ptr<debugger_snapshot> debugger::poll_snapshot() {
+    if (m_state.load(std::memory_order_acquire) != STATE::SNAPSHOT_READY) {
+        return nullptr;
+    }
+    m_state.store(debugger::STATE::ATTACHED, std::memory_order_release);
+    {
+        std::lock_guard guard(m_mutex);
+        return std::move(std::exchange(m_snapshot, nullptr));
+    }
+}
+
+void debugger::store_error(std::string_view error) {
+    m_state.store(debugger::STATE::ERROR, std::memory_order_release);
+    {
+        std::lock_guard guard(m_mutex);
+        m_error = error;
+    }
+}
+
+void debugger::loop(std::stop_token st) {
+    while (!st.stop_requested()) {
         m_control->SetExecutionStatus(DEBUG_STATUS_GO);
         if (m_control->WaitForEvent(DEBUG_WAIT_DEFAULT, INFINITE) != S_OK) {
             break;
@@ -139,32 +224,41 @@ template<typename sid_iter>
             continue;
         }
 
-        DEBUG_VALUE stack_pointer{};
-        
-        m_registers->GetValue(rsp, &stack_pointer);
-
-        u64 sid_location = stack_pointer.I64 + SID_LOCATION_STACK_POINTER_OFFSET;
-
-        std::expected sid_res = read_virtual<sid64>(sid_location);
-
-        if (!sid_res) {
-            return std::unexpected{std::move(sid_res.error())};
+        if (m_state.load(std::memory_order_acquire) == STATE::SNAPSHOT_READY) {
+            continue;
         }
 
-        const bool sid_match = std::any_of(sids_begin, sids_end, [found = *sid_res] (const sid64 sid_entry) { return found == sid_entry; });
+        DEBUG_VALUE stack_pointer{};
+        m_registers->GetValue(rsp, &stack_pointer);
 
-        if (!sid_match) {
+        const u64 sid_location = stack_pointer.I64 + SID_LOCATION_STACK_POINTER_OFFSET;
+
+        res_msg sid = read_virtual<sid64>(sid_location);
+
+        if (!sid) {
+            store_error(std::move(sid.error()));
+            break;
+        }
+
+        const bool sid_found = std::any_of(m_toMatchSIDs.begin(), m_toMatchSIDs.end(), [needle = *sid] (const sid64 sid) { return needle == sid; } );
+
+        if (!sid_found) {
             continue;
         }
 
         DEBUG_VALUE script_lambda_val{};
-
         m_registers->GetValue(rax, &script_lambda_val);
 
-        std::expected script_lamba_res = read_virtual<ScriptLambda>(script_lambda_val.I64);
+        res_msg<ScriptLambda> script_lamba_res = read_virtual<ScriptLambda>(script_lambda_val.I64);
 
         if (!script_lamba_res) {
-            return std::unexpected{std::move(script_lamba_res.error())};
+            store_error(script_lamba_res.error());
+            break;
+        }
+
+        if (script_lamba_res->m_instructionFlag != 0xdeadbeef1337f00d) {
+            store_error("found function but magic number was wrong"sv);
+            break;
         }
 
         const u64* istr_addr = script_lamba_res->m_pInstruction;
@@ -173,34 +267,38 @@ template<typename sid_iter>
         const u64 num_instructions = script_lamba_res->m_numInstructions;
 
         const u64 num_symbols = (script_lamba_res->m_sum - 12) / 4 - num_instructions;
-        
-        std::expected instructions_res = read_virtual<Instruction>((u64)istr_addr, num_instructions);
+
+        res_msg instructions_res = read_virtual<Instruction>((u64)istr_addr, num_instructions);
         if (!instructions_res) {
-            return std::unexpected{std::move(instructions_res.error())};
+            store_error(instructions_res.error());
+            break;
         }
-        std::expected symbols_res = read_virtual<u64>((u64)symbol_table_addr, num_symbols);
+        res_msg symbols_res = read_virtual<u64>((u64)symbol_table_addr, num_symbols);
         if (!symbols_res) {
-            return std::unexpected{std::move(symbols_res.error())};
+            store_error(symbols_res.error());
+            break;
         }
 
         m_functionData.emplace_back(std::move(*instructions_res), std::move(*symbols_res));
 
-        CHECKED(m_bp->RemoveFlags(DEBUG_BREAKPOINT_ENABLED), "couldn't disable bp");
-        CHECKED(m_control->SetExecutionStatus(DEBUG_STATUS_GO), "couldn't resume");
-
-        return Disassembler::create_function_disassembly(
+        std::shared_ptr func_disassembly = Disassembler::create_function_disassembly(
             m_functionData.back().m_instructions.get(),
             num_instructions,
-            "anonymous",
+            "anon",
             location(m_functionData.back().m_symbols.get()),
             reinterpret_cast<u64>(istr_addr),
             sizeof(Instruction),
             game_type::T2R,
-            m_sidbase,
+            *m_sidbase,
             m_sidCache
         );
+
+        {
+            std::lock_guard lock(m_mutex);
+            m_snapshot = std::make_shared<debugger_snapshot>(std::move(func_disassembly));
+        }
+        m_state.store(STATE::SNAPSHOT_READY, std::memory_order_release);
     }
-    return std::unexpected{"debugger stopped before matching a requested SID"};
 }
 
 }

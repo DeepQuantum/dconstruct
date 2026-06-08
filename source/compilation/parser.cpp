@@ -1,5 +1,4 @@
 #include "compilation/dc_parser.h"
-#include <vector>
 
 namespace dconstruct::compilation {
 

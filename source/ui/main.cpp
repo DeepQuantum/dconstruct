@@ -11,7 +11,6 @@
 #include <memory>
 #include <optional>
 #include <print>
-#include <span>
 #include <sstream>
 #include <string>
 #include <string_view>
@@ -1088,7 +1087,7 @@ namespace dconstruct::ui {
         ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 8.0F);
         ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(8.0F, 8.0F));
         ImGui::PushStyleColor(ImGuiCol_PopupBg, qui::color::active_palette().WindowBackground);
-        
+
         if (ImGui::BeginPopupModal(
             "##dconstruct_settings",
             nullptr,

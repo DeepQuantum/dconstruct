@@ -19,7 +19,7 @@ namespace dconstruct::dcompiler {
         return nullptr;
     }
 
-    [[nodiscar]] std::unique_ptr<ast::identifier> decomp_function::make_current_var(
+    [[nodiscard]] std::unique_ptr<ast::identifier> decomp_function::make_current_var(
         const ast::full_type& type,
         expr_uptr expr
     ) {
@@ -149,7 +149,7 @@ namespace dconstruct::dcompiler {
         }
     }
 
-    [[nodiscard]] void state_script_functions::to_string(ast::ast_serialization_buffer& buffer) const noexcept {
+    void state_script_functions::to_string(ast::ast_serialization_buffer& buffer) const noexcept {
         for (const auto& func : m_nonStateScriptFuncs) {
             buffer.append(*func, "\n\n"sv);
         }
@@ -574,7 +574,6 @@ namespace dconstruct::dcompiler {
                         const sid64 sid = symbol_table.get<sid64>(istr.operand1);
                         const char* name = m_sidbase.lookup(sid, m_file.m_sidCache);
                         lit = std::make_unique<ast::sid_identifier>(name);
-
                     } else {
                         const sid32 sid = symbol_table.get<sid32>(istr.operand1);
                         const char* name = m_sidbase.lookup(sid, m_file.m_sidCache);

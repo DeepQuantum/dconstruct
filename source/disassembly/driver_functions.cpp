@@ -6,622 +6,627 @@
 #include "decompilation/decomp_function.h"
 #include "compilation/compiler_funcs.h"
 #include "buildinfo.h"
-#include "windows.h"
-#include <cstddef>
 #include <codecvt>
-#include <execution>
+#include <cstddef>
 #include <fstream>
-#include <iostream>
-#include <locale>
-#include <set>
 #include <sstream>
-#include <print>
 #include <algorithm>
+#include <execution>
+#include <windows.h>
+#include <set>
+#include <print>
+
 
 namespace dconstruct {
 
-    constexpr char DEFAULT_OUT[] = "<input_path.asm>";
-    constexpr i32 BOX_WIDTH = 100;
+constexpr char DEFAULT_OUT[] = "<input_path.asm>";
+constexpr i32 BOX_WIDTH = 100;
 
-    [[nodiscard]] std::filesystem::path get_sanitized_graph_path(
-        const std::filesystem::path& graph_dir,
-        const std::string& func_id
-    ) {
-        std::string sanitized_func_id;
-        sanitized_func_id.reserve(func_id.size());
-        for (char c : func_id) {
-            switch (c) {
-                case '?':
-                case '>':
-                case '<':
-                case '*':
-                case '\\':
-                case '/':
-                case '|':
-                case '\"':
-                case ':':
-                case '@':
-                case '-': {
-                    sanitized_func_id += '_';
-                    break;
-                }
-                default: {
-                    sanitized_func_id += c;
-                    break;
-                }
+[[nodiscard]] std::filesystem::path get_sanitized_graph_path(const std::filesystem::path& graph_dir, const std::string& func_id) {
+    std::string sanitized_func_id;
+    sanitized_func_id.reserve(func_id.size());
+    for (char c : func_id) {
+        switch (c) {
+            case '?':
+            case '>':
+            case '<':
+            case '*':
+            case '\\':
+            case '/':
+            case '|':
+            case '\"':
+            case ':':
+            case '@':
+            case '-': {
+                sanitized_func_id += '_';
+                break;
+            }
+            default: {
+                sanitized_func_id += c;
+                break;
             }
         }
-        return (graph_dir / sanitized_func_id).replace_extension(".svg");
+    }
+    return (graph_dir / sanitized_func_id).replace_extension(".svg");
+}
+
+[[nodiscard]] std::string get_dcpl_comment_prefix(const dconstruct::ast::LANGUAGE_FLAGS language_flags) {
+    if (static_cast<u8>(language_flags & dconstruct::ast::LANGUAGE_FLAGS::PY) != 0) {
+        return "#";
+    }
+    if (static_cast<u8>(language_flags & dconstruct::ast::LANGUAGE_FLAGS::RACKET) != 0) {
+        return ";";
+    }
+    return "//";
+}
+
+[[nodiscard]] std::string get_box_line(std::string text) {
+    if (text.size() < BOX_WIDTH - 1) {
+        text.append(BOX_WIDTH - 1 - text.size(), ' ');
+    }
+    text += '#';
+    return text;
+}
+
+[[nodiscard]] std::string get_game_type_string(const dconstruct::game_type game) {
+    if (game == dconstruct::game_type::T2R) {
+        return "t2r";
+    }
+    if (game == dconstruct::game_type::T1X) {
+        return "t1x";
+    }
+    if (game == dconstruct::game_type::UC4) {
+        return "uc4";
+    }
+    return "unknown";
+}
+
+[[nodiscard]] std::string get_optimizations_string(const dconstruct::dcompiler::OPTIMIZATION_KIND optimizations) {
+    using dconstruct::dcompiler::OPTIMIZATION_KIND;
+    if (optimizations == OPTIMIZATION_KIND::NONE) {
+        return "none";
+    }
+    std::string result;
+    const auto append = [&](const char* name) {
+        if (!result.empty()) {
+            result += ", ";
+        }
+        result += name;
+    };
+    if (has_optimization(optimizations, OPTIMIZATION_KIND::SSO_VAR)) {
+        append("sso var");
+    }
+    if (has_optimization(optimizations, OPTIMIZATION_KIND::FOREACH)) {
+        append("foreach");
+    }
+    if (has_optimization(optimizations, OPTIMIZATION_KIND::MATCH)) {
+        append("match");
+    }
+    if (has_optimization(optimizations, OPTIMIZATION_KIND::SECOND_VAR)) {
+        append("second var");
+    }
+    if (has_optimization(optimizations, OPTIMIZATION_KIND::MEMBER_ACCESS)) {
+        append("member access");
+    }
+    if (has_optimization(optimizations, OPTIMIZATION_KIND::REGEX)) {
+        append("regex");
+    }
+    return result;
+}
+
+[[nodiscard]] std::string get_output_header(
+    const dconstruct::BinaryFile& file,
+    const u32 total_entries,
+    const size_t function_count,
+    const bool has_state_script,
+    const dconstruct::game_type game,
+    const dconstruct::dcompiler::OPTIMIZATION_KIND optimizations,
+    const std::string& line_prefix = {}
+) {
+    std::ostringstream out;
+
+    const auto append_line = [&](const std::string& line) {
+        if (!line_prefix.empty()) {
+            out << line_prefix << ' ';
+        }
+        out << line << '\n';
+    };
+
+    append_line(std::string(BOX_WIDTH, '#'));
+    append_line(get_box_line("#"));
+    append_line(get_box_line(std::string("#   generated by dconstruct ver. ") + VERSION));
+    {
+        const std::string path_prefix = "#   listing for file: ";
+        std::string path_str = file.m_path.string();
+        const size_t max_content = BOX_WIDTH - 3;
+        if (path_prefix.size() + path_str.size() > max_content) {
+            constexpr std::string_view ellipsis = "...";
+            const size_t avail = max_content - path_prefix.size() - ellipsis.size();
+            path_str = std::string(ellipsis) + path_str.substr(path_str.size() - avail);
+        }
+        append_line(get_box_line(path_prefix + path_str));
+    }
+    append_line(get_box_line(std::string("#   filesize: ") + std::to_string(file.m_size) + " bytes"));
+    append_line(get_box_line(std::string("#   total entries: ") + std::to_string(total_entries)));
+    append_line(get_box_line(std::string("#   functions: ") + std::to_string(function_count)));
+    append_line(get_box_line(std::string("#   has state script: ") + (has_state_script ? "true" : "false")));
+    append_line(get_box_line(std::string("#   game type: ") + get_game_type_string(game)));
+    append_line(get_box_line(std::string("#   optimizations enabled: ") + get_optimizations_string(optimizations)));
+    append_line(get_box_line("#"));
+    append_line(std::string(BOX_WIDTH, '#'));
+    out << '\n';
+    return out.str();
+}
+
+void map_types_multiple(
+    const std::filesystem::path& in,
+    const dconstruct::SIDBase& sidbase,
+    dconstruct::MappingRegistry& registry,
+    const dconstruct::game_type game
+) {
+    std::vector<std::filesystem::path> filepaths;
+
+    for (const auto& entry : std::filesystem::recursive_directory_iterator(in)) {
+        if (entry.path().extension() != ".bin") {
+            continue;
+        }
+        filepaths.emplace_back(entry.path());
     }
 
-    [[nodiscard]] std::string get_dcpl_comment_prefix(const dconstruct::ast::LANGUAGE_FLAGS language_flags) {
-        if (static_cast<u8>(language_flags & dconstruct::ast::LANGUAGE_FLAGS::PY) != 0) {
-            return "#";
-        }
-        if (static_cast<u8>(language_flags & dconstruct::ast::LANGUAGE_FLAGS::RACKET) != 0) {
-            return ";";
-        }
-        return "//";
-    }
-
-    [[nodiscard]] std::string get_box_line(std::string text) {
-        if (text.size() < BOX_WIDTH - 1) {
-            text.append(BOX_WIDTH - 1 - text.size(), ' ');
-        }
-        text += '#';
-        return text;
-    }
-
-    [[nodiscard]] std::string get_game_type_string(const dconstruct::game_type game) {
-        if (game == dconstruct::game_type::T2R) {
-            return "t2r";
-        }
-        if (game == dconstruct::game_type::T1X) {
-            return "t1x";
-        }
-        if (game == dconstruct::game_type::UC4) {
-            return "uc4";
-        }
-        return "unknown";
-    }
-
-    [[nodiscard]] std::string get_optimizations_string(const dconstruct::dcompiler::OPTIMIZATION_KIND optimizations) {
-        using dconstruct::dcompiler::OPTIMIZATION_KIND;
-        if (optimizations == OPTIMIZATION_KIND::NONE) {
-            return "none";
-        }
-        std::string result;
-        const auto append = [&](const char* name) {
-            if (!result.empty()) {
-                result += ", ";
+    std::for_each(
+        std::execution::par_unseq,
+        filepaths.begin(),
+        filepaths.end(),
+        [&](const std::filesystem::path& entry) {
+            std::println("mapping types in {}...", entry.string());
+            auto file_res = dconstruct::BinaryFile::from_path(entry.string());
+            if (!file_res) {
+                return;
             }
-            result += name;
-        };
-        if (has_optimization(optimizations, OPTIMIZATION_KIND::SSO_VAR)) {
-            append("sso var");
+            auto& file = *file_res;
+            dconstruct::MappingDisassembler disassembler(&file, &sidbase, registry, game);
+            disassembler.ingest();
         }
-        if (has_optimization(optimizations, OPTIMIZATION_KIND::FOREACH)) {
-            append("foreach");
-        }
-        if (has_optimization(optimizations, OPTIMIZATION_KIND::MATCH)) {
-            append("match");
-        }
-        if (has_optimization(optimizations, OPTIMIZATION_KIND::SECOND_VAR)) {
-            append("second var");
-        }
-        if (has_optimization(optimizations, OPTIMIZATION_KIND::MEMBER_ACCESS)) {
-            append("member access");
-        }
-        if (has_optimization(optimizations, OPTIMIZATION_KIND::REGEX)) {
-            append("regex");
-        }
-        return result;
+    );
+}
+
+[[nodiscard]] std::wstring get_executable_path() {
+    wchar_t buffer[MAX_PATH];
+    const DWORD len = GetModuleFileNameW(nullptr, buffer, MAX_PATH);
+    if (len == 0 || len == MAX_PATH) {
+        throw std::runtime_error("GetModuleFileNameW failed");
     }
-
-    [[nodiscard]] std::string get_output_header(
-        const dconstruct::BinaryFile& file,
-        const u32 total_entries,
-        const size_t function_count,
-        const bool has_state_script,
-        const dconstruct::game_type game,
-        const dconstruct::dcompiler::OPTIMIZATION_KIND optimizations,
-        const std::string& line_prefix = {}
-    ) {
-        std::ostringstream out;
-
-        const auto append_line = [&](const std::string& line) {
-            if (!line_prefix.empty()) {
-                out << line_prefix << ' ';
-            }
-            out << line << '\n';
-        };
-
-        append_line(std::string(BOX_WIDTH, '#'));
-        append_line(get_box_line("#"));
-        append_line(get_box_line(std::string("#   generated by dconstruct ver. ") + VERSION));
-        {
-            const std::string path_prefix = "#   listing for file: ";
-            std::string path_str = file.m_path.string();
-            const size_t max_content = BOX_WIDTH - 3;
-            if (path_prefix.size() + path_str.size() > max_content) {
-                constexpr std::string_view ellipsis = "...";
-                const size_t avail = max_content - path_prefix.size() - ellipsis.size();
-                path_str = std::string(ellipsis) + path_str.substr(path_str.size() - avail);
-            }
-            append_line(get_box_line(path_prefix + path_str));
-        }
-        append_line(get_box_line(std::string("#   filesize: ") + std::to_string(file.m_size) + " bytes"));
-        append_line(get_box_line(std::string("#   total entries: ") + std::to_string(total_entries)));
-        append_line(get_box_line(std::string("#   functions: ") + std::to_string(function_count)));
-        append_line(get_box_line(std::string("#   has state script: ") + (has_state_script ? "true" : "false")));
-        append_line(get_box_line(std::string("#   game type: ") + get_game_type_string(game)));
-        append_line(get_box_line(std::string("#   optimizations enabled: ") + get_optimizations_string(optimizations)));
-        append_line(get_box_line("#"));
-        append_line(std::string(BOX_WIDTH, '#'));
-        out << '\n';
-        return out.str();
-    }
-
-    void map_types_multiple(
-        const std::filesystem::path& in,
-        const dconstruct::SIDBase& sidbase,
-        dconstruct::MappingRegistry& registry,
-        const dconstruct::game_type game
-    ) {
-        std::vector<std::filesystem::path> filepaths;
-
-        for (const auto& entry : std::filesystem::recursive_directory_iterator(in)) {
-            if (entry.path().extension() != ".bin") {
-                continue;
-            }
-            filepaths.emplace_back(entry.path());
-        }
-
-        std::for_each(
-            std::execution::par_unseq,
-            filepaths.begin(),
-            filepaths.end(),
-            [&](const std::filesystem::path& entry) {
-                std::println("mapping types in {}...", entry.string());
-                auto file_res = dconstruct::BinaryFile::from_path(entry.string());
-                if (!file_res) {
-                    return;
-                }
-                auto& file = *file_res;
-                dconstruct::MappingDisassembler disassembler(&file, &sidbase, registry, game);
-                disassembler.ingest();
-            }
-        );
-    }
-
-    [[nodiscard]] std::wstring get_executable_path() {
-        wchar_t buffer[MAX_PATH];
-        const DWORD len = GetModuleFileNameW(nullptr, buffer, MAX_PATH);
-        if (len == 0 || len == MAX_PATH) {
-            throw std::runtime_error("GetModuleFileNameW failed");
-        }
-        return std::wstring(buffer, len);
-    }
+    return std::wstring(buffer, len);
+}
 
 }
 
 namespace dconstruct::disassembly {
 
-    void decomp_file(
-        const std::filesystem::path& inpath,
-        const std::filesystem::path& out_disasm_filename,
-        const std::filesystem::path& out_decomp_filename,
-        const dconstruct::SIDBase& base,
-        const std::unordered_map<sid64, dconstruct::ast::full_type>& type_map,
-        const bool write_graphs,
-        const dconstruct::ast::LANGUAGE_FLAGS language_flags,
-        const bool show_warnings,
-        dconstruct::dcompiler::OPTIMIZATION_KIND optimizations,
-        const std::vector<std::string>& edits,
-        const dconstruct::game_type game,
-        const parsed_type_maps_t& type_maps
-    ) {
-        if (optimizations != dconstruct::dcompiler::OPTIMIZATION_KIND::NONE && game != dconstruct::game_type::T2R) {
-            std::println("warning: optimization is only supported for t2r; disabling optimization");
-            optimizations = dconstruct::dcompiler::OPTIMIZATION_KIND::NONE;
-        }
+void decomp_file(
+    const std::filesystem::path& inpath,
+    const std::filesystem::path& out_disasm_filename,
+    const std::filesystem::path& out_decomp_filename,
+    const dconstruct::SIDBase& base,
+    const std::unordered_map<sid64, dconstruct::ast::full_type>& type_map,
+    const bool write_graphs,
+    const dconstruct::ast::LANGUAGE_FLAGS language_flags,
+    const bool show_warnings,
+    dconstruct::dcompiler::OPTIMIZATION_KIND optimizations,
+    const std::vector<std::string>& edits,
+    const dconstruct::game_type game,
+    const parsed_type_maps_t& type_maps
+) {
+    if (optimizations != dconstruct::dcompiler::OPTIMIZATION_KIND::NONE && game != dconstruct::game_type::T2R) {
+        std::println("warning: optimization is only supported for t2r; disabling optimization");
+        optimizations = dconstruct::dcompiler::OPTIMIZATION_KIND::NONE;
+    }
 
-        auto file_res = dconstruct::BinaryFile::from_path(inpath.string());
-        if (!file_res) {
-            std::println(stderr, "{}", file_res.error());
-            std::terminate();
-        }
+    auto file_res = dconstruct::BinaryFile::from_path(inpath.string());
 
-        auto& file = *file_res;
+    if (!file_res) {
+        std::println(stderr, "{}", file_res.error());
+        std::terminate();
+    }
 
-        if (game != dconstruct::game_type::UC4 && !edits.empty()) {
-            dconstruct::EditDisassembler ed(&file, &base, edits, game);
-            if (const dconstruct::error_msg err = ed.apply_file_edits(); err.has_value()) {
-                std::println(stderr, "{}", *err);
-            }
-        }
+    auto& file = *file_res;
 
-        dconstruct::Disassembler disassembler(&file, &base, &type_map, game);
-
-        if (game == dconstruct::game_type::UC4) {
-            disassembler.disassemble_functions_from_bin_file();
-        } else {
-            disassembler.disassemble();
-        }
-
-        const auto funcs = disassembler.get_all_functions();
-        {
-            std::ofstream out(out_disasm_filename, std::ios::binary);
-            out << get_output_header(file, file.m_dcheader ? file.m_dcheader->m_numEntries : 0, funcs.size(), disassembler.has_state_script(), game, optimizations);
-            out << disassembler.disassembly_to_string(disassembler.get_disassembled_entries());
-        }
-
-        if (!funcs.empty()) {
-            std::vector<dconstruct::ast::function_definition> functions;
-            functions.reserve(funcs.size());
-
-            dconstruct::ast::ast_serialization_buffer out{100'000};
-            out.append(get_output_header(file, file.m_dcheader ? file.m_dcheader->m_numEntries : 0, funcs.size(), disassembler.has_state_script(), game, optimizations, get_dcpl_comment_prefix(language_flags)));
-            out.m_flags = language_flags;
-            std::set<u64> emitted_funcs;
-
-            const dconstruct::ast::function_to_mapped_vars* function_scopes = nullptr;
-            const std::string bin_stem = inpath.stem().string();
-            for (const auto& [map_path, scopes] : type_maps) {
-                if (map_path.stem().string() == bin_stem) {
-                    function_scopes = &scopes;
-                    break;
-                }
-            }
-
-            for (const auto& func : funcs) {
-                std::optional<std::filesystem::path> graph_path = std::nullopt;
-                if (write_graphs) {
-                    auto graph_dir = std::filesystem::path(out_decomp_filename).replace_extension("").concat("_graphs");
-                    std::filesystem::create_directories(graph_dir);
-                    graph_path = get_sanitized_graph_path(graph_dir, func->get_id());
-                }
-
-                const std::string& func_id = func->get_id();
-                const ast::mapped_var_scope* function_scope = nullptr;
-                if (function_scopes) {
-                    if (auto entry = function_scopes->find(SID(func_id.c_str())); entry != function_scopes->end()) {
-                        function_scope = &entry->second;
-                    }
-                }
-
-                dconstruct::dcompiler::decomp_function decomp_func{*func, file, base, dconstruct::ControlFlowGraph::build(*func), std::move(graph_path), nullptr, function_scope};
-                ast::function_definition function_body = decomp_func.decompile(optimizations);
-
-                if (show_warnings && decomp_func.m_error) {
-                    std::println(stderr, "warning: the decompilation for <{}> will be inaccurate: {}", func->get_id(), *decomp_func.m_error);
-                }
-                functions.emplace_back(std::move(function_body));
-            }
-            dconstruct::dcompiler::state_script_functions output_functions{functions, &file, &base};
-            output_functions.to_string(out);
-
-            std::ofstream file_out(out_decomp_filename, std::ios::binary);
-            file_out << out.str();
+    if (game != dconstruct::game_type::UC4 && !edits.empty()) {
+        dconstruct::EditDisassembler ed(&file, &base, edits, game);
+        if (const dconstruct::error_msg err = ed.apply_file_edits(); err.has_value()) {
+            std::println(stderr, "{}", *err);
         }
     }
 
-    void disasm_file(
-        const std::filesystem::path& inpath,
-        const std::filesystem::path& out_filename,
-        const dconstruct::SIDBase& base,
-        const std::unordered_map<sid64, dconstruct::ast::full_type>& type_map,
-        const std::vector<std::string>& edits,
-        const dconstruct::game_type game) {
-        auto file_res = dconstruct::BinaryFile::from_path(inpath.string());
+    dconstruct::Disassembler disassembler(&file, &base, &type_map, game);
 
-        if (!file_res) {
-            std::println(stderr, "{}", file_res.error());
-            std::terminate();
-        }
-
-        auto& file = *file_res;
-
-        if (!edits.empty() && game != dconstruct::game_type::UC4) {
-            dconstruct::EditDisassembler ed(&file, &base, edits, game);
-            if (const dconstruct::error_msg err = ed.apply_file_edits(); err.has_value()) {
-                std::println(stderr, "{}", *err);
-            }
-        }
-
-        dconstruct::Disassembler disassembler(&file, &base, &type_map, game);
+    if (game == dconstruct::game_type::UC4) {
+        disassembler.disassemble_functions_from_bin_file();
+    } else {
         disassembler.disassemble();
-        const auto funcs = disassembler.get_all_functions();
-        std::ofstream out(out_filename, std::ios::binary);
-        out << get_output_header(file, file.m_dcheader ? file.m_dcheader->m_numEntries : 0, funcs.size(), disassembler.has_state_script(), game, dconstruct::dcompiler::OPTIMIZATION_KIND::NONE);
+    }
+
+
+    const auto funcs = disassembler.get_all_functions();
+    {
+        std::ofstream out(out_disasm_filename, std::ios::binary);
+        out << get_output_header(file, file.m_dcheader ? file.m_dcheader->m_numEntries : 0, funcs.size(), disassembler.has_state_script(), game, optimizations);
         out << disassembler.disassembly_to_string(disassembler.get_disassembled_entries());
     }
 
-    void decompile_multiple(
-        const std::filesystem::path& in,
-        const std::filesystem::path& out,
-        const dconstruct::SIDBase& sidbase,
-        const std::unordered_map<sid64, dconstruct::ast::full_type>& type_map,
-        const bool generate_graphs,
-        const bool show_warnings,
-        const bool optimize,
-        const dconstruct::ast::LANGUAGE_FLAGS language_flags,
-        const dconstruct::game_type game,
-        const parsed_type_maps_t& type_maps) {
-        const bool effective_optimize = optimize && game == dconstruct::game_type::T2R;
-        if (optimize && !effective_optimize) {
-            std::println("warning: optimization is only supported for t2r; disabling optimization");
-        }
+    if (!funcs.empty()) {
+        std::vector<dconstruct::ast::function_definition> functions;
+        functions.reserve(funcs.size());
 
-        std::vector<std::filesystem::path> filepaths;
+        dconstruct::ast::ast_serialization_buffer out{100'000};
+        out.append(get_output_header(file, file.m_dcheader ? file.m_dcheader->m_numEntries : 0, funcs.size(), disassembler.has_state_script(), game, optimizations, get_dcpl_comment_prefix(language_flags)));
+        out.m_flags = language_flags;
+        std::set<u64> emitted_funcs;
 
-        for (const auto& entry : std::filesystem::recursive_directory_iterator(in)) {
-            if (entry.path().extension() != ".bin") {
-                continue;
+        const dconstruct::ast::function_to_mapped_vars* function_scopes = nullptr;
+        const std::string bin_stem = inpath.stem().string();
+        for (const auto& [map_path, scopes] : type_maps) {
+            if (map_path.stem().string() == bin_stem) {
+                function_scopes = &scopes;
+                break;
             }
-            filepaths.emplace_back(entry.path());
         }
 
-        const auto start = std::chrono::high_resolution_clock::now();
-
-        std::println("disassembling & decompiling {} files into {}...", filepaths.size(), out.string());
-
-        std::for_each(
-            std::execution::par_unseq,
-            filepaths.begin(),
-            filepaths.end(),
-            [&](const std::filesystem::path& entry) {
-                const std::filesystem::path disasm_outpath = (out / std::filesystem::relative(entry, in)).concat(".asm");
-                const std::filesystem::path decomp_outpath = (out / std::filesystem::relative(entry, in)).concat(".dcpl");
-                std::filesystem::create_directories(disasm_outpath.parent_path());
-                decomp_file(entry.string(), disasm_outpath, decomp_outpath, sidbase, type_map, generate_graphs, language_flags, show_warnings, effective_optimize ? dconstruct::dcompiler::OPTIMIZATION_KIND::ALL : dconstruct::dcompiler::OPTIMIZATION_KIND::NONE, {}, game, type_maps);
-            });
-
-        const auto time_taken = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - start);
-
-        std::println("took {}ms", time_taken.count());
-    }
-
-    void disassemble_multiple(
-        const std::filesystem::path& in,
-        const std::filesystem::path& out,
-        const dconstruct::SIDBase& sidbase,
-        const std::unordered_map<sid64, dconstruct::ast::full_type>& type_map,
-        const dconstruct::game_type game) {
-        std::vector<std::filesystem::path> filepaths;
-
-        for (const auto& entry : std::filesystem::recursive_directory_iterator(in)) {
-            if (entry.path().extension() != ".bin") {
-                continue;
+        for (const auto& func : funcs) {
+            std::optional<std::filesystem::path> graph_path = std::nullopt;
+            if (write_graphs) {
+                auto graph_dir = std::filesystem::path(out_decomp_filename).replace_extension("").concat("_graphs");
+                std::filesystem::create_directories(graph_dir);
+                graph_path = get_sanitized_graph_path(graph_dir, func->get_id());
             }
-            filepaths.emplace_back(entry.path());
-        }
 
-        const auto start = std::chrono::high_resolution_clock::now();
-
-        std::println("disassembling {} files into {}...", filepaths.size(), out.string());
-
-        std::for_each(
-            std::execution::par_unseq,
-            filepaths.begin(),
-            filepaths.end(),
-            [&](const std::filesystem::path& entry) {
-                const std::filesystem::path outpath = (out / std::filesystem::relative(entry, in)).concat(".asm");
-                std::filesystem::create_directories(outpath.parent_path());
-                disasm_file(entry.string(), outpath, sidbase, type_map, {}, game);
-            });
-
-        const auto time_taken = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - start);
-
-        std::println("took {}ms", time_taken.count());
-    }
-
-    void map_types_multiple_to_file(
-        const std::filesystem::path& in,
-        const dconstruct::SIDBase& sidbase,
-        const std::filesystem::path& out_types_file,
-        const dconstruct::game_type game) {
-        dconstruct::MappingRegistry registry;
-        map_types_multiple(in, sidbase, registry, game);
-        registry.dump_types_file(out_types_file, sidbase);
-    }
-
-    std::vector<std::string> edits_from_file(const std::filesystem::path& path) {
-        std::ifstream edit_in(path);
-        std::vector<std::string> result;
-
-        if (!edit_in.is_open()) {
-            std::println("warning: couldn't open {}", path.string());
-        }
-        std::string edit_str;
-        while (edit_in >> edit_str) {
-            result.emplace_back(std::move(edit_str));
-        }
-
-        return result;
-    }
-
-    [[nodiscard]] std::optional<dconstruct::ast::LANGUAGE_FLAGS> get_print_type(const std::string& input_string) {
-        if (input_string == "C" || input_string == "c") {
-            return dconstruct::ast::LANGUAGE_FLAGS::C;
-        }
-        if (input_string == "Python" || input_string == "python") {
-            return dconstruct::ast::LANGUAGE_FLAGS::PY;
-        }
-        if (input_string == "Racket" || input_string == "racket") {
-            return dconstruct::ast::LANGUAGE_FLAGS::RACKET;
-        }
-        return std::nullopt;
-    }
-
-    [[nodiscard]] std::optional<dconstruct::game_type> get_game_type(const std::string& input_string) {
-        if (input_string == "t2r" || input_string == "T2R") {
-            return dconstruct::game_type::T2R;
-        }
-        if (input_string == "t1x" || input_string == "T1X") {
-            return dconstruct::game_type::T1X;
-        }
-        if (input_string == "uc4" || input_string == "UC4") {
-            return dconstruct::game_type::UC4;
-        }
-        return std::nullopt;
-    }
-
-    [[nodiscard]] std::expected<type_map_t, std::string> parse_type_defs_file(const std::filesystem::path& filepath) {
-        using namespace compilation;
-
-        std::ifstream file(filepath);
-
-        if (!file) {
-            return std::unexpected{"couldn't open filepath " + filepath.string()};
-        }
-
-        std::stringstream input;
-        input << file.rdbuf();
-
-        std::string type_def_source = input.str();
-
-        Lexer lexer{type_def_source};
-        const auto& [tokens, lex_errors] = lexer.get_results();
-
-        if (!lex_errors.empty()) {
-            std::ostringstream oss;
-            for (const auto& err : lex_errors) {
-                oss << "[syntax error] " << err << '\n';
+            const ast::mapped_var_scope* function_scope = nullptr;
+            if (function_scopes) {
+                if (auto entry = function_scopes->find(SID(func->get_id().c_str())); entry != function_scopes->end()) {
+                    function_scope = &entry->second;
+                }
             }
-            return std::unexpected{oss.str()};
-        }
 
-        Parser parser{tokens};
-        auto [program, types, parse_errors] = parser.get_results();
-        if (!parse_errors.empty()) {
-            std::ostringstream oss;
-            for (const auto& err : parse_errors) {
-                oss << "[parsing error] " << err.m_message << " at " << format_source_location({err.m_token.m_file, err.m_token.m_line}) << '\n';
+            dconstruct::dcompiler::decomp_function decomp_func{*func, file, base, dconstruct::ControlFlowGraph::build(*func), std::move(graph_path), &type_map, function_scope};
+            ast::function_definition function_body = decomp_func.decompile(optimizations);
+            if (show_warnings && decomp_func.m_error) {
+                std::println(stderr, "warning: the decompilation for <{}> will be inaccurate: {}", func->get_id(), *decomp_func.m_error);
             }
-            return std::unexpected{oss.str()};
+            functions.emplace_back(std::move(function_body));
         }
+        dconstruct::dcompiler::state_script_functions output_functions{functions, &file, &base};
+        output_functions.to_string(out);
 
-        if (!program.m_declarations.empty()) {
-            return std::unexpected{"[logic error] you cannot have any code inside a type definition file\n"};
+        std::ofstream file_out(out_decomp_filename, std::ios::binary);
+        file_out << out.str();
+    }
+}
+
+void disasm_file(
+    const std::filesystem::path& inpath,
+    const std::filesystem::path& out_filename,
+    const dconstruct::SIDBase& base,
+    const std::unordered_map<sid64, dconstruct::ast::full_type>& type_map,
+    const std::vector<std::string>& edits,
+    const dconstruct::game_type game
+) {
+    auto file_res = dconstruct::BinaryFile::from_path(inpath.string());
+
+    if (!file_res) {
+        std::println(stderr, "{}", file_res.error());
+        std::terminate();
+    }
+
+    auto& file = *file_res;
+
+    if (!edits.empty() && game != dconstruct::game_type::UC4) {
+        dconstruct::EditDisassembler ed(&file, &base, edits, game);
+        if (const dconstruct::error_msg err = ed.apply_file_edits(); err.has_value()) {
+            std::println(stderr, "{}", *err);
         }
+    }
 
+    dconstruct::Disassembler disassembler(&file, &base, &type_map, game);
+    disassembler.disassemble();
+    const auto funcs = disassembler.get_all_functions();
+    std::ofstream out(out_filename, std::ios::binary);
+    out << get_output_header(file, file.m_dcheader ? file.m_dcheader->m_numEntries : 0, funcs.size(), disassembler.has_state_script(), game, dconstruct::dcompiler::OPTIMIZATION_KIND::NONE);
+    out << disassembler.disassembly_to_string(disassembler.get_disassembled_entries());
+}
+
+void decompile_multiple(
+    const std::filesystem::path& in,
+    const std::filesystem::path& out,
+    const dconstruct::SIDBase& sidbase,
+    const std::unordered_map<sid64, dconstruct::ast::full_type>& type_map,
+    const bool generate_graphs,
+    const bool show_warnings,
+    const bool optimize,
+    const dconstruct::ast::LANGUAGE_FLAGS language_flags,
+    const dconstruct::game_type game,
+    const parsed_type_maps_t& type_maps
+) {
+    const bool effective_optimize = optimize && game == dconstruct::game_type::T2R;
+    if (optimize && !effective_optimize) {
+        std::println("warning: optimization is only supported for t2r; disabling optimization");
+    }
+
+    std::vector<std::filesystem::path> filepaths;
+
+    for (const auto& entry : std::filesystem::recursive_directory_iterator(in)) {
+        if (entry.path().extension() != ".bin") {
+            continue;
+        }
+        filepaths.emplace_back(entry.path());
+    }
+
+    const auto start = std::chrono::high_resolution_clock::now();
+
+    std::println("disassembling & decompiling {} files into {}...", filepaths.size(), out.string());
+
+    std::for_each(
+        std::execution::par_unseq,
+        filepaths.begin(),
+        filepaths.end(),
+        [&](const std::filesystem::path& entry) {
+            const std::filesystem::path disasm_outpath = (out / std::filesystem::relative(entry, in)).concat(".asm");
+            const std::filesystem::path decomp_outpath = (out / std::filesystem::relative(entry, in)).concat(".dcpl");
+            std::filesystem::create_directories(disasm_outpath.parent_path());
+            decomp_file(entry.string(), disasm_outpath, decomp_outpath, sidbase, type_map, generate_graphs, language_flags, show_warnings, effective_optimize ? dconstruct::dcompiler::OPTIMIZATION_KIND::ALL : dconstruct::dcompiler::OPTIMIZATION_KIND::NONE, {}, game, type_maps);
+        }
+    );
+
+    const auto time_taken = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - start);
+
+    std::println("took {}ms", time_taken.count());
+}
+
+void disassemble_multiple(
+    const std::filesystem::path& in,
+    const std::filesystem::path& out,
+    const dconstruct::SIDBase& sidbase,
+    const std::unordered_map<sid64, dconstruct::ast::full_type>& type_map,
+    const dconstruct::game_type game
+) {
+    std::vector<std::filesystem::path> filepaths;
+
+    for (const auto& entry : std::filesystem::recursive_directory_iterator(in)) {
+        if (entry.path().extension() != ".bin") {
+            continue;
+        }
+        filepaths.emplace_back(entry.path());
+    }
+
+    const auto start = std::chrono::high_resolution_clock::now();
+
+    std::println("disassembling {} files into {}...", filepaths.size(), out.string());
+
+    std::for_each(
+        std::execution::par_unseq,
+        filepaths.begin(),
+        filepaths.end(),
+        [&](const std::filesystem::path& entry) {
+            const std::filesystem::path outpath = (out / std::filesystem::relative(entry, in)).concat(".asm");
+            std::filesystem::create_directories(outpath.parent_path());
+            disasm_file(entry.string(), outpath, sidbase, type_map, {}, game);
+        }
+    );
+
+    const auto time_taken = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - start);
+
+    std::println("took {}ms", time_taken.count());
+}
+
+void map_types_multiple_to_file(
+    const std::filesystem::path& in,
+    const dconstruct::SIDBase& sidbase,
+    const std::filesystem::path& out_types_file,
+    const dconstruct::game_type game
+) {
+    dconstruct::MappingRegistry registry;
+    map_types_multiple(in, sidbase, registry, game);
+    registry.dump_types_file(out_types_file, sidbase);
+}
+
+std::vector<std::string> edits_from_file(const std::filesystem::path& path) {
+    std::ifstream edit_in(path);
+    std::vector<std::string> result;
+
+    if (!edit_in.is_open()) {
+        std::println("warning: couldn't open {}", path.string());
+    }
+    std::string edit_str;
+    while (edit_in >> edit_str) {
+        result.emplace_back(std::move(edit_str));
+    }
+
+    return result;
+}
+
+[[nodiscard]] std::optional<dconstruct::ast::LANGUAGE_FLAGS> get_print_type(const std::string& input_string) {
+    if (input_string == "C" || input_string == "c") {
+        return dconstruct::ast::LANGUAGE_FLAGS::C;
+    }
+    if (input_string == "Python" || input_string == "python") {
+        return dconstruct::ast::LANGUAGE_FLAGS::PY;
+    }
+    if (input_string == "Racket" || input_string == "racket") {
+        return dconstruct::ast::LANGUAGE_FLAGS::RACKET;
+    }
+    return std::nullopt;
+}
+
+[[nodiscard]] std::optional<dconstruct::game_type> get_game_type(const std::string& input_string) {
+    if (input_string == "t2r" || input_string == "T2R") {
+        return dconstruct::game_type::T2R;
+    }
+    if (input_string == "t1x" || input_string == "T1X") {
+        return dconstruct::game_type::T1X;
+    }
+    if (input_string == "uc4" || input_string == "UC4") {
+        return dconstruct::game_type::UC4;
+    }
+    return std::nullopt;
+}
+
+[[nodiscard]] std::expected<type_map_t, std::string> parse_type_defs_file(const std::filesystem::path& filepath) {
+
+    using namespace compilation;
+
+    std::ifstream file(filepath);
+
+    if (!file) {
+        return std::unexpected{"couldn't open filepath " + filepath.string()};
+    }
+
+    std::stringstream input;
+    input << file.rdbuf();
+
+    std::string type_def_source = input.str();
+
+
+
+    Lexer lexer{type_def_source};
+    const auto& [tokens, lex_errors] = lexer.get_results();
+
+    if (!lex_errors.empty()) {
         std::ostringstream oss;
-        type_map_t type_results;
-        for (auto& [name, type] : types) {
-            if (std::holds_alternative<ast::primitive_type>(type)) {
-                continue;
-            } else if (ast::struct_type* struct_t_ptr = std::get_if<ast::struct_type>(&type)) {
-                if (!struct_t_ptr->m_typeHash) {
-                    oss << "[logic error] struct " << name << " muts have an sid identifier (#*name*) as its struct name\n";
-                } else {
-                    type_results.emplace(*struct_t_ptr->m_typeHash, std::move(*struct_t_ptr));
-                }
-            } else if (ast::enum_type* enum_t_ptr = std::get_if<ast::enum_type>(&type)) {
-                if (!enum_t_ptr->m_typeHash) {
-                    oss << "[logic error] enum " << name << " muts have an sid identifier (#*name*) as its enum name\n";
-                } else {
-                    type_results.emplace(*enum_t_ptr->m_typeHash, std::move(*enum_t_ptr));
-                }
+        for (const auto& err : lex_errors) {
+            oss << "[syntax error] " << err << '\n';
+        }
+        return std::unexpected{oss.str()};
+    }
+
+    Parser parser{tokens};
+    auto [program, types, parse_errors] = parser.get_results();
+    if (!parse_errors.empty()) {
+        std::ostringstream oss;
+        for (const auto& err : parse_errors) {
+            oss << "[parsing error] " << err.m_message << " at " << format_source_location({err.m_token.m_file, err.m_token.m_line}) << '\n';
+        }
+        return std::unexpected{oss.str()};
+    }
+
+    if (!program.m_declarations.empty()) {
+        return std::unexpected{"[logic error] you cannot have any code inside a type definition file\n"};
+    }
+
+    std::ostringstream oss;
+    type_map_t type_results;
+    for (auto& [name, type] : types) {
+        if (std::holds_alternative<ast::primitive_type>(type)) {
+            continue;
+        } else if (ast::struct_type *struct_t_ptr = std::get_if<ast::struct_type>(&type)) {
+            if (!struct_t_ptr->m_typeHash) {
+                oss << "[logic error] struct " << name << " muts have an sid identifier (#*name*) as its struct name\n";
             } else {
-                oss << "[logic error] type " << name << " must be enum or struct type\n";
+                type_results.emplace(*struct_t_ptr->m_typeHash, std::move(*struct_t_ptr));
             }
+        } else if (ast::enum_type *enum_t_ptr = std::get_if<ast::enum_type>(&type)) {
+            if (!enum_t_ptr->m_typeHash) {
+                oss << "[logic error] enum " << name << " muts have an sid identifier (#*name*) as its enum name\n";
+            } else {
+                type_results.emplace(*enum_t_ptr->m_typeHash, std::move(*enum_t_ptr));
+            }
+        } else {
+            oss << "[logic error] type " << name << " must be enum or struct type\n";
         }
-        if (std::string errors = oss.str(); !errors.empty()) {
-            return std::unexpected{errors};
-        }
-
-        return type_results;
+    }
+    if (std::string errors = oss.str(); !errors.empty()) {
+        return std::unexpected{errors};
     }
 
-    [[nodiscard]] std::expected<ast::function_to_mapped_vars, std::string> parse_var_type_map_file(
-        const std::filesystem::path& filepath,
-        const std::unordered_map<sid64, ast::full_type>* mapped_types
-    ) {
-        using namespace compilation;
+    return type_results;
+}
 
-        std::ifstream file(filepath);
+[[nodiscard]] std::expected<ast::function_to_mapped_vars, std::string> parse_var_type_map_file(
+    const std::filesystem::path& filepath,
+    const std::unordered_map<sid64, ast::full_type>* mapped_types
+) {
+    using namespace compilation;
 
-        if (!file) {
-            return std::unexpected{"couldn't open filepath " + filepath.string()};
-        }
+    std::ifstream file(filepath);
 
-        std::stringstream input;
-        input << file.rdbuf();
-
-        std::string type_map_source = input.str();
-
-        Lexer lexer{type_map_source};
-        const auto& [tokens, lex_errors] = lexer.get_results();
-
-        if (!lex_errors.empty()) {
-            std::ostringstream oss;
-            for (const auto& err : lex_errors) {
-                oss << "[syntax error] " << err << '\n';
-            }
-            return std::unexpected{oss.str()};
-        }
-
-        Parser parser{tokens};
-        if (mapped_types != nullptr) {
-            parser.add_mapped_types(*mapped_types);
-        }
-        auto typemap = parser.make_typemap();
-        const auto parse_errors = parser.get_errors();
-        if (!typemap || !parse_errors.empty()) {
-            std::ostringstream oss;
-            for (const auto& err : parse_errors) {
-                oss << "[parsing error] " << err.m_message << " at " << format_source_location({err.m_token.m_file, err.m_token.m_line}) << '\n';
-            }
-            return std::unexpected{oss.str()};
-        }
-
-        return std::move(*typemap);
+    if (!file) {
+        return std::unexpected{"couldn't open filepath " + filepath.string()};
     }
 
-    [[nodiscard]] std::optional<std::pair<cxxopts::Options, cxxopts::ParseResult>> get_command_line_options(
-        int argc,
-        char* argv[]
-    ) {
-        cxxopts::Options options("dconstruct", "\na program for disassembling, editing and decompiling tlouii dc files. use --about for a more detailed description.\n");
+    std::stringstream input;
+    input << file.rdbuf();
 
-        using convert_type = std::codecvt_utf8<wchar_t>;
-        std::wstring_convert<convert_type, wchar_t> converter;
+    std::string type_map_source = input.str();
 
-        const std::filesystem::path current_program_path = converter.to_bytes(get_executable_path());
+    Lexer lexer{type_map_source};
+    const auto& [tokens, lex_errors] = lexer.get_results();
 
-        options.add_options("information")
-            ("h, help", "display this message")
-            ("help_edit", "help with editing a file")
-            ("a,about", "print about");
-        options.add_options("input/output")
-            ("i,input", "input DC file or folder", cxxopts::value<std::string>(), "<path>")
-            ("o,output", "output file or folder", cxxopts::value<std::string>()->default_value(""), DEFAULT_OUT)
-            ("s,sidbase", "sidbase file", cxxopts::value<std::string>()->default_value((current_program_path.parent_path() / "sidbase.bin").string()), "<path>")
-            ("type_defines", "a .dcpl file for defining new types", cxxopts::value<std::string>()->default_value(""))
-            ("type_map", "one or more .dcplmap files for declaring the types of variables for the decompiler. a map file is matched to a .bin file by having the same filename (without extension).", cxxopts::value<std::vector<std::string>>());
-        options.add_options("configuration")
-            ("no_decompile", "don't emit a file containing the decompiled functions (excluding those nested inside structs).", cxxopts::value<bool>()->default_value("false"))
-            ("no_optimize", "don't optimize/cleanup the decompiled code output, e.g. replacing some 'for' loops with 'foreach' loops, some if-else chains with match expressions, and removing unused variables.", cxxopts::value<bool>()->default_value("false"))
-            ("pascal_case", "convert the games function names into pascal case in the DCPL output.", cxxopts::value<bool>()->default_value("false"))("show_warnings", "don't show warnings for functions that couldn't be decompiled.", cxxopts::value<bool>()->default_value("false"))
-            ("language", "specify the DCPL pseudo language type. current options are 'C', 'Racket' (closest to original DC), or 'Python'. default is 'C'.", cxxopts::value<std::string>()->default_value("C"))("g,game_type", "game type. current options are 't2r', 't1x', or 'uc4'. default is 't2r'.", cxxopts::value<std::string>()->default_value("t2r"))
-            ("graphs", "emit control flow graph SVGs of the named functions when decompiling. only emits graphs of size >1. SIGNIFICANTLY slows down decompilation.", cxxopts::value<bool>()->default_value("false"))
-            ("map_types", "don't emit disassembly or decompilation output, just map as many struct types as possible and emit them to a file specified by --output", cxxopts::value<bool>()->default_value("false"));
-
-        options.add_options("edit")
-            ("e,edit", "make an edit at a specific address. may only be specified during single file disassembly.", cxxopts::value<std::vector<std::string>>(), "<addr>[<offset>]=<new_value>")
-            ("edit_file", "specify a path to an edit file. a line in an edit file is equivalent to the value for one -e flag.", cxxopts::value<std::string>());
-
-        options.parse_positional({"i"});
-        cxxopts::ParseResult opts;
-        try {
-            opts = options.parse(argc, argv);
-        } catch (const std::exception& e) {
-            std::println(stderr, "{}", e.what());
-            return std::nullopt;
+    if (!lex_errors.empty()) {
+        std::ostringstream oss;
+        for (const auto& err : lex_errors) {
+            oss << "[syntax error] " << err << '\n';
         }
-
-        return std::pair{options, opts};
+        return std::unexpected{oss.str()};
     }
+
+    Parser parser{tokens};
+    if (mapped_types != nullptr) {
+        parser.add_mapped_types(*mapped_types);
+    }
+    auto typemap = parser.make_typemap();
+    const auto parse_errors = parser.get_errors();
+    if (!typemap || !parse_errors.empty()) {
+        std::ostringstream oss;
+        for (const auto& err : parse_errors) {
+            oss << "[parsing error] " << err.m_message << " at " << format_source_location({err.m_token.m_file, err.m_token.m_line}) << '\n';
+        }
+        return std::unexpected{oss.str()};
+    }
+
+    return std::move(*typemap);
+}
+
+[[nodiscard]] std::optional<std::pair<cxxopts::Options, cxxopts::ParseResult>> get_command_line_options(int argc, char* argv[]) {
+    cxxopts::Options options("dconstruct", "\na program for disassembling, editing and decompiling tlouii dc files. use --about for a more detailed description.\n");
+
+    using convert_type = std::codecvt_utf8<wchar_t>;
+    std::wstring_convert<convert_type, wchar_t> converter;
+
+    const std::filesystem::path current_program_path = converter.to_bytes(get_executable_path());
+
+    options.add_options("information")
+        ("h, help", "display this message")
+        ("help_edit", "help with editing a file")
+        ("a,about", "print about");
+    options.add_options("input/output")
+        ("i,input", "input DC file or folder", cxxopts::value<std::string>(), "<path>")
+        ("o,output", "output file or folder", cxxopts::value<std::string>()->default_value(""), DEFAULT_OUT)
+        ("s,sidbase", "sidbase file", cxxopts::value<std::string>()->default_value((current_program_path.parent_path() / "sidbase.bin").string()), "<path>")
+        ("type_defines", "a .dcpl file for defining new types", cxxopts::value<std::string>()->default_value(""))
+        ("type_map", "one or more .dcplmap files for declaring the types of variables for the decompiler. a map file is matched to a .bin file by having the same filename (without extension).", cxxopts::value<std::vector<std::string>>());
+    options.add_options("configuration")
+        ("no_decompile", "don't emit a file containing the decompiled functions (excluding those nested inside structs).", cxxopts::value<bool>()->default_value("false"))
+        ("no_optimize", "don't optimize/cleanup the decompiled code output, e.g. replacing some 'for' loops with 'foreach' loops, some if-else chains with match expressions, and removing unused variables.", cxxopts::value<bool>()->default_value("false"))
+        ("pascal_case", "convert the games function names into pascal case in the DCPL output.", cxxopts::value<bool>()->default_value("false"))
+        ("show_warnings", "don't show warnings for functions that couldn't be decompiled.", cxxopts::value<bool>()->default_value("false"))
+        ("language", "specify the DCPL pseudo language type. current options are 'C', 'Racket' (closest to original DC), or 'Python'. default is 'C'.", cxxopts::value<std::string>()->default_value("C"))
+        ("g,game_type", "game type. current options are 't2r', 't1x', or 'uc4'. default is 't2r'.", cxxopts::value<std::string>()->default_value("t2r"))
+        ("graphs", "emit control flow graph SVGs of the named functions when decompiling. only emits graphs of size >1. SIGNIFICANTLY slows down decompilation.", cxxopts::value<bool>()->default_value("false"))
+        ("map_types", "don't emit disassembly or decompilation output, just map as many struct types as possible and emit them to a file specified by --output", cxxopts::value<bool>()->default_value("false"));
+
+    options.add_options("edit")
+        ("e,edit", "make an edit at a specific address. may only be specified during single file disassembly.", cxxopts::value<std::vector<std::string>>(), "<addr>[<offset>]=<new_value>")
+        ("edit_file", "specify a path to an edit file. a line in an edit file is equivalent to the value for one -e flag.", cxxopts::value<std::string>());
+
+    options.parse_positional({"i"});
+    cxxopts::ParseResult opts;
+    try {
+        opts = options.parse(argc, argv);
+    }
+    catch (const std::exception& e) {
+        std::println(stderr, "{}", e.what());
+        return std::nullopt;
+    }
+
+    return std::pair{options, opts};
+}
 
 }

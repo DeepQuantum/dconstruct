@@ -1,3 +1,7 @@
+#include "decompilation/decomp_function.h"
+#include <atomic>
+#include <optional>
+#include <stop_token>
 #include <windows.h>
 #include <DbgEng.h>
 #include <wrl/client.h>
@@ -33,42 +37,78 @@
 #endif
 
 #include "disassembly/instructions.h"
+#include "ast/function_definition.h"
 #include "sidbase.h"
 
 #include "DCScript.h"
 
-#define CHECKED_THREAD(expr, message) if (FAILED(expr)) { m_lastError = message; return; }
+#define CHECKED_THREAD(expr, message) if (FAILED(expr)) { return message; }
 
 using namespace std::literals;
 using namespace Microsoft;
 
 namespace dconstruct::debugger {
 
-    
-static constexpr ULONG64 PARSE_INSTRUCTION_LOOP_ENTRY = 0x0014B6B10;
+static constexpr ULONG64 PARSE_INSTRUCTION_LOOP_ENTRY = 0x14B6B10;
 static constexpr ULONG64 SID_LOCATION_STACK_POINTER_OFFSET = 0x338;
- 
+
+struct debugger_snapshot {
+    std::shared_ptr<function_disassembly> m_func;
+    std::shared_ptr<ast::function_definition> m_decomp;
+    std::array<u64, ARGUMENT_REGISTERS_IDX> m_generalPurposeRegisters{};
+    std::array<u64, ARGUMENT_REGISTERS_IDX> m_argumentRegisters{};
+};
+
 class debugger {
 
+#undef ERROR
+
 public:
+    enum class STATE : u8 {
+        DETACHED,
+        ATTACHING,
+        ATTACHED,
+        SNAPSHOT_READY,
+        ERROR
+    };
+
     [[nodiscard]] std::optional<std::string> request_attach();
+    void detach();
 
     debugger() {
         m_sink.set_output(&m_output);
     }
 
-    [[nodiscard]] bool is_attached() const noexcept {
-        return m_attached;
-    }
+
     [[nodiscard]] const std::string& output() const noexcept {
         return m_output;
     }
+
+    [[nodiscard]] bool is_attached() const noexcept {
+        const STATE state = poll_state();
+        return state == STATE::ATTACHED || state == STATE::SNAPSHOT_READY;
+    }
+
     void append_output(std::string_view text) {
         m_output.append(text);
     }
 
     template<typename sid_iter>
-    [[nodiscard]] std::expected<std::shared_ptr<function_disassembly>, std::string> get_sid_matched_function_disassembly(sid_iter begin, sid_iter end);
+    void set_sids(sid_iter begin, sid_iter end) {
+        for (auto i = begin; i < end; ++i) {
+            m_toMatchSIDs.push_back(*i);
+        }
+    }
+
+    [[nodiscard]] STATE poll_state() const {
+        return m_state.load(std::memory_order_acquire);
+    }
+
+    void loop(std::stop_token st);
+
+    [[nodiscard]] std::shared_ptr<debugger_snapshot> poll_snapshot();
+    [[nodiscard]] std::optional<std::string> poll_error();
+
 
     debugger(debugger&) = delete;
     debugger(debugger&&) = delete;
@@ -77,13 +117,12 @@ public:
     debugger& operator=(debugger&&) = delete;
 
     ~debugger() {
-        if (m_client) {
-            m_client->DetachProcesses();
-        }
+        detach();
     }
 
 private:
-    void attach();
+    [[nodiscard]] std::optional<std::string> attach();
+    void cleanup_session();
 
     struct OutputSink : IDebugOutputCallbacks {
         void set_output(std::string* output) noexcept {
@@ -115,14 +154,15 @@ private:
         std::unique_ptr<u64[]> m_symbols;
     };
 
-
     [[nodiscard]] static std::expected<ULONG, std::string> get_tlou_pid();
-    
+
     template<typename T>
     [[nodiscard]] std::expected<T, std::string> read_virtual(u64 addr);
 
     template<typename T>
     [[nodiscard]] std::expected<std::unique_ptr<T[]>, std::string> read_virtual(u64 addr, u64 num_elements);
+
+    void store_error(std::string_view error);
 
     WRL::ComPtr<IDebugClient> m_client;
     WRL::ComPtr<IDebugControl> m_control;
@@ -132,20 +172,23 @@ private:
     WRL::ComPtr<IDebugBreakpoint> m_bp;
     std::vector<owning_function_disassembly_data> m_functionData;
     std::unordered_map<sid64, std::shared_ptr<function_disassembly>> m_debuggedFunctions;
-    SIDBase m_sidbase = SIDBase::from_caches({std::map<sid64, std::string>{{0, "#0"}}});
+    const SIDBase* m_sidbase = nullptr;
     std::map<sid64, std::string> m_sidCache;
+    std::vector<sid64> m_toMatchSIDs;
 
+    mutable std::mutex m_mutex;
     std::jthread m_debugThread;
-    std::mutex m_mutex;
-    std::optional<std::string> m_lastError;
+
+    std::optional<std::string> m_error;
+    std::shared_ptr<debugger_snapshot> m_snapshot;
+    std::atomic<STATE> m_state = STATE::DETACHED;
 
     std::string m_output;
     OutputSink m_sink;
-    bool m_attached = false;
     ULONG m_opts{};
     ULONG rax{}, rdx{}, rbp{}, rsi{}, r15{}, rdi{}, rcx{}, rsp{};
 };
-    
+
 
 
 

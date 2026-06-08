@@ -1,3 +1,4 @@
+#include "disassembly/instructions.h"
 #ifdef WIN32
 #define GVDLL
 #endif
@@ -223,20 +224,20 @@ namespace dconstruct {
         return result;
     }
 
-    [[nodiscard]] ControlFlowGraph ControlFlowGraph::build(const function_disassembly& func) noexcept {
-        const std::vector<u32>& labels = func.m_stackFrame.m_labels;
+    [[nodiscard]] ControlFlowGraph ControlFlowGraph::build(const function_disassembly& func_ref) noexcept {
+        const std::vector<u32>& labels = func_ref.m_stackFrame.m_labels;
         std::map<node_id, control_flow_node> nodes;
         nodes.emplace(0, 0);
         node_id current_node = 0;
         node_id following_node;
-        for (u32 i = 0; i < func.m_lines.size(); ++i) {
-            const function_disassembly_line& current_line = func.m_lines[i];
+        for (u32 i = 0; i < func_ref.m_lines.size(); ++i) {
+            const function_disassembly_line& current_line = func_ref.m_lines[i];
             nodes[current_node].m_lines.push_back(current_line);
-            if (i == func.m_lines.size() - 1) {
+            if (i == func_ref.m_lines.size() - 1) {
                 nodes[current_node].m_endLine = current_line.m_location;
                 break;
             }
-            const function_disassembly_line& next_line = func.m_lines[i + 1];
+            const function_disassembly_line& next_line = func_ref.m_lines[i + 1];
 
             bool next_line_is_target = std::find(labels.begin(), labels.end(), next_line.m_location) != labels.end();
 
@@ -286,14 +287,15 @@ namespace dconstruct {
             ordered_nodes[node.m_index] = node;
             ordered_nodes[node.m_index].determine_register_nature();
         }
-        if (func.m_isScriptFunction) {
+        if (func_ref.m_isScriptFunction) {
             ordered_nodes.back().m_regs = ordered_nodes.back().get_register_nature_starting_at(0, false);
         }
 
-        ControlFlowGraph res(func, std::move(ordered_nodes));
+        ControlFlowGraph res(std::move(ordered_nodes));
 
         res.compute_postdominators();
-        res.find_loops();
+        res.find_loops(func_ref);
+        res.m_isScriptFunction = func_ref.m_isScriptFunction;
 
         return res;
     }
@@ -415,8 +417,8 @@ namespace dconstruct {
         }
     }
 
-    void ControlFlowGraph::find_loops() {
-        for (const auto& loc : m_func.m_stackFrame.m_backwardsJumpLocs) {
+    void ControlFlowGraph::find_loops(const function_disassembly& func) {
+        for (const auto& loc : func.m_stackFrame.m_backwardsJumpLocs) {
             const node_id loop_head = std::lower_bound(
                 m_nodes.begin(),
                 m_nodes.end(),
@@ -424,8 +426,7 @@ namespace dconstruct {
                 [](const control_flow_node& node, const u64 target) -> bool {
                     return node.m_startLine < target;
                 }
-            )
-                                          ->m_index;
+            )->m_index;
             node_id loop_latch = 0;
             for (const auto& node : m_nodes) {
                 if (node.m_endLine == loc.m_location) {
@@ -535,7 +536,7 @@ namespace dconstruct {
         std::vector<node_reg_pair> node_stack;
 
         if (start_line) {
-            const auto [read_first, _x, _y] = start_node.get_register_nature_starting_at(start_line, !m_func.m_isScriptFunction);
+            const auto [read_first, _x, _y] = start_node.get_register_nature_starting_at(start_line, m_isScriptFunction);
             read |= read_first & check_regs;
             check_regs &= ~read_first;
             checked[start_node.m_index] = true;
@@ -598,7 +599,7 @@ namespace dconstruct {
         std::cout << "check reg " << std::to_string(reg_to_check) << '\n';
 #endif
         if (start_line) {
-            const auto [read_once, read_twice, written] = start_node.get_register_nature_starting_at(start_line, !m_func.m_isScriptFunction);
+            const auto [read_once, read_twice, written] = start_node.get_register_nature_starting_at(start_line, m_isScriptFunction);
 #ifdef _TRACE
             std::cout << "using start line " << start_line << " , "
                       << " read_first: " << pretty_regset(read_once)
