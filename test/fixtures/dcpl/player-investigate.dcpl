@@ -104,3 +104,31 @@ u64? anim-player-investigate-states__anim-transition-group@15b0__anim-transition
     return var_1;
 }
 
+u64? anim-player-investigate-states__actor-state-list@48(u64? arg_0, u64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64 arg_5, u64? arg_6) {
+    u64 var_0 = *(u64 *)(*(arg_1 + 8) + 384);
+    u64? var_1 = player-anim-speed-mult(var_0, *(u64 *)arg_5);
+    return arg_2 + ((arg_3 * var_1) * arg_4);
+}
+
+f32 anim-player-investigate-states__anim-node-subsystem-ik@1a98__anim-node-parametric@2cb8__(f32 arg_0) {
+    return *(f32 *)(*(arg_0 + 16) + 2868);
+}
+
+f32 anim-player-investigate-states__anim-node-subsystem-ik@1a98(f32 arg_0) {
+    return *(f32 *)((*(arg_0 + 16) + 2868) + 4);
+}
+
+f32 anim-player-investigate-states__anim-node-parametric@1a18(f32 arg_0) {
+    return *(f32 *)(*(arg_0 + 16) + 2868);
+}
+
+f32 anim-player-investigate-states(f32 arg_0) {
+    return *(f32 *)((*(arg_0 + 16) + 2868) + 4);
+}
+
+u64? anim-player-investigate-states__anim-transition-group@1750__anim-transition-condition-lambda@3790__(u8 arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_0 = player-animation-abort-active?(arg_2, arg_1);
+    bool var_1 = var_0 && *(u8 *)(*arg_0 + 208);
+    return var_1;
+}
+

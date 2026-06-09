@@ -334,3 +334,103 @@ u64 anim-player-prone-states__anim-node-animation@23e0(u64? arg_0, u64 arg_1, u6
     return *(u64*)((*(arg_1 + 8) + 40) + 120);
 }
 
+u64 anim-player-prone-states__actor-state-list@48__anim-node-animation@34e8__(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64 *)(*(arg_1 + 8) + 40);
+}
+
+u64? anim-player-prone-states__anim-transition-group@2c40__anim-transition-condition-lambda@12170__(u8 arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_0 = player-animation-abort-active?(arg_2, arg_1);
+    bool var_1 = var_0 && *(u8 *)(*arg_0 + 208);
+    return var_1;
+}
+
+u64? anim-player-prone-states(u64? arg_0, u64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64 arg_5, u64? arg_6) {
+    u64 var_0 = *(u64 *)(*(arg_1 + 8) + 384);
+    u64? var_1 = player-anim-speed-mult(var_0, *(u64 *)arg_5);
+    return arg_2 + ((arg_3 * var_1) * arg_4);
+}
+
+u64 anim-player-prone-states__anim-node-animation@2718(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64 *)((*(arg_1 + 8) + 40) + 8);
+}
+
+u64 anim-player-prone-states__anim-node-animation@3368(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64 *)((*(arg_1 + 8) + 40) + 24);
+}
+
+u64 anim-player-prone-states__anim-node-animation@2ed8(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64 *)((*(arg_1 + 8) + 40) + 16);
+}
+
+bool anim-player-prone-states__anim-transition-group@1e60__anim-transition-condition-lambda@11da0__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return *(f32 *)(*arg_0 + 144) > 0.50;
+}
+
+f32 anim-player-prone-states__anim-node-blend@23a0__anim-node-blend@a100__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32 *)((*(arg_0 + 8) + 40) + 96);
+}
+
+f32 anim-player-prone-states__anim-node-blend@8d60(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32 *)((*(arg_0 + 8) + 40) + 100);
+}
+
+f32 anim-player-prone-states__anim-node-blend@25c8__anim-node-blend@7028____anim-node-blend@12438__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32 *)((*(arg_0 + 8) + 40) + 96);
+}
+
+f32 anim-player-prone-states__anim-node-blend@25c8__anim-node-blend@123a0__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32 *)((*(arg_0 + 8) + 40) + 100);
+}
+
+u8 anim-player-prone-states__anim-transition-group@3470__anim-transition-condition-lambda@121a0__(u8 arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return *(u8 *)((*arg_0 + 144) + 20);
+}
+
+u8 anim-player-prone-states__anim-transition-condition-lambda@11830(bool arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return !*(u8 *)((*arg_0 + 144) + 20);
+}
+
+u64 anim-player-prone-states__anim-node-subsystem-ik@2b50__anim-node-animation@8ca8__(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64 *)((*(arg_1 + 8) + 40) + 48);
+}
+
+u64 anim-player-prone-states__anim-node-subsystem-ik@2820__anim-node-animation@d968__(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64 *)((*(arg_1 + 8) + 40) + 56);
+}
+
+u64 anim-player-prone-states__anim-node-subsystem-ik@2290__anim-node-blend@5438____anim-node-blend@117e8____anim-node-animation@12ac0__(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64 *)((*(arg_1 + 8) + 40) + 128);
+}
+
+u64 anim-player-prone-states__anim-node-subsystem-ik@2290__anim-node-blend@12478____anim-node-animation@13588__(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64 *)((*(arg_1 + 8) + 40) + 152);
+}
+
+f32 anim-player-prone-states__anim-node-subsystem-ik@2570__anim-node-hand-fix-ik@74d8____anim-node-blend@119a8__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32 *)((*(arg_0 + 8) + 40) + 88);
+}
+
+u16 anim-player-prone-states__anim-node-subsystem-ik@2570(u64? arg_0, u64? arg_1) {
+    return 3;
+}
+
+u64 anim-player-prone-states__anim-node-animation@2688(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64 *)((*(arg_1 + 8) + 40) + 64);
+}
+
+u64 anim-player-prone-states__anim-node-subsystem-ik@2e88__anim-node-blend@fb68____anim-node-animation@11b88__(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64 *)((*(arg_1 + 8) + 40) + 64);
+}
+
+u64 anim-player-prone-states__anim-node-animation@2e10(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64 *)((*arg_1 + 344) + 8);
+}
+
+u64 anim-player-prone-states__anim-node-animation@23e0(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64 *)((*(arg_1 + 8) + 40) + 120);
+}
+
+u8 anim-player-prone-states__anim-transition-group@25b0__anim-transition-condition-lambda@11d70__(bool arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return !*(u8 *)((*arg_0 + 744) + 48);
+}
+

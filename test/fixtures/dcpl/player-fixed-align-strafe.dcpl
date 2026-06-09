@@ -422,3 +422,135 @@ u64 anim-player-fixed-align-strafe-states__anim-node-animation@1248(u64? arg_0, 
     return *(u64*)((*(arg_1 + 8) + 2224) + 88);
 }
 
+u64 anim-player-fixed-align-strafe-states__actor-state-list@48__anim-node-animation@7d0__(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64 *)((*(arg_1 + 8) + 2224) + 16);
+}
+
+f32 anim-player-fixed-align-strafe-states(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return 0.00;
+}
+
+u64 anim-player-fixed-align-strafe-states__anim-node-blend@6b8__anim-node-blend@f38____anim-node-blend@26e8____anim-node-blend@36f0____anim-node-animation@4650__(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64 *)((*(arg_1 + 8) + 2224) + 32);
+}
+
+u64 anim-player-fixed-align-strafe-states__anim-node-blend@6b8__anim-node-blend@f38____anim-node-blend@26e8____anim-node-animation@45e0__(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64 *)((*(arg_1 + 8) + 2224) + 48);
+}
+
+u64? anim-player-fixed-align-strafe-states__anim-node-blend@6b8__anim-node-blend@f38__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0;
+    if (arg_2) {
+        f32 var_1 = -*(f32 *)(*(arg_0 + 16) + 16);
+        u64? var_2 = lerp-scale(-1.00 * 45.00, -1.00 * 0.00, 1.00, 0.00, var_1);
+        var_0 = var_2;
+    } else {
+        f32 var_3 = *(f32 *)(*(arg_0 + 16) + 16);
+        u64? var_4 = lerp-scale(-1.00 * 45.00, -1.00 * 0.00, 1.00, 0.00, var_3);
+        var_0 = var_4;
+    }
+    return var_0;
+}
+
+u64 anim-player-fixed-align-strafe-states__anim-node-animation@3418(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64 *)((*(arg_1 + 8) + 2224) + 40);
+}
+
+u64 anim-player-fixed-align-strafe-states__anim-node-animation@27d8(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64 *)((*(arg_1 + 8) + 2224) + 64);
+}
+
+u64 anim-player-fixed-align-strafe-states__anim-node-animation@1500(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64 *)((*(arg_1 + 8) + 2224) + 56);
+}
+
+u64 anim-player-fixed-align-strafe-states__anim-node-blend@5e0__anim-node-blend@1000____anim-node-blend@25e8____anim-node-blend@3360____anim-node-animation@4618__(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64 *)((*(arg_1 + 8) + 2224) + 72);
+}
+
+u64 anim-player-fixed-align-strafe-states__anim-node-blend@5e0__anim-node-blend@1000____anim-node-blend@25e8____anim-node-animation@4688__(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64 *)((*(arg_1 + 8) + 2224) + 80);
+}
+
+u64? anim-player-fixed-align-strafe-states__anim-node-blend@5e0__anim-node-blend@1000__(i32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0;
+    if (arg_2) {
+        f32 var_1 = (f32)(180 + (i32)-*(f32 *)(*(arg_0 + 16) + 16));
+        u64? var_2 = angle-mod(var_1);
+        u64? var_3 = lerp-scale(-1.00 * 45.00, -1.00 * 0.00, 1.00, 0.00, var_2);
+        var_0 = var_3;
+    } else {
+        f32 var_4 = (f32)(180 + (i32)*(f32 *)(*(arg_0 + 16) + 16));
+        u64? var_5 = angle-mod(var_4);
+        u64? var_6 = lerp-scale(-1.00 * 45.00, -1.00 * 0.00, 1.00, 0.00, var_5);
+        var_0 = var_6;
+    }
+    return var_0;
+}
+
+u64 anim-player-fixed-align-strafe-states__anim-node-animation@3850(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64 *)((*(arg_1 + 8) + 2224) + 88);
+}
+
+u64 anim-player-fixed-align-strafe-states__anim-node-animation@2398(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64 *)((*(arg_1 + 8) + 2224) + 96);
+}
+
+u64 anim-player-fixed-align-strafe-states__anim-node-animation@1418(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64 *)((*(arg_1 + 8) + 2224) + 104);
+}
+
+u64 anim-player-fixed-align-strafe-states__anim-node-animation@798(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64 *)((*(arg_1 + 8) + 2224) + 8);
+}
+
+u64? anim-player-fixed-align-strafe-states__anim-transition-group@950__anim-transition-condition-lambda@2630__(u8 arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_0 = player-animation-abort-active?(arg_2, arg_1);
+    bool var_1 = var_0 && *(u8 *)(*arg_0 + 208);
+    return var_1;
+}
+
+u64? anim-player-fixed-align-strafe-states__anim-transition-group@760__anim-transition-condition-lambda@2370__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    bool var_0 = 1 && *(f32 *)(*arg_0 + 672) > 0.00 && abs(*(f32 *)((*arg_0 + 672) + 4)) < (90.00 + 7.50);
+    return var_0;
+}
+
+u64? anim-player-fixed-align-strafe-states__anim-transition-condition-lambda@25c0(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    bool var_0 = 1 && *(f32 *)(*arg_0 + 672) > 0.00 && abs(*(f32 *)((*arg_0 + 672) + 4)) > (90.00 + 7.50);
+    return var_0;
+}
+
+u64 anim-player-fixed-align-strafe-states__anim-node-blend@968__anim-node-blend@ef8____anim-node-animation@23d0__(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64 *)((*(arg_1 + 8) + 2224) + 32);
+}
+
+u64 anim-player-fixed-align-strafe-states__anim-node-blend@968__anim-node-animation@2848__(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64 *)((*(arg_1 + 8) + 2224) + 48);
+}
+
+u64 anim-player-fixed-align-strafe-states__anim-node-animation@1388(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64 *)((*(arg_1 + 8) + 2224) + 40);
+}
+
+u64? anim-player-fixed-align-strafe-states__anim-transition-condition-lambda@2110(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    bool var_0 = 1 && *(f32 *)(*arg_0 + 672) <= 0.00;
+    return var_0;
+}
+
+u64 anim-player-fixed-align-strafe-states__anim-node-blend@528__anim-node-blend@14c0____anim-node-animation@2810__(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64 *)((*(arg_1 + 8) + 2224) + 72);
+}
+
+u64 anim-player-fixed-align-strafe-states__anim-node-blend@528__anim-node-animation@2658__(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64 *)((*(arg_1 + 8) + 2224) + 80);
+}
+
+u64 anim-player-fixed-align-strafe-states__anim-node-animation@1248(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64 *)((*(arg_1 + 8) + 2224) + 88);
+}
+
+u64? anim-player-fixed-align-strafe-states__anim-transition-group@870__anim-transition-condition-lambda@2530__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    bool var_0 = 1 && *(f32 *)(*arg_0 + 672) > 0.00 && abs(*(f32 *)((*arg_0 + 672) + 4)) < (90.00 - 7.50);
+    return var_0;
+}
+

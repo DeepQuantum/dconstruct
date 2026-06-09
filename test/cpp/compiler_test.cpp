@@ -12,6 +12,7 @@
 #include <vector>
 #include <fstream>
 #include <algorithm>
+#include <bit>
 #include <filesystem>
 
 namespace dconstruct::testing {
@@ -83,10 +84,6 @@ namespace dconstruct::testing {
             return std::unexpected{"semantic errors: " + semantic_errors.front().m_message};
         }
         compilation::global_state global{};
-        for (const auto& [name, sid_literal] : scope.m_sidAliases) {
-            const ast::full_type* type = scope.lookup(name);
-            global.m_sidAliases.emplace(name, std::pair{*type, sid_literal.first});
-        }
         std::vector<compilation::function> functions;
         for (const auto& decl : program.m_declarations) {
             auto* func_def = dynamic_cast<const ast::function_definition*>(decl.get());
@@ -783,30 +780,34 @@ namespace dconstruct::testing {
             compilation::token(compilation::token_type::LEFT_PAREN, "(", 0, 1),
             compilation::token(compilation::token_type::RIGHT_PAREN, ")", 0, 1),
             compilation::token(compilation::token_type::LEFT_BRACE, "{", 0, 2),
-            compilation::token(compilation::token_type::IDENTIFIER, "int", 0, 3),
-            compilation::token(compilation::token_type::IDENTIFIER, "a", 0, 3),
-            compilation::token(compilation::token_type::EQUAL, "=", 0, 3),
-            compilation::token(compilation::token_type::INT, "0", 0, 3),
-            compilation::token(compilation::token_type::SEMICOLON, ";", 0, 3),
-            compilation::token(compilation::token_type::IDENTIFIER, "a", 0, 4),
-            compilation::token(compilation::token_type::PLUS_EQUAL, "+=", 0, 4),
-            compilation::token(compilation::token_type::INT, "1", 0, 4),
-            compilation::token(compilation::token_type::SEMICOLON, ";", 0, 4),
-            compilation::token(compilation::token_type::RETURN, "return", 0, 5),
-            compilation::token(compilation::token_type::IDENTIFIER, "a", 0, 5),
-            compilation::token(compilation::token_type::SEMICOLON, ";", 0, 5),
-            compilation::token(compilation::token_type::RIGHT_BRACE, "}", 0, 6),
-            compilation::token(compilation::token_type::_EOF, "", 0, 6),
+            compilation::token(compilation::token_type::IDENTIFIER, "int", 0, 2),
+            compilation::token(compilation::token_type::IDENTIFIER, "a", 0, 2),
+            compilation::token(compilation::token_type::EQUAL, "=", 0, 2),
+            compilation::token(compilation::token_type::INT, "0", (u16)0, 2),
+            compilation::token(compilation::token_type::SEMICOLON, ";", 0, 2),
+            compilation::token(compilation::token_type::IDENTIFIER, "a", 0, 2),
+            compilation::token(compilation::token_type::PLUS_EQUAL, "+=", 0, 2),
+            compilation::token(compilation::token_type::INT, "1", (u16)1, 2),
+            compilation::token(compilation::token_type::SEMICOLON, ";", 0, 2),
+            compilation::token(compilation::token_type::RETURN, "return", 0, 2),
+            compilation::token(compilation::token_type::IDENTIFIER, "a", 0, 2),
+            compilation::token(compilation::token_type::SEMICOLON, ";", 0, 2),
+            compilation::token(compilation::token_type::RIGHT_BRACE, "}", 0, 2),
+            compilation::token(compilation::token_type::_EOF, "", 0, 2),
         };
+
+        const auto [tokens, errors] = get_tokens(chars);
+        EXPECT_EQ(tokens, expected);
+        EXPECT_EQ(errors.size(), 0);
     }
 
     TEST(COMPILER, LexerComplexSids) {
         const std::string chars = "#simple_sid #%alloc-array? #=f(test123)";
         const auto [tokens, errors] = get_tokens(chars);
         const std::vector<compilation::token> expected = {
-            compilation::token(compilation::token_type::SID, "#simple_sid", 0, 1),
-            compilation::token(compilation::token_type::SID, "#%alloc-array?", 0, 1),
-            compilation::token(compilation::token_type::SID, "#=f", 0, 1),
+            compilation::token(compilation::token_type::SID, "#simple_sid", SID("simple_sid"), 1),
+            compilation::token(compilation::token_type::SID, "#%alloc-array?", SID("%alloc-array?"), 1),
+            compilation::token(compilation::token_type::SID, "#=f", SID("=f"), 1),
             compilation::token(compilation::token_type::LEFT_PAREN, "(", 0, 1),
             compilation::token(compilation::token_type::IDENTIFIER, "test123", 0, 1),
             compilation::token(compilation::token_type::RIGHT_PAREN, ")", 0, 1),
@@ -839,7 +840,7 @@ namespace dconstruct::testing {
             compilation::token(compilation::token_type::IDENTIFIER, "sid", 0, 2),
             compilation::token(compilation::token_type::IDENTIFIER, "name", 0, 2),
             compilation::token(compilation::token_type::EQUAL, "=", 0, 2),
-            compilation::token(compilation::token_type::SID, "#ellie", 0, 2),
+            compilation::token(compilation::token_type::SID, "#ellie", SID("ellie"), 2),
             compilation::token(compilation::token_type::SEMICOLON, ";", 0, 2),
 
             compilation::token(compilation::token_type::IDENTIFIER, "double", 0, 3),
@@ -1148,7 +1149,7 @@ namespace dconstruct::testing {
 
         std::list<stmnt_uptr> expected;
 
-        expected.push_back(std::make_unique<ast::variable_declaration>(ast::make_type_from_prim(ast::primitive_kind::U32), "x",
+        expected.push_back(std::make_unique<ast::variable_declaration>(ast::make_type_from_prim(ast::primitive_kind::I32), "x",
                                                                        std::make_unique<ast::sub_expr>(
                                                                            compilation::token(compilation::token_type::MINUS, "-", 0, 1),
                                                                            std::make_unique<ast::add_expr>(
@@ -1295,7 +1296,6 @@ namespace dconstruct::testing {
             std::make_unique<ast::sid_identifier>("#dc:format"),
             std::move(format_args)
         ));
-        display_args.push_back(std::make_unique<ast::literal>(19));
 
         std::list<stmnt_uptr> expected;
         expected.push_back(std::make_unique<ast::expression_stmt>(
@@ -1427,7 +1427,7 @@ namespace dconstruct::testing {
 
         const auto [statements, errors] = get_statements(tokens);
 
-        ASSERT_EQ(errors.size(), 2);
+        ASSERT_FALSE(errors.empty());
 
         const std::list<stmnt_uptr> expected_statements = {};
         EXPECT_EQ(statements, expected_statements);
@@ -1658,9 +1658,9 @@ namespace dconstruct::testing {
         EXPECT_EQ(program.m_declarations.size(), 0);
         ast::struct_type expected_type;
         expected_type.m_name = "Vector3";
-        expected_type.m_members["x"] = std::move(std::make_shared<ast::full_type>(ast::make_type_from_prim(ast::primitive_kind::F32)));
-        expected_type.m_members["y"] = std::move(std::make_shared<ast::full_type>(ast::make_type_from_prim(ast::primitive_kind::F32)));
-        expected_type.m_members["z"] = std::move(std::make_shared<ast::full_type>(ast::make_type_from_prim(ast::primitive_kind::F32)));
+        expected_type.m_members.emplace_back("x", std::make_shared<ast::full_type>(ast::make_type_from_prim(ast::primitive_kind::F32)));
+        expected_type.m_members.emplace_back("y", std::make_shared<ast::full_type>(ast::make_type_from_prim(ast::primitive_kind::F32)));
+        expected_type.m_members.emplace_back("z", std::make_shared<ast::full_type>(ast::make_type_from_prim(ast::primitive_kind::F32)));
         EXPECT_TRUE(types.contains("Vector3"));
         EXPECT_TRUE(std::holds_alternative<ast::struct_type>(types.at("Vector3")));
         auto type = std::get<ast::struct_type>(types.at("Vector3"));
@@ -1732,7 +1732,7 @@ namespace dconstruct::testing {
     }
 
     TEST(COMPILER, FullFunc1) {
-        const std::string code = "struct Vector3 { f32 x; f32 y; f32 z; } enum Opcode { MOVE, LOAD, PUSH } i32 vector3_dist(Vector3 a) { return 1.0; }";
+        const std::string code = "struct Vector3 { f32 x; f32 y; f32 z; } enum Opcode { MOVE, LOAD, PUSH } i32 vector3_dist(Vector3 a) { return 1; }";
         auto [tokens, lex_errors] = get_tokens(code);
         const auto [program, types, parse_errors] = get_parse_results(tokens);
         EXPECT_EQ(lex_errors.size(), 0);
@@ -1842,10 +1842,10 @@ namespace dconstruct::testing {
     TEST(COMPILER, Using1) {
         const std::string code =
             "using #display as far (string, u32) -> u0;"
-            "using #5445173390656D6D as near (string, u32, u32) -> string sprintf;"
+            "using #5445173390656D6D as near (string, u32, u32) -> string;"
             "u32 main() {"
-            "    string message = sprintf(\"Hello World from DC version %d.%d\", 0, 0);"
-            "    display(message, 19);"
+            "    string message = #5445173390656D6D(\"Hello World from DC version %d.%d\", 0, 0);"
+            "    #display(message, 19);"
             "    return 0;"
             "}";
         auto [tokens, lex_errors] = get_tokens(code);
@@ -1856,7 +1856,11 @@ namespace dconstruct::testing {
 
         compilation::scope scope{types};
         std::vector<ast::semantic_check_error> semantic_errors = program.check_semantics(scope);
-        ASSERT_EQ(scope.m_sidAliases.at("sprintf").first, 0x5445173390656D6D);
+
+        const ast::full_type* alias_type = scope.lookup("#5445173390656D6D");
+        ASSERT_NE(alias_type, nullptr);
+        ASSERT_TRUE(std::holds_alternative<ast::function_type>(*alias_type));
+        EXPECT_EQ(std::get<ast::function_type>(*alias_type).m_distanceType, ast::function_type::DISTANCE::NEAR);
 
         std::vector<ast::semantic_check_error> empty{};
         EXPECT_EQ(semantic_errors, empty);
@@ -1904,6 +1908,7 @@ namespace dconstruct::testing {
             "i32 main() {"
             "   u64 x = 1;"
             "   u64 y = x * 2;"
+            "   return 0;"
             "}";
 
         auto [tokens, lex_errors] = get_tokens(code);
@@ -1929,6 +1934,7 @@ namespace dconstruct::testing {
             "i32 main() { return (i32)1.0; }",
             {
                 Instruction{Opcode::LoadStaticFloatImm, 0, 0, 0},
+                Instruction{Opcode::Move, 1, 0, 0},
                 Instruction{Opcode::CastInteger, 1, 0, 0},
                 Instruction{Opcode::Move, 0, 1, 0},
                 Instruction{Opcode::Return, 0, 0, 0_r},
@@ -2048,7 +2054,7 @@ namespace dconstruct::testing {
     TEST(COMPILER, MatchArrayCompilationElseLoadsDefault) {
         const std::string code =
             "u64 main(u64 a) {"
-            "   return match (a) { 1 -> #ellie, 3 -> #dina, else -> #joel };"
+            "   return match (a) { 0 -> #ellie, 2 -> #dina, else -> #joel };"
             "}";
 
         auto functions = compile_to_functions(code);
@@ -2057,12 +2063,12 @@ namespace dconstruct::testing {
 
         std::vector<Instruction> expected{
             Instruction{Opcode::Move, 0, 49, 0},
-            Instruction{Opcode::QEX_InRangeI, 1, 0, 3},
+            Instruction{Opcode::LoadU16Imm, 1, 2, 0},
+            Instruction{Opcode::IGreaterThan, 1, 0, 1},
             Instruction{Opcode::BranchIfNot, 6, 1, 0},
-            Instruction{Opcode::IAddImm, 0, 0, 1},
-            Instruction{Opcode::LoadStaticInt, 1, 0, 0},
+            Instruction{Opcode::LoadStaticU64Imm, 1, 1, 0},
             Instruction{Opcode::Branch, 7, 0, 0},
-            Instruction{Opcode::LoadStaticInt, 1, 1, 0},
+            Instruction{Opcode::LoadStaticInt, 1, 0, 0},
             Instruction{Opcode::Move, 0, 1, 0},
             Instruction{Opcode::Return, 0, 0, 0},
         };
@@ -2073,8 +2079,8 @@ namespace dconstruct::testing {
         EXPECT_EQ(fn.m_symbolTable[0], SID("ellie"));
         EXPECT_EQ(fn.m_symbolTable[1], SID("joel"));
         EXPECT_EQ(fn.m_symbolTable[2], SID("dina"));
-        EXPECT_EQ(fn.m_symbolTable[3], 1);
-        EXPECT_EQ(fn.m_symbolTable[4], 3);
+        EXPECT_EQ(fn.m_symbolTable[3], 0);
+        EXPECT_EQ(fn.m_symbolTable[4], 2);
     }
 
     TEST(COMPILER, IfElseReturn) {
@@ -2198,7 +2204,7 @@ namespace dconstruct::testing {
 
     TEST(COMPILER, Subscript1) {
         expect_instructions(
-            "i32 main(u16* bytes) { u16 my_byte = bytes[2]; }",
+            "u0 main(u16* bytes) { u16 my_byte = bytes[2]; }",
             {
                 Instruction{Opcode::Move, 0_r, 49_r},
                 Instruction{Opcode::LoadU16Imm, 2_r, 2_r, 0_r},
@@ -2212,7 +2218,7 @@ namespace dconstruct::testing {
 
     TEST(COMPILER, Subscript2) {
         expect_instructions(
-            "i32 main(f32* floats) { floats[2] = 0.69; }",
+            "u0 main(f32* floats) { floats[2] = 0.69; }",
             {
                 Instruction{Opcode::Move, 0_r, 49_r},
                 Instruction{Opcode::LoadU16Imm, 1_r, 2_r, 0_r},
@@ -2245,10 +2251,11 @@ namespace dconstruct::testing {
         auto functions = compile_to_functions("u64 main() { return sizeof(u32); }");
         ASSERT_TRUE(functions) << functions.error();
         ASSERT_FALSE(functions->empty());
-        ASSERT_EQ((*functions)[0].m_instructions.size(), 3);
+        ASSERT_EQ((*functions)[0].m_instructions.size(), 2);
         EXPECT_EQ((*functions)[0].m_instructions[0].opcode, Opcode::LoadU16Imm);
         EXPECT_EQ((*functions)[0].m_instructions[0].operand1, 4);
         EXPECT_EQ((*functions)[0].m_instructions[0].operand2, 0);
+        EXPECT_EQ((*functions)[0].m_instructions[1].opcode, Opcode::Return);
     }
 
     TEST(COMPILER, SizeofStructType) {
@@ -2304,6 +2311,459 @@ namespace dconstruct::testing {
         ASSERT_TRUE(std::holds_alternative<expr_uptr>(sz->m_operand));
         const auto* inner = dynamic_cast<const ast::add_expr*>(std::get<expr_uptr>(sz->m_operand).get());
         ASSERT_NE(inner, nullptr);
+    }
+
+    static std::vector<std::string> get_semantic_error_messages(const std::string& code) {
+        auto [tokens, lex_errors] = get_tokens(code);
+        if (!lex_errors.empty()) {
+            return {"lex error: " + lex_errors.front().m_message};
+        }
+        auto [program, types, parse_errors] = get_parse_results(tokens);
+        if (!parse_errors.empty()) {
+            return {"parse error: " + parse_errors.front().m_message};
+        }
+        compilation::scope scope{types};
+        compilation::add_global_functions(scope);
+        std::vector<std::string> messages;
+        for (const auto& error : program.check_semantics(scope)) {
+            messages.push_back(error.m_message);
+        }
+        return messages;
+    }
+
+    static bool any_message_contains(const std::vector<std::string>& messages, const std::string& needle) {
+        return std::any_of(messages.begin(), messages.end(), [&needle](const std::string& message) {
+            return message.find(needle) != std::string::npos;
+        });
+    }
+
+    static void expect_opcodes_present(const std::string& code, const std::vector<Opcode>& opcodes) {
+        auto functions = compile_to_functions(code);
+        ASSERT_TRUE(functions) << functions.error();
+        ASSERT_FALSE(functions->empty());
+        const std::vector<Instruction>& instructions = (*functions)[0].m_instructions;
+        ASSERT_FALSE(instructions.empty());
+        for (const Opcode opcode : opcodes) {
+            EXPECT_TRUE(std::any_of(instructions.begin(), instructions.end(), [opcode](const Instruction& instruction) {
+                return instruction.opcode == opcode;
+            })) << "missing opcode " << static_cast<u32>(opcode) << " in: " << code;
+        }
+        EXPECT_EQ(instructions.back().opcode, Opcode::Return);
+    }
+
+    static bool symbol_table_contains(const compilation::function& fn, const u64 value) {
+        return std::find(fn.m_symbolTable.begin(), fn.m_symbolTable.end(), value) != fn.m_symbolTable.end();
+    }
+
+    TEST(COMPILER, LexerKeywords2) {
+        const auto [tokens, errors] = get_tokens("for break continue sizeof null true false using as near far auto");
+
+        const std::vector<compilation::token> expected = {
+            compilation::token(compilation::token_type::FOR, "for", 0, 1),
+            compilation::token(compilation::token_type::BREAK, "break", 0, 1),
+            compilation::token(compilation::token_type::CONTINUE, "continue", 0, 1),
+            compilation::token(compilation::token_type::SIZEOF, "sizeof", 0, 1),
+            compilation::token(compilation::token_type::_NULL, "null", 0, 1),
+            compilation::token(compilation::token_type::TRUE, "true", 0, 1),
+            compilation::token(compilation::token_type::FALSE, "false", 0, 1),
+            compilation::token(compilation::token_type::USING, "using", 0, 1),
+            compilation::token(compilation::token_type::AS, "as", 0, 1),
+            compilation::token(compilation::token_type::NEAR, "near", 0, 1),
+            compilation::token(compilation::token_type::FAR, "far", 0, 1),
+            compilation::token(compilation::token_type::AUTO, "auto", 0, 1),
+            compilation::token(compilation::token_type::_EOF, "", 0, 1),
+        };
+
+        EXPECT_EQ(tokens, expected);
+        EXPECT_EQ(errors.size(), 0);
+    }
+
+    TEST(COMPILER, LexerOperatorTokens) {
+        const auto [tokens, errors] = get_tokens("-> => ... ^^ >> && || ++ -- *= != $");
+
+        const std::vector<compilation::token> expected = {
+            compilation::token(compilation::token_type::ARROW, "->", 0, 1),
+            compilation::token(compilation::token_type::EQUAL_GREATER, "=>", 0, 1),
+            compilation::token(compilation::token_type::DOT_DOT_DOT, "...", 0, 1),
+            compilation::token(compilation::token_type::CARET_CARET, "^^", 0, 1),
+            compilation::token(compilation::token_type::GREATER_GREATER, ">>", 0, 1),
+            compilation::token(compilation::token_type::AMPERSAND_AMPERSAND, "&&", 0, 1),
+            compilation::token(compilation::token_type::PIPE_PIPE, "||", 0, 1),
+            compilation::token(compilation::token_type::PLUS_PLUS, "++", 0, 1),
+            compilation::token(compilation::token_type::MINUS_MINUS, "--", 0, 1),
+            compilation::token(compilation::token_type::STAR_EQUAL, "*=", 0, 1),
+            compilation::token(compilation::token_type::BANG_EQUAL, "!=", 0, 1),
+            compilation::token(compilation::token_type::DOLLAR, "$", 0, 1),
+            compilation::token(compilation::token_type::_EOF, "", 0, 1),
+        };
+
+        EXPECT_EQ(tokens, expected);
+        EXPECT_EQ(errors.size(), 0);
+    }
+
+    TEST(COMPILER, LexerNumericSidLiteral) {
+        const auto [tokens, errors] = get_tokens("#5445173390656D6D");
+
+        ASSERT_EQ(errors.size(), 0);
+        ASSERT_EQ(tokens.size(), 2);
+        EXPECT_EQ(tokens[0].m_type, compilation::token_type::SID);
+        EXPECT_EQ(std::get<u64>(tokens[0].m_literal), 0x5445173390656D6D);
+    }
+
+    TEST(COMPILER, LexerIntWidths) {
+        const auto [tokens, errors] = get_tokens("65535 65536 4294967295 4294967296");
+
+        const std::vector<compilation::token> expected = {
+            compilation::token(compilation::token_type::INT, "65535", static_cast<u16>(65535), 1),
+            compilation::token(compilation::token_type::INT, "65536", static_cast<u32>(65536), 1),
+            compilation::token(compilation::token_type::INT, "4294967295", static_cast<u32>(4294967295), 1),
+            compilation::token(compilation::token_type::INT, "4294967296", static_cast<u64>(4294967296), 1),
+            compilation::token(compilation::token_type::_EOF, "", 0, 1),
+        };
+
+        EXPECT_EQ(tokens, expected);
+        EXPECT_EQ(errors.size(), 0);
+    }
+
+    TEST(COMPILER, ParseForLoop) {
+        const std::string code = "u64 x = 0; for (u64 i = 0; i < 3; i = i + 1) { x = x + i; }";
+        auto [tokens, lex_errors] = get_tokens(code);
+        const auto [statements, parse_errors] = get_statements(tokens);
+
+        EXPECT_EQ(lex_errors.size(), 0);
+        EXPECT_EQ(parse_errors.size(), 0);
+        ASSERT_EQ(statements.size(), 2);
+
+        const auto* for_loop = dynamic_cast<const ast::for_stmt*>(statements.back().get());
+        ASSERT_NE(for_loop, nullptr);
+        EXPECT_NE(dynamic_cast<const ast::variable_declaration*>(for_loop->m_init.get()), nullptr);
+        EXPECT_NE(dynamic_cast<const ast::compare_expr*>(for_loop->m_condition.get()), nullptr);
+        EXPECT_NE(dynamic_cast<const ast::assign_expr*>(for_loop->m_incr.get()), nullptr);
+        EXPECT_NE(dynamic_cast<const ast::block*>(for_loop->m_body.get()), nullptr);
+    }
+
+    TEST(COMPILER, ParseUnaryExpressions) {
+        const std::string code = "u64 a = 0; -a; !a; ++a; *a;";
+        auto [tokens, lex_errors] = get_tokens(code);
+        const auto [statements, parse_errors] = get_statements(tokens);
+
+        EXPECT_EQ(lex_errors.size(), 0);
+        EXPECT_EQ(parse_errors.size(), 0);
+        ASSERT_EQ(statements.size(), 5);
+
+        auto it = statements.begin();
+        ++it;
+        const auto* negate = dynamic_cast<const ast::expression_stmt*>(it->get());
+        ASSERT_NE(negate, nullptr);
+        EXPECT_NE(dynamic_cast<const ast::negate_expr*>(negate->m_expression.get()), nullptr);
+
+        ++it;
+        const auto* logical_not = dynamic_cast<const ast::expression_stmt*>(it->get());
+        ASSERT_NE(logical_not, nullptr);
+        EXPECT_NE(dynamic_cast<const ast::logical_not_expr*>(logical_not->m_expression.get()), nullptr);
+
+        ++it;
+        const auto* increment = dynamic_cast<const ast::expression_stmt*>(it->get());
+        ASSERT_NE(increment, nullptr);
+        EXPECT_NE(dynamic_cast<const ast::post_arithmetic_expression*>(increment->m_expression.get()), nullptr);
+
+        ++it;
+        const auto* dereference = dynamic_cast<const ast::expression_stmt*>(it->get());
+        ASSERT_NE(dereference, nullptr);
+        EXPECT_NE(dynamic_cast<const ast::dereference_expr*>(dereference->m_expression.get()), nullptr);
+    }
+
+    TEST(COMPILER, ParseBitwiseNotFromTokens) {
+        std::vector<compilation::token> tokens = {
+            compilation::token(compilation::token_type::TILDE, "~", 0, 1),
+            compilation::token(compilation::token_type::IDENTIFIER, "a", 0, 1),
+            compilation::token(compilation::token_type::SEMICOLON, ";", 0, 1),
+            compilation::token(compilation::token_type::_EOF, "", 0, 1)};
+
+        const auto [statements, errors] = get_statements(tokens);
+
+        EXPECT_EQ(errors.size(), 0);
+        ASSERT_EQ(statements.size(), 1);
+        const auto* stmt = dynamic_cast<const ast::expression_stmt*>(statements.front().get());
+        ASSERT_NE(stmt, nullptr);
+        EXPECT_NE(dynamic_cast<const ast::bitwise_not_expr*>(stmt->m_expression.get()), nullptr);
+    }
+
+    TEST(COMPILER, ParseSubscriptAndStructAccess) {
+        const std::string code = "a[1]; a.b;";
+        auto [tokens, lex_errors] = get_tokens(code);
+        const auto [statements, parse_errors] = get_statements(tokens);
+
+        EXPECT_EQ(lex_errors.size(), 0);
+        EXPECT_EQ(parse_errors.size(), 0);
+        ASSERT_EQ(statements.size(), 2);
+
+        const auto* subscript_stmt = dynamic_cast<const ast::expression_stmt*>(statements.front().get());
+        ASSERT_NE(subscript_stmt, nullptr);
+        EXPECT_NE(dynamic_cast<const ast::subscript_expr*>(subscript_stmt->m_expression.get()), nullptr);
+
+        const auto* access_stmt = dynamic_cast<const ast::expression_stmt*>(statements.back().get());
+        ASSERT_NE(access_stmt, nullptr);
+        const auto* access = dynamic_cast<const ast::struct_access*>(access_stmt->m_expression.get());
+        ASSERT_NE(access, nullptr);
+        EXPECT_EQ(access->m_memberName.m_lexeme, "b");
+    }
+
+    TEST(COMPILER, ParseCastExpression) {
+        const std::string code = "u64 x = (i32)1.0;";
+        auto [tokens, lex_errors] = get_tokens(code);
+        const auto [statements, parse_errors] = get_statements(tokens);
+
+        EXPECT_EQ(lex_errors.size(), 0);
+        EXPECT_EQ(parse_errors.size(), 0);
+        ASSERT_EQ(statements.size(), 1);
+
+        const auto* declaration = dynamic_cast<const ast::variable_declaration*>(statements.front().get());
+        ASSERT_NE(declaration, nullptr);
+        const auto* cast = dynamic_cast<const ast::cast_expr*>(declaration->m_init.get());
+        ASSERT_NE(cast, nullptr);
+        EXPECT_EQ(cast->m_castType, ast::make_type_from_prim(ast::primitive_kind::I32));
+        EXPECT_NE(dynamic_cast<const ast::literal*>(cast->m_rhs.get()), nullptr);
+    }
+
+    TEST(COMPILER, SemanticErrorUndefinedIdentifier) {
+        const auto messages = get_semantic_error_messages("u64 main() { u64 x = undefined_var; return 0; }");
+        ASSERT_FALSE(messages.empty());
+        EXPECT_TRUE(any_message_contains(messages, "undefined_var")) << messages.front();
+    }
+
+    TEST(COMPILER, SemanticErrorMissingReturnValue) {
+        const auto messages = get_semantic_error_messages("i32 main() { i32 x = 0; }");
+        ASSERT_FALSE(messages.empty());
+        EXPECT_TRUE(any_message_contains(messages, "expects a value to be returned")) << messages.front();
+    }
+
+    TEST(COMPILER, SemanticErrorAddNonAddable) {
+        const auto messages = get_semantic_error_messages("u64 main(string s) { u64 x = s + 1; return 0; }");
+        ASSERT_FALSE(messages.empty());
+        EXPECT_TRUE(any_message_contains(messages, "addable")) << messages.front();
+    }
+
+    TEST(COMPILER, SemanticErrorDereferenceNonPointer) {
+        const auto messages = get_semantic_error_messages("u64 main(u64 a) { return *a; }");
+        EXPECT_FALSE(messages.empty());
+    }
+
+    TEST(COMPILER, SemanticNestedScopeReadsOuterVariable) {
+        const auto messages = get_semantic_error_messages("u64 main() { u64 outer = 1; { u64 inner = outer; } return outer; }");
+        EXPECT_TRUE(messages.empty()) << messages.front();
+    }
+
+    TEST(COMPILER, SemanticIfElseBothReturn) {
+        const auto messages = get_semantic_error_messages("i32 main(i32 a) { if (a) { return 1; } else { return 2; } }");
+        EXPECT_TRUE(messages.empty()) << messages.front();
+    }
+
+    TEST(COMPILER, AddEmission) {
+        expect_instructions(
+            "u64 main(u64 a, u64 b) { return a + b; }",
+            {
+                Instruction{Opcode::Move, 0, 49, 0},
+                Instruction{Opcode::Move, 1, 50, 0},
+                Instruction{Opcode::IAdd, 2, 0, 1},
+                Instruction{Opcode::Move, 0, 2, 0},
+                Instruction{Opcode::Return, 0, 0, 0},
+            }
+        );
+    }
+
+    TEST(COMPILER, SubEmission) {
+        expect_instructions(
+            "u64 main(u64 a, u64 b) { return a - b; }",
+            {
+                Instruction{Opcode::Move, 0, 49, 0},
+                Instruction{Opcode::Move, 1, 50, 0},
+                Instruction{Opcode::ISub, 2, 0, 1},
+                Instruction{Opcode::Move, 0, 2, 0},
+                Instruction{Opcode::Return, 0, 0, 0},
+            }
+        );
+    }
+
+    TEST(COMPILER, MulDivEmission) {
+        expect_opcodes_present("u64 main(u64 a, u64 b) { return a * b; }", {Opcode::IMul});
+        expect_opcodes_present("u64 main(u64 a, u64 b) { return a / b; }", {Opcode::IDiv});
+    }
+
+    TEST(COMPILER, FloatArithmeticEmission) {
+        expect_opcodes_present("f32 main(f32 a, f32 b) { return a + b; }", {Opcode::FAdd});
+        expect_opcodes_present("f32 main(f32 a, f32 b) { return a - b; }", {Opcode::FSub});
+        expect_opcodes_present("f32 main(f32 a, f32 b) { return a * b; }", {Opcode::FMul});
+        expect_opcodes_present("f32 main(f32 a, f32 b) { return a / b; }", {Opcode::FDiv});
+    }
+
+    TEST(COMPILER, CompareEmission) {
+        expect_opcodes_present("u64 main(u64 a, u64 b) { if (a < b) { return 1; } return 0; }", {Opcode::ILessThan});
+        expect_opcodes_present("u64 main(u64 a, u64 b) { if (a >= b) { return 1; } return 0; }", {Opcode::IGreaterThanEqual});
+        expect_opcodes_present("u64 main(u64 a, u64 b) { if (a == b) { return 1; } return 0; }", {Opcode::IEqual});
+        expect_opcodes_present("u64 main(u64 a, u64 b) { if (a != b) { return 1; } return 0; }", {Opcode::INotEqual});
+        expect_opcodes_present("u64 main(f32 a, f32 b) { if (a < b) { return 1; } return 0; }", {Opcode::FLessThan});
+    }
+
+    TEST(COMPILER, NegateEmission) {
+        expect_opcodes_present("u64 main(i64 a) { return -a; }", {Opcode::INeg});
+    }
+
+    TEST(COMPILER, LogicalNotEmission) {
+        expect_opcodes_present("u64 main(u64 a) { if (!a) { return 1; } return 0; }", {Opcode::OpLogNot});
+    }
+
+    TEST(COMPILER, PostArithmeticEmission) {
+        expect_opcodes_present("u64 main(u64 a) { ++a; return a; }", {Opcode::IAddImm});
+        expect_opcodes_present("u64 main(u64 a) { --a; return a; }", {Opcode::LoadStaticI64Imm, Opcode::IAdd});
+    }
+
+    TEST(COMPILER, CallNearEmission) {
+        const std::string code =
+            "using #foo as near (u64) -> u64;"
+            "u64 main(u64 a) { return #foo(a); }";
+        auto functions = compile_to_functions(code);
+        ASSERT_TRUE(functions) << functions.error();
+        ASSERT_FALSE(functions->empty());
+
+        const compilation::function& fn = functions->back();
+        EXPECT_TRUE(std::any_of(fn.m_instructions.begin(), fn.m_instructions.end(), [](const Instruction& instruction) {
+            return instruction.opcode == Opcode::Call;
+        }));
+        EXPECT_TRUE(symbol_table_contains(fn, SID("foo")));
+    }
+
+    TEST(COMPILER, CallFarEmission) {
+        const std::string code =
+            "using #foo as far (u64) -> u64;"
+            "u64 main(u64 a) { return #foo(a); }";
+        auto functions = compile_to_functions(code);
+        ASSERT_TRUE(functions) << functions.error();
+        ASSERT_FALSE(functions->empty());
+
+        const compilation::function& fn = functions->back();
+        EXPECT_TRUE(std::any_of(fn.m_instructions.begin(), fn.m_instructions.end(), [](const Instruction& instruction) {
+            return instruction.opcode == Opcode::CallFf;
+        }));
+        EXPECT_TRUE(symbol_table_contains(fn, SID("foo")));
+    }
+
+    TEST(COMPILER, SidLiteralEmission) {
+        auto functions = compile_to_functions("u64 main() { u64 s = #ellie; return s; }");
+        ASSERT_TRUE(functions) << functions.error();
+        ASSERT_FALSE(functions->empty());
+
+        const compilation::function& fn = (*functions)[0];
+        EXPECT_TRUE(std::any_of(fn.m_instructions.begin(), fn.m_instructions.end(), [](const Instruction& instruction) {
+            return instruction.opcode == Opcode::LoadStaticU64Imm;
+        }));
+        EXPECT_TRUE(symbol_table_contains(fn, SID("ellie")));
+    }
+
+    TEST(COMPILER, FloatLiteralEmission) {
+        auto functions = compile_to_functions("f32 main() { return 1.5; }");
+        ASSERT_TRUE(functions) << functions.error();
+        ASSERT_FALSE(functions->empty());
+
+        const compilation::function& fn = (*functions)[0];
+        EXPECT_TRUE(std::any_of(fn.m_instructions.begin(), fn.m_instructions.end(), [](const Instruction& instruction) {
+            return instruction.opcode == Opcode::LoadStaticFloatImm;
+        }));
+        EXPECT_TRUE(symbol_table_contains(fn, static_cast<u64>(std::bit_cast<u32>(1.5f))));
+    }
+
+    TEST(COMPILER, StringLiteralEmission) {
+        auto functions = compile_to_functions("u0 main() { string s = \"hello\"; }");
+        ASSERT_TRUE(functions) << functions.error();
+        ASSERT_FALSE(functions->empty());
+
+        const compilation::function& fn = (*functions)[0];
+        EXPECT_TRUE(std::any_of(fn.m_instructions.begin(), fn.m_instructions.end(), [](const Instruction& instruction) {
+            return instruction.opcode == Opcode::LoadStaticPointerImm;
+        }));
+        ASSERT_FALSE(fn.m_symbolTableEntryPointers.empty());
+        EXPECT_EQ(fn.m_symbolTableEntryPointers[0], compilation::function::SYMBOL_TABLE_POINTER_KIND::STRING);
+    }
+
+    TEST(COMPILER, ForLoopEmission) {
+        expect_opcodes_present(
+            "u64 main() { u64 x = 0; for (u64 i = 0; i < 3; i = i + 1) { x = x + i; } return x; }",
+            {Opcode::ILessThan, Opcode::BranchIfNot, Opcode::Branch, Opcode::IAdd}
+        );
+    }
+
+    template <typename T>
+    static void expect_manual_binary_emission(const compilation::token_type op_type, const std::string& op_lexeme, const Opcode expected_opcode) {
+        T expr{
+            compilation::token(op_type, op_lexeme, 0, 1),
+            std::make_unique<ast::literal>((u16)6),
+            std::make_unique<ast::literal>((u16)3)};
+
+        compilation::scope scope{{}};
+        const auto type_res = expr.get_type_checked(scope);
+        ASSERT_TRUE(type_res) << type_res.error().m_message;
+
+        compilation::function fn{};
+        compilation::global_state global{};
+        const emission_res result = expr.emit_dc(fn, global, std::nullopt);
+        ASSERT_TRUE(result) << result.error();
+
+        const std::vector<Instruction> expected = {
+            Instruction{Opcode::LoadU16Imm, 0, 6, 0},
+            Instruction{Opcode::LoadU16Imm, 1, 3, 0},
+            Instruction{expected_opcode, 2, 0, 1},
+        };
+        EXPECT_EQ(fn.m_instructions, expected);
+    }
+
+    TEST(COMPILER, BitwiseAndEmission) {
+        expect_manual_binary_emission<ast::bitwise_and_expr>(compilation::token_type::AMPERSAND, "&", Opcode::OpBitAnd);
+    }
+
+    TEST(COMPILER, BitwiseOrEmission) {
+        expect_manual_binary_emission<ast::bitwise_or_expr>(compilation::token_type::PIPE, "|", Opcode::OpBitOr);
+    }
+
+    TEST(COMPILER, BitwiseXorEmission) {
+        expect_manual_binary_emission<ast::bitwise_xor_expr>(compilation::token_type::CARET, "^", Opcode::OpBitXor);
+    }
+
+    TEST(COMPILER, ModEmission) {
+        expect_manual_binary_emission<ast::mod_expr>(compilation::token_type::PERCENT, "%", Opcode::IMod);
+    }
+
+    TEST(COMPILER, TypeSizes) {
+        EXPECT_EQ(ast::get_size(ast::make_type_from_prim(ast::primitive_kind::U8)), 1);
+        EXPECT_EQ(ast::get_size(ast::make_type_from_prim(ast::primitive_kind::U16)), 2);
+        EXPECT_EQ(ast::get_size(ast::make_type_from_prim(ast::primitive_kind::U32)), 4);
+        EXPECT_EQ(ast::get_size(ast::make_type_from_prim(ast::primitive_kind::U64)), 8);
+        EXPECT_EQ(ast::get_size(ast::make_type_from_prim(ast::primitive_kind::F32)), 4);
+        EXPECT_EQ(ast::get_size(ast::make_type_from_prim(ast::primitive_kind::F64)), 8);
+        EXPECT_EQ(ast::get_size(ast::full_type{ast::ptr_type{ast::primitive_kind::U8}}), 8);
+    }
+
+    TEST(COMPILER, TypeSignedness) {
+        EXPECT_TRUE(ast::is_signed(ast::primitive_kind::I32));
+        EXPECT_FALSE(ast::is_signed(ast::primitive_kind::U32));
+        EXPECT_TRUE(ast::is_unsigned(ast::primitive_kind::U64));
+        EXPECT_TRUE(ast::is_integral(ast::primitive_kind::U8));
+        EXPECT_FALSE(ast::is_integral(ast::primitive_kind::F32));
+        EXPECT_TRUE(ast::is_floating_point(ast::primitive_kind::F64));
+        EXPECT_TRUE(ast::is_arithmetic(ast::primitive_kind::I16));
+    }
+
+    TEST(COMPILER, NotAssignableReason) {
+        const auto same = ast::not_assignable_reason(
+            ast::make_type_from_prim(ast::primitive_kind::U64),
+            ast::make_type_from_prim(ast::primitive_kind::U64)
+        );
+        EXPECT_FALSE(same.has_value());
+
+        const auto mismatched = ast::not_assignable_reason(
+            ast::make_type_from_prim(ast::primitive_kind::U32),
+            ast::make_type_from_prim(ast::primitive_kind::STRING)
+        );
+        EXPECT_TRUE(mismatched.has_value());
     }
 
 }

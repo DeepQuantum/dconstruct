@@ -630,3 +630,161 @@ u64? npc-human-vs-npc-human-back-1hblunt-finisher-sync__melee-attack@16a0__start
     return var_0;
 }
 
+u16 npc-human-vs-npc-human-left-1hblade-finisher__melee-attack@150(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    return 19;
+}
+
+u64? npc-human-vs-npc-human-left-1hblade-finisher__start-func-array@1c58(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    if (!!(arg_1 == 0)) {
+        melee-debug-text-file-line-fail("(valid-symbol? attacker)", "t2r/src/game/scriptx/melee/npc-standing/imports/npc-standing-macros.dcx", 9132);
+    }
+    melee-debug-text-file-line-fail("(valid-symbol? defender)", "t2r/src/game/scriptx/melee/npc-standing/imports/npc-standing-macros.dcx", 9133);
+    bool var_0 = !(arg_1 == 0) && !(arg_2 == 0) && !(arg_2 == 0);
+    return var_0;
+}
+
+u16 npc-human-vs-npc-human-left-1hblade-finisher(i64 arg_0, u64? arg_1, i64 arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    u16 var_0;
+    if (arg_0 == arg_2) {
+        abort-melee-action(arg_1);
+        melee-fact-set-symbol(arg_2, marked-for-buddy-finisher, 0);
+        u64? var_1 = npc-clear-request-movement(arg_2);
+        var_0 = var_1;
+    } else {
+        var_0 = 0;
+    }
+    return var_0;
+}
+
+u64? npc-human-vs-npc-human-left-1hblade-finisher__melee-event-list@2548(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    f32 var_0;
+    if (!(0.00 == 0.00)) {
+        var_0 = 0.00;
+    } else {
+        var_0 = 1.00;
+    }
+    u64? var_1 = play-melee-facial-gesture(arg_1, 22, var_0, 0.10);
+    return var_1;
+}
+
+u64? npc-human-vs-npc-human-right-1hblunt-finisher-sync__melee-attack@340__start-func-array@26f8__(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    if (!!(arg_1 == 0)) {
+        melee-debug-text-file-line-fail("(valid-symbol? attacker)", "t2r/src/game/scriptx/melee/npc-standing/imports/npc-standing-macros.dcx", 9298);
+    }
+    melee-debug-text-file-line-fail("(valid-symbol? defender)", "t2r/src/game/scriptx/melee/npc-standing/imports/npc-standing-macros.dcx", 9299);
+    bool var_0 = !(arg_1 == 0) && !(arg_2 == 0) && !(arg_2 == 0);
+    return var_0;
+}
+
+u16 npc-human-vs-npc-human-right-1hblunt-finisher-sync(i64 arg_0, u64? arg_1, i64 arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    u16 var_0;
+    if (arg_0 == arg_2) {
+        melee-fact-remove(arg_2, force-disable-melee-targeting);
+        u64? var_1 = melee-fact-get-bool(arg_2, doomed?);
+        if (var_1) {
+            u64? var_2 = npc-die(arg_2, 0, 0, 0, 1);
+            var_0 = var_2;
+        } else {
+            var_0 = 0;
+        }
+    } else {
+        var_0 = 0;
+    }
+    return var_0;
+}
+
+u64? npc-human-vs-npc-human-right-1hblunt-finisher-sync__melee-event-list@1950(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = set-object-health(arg_2, 1.00);
+    return var_0;
+}
+
+u64? npc-human-vs-npc-human-left-1hblade-finisher-sync__melee-attack@530__start-func-array@1da0__(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    if (!!(arg_1 == 0)) {
+        melee-debug-text-file-line-fail("(valid-symbol? attacker)", "t2r/src/game/scriptx/melee/npc-standing/imports/npc-standing-macros.dcx", 9298);
+    }
+    melee-debug-text-file-line-fail("(valid-symbol? defender)", "t2r/src/game/scriptx/melee/npc-standing/imports/npc-standing-macros.dcx", 9299);
+    bool var_0 = !(arg_1 == 0) && !(arg_2 == 0) && !(arg_2 == 0);
+    return var_0;
+}
+
+u64? npc-human-vs-npc-human-right-1hblunt-finisher__start-func-array@1af0(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    if (!!(arg_1 == 0)) {
+        melee-debug-text-file-line-fail("(valid-symbol? attacker)", "t2r/src/game/scriptx/melee/npc-standing/imports/npc-standing-macros.dcx", 9132);
+    }
+    melee-debug-text-file-line-fail("(valid-symbol? defender)", "t2r/src/game/scriptx/melee/npc-standing/imports/npc-standing-macros.dcx", 9133);
+    bool var_0 = !(arg_1 == 0) && !(arg_2 == 0) && !(arg_2 == 0);
+    return var_0;
+}
+
+u64? npc-human-vs-npc-human-right-1hblade-finisher-sync__melee-attack@910__start-func-array@29b0__(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    if (!!(arg_1 == 0)) {
+        melee-debug-text-file-line-fail("(valid-symbol? attacker)", "t2r/src/game/scriptx/melee/npc-standing/imports/npc-standing-macros.dcx", 9298);
+    }
+    melee-debug-text-file-line-fail("(valid-symbol? defender)", "t2r/src/game/scriptx/melee/npc-standing/imports/npc-standing-macros.dcx", 9299);
+    bool var_0 = !(arg_1 == 0) && !(arg_2 == 0) && !(arg_2 == 0);
+    return var_0;
+}
+
+u64? npc-human-vs-npc-human-left-1hblunt-finisher__start-func-array@1ea8(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    if (!!(arg_1 == 0)) {
+        melee-debug-text-file-line-fail("(valid-symbol? attacker)", "t2r/src/game/scriptx/melee/npc-standing/imports/npc-standing-macros.dcx", 9132);
+    }
+    melee-debug-text-file-line-fail("(valid-symbol? defender)", "t2r/src/game/scriptx/melee/npc-standing/imports/npc-standing-macros.dcx", 9133);
+    bool var_0 = !(arg_1 == 0) && !(arg_2 == 0) && !(arg_2 == 0);
+    return var_0;
+}
+
+u64? npc-human-vs-npc-human-back-1hblunt-finisher__start-func-array@2768(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    if (!!(arg_1 == 0)) {
+        melee-debug-text-file-line-fail("(valid-symbol? attacker)", "t2r/src/game/scriptx/melee/npc-standing/imports/npc-standing-macros.dcx", 9132);
+    }
+    melee-debug-text-file-line-fail("(valid-symbol? defender)", "t2r/src/game/scriptx/melee/npc-standing/imports/npc-standing-macros.dcx", 9133);
+    bool var_0 = !(arg_1 == 0) && !(arg_2 == 0) && !(arg_2 == 0);
+    return var_0;
+}
+
+u64? npc-human-vs-npc-human-left-1hblunt-finisher-sync__melee-attack@ee0__start-func-array@1dd0__(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    if (!!(arg_1 == 0)) {
+        melee-debug-text-file-line-fail("(valid-symbol? attacker)", "t2r/src/game/scriptx/melee/npc-standing/imports/npc-standing-macros.dcx", 9298);
+    }
+    melee-debug-text-file-line-fail("(valid-symbol? defender)", "t2r/src/game/scriptx/melee/npc-standing/imports/npc-standing-macros.dcx", 9299);
+    bool var_0 = !(arg_1 == 0) && !(arg_2 == 0) && !(arg_2 == 0);
+    return var_0;
+}
+
+u64? npc-human-vs-npc-human-back-1hblade-finisher-sync__melee-attack@10d0__start-func-array@2388__(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    if (!!(arg_1 == 0)) {
+        melee-debug-text-file-line-fail("(valid-symbol? attacker)", "t2r/src/game/scriptx/melee/npc-standing/imports/npc-standing-macros.dcx", 9298);
+    }
+    melee-debug-text-file-line-fail("(valid-symbol? defender)", "t2r/src/game/scriptx/melee/npc-standing/imports/npc-standing-macros.dcx", 9299);
+    bool var_0 = !(arg_1 == 0) && !(arg_2 == 0) && !(arg_2 == 0);
+    return var_0;
+}
+
+u64? npc-human-vs-npc-human-back-1hblade-finisher__start-func-array@2608(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    if (!!(arg_1 == 0)) {
+        melee-debug-text-file-line-fail("(valid-symbol? attacker)", "t2r/src/game/scriptx/melee/npc-standing/imports/npc-standing-macros.dcx", 9132);
+    }
+    melee-debug-text-file-line-fail("(valid-symbol? defender)", "t2r/src/game/scriptx/melee/npc-standing/imports/npc-standing-macros.dcx", 9133);
+    bool var_0 = !(arg_1 == 0) && !(arg_2 == 0) && !(arg_2 == 0);
+    return var_0;
+}
+
+u64? npc-human-vs-npc-human-right-1hblade-finisher__start-func-array@1d88(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    if (!!(arg_1 == 0)) {
+        melee-debug-text-file-line-fail("(valid-symbol? attacker)", "t2r/src/game/scriptx/melee/npc-standing/imports/npc-standing-macros.dcx", 9132);
+    }
+    melee-debug-text-file-line-fail("(valid-symbol? defender)", "t2r/src/game/scriptx/melee/npc-standing/imports/npc-standing-macros.dcx", 9133);
+    bool var_0 = !(arg_1 == 0) && !(arg_2 == 0) && !(arg_2 == 0);
+    return var_0;
+}
+
+u64? npc-human-vs-npc-human-back-1hblunt-finisher-sync__melee-attack@16a0__start-func-array@2150__(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    if (!!(arg_1 == 0)) {
+        melee-debug-text-file-line-fail("(valid-symbol? attacker)", "t2r/src/game/scriptx/melee/npc-standing/imports/npc-standing-macros.dcx", 9298);
+    }
+    melee-debug-text-file-line-fail("(valid-symbol? defender)", "t2r/src/game/scriptx/melee/npc-standing/imports/npc-standing-macros.dcx", 9299);
+    bool var_0 = !(arg_1 == 0) && !(arg_2 == 0) && !(arg_2 == 0);
+    return var_0;
+}
+

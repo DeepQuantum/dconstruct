@@ -418,3 +418,108 @@ u64? npc-dog-strafe-r(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4
     return var_0;
 }
 
+u64? npc-abby-taunt-3__melee-attack@258__start-func-array@2ee8__(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = get-object-distance(arg_1, arg_2);
+    bool var_1 = !(arg_1 == 0) && !(arg_2 == 0) && var_0 < 99.00 && var_0 > 0.00;
+    u64? var_2 = new-boxed-value(6, var_0);
+    u64? var_3 = new-boxed-value(6, 0.00);
+    u64? var_4 = new-boxed-value(6, 99.00);
+    u64? var_5;
+    if (var_1) {
+        u64? var_6 = new-boxed-value(7, true);
+        var_5 = var_6;
+    } else {
+        u64? var_7 = new-boxed-value(7, false);
+        var_5 = var_7;
+    }
+    do-melee-log("characters-in-range? [[f]] [[f]] [[f]] [[s]]", var_2, var_3, var_4, var_5);
+    u64? var_8 = get-object-locator(arg_1);
+    u64? var_9 = get-object-locator(arg_2);
+    u64? var_10 = facing-point-xz?(var_8, var_9, 90.00);
+    u64? var_11 = melee-fact-get-time-since(player, npc-taunts-global-cooldown);
+    melee-debug-text-file-line-fail("(>= (melee-fact-get-time-since (quote player) (quote npc-taunts-global-cooldown)) min-group-retrigger-time)", "t2r/src/game/scriptx/melee/npc-standing/imports/npc-standing-macros.dcx", 6269);
+    bool var_12 = var_1 && var_10 && var_11 >= 4.00 && var_11 >= 4.00;
+    return var_12;
+}
+
+u64? npc-abby-taunt-3__melee-event-list@31c8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = melee-fact-set-time(player, npc-taunts-global-cooldown);
+    return var_0;
+}
+
+u64? npc-abby-taunt-3(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = get-object-distance(arg_1, arg_2);
+    bool var_1 = !(arg_1 == 0) && !(arg_2 == 0) && var_0 < 99.00 && var_0 > 0.00;
+    u64? var_2 = new-boxed-value(6, var_0);
+    u64? var_3 = new-boxed-value(6, 0.00);
+    u64? var_4 = new-boxed-value(6, 99.00);
+    u64? var_5;
+    if (var_1) {
+        u64? var_6 = new-boxed-value(7, true);
+        var_5 = var_6;
+    } else {
+        u64? var_7 = new-boxed-value(7, false);
+        var_5 = var_7;
+    }
+    do-melee-log("characters-in-range? [[f]] [[f]] [[f]] [[s]]", var_2, var_3, var_4, var_5);
+    return !var_1;
+}
+
+u64? npc-taunt-01__melee-attack@df8__start-func-array@2fb8__(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = get-object-distance(arg_1, arg_2);
+    bool var_1 = !(arg_1 == 0) && !(arg_2 == 0) && var_0 < 99.00 && var_0 > 0.00;
+    u64? var_2 = new-boxed-value(6, var_0);
+    u64? var_3 = new-boxed-value(6, 0.00);
+    u64? var_4 = new-boxed-value(6, 99.00);
+    u64? var_5;
+    if (var_1) {
+        u64? var_6 = new-boxed-value(7, true);
+        var_5 = var_6;
+    } else {
+        u64? var_7 = new-boxed-value(7, false);
+        var_5 = var_7;
+    }
+    do-melee-log("characters-in-range? [[f]] [[f]] [[f]] [[s]]", var_2, var_3, var_4, var_5);
+    u64? var_8 = get-object-locator(arg_1);
+    u64? var_9 = get-object-locator(arg_2);
+    u64? var_10 = facing-point-xz?(var_8, var_9, 90.00);
+    u64? var_11 = melee-fact-get-time-since(player, npc-taunts-global-cooldown);
+    melee-debug-text-file-line-fail("(>= (melee-fact-get-time-since (quote player) (quote npc-taunts-global-cooldown)) min-group-retrigger-time)", "t2r/src/game/scriptx/melee/npc-standing/imports/npc-standing-macros.dcx", 6269);
+    bool var_12 = var_1 && var_10 && var_11 >= 8.00 && var_11 >= 8.00;
+    return var_12;
+}
+
+bool npc-dog-strafe-r__melee-attack@2b08__start-func-array@3788__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = melee-fact-get-time-since(arg_1, dog-strafe);
+    return var_0 > 4.00;
+}
+
+u64? npc-dog-strafe-r__melee-attack@2b08(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = get-object-distance(arg_1, arg_2);
+    bool var_1 = !(arg_1 == 0) && !(arg_2 == 0) && var_0 < 99.00 && var_0 > 0.00;
+    u64? var_2 = new-boxed-value(6, var_0);
+    u64? var_3 = new-boxed-value(6, 0.00);
+    u64? var_4 = new-boxed-value(6, 99.00);
+    u64? var_5;
+    if (var_1) {
+        u64? var_6 = new-boxed-value(7, true);
+        var_5 = var_6;
+    } else {
+        u64? var_7 = new-boxed-value(7, false);
+        var_5 = var_7;
+    }
+    do-melee-log("characters-in-range? [[f]] [[f]] [[f]] [[s]]", var_2, var_3, var_4, var_5);
+    u64? var_8 = get-object-locator(arg_1);
+    u64? var_9 = get-object-locator(arg_2);
+    u64? var_10 = facing-point-xz?(var_8, var_9, 90.00);
+    u64? var_11 = melee-fact-get-time-since(player, npc-taunts-global-cooldown);
+    melee-debug-text-file-line-fail("(>= (melee-fact-get-time-since (quote player) (quote npc-taunts-global-cooldown)) min-group-retrigger-time)", "t2r/src/game/scriptx/melee/npc-standing/imports/npc-standing-macros.dcx", 6269);
+    bool var_12 = var_1 && var_10 && var_11 >= 0.00 && var_11 >= 0.00;
+    return var_12;
+}
+
+u64? npc-dog-strafe-r(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = melee-fact-set-time(arg_1, dog-strafe);
+    return var_0;
+}
+

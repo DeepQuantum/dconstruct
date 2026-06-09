@@ -124,3 +124,35 @@ u64 anim-player-ladder-states__anim-node-animation@ee0(u64? arg_0, u64 arg_1, u6
     return *(u64*)(*(arg_1 + 8) + 248);
 }
 
+u64? anim-player-ladder-states__actor-state-list@48__anim-transition-group@13a0____anim-transition-condition-lambda@41f0__(u8 arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_0 = player-animation-abort-active?(arg_2, arg_1);
+    bool var_1 = var_0 && *(u8 *)(*arg_0 + 208);
+    return var_1;
+}
+
+u64? anim-player-ladder-states(u64? arg_0, u64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64 arg_5, u64? arg_6) {
+    u64 var_0 = *(u64 *)(*(arg_1 + 8) + 384);
+    u64? var_1 = player-anim-speed-mult(var_0, *(u64 *)arg_5);
+    return arg_2 + ((arg_3 * var_1) * arg_4);
+}
+
+u64 anim-player-ladder-states__anim-node-subsystem-ik@14c8__anim-node-animation@3a40__(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64 *)(*(arg_1 + 8) + 248);
+}
+
+u8 anim-player-ladder-states__anim-node-subsystem-ik@14c8(u64? arg_0, u8 arg_1, u64? arg_2) {
+    return *(u8 *)(*(arg_1 + 8) + 381);
+}
+
+u64 anim-player-ladder-states__anim-node-subsystem-ik@10b8__anim-node-blend@3a00____anim-node-blend@3ee0____anim-node-animation@4540__(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64 *)(*(arg_1 + 8) + 248);
+}
+
+f32 anim-player-ladder-states__anim-node-subsystem-ik@10b8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return 1.00;
+}
+
+u64 anim-player-ladder-states__anim-node-animation@ee0(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64 *)(*(arg_1 + 8) + 248);
+}
+

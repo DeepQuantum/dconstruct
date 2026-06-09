@@ -97,3 +97,36 @@ f32 anim-overlay-player-weapon-base-throwable__anim-overlay-set@b368(u64? arg_0,
     return 0.90;
 }
 
+f32 anim-overlay-player-character-name-ellie__anim-overlay-set@44a8(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32 *)(*arg_0 + 192);
+}
+
+u8 flashlight-flip-func(u64? arg_0, u8 arg_1, u64? arg_2) {
+    return *(u8 *)(*(arg_1 + 8) + 381);
+}
+
+u8 anim-overlay-player-flashlight-on__anim-overlay-set@4ce8(u64? arg_0, u8 arg_1, u64? arg_2) {
+    return *(u8 *)(*(arg_1 + 8) + 381);
+}
+
+u64? anim-overlay-player-ledge-ladder__anim-overlay-set@8028(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = lerp-scale(0.40, 1.00, 0.00, 1.00, 1.00 * arg_1);
+    u64? var_1 = minmax(var_0, 0.00, 1.00);
+    return var_1;
+}
+
+u64? anim-overlay-player-skel-ellie-14-skel__anim-overlay-set@94a8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = read-float-channel(OverlayHelper.AimState, arg_3, arg_0, arg_1, arg_2, 0.00);
+    return var_0;
+}
+
+u64? anim-overlay-player-weapon-base-long-gun__anim-overlay-set@a5b8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = lerp-scale(0.60, 0.80, 0.00, 1.00, 1.00 * arg_1);
+    u64? var_1 = minmax(var_0, 0.00, 1.00);
+    return var_1;
+}
+
+f32 anim-overlay-player-weapon-base-throwable__anim-overlay-set@b368(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return 0.90;
+}
+

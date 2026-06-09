@@ -14,6 +14,10 @@
 #include <set>
 
 namespace dconstruct {
+    namespace debugger {
+        class debugger;
+    }
+
     enum class symbol_type {
         B8,
         I32,
@@ -39,6 +43,8 @@ namespace dconstruct {
     };
 
     class BinaryFile {
+        friend class debugger::debugger;
+
         struct aligned_deleter {
             void operator()(std::byte* p) const noexcept {
                 ::operator delete[](p, std::align_val_t(64));

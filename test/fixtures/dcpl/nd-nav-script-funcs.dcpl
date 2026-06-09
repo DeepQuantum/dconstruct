@@ -13,3 +13,8 @@ u64? disable-action-pack(u64? arg_0) {
     return var_0;
 }
 
+u64? disable-action-pack(u64? arg_0) {
+    u64? var_0 = enable-action-pack(arg_0, 0);
+    return var_0;
+}
+

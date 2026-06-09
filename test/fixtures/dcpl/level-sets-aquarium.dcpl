@@ -598,3 +598,153 @@ u64? tsk-fob-aquarium-flashback-elevator-to-basement-transition__level-scripted-
     return !var_0;
 }
 
+u64? tsk-fob-aquarium-flashback-swim-into-stadium__level-set@bb0__level-scripted-set@1d60__() {
+    u64? var_0 = get-boolean(#D3F10801ADE7DA2E, ss-fob-aquarium-gate-to-stadium-igc-1);
+    return var_0;
+}
+
+u16 tsk-fob-aquarium-flashback-swim-into-stadium__level-scripted-set@3fb0() {
+    return 1;
+}
+
+u64? tsk-amp-post-surgery__level-set@ca0__level-scripted-set@29f0__() {
+    u64? var_0 = is-chronological-mode-enabled?();
+    u64? var_1 = !(var_0);
+    return var_1;
+}
+
+u64? tsk-amp-post-surgery__level-scripted-set@2c00() {
+    u64? var_0 = is-chronological-mode-enabled?();
+    return var_0;
+}
+
+u64? tsk-ski-aquarium-flashback-preload__level-set@d90__level-scripted-set@3968__() {
+    u64? var_0 = get-boolean(screen-black?, ss-fob-hostile-territory-capture-1);
+    return var_0;
+}
+
+u64? tsk-ski-aquarium-flashback-preload__level-scripted-set@43b8() {
+    u64? var_0 = task-active?(forward-base, fob-hostile-territory-capture);
+    return var_0;
+}
+
+u64? tsk-fob-aquarium-flashback-atrium__level-set@e28__level-scripted-set@2180__() {
+    u64? var_0 = task-not-complete?(forward-base, fob-aquarium-flashback-enter);
+    return var_0;
+}
+
+u64? tsk-amp-levs-missing__level-set@ff0__level-scripted-set@3110__() {
+    u64? var_0 = task-active?(amputation, amp-levs-missing-a);
+    return var_0;
+}
+
+u64? tsk-ski-aquarium-flashback-atrium__level-set@10e0__level-scripted-set@3758__() {
+    u64? var_0 = cinematic-playing?(cin-ski-aquarium-flashback-intro);
+    return var_0;
+}
+
+u64? tsk-ski-aquarium-flashback-atrium__level-scripted-set@4448() {
+    u64? var_0 = get-boolean(#A6A6C626DE9E5F9B, ss-ski-aquarium-flashback-target-practice-1);
+    return var_0;
+}
+
+bool tsk-amp-yara-walk-balcony__level-set@1248__level-scripted-set@2618__() {
+    u64? var_0 = cinematic-get-current-maya-frame(cin-amp-yara-walk-balcony);
+    return var_0 < 259.00;
+}
+
+u64? tsk-fob-aquarium-flashback-1-outro__level-set@12f8__level-scripted-set@27c8__() {
+    u64? var_0 = is-chronological-mode-enabled?();
+    u64? var_1 = get-animation-fade(player, fob-aquarium-flashback-outro-enter--abby);
+    bool var_2 = var_0 && var_1 > 0.00;
+    return var_2;
+}
+
+u64? tsk-fob-aquarium-flashback-1-outro__level-scripted-set@23a8() {
+    u64? var_0 = is-chronological-mode-enabled?();
+    u64? var_1 = !(var_0);
+    u64? var_2 = get-animation-fade(player, fob-aquarium-flashback-outro-enter--abby);
+    bool var_3 = var_1 && var_2 > 0.00;
+    return var_3;
+}
+
+u64? tsk-fob-aquarium-flashback-1-outro__level-scripted-set@3620() {
+    u64? var_0 = is-chronological-mode-enabled?();
+    u64? var_1 = get-animation-fade(player, fob-aquarium-flashback-outro-enter--abby);
+    bool var_2 = var_0 && var_1 <= 0.00;
+    return var_2;
+}
+
+u64? tsk-fob-aquarium-flashback-1-outro__level-scripted-set@3860() {
+    u64? var_0 = is-chronological-mode-enabled?();
+    u64? var_1 = !(var_0);
+    u64? var_2 = get-animation-fade(player, fob-aquarium-flashback-outro-enter--abby);
+    bool var_3 = var_1 && var_2 <= 0.00;
+    return var_3;
+}
+
+u64? tsk-amp-yara-walk-gift-shop__level-set@13c0__level-scripted-set@1d90__() {
+    u64? var_0 = cinematic-playing?(cin-amp-yara-walk-balcony);
+    u64? var_1 = task-not-complete?(amputation, amp-yara-walk-atrium);
+    bool var_2 = var_0 && var_1;
+    return var_2;
+}
+
+u64? tsk-med-aquarium-mel__level-set@1448__level-scripted-set@27b0__() {
+    u64? var_0 = task-range-active?(medicine, med-aquarium-mel-d, medicine, med-aquarium-mel-e);
+    return var_0;
+}
+
+u64? tsk-med-aquarium-preload-chronological__level-set@1548__level-scripted-set@36c8__() {
+    u64? var_0 = get-boolean(#A5D588E81B36BF14, ss-res-escape-post-crash-1);
+    u64? var_1 = !(var_0);
+    return var_1;
+}
+
+u64? tsk-amp-levs-missing-preroll-scripted-set__level-set@1600__level-scripted-set@3398__() {
+    u64? var_0 = get-boolean(#5EDAD9DF99156DFB, ss-sle-marina-boats-physicalize-1);
+    return var_0;
+}
+
+u64? tsk-ski-aquarium-flashback-cafe__level-set@1798__level-scripted-set@1b50__() {
+    u64? var_0 = cinematic-get-current-frame(cin-ski-aquarium-flashback-cafe);
+    u64? var_1 = is-chronological-mode-enabled?();
+    u64? var_2 = !(var_1);
+    bool var_3 = var_0 < 500.00 && var_2;
+    return var_3;
+}
+
+u64? tsk-ski-aquarium-flashback-cafe__level-scripted-set@2858() {
+    u64? var_0 = cinematic-get-current-frame(cin-ski-aquarium-flashback-cafe);
+    u64? var_1 = is-chronological-mode-enabled?();
+    bool var_2 = var_0 < 500.00 && var_1;
+    return var_2;
+}
+
+u64? tsk-ski-aquarium-flashback-cafe__level-scripted-set@1f10() {
+    u64? var_0 = cinematic-get-current-frame(cin-ski-aquarium-flashback-cafe);
+    u64? var_1 = is-chronological-mode-enabled?();
+    u64? var_2 = !(var_1);
+    bool var_3 = var_0 >= 500.00 && var_2;
+    return var_3;
+}
+
+u64? tsk-ski-aquarium-flashback-cafe__level-scripted-set@2b70() {
+    u64? var_0 = cinematic-get-current-frame(cin-ski-aquarium-flashback-cafe);
+    u64? var_1 = is-chronological-mode-enabled?();
+    bool var_2 = var_0 >= 500.00 && var_1;
+    return var_2;
+}
+
+u64? tsk-fob-aquarium-flashback-elevator-to-basement-transition__level-set@18d0__level-scripted-set@2c18__() {
+    u64? var_0 = get-boolean(igc-started?, ss-fob-aquarium-elevator-igc-1);
+    u64? var_1 = task-complete?(forward-base, fob-aquarium-flashback-elevator);
+    bool var_2 = var_0 && var_1;
+    return var_2;
+}
+
+u64? tsk-fob-aquarium-flashback-elevator-to-basement-transition__level-scripted-set@3080() {
+    u64? var_0 = get-boolean(player-near-elevator?, ss-fob-aquarium-elevator-igc-1);
+    return !var_0;
+}
+

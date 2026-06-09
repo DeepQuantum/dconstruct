@@ -1,4 +1,4 @@
-@mod "C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/mods/ProjectFEDRA"
+@mod "C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/mods/gas-mask-toggle"
 @output "gas-mask-toggle"
 @sidbase "C:/Users/damix/Documents/GitHub/TLOU2Modding/dconstruct/test/fixtures/dc/sidbase_new_fixed.bin"
 
@@ -7,6 +7,8 @@
 @add_pak level-name sp-all {
     actor gas-mask-base
     actor gas-mask-ellie
+    actor gas-mask-dina
+    actor anim-ellie-player-gestures
 }
 
 using #set-gas-mask-setting-id as far (u64, u64) -> u64*;
@@ -42,7 +44,7 @@ u64 get_gas_mask_setup(u64 current_character) {
     return match (current_character) {
         0 -> #*ellie-gas-mask-setup*,
         1 -> #*abby-gas-mask-setup*,
-        2 -> #*dina-gas-mask-setup*, 
+        2 -> #*dina-gas-mask-setup*,
         3 -> #*joel-gas-mask-setup*, // joel
         4 -> #*lev-gas-mask-setup*,
         else -> null
@@ -60,26 +62,24 @@ statescript #gas-mask-toggle {
                     u16 version_major = 1;
                     u16 version_minor = 1;
 
-                    // >> "launched custom gas mask script, version %d.%d" $ version_major, version_minor;
-                    // u64* current_mask = #get-gas-mask(#player);
-                    // >> "current mask: %p" $ current_mask;
+                     >> "launched custom gas mask script, version %d.%d" $ version_major, version_minor;
+                     >> "current mask: %p" $ current_mask;
+                    u64* current_mask = #get-gas-mask(#player);
 
-                    // u64 current_character = 0;
-                    // if (#is-rogue-mode?()) {
-                    //     >> "in rogue, getting character";
-                    //     current_character = #rogue-get-player-character();
-                    //     >> "got character %d" $ current_character;
-                    // }
-                    // >> "getting gas mask setup...";
+                    u64 current_character = 0;
+                    if (#is-rogue-mode?()) {
+                        >> "in rogue, getting character";
+                        current_character = #rogue-get-player-character();
+                        >> "got character %d" $ current_character;
+                    }
+                    >> "getting gas mask setup...";
 
-                    // u64 gas_mask_setup = get_gas_mask_setup(current_character);
-
-                    // >> "got gas mask setup: %p" $ gas_mask_setup;
-
-                    // if (gas_mask_setup == null) {
-                    //     >> "invalid gas mask setup, defaulting to ellie";
-                    //     gas_mask_setup = #*ellie-gas-mask-setup*;
-                    // }
+                     u64 gas_mask_setup = get_gas_mask_setup(current_character);
+                    >> "got gas mask setup: %p" $ gas_mask_setup;
+                    if (gas_mask_setup == null) {
+                        >> "invalid gas mask setup, defaulting to ellie";
+                        gas_mask_setup = #*ellie-gas-mask-setup*;
+                    }
 
                     #set-gas-mask-setting-id(#player, #*ellie-gas-mask-setup*);
                     //u64* gas_mask_setting_id_ptr = #lookup-symbol(gas_mask_setup, #gas-mask-setup);
@@ -111,7 +111,7 @@ statescript #gas-mask-toggle {
                     if (!#is-script-running?(#ss-gas-mask-material-controller-1)) {
                         >> "not running";
                     }
-                    
+
                     #wait-equip-gas-mask(#player, 0, 0);
                     u64* current_mask = #get-gas-mask(#player);
 

@@ -3790,3 +3790,1267 @@ u64? player-2h-contextual-dodge-right-upward-left-a(u64? arg_0, u64? arg_1, u64?
     return var_1;
 }
 
+u64? player-2h-contextual-dodge-right-leap-b__melee-attack@498__character-melee-info@7980__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    u64? var_0 = get-bf-from-cache(arg_6, 0);
+    u64? var_1 = melee-dodge-pose-calibration(arg_2, ellie-2h-dodge-combat-right-horiz-right-b, arg_5, var_0);
+    return var_1;
+}
+
+f32 player-2h-contextual-dodge-right-leap-b__melee-attack@498(u64? arg_0, u64? arg_1, u64? arg_2) {
+    u64? var_0 = get-layer-animation-frame(arg_1, base);
+    f32 var_1;
+    if (var_0 >= (f32)(20 + 10)) {
+        var_1 = 0.60;
+    } else {
+        var_1 = 0.40;
+    }
+    return var_1;
+}
+
+u64? player-2h-contextual-dodge-right-leap-b__start-func-array@7300(u64? arg_0, bool arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = task-node-active?(melee-move-tester);
+    u64? var_1 = get-object-position(arg_1);
+    u64? var_2 = get-melee-evade-dir(arg_1);
+    u64? var_3 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+    u64? var_4 = quat-from-look-at(var_2, var_3);
+    u64? var_5 = alloc-bound-frame(var_1, var_4, 0, 0, 0);
+    u64? var_6 = melee-fact-get-symbol(player, contextual-dodge-npc);
+    u64? var_7 = get-object-locator(var_6);
+    u64? var_8 = get-object-locator(arg_1);
+    u64? var_9 = rotate-locator-lookat(var_7, var_8, 1.00, 0);
+    u64? var_10 = get-object-facing-angle-plus(var_5, var_9, 2, 1);
+    u64? var_11 = melee-character-bit-check(arg_2, 1);
+    melee-debug-text-file-line-fail("(melee-character-bit-check defender valid-defenders)", "t2r/src/game/scriptx/melee/player-standing/imports/player-standing-macros.dcx", 8479);
+    bool var_12 = var_0 && var_10 && var_10;
+    return var_12;
+}
+
+u16 player-2h-contextual-dodge-right-leap-b(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    u64? var_0 = is-player?(arg_0);
+    u16 var_1;
+    if (var_0) {
+        broadcast-event(#838AEFD5AE03AADE);
+        u64? var_2 = is-final-build?();
+        if (!var_2) {
+            u64? var_3 = #5445173390656D6D("PLAYER DODGE END");
+            display(var_3, 19);
+        }
+        melee-fact-set-bool(arg_1, is-dodging, 0);
+        u64? var_4 = get-layer-animation-frame(arg_0, base);
+        u64? var_5 = round-float(18.00 - var_4);
+        u64? var_6 = minmax(var_5, 0.00, 999.00);
+        u16 var_7;
+        if ((var_6 / 30.00) > 0.00) {
+            u64? var_8 = is-final-build?();
+            if (!var_8) {
+                u64? var_9 = #5445173390656D6D("Run off i-frames awarded: %f", var_6 / 30.00);
+                display(var_9, 19);
+            }
+            u64? var_10 = give-i-frames(arg_0, var_6 / 30.00);
+            var_7 = var_10;
+        } else {
+            var_7 = 0;
+        }
+        var_1 = var_7;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u64? player-2h-contextual-dodge-right-leap-b__melee-event-list@7148__melee-event-advanced@28c98__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = camera-locator(0);
+    u64? var_1 = get-locator-position(var_0);
+    u64? var_2 = get-object-position(arg_2);
+    u64? var_3 = distance-between-points-xz(var_1, var_2);
+    u64? var_4 = lerp-scale(0.00, 0.50, 0.50, 1.50, var_3);
+    return var_4;
+}
+
+u64? player-2h-contextual-dodge-right-leap-b__melee-event-advanced@26ff0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = melee-fact-get-float(arg_1, dodge-speed-flex);
+    return var_0;
+}
+
+sid player-2h-contextual-dodge-right-leap-b__melee-event-transitions@27158(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return player-evade-back-attacks;
+}
+
+u64? player-2h-contextual-dodge-right-leap-a__melee-attack@688__character-melee-info@60b0__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    u64? var_0 = get-bf-from-cache(arg_6, 0);
+    u64? var_1 = melee-dodge-pose-calibration(arg_2, ellie-2h-dodge-combat-right-horiz-right-a, arg_5, var_0);
+    return var_1;
+}
+
+u64? player-2h-contextual-dodge-right-leap-a(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = joypad-command-active?(sprint-hold, 6);
+    u64? var_1;
+    if (var_0) {
+        u64? var_2 = string-debug(ellie-2h-dodge-combat-right-horiz-right-a);
+        u64? var_3 = log-event("melee-player-dodge-contextual-to-sprint", 1, var_2, 0, 0);
+        var_1 = var_3;
+    } else {
+        u64? var_4 = string-debug(ellie-2h-dodge-combat-right-horiz-right-a);
+        u64? var_5 = log-event("melee-player-dodge-contextual", 1, var_4, 0, 0);
+        var_1 = var_5;
+    }
+    return var_1;
+}
+
+u64? player-2h-contextual-dodge-back-horiz-right-b__melee-attack@878__character-melee-info@6ee0__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    u64? var_0 = get-bf-from-cache(arg_6, 0);
+    u64? var_1 = melee-dodge-pose-calibration(arg_2, ellie-2h-dodge-combat-back-horiz-right-b, arg_5, var_0);
+    return var_1;
+}
+
+u64? player-2h-contextual-dodge-back-horiz-right-b__start-func-array@7330(u64? arg_0, bool arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = task-node-active?(melee-move-tester);
+    u64? var_1 = get-object-position(arg_1);
+    u64? var_2 = get-melee-evade-dir(arg_1);
+    u64? var_3 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+    u64? var_4 = quat-from-look-at(var_2, var_3);
+    u64? var_5 = alloc-bound-frame(var_1, var_4, 0, 0, 0);
+    u64? var_6 = melee-fact-get-symbol(player, contextual-dodge-npc);
+    u64? var_7 = get-object-locator(var_6);
+    u64? var_8 = get-object-locator(arg_1);
+    u64? var_9 = rotate-locator-lookat(var_7, var_8, 1.00, 0);
+    u64? var_10 = get-object-facing-angle-plus(var_5, var_9, 2, 1);
+    u64? var_11 = melee-character-bit-check(arg_2, 1);
+    melee-debug-text-file-line-fail("(melee-character-bit-check defender valid-defenders)", "t2r/src/game/scriptx/melee/player-standing/imports/player-standing-macros.dcx", 8479);
+    bool var_12 = var_0 && var_10 && var_10;
+    return var_12;
+}
+
+u64? player-2h-contextual-dodge-back-horiz-right-b(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = joypad-command-active?(sprint-hold, 6);
+    u64? var_1;
+    if (var_0) {
+        u64? var_2 = string-debug(ellie-2h-dodge-combat-back-horiz-right-b);
+        u64? var_3 = log-event("melee-player-dodge-contextual-to-sprint", 1, var_2, 0, 0);
+        var_1 = var_3;
+    } else {
+        u64? var_4 = string-debug(ellie-2h-dodge-combat-back-horiz-right-b);
+        u64? var_5 = log-event("melee-player-dodge-contextual", 1, var_4, 0, 0);
+        var_1 = var_5;
+    }
+    return var_1;
+}
+
+u64? player-2h-contextual-dodge-back-horiz-right-c__melee-attack@a68__character-melee-info@83d8__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    u64? var_0 = get-bf-from-cache(arg_6, 0);
+    u64? var_1 = melee-dodge-pose-calibration(arg_2, ellie-2h-dodge-combat-back-horiz-right-c, arg_5, var_0);
+    return var_1;
+}
+
+u64? player-2h-contextual-dodge-back-horiz-right-c(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = joypad-command-active?(sprint-hold, 6);
+    u64? var_1;
+    if (var_0) {
+        u64? var_2 = string-debug(ellie-2h-dodge-combat-back-horiz-right-c);
+        u64? var_3 = log-event("melee-player-dodge-contextual-to-sprint", 1, var_2, 0, 0);
+        var_1 = var_3;
+    } else {
+        u64? var_4 = string-debug(ellie-2h-dodge-combat-back-horiz-right-c);
+        u64? var_5 = log-event("melee-player-dodge-contextual", 1, var_4, 0, 0);
+        var_1 = var_5;
+    }
+    return var_1;
+}
+
+u64? player-2h-contextual-dodge-back-horiz-right-a__melee-attack@c58__character-melee-info@7d18__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    u64? var_0 = get-bf-from-cache(arg_6, 0);
+    u64? var_1 = melee-dodge-pose-calibration(arg_2, ellie-2h-dodge-combat-back-horiz-right-a, arg_5, var_0);
+    return var_1;
+}
+
+u64? player-2h-contextual-dodge-back-horiz-right-a(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = joypad-command-active?(sprint-hold, 6);
+    u64? var_1;
+    if (var_0) {
+        u64? var_2 = string-debug(ellie-2h-dodge-combat-back-horiz-right-a);
+        u64? var_3 = log-event("melee-player-dodge-contextual-to-sprint", 1, var_2, 0, 0);
+        var_1 = var_3;
+    } else {
+        u64? var_4 = string-debug(ellie-2h-dodge-combat-back-horiz-right-a);
+        u64? var_5 = log-event("melee-player-dodge-contextual", 1, var_4, 0, 0);
+        var_1 = var_5;
+    }
+    return var_1;
+}
+
+u64? player-2h-contextual-dodge-back-horiz-right-d__melee-attack@e48__character-melee-info@7dc0__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    u64? var_0 = get-bf-from-cache(arg_6, 0);
+    u64? var_1 = melee-dodge-pose-calibration(arg_2, ellie-2h-dodge-combat-back-horiz-right-d, arg_5, var_0);
+    return var_1;
+}
+
+u64? player-2h-contextual-dodge-back-horiz-right-d(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = joypad-command-active?(sprint-hold, 6);
+    u64? var_1;
+    if (var_0) {
+        u64? var_2 = string-debug(ellie-2h-dodge-combat-back-horiz-right-d);
+        u64? var_3 = log-event("melee-player-dodge-contextual-to-sprint", 1, var_2, 0, 0);
+        var_1 = var_3;
+    } else {
+        u64? var_4 = string-debug(ellie-2h-dodge-combat-back-horiz-right-d);
+        u64? var_5 = log-event("melee-player-dodge-contextual", 1, var_4, 0, 0);
+        var_1 = var_5;
+    }
+    return var_1;
+}
+
+u64? player-2h-contextual-dodge-back-charge__melee-attack@1038__character-melee-info@80f0__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    u64? var_0 = get-bf-from-cache(arg_6, 0);
+    u64? var_1 = melee-dodge-pose-calibration(arg_2, ellie-2h-dodge-combat-back-downward-left-c, arg_5, var_0);
+    return var_1;
+}
+
+f32 player-2h-contextual-dodge-back-charge__melee-attack@1038(u64? arg_0, u64? arg_1, u64? arg_2) {
+    u64? var_0 = get-layer-animation-frame(arg_1, base);
+    f32 var_1;
+    if (var_0 >= (f32)(30 + 10)) {
+        var_1 = 0.60;
+    } else {
+        var_1 = 0.40;
+    }
+    return var_1;
+}
+
+u64? player-2h-contextual-dodge-back-charge(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = joypad-command-active?(sprint-hold, 6);
+    u64? var_1;
+    if (var_0) {
+        u64? var_2 = string-debug(ellie-2h-dodge-combat-back-downward-left-c);
+        u64? var_3 = log-event("melee-player-dodge-contextual-to-sprint", 1, var_2, 0, 0);
+        var_1 = var_3;
+    } else {
+        u64? var_4 = string-debug(ellie-2h-dodge-combat-back-downward-left-c);
+        u64? var_5 = log-event("melee-player-dodge-contextual", 1, var_4, 0, 0);
+        var_1 = var_5;
+    }
+    return var_1;
+}
+
+u64? player-2h-contextual-dodge-right-upward-right-b__melee-attack@1228__character-melee-info@6878__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    u64? var_0 = get-bf-from-cache(arg_6, 0);
+    u64? var_1 = melee-dodge-pose-calibration(arg_2, ellie-2h-dodge-combat-right-upward-right-b, arg_5, var_0);
+    return var_1;
+}
+
+u64? player-2h-contextual-dodge-right-upward-right-b__start-func-array@7ce8(u64? arg_0, bool arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = task-node-active?(melee-move-tester);
+    u64? var_1 = get-object-position(arg_1);
+    u64? var_2 = get-melee-evade-dir(arg_1);
+    u64? var_3 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+    u64? var_4 = quat-from-look-at(var_2, var_3);
+    u64? var_5 = alloc-bound-frame(var_1, var_4, 0, 0, 0);
+    u64? var_6 = melee-fact-get-symbol(player, contextual-dodge-npc);
+    u64? var_7 = get-object-locator(var_6);
+    u64? var_8 = get-object-locator(arg_1);
+    u64? var_9 = rotate-locator-lookat(var_7, var_8, 1.00, 0);
+    u64? var_10 = get-object-facing-angle-plus(var_5, var_9, 2, 1);
+    u64? var_11 = melee-character-bit-check(arg_2, 1);
+    melee-debug-text-file-line-fail("(melee-character-bit-check defender valid-defenders)", "t2r/src/game/scriptx/melee/player-standing/imports/player-standing-macros.dcx", 8479);
+    bool var_12 = var_0 && var_10 && var_10;
+    return var_12;
+}
+
+u64? player-2h-contextual-dodge-right-upward-right-b(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = joypad-command-active?(sprint-hold, 6);
+    u64? var_1;
+    if (var_0) {
+        u64? var_2 = string-debug(ellie-2h-dodge-combat-right-upward-right-b);
+        u64? var_3 = log-event("melee-player-dodge-contextual-to-sprint", 1, var_2, 0, 0);
+        var_1 = var_3;
+    } else {
+        u64? var_4 = string-debug(ellie-2h-dodge-combat-right-upward-right-b);
+        u64? var_5 = log-event("melee-player-dodge-contextual", 1, var_4, 0, 0);
+        var_1 = var_5;
+    }
+    return var_1;
+}
+
+u64? player-2h-contextual-dodge-back-upward-right-a__melee-attack@1418__character-melee-info@6d30__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    u64? var_0 = get-bf-from-cache(arg_6, 0);
+    u64? var_1 = melee-dodge-pose-calibration(arg_2, ellie-2h-dodge-combat-back-upward-right-a, arg_5, var_0);
+    return var_1;
+}
+
+u64? player-2h-contextual-dodge-back-upward-right-a__start-func-array@7f40(u64? arg_0, bool arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = task-node-active?(melee-move-tester);
+    u64? var_1 = get-object-position(arg_1);
+    u64? var_2 = get-melee-evade-dir(arg_1);
+    u64? var_3 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+    u64? var_4 = quat-from-look-at(var_2, var_3);
+    u64? var_5 = alloc-bound-frame(var_1, var_4, 0, 0, 0);
+    u64? var_6 = melee-fact-get-symbol(player, contextual-dodge-npc);
+    u64? var_7 = get-object-locator(var_6);
+    u64? var_8 = get-object-locator(arg_1);
+    u64? var_9 = rotate-locator-lookat(var_7, var_8, 1.00, 0);
+    u64? var_10 = get-object-facing-angle-plus(var_5, var_9, 2, 1);
+    u64? var_11 = melee-character-bit-check(arg_2, 1);
+    melee-debug-text-file-line-fail("(melee-character-bit-check defender valid-defenders)", "t2r/src/game/scriptx/melee/player-standing/imports/player-standing-macros.dcx", 8479);
+    bool var_12 = var_0 && var_10 && var_10;
+    return var_12;
+}
+
+u64? player-2h-contextual-dodge-back-upward-right-a(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = joypad-command-active?(sprint-hold, 6);
+    u64? var_1;
+    if (var_0) {
+        u64? var_2 = string-debug(ellie-2h-dodge-combat-back-upward-right-a);
+        u64? var_3 = log-event("melee-player-dodge-contextual-to-sprint", 1, var_2, 0, 0);
+        var_1 = var_3;
+    } else {
+        u64? var_4 = string-debug(ellie-2h-dodge-combat-back-upward-right-a);
+        u64? var_5 = log-event("melee-player-dodge-contextual", 1, var_4, 0, 0);
+        var_1 = var_5;
+    }
+    return var_1;
+}
+
+u64? player-2h-contextual-dodge-right-charge__start-func-array@8880(u64? arg_0, bool arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = task-node-active?(melee-move-tester);
+    u64? var_1 = get-object-position(arg_1);
+    u64? var_2 = get-melee-evade-dir(arg_1);
+    u64? var_3 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+    u64? var_4 = quat-from-look-at(var_2, var_3);
+    u64? var_5 = alloc-bound-frame(var_1, var_4, 0, 0, 0);
+    u64? var_6 = melee-fact-get-symbol(player, contextual-dodge-npc);
+    u64? var_7 = get-object-locator(var_6);
+    u64? var_8 = get-object-locator(arg_1);
+    u64? var_9 = rotate-locator-lookat(var_7, var_8, 1.00, 0);
+    u64? var_10 = get-object-facing-angle-plus(var_5, var_9, 2, 1);
+    u64? var_11 = melee-character-bit-check(arg_2, 1);
+    melee-debug-text-file-line-fail("(melee-character-bit-check defender valid-defenders)", "t2r/src/game/scriptx/melee/player-standing/imports/player-standing-macros.dcx", 8479);
+    bool var_12 = var_0 && var_10 && var_10;
+    return var_12;
+}
+
+u64? player-2h-contextual-dodge-left-charge__melee-attack@17f8__character-melee-info@7b30__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    u64? var_0 = get-bf-from-cache(arg_6, 0);
+    u64? var_1 = melee-dodge-pose-calibration(arg_2, ellie-2h-dodge-combat-left-horiz-left-a, arg_5, var_0);
+    return var_1;
+}
+
+u64? player-2h-contextual-dodge-left-charge__start-func-array@7740(u64? arg_0, bool arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = task-node-active?(melee-move-tester);
+    u64? var_1 = get-object-position(arg_1);
+    u64? var_2 = get-melee-evade-dir(arg_1);
+    u64? var_3 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+    u64? var_4 = quat-from-look-at(var_2, var_3);
+    u64? var_5 = alloc-bound-frame(var_1, var_4, 0, 0, 0);
+    u64? var_6 = melee-fact-get-symbol(player, contextual-dodge-npc);
+    u64? var_7 = get-object-locator(var_6);
+    u64? var_8 = get-object-locator(arg_1);
+    u64? var_9 = rotate-locator-lookat(var_7, var_8, 1.00, 0);
+    u64? var_10 = get-object-facing-angle-plus(var_5, var_9, 2, 1);
+    u64? var_11 = melee-character-bit-check(arg_2, 1);
+    melee-debug-text-file-line-fail("(melee-character-bit-check defender valid-defenders)", "t2r/src/game/scriptx/melee/player-standing/imports/player-standing-macros.dcx", 8479);
+    bool var_12 = var_0 && var_10 && var_10;
+    return var_12;
+}
+
+u64? player-2h-contextual-dodge-left-charge(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = joypad-command-active?(sprint-hold, 6);
+    u64? var_1;
+    if (var_0) {
+        u64? var_2 = string-debug(ellie-2h-dodge-combat-left-horiz-left-a);
+        u64? var_3 = log-event("melee-player-dodge-contextual-to-sprint", 1, var_2, 0, 0);
+        var_1 = var_3;
+    } else {
+        u64? var_4 = string-debug(ellie-2h-dodge-combat-left-horiz-left-a);
+        u64? var_5 = log-event("melee-player-dodge-contextual", 1, var_4, 0, 0);
+        var_1 = var_5;
+    }
+    return var_1;
+}
+
+u64? player-2h-contextual-dodge-front-leap__melee-attack@19e8__character-melee-info@67d0__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    u64? var_0 = get-bf-from-cache(arg_6, 0);
+    u64? var_1 = melee-dodge-pose-calibration(arg_2, ellie-2h-dodge-combat-left-horiz-left-b, arg_5, var_0);
+    return var_1;
+}
+
+u64? player-2h-contextual-dodge-front-leap__start-func-array@6b80(u64? arg_0, bool arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = task-node-active?(melee-move-tester);
+    u64? var_1 = get-object-position(arg_1);
+    u64? var_2 = get-melee-evade-dir(arg_1);
+    u64? var_3 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+    u64? var_4 = quat-from-look-at(var_2, var_3);
+    u64? var_5 = alloc-bound-frame(var_1, var_4, 0, 0, 0);
+    u64? var_6 = melee-fact-get-symbol(player, contextual-dodge-npc);
+    u64? var_7 = get-object-locator(var_6);
+    u64? var_8 = get-object-locator(arg_1);
+    u64? var_9 = rotate-locator-lookat(var_7, var_8, 1.00, 0);
+    u64? var_10 = get-object-facing-angle-plus(var_5, var_9, 2, 1);
+    u64? var_11 = melee-character-bit-check(arg_2, 1);
+    melee-debug-text-file-line-fail("(melee-character-bit-check defender valid-defenders)", "t2r/src/game/scriptx/melee/player-standing/imports/player-standing-macros.dcx", 8479);
+    bool var_12 = var_0 && var_10 && var_10;
+    return var_12;
+}
+
+u64? player-2h-contextual-dodge-front-leap(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = joypad-command-active?(sprint-hold, 6);
+    u64? var_1;
+    if (var_0) {
+        u64? var_2 = string-debug(ellie-2h-dodge-combat-left-horiz-left-b);
+        u64? var_3 = log-event("melee-player-dodge-contextual-to-sprint", 1, var_2, 0, 0);
+        var_1 = var_3;
+    } else {
+        u64? var_4 = string-debug(ellie-2h-dodge-combat-left-horiz-left-b);
+        u64? var_5 = log-event("melee-player-dodge-contextual", 1, var_4, 0, 0);
+        var_1 = var_5;
+    }
+    return var_1;
+}
+
+u64? player-2h-contextual-dodge-back-horiz-left-a__melee-attack@1bd8__character-melee-info@8240__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    u64? var_0 = get-bf-from-cache(arg_6, 0);
+    u64? var_1 = melee-dodge-pose-calibration(arg_2, ellie-2h-dodge-combat-back-horiz-left-a, arg_5, var_0);
+    return var_1;
+}
+
+u64? player-2h-contextual-dodge-back-horiz-left-a__start-func-array@7a28(u64? arg_0, bool arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = task-node-active?(melee-move-tester);
+    u64? var_1 = get-object-position(arg_1);
+    u64? var_2 = get-melee-evade-dir(arg_1);
+    u64? var_3 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+    u64? var_4 = quat-from-look-at(var_2, var_3);
+    u64? var_5 = alloc-bound-frame(var_1, var_4, 0, 0, 0);
+    u64? var_6 = melee-fact-get-symbol(player, contextual-dodge-npc);
+    u64? var_7 = get-object-locator(var_6);
+    u64? var_8 = get-object-locator(arg_1);
+    u64? var_9 = rotate-locator-lookat(var_7, var_8, 1.00, 0);
+    u64? var_10 = get-object-facing-angle-plus(var_5, var_9, 2, 1);
+    u64? var_11 = melee-character-bit-check(arg_2, 1);
+    melee-debug-text-file-line-fail("(melee-character-bit-check defender valid-defenders)", "t2r/src/game/scriptx/melee/player-standing/imports/player-standing-macros.dcx", 8479);
+    bool var_12 = var_0 && var_10 && var_10;
+    return var_12;
+}
+
+u64? player-2h-contextual-dodge-back-horiz-left-a(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = joypad-command-active?(sprint-hold, 6);
+    u64? var_1;
+    if (var_0) {
+        u64? var_2 = string-debug(ellie-2h-dodge-combat-back-horiz-left-a);
+        u64? var_3 = log-event("melee-player-dodge-contextual-to-sprint", 1, var_2, 0, 0);
+        var_1 = var_3;
+    } else {
+        u64? var_4 = string-debug(ellie-2h-dodge-combat-back-horiz-left-a);
+        u64? var_5 = log-event("melee-player-dodge-contextual", 1, var_4, 0, 0);
+        var_1 = var_5;
+    }
+    return var_1;
+}
+
+u64? player-2h-contextual-dodge-left-horiz-left-b__start-func-array@6b68(u64? arg_0, bool arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = task-node-active?(melee-move-tester);
+    u64? var_1 = get-object-position(arg_1);
+    u64? var_2 = get-melee-evade-dir(arg_1);
+    u64? var_3 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+    u64? var_4 = quat-from-look-at(var_2, var_3);
+    u64? var_5 = alloc-bound-frame(var_1, var_4, 0, 0, 0);
+    u64? var_6 = melee-fact-get-symbol(player, contextual-dodge-npc);
+    u64? var_7 = get-object-locator(var_6);
+    u64? var_8 = get-object-locator(arg_1);
+    u64? var_9 = rotate-locator-lookat(var_7, var_8, 1.00, 0);
+    u64? var_10 = get-object-facing-angle-plus(var_5, var_9, 2, 1);
+    u64? var_11 = melee-character-bit-check(arg_2, 1);
+    melee-debug-text-file-line-fail("(melee-character-bit-check defender valid-defenders)", "t2r/src/game/scriptx/melee/player-standing/imports/player-standing-macros.dcx", 8479);
+    bool var_12 = var_0 && var_10 && var_10;
+    return var_12;
+}
+
+u64? player-2h-contextual-dodge-right-horiz-left-a__melee-attack@21a8__character-melee-info@6a00__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    u64? var_0 = get-bf-from-cache(arg_6, 0);
+    u64? var_1 = melee-dodge-pose-calibration(arg_2, ellie-2h-dodge-combat-right-horiz-left-a, arg_5, var_0);
+    return var_1;
+}
+
+u64? player-2h-contextual-dodge-right-horiz-left-a__start-func-array@6428(u64? arg_0, bool arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = task-node-active?(melee-move-tester);
+    u64? var_1 = get-object-position(arg_1);
+    u64? var_2 = get-melee-evade-dir(arg_1);
+    u64? var_3 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+    u64? var_4 = quat-from-look-at(var_2, var_3);
+    u64? var_5 = alloc-bound-frame(var_1, var_4, 0, 0, 0);
+    u64? var_6 = melee-fact-get-symbol(player, contextual-dodge-npc);
+    u64? var_7 = get-object-locator(var_6);
+    u64? var_8 = get-object-locator(arg_1);
+    u64? var_9 = rotate-locator-lookat(var_7, var_8, 1.00, 0);
+    u64? var_10 = get-object-facing-angle-plus(var_5, var_9, 2, 1);
+    u64? var_11 = melee-character-bit-check(arg_2, 1);
+    melee-debug-text-file-line-fail("(melee-character-bit-check defender valid-defenders)", "t2r/src/game/scriptx/melee/player-standing/imports/player-standing-macros.dcx", 8479);
+    bool var_12 = var_0 && var_10 && var_10;
+    return var_12;
+}
+
+u64? player-2h-contextual-dodge-right-horiz-left-a(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = joypad-command-active?(sprint-hold, 6);
+    u64? var_1;
+    if (var_0) {
+        u64? var_2 = string-debug(ellie-2h-dodge-combat-right-horiz-left-a);
+        u64? var_3 = log-event("melee-player-dodge-contextual-to-sprint", 1, var_2, 0, 0);
+        var_1 = var_3;
+    } else {
+        u64? var_4 = string-debug(ellie-2h-dodge-combat-right-horiz-left-a);
+        u64? var_5 = log-event("melee-player-dodge-contextual", 1, var_4, 0, 0);
+        var_1 = var_5;
+    }
+    return var_1;
+}
+
+u64? player-2h-contextual-dodge-right-horiz-left-b__melee-attack@2398__character-melee-info@7e80__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    u64? var_0 = get-bf-from-cache(arg_6, 0);
+    u64? var_1 = melee-dodge-pose-calibration(arg_2, ellie-2h-dodge-combat-right-horiz-left-b, arg_5, var_0);
+    return var_1;
+}
+
+u64? player-2h-contextual-dodge-right-horiz-left-b(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = joypad-command-active?(sprint-hold, 6);
+    u64? var_1;
+    if (var_0) {
+        u64? var_2 = string-debug(ellie-2h-dodge-combat-right-horiz-left-b);
+        u64? var_3 = log-event("melee-player-dodge-contextual-to-sprint", 1, var_2, 0, 0);
+        var_1 = var_3;
+    } else {
+        u64? var_4 = string-debug(ellie-2h-dodge-combat-right-horiz-left-b);
+        u64? var_5 = log-event("melee-player-dodge-contextual", 1, var_4, 0, 0);
+        var_1 = var_5;
+    }
+    return var_1;
+}
+
+u64? player-2h-contextual-dodge-front-charge__start-func-array@7438(u64? arg_0, bool arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = task-node-active?(melee-move-tester);
+    u64? var_1 = get-object-position(arg_1);
+    u64? var_2 = get-melee-evade-dir(arg_1);
+    u64? var_3 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+    u64? var_4 = quat-from-look-at(var_2, var_3);
+    u64? var_5 = alloc-bound-frame(var_1, var_4, 0, 0, 0);
+    u64? var_6 = melee-fact-get-symbol(player, contextual-dodge-npc);
+    u64? var_7 = get-object-locator(var_6);
+    u64? var_8 = get-object-locator(arg_1);
+    u64? var_9 = rotate-locator-lookat(var_7, var_8, 1.00, 0);
+    u64? var_10 = get-object-facing-angle-plus(var_5, var_9, 2, 1);
+    u64? var_11 = melee-character-bit-check(arg_2, 1);
+    melee-debug-text-file-line-fail("(melee-character-bit-check defender valid-defenders)", "t2r/src/game/scriptx/melee/player-standing/imports/player-standing-macros.dcx", 8479);
+    bool var_12 = var_0 && var_10 && var_10;
+    return var_12;
+}
+
+u64? player-2h-contextual-dodge-right-downward-right-c__melee-attack@2778__character-melee-info@8198__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    u64? var_0 = get-bf-from-cache(arg_6, 0);
+    u64? var_1 = melee-dodge-pose-calibration(arg_2, ellie-2h-dodge-combat-right-downward-right-c, arg_5, var_0);
+    return var_1;
+}
+
+u64? player-2h-contextual-dodge-right-downward-right-c__start-func-array@8820(u64? arg_0, bool arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = task-node-active?(melee-move-tester);
+    u64? var_1 = get-object-position(arg_1);
+    u64? var_2 = get-melee-evade-dir(arg_1);
+    u64? var_3 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+    u64? var_4 = quat-from-look-at(var_2, var_3);
+    u64? var_5 = alloc-bound-frame(var_1, var_4, 0, 0, 0);
+    u64? var_6 = melee-fact-get-symbol(player, contextual-dodge-npc);
+    u64? var_7 = get-object-locator(var_6);
+    u64? var_8 = get-object-locator(arg_1);
+    u64? var_9 = rotate-locator-lookat(var_7, var_8, 1.00, 0);
+    u64? var_10 = get-object-facing-angle-plus(var_5, var_9, 2, 1);
+    u64? var_11 = melee-character-bit-check(arg_2, 1);
+    melee-debug-text-file-line-fail("(melee-character-bit-check defender valid-defenders)", "t2r/src/game/scriptx/melee/player-standing/imports/player-standing-macros.dcx", 8479);
+    bool var_12 = var_0 && var_10 && var_10;
+    return var_12;
+}
+
+u64? player-2h-contextual-dodge-right-downward-right-c(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = joypad-command-active?(sprint-hold, 6);
+    u64? var_1;
+    if (var_0) {
+        u64? var_2 = string-debug(ellie-2h-dodge-combat-right-downward-right-c);
+        u64? var_3 = log-event("melee-player-dodge-contextual-to-sprint", 1, var_2, 0, 0);
+        var_1 = var_3;
+    } else {
+        u64? var_4 = string-debug(ellie-2h-dodge-combat-right-downward-right-c);
+        u64? var_5 = log-event("melee-player-dodge-contextual", 1, var_4, 0, 0);
+        var_1 = var_5;
+    }
+    return var_1;
+}
+
+u64? player-2h-contextual-dodge-right-downward-right-b__melee-attack@2968__character-melee-info@66f8__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    u64? var_0 = get-bf-from-cache(arg_6, 0);
+    u64? var_1 = melee-dodge-pose-calibration(arg_2, ellie-2h-dodge-combat-right-downward-right-b, arg_5, var_0);
+    return var_1;
+}
+
+u64? player-2h-contextual-dodge-right-downward-right-b(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = joypad-command-active?(sprint-hold, 6);
+    u64? var_1;
+    if (var_0) {
+        u64? var_2 = string-debug(ellie-2h-dodge-combat-right-downward-right-b);
+        u64? var_3 = log-event("melee-player-dodge-contextual-to-sprint", 1, var_2, 0, 0);
+        var_1 = var_3;
+    } else {
+        u64? var_4 = string-debug(ellie-2h-dodge-combat-right-downward-right-b);
+        u64? var_5 = log-event("melee-player-dodge-contextual", 1, var_4, 0, 0);
+        var_1 = var_5;
+    }
+    return var_1;
+}
+
+u64? player-2h-contextual-dodge-right-downward-right-a__melee-attack@2b58__character-melee-info@78c0__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    u64? var_0 = get-bf-from-cache(arg_6, 0);
+    u64? var_1 = melee-dodge-pose-calibration(arg_2, ellie-2h-dodge-combat-right-downward-right-a, arg_5, var_0);
+    return var_1;
+}
+
+u64? player-2h-contextual-dodge-right-downward-right-a(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = joypad-command-active?(sprint-hold, 6);
+    u64? var_1;
+    if (var_0) {
+        u64? var_2 = string-debug(ellie-2h-dodge-combat-right-downward-right-a);
+        u64? var_3 = log-event("melee-player-dodge-contextual-to-sprint", 1, var_2, 0, 0);
+        var_1 = var_3;
+    } else {
+        u64? var_4 = string-debug(ellie-2h-dodge-combat-right-downward-right-a);
+        u64? var_5 = log-event("melee-player-dodge-contextual", 1, var_4, 0, 0);
+        var_1 = var_5;
+    }
+    return var_1;
+}
+
+u64? player-2h-contextual-dodge-back-leap__start-func-array@6200(u64? arg_0, bool arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = task-node-active?(melee-move-tester);
+    u64? var_1 = get-object-position(arg_1);
+    u64? var_2 = get-melee-evade-dir(arg_1);
+    u64? var_3 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+    u64? var_4 = quat-from-look-at(var_2, var_3);
+    u64? var_5 = alloc-bound-frame(var_1, var_4, 0, 0, 0);
+    u64? var_6 = melee-fact-get-symbol(player, contextual-dodge-npc);
+    u64? var_7 = get-object-locator(var_6);
+    u64? var_8 = get-object-locator(arg_1);
+    u64? var_9 = rotate-locator-lookat(var_7, var_8, 1.00, 0);
+    u64? var_10 = get-object-facing-angle-plus(var_5, var_9, 2, 1);
+    u64? var_11 = melee-character-bit-check(arg_2, 1);
+    melee-debug-text-file-line-fail("(melee-character-bit-check defender valid-defenders)", "t2r/src/game/scriptx/melee/player-standing/imports/player-standing-macros.dcx", 8479);
+    bool var_12 = var_0 && var_10 && var_10;
+    return var_12;
+}
+
+u64? player-2h-contextual-dodge-left-contextual-DEBUG-ALL__start-func-array@8498(u64? arg_0, bool arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = task-node-active?(melee-move-tester);
+    u64? var_1 = get-object-position(arg_1);
+    u64? var_2 = get-melee-evade-dir(arg_1);
+    u64? var_3 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+    u64? var_4 = quat-from-look-at(var_2, var_3);
+    u64? var_5 = alloc-bound-frame(var_1, var_4, 0, 0, 0);
+    u64? var_6 = melee-fact-get-symbol(player, contextual-dodge-npc);
+    u64? var_7 = get-object-locator(var_6);
+    u64? var_8 = get-object-locator(arg_1);
+    u64? var_9 = rotate-locator-lookat(var_7, var_8, 1.00, 0);
+    u64? var_10 = get-object-facing-angle-plus(var_5, var_9, 2, 1);
+    u64? var_11 = melee-character-bit-check(arg_2, 1);
+    melee-debug-text-file-line-fail("(melee-character-bit-check defender valid-defenders)", "t2r/src/game/scriptx/melee/player-standing/imports/player-standing-macros.dcx", 8479);
+    bool var_12 = var_0 && var_10 && var_10;
+    return var_12;
+}
+
+u64? player-2h-contextual-dodge-left-contextual-DEBUG-ALL(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13) {
+    u64? var_0 = melee-character-bit-check(arg_2, #0000000040000000);
+    bool var_1 = 64 == 63 || 128 == 63 && var_0;
+    return var_1;
+}
+
+u64? player-2h-contextual-dodge-back-downward-right-b__melee-attack@3128__character-melee-info@7048__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    u64? var_0 = get-bf-from-cache(arg_6, 0);
+    u64? var_1 = melee-dodge-pose-calibration(arg_2, ellie-2h-dodge-combat-back-downward-right-b, arg_5, var_0);
+    return var_1;
+}
+
+u64? player-2h-contextual-dodge-back-downward-right-b__start-func-array@8480(u64? arg_0, bool arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = task-node-active?(melee-move-tester);
+    u64? var_1 = get-object-position(arg_1);
+    u64? var_2 = get-melee-evade-dir(arg_1);
+    u64? var_3 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+    u64? var_4 = quat-from-look-at(var_2, var_3);
+    u64? var_5 = alloc-bound-frame(var_1, var_4, 0, 0, 0);
+    u64? var_6 = melee-fact-get-symbol(player, contextual-dodge-npc);
+    u64? var_7 = get-object-locator(var_6);
+    u64? var_8 = get-object-locator(arg_1);
+    u64? var_9 = rotate-locator-lookat(var_7, var_8, 1.00, 0);
+    u64? var_10 = get-object-facing-angle-plus(var_5, var_9, 2, 1);
+    u64? var_11 = melee-character-bit-check(arg_2, 1);
+    melee-debug-text-file-line-fail("(melee-character-bit-check defender valid-defenders)", "t2r/src/game/scriptx/melee/player-standing/imports/player-standing-macros.dcx", 8479);
+    bool var_12 = var_0 && var_10 && var_10;
+    return var_12;
+}
+
+u64? player-2h-contextual-dodge-back-downward-right-b(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = joypad-command-active?(sprint-hold, 6);
+    u64? var_1;
+    if (var_0) {
+        u64? var_2 = string-debug(ellie-2h-dodge-combat-back-downward-right-b);
+        u64? var_3 = log-event("melee-player-dodge-contextual-to-sprint", 1, var_2, 0, 0);
+        var_1 = var_3;
+    } else {
+        u64? var_4 = string-debug(ellie-2h-dodge-combat-back-downward-right-b);
+        u64? var_5 = log-event("melee-player-dodge-contextual", 1, var_4, 0, 0);
+        var_1 = var_5;
+    }
+    return var_1;
+}
+
+u64? player-2h-contextual-dodge-back-downward-right-c__melee-attack@3318__character-melee-info@7240__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    u64? var_0 = get-bf-from-cache(arg_6, 0);
+    u64? var_1 = melee-dodge-pose-calibration(arg_2, ellie-2h-dodge-combat-back-downward-right-c, arg_5, var_0);
+    return var_1;
+}
+
+u64? player-2h-contextual-dodge-back-downward-right-c(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = joypad-command-active?(sprint-hold, 6);
+    u64? var_1;
+    if (var_0) {
+        u64? var_2 = string-debug(ellie-2h-dodge-combat-back-downward-right-c);
+        u64? var_3 = log-event("melee-player-dodge-contextual-to-sprint", 1, var_2, 0, 0);
+        var_1 = var_3;
+    } else {
+        u64? var_4 = string-debug(ellie-2h-dodge-combat-back-downward-right-c);
+        u64? var_5 = log-event("melee-player-dodge-contextual", 1, var_4, 0, 0);
+        var_1 = var_5;
+    }
+    return var_1;
+}
+
+u64? player-2h-contextual-dodge-back-downward-right-a__melee-attack@3508__character-melee-info@6fa0__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    u64? var_0 = get-bf-from-cache(arg_6, 0);
+    u64? var_1 = melee-dodge-pose-calibration(arg_2, ellie-2h-dodge-combat-back-downward-right-a, arg_5, var_0);
+    return var_1;
+}
+
+u64? player-2h-contextual-dodge-back-downward-right-a(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = joypad-command-active?(sprint-hold, 6);
+    u64? var_1;
+    if (var_0) {
+        u64? var_2 = string-debug(ellie-2h-dodge-combat-back-downward-right-a);
+        u64? var_3 = log-event("melee-player-dodge-contextual-to-sprint", 1, var_2, 0, 0);
+        var_1 = var_3;
+    } else {
+        u64? var_4 = string-debug(ellie-2h-dodge-combat-back-downward-right-a);
+        u64? var_5 = log-event("melee-player-dodge-contextual", 1, var_4, 0, 0);
+        var_1 = var_5;
+    }
+    return var_1;
+}
+
+u64? player-2h-contextual-dodge-back-downward-left-a__melee-attack@36f8__character-melee-info@6ac0__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    u64? var_0 = get-bf-from-cache(arg_6, 0);
+    u64? var_1 = melee-dodge-pose-calibration(arg_2, ellie-2h-dodge-combat-back-downward-left-a, arg_5, var_0);
+    return var_1;
+}
+
+u64? player-2h-contextual-dodge-back-downward-left-a__start-func-array@7728(u64? arg_0, bool arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = task-node-active?(melee-move-tester);
+    u64? var_1 = get-object-position(arg_1);
+    u64? var_2 = get-melee-evade-dir(arg_1);
+    u64? var_3 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+    u64? var_4 = quat-from-look-at(var_2, var_3);
+    u64? var_5 = alloc-bound-frame(var_1, var_4, 0, 0, 0);
+    u64? var_6 = melee-fact-get-symbol(player, contextual-dodge-npc);
+    u64? var_7 = get-object-locator(var_6);
+    u64? var_8 = get-object-locator(arg_1);
+    u64? var_9 = rotate-locator-lookat(var_7, var_8, 1.00, 0);
+    u64? var_10 = get-object-facing-angle-plus(var_5, var_9, 2, 1);
+    u64? var_11 = melee-character-bit-check(arg_2, 1);
+    melee-debug-text-file-line-fail("(melee-character-bit-check defender valid-defenders)", "t2r/src/game/scriptx/melee/player-standing/imports/player-standing-macros.dcx", 8479);
+    bool var_12 = var_0 && var_10 && var_10;
+    return var_12;
+}
+
+u64? player-2h-contextual-dodge-back-downward-left-a(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = joypad-command-active?(sprint-hold, 6);
+    u64? var_1;
+    if (var_0) {
+        u64? var_2 = string-debug(ellie-2h-dodge-combat-back-downward-left-a);
+        u64? var_3 = log-event("melee-player-dodge-contextual-to-sprint", 1, var_2, 0, 0);
+        var_1 = var_3;
+    } else {
+        u64? var_4 = string-debug(ellie-2h-dodge-combat-back-downward-left-a);
+        u64? var_5 = log-event("melee-player-dodge-contextual", 1, var_4, 0, 0);
+        var_1 = var_5;
+    }
+    return var_1;
+}
+
+u64? player-2h-contextual-dodge-back-downward-left-b__melee-attack@3ad8__character-melee-info@7800__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    u64? var_0 = get-bf-from-cache(arg_6, 0);
+    u64? var_1 = melee-dodge-pose-calibration(arg_2, ellie-2h-dodge-combat-back-downward-left-b, arg_5, var_0);
+    return var_1;
+}
+
+u64? player-2h-contextual-dodge-back-downward-left-b(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = joypad-command-active?(sprint-hold, 6);
+    u64? var_1;
+    if (var_0) {
+        u64? var_2 = string-debug(ellie-2h-dodge-combat-back-downward-left-b);
+        u64? var_3 = log-event("melee-player-dodge-contextual-to-sprint", 1, var_2, 0, 0);
+        var_1 = var_3;
+    } else {
+        u64? var_4 = string-debug(ellie-2h-dodge-combat-back-downward-left-b);
+        u64? var_5 = log-event("melee-player-dodge-contextual", 1, var_4, 0, 0);
+        var_1 = var_5;
+    }
+    return var_1;
+}
+
+u64? player-2h-contextual-dodge-left-downward-right-a__melee-attack@3cc8__character-melee-info@8778__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    u64? var_0 = get-bf-from-cache(arg_6, 0);
+    u64? var_1 = melee-dodge-pose-calibration(arg_2, ellie-2h-dodge-combat-left-downward-right-a, arg_5, var_0);
+    return var_1;
+}
+
+u64? player-2h-contextual-dodge-left-downward-right-a__start-func-array@8838(u64? arg_0, bool arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = task-node-active?(melee-move-tester);
+    u64? var_1 = get-object-position(arg_1);
+    u64? var_2 = get-melee-evade-dir(arg_1);
+    u64? var_3 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+    u64? var_4 = quat-from-look-at(var_2, var_3);
+    u64? var_5 = alloc-bound-frame(var_1, var_4, 0, 0, 0);
+    u64? var_6 = melee-fact-get-symbol(player, contextual-dodge-npc);
+    u64? var_7 = get-object-locator(var_6);
+    u64? var_8 = get-object-locator(arg_1);
+    u64? var_9 = rotate-locator-lookat(var_7, var_8, 1.00, 0);
+    u64? var_10 = get-object-facing-angle-plus(var_5, var_9, 2, 1);
+    u64? var_11 = melee-character-bit-check(arg_2, 1);
+    melee-debug-text-file-line-fail("(melee-character-bit-check defender valid-defenders)", "t2r/src/game/scriptx/melee/player-standing/imports/player-standing-macros.dcx", 8479);
+    bool var_12 = var_0 && var_10 && var_10;
+    return var_12;
+}
+
+u64? player-2h-contextual-dodge-left-downward-right-a(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = joypad-command-active?(sprint-hold, 6);
+    u64? var_1;
+    if (var_0) {
+        u64? var_2 = string-debug(ellie-2h-dodge-combat-left-downward-right-a);
+        u64? var_3 = log-event("melee-player-dodge-contextual-to-sprint", 1, var_2, 0, 0);
+        var_1 = var_3;
+    } else {
+        u64? var_4 = string-debug(ellie-2h-dodge-combat-left-downward-right-a);
+        u64? var_5 = log-event("melee-player-dodge-contextual", 1, var_4, 0, 0);
+        var_1 = var_5;
+    }
+    return var_1;
+}
+
+u64? player-2h-contextual-dodge-left-downward-right-b__melee-attack@3eb8__character-melee-info@6650__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    u64? var_0 = get-bf-from-cache(arg_6, 0);
+    u64? var_1 = melee-dodge-pose-calibration(arg_2, ellie-2h-dodge-combat-left-downward-right-b, arg_5, var_0);
+    return var_1;
+}
+
+u64? player-2h-contextual-dodge-left-downward-right-b(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = joypad-command-active?(sprint-hold, 6);
+    u64? var_1;
+    if (var_0) {
+        u64? var_2 = string-debug(ellie-2h-dodge-combat-left-downward-right-b);
+        u64? var_3 = log-event("melee-player-dodge-contextual-to-sprint", 1, var_2, 0, 0);
+        var_1 = var_3;
+    } else {
+        u64? var_4 = string-debug(ellie-2h-dodge-combat-left-downward-right-b);
+        u64? var_5 = log-event("melee-player-dodge-contextual", 1, var_4, 0, 0);
+        var_1 = var_5;
+    }
+    return var_1;
+}
+
+u64? player-2h-contextual-dodge-left-downward-right-c__melee-attack@40a8__character-melee-info@6338__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    u64? var_0 = get-bf-from-cache(arg_6, 0);
+    u64? var_1 = melee-dodge-pose-calibration(arg_2, ellie-2h-dodge-combat-left-downward-right-c, arg_5, var_0);
+    return var_1;
+}
+
+u64? player-2h-contextual-dodge-left-downward-right-c(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = joypad-command-active?(sprint-hold, 6);
+    u64? var_1;
+    if (var_0) {
+        u64? var_2 = string-debug(ellie-2h-dodge-combat-left-downward-right-c);
+        u64? var_3 = log-event("melee-player-dodge-contextual-to-sprint", 1, var_2, 0, 0);
+        var_1 = var_3;
+    } else {
+        u64? var_4 = string-debug(ellie-2h-dodge-combat-left-downward-right-c);
+        u64? var_5 = log-event("melee-player-dodge-contextual", 1, var_4, 0, 0);
+        var_1 = var_5;
+    }
+    return var_1;
+}
+
+u64? player-2h-contextual-dodge-right-horiz-right-a__start-func-array@6410(u64? arg_0, bool arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = task-node-active?(melee-move-tester);
+    u64? var_1 = get-object-position(arg_1);
+    u64? var_2 = get-melee-evade-dir(arg_1);
+    u64? var_3 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+    u64? var_4 = quat-from-look-at(var_2, var_3);
+    u64? var_5 = alloc-bound-frame(var_1, var_4, 0, 0, 0);
+    u64? var_6 = melee-fact-get-symbol(player, contextual-dodge-npc);
+    u64? var_7 = get-object-locator(var_6);
+    u64? var_8 = get-object-locator(arg_1);
+    u64? var_9 = rotate-locator-lookat(var_7, var_8, 1.00, 0);
+    u64? var_10 = get-object-facing-angle-plus(var_5, var_9, 2, 1);
+    u64? var_11 = melee-character-bit-check(arg_2, 1);
+    melee-debug-text-file-line-fail("(melee-character-bit-check defender valid-defenders)", "t2r/src/game/scriptx/melee/player-standing/imports/player-standing-macros.dcx", 8479);
+    bool var_12 = var_0 && var_10 && var_10;
+    return var_12;
+}
+
+u64? player-2h-contextual-dodge-back-upward-left-a__melee-attack@4678__character-melee-info@7f58__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    u64? var_0 = get-bf-from-cache(arg_6, 0);
+    u64? var_1 = melee-dodge-pose-calibration(arg_2, ellie-2h-dodge-combat-back-upward-left-a, arg_5, var_0);
+    return var_1;
+}
+
+u64? player-2h-contextual-dodge-back-upward-left-a__start-func-array@6aa8(u64? arg_0, bool arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = task-node-active?(melee-move-tester);
+    u64? var_1 = get-object-position(arg_1);
+    u64? var_2 = get-melee-evade-dir(arg_1);
+    u64? var_3 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+    u64? var_4 = quat-from-look-at(var_2, var_3);
+    u64? var_5 = alloc-bound-frame(var_1, var_4, 0, 0, 0);
+    u64? var_6 = melee-fact-get-symbol(player, contextual-dodge-npc);
+    u64? var_7 = get-object-locator(var_6);
+    u64? var_8 = get-object-locator(arg_1);
+    u64? var_9 = rotate-locator-lookat(var_7, var_8, 1.00, 0);
+    u64? var_10 = get-object-facing-angle-plus(var_5, var_9, 2, 1);
+    u64? var_11 = melee-character-bit-check(arg_2, 1);
+    melee-debug-text-file-line-fail("(melee-character-bit-check defender valid-defenders)", "t2r/src/game/scriptx/melee/player-standing/imports/player-standing-macros.dcx", 8479);
+    bool var_12 = var_0 && var_10 && var_10;
+    return var_12;
+}
+
+u64? player-2h-contextual-dodge-back-upward-left-a(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = joypad-command-active?(sprint-hold, 6);
+    u64? var_1;
+    if (var_0) {
+        u64? var_2 = string-debug(ellie-2h-dodge-combat-back-upward-left-a);
+        u64? var_3 = log-event("melee-player-dodge-contextual-to-sprint", 1, var_2, 0, 0);
+        var_1 = var_3;
+    } else {
+        u64? var_4 = string-debug(ellie-2h-dodge-combat-back-upward-left-a);
+        u64? var_5 = log-event("melee-player-dodge-contextual", 1, var_4, 0, 0);
+        var_1 = var_5;
+    }
+    return var_1;
+}
+
+u64? player-2h-contextual-dodge-left-upward-left-b__melee-attack@4868__character-melee-info@6ba8__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    u64? var_0 = get-bf-from-cache(arg_6, 0);
+    u64? var_1 = melee-dodge-pose-calibration(arg_2, ellie-2h-dodge-combat-left-upward-left-b, arg_5, var_0);
+    return var_1;
+}
+
+u64? player-2h-contextual-dodge-left-upward-left-b__start-func-array@8318(u64? arg_0, bool arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = task-node-active?(melee-move-tester);
+    u64? var_1 = get-object-position(arg_1);
+    u64? var_2 = get-melee-evade-dir(arg_1);
+    u64? var_3 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+    u64? var_4 = quat-from-look-at(var_2, var_3);
+    u64? var_5 = alloc-bound-frame(var_1, var_4, 0, 0, 0);
+    u64? var_6 = melee-fact-get-symbol(player, contextual-dodge-npc);
+    u64? var_7 = get-object-locator(var_6);
+    u64? var_8 = get-object-locator(arg_1);
+    u64? var_9 = rotate-locator-lookat(var_7, var_8, 1.00, 0);
+    u64? var_10 = get-object-facing-angle-plus(var_5, var_9, 2, 1);
+    u64? var_11 = melee-character-bit-check(arg_2, 1);
+    melee-debug-text-file-line-fail("(melee-character-bit-check defender valid-defenders)", "t2r/src/game/scriptx/melee/player-standing/imports/player-standing-macros.dcx", 8479);
+    bool var_12 = var_0 && var_10 && var_10;
+    return var_12;
+}
+
+u64? player-2h-contextual-dodge-left-upward-left-b(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = joypad-command-active?(sprint-hold, 6);
+    u64? var_1;
+    if (var_0) {
+        u64? var_2 = string-debug(ellie-2h-dodge-combat-left-upward-left-b);
+        u64? var_3 = log-event("melee-player-dodge-contextual-to-sprint", 1, var_2, 0, 0);
+        var_1 = var_3;
+    } else {
+        u64? var_4 = string-debug(ellie-2h-dodge-combat-left-upward-left-b);
+        u64? var_5 = log-event("melee-player-dodge-contextual", 1, var_4, 0, 0);
+        var_1 = var_5;
+    }
+    return var_1;
+}
+
+u64? player-2h-contextual-dodge-left-leap__start-func-array@63e0(u64? arg_0, bool arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = task-node-active?(melee-move-tester);
+    u64? var_1 = get-object-position(arg_1);
+    u64? var_2 = get-melee-evade-dir(arg_1);
+    u64? var_3 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+    u64? var_4 = quat-from-look-at(var_2, var_3);
+    u64? var_5 = alloc-bound-frame(var_1, var_4, 0, 0, 0);
+    u64? var_6 = melee-fact-get-symbol(player, contextual-dodge-npc);
+    u64? var_7 = get-object-locator(var_6);
+    u64? var_8 = get-object-locator(arg_1);
+    u64? var_9 = rotate-locator-lookat(var_7, var_8, 1.00, 0);
+    u64? var_10 = get-object-facing-angle-plus(var_5, var_9, 2, 1);
+    u64? var_11 = melee-character-bit-check(arg_2, 1);
+    melee-debug-text-file-line-fail("(melee-character-bit-check defender valid-defenders)", "t2r/src/game/scriptx/melee/player-standing/imports/player-standing-macros.dcx", 8479);
+    bool var_12 = var_0 && var_10 && var_10;
+    return var_12;
+}
+
+u64? player-2h-contextual-dodge-right-downward-left-b__melee-attack@4c48__character-melee-info@8048__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    u64? var_0 = get-bf-from-cache(arg_6, 0);
+    u64? var_1 = melee-dodge-pose-calibration(arg_2, ellie-2h-dodge-combat-right-downward-left-b, arg_5, var_0);
+    return var_1;
+}
+
+u64? player-2h-contextual-dodge-right-downward-left-b__start-func-array@7480(u64? arg_0, bool arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = task-node-active?(melee-move-tester);
+    u64? var_1 = get-object-position(arg_1);
+    u64? var_2 = get-melee-evade-dir(arg_1);
+    u64? var_3 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+    u64? var_4 = quat-from-look-at(var_2, var_3);
+    u64? var_5 = alloc-bound-frame(var_1, var_4, 0, 0, 0);
+    u64? var_6 = melee-fact-get-symbol(player, contextual-dodge-npc);
+    u64? var_7 = get-object-locator(var_6);
+    u64? var_8 = get-object-locator(arg_1);
+    u64? var_9 = rotate-locator-lookat(var_7, var_8, 1.00, 0);
+    u64? var_10 = get-object-facing-angle-plus(var_5, var_9, 2, 1);
+    u64? var_11 = melee-character-bit-check(arg_2, 1);
+    melee-debug-text-file-line-fail("(melee-character-bit-check defender valid-defenders)", "t2r/src/game/scriptx/melee/player-standing/imports/player-standing-macros.dcx", 8479);
+    bool var_12 = var_0 && var_10 && var_10;
+    return var_12;
+}
+
+u64? player-2h-contextual-dodge-right-downward-left-b(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = joypad-command-active?(sprint-hold, 6);
+    u64? var_1;
+    if (var_0) {
+        u64? var_2 = string-debug(ellie-2h-dodge-combat-right-downward-left-b);
+        u64? var_3 = log-event("melee-player-dodge-contextual-to-sprint", 1, var_2, 0, 0);
+        var_1 = var_3;
+    } else {
+        u64? var_4 = string-debug(ellie-2h-dodge-combat-right-downward-left-b);
+        u64? var_5 = log-event("melee-player-dodge-contextual", 1, var_4, 0, 0);
+        var_1 = var_5;
+    }
+    return var_1;
+}
+
+u64? player-2h-contextual-dodge-right-downward-left-a__melee-attack@4e38__character-melee-info@6440__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    u64? var_0 = get-bf-from-cache(arg_6, 0);
+    u64? var_1 = melee-dodge-pose-calibration(arg_2, ellie-2h-dodge-combat-right-downward-left-a, arg_5, var_0);
+    return var_1;
+}
+
+u64? player-2h-contextual-dodge-right-downward-left-a(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = joypad-command-active?(sprint-hold, 6);
+    u64? var_1;
+    if (var_0) {
+        u64? var_2 = string-debug(ellie-2h-dodge-combat-right-downward-left-a);
+        u64? var_3 = log-event("melee-player-dodge-contextual-to-sprint", 1, var_2, 0, 0);
+        var_1 = var_3;
+    } else {
+        u64? var_4 = string-debug(ellie-2h-dodge-combat-right-downward-left-a);
+        u64? var_5 = log-event("melee-player-dodge-contextual", 1, var_4, 0, 0);
+        var_1 = var_5;
+    }
+    return var_1;
+}
+
+u64? player-2h-contextual-dodge-left-horiz-right-a__melee-attack@5028__character-melee-info@7360__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    u64? var_0 = get-bf-from-cache(arg_6, 0);
+    u64? var_1 = melee-dodge-pose-calibration(arg_2, ellie-2h-dodge-combat-left-horiz-right-a, arg_5, var_0);
+    return var_1;
+}
+
+u64? player-2h-contextual-dodge-left-horiz-right-a(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = joypad-command-active?(sprint-hold, 6);
+    u64? var_1;
+    if (var_0) {
+        u64? var_2 = string-debug(ellie-2h-dodge-combat-left-horiz-right-a);
+        u64? var_3 = log-event("melee-player-dodge-contextual-to-sprint", 1, var_2, 0, 0);
+        var_1 = var_3;
+    } else {
+        u64? var_4 = string-debug(ellie-2h-dodge-combat-left-horiz-right-a);
+        u64? var_5 = log-event("melee-player-dodge-contextual", 1, var_4, 0, 0);
+        var_1 = var_5;
+    }
+    return var_1;
+}
+
+u64? player-2h-contextual-dodge-right-contextual-DEBUG-ALL__start-func-array@6eb0(u64? arg_0, bool arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = task-node-active?(melee-move-tester);
+    u64? var_1 = get-object-position(arg_1);
+    u64? var_2 = get-melee-evade-dir(arg_1);
+    u64? var_3 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+    u64? var_4 = quat-from-look-at(var_2, var_3);
+    u64? var_5 = alloc-bound-frame(var_1, var_4, 0, 0, 0);
+    u64? var_6 = melee-fact-get-symbol(player, contextual-dodge-npc);
+    u64? var_7 = get-object-locator(var_6);
+    u64? var_8 = get-object-locator(arg_1);
+    u64? var_9 = rotate-locator-lookat(var_7, var_8, 1.00, 0);
+    u64? var_10 = get-object-facing-angle-plus(var_5, var_9, 2, 1);
+    u64? var_11 = melee-character-bit-check(arg_2, 1);
+    melee-debug-text-file-line-fail("(melee-character-bit-check defender valid-defenders)", "t2r/src/game/scriptx/melee/player-standing/imports/player-standing-macros.dcx", 8479);
+    bool var_12 = var_0 && var_10 && var_10;
+    return var_12;
+}
+
+u64? player-2h-contextual-dodge-back-contextual-DEBUG-ALL__start-func-array@8718(u64? arg_0, bool arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = task-node-active?(melee-move-tester);
+    u64? var_1 = get-object-position(arg_1);
+    u64? var_2 = get-melee-evade-dir(arg_1);
+    u64? var_3 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+    u64? var_4 = quat-from-look-at(var_2, var_3);
+    u64? var_5 = alloc-bound-frame(var_1, var_4, 0, 0, 0);
+    u64? var_6 = melee-fact-get-symbol(player, contextual-dodge-npc);
+    u64? var_7 = get-object-locator(var_6);
+    u64? var_8 = get-object-locator(arg_1);
+    u64? var_9 = rotate-locator-lookat(var_7, var_8, 1.00, 0);
+    u64? var_10 = get-object-facing-angle-plus(var_5, var_9, 2, 1);
+    u64? var_11 = melee-character-bit-check(arg_2, 1);
+    melee-debug-text-file-line-fail("(melee-character-bit-check defender valid-defenders)", "t2r/src/game/scriptx/melee/player-standing/imports/player-standing-macros.dcx", 8479);
+    bool var_12 = var_0 && var_10 && var_10;
+    return var_12;
+}
+
+u64? player-2h-contextual-dodge-front-contextual-DEBUG-ALL__start-func-array@8030(u64? arg_0, bool arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = task-node-active?(melee-move-tester);
+    u64? var_1 = get-object-position(arg_1);
+    u64? var_2 = get-melee-evade-dir(arg_1);
+    u64? var_3 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+    u64? var_4 = quat-from-look-at(var_2, var_3);
+    u64? var_5 = alloc-bound-frame(var_1, var_4, 0, 0, 0);
+    u64? var_6 = melee-fact-get-symbol(player, contextual-dodge-npc);
+    u64? var_7 = get-object-locator(var_6);
+    u64? var_8 = get-object-locator(arg_1);
+    u64? var_9 = rotate-locator-lookat(var_7, var_8, 1.00, 0);
+    u64? var_10 = get-object-facing-angle-plus(var_5, var_9, 2, 1);
+    u64? var_11 = melee-character-bit-check(arg_2, 1);
+    melee-debug-text-file-line-fail("(melee-character-bit-check defender valid-defenders)", "t2r/src/game/scriptx/melee/player-standing/imports/player-standing-macros.dcx", 8479);
+    bool var_12 = var_0 && var_10 && var_10;
+    return var_12;
+}
+
+u64? player-2h-contextual-dodge-left-downward-left-b__melee-attack@57e8__character-melee-info@6278__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    u64? var_0 = get-bf-from-cache(arg_6, 0);
+    u64? var_1 = melee-dodge-pose-calibration(arg_2, ellie-2h-dodge-combat-left-downward-left-b, arg_5, var_0);
+    return var_1;
+}
+
+u64? player-2h-contextual-dodge-left-downward-left-b__start-func-array@5fc0(u64? arg_0, bool arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = task-node-active?(melee-move-tester);
+    u64? var_1 = get-object-position(arg_1);
+    u64? var_2 = get-melee-evade-dir(arg_1);
+    u64? var_3 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+    u64? var_4 = quat-from-look-at(var_2, var_3);
+    u64? var_5 = alloc-bound-frame(var_1, var_4, 0, 0, 0);
+    u64? var_6 = melee-fact-get-symbol(player, contextual-dodge-npc);
+    u64? var_7 = get-object-locator(var_6);
+    u64? var_8 = get-object-locator(arg_1);
+    u64? var_9 = rotate-locator-lookat(var_7, var_8, 1.00, 0);
+    u64? var_10 = get-object-facing-angle-plus(var_5, var_9, 2, 1);
+    u64? var_11 = melee-character-bit-check(arg_2, 1);
+    melee-debug-text-file-line-fail("(melee-character-bit-check defender valid-defenders)", "t2r/src/game/scriptx/melee/player-standing/imports/player-standing-macros.dcx", 8479);
+    bool var_12 = var_0 && var_10 && var_10;
+    return var_12;
+}
+
+u64? player-2h-contextual-dodge-left-downward-left-b(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = joypad-command-active?(sprint-hold, 6);
+    u64? var_1;
+    if (var_0) {
+        u64? var_2 = string-debug(ellie-2h-dodge-combat-left-downward-left-b);
+        u64? var_3 = log-event("melee-player-dodge-contextual-to-sprint", 1, var_2, 0, 0);
+        var_1 = var_3;
+    } else {
+        u64? var_4 = string-debug(ellie-2h-dodge-combat-left-downward-left-b);
+        u64? var_5 = log-event("melee-player-dodge-contextual", 1, var_4, 0, 0);
+        var_1 = var_5;
+    }
+    return var_1;
+}
+
+u64? player-2h-contextual-dodge-left-downward-left-a__melee-attack@59d8__character-melee-info@8330__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    u64? var_0 = get-bf-from-cache(arg_6, 0);
+    u64? var_1 = melee-dodge-pose-calibration(arg_2, ellie-2h-dodge-combat-left-downward-left-a, arg_5, var_0);
+    return var_1;
+}
+
+u64? player-2h-contextual-dodge-left-downward-left-a(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = joypad-command-active?(sprint-hold, 6);
+    u64? var_1;
+    if (var_0) {
+        u64? var_2 = string-debug(ellie-2h-dodge-combat-left-downward-left-a);
+        u64? var_3 = log-event("melee-player-dodge-contextual-to-sprint", 1, var_2, 0, 0);
+        var_1 = var_3;
+    } else {
+        u64? var_4 = string-debug(ellie-2h-dodge-combat-left-downward-left-a);
+        u64? var_5 = log-event("melee-player-dodge-contextual", 1, var_4, 0, 0);
+        var_1 = var_5;
+    }
+    return var_1;
+}
+
+u64? player-2h-contextual-dodge-left-upward-right-a__melee-attack@5bc8__character-melee-info@6df0__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    u64? var_0 = get-bf-from-cache(arg_6, 0);
+    u64? var_1 = melee-dodge-pose-calibration(arg_2, ellie-2h-dodge-combat-left-upward-right-a, arg_5, var_0);
+    return var_1;
+}
+
+u64? player-2h-contextual-dodge-left-upward-right-a(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = joypad-command-active?(sprint-hold, 6);
+    u64? var_1;
+    if (var_0) {
+        u64? var_2 = string-debug(ellie-2h-dodge-combat-left-upward-right-a);
+        u64? var_3 = log-event("melee-player-dodge-contextual-to-sprint", 1, var_2, 0, 0);
+        var_1 = var_3;
+    } else {
+        u64? var_4 = string-debug(ellie-2h-dodge-combat-left-upward-right-a);
+        u64? var_5 = log-event("melee-player-dodge-contextual", 1, var_4, 0, 0);
+        var_1 = var_5;
+    }
+    return var_1;
+}
+
+u64? player-2h-contextual-dodge-right-upward-left-a__melee-attack@5db8__character-melee-info@7a58__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    u64? var_0 = get-bf-from-cache(arg_6, 0);
+    u64? var_1 = melee-dodge-pose-calibration(arg_2, ellie-2h-dodge-combat-right-upward-left-a, arg_5, var_0);
+    return var_1;
+}
+
+u64? player-2h-contextual-dodge-right-upward-left-a__start-func-array@6218(u64? arg_0, bool arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = task-node-active?(melee-move-tester);
+    u64? var_1 = get-object-position(arg_1);
+    u64? var_2 = get-melee-evade-dir(arg_1);
+    u64? var_3 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+    u64? var_4 = quat-from-look-at(var_2, var_3);
+    u64? var_5 = alloc-bound-frame(var_1, var_4, 0, 0, 0);
+    u64? var_6 = melee-fact-get-symbol(player, contextual-dodge-npc);
+    u64? var_7 = get-object-locator(var_6);
+    u64? var_8 = get-object-locator(arg_1);
+    u64? var_9 = rotate-locator-lookat(var_7, var_8, 1.00, 0);
+    u64? var_10 = get-object-facing-angle-plus(var_5, var_9, 2, 1);
+    u64? var_11 = melee-character-bit-check(arg_2, 1);
+    melee-debug-text-file-line-fail("(melee-character-bit-check defender valid-defenders)", "t2r/src/game/scriptx/melee/player-standing/imports/player-standing-macros.dcx", 8479);
+    bool var_12 = var_0 && var_10 && var_10;
+    return var_12;
+}
+
+u64? player-2h-contextual-dodge-right-upward-left-a(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = joypad-command-active?(sprint-hold, 6);
+    u64? var_1;
+    if (var_0) {
+        u64? var_2 = string-debug(ellie-2h-dodge-combat-right-upward-left-a);
+        u64? var_3 = log-event("melee-player-dodge-contextual-to-sprint", 1, var_2, 0, 0);
+        var_1 = var_3;
+    } else {
+        u64? var_4 = string-debug(ellie-2h-dodge-combat-right-upward-left-a);
+        u64? var_5 = log-event("melee-player-dodge-contextual", 1, var_4, 0, 0);
+        var_1 = var_5;
+    }
+    return var_1;
+}
+

@@ -78,3 +78,23 @@ u64? tsk-tra-we-should-turn-back__level-scripted-set@d18() {
     return !var_0;
 }
 
+u64? tsk-tra-hideout-return__level-set@2d8__level-scripted-set@640__() {
+    u64? var_0 = task-complete?(patrol-chalet, tra-hideout-return-a);
+    return !var_0;
+}
+
+u64? tsk-tra-hideout-return__level-scripted-set@d00() {
+    u64? var_0 = task-complete?(patrol-chalet, tra-hideout-return-a);
+    return var_0;
+}
+
+u64? tsk-tra-we-should-turn-back__level-set@5c0__level-scripted-set@6d0__() {
+    u64? var_0 = get-boolean(#8FECA173AA95DC53, ss-cin-tra-we-should-turn-back-1);
+    return var_0;
+}
+
+u64? tsk-tra-we-should-turn-back__level-scripted-set@d18() {
+    u64? var_0 = get-boolean(#8FECA173AA95DC53, ss-cin-tra-we-should-turn-back-1);
+    return !var_0;
+}
+

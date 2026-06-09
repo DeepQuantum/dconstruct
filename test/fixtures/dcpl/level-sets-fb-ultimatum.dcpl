@@ -82,3 +82,24 @@ u64? tsk-efu-hospital-corridor__level-scripted-set@370() {
     return !var_0;
 }
 
+u64? tsk-efu-post-nora-b__level-set@160__level-scripted-set@388__() {
+    u64? var_0 = is-chronological-mode-enabled?();
+    u64? var_1 = !(var_0);
+    return var_1;
+}
+
+u64? tsk-efu-post-nora-b__level-scripted-set@6a0() {
+    u64? var_0 = is-chronological-mode-enabled?();
+    return var_0;
+}
+
+u64? tsk-efu-hospital-corridor__level-set@218__level-scripted-set@508__() {
+    u64? var_0 = get-boolean(#F70D79B212C10C32, ss-efu-enter-corridor-1);
+    return var_0;
+}
+
+u64? tsk-efu-hospital-corridor__level-scripted-set@370() {
+    u64? var_0 = get-boolean(#F70D79B212C10C32, ss-efu-enter-corridor-1);
+    return !var_0;
+}
+

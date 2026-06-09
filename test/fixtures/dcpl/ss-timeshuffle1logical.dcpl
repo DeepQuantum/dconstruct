@@ -514,3 +514,132 @@ lambda {
     go(main, 1);
 }
 
+lambda {
+    u64? var_0 = is-final-build?();
+    if (!var_0) {
+        u64? var_1 = #5445173390656D6D("[KK] Chronological Mode Started");
+        display(var_1, 19);
+    }
+}
+
+lambda {
+    set-boolean(cinematic-started?, 0, self);
+}
+
+lambda {
+    u64? var_0 = event-arg-symbol(0);
+    u64? var_1 = event-arg-symbol(1);
+    u64? var_2 = is-final-build?();
+    u16 var_3;
+    if (!var_2) {
+        u64? var_4 = string-debug(var_0);
+        u64? var_5 = string-debug(var_1);
+        u64? var_6 = #5445173390656D6D("[KK] Task Active: %s | %s...", var_4, var_5);
+        u64? var_7 = display(var_6, 19);
+        var_3 = var_7;
+    } else {
+        var_3 = 0;
+    }
+}
+
+lambda {
+    u64? var_0 = task-active?(ellie-flashback-museum, efm-camp-guitar);
+    if (var_0) {
+        go(black, 1);
+    }
+}
+
+lambda {
+    u64? var_0 = task-active?(forward-base, fob-arrive-at-base);
+    if (var_0) {
+        go(black, 1);
+    }
+}
+
+lambda {
+    u64? var_0 = task-active?(ellie-flashback-ultimatum, efu-post-nora-a);
+    if (var_0) {
+        go(black, 1);
+    }
+}
+
+lambda {
+    u64? var_0 = is-final-build?();
+    if (!var_0) {
+        u64? var_1 = event-arg-symbol(0);
+        u64? var_2 = string-debug(var_1);
+        u64? var_3 = #5445173390656D6D("[KK] Cinematic Started %s", var_2);
+        display(var_3, 19);
+    }
+}
+
+lambda {
+    u64? var_0 = event-arg-symbol(0);
+    if (var_0 == cin-efm-camp-guitar) {
+        set-boolean(cinematic-started?, 1, self);
+    }
+}
+
+lambda {
+    u64? var_0 = event-arg-symbol(0);
+    if (var_0 == cin-fob-arrive-at-base) {
+        set-boolean(cinematic-started?, 1, self);
+    }
+}
+
+lambda {
+    u64? var_0 = event-arg-symbol(0);
+    if (var_0 == cin-efu-post-nora-a) {
+        set-boolean(cinematic-started?, 1, self);
+    }
+}
+
+lambda {
+    u64? var_0 = is-final-build?();
+    if (!var_0) {
+        u64? var_1 = #5445173390656D6D("[KK] Chronological Mode Ended");
+        display(var_1, 19);
+    }
+}
+
+lambda {
+    u64? var_0 = is-final-build?();
+    if (!var_0) {
+        u64? var_1 = #5445173390656D6D("[KK] ss-chronological created");
+        display(var_1, 19);
+    }
+}
+
+lambda {
+    u64? var_0 = is-final-build?();
+    if (!var_0) {
+        u64? var_1 = #5445173390656D6D("[KK] Got here 1");
+        display(var_1, 19);
+    }
+}
+
+lambda {
+    u64? var_0 = get-boolean(cinematic-started?, self);
+    while (!var_0) {
+        u64? var_1 = is-final-build?();
+        if (!var_1) {
+            u64? var_2 = #5445173390656D6D("[KK] Set black fade while we wait...");
+            display(var_2, 19);
+        }
+        set-black-fade(1.00, 1, 0, 1);
+        wait-one-frame();
+    }
+}
+
+lambda {
+    u64? var_0 = is-final-build?();
+    if (!var_0) {
+        u64? var_1 = #5445173390656D6D("[KK] Got here 2");
+        display(var_1, 19);
+    }
+}
+
+lambda {
+    go(main, 1);
+}
+

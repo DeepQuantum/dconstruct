@@ -210,6 +210,7 @@ namespace dconstruct::ui {
         std::array<u64, VM_REGISTER_COUNT> m_argRegisters{};
         std::shared_ptr<dconstruct::debugger::debugger_snapshot> m_snapshot;
         ast::code_color_buffer m_instructionsAndSymbols;
+        ast::code_color_buffer m_decomp;
         dconstruct::debugger::debugger::STATE m_lastPollState = dconstruct::debugger::debugger::STATE::DETACHED;
         bool m_hasPollState = false;
         bool m_sidsSeeded = false;
@@ -4441,9 +4442,18 @@ namespace dconstruct::ui {
         m_argRegisters = snapshot.m_argumentRegisters;
 
         m_instructionsAndSymbols.clear();
+        m_decomp.clear();
         if (snapshot.m_func == nullptr) {
             append_debugger_span(m_instructionsAndSymbols, ast::AST_COLOR::COMMENT, "; no debugger snapshot\n");
             return;
+        }
+
+        if (snapshot.m_decomp != nullptr) {
+            ast::code_color_serialization_buffer color_buffer;
+            color_buffer.m_currentIndent = 0;
+            color_buffer.reserve(256);
+            snapshot.m_decomp->to_pseudo_c_colored_string(color_buffer);
+            m_decomp = color_buffer.take();
         }
 
         const function_disassembly& func = *snapshot.m_func;
@@ -4498,7 +4508,8 @@ namespace dconstruct::ui {
     enum class debug_icon {
         continue_run,
         step_instruction,
-        step_line
+        step_line,
+        detach
     };
 
     void debugger_draw_control_icon(ImDrawList* dl, debug_icon icon, ImVec2 center, f32 radius, ImU32 color) {
@@ -4541,6 +4552,15 @@ namespace dconstruct::ui {
                 dl->AddCircleFilled(ImVec2(center.x, arc_center.y + radius * 0.05F), radius * 0.27F, color);
                 break;
             }
+            case debug_icon::detach: {
+                dl->AddRectFilled(
+                    ImVec2(center.x - radius * 0.72F, center.y - radius * 0.72F),
+                    ImVec2(center.x + radius * 0.72F, center.y + radius * 0.72F),
+                    color,
+                    radius * 0.12F
+                );
+                break;
+            }
         }
     }
 
@@ -4566,8 +4586,9 @@ namespace dconstruct::ui {
         dbg.m_sidsSeeded = true;
     }
 
-    void request_debugger_attach(debugger_state& dbg) {
+    void request_debugger_attach(debugger_state& dbg, const SIDBase* sidbase) {
         seed_debugger_sids(dbg);
+        dbg.m_debugger.set_sidbase(sidbase);
         if (std::optional<std::string> attach_error = dbg.m_debugger.request_attach()) {
             dbg.m_debugger.append_output(std::format("[debugger] error: {}\n", *attach_error));
         }
@@ -4576,6 +4597,7 @@ namespace dconstruct::ui {
     void clear_debugger_snapshot_view(debugger_state& dbg) {
         dbg.m_snapshot.reset();
         dbg.m_instructionsAndSymbols.clear();
+        dbg.m_decomp.clear();
         dbg.m_registers.fill(0);
         dbg.m_argRegisters.fill(0);
     }
@@ -4609,11 +4631,9 @@ namespace dconstruct::ui {
             case debugger_type::STATE::SNAPSHOT_READY: {
                 std::shared_ptr snapshot = dbg.m_debugger.poll_snapshot();
                 final_state = dbg.m_debugger.poll_state();
-                if (snapshot != nullptr) {
-                    dbg.m_snapshot = std::move(snapshot);
-                    dbg.render(*dbg.m_snapshot);
-                    dbg.m_debugger.append_output(std::format("[debugger] got function: {}\n", dbg.m_snapshot->m_func->get_id()));
-                }
+                dbg.m_snapshot = std::move(snapshot);
+                dbg.render(*dbg.m_snapshot);
+                dbg.m_debugger.append_output(std::format("[debugger] got function: {}\n", dbg.m_snapshot->m_func->get_id()));
                 break;
             }
             case debugger_type::STATE::ERROR: {
@@ -4632,15 +4652,16 @@ namespace dconstruct::ui {
         dbg.m_hasPollState = true;
     }
 
-    void draw_debugger_controls(debugger_state& dbg) {
+    void draw_debugger_controls(debugger_state& dbg, const SIDBase* sidbase) {
         const f32 button_size = ImGui::GetFrameHeight();
         const f32 spacing = ImGui::GetStyle().ItemSpacing.x;
         const dconstruct::debugger::debugger::STATE state = dbg.m_debugger.poll_state();
         const bool attached = dbg.m_debugger.is_attached();
         const bool attaching = state == dconstruct::debugger::debugger::STATE::ATTACHING;
+        const bool can_detach = attached || attaching;
         const char* attach_label = attached ? "Attached to tlou-ii.exe" : attaching ? "Attaching..." : "Attach to tlou-ii.exe process";
         const f32 attach_width = ImGui::CalcTextSize(attach_label).x + ImGui::GetStyle().FramePadding.x * 2.0F;
-        const f32 total_width = attach_width + button_size * 3.0F + spacing * 3.0F;
+        const f32 total_width = attach_width + button_size * 4.0F + spacing * 4.0F;
         const f32 avail = ImGui::GetContentRegionAvail().x;
         if (total_width < avail) {
             ImGui::SetCursorPosX(ImGui::GetCursorPosX() + (avail - total_width) * 0.5F);
@@ -4648,7 +4669,7 @@ namespace dconstruct::ui {
 
         ImGui::BeginDisabled(attached || attaching);
         if (ImGui::Button(attach_label, ImVec2(attach_width, button_size))) {
-            request_debugger_attach(dbg);
+            request_debugger_attach(dbg, sidbase);
         }
         ImGui::EndDisabled();
         ImGui::SameLine();
@@ -4668,6 +4689,17 @@ namespace dconstruct::ui {
         ImGui::SameLine();
         if (debugger_control_button("##dbg_step_line", debug_icon::step_line, qui::color::active_palette().ButtonHovered, "Next line")) {
             dbg.m_debugger.append_output("[debugger] step line\n");
+        }
+        ImGui::EndDisabled();
+
+        ImGui::SameLine();
+        ImGui::BeginDisabled(!can_detach);
+        if (debugger_control_button("##dbg_detach", debug_icon::detach, qui::color::active_palette().AccentRed, "Detach debugger")) {
+            dbg.m_debugger.detach();
+            clear_debugger_snapshot_view(dbg);
+            dbg.m_debugger.append_output("[debugger] detach requested\n");
+            dbg.m_lastPollState = dbg.m_debugger.poll_state();
+            dbg.m_hasPollState = true;
         }
         ImGui::EndDisabled();
 
@@ -4703,7 +4735,7 @@ namespace dconstruct::ui {
         const f32 left_block_width = dbg.m_leftWidth + SPLITTER_WIDTH + dbg.m_middleWidth;
         ImGui::BeginChild("##dbg_left_block", ImVec2(left_block_width, panels_height));
         {
-            draw_debugger_controls(dbg);
+            draw_debugger_controls(dbg, state.m_sidbase.get());
 
             ImGui::BeginDisabled(panels_disabled);
             const f32 panels_row_height = std::max(1.0F, ImGui::GetContentRegionAvail().y - ImGui::GetStyle().ItemSpacing.y);
@@ -4739,10 +4771,20 @@ namespace dconstruct::ui {
             {
                 ImVec2 inner_size;
                 if (begin_labeled_table_frame("Decompilation", inner_size)) {
-                    const std::array<qui::code::colored_span, 1> spans{{
-                        {qui::code::to_u32(qui::color::active_palette().TextDisabled), "// decompilation will appear here"}
-                    }};
-                    qui::code::code_window_colored("##dbg_decomp", spans, inner_size, scheme_code_theme());
+                    if (dbg.m_snapshot != nullptr && !dbg.m_decomp.empty()) {
+                        std::vector<qui::code::colored_span> spans;
+                        spans.reserve(dbg.m_decomp.size());
+                        for (const auto& [color, text] : dbg.m_decomp) {
+                            const ImVec4 resolved = scheme_lookup(code_color_key(color), qui::color::active_palette().Text);
+                            spans.push_back({qui::code::to_u32(resolved), text});
+                        }
+                        qui::code::code_window_colored("##dbg_decomp", spans, inner_size, scheme_code_theme());
+                    } else {
+                        const std::array<qui::code::colored_span, 1> spans{{
+                            {qui::code::to_u32(qui::color::active_palette().TextDisabled), "// decompilation will appear here"}
+                        }};
+                        qui::code::code_window_colored("##dbg_decomp", spans, inner_size, scheme_code_theme());
+                    }
                 }
             }
             ImGui::EndChild();

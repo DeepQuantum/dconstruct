@@ -478,3 +478,163 @@ u16 player-contextual-dodge-wall-right(u64? arg_0, u64? arg_1, u64? arg_2, u64? 
     return var_0;
 }
 
+u16 player-contextual-dodge-wall-left__melee-attack@60__start-func-array@6d0__(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = melee-evade-matches-dir?(arg_1, 2, 0);
+    u16 var_1;
+    if (var_0) {
+        u64? var_2 = get-object-distance(arg_1, arg_2);
+        bool var_3 = !(arg_1 == 0) && !(arg_2 == 0) && var_2 < 2.00 && var_2 > 0.00;
+        u64? var_4 = new-boxed-value(6, var_2);
+        u64? var_5 = new-boxed-value(6, 0.00);
+        u64? var_6 = new-boxed-value(6, 2.00);
+        u64? var_7;
+        if (var_3) {
+            u64? var_8 = new-boxed-value(7, true);
+            var_7 = var_8;
+        } else {
+            u64? var_9 = new-boxed-value(7, false);
+            var_7 = var_9;
+        }
+        do-melee-log("characters-in-range? [[f]] [[f]] [[f]] [[s]]", var_4, var_5, var_6, var_7);
+        if (var_3) {
+            u64? var_10 = fact-exists?(arg_1, time-to-next-valid-dodge);
+            u16 var_11;
+            if (var_10) {
+                u64? var_12 = melee-fact-get-time-since(arg_1, last-dodge-time);
+                u64? var_13 = melee-fact-get-float(arg_1, time-to-next-valid-dodge);
+                var_11 = var_12 > var_13;
+            } else {
+                var_11 = 1;
+            }
+            u64? var_14 = against-wall-stick-dir?(arg_9, 1, 1.00, 0.00, arg_13, 1, 1);
+            u64? var_15 = against-wall-stick-dir?(arg_9, 0, 1.00, 0.00, arg_13, 1, 1);
+            u64? var_16 = get-bf-from-cache(arg_13, 1);
+            u64? var_17 = get-object-locator(arg_1);
+            u64? var_18 = rotate-locator-lookat(var_16, var_17, 1.00, 0);
+            u64? var_19 = set-cache-bound-frame(arg_13, var_18, 0);
+            u64? var_20 = get-evade-stick-dir();
+            u64? var_21 = get-bf-from-cache(arg_13, 1);
+            u64? var_22 = get-z-vec-from-bound-frame(var_21);
+            u64? var_23 = vector-neg(var_22);
+            u64? var_24 = dot-product(var_20, var_23);
+            u64? var_25 = arccos(var_24);
+            u64? var_26 = radians->degrees(var_25);
+            if (var_11 || var_14 && var_15 && var_19 && var_26 < 55.00) {
+                u64? var_27 = get-evade-stick-dir();
+                u64? var_28 = get-bf-from-cache(arg_13, 1);
+                u64? var_29 = get-z-vec-from-bound-frame(var_28);
+                u64? var_30 = vector-neg(var_29);
+                u64? var_31 = dot-product(var_27, var_30);
+                u64? var_32 = arccos(var_31);
+                u64? var_33 = radians->degrees(var_32);
+                print-float(var_33, self);
+                var_1 = 1;
+            } else {
+                var_1 = 0;
+            }
+        }
+    }
+    return var_1;
+}
+
+u64? player-contextual-dodge-wall-left__melee-event-list@550(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    melee-log-player-event("melee-player-environment-wall-dodge", 1);
+    melee-fact-set-time(arg_1, npc-nullify-dodge);
+    u64? var_0 = melee-fact-set-time(arg_1, environment-evade-cooldown);
+    return var_0;
+}
+
+u16 player-contextual-dodge-wall-left(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = is-player?(arg_1);
+    u64? var_1 = is-player?(arg_2);
+    u16 var_2;
+    if (var_0 && var_1) {
+        start-rumble(melee-environmental-dodge-rumble-settings, 0);
+        u64? var_3 = get-object-locator(arg_2);
+        u64? var_4 = camera-shake-melee(var_3, 0.50, 0.50, 1);
+        var_2 = var_4;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u64? player-contextual-dodge-wall-left__melee-event-advanced@16f8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = melee-fact-get-float(arg_1, dodge-speed-flex);
+    return var_0;
+}
+
+sid player-contextual-dodge-wall-left__melee-event-transitions@15f0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return player-evade-back-attacks;
+}
+
+u16 player-contextual-dodge-wall-right__melee-attack@250__start-func-array@568__(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = melee-evade-matches-dir?(arg_1, 3, 0);
+    u16 var_1;
+    if (var_0) {
+        u64? var_2 = get-object-distance(arg_1, arg_2);
+        bool var_3 = !(arg_1 == 0) && !(arg_2 == 0) && var_2 < 2.00 && var_2 > 0.00;
+        u64? var_4 = new-boxed-value(6, var_2);
+        u64? var_5 = new-boxed-value(6, 0.00);
+        u64? var_6 = new-boxed-value(6, 2.00);
+        u64? var_7;
+        if (var_3) {
+            u64? var_8 = new-boxed-value(7, true);
+            var_7 = var_8;
+        } else {
+            u64? var_9 = new-boxed-value(7, false);
+            var_7 = var_9;
+        }
+        do-melee-log("characters-in-range? [[f]] [[f]] [[f]] [[s]]", var_4, var_5, var_6, var_7);
+        if (var_3) {
+            u64? var_10 = fact-exists?(arg_1, time-to-next-valid-dodge);
+            u16 var_11;
+            if (var_10) {
+                u64? var_12 = melee-fact-get-time-since(arg_1, last-dodge-time);
+                u64? var_13 = melee-fact-get-float(arg_1, time-to-next-valid-dodge);
+                var_11 = var_12 > var_13;
+            } else {
+                var_11 = 1;
+            }
+            u64? var_14 = against-wall-stick-dir?(arg_9, 1, 1.00, 0.00, arg_13, 1, 1);
+            u64? var_15 = against-wall-stick-dir?(arg_9, 0, 1.00, 0.00, arg_13, 1, 1);
+            u64? var_16 = get-bf-from-cache(arg_13, 1);
+            u64? var_17 = get-object-locator(arg_1);
+            u64? var_18 = rotate-locator-lookat(var_16, var_17, 1.00, 0);
+            u64? var_19 = set-cache-bound-frame(arg_13, var_18, 0);
+            u64? var_20 = get-evade-stick-dir();
+            u64? var_21 = get-bf-from-cache(arg_13, 1);
+            u64? var_22 = get-z-vec-from-bound-frame(var_21);
+            u64? var_23 = vector-neg(var_22);
+            u64? var_24 = dot-product(var_20, var_23);
+            u64? var_25 = arccos(var_24);
+            u64? var_26 = radians->degrees(var_25);
+            if (var_11 || var_14 && var_15 && var_19 && var_26 < 55.00) {
+                u64? var_27 = get-evade-stick-dir();
+                u64? var_28 = get-bf-from-cache(arg_13, 1);
+                u64? var_29 = get-z-vec-from-bound-frame(var_28);
+                u64? var_30 = vector-neg(var_29);
+                u64? var_31 = dot-product(var_27, var_30);
+                u64? var_32 = arccos(var_31);
+                u64? var_33 = radians->degrees(var_32);
+                print-float(var_33, self);
+                var_1 = 1;
+            } else {
+                var_1 = 0;
+            }
+        }
+    }
+    return var_1;
+}
+
+u16 player-contextual-dodge-wall-right(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u16 var_0;
+    if (!(*camera-remap-environment-dodge-right* == 0)) {
+        u64? var_1 = camera-set-overlay(*camera-remap-environment-dodge-right*);
+        var_0 = var_1;
+    } else {
+        var_0 = 0;
+    }
+    return var_0;
+}
+

@@ -270,3 +270,71 @@ u64 anim-player-strafe-states__anim-node-animation@2858(u64? arg_0, u64 arg_1, u
     return *(u64*)(((*(arg_1 + 8) + 528) + 176) + 16);
 }
 
+u64? anim-player-strafe-states__actor-state-list@48(u64? arg_0, u64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64 arg_5, u64? arg_6) {
+    u64 var_0 = *(u64 *)(*(arg_1 + 8) + 384);
+    u64? var_1 = player-anim-speed-mult(var_0, *(u64 *)arg_5);
+    return arg_2 + ((arg_3 * var_1) * arg_4);
+}
+
+f32 anim-player-strafe-states__anim-node-blend@1818__anim-node-blend@27c8____anim-node-blend@66c8____anim-node-animation@73f0__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    f32 var_0;
+    if (*(u8 *)(*(arg_0 + 8) + 466)) {
+        var_0 = arg_1;
+    } else {
+        var_0 = *(f32 *)((*(arg_0 + 8) + 528) + 144);
+    }
+    return var_0;
+}
+
+u64 anim-player-strafe-states__anim-node-blend@1818__anim-node-blend@27c8____anim-node-blend@66c8__(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64 *)((*(arg_1 + 8) + 528) + 8);
+}
+
+u64 anim-player-strafe-states__anim-node-blend@1818__anim-node-animation@7498__(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64 *)((*(arg_1 + 8) + 528) + 40);
+}
+
+f32 anim-player-strafe-states(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32 *)(*arg_0 + 240);
+}
+
+u64 anim-player-strafe-states__anim-node-blend@1278__anim-node-blend@2fc8____anim-node-animation@6638__(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64 *)((*(arg_1 + 8) + 528) + 8);
+}
+
+f32 anim-player-strafe-states__anim-node-blend@1568__anim-node-animation@2820__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return *(f32 *)((*(arg_0 + 8) + 528) + 144);
+}
+
+u64 anim-player-strafe-states__anim-node-blend@1568(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64 *)((*(arg_1 + 8) + 528) + 8);
+}
+
+u64 anim-player-strafe-states__anim-node-animation@46c8(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64 *)((*(arg_1 + 8) + 528) + 40);
+}
+
+u64 anim-player-strafe-states__anim-node-animation@13b8(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64 *)((*(arg_1 + 8) + 528) + 8);
+}
+
+u64 anim-player-strafe-states__anim-node-blend@10d8__anim-node-blend@42b0____anim-node-animation@6430__(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64 *)((*(arg_1 + 8) + 528) + 176);
+}
+
+u64 anim-player-strafe-states__anim-node-blend@10d8__anim-node-animation@65e8__(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64 *)(((*(arg_1 + 8) + 528) + 176) + 16);
+}
+
+u64 anim-player-strafe-states__anim-node-animation@44e8(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64 *)(((*(arg_1 + 8) + 528) + 176) + 8);
+}
+
+u64 anim-player-strafe-states__anim-node-blend@11d8__anim-node-animation@63f8__(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64 *)(((*(arg_1 + 8) + 528) + 176) + 8);
+}
+
+u64 anim-player-strafe-states__anim-node-animation@2858(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64 *)(((*(arg_1 + 8) + 528) + 176) + 16);
+}
+

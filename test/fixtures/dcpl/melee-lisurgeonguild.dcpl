@@ -309,3 +309,746 @@ u16 *melee-post-probes-common-evaluation-func-player-npc*(bool arg_0, bool arg_1
     return var_0;
 }
 
+u64? *online-melee-lists*__hash-table@1268__melee-attack-list@3168____array*@5fb0____melee-attack-list@8d10__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    u64? var_0 = is-player-ellie?(player);
+    u64? var_1 = npc-clicker?(arg_1);
+    bool var_2 = var_0 && var_1;
+    return var_2;
+}
+
+u64? *online-melee-lists*__hash-table@1268__melee-attack-list@3168____melee-attack-list@8d48__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    u64? var_0 = net-is-active?();
+    u64? var_1 = !(var_0);
+    return var_1;
+}
+
+u64? *online-melee-lists*__hash-table@1268__melee-attack-list@8d80__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    u64? var_0 = net-is-active?();
+    return var_0;
+}
+
+u64? *online-melee-lists*__melee-attack-list@31d8__array*@5190____melee-attack-list@6818__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    u64? var_0 = npc-get-weapon(arg_0);
+    u64? var_1 = lookup-weapon-gameplay-def(var_0, 0);
+    u64? var_2 = npc-1h-blunt-fast?(var_1);
+    return var_2;
+}
+
+u64? *online-melee-lists*__melee-attack-list@31d8__melee-attack-list@6850__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    u64? var_0 = npc-get-weapon(arg_0);
+    u64? var_1 = lookup-weapon-gameplay-def(var_0, 0);
+    u64? var_2 = npc-1h-blade-fast?(var_1);
+    return var_2;
+}
+
+u64? *online-melee-lists*__melee-attack-list@6888(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    u64? var_0 = npc-get-weapon(arg_0);
+    u64? var_1 = lookup-weapon-gameplay-def(var_0, 0);
+    u64? var_2 = npc-2h-blunt-fast?(var_1);
+    return var_2;
+}
+
+u64? *online-melee-lists*__melee-attack-list@68c0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    u64? var_0 = npc-get-weapon(arg_0);
+    u64? var_1 = lookup-weapon-gameplay-def(var_0, 0);
+    u64? var_2 = npc-2h-blade-fast?(var_1);
+    return var_2;
+}
+
+u64? *online-melee-lists*__melee-attack-list@68f8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    u64? var_0 = npc-brute?(arg_0);
+    return var_0;
+}
+
+u64? *online-melee-lists*__melee-attack-list@3210__array*@5da0____melee-attack-list@8530__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    u64? var_0 = is-player-ellie?(player);
+    return var_0;
+}
+
+u64? *online-melee-lists*__melee-attack-list@3248__array*@5d70____melee-attack-list@8290__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    u64? var_0 = npc-get-weapon(arg_1);
+    u64? var_1 = lookup-weapon-gameplay-def(var_0, 0);
+    u64? var_2 = npc-1h-blunt-fast?(var_1);
+    u64? var_3 = npc-1h-blade-fast?(var_1);
+    u64? var_4 = npc-2h-blunt-fast?(var_1);
+    u64? var_5 = npc-2h-blade-fast?(var_1);
+    u64? var_6 = npc-enemy-ellie?(arg_1);
+    u64? var_7 = npc-enemy-abby?(arg_1);
+    u64? var_8 = npc-short-gun-fast?(var_1);
+    u64? var_9 = npc-long-gun-fast?(var_1);
+    u64? var_10 = npc-brute?(arg_1);
+    bool var_11 = var_2 || var_3 || var_4 || var_5 || var_6 || var_7 || var_8 || var_9 && var_10;
+    u64? var_12 = npc-is-buddy?(arg_1);
+    u64? var_13 = npc-is-infected?(arg_1);
+    u64? var_14 = !(var_13);
+    u64? var_15 = get-object-locator(arg_1);
+    u64? var_16 = get-object-locator(arg_0);
+    u64? var_17 = is-in-front?(var_15, var_16, 2, 120.00);
+    u64? var_18 = npc-in-tap?(arg_1);
+    u64? var_19 = !(var_18);
+    u64? var_20 = npc-in-melee-vulnerable-tap?(arg_1);
+    bool var_21 = var_11 && !var_12 && var_14 && var_17 || var_19 && var_20;
+    return var_21;
+}
+
+u64? *online-melee-lists*__melee-attack-list@3248__melee-attack-list@82c8__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    u64? var_0 = npc-get-weapon(arg_1);
+    u64? var_1 = lookup-weapon-gameplay-def(var_0, 0);
+    u64? var_2 = npc-1h-blunt-fast?(var_1);
+    u64? var_3 = npc-1h-blade-fast?(var_1);
+    u64? var_4 = npc-2h-blunt-fast?(var_1);
+    u64? var_5 = npc-2h-blade-fast?(var_1);
+    u64? var_6 = npc-enemy-ellie?(arg_1);
+    u64? var_7 = npc-enemy-abby?(arg_1);
+    u64? var_8 = npc-short-gun-fast?(var_1);
+    u64? var_9 = npc-long-gun-fast?(var_1);
+    u64? var_10 = npc-brute?(arg_1);
+    bool var_11 = var_2 || var_3 || var_4 || var_5 || var_6 || var_7 || var_8 || var_9 && var_10;
+    u64? var_12 = npc-is-buddy?(arg_1);
+    u64? var_13 = npc-is-infected?(arg_1);
+    u64? var_14 = !(var_13);
+    u64? var_15 = get-object-locator(arg_1);
+    u64? var_16 = get-object-locator(arg_0);
+    u64? var_17 = is-behind?(var_15, var_16, 2, 120.00);
+    u64? var_18 = npc-in-tap?(arg_1);
+    u64? var_19 = !(var_18);
+    u64? var_20 = npc-in-melee-vulnerable-tap?(arg_1);
+    bool var_21 = var_11 && !var_12 && var_14 && var_17 || var_19 && var_20;
+    return var_21;
+}
+
+u64? *online-melee-lists*__melee-attack-list@8300(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    u64? var_0 = npc-get-weapon(arg_1);
+    u64? var_1 = lookup-weapon-gameplay-def(var_0, 0);
+    u64? var_2 = npc-1h-blunt-fast?(var_1);
+    u64? var_3 = npc-1h-blade-fast?(var_1);
+    u64? var_4 = npc-2h-blunt-fast?(var_1);
+    u64? var_5 = npc-2h-blade-fast?(var_1);
+    u64? var_6 = npc-enemy-ellie?(arg_1);
+    u64? var_7 = npc-enemy-abby?(arg_1);
+    u64? var_8 = npc-short-gun-fast?(var_1);
+    u64? var_9 = npc-long-gun-fast?(var_1);
+    u64? var_10 = npc-brute?(arg_1);
+    bool var_11 = var_2 || var_3 || var_4 || var_5 || var_6 || var_7 || var_8 || var_9 && var_10;
+    u64? var_12 = npc-is-buddy?(arg_1);
+    u64? var_13 = npc-is-infected?(arg_1);
+    u64? var_14 = !(var_13);
+    u64? var_15 = get-object-locator(arg_1);
+    u64? var_16 = get-object-locator(arg_0);
+    u64? var_17 = is-left?(var_15, var_16, 60.00);
+    u64? var_18 = get-object-locator(arg_1);
+    u64? var_19 = get-object-locator(arg_0);
+    u64? var_20 = is-right?(var_18, var_19, 60.00);
+    u64? var_21 = npc-in-tap?(arg_1);
+    u64? var_22 = !(var_21);
+    u64? var_23 = npc-in-melee-vulnerable-tap?(arg_1);
+    bool var_24 = var_11 && !var_12 && var_14 || var_17 && var_20 || var_22 && var_23;
+    return var_24;
+}
+
+u64? *online-melee-lists*__melee-attack-list@8338(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    u64? var_0 = npc-is-buddy?(arg_1);
+    u64? var_1 = get-object-locator(arg_1);
+    u64? var_2 = get-object-locator(arg_0);
+    u64? var_3 = is-in-front?(var_1, var_2, 2, 120.00);
+    u64? var_4 = npc-in-tap?(arg_1);
+    u64? var_5 = !(var_4);
+    u64? var_6 = npc-in-melee-vulnerable-tap?(arg_1);
+    bool var_7 = var_0 && var_3 || var_5 && var_6;
+    return var_7;
+}
+
+u64? *online-melee-lists*__melee-attack-list@8370(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    u64? var_0 = npc-is-buddy?(arg_1);
+    u64? var_1 = get-object-locator(arg_1);
+    u64? var_2 = get-object-locator(arg_0);
+    u64? var_3 = is-behind?(var_1, var_2, 2, 120.00);
+    u64? var_4 = npc-in-tap?(arg_1);
+    u64? var_5 = !(var_4);
+    u64? var_6 = npc-in-melee-vulnerable-tap?(arg_1);
+    bool var_7 = var_0 && var_3 || var_5 && var_6;
+    return var_7;
+}
+
+u64? *online-melee-lists*__melee-attack-list@83a8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    u64? var_0 = npc-is-buddy?(arg_1);
+    u64? var_1 = get-object-locator(arg_1);
+    u64? var_2 = get-object-locator(arg_0);
+    u64? var_3 = is-left?(var_1, var_2, 60.00);
+    u64? var_4 = get-object-locator(arg_1);
+    u64? var_5 = get-object-locator(arg_0);
+    u64? var_6 = is-right?(var_4, var_5, 60.00);
+    u64? var_7 = npc-in-tap?(arg_1);
+    u64? var_8 = !(var_7);
+    u64? var_9 = npc-in-melee-vulnerable-tap?(arg_1);
+    bool var_10 = var_0 || var_3 && var_6 || var_8 && var_9;
+    return var_10;
+}
+
+u64? *online-melee-lists*__melee-attack-list@83e0(u64? arg_0, bool arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    u64? var_0 = is-npc?(arg_1);
+    u64? var_1 = npc-is-dog?(arg_1);
+    u64? var_2 = npc-in-tap?(arg_1);
+    u64? var_3 = !(var_2);
+    u64? var_4 = npc-in-melee-vulnerable-tap?(arg_1);
+    bool var_5 = !(arg_1 == 0) && var_0 && var_1 || var_3 && var_4;
+    return var_5;
+}
+
+u64? *online-melee-lists*__melee-attack-list@8418(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    u64? var_0 = npc-is-infected?(arg_1);
+    u64? var_1 = get-object-locator(arg_1);
+    u64? var_2 = get-object-locator(arg_0);
+    u64? var_3 = is-in-front?(var_1, var_2, 2, 120.00);
+    u64? var_4 = npc-in-tap?(arg_1);
+    u64? var_5 = !(var_4);
+    u64? var_6 = npc-in-melee-vulnerable-tap?(arg_1);
+    bool var_7 = var_0 && var_3 || var_5 && var_6;
+    return var_7;
+}
+
+u64? *online-melee-lists*__melee-attack-list@8450(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    u64? var_0 = npc-is-infected?(arg_1);
+    u64? var_1 = get-object-locator(arg_1);
+    u64? var_2 = get-object-locator(arg_0);
+    u64? var_3 = is-behind?(var_1, var_2, 2, 120.00);
+    u64? var_4 = npc-in-tap?(arg_1);
+    u64? var_5 = !(var_4);
+    u64? var_6 = npc-in-melee-vulnerable-tap?(arg_1);
+    bool var_7 = var_0 && var_3 || var_5 && var_6;
+    return var_7;
+}
+
+u64? *online-melee-lists*__melee-attack-list@8488(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    u64? var_0 = npc-is-infected?(arg_1);
+    u64? var_1 = get-object-locator(arg_1);
+    u64? var_2 = get-object-locator(arg_0);
+    u64? var_3 = is-left?(var_1, var_2, 60.00);
+    u64? var_4 = get-object-locator(arg_1);
+    u64? var_5 = get-object-locator(arg_0);
+    u64? var_6 = is-right?(var_4, var_5, 60.00);
+    u64? var_7 = npc-in-tap?(arg_1);
+    u64? var_8 = !(var_7);
+    u64? var_9 = npc-in-melee-vulnerable-tap?(arg_1);
+    bool var_10 = var_0 || var_3 && var_6 || var_8 && var_9;
+    return var_10;
+}
+
+u64? *online-melee-lists*__melee-attack-list@3280__array*@5898____melee-attack-list@7ae8__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    u64? var_0 = npc-is-buddy?(arg_0);
+    return !var_0;
+}
+
+u64? *online-melee-lists*__melee-attack-list@3398__array*@5b78____melee-attack-list@7dc0__(sid arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    bool var_0 = arg_0 == dina || arg_0 == mel && arg_0 == lev;
+    return var_0;
+}
+
+u64? *online-melee-lists*__melee-attack-list@3478__array*@5630____melee-attack-list@7420__(sid arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    bool var_0 = arg_0 == dina && arg_0 == lev;
+    return var_0;
+}
+
+u64? *online-melee-lists*__melee-attack-list@3520__array*@5440____melee-attack-list@6fc0__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    u64? var_0 = npc-enemy-abby?(arg_1);
+    u64? var_1 = npc-get-faction(arg_1, 1);
+    u64? var_2 = npc-get-faction(arg_1, 1);
+    bool var_3 = !var_0 || var_1 == Militia && var_2 == Slaver;
+    return var_3;
+}
+
+u64? *online-melee-lists*__melee-attack-list@3558__array*@5eb0____melee-attack-list@8798__(sid arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    u64? var_0;
+    if (arg_0 == dina || arg_0 == mel && arg_0 == lev) {
+        u64? var_1 = npc-is-infected?(arg_1);
+        var_0 = var_1;
+    }
+    return var_0;
+}
+
+u64? *online-melee-lists*__melee-attack-list@3558__melee-attack-list@87d0__(sid arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    u64? var_0 = is-rogue-mode?();
+    u64? var_1 = npc-is-infected?(arg_1);
+    bool var_2 = var_0 && arg_0 == yara && var_1;
+    return var_2;
+}
+
+u64? *online-melee-lists*__melee-attack-list@8808(sid arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    u64? var_0 = npc-is-infected?(arg_1);
+    u64? var_1 = npc-short-gun?(arg_1);
+    u64? var_2 = npc-long-gun?(arg_1);
+    u64? var_3;
+    if (arg_0 == dina || arg_0 == mel && arg_0 == lev && !var_0 && !var_1 && !var_2) {
+        u64? var_4 = npc-1h-blade?(arg_1);
+        u64? var_5 = melee-weapon-bit-check(arg_1, #0000000001800000, 1, 0);
+        bool var_6 = !var_4 && var_5;
+        var_3 = var_6;
+    }
+    return var_3;
+}
+
+u64? *online-melee-lists*__melee-attack-list@8840(sid arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    u64? var_0 = is-rogue-mode?();
+    u64? var_1 = npc-is-infected?(arg_1);
+    u64? var_2 = npc-short-gun?(arg_1);
+    u64? var_3 = npc-long-gun?(arg_1);
+    u64? var_4 = npc-1h-blade?(arg_1);
+    u64? var_5 = melee-weapon-bit-check(arg_1, #0000000001800000, 1, 0);
+    bool var_6 = var_0 && arg_0 == yara && !var_1 && !var_2 && !var_3 || !var_4 && var_5;
+    return var_6;
+}
+
+u64? *online-melee-lists*__melee-attack-list@8878(sid arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    u64? var_0 = npc-is-infected?(arg_1);
+    u64? var_1;
+    if (arg_0 == dina || arg_0 == mel && arg_0 == lev && !var_0) {
+        u64? var_2 = npc-short-gun?(arg_1);
+        u64? var_3 = npc-long-gun?(arg_1);
+        u64? var_4 = npc-1h-blade?(arg_1);
+        u64? var_5 = melee-weapon-bit-check(arg_1, #0000000001800000, 1, 0);
+        bool var_6 = var_2 || var_3 && var_4 && !var_5;
+        var_1 = var_6;
+    }
+    return var_1;
+}
+
+u64? *online-melee-lists*__melee-attack-list@88b0(sid arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    u64? var_0 = npc-is-infected?(arg_1);
+    u64? var_1;
+    if (arg_0 == joel && arg_0 == tommy && var_0) {
+        u64? var_2 = npc-1h-blade?(arg_0);
+        var_1 = !var_2;
+    }
+    return var_1;
+}
+
+u64? *online-melee-lists*__melee-attack-list@88e8(sid arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    u64? var_0 = npc-is-infected?(arg_1);
+    u64? var_1;
+    if (arg_0 == joel || arg_0 == tommy || arg_0 == jesse && arg_0 == manny && var_0) {
+        u64? var_2 = npc-1h-blade?(arg_0);
+        var_1 = var_2;
+    }
+    return var_1;
+}
+
+u64? *online-melee-lists*__melee-attack-list@8920(sid arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    u64? var_0 = npc-is-infected?(arg_1);
+    u64? var_1 = npc-short-gun?(arg_1);
+    u64? var_2 = npc-long-gun?(arg_1);
+    u64? var_3;
+    if (arg_0 == joel || arg_0 == tommy || arg_0 == jesse && arg_0 == manny && !var_0 && !var_1 && !var_2) {
+        u64? var_4 = npc-1h-blade?(arg_1);
+        u64? var_5 = melee-weapon-bit-check(arg_1, #0000000001800000, 1, 0);
+        bool var_6 = !var_4 && var_5;
+        var_3 = var_6;
+    }
+    return var_3;
+}
+
+u64? *online-melee-lists*__melee-attack-list@8958(sid arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    u64? var_0 = npc-is-infected?(arg_1);
+    u64? var_1;
+    if (arg_0 == joel || arg_0 == tommy || arg_0 == jesse && arg_0 == manny && !var_0) {
+        u64? var_2 = npc-short-gun?(arg_1);
+        u64? var_3 = npc-long-gun?(arg_1);
+        u64? var_4 = npc-1h-blade?(arg_1);
+        u64? var_5 = melee-weapon-bit-check(arg_1, #0000000001800000, 1, 0);
+        bool var_6 = var_2 || var_3 && var_4 && !var_5;
+        var_1 = var_6;
+    }
+    return var_1;
+}
+
+u64? *online-melee-lists*__melee-attack-list@35c8__array*@55d0____melee-attack-list@72d0__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    u64? var_0 = npc-get-weapon(arg_0);
+    u64? var_1 = lookup-weapon-gameplay-def(var_0, 0);
+    u64? var_2 = npc-1h-blunt-fast?(var_1);
+    u64? var_3 = melee-weapon-bit-check(arg_0, #0000000001800000, 1, 0);
+    bool var_4 = var_2 && var_3;
+    return var_4;
+}
+
+u64? *online-melee-lists*__melee-attack-list@35c8__melee-attack-list@7308__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    u64? var_0 = npc-get-weapon(arg_0);
+    u64? var_1 = lookup-weapon-gameplay-def(var_0, 0);
+    u64? var_2 = npc-1h-blade-fast?(var_1);
+    u64? var_3 = melee-weapon-bit-check(arg_0, #0000000001800000, 1, 0);
+    bool var_4 = var_2 && !var_3;
+    return var_4;
+}
+
+u64? *online-melee-lists*__melee-attack-list@73b0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    u64? var_0 = npc-get-weapon(arg_0);
+    u64? var_1 = lookup-weapon-gameplay-def(var_0, 0);
+    u64? var_2 = npc-short-gun-fast?(var_1);
+    u64? var_3 = npc-long-gun-fast?(var_1);
+    bool var_4 = var_2 && var_3;
+    return var_4;
+}
+
+u64? *online-melee-lists*__melee-attack-list@73e8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    u64? var_0 = melee-character-bit-check(arg_0, #000000000B000000);
+    return var_0;
+}
+
+u64? *online-melee-lists*__melee-attack-list@3600(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    u64? var_0 = melee-character-bit-check(arg_0, #000000000B000000);
+    return var_0;
+}
+
+u64? *online-melee-lists*__melee-attack-list@3788__array*@6040____melee-attack-list@8e28__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    determine-dodge-npc-target(arg_1);
+    u64? var_0 = is-player?(arg_0);
+    if (!var_0) {
+        melee-debug-text-file-line-fail("(is-player? attacker)", "t2r/src/game/scriptx/melee/melee-lists.dcx", 553);
+    }
+    u64? var_1 = player-is-prone?();
+    u64? var_2 = player-is-supine?();
+    u64? var_3 = character-melee-event-active?(arg_0, 38, 0);
+    melee-debug-text-file-line-fail("(or (and (player-is-prone?) (not (player-is-supine?))) (character-melee-event-active? attacker (melee-event-type pretend-prone)))", "t2r/src/game/scriptx/melee/melee-lists.dcx", 554);
+    bool var_4 = var_0 && var_1 || !var_2 && var_3 && var_3 && var_3;
+    return var_4;
+}
+
+u64? *online-melee-lists*__melee-attack-list@3788__melee-attack-list@8e60__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    determine-dodge-npc-target(arg_1);
+    u64? var_0 = is-player?(arg_0);
+    if (!var_0) {
+        melee-debug-text-file-line-fail("(is-player? attacker)", "t2r/src/game/scriptx/melee/melee-lists.dcx", 576);
+    }
+    u64? var_1 = player-is-supine?();
+    u64? var_2 = character-melee-event-active?(arg_0, 39, 0);
+    melee-debug-text-file-line-fail("(or (player-is-supine?) (character-melee-event-active? attacker (melee-event-type pretend-supine)))", "t2r/src/game/scriptx/melee/melee-lists.dcx", 577);
+    bool var_3 = var_0 || var_1 && var_2 && var_2 && var_2;
+    return var_3;
+}
+
+u64? *online-melee-lists*__melee-attack-list@8e98(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    determine-dodge-npc-target(arg_1);
+    if (*cwohlwend-test* != null && *(u8 *)(*cwohlwend-test* + 1)) {
+        u64? var_0 = is-final-build?();
+        if (!var_0) {
+            u64? var_1 = melee-fact-get-symbol(player, contextual-dodge-npc);
+            u64? var_2 = estimate-frames-til-hit(var_1);
+            u64? var_3 = #5445173390656D6D("Frames-til-hit: %i", var_2);
+            display(var_3, 19);
+        }
+        u64? var_4 = is-final-build?();
+        if (!var_4) {
+            u64? var_5 = get-object-position(arg_0);
+            u64? var_6 = get-melee-evade-dir(arg_0);
+            u64? var_7 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+            u64? var_8 = quat-from-look-at(var_6, var_7);
+            u64? var_9 = alloc-bound-frame(var_5, var_8, 0, 0, 0);
+            u64? var_10 = melee-fact-get-symbol(player, contextual-dodge-npc);
+            u64? var_11 = get-object-locator(var_10);
+            u64? var_12 = get-object-locator(arg_0);
+            u64? var_13 = rotate-locator-lookat(var_11, var_12, 1.00, 0);
+            u64? var_14 = get-object-facing-angle-plus(var_9, var_13, 2, 1);
+            u64? var_15 = #5445173390656D6D("ANGLE BETWEEN DEFENDER AND EVADE DIR : %f", var_14);
+            display(var_15, 19);
+        }
+    }
+    u64? var_16 = is-player?(arg_0);
+    if (!var_16) {
+        melee-debug-text-file-line-fail("(is-player? attacker)", "t2r/src/game/scriptx/melee/melee-lists.dcx", 616);
+    }
+    u64? var_17 = melee-weapon-bit-check(arg_0, #0300008410000000, 1, 0);
+    melee-debug-text-file-line-fail("(not (melee-weapon-bit-check attacker (target-weapon-type 2h-blunt-all 2h-blade-all 2h-superheavy-all shotgun rifle)))", "t2r/src/game/scriptx/melee/melee-lists.dcx", 617);
+    bool var_18 = var_16 && !var_17 && !var_17;
+    return var_18;
+}
+
+u64? *online-melee-lists*__melee-attack-list@8ed0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    determine-dodge-npc-target(arg_1);
+    u64? var_0 = is-player?(arg_0);
+    u64? var_1 = melee-weapon-bit-check(arg_0, #0300008410000000, 1, 0);
+    u64? var_2 = npc-enemy-abby?(arg_1);
+    u64? var_3 = !(var_2);
+    u64? var_4 = net-is-active?();
+    u64? var_5 = !(var_4);
+    u64? var_6 = melee-fact-get-time-since(arg_0, mosh-pit-ended);
+    u64? var_7 = character-melee-event-active?(arg_0, 220, 0);
+    u64? var_8 = player-is-prone?();
+    u64? var_9 = player-is-supine?();
+    u64? var_10 = character-melee-event-active?(arg_0, 38, 0);
+    u64? var_11 = character-melee-event-active?(arg_0, 39, 0);
+    invalidate-melee-command-queue(arg_0);
+    bool var_12 = var_0 && var_1 && var_3 && var_5 && !(var_6 < 1.00) && !var_7 && !var_8 && !var_9 && !var_10 && !var_11 && 1;
+    return var_12;
+}
+
+u64? *online-melee-lists*__melee-attack-list@8f08(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    determine-dodge-npc-target(arg_1);
+    if (*cwohlwend-test* != null && *(u8 *)(*cwohlwend-test* + 1)) {
+        u64? var_0 = is-final-build?();
+        if (!var_0) {
+            u64? var_1 = melee-fact-get-symbol(player, contextual-dodge-npc);
+            u64? var_2 = estimate-frames-til-hit(var_1);
+            u64? var_3 = #5445173390656D6D("Frames-til-hit: %i", var_2);
+            display(var_3, 19);
+        }
+    }
+    u64? var_4 = npc-enemy-abby?(arg_1);
+    u64? var_5 = player-is-prone?();
+    u64? var_6 = player-is-supine?();
+    u64? var_7 = character-melee-event-active?(arg_0, 38, 0);
+    u64? var_8 = character-melee-event-active?(arg_0, 39, 0);
+    bool var_9 = var_4 && !var_5 && !var_6 && !var_7 && !var_8;
+    return var_9;
+}
+
+u64? *online-melee-lists*__melee-attack-list@8f40(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    determine-dodge-npc-target(arg_1);
+    if (*cwohlwend-test* != null && *(u8 *)(*cwohlwend-test* + 1)) {
+        u64? var_0 = is-final-build?();
+        if (!var_0) {
+            u64? var_1 = melee-fact-get-symbol(player, contextual-dodge-npc);
+            u64? var_2 = estimate-frames-til-hit(var_1);
+            u64? var_3 = #5445173390656D6D("Frames-til-hit: %i", var_2);
+            display(var_3, 19);
+        }
+    }
+    u64? var_4 = net-is-active?();
+    return var_4;
+}
+
+u64? *online-melee-lists*__melee-attack-list@37f8__array*@55b8____melee-attack-list@7260__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    determine-dodge-npc-target(arg_1);
+    if (!1) {
+        melee-debug-text-file-line-fail("(begin (determine-dodge-npc-target defender) #t)", "t2r/src/game/scriptx/melee/melee-lists.dcx", 1117);
+    }
+    u64? var_0 = supine-auto-stand-frame-check(arg_0, 30);
+    melee-debug-text-file-line-fail("(supine-auto-stand-frame-check attacker)", "t2r/src/game/scriptx/melee/melee-lists.dcx", 1118);
+    bool var_1 = 1 && var_0 && var_0;
+    return var_1;
+}
+
+u64? *online-melee-lists*__melee-attack-list@3868__array*@53b0____melee-attack-list@6d90__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    u64? var_0 = npc-enemy-abby-phase-1?(arg_0);
+    return var_0;
+}
+
+u64? *online-melee-lists*__melee-attack-list@3868__melee-attack-list@6dc8__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    u64? var_0 = npc-enemy-abby-phase-2?(arg_0);
+    return var_0;
+}
+
+u64? *online-melee-lists*__melee-attack-list@6e00(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    u64? var_0 = npc-enemy-abby-phase-3?(arg_0);
+    return var_0;
+}
+
+u64? *online-melee-lists*__melee-attack-list@3910(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    u64? var_0 = net-is-active?();
+    return var_0;
+}
+
+u64? *online-melee-lists*__melee-attack-list@39b8__array*@5d58____melee-attack-list@8220__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    u64? var_0 = npc-brute?(arg_1);
+    return !var_0;
+}
+
+bool *online-melee-lists*__melee-attack-list@3a60__array*@5e60____melee-attack-list@85a0__(sid arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    return arg_0 == dina;
+}
+
+bool *online-melee-lists*__melee-attack-list@3a60__melee-attack-list@85d8__(sid arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    return arg_0 == jesse;
+}
+
+bool *online-melee-lists*__melee-attack-list@8610(sid arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    return arg_0 == manny;
+}
+
+bool *online-melee-lists*__melee-attack-list@8648(sid arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    return arg_0 == mel;
+}
+
+bool *online-melee-lists*__melee-attack-list@8680(sid arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    return arg_0 == lev;
+}
+
+bool *online-melee-lists*__melee-attack-list@86b8(sid arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    return arg_0 == joel;
+}
+
+bool *online-melee-lists*__melee-attack-list@86f0(sid arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    return arg_0 == tommy;
+}
+
+u64? *online-melee-lists*__melee-attack-list@3bb0__array*@54d0____melee-attack-list@7030__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    u64? var_0 = melee-weapon-bit-check(arg_0, 4, 1, 0);
+    return var_0;
+}
+
+u64? *online-melee-lists*__melee-attack-list@3bb0__melee-attack-list@7068__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    u64? var_0 = melee-weapon-bit-check(arg_0, 32, 1, 0);
+    return var_0;
+}
+
+u64? *online-melee-lists*__melee-attack-list@70a0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    u64? var_0 = melee-weapon-bit-check(arg_0, 1024, 1, 0);
+    return var_0;
+}
+
+u64? *online-melee-lists*__melee-attack-list@70d8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    u64? var_0 = melee-weapon-bit-check(arg_0, #0000000000100000, 1, 0);
+    return var_0;
+}
+
+u64? *online-melee-lists*__melee-attack-list@7110(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    u64? var_0 = melee-weapon-bit-check(arg_0, #0000000010000000, 1, 0);
+    return var_0;
+}
+
+u64? *online-melee-lists*__melee-attack-list@7148(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    u64? var_0 = melee-weapon-bit-check(arg_0, #0000000400000000, 1, 0);
+    return var_0;
+}
+
+u64? *online-melee-lists*__melee-attack-list@3da8__array*@59b0____melee-attack-list@7c70__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    u64? var_0 = melee-character-bit-check(arg_0, 1920);
+    return var_0;
+}
+
+bool *online-melee-lists*__melee-attack-list@4048__array*@5cb0____melee-attack-list@7ff0__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    u64? var_0 = npc-get-faction(arg_1, 1);
+    return var_0 == Militia;
+}
+
+u64? *online-melee-lists*__melee-attack-list@4400__melee-attack-list@8ae0__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    u64? var_0 = is-player-abby?(player);
+    return var_0;
+}
+
+u64? *online-melee-lists*__melee-attack-list@4518__array*@51a8____melee-attack-list@6930__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    u64? var_0 = melee-character-bit-check(arg_0, #0000000000100000);
+    return var_0;
+}
+
+u64? *online-melee-lists*__melee-attack-list@46d8__melee-attack-list@7d18__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    u64? var_0 = is-player-abby?(player);
+    u64? var_1 = npc-enemy-ellie?(arg_1);
+    bool var_2 = var_0 && !var_1;
+    return var_2;
+}
+
+u64? *online-melee-lists*__melee-attack-list@4860__array*@5268____melee-attack-list@6cb0__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    u64? var_0 = task-range-active?(santa-barbara, san-free-abby-fight, santa-barbara, san-abby-boats-away);
+    u64? var_1 = net-is-active?();
+    u64? var_2 = !(var_1);
+    bool var_3 = !var_0 && var_2;
+    return var_3;
+}
+
+u64? *online-melee-lists*__melee-attack-list@4860__melee-attack-list@6ce8__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    u64? var_0 = task-range-active?(santa-barbara, san-free-abby-fight, santa-barbara, san-abby-boats-away);
+    return var_0;
+}
+
+u64? *online-melee-lists*__melee-attack-list@4978__array*@56e0____melee-attack-list@7538__(sid arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    u64? var_0 = is-rogue-mode?();
+    bool var_1 = var_0 && arg_0 == yara;
+    return var_1;
+}
+
+u16 *online-melee-lists*__melee-attack-list@49e8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    determine-dodge-npc-target(arg_1);
+    return 1;
+}
+
+u64? *online-melee-lists*__melee-attack-list@4d30(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    u64? var_0 = net-is-active?();
+    u64? var_1 = !(var_0);
+    return var_1;
+}
+
+u64? *online-melee-lists*__melee-attack-list@4e80__array*@5a80____net-is-active?@64f0____melee-attack-list@7d88__(u64? arg_0, sid arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    bool var_0 = arg_1 == dina || arg_1 == lev && arg_1 == mel;
+    return var_0;
+}
+
+u64? *online-melee-lists*__melee-attack-list@7810(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    u64? var_0 = melee-character-bit-check(arg_0, #0000000009000000);
+    return var_0;
+}
+
+u64? *online-melee-lists*__melee-attack-list@50b0__array*@5f88____melee-attack-list@8b50__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    u64? var_0 = melee-weapon-bit-check(arg_1, #0300008410000000, 1, 0);
+    u64? var_1 = get-object-locator(arg_1);
+    u64? var_2 = get-object-locator(arg_0);
+    u64? var_3 = is-in-front?(var_1, var_2, 2, 120.00);
+    u64? var_4 = is-player?(arg_1);
+    u64? var_5 = is-player-base?(arg_1);
+    u64? var_6 = character-is-prone?(arg_1);
+    u64? var_7 = player-is-supine?();
+    bool var_8 = !var_0 && var_3 || var_4 && var_5 && !var_6 && !var_7;
+    return var_8;
+}
+
+u64? *online-melee-lists*__melee-attack-list@50b0__melee-attack-list@8c30__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    u64? var_0 = melee-weapon-bit-check(arg_1, #0300008410000000, 1, 0);
+    u64? var_1 = get-object-locator(arg_1);
+    u64? var_2 = get-object-locator(arg_0);
+    u64? var_3 = is-behind?(var_1, var_2, 2, 120.00);
+    u64? var_4 = is-player?(arg_1);
+    u64? var_5 = is-player-base?(arg_1);
+    u64? var_6 = character-is-prone?(arg_1);
+    u64? var_7 = player-is-supine?();
+    bool var_8 = var_0 && var_3 || var_4 && var_5 && !var_6 && !var_7;
+    return var_8;
+}
+
+u64? *online-melee-lists*__melee-attack-list@5158__array*@54e8____melee-attack-list@7180__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    u64? var_0 = npc-enemy-abby?(arg_1);
+    return var_0;
+}
+
+u64? *online-melee-lists*__melee-attack-list@5158__melee-attack-list@71f0__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    u64? var_0 = npc-get-faction(arg_1, 1);
+    u64? var_1 = npc-brute?(arg_1);
+    bool var_2 = var_0 == Scar && !var_1;
+    return var_2;
+}
+
+u16 supine-auto-stand-frame-check(u64? arg_0, i32 arg_1) {
+    u64? var_0 = get-animation-playing?(arg_0, supine-idle^crouch-idle, 2);
+    u16 var_1;
+    if (var_0) {
+        u64? var_2 = get-animation-frame(arg_0, 2, supine-idle^crouch-idle);
+        u64? var_3 = round-float(var_2);
+        var_1 = (i32)var_3 < arg_1;
+    } else {
+        u64? var_4 = get-animation-playing?(arg_0, supine-idle^crouch-idle-rifle, 2);
+        if (var_4) {
+            u64? var_5 = get-animation-frame(arg_0, 2, supine-idle^crouch-idle-rifle);
+            u64? var_6 = round-float(var_5);
+            var_1 = (i32)var_6 < arg_1;
+        } else {
+            u64? var_7 = get-animation-playing?(arg_0, supine-idle^crouch-idle-rifle-flip, 2);
+            if (var_7) {
+                u64? var_8 = get-animation-frame(arg_0, 2, supine-idle^crouch-idle-rifle-flip);
+                u64? var_9 = round-float(var_8);
+                var_1 = (i32)var_9 < arg_1;
+            } else {
+                var_1 = 1;
+            }
+        }
+    }
+    return var_1;
+}
+
+u16 *melee-post-probes-common-evaluation-func-player-npc*(bool arg_0, bool arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? * arg_5) {
+    u16 var_0;
+    if (!(arg_0 == 0) && !(arg_1 == 0)) {
+        u64? var_1 = *(arg_5 + 48);
+        u64? var_2 = get-edge-between-characters->common-data(arg_0, arg_2, arg_1, arg_3, var_1, arg_5);
+        var_0 = var_2;
+    } else {
+        var_0 = 0;
+    }
+    return var_0;
+}
+

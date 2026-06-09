@@ -10,3 +10,7 @@ u8 anim-overlay-player-specific-weapon-rifle-vepr__anim-overlay-set@110(u64? arg
     return *(u8*)((*(arg_1 + 8) + 40) + 44);
 }
 
+u8 anim-overlay-player-specific-weapon-rifle-vepr__anim-overlay-set@110(u64? arg_0, u8 arg_1, u64? arg_2) {
+    return *(u8 *)((*(arg_1 + 8) + 40) + 44);
+}
+

@@ -1510,3 +1510,381 @@ u64? #EE49148374E0CACA() {
     return var_7;
 }
 
+u16 #0E764148D8265FF9(u16 arg_0, u64? arg_1) {
+    u16 var_0;
+    if (arg_1) {
+        var_0 = 3;
+    } else if (arg_0) {
+        var_0 = 2;
+    } else {
+        var_0 = 0;
+    }
+    return var_0;
+}
+
+u16 #13B32A07AE7F5009(u64? arg_0, u64? arg_1) {
+    u16 var_0;
+    if (arg_1) {
+        var_0 = 0;
+    } else if (arg_0) {
+        var_0 = 1;
+    } else {
+        var_0 = 0;
+    }
+    return var_0;
+}
+
+u64? #451EEFDC085298B4() {
+    u64? var_0 = #CD3AB99702F53DC4(1);
+    u64? var_1 = #EE49148374E0CACA();
+    bool var_2 = var_0 && !var_1;
+    return var_2;
+}
+
+u64? #6B44518153572030() {
+    u64? var_0 = task-active?(seattle-arrival, sea-hub-explore);
+    return var_0;
+}
+
+u64? *activities*__activity-map@3e8__map@ce0____activity-data@1f40__(u64? arg_0) {
+    u64? var_0 = task-continue-active?(flooded-city, flo-boat-explore-downtown, default);
+    u64? var_1 = task-continue-active?(flooded-city, flo-boat-explore-downtown, parking-lot);
+    u64? var_2 = task-continue-active?(flooded-city, flo-boat-explore-downtown, 6th-ave);
+    bool var_3 = var_0 || var_1 && var_2;
+    u64? var_4 = task-complete?(flooded-city, flo-boat-explore-downtown);
+    u64? var_5 = task-active?(flooded-city, flo-boat-explore-downtown);
+    u64? var_6 = task-continue-active?(flooded-city, flo-boat-explore-downtown, default);
+    u64? var_7 = task-continue-active?(flooded-city, flo-boat-explore-downtown, parking-lot);
+    u64? var_8 = task-continue-active?(flooded-city, flo-boat-explore-downtown, 6th-ave);
+    bool var_9 = var_4 && var_5 && !var_6 && !var_7 && !var_8;
+    u64? var_10 = #0E764148D8265FF9(var_3, var_9);
+    return var_10;
+}
+
+u64? *activities*__activity-map@3e8__map@ce0__(u64? arg_0) {
+    u64? var_0 = task-active?(flooded-city, flo-boat-explore-downtown);
+    u64? var_1 = task-continue-active?(flooded-city, flo-boat-explore-downtown, default);
+    u64? var_2 = task-continue-active?(flooded-city, flo-boat-explore-downtown, parking-lot);
+    u64? var_3 = task-continue-active?(flooded-city, flo-boat-explore-downtown, 6th-ave);
+    bool var_4 = var_0 && !var_1 && !var_2 && !var_3;
+    u64? var_5 = task-complete?(flooded-city, flo-boat-explore-downtown);
+    u64? var_6 = #0E764148D8265FF9(var_4, var_5);
+    return var_6;
+}
+
+u64? *activities*__activity-map@3e8(u64? arg_0) {
+    u64? var_0 = task-continue-active?(flooded-city, flo-boat-explore-arcade-bloater-fight, default);
+    u64? var_1 = task-complete?(flooded-city, flo-boat-explore-arcade-bloater-fight);
+    u64? var_2 = task-continue-active?(flooded-city, flo-boat-explore-arcade-bloater-fight, combat-done);
+    bool var_3 = var_1 && var_2;
+    u64? var_4 = #0E764148D8265FF9(var_0, var_3);
+    return var_4;
+}
+
+u64? *activities*(u64? arg_0) {
+    u64? var_0 = task-continue-active?(flooded-city, flo-boat-explore-arcade-bloater-fight, combat-done);
+    u64? var_1 = task-active?(flooded-city, flo-boat-explore-arcade-unblock-chain);
+    bool var_2 = var_0 && var_1;
+    u64? var_3 = task-complete?(flooded-city, flo-boat-explore-arcade-unblock-chain);
+    u64? var_4 = #0E764148D8265FF9(var_2, var_3);
+    return var_4;
+}
+
+u64? *activities*__activity-data@2120(u64? arg_0) {
+    u64? var_0 = task-continue-active?(forward-base, fob-on-foot-store-appliances, default);
+    u64? var_1 = task-complete?(forward-base, fob-on-foot-store-appliances);
+    u64? var_2 = task-continue-active?(forward-base, fob-on-foot-store-appliances, combat-done);
+    bool var_3 = var_1 && var_2;
+    u64? var_4 = #0E764148D8265FF9(var_0, var_3);
+    return var_4;
+}
+
+u64? *activities*__activity-data@24e0(u64? arg_0) {
+    u64? var_0 = task-continue-active?(rescue-jesse, res-neighborhood-fight-ruins, default);
+    u64? var_1 = task-complete?(rescue-jesse, res-neighborhood-fight-ruins);
+    u64? var_2 = task-active?(rescue-jesse, res-neighborhood-fight-ruins);
+    u64? var_3 = task-continue-active?(rescue-jesse, res-neighborhood-fight-ruins, default);
+    bool var_4 = var_1 && var_2 && !var_3;
+    u64? var_5 = #0E764148D8265FF9(var_0, var_4);
+    return var_5;
+}
+
+u64? *activities*__activity-data@2000(u64? arg_0) {
+    u64? var_0 = task-continue-active?(ellie-flashback-patrol, efp-motel-lobby-fight, default);
+    u64? var_1 = task-complete?(ellie-flashback-patrol, efp-motel-lobby-fight);
+    u64? var_2 = task-active?(ellie-flashback-patrol, efp-motel-lobby-fight);
+    u64? var_3 = task-continue-active?(ellie-flashback-patrol, efp-motel-lobby-fight, default);
+    bool var_4 = var_1 && var_2 && !var_3;
+    u64? var_5 = #0E764148D8265FF9(var_0, var_4);
+    return var_5;
+}
+
+u64? *activities*__activity-data@2c60(u64? arg_0) {
+    u64? var_0 = task-active?(seattle-arrival, sea-hub-explore-intro);
+    u64? var_1 = task-complete?(seattle-arrival, sea-hub-explore-intro);
+    u64? var_2 = task-active?(seattle-arrival, sea-hub-explore-intro);
+    u64? var_3 = get-svar-as-boolean(#82075B11FE09E716);
+    bool var_4 = var_1 && var_2 && var_3;
+    u64? var_5 = #0E764148D8265FF9(var_0, var_4);
+    return var_5;
+}
+
+u64? *activities*__activity-data@3440(u64? arg_0) {
+    u64? var_0 = task-continue-active?(flooded-city, flo-into-the-city-tunnel-militia-fight, default);
+    u64? var_1 = task-continue-active?(flooded-city, flo-into-the-city-tunnel-militia-fight, checkpoint);
+    bool var_2 = var_0 && var_1;
+    u64? var_3 = task-complete?(flooded-city, flo-into-the-city-tunnel-militia-fight);
+    u64? var_4 = task-continue-active?(flooded-city, flo-into-the-city-tunnel-militia-fight, combat-done);
+    bool var_5 = var_3 && var_4;
+    u64? var_6 = #0E764148D8265FF9(var_2, var_5);
+    return var_6;
+}
+
+u64? *activities*__activity-data@1ac0(u64? arg_0) {
+    u64? var_0 = task-continue-active?(forward-base, fob-hostile-territory-explore-alley-pre-wall, default);
+    u64? var_1 = task-continue-active?(forward-base, fob-hostile-territory-explore-alley-pre-wall, squeeze-through-encounter);
+    bool var_2 = var_0 && var_1;
+    u64? var_3 = task-complete?(forward-base, fob-hostile-territory-explore-alley-pre-wall);
+    u64? var_4 = task-continue-active?(forward-base, fob-hostile-territory-explore-alley-pre-wall, squeeze-through-encounter-escape-clicker);
+    u64? var_5 = task-continue-active?(forward-base, fob-hostile-territory-explore-alley-pre-wall, squeeze-through-encounter-fight-clicker);
+    u64? var_6 = task-continue-active?(forward-base, fob-hostile-territory-explore-alley-pre-wall, squeeze-through-encounter-complete);
+    bool var_7 = var_3 || var_4 || var_5 && var_6;
+    u64? var_8 = #0E764148D8265FF9(var_2, var_7);
+    return var_8;
+}
+
+u64? *activities*__activity-data@1dc0(u64? arg_0) {
+    u64? var_0 = task-active?(save-lev, sle-scar-island-farm-road-troops-landing);
+    u64? var_1 = task-continue-active?(save-lev, sle-farmland-passing-troops, default);
+    u64? var_2 = task-continue-active?(save-lev, sle-farmland-passing-troops, farm-road-patrol);
+    u64? var_3 = task-continue-active?(save-lev, sle-farmland-passing-troops, farm-road-patrol-done);
+    u64? var_4 = task-continue-active?(save-lev, sle-farmland-passing-troops, farm-road-shrine);
+    u64? var_5 = task-continue-active?(save-lev, sle-farmland-passing-troops, farm-road-workbench);
+    bool var_6 = var_0 || var_1 || var_2 || var_3 || var_4 && var_5;
+    u64? var_7 = task-complete?(save-lev, sle-farmland-passing-troops);
+    u64? var_8 = task-continue-active?(save-lev, sle-farmland-passing-troops, farmland);
+    u64? var_9 = task-continue-active?(save-lev, sle-farmland-passing-troops, checkpoint);
+    u64? var_10 = task-continue-active?(save-lev, sle-farmland-passing-troops, gate-attempted);
+    u64? var_11 = task-continue-active?(save-lev, sle-farmland-passing-troops, combat-done);
+    bool var_12 = var_7 || var_8 || var_9 || var_10 && var_11;
+    u64? var_13 = #0E764148D8265FF9(var_6, var_12);
+    return var_13;
+}
+
+u64? *activities*__activity-data@13a0(u64? arg_0) {
+    u64? var_0 = task-range-active?(saving-kids, ski-protecting-kids-escape, saving-kids, ski-protecting-kids-stream);
+    u64? var_1 = task-continue-active?(saving-kids, ski-protecting-kids-fence-pry, default);
+    bool var_2 = var_0 && var_1;
+    u64? var_3 = task-complete?(saving-kids, ski-protecting-kids-fence-pry);
+    u64? var_4 = task-continue-active?(saving-kids, ski-protecting-kids-fence-pry, tackle);
+    bool var_5 = var_3 && var_4;
+    u64? var_6 = #0E764148D8265FF9(var_2, var_5);
+    return var_6;
+}
+
+u64? *activities*__activity-data@1760(u64? arg_0) {
+    u64? var_0 = task-continue-active?(watchtower, wat-watchtower-escape, default);
+    u64? var_1 = task-complete?(watchtower, wat-watchtower-escape);
+    u64? var_2 = task-continue-active?(watchtower, wat-watchtower-escape, studio-intro);
+    u64? var_3 = task-continue-active?(watchtower, wat-watchtower-escape, studio);
+    u64? var_4 = task-continue-active?(watchtower, wat-watchtower-escape, lobby);
+    bool var_5 = var_1 || var_2 || var_3 && var_4;
+    u64? var_6 = #0E764148D8265FF9(var_0, var_5);
+    return var_6;
+}
+
+u64? *activities*__activity-data@1b20(u64? arg_0) {
+    u64? var_0 = task-active?(watchtower, wat-explore-capitol-hill);
+    u64? var_1 = task-continue-active?(watchtower, wat-explore-capitol-hill, gas-station);
+    u64? var_2 = task-continue-active?(watchtower, wat-explore-capitol-hill, olive-st);
+    bool var_3 = var_0 && !var_1 && !var_2;
+    u64? var_4 = task-complete?(watchtower, wat-explore-capitol-hill);
+    u64? var_5 = task-continue-active?(watchtower, wat-explore-capitol-hill, gas-station);
+    u64? var_6 = task-continue-active?(watchtower, wat-explore-capitol-hill, olive-st);
+    bool var_7 = var_4 || var_5 && var_6;
+    u64? var_8 = #0E764148D8265FF9(var_3, var_7);
+    return var_8;
+}
+
+u64? *activities*__activity-data@2f00(u64? arg_0) {
+    u64? var_0 = task-range-active?(find-nora, nor-ellie-leaves-theater-intro, find-nora, nor-ellie-alone-streets);
+    u64? var_1 = task-complete?(find-nora, nor-ellie-alone-streets);
+    u64? var_2 = task-continue-active?(find-nora, nor-ellie-alone-streets, hospital-vantage-point);
+    bool var_3 = var_1 && var_2;
+    u64? var_4 = #0E764148D8265FF9(var_0, var_3);
+    return var_4;
+}
+
+u64? *activities*__activity-data@23c0(u64? arg_0) {
+    u64? var_0 = task-active?(ellie-flashback-museum, efm-swim-to-deer);
+    u64? var_1 = task-continue-active?(ellie-flashback-museum, efm-swim-push-joel-in, default);
+    bool var_2 = var_0 && var_1;
+    u64? var_3 = task-complete?(ellie-flashback-museum, efm-swim-push-joel-in);
+    u64? var_4 = task-continue-active?(ellie-flashback-museum, efm-swim-push-joel-in, post-push);
+    bool var_5 = var_3 && var_4;
+    u64? var_6 = #0E764148D8265FF9(var_2, var_5);
+    return var_6;
+}
+
+u64? *activities*__activity-data@1d00(u64? arg_0) {
+    u64? var_0 = task-active?(tracking-horde, tra-horde-joel-tommy-defend-fight);
+    u64? var_1 = task-complete?(tracking-horde, tra-horde-joel-tommy-defend-fight);
+    u64? var_2 = task-continue-active?(tracking-horde, tra-horde-joel-tommy-defend-fight, push-done);
+    bool var_3 = var_1 && var_2;
+    u64? var_4 = #0E764148D8265FF9(var_0, var_3);
+    return var_4;
+}
+
+u64? *activities*__activity-data@2e40(u64? arg_0) {
+    u64? var_0 = task-continue-active?(medicine, med-hidden-ascent-top, default);
+    u64? var_1 = task-complete?(medicine, med-hidden-ascent-top);
+    u64? var_2 = task-continue-active?(medicine, med-hidden-ascent-top, combat-done);
+    bool var_3 = var_1 && var_2;
+    u64? var_4 = #0E764148D8265FF9(var_0, var_3);
+    return var_4;
+}
+
+u64? *activities*__activity-data@1fa0(u64? arg_0) {
+    u64? var_0 = task-range-active?(saving-kids, ski-coastal-explore-start, saving-kids, ski-aquarium-approach);
+    u64? var_1 = task-complete?(saving-kids, ski-aquarium-approach);
+    u64? var_2 = task-active?(saving-kids, ski-aquarium-approach);
+    u64? var_3 = get-svar-as-boolean(#3857992E6AF3BE16);
+    bool var_4 = var_1 && var_2 && var_3;
+    u64? var_5 = #0E764148D8265FF9(var_0, var_4);
+    return var_5;
+}
+
+u64? *activities*__activity-data@2840(u64? arg_0) {
+    u64? var_0 = task-continue-active?(medicine, med-infected-building-descent, default);
+    u64? var_1 = task-continue-active?(medicine, med-infected-building-descent, floor-1);
+    u64? var_2 = task-continue-active?(medicine, med-infected-building-descent, floor-1-cleared);
+    bool var_3 = var_0 || var_1 && var_2;
+    u64? var_4 = task-complete?(medicine, med-infected-building-descent);
+    u64? var_5 = task-continue-active?(medicine, med-infected-building-descent, floor-2);
+    u64? var_6 = task-continue-active?(medicine, med-infected-building-descent, floor-2-cleared);
+    u64? var_7 = task-continue-active?(medicine, med-infected-building-descent, floor-3);
+    u64? var_8 = task-continue-active?(medicine, med-infected-building-descent, floor-3-cleared);
+    u64? var_9 = task-continue-active?(medicine, med-infected-building-descent, floor-4);
+    u64? var_10 = task-continue-active?(medicine, med-infected-building-descent, floor-5);
+    u64? var_11 = task-continue-active?(medicine, med-infected-building-descent, floor-6);
+    bool var_12 = var_4 || var_5 || var_6 || var_7 || var_8 || var_9 || var_10 && var_11;
+    u64? var_13 = #0E764148D8265FF9(var_3, var_12);
+    return var_13;
+}
+
+u64? *activities*__activity-data@2a20(u64? arg_0) {
+    u64? var_0 = task-continue-active?(jordan-escape, joe-school-fight, default);
+    u64? var_1 = task-continue-active?(jordan-escape, joe-school-fight, classroom-done);
+    bool var_2 = var_0 && var_1;
+    u64? var_3 = task-complete?(jordan-escape, joe-school-fight);
+    u64? var_4 = task-continue-active?(jordan-escape, joe-school-fight, corridor-start);
+    u64? var_5 = task-continue-active?(jordan-escape, joe-school-fight, corridor-combat);
+    u64? var_6 = task-continue-active?(jordan-escape, joe-school-fight, corridor-done);
+    u64? var_7 = task-continue-active?(jordan-escape, joe-school-fight, courtyard-start);
+    u64? var_8 = task-continue-active?(jordan-escape, joe-school-fight, courtyard-checkpoint);
+    u64? var_9 = task-continue-active?(jordan-escape, joe-school-fight, courtyard-done);
+    u64? var_10 = task-continue-active?(jordan-escape, joe-school-fight, roof-start);
+    u64? var_11 = task-continue-active?(jordan-escape, joe-school-fight, roof-combat);
+    u64? var_12 = task-continue-active?(jordan-escape, joe-school-fight, roof-moved-to-courtyard);
+    u64? var_13 = task-continue-active?(jordan-escape, joe-school-fight, roof-done);
+    bool var_14 = var_3 || var_4 || var_5 || var_6 || var_7 || var_8 || var_9 || var_10 || var_11 || var_12 && var_13;
+    u64? var_15 = #0E764148D8265FF9(var_2, var_14);
+    return var_15;
+}
+
+u64? *activities*__activity-data@2660(u64? arg_0) {
+    u64? var_0 = task-continue-active?(tracking, tra-find-outpost-stealth-tutorial, default);
+    u64? var_1 = task-complete?(tracking, tra-find-outpost-stealth-tutorial);
+    u64? var_2 = task-continue-active?(tracking, tra-find-outpost-stealth-tutorial, found-infected);
+    u64? var_3 = task-continue-active?(tracking, tra-find-outpost-stealth-tutorial, tutorial-done);
+    u64? var_4 = task-continue-active?(tracking, tra-find-outpost-stealth-tutorial, combat-done);
+    bool var_5 = var_1 || var_2 || var_3 && var_4;
+    u64? var_6 = #0E764148D8265FF9(var_0, var_5);
+    return var_6;
+}
+
+u64? *activities*__activity-data@2a80(u64? arg_0) {
+    u64? var_0 = task-active?(medicine, med-hospital-basement-finding-power);
+    u64? var_1 = task-continue-active?(medicine, med-hospital-basement-back-rooms, default);
+    bool var_2 = var_0 && var_1;
+    u64? var_3 = task-complete?(medicine, med-hospital-basement-back-rooms);
+    u64? var_4 = task-continue-active?(medicine, med-hospital-basement-back-rooms, generator);
+    u64? var_5 = task-continue-active?(medicine, med-hospital-basement-back-rooms, breaker-switch);
+    bool var_6 = var_3 || var_4 && var_5;
+    u64? var_7 = #0E764148D8265FF9(var_2, var_6);
+    return var_7;
+}
+
+u64? *activities*__activity-data@32c0(u64? arg_0) {
+    u64? var_0 = task-active?(farm, far-explore-house);
+    u64? var_1 = task-complete?(farm, far-explore-house);
+    u64? var_2 = task-active?(farm, far-explore-house);
+    u64? var_3 = get-svar-as-boolean(far-played-record);
+    bool var_4 = var_1 && var_2 && var_3;
+    u64? var_5 = #0E764148D8265FF9(var_0, var_4);
+    return var_5;
+}
+
+u64? *activities*__activity-data@3020(u64? arg_0) {
+    u64? var_0 = task-continue-active?(santa-barbara, san-infected-wilds-upper-fight, default);
+    u64? var_1 = task-continue-active?(santa-barbara, san-infected-wilds-upper-fight, checkpoint);
+    bool var_2 = var_0 && var_1;
+    u64? var_3 = task-complete?(santa-barbara, san-infected-wilds-upper-fight);
+    u64? var_4 = task-continue-active?(santa-barbara, san-infected-wilds-upper-fight, mansion);
+    u64? var_5 = task-continue-active?(santa-barbara, san-infected-wilds-upper-fight, mansion-done);
+    u64? var_6 = task-continue-active?(santa-barbara, san-infected-wilds-upper-fight, overlook);
+    u64? var_7 = task-continue-active?(santa-barbara, san-infected-wilds-upper-fight, overlook-fight);
+    bool var_8 = var_3 || var_4 || var_5 || var_6 && var_7;
+    u64? var_9 = #0E764148D8265FF9(var_2, var_8);
+    return var_9;
+}
+
+u64? #9811B43668E13FDC() {
+    u64? var_0 = #CD3AB99702F53DC4(0);
+    u64? var_1 = #B17F0E78E84400FE();
+    bool var_2 = var_0 && !var_1;
+    return var_2;
+}
+
+u64? #B17F0E78E84400FE() {
+    u64? var_0 = task-continue-active?(seattle-arrival, sea-hub-explore, courthouse-entry);
+    u64? var_1 = task-continue-active?(seattle-arrival, sea-hub-explore, courthouse-entry-checkpoint);
+    u64? var_2 = task-continue-active?(seattle-arrival, sea-hub-explore, courthouse-stairwell);
+    u64? var_3 = task-continue-active?(seattle-arrival, sea-hub-explore, courthouse-front);
+    u64? var_4 = task-continue-active?(seattle-arrival, sea-hub-explore, courthouse-fight);
+    u64? var_5 = task-continue-active?(seattle-arrival, sea-hub-explore, courthouse-post-fight);
+    u64? var_6 = task-continue-active?(seattle-arrival, sea-hub-explore, courthouse-post-fight-with-gas);
+    bool var_7 = var_0 || var_1 || var_2 || var_3 || var_4 || var_5 && var_6;
+    return var_7;
+}
+
+u64? #C8D3BAD302B43BD9() {
+    u64? var_0 = task-active?(seattle-arrival, sea-hub-explore);
+    u64? var_1 = get-svar(sea-horse-finding-gas);
+    u64? var_2 = #B17F0E78E84400FE();
+    u64? var_3 = #EE49148374E0CACA();
+    bool var_4 = var_0 && var_1 > 4 && !var_2 && !var_3;
+    return var_4;
+}
+
+u64? #CD3AB99702F53DC4(u64? arg_0) {
+    u64? var_0 = task-complete?(seattle-arrival, sea-hub-explore);
+    u64? var_1 = task-active?(seattle-arrival, sea-hub-explore);
+    u64? var_2 = get-svar(sea-horse-finding-gas);
+    u64? var_3 = get-svar(sea-horse-finding-gas);
+    bool var_4 = var_0 && var_1 || var_2 >= 5 && arg_0 && var_3 == 3;
+    return var_4;
+}
+
+u64? #EE49148374E0CACA() {
+    u64? var_0 = task-continue-active?(seattle-arrival, sea-hub-explore, sanctuary-infected);
+    u64? var_1 = task-continue-active?(seattle-arrival, sea-hub-explore, sanctuary-construction);
+    u64? var_2 = task-continue-active?(seattle-arrival, sea-hub-explore, sanctuary-boost);
+    u64? var_3 = task-continue-active?(seattle-arrival, sea-hub-explore, sanctuary-first-floor);
+    u64? var_4 = task-continue-active?(seattle-arrival, sea-hub-explore, sanctuary-first-floor-with-gas);
+    u64? var_5 = task-continue-active?(seattle-arrival, sea-hub-explore, sanctuary-near-rope);
+    u64? var_6 = task-continue-active?(seattle-arrival, sea-hub-explore, sanctuary-second-floor);
+    bool var_7 = var_0 || var_1 || var_2 || var_3 || var_4 || var_5 && var_6;
+    return var_7;
+}
+

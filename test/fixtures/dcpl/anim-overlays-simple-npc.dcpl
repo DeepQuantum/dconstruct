@@ -38,3 +38,13 @@ u64? anim-overlay-simple-npc-locomotion-whitney-giiiiirl__anim-overlay-set@76b0(
     return var_0;
 }
 
+u64? anim-overlay-simple-npc-locomotion-basic-male__anim-overlay-set@2a80(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = lerp-scale(0.90, 0.70, 1.00, 0.00, arg_1);
+    return var_0;
+}
+
+u64? anim-overlay-simple-npc-locomotion-whitney-giiiiirl__anim-overlay-set@76b0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = read-float-channel(OverlayHelper.AimState, arg_3, arg_0, arg_1, arg_2, 0.00);
+    return var_0;
+}
+

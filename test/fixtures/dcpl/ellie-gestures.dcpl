@@ -70,3 +70,31 @@ u64? aiming-ik-config__array*@697b0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg
     return var_0;
 }
 
+string dra-jeep-combat-horn-1-long-1-short-gesture__gesture-def@b130__gesture-ik-config@66a78____ik-node-config@71840____array*@7a648____aim@7e700__(u64? arg_0) {
+    return "";
+}
+
+u64? dra-jeep-combat-horn-1-long-1-short-gesture__gesture-def@b130__gesture-ik-config@66a78____array*@76280__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_0 = alloc-ik-goal-look-at();
+    *(i32 *)(var_0 + 32) = 2;
+    u64? var_1 = gesture-get-target-ws-from-snapshot(aim, arg_2, arg_3, 1);
+    *(f32 *)(var_0 + 16) = *(f32 *)var_1;
+    *(f32 *)((var_0 + 16) + 4) = *(f32 *)(var_1 + 4);
+    *(f32 *)((var_0 + 16) + 8) = *(f32 *)(var_1 + 8);
+    return var_0;
+}
+
+string ellie-uneasy-raised-left-arm-gesture__gesture-def@1f5b0__gesture-mesh@62b10__(u64? arg_0) {
+    return "";
+}
+
+u64? aiming-ik-config__array*@697b0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_0 = alloc-ik-goal-look-at();
+    *(i32 *)(var_0 + 32) = 2;
+    u64? var_1 = gesture-get-target-ws-from-snapshot(aim, arg_2, arg_3, 1);
+    *(f32 *)(var_0 + 16) = *(f32 *)var_1;
+    *(f32 *)((var_0 + 16) + 4) = *(f32 *)(var_1 + 4);
+    *(f32 *)((var_0 + 16) + 8) = *(f32 *)(var_1 + 8);
+    return var_0;
+}
+

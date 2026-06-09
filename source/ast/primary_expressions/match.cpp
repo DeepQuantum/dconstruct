@@ -425,7 +425,13 @@ namespace dconstruct::ast {
         const i64 start_symbol_table_size = fn.m_symbolTable.size();
 
         static const literal sentinel{SID("sentinel")};
-        const literal& default_case = m_default ? *m_default->as_literal() : sentinel;
+
+        const auto emit_default_to_symbol_table = [&]() -> std::expected<u16, std::string> {
+            if (m_default) {
+                return m_default->emit_to_symbol_table(fn, global);
+            }
+            return sentinel.emit_to_symbol_table(fn, global);
+        };
 
         std::optional<u64> default_symbol_table_entry;
         std::expected<u16, std::string> symbol_table_entry_res;
@@ -434,7 +440,7 @@ namespace dconstruct::ast {
                 symbol_table_entry_res = match_it->second->emit_to_symbol_table(fn, global);
                 ++match_it;
             } else {
-                symbol_table_entry_res = default_case.emit_to_symbol_table(fn, global);
+                symbol_table_entry_res = emit_default_to_symbol_table();
                 default_symbol_table_entry = symbol_table_entry_res.value_or(0);
             }
             if (!symbol_table_entry_res) {
@@ -443,8 +449,8 @@ namespace dconstruct::ast {
             entries.push_back(*symbol_table_entry_res);
         }
 
-        if (!default_symbol_table_entry) {
-            const auto st_res = default_case.emit_to_symbol_table(fn, global);
+        if (!default_symbol_table_entry && m_default) {
+            const auto st_res = m_default->emit_to_symbol_table(fn, global);
             if (!st_res) {
                 return std::unexpected{st_res.error()};
             }
@@ -486,10 +492,13 @@ namespace dconstruct::ast {
         }
 
         assert(m_loadOpcode.has_value());
-        fn.emit_instruction(Opcode::LoadStaticU64Imm, *load_dest_res, (u8)*default_symbol_table_entry);
+        u64 end_branch = 0;
+        if (m_default) {
+            fn.emit_instruction(Opcode::LoadStaticU64Imm, *load_dest_res, (u8)*default_symbol_table_entry);
 
-        const u64 end_branch = fn.m_instructions.size();
-        fn.emit_instruction(Opcode::Branch, compilation::function::BRANCH_PLACEHOLDER, 0, compilation::function::BRANCH_PLACEHOLDER);
+            end_branch = fn.m_instructions.size();
+            fn.emit_instruction(Opcode::Branch, compilation::function::BRANCH_PLACEHOLDER, 0, compilation::function::BRANCH_PLACEHOLDER);
+        }
         const u64 default_location = fn.m_instructions.size();
         if (start_idx != 0) {
             const Opcode math_opcode = start_idx < 0 ? Opcode::ISubImm : Opcode::IAddImm;
@@ -497,8 +506,10 @@ namespace dconstruct::ast {
         }
         fn.emit_instruction(*m_loadOpcode, *load_dest_res, condition_reg);
         const u64 end_location = fn.m_instructions.size();
-        fn.m_instructions[default_branch].set_lo_hi(static_cast<u16>(default_location));
-        fn.m_instructions[end_branch].set_lo_hi(static_cast<u16>(end_location));
+        if (m_default) {
+            fn.m_instructions[default_branch].set_lo_hi(static_cast<u16>(default_location));
+            fn.m_instructions[end_branch].set_lo_hi(static_cast<u16>(end_location));
+        }
 
         return *load_dest_res;
     }

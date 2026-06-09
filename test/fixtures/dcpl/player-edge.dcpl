@@ -351,3 +351,111 @@ u64 anim-player-edge-states__anim-node-animation@2658(u64? arg_0, u64 arg_1, u64
     return *(u64*)((*(arg_1 + 8) + 904) + 8);
 }
 
+u64? anim-player-edge-states__actor-state-list@48__anim-transition-group@25b0____anim-transition-condition-lambda@13bb0__(u8 arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_0 = player-animation-abort-active?(arg_2, arg_1);
+    bool var_1 = var_0 && *(u8 *)(*arg_0 + 208);
+    return var_1;
+}
+
+u64? anim-player-edge-states(u64? arg_0, u64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64 arg_5, u64? arg_6) {
+    u64 var_0 = *(u64 *)(*(arg_1 + 8) + 384);
+    u64? var_1 = player-anim-speed-mult(var_0, *(u64 *)arg_5);
+    return arg_2 + ((arg_3 * var_1) * arg_4);
+}
+
+f32 anim-player-edge-states__anim-node-blend@2818__anim-node-blend@d3b8__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32 *)((*(arg_0 + 16) + 240) + 8);
+}
+
+u64? anim-player-edge-states__anim-transition-group@1c70__anim-transition-condition-lambda@13310__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_0 = player-on-cover-ledge?(0);
+    u64? var_1 = player-get-weapon-hand();
+    bool var_2 = var_0 && var_1 == 1;
+    return var_2;
+}
+
+u64? anim-player-edge-states__anim-transition-condition-lambda@13f00(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_0 = player-on-cover-ledge?(0);
+    u64? var_1 = player-get-weapon-hand();
+    bool var_2 = var_0 && var_1 == 0;
+    return var_2;
+}
+
+f32 anim-player-edge-states__anim-node-blend@1e90__anim-node-blend@e338____anim-node-animation@139a8__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return 0.00;
+}
+
+f32 anim-player-edge-states__anim-node-blend@1e90(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return 1.00;
+}
+
+f32 anim-player-edge-states__anim-node-blend@10208__anim-node-blend@13728__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32 *)((*(arg_0 + 16) + 240) + 8);
+}
+
+f32 anim-player-edge-states__anim-node-blend@2768(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32 *)(*(arg_0 + 16) + 240);
+}
+
+f32 anim-player-edge-states__anim-node-blend@2158__anim-node-blend@10018__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32 *)(*(arg_0 + 16) + 240);
+}
+
+u64? anim-player-edge-states__anim-transition-group@1c50__anim-transition-condition-lambda@13040__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_0 = player-animation-abort-active?(arg_2, arg_1);
+    return var_0;
+}
+
+u64 anim-player-edge-states__anim-node-blend@1a88__anim-node-blend@8c50____anim-node-animation@138a8__(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64 *)((*(arg_1 + 8) + 904) + 40);
+}
+
+u64 anim-player-edge-states__anim-node-blend@1a88__anim-node-animation@12bf0__(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64 *)((*(arg_1 + 8) + 904) + 64);
+}
+
+u64 anim-player-edge-states__anim-node-blend@3f50__anim-node-animation@12bb8__(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64 *)((*(arg_1 + 8) + 904) + 88);
+}
+
+u64 anim-player-edge-states__anim-node-animation@12c68(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64 *)((*(arg_1 + 8) + 904) + 112);
+}
+
+u64 anim-player-edge-states__anim-node-blend@19a8__anim-node-blend@ffd8____anim-node-animation@12cc8__(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64 *)((*(arg_1 + 8) + 904) + 48);
+}
+
+u64 anim-player-edge-states__anim-node-blend@19a8__anim-node-animation@13480__(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64 *)((*(arg_1 + 8) + 904) + 72);
+}
+
+u64 anim-player-edge-states__anim-node-blend@a0b8__anim-node-animation@12d00__(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64 *)((*(arg_1 + 8) + 904) + 96);
+}
+
+u64 anim-player-edge-states__anim-node-animation@12d38(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64 *)((*(arg_1 + 8) + 904) + 120);
+}
+
+u64? anim-player-edge-states__anim-transition-group@1ad0__anim-transition-condition-lambda@13180__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_0 = player-on-cover-ledge?(1);
+    return var_0;
+}
+
+u64 anim-player-edge-states__anim-node-animation@26d8(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64 *)((*(arg_1 + 8) + 904) + 16);
+}
+
+u64 anim-player-edge-states__anim-node-animation@1b68(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64 *)((*(arg_1 + 8) + 904) + 152);
+}
+
+u64 anim-player-edge-states__anim-node-animation@1e18(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64 *)(*(arg_1 + 8) + 904);
+}
+
+u64 anim-player-edge-states__anim-node-animation@2658(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64 *)((*(arg_1 + 8) + 904) + 8);
+}
+

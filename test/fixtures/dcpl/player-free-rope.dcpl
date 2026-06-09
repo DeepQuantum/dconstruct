@@ -222,3 +222,59 @@ u64? anim-player-free-rope-states__anim-transition-group@2e00__anim-transition-c
     return var_1;
 }
 
+f32 anim-player-free-rope-states__actor-state-list@48__anim-node-blend@23f8____anim-node-blend@57a8__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32 *)((*(arg_0 + 16) + 2432) + 16);
+}
+
+f32 anim-player-free-rope-states__actor-state-list@48(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32 *)((*(arg_0 + 16) + 2432) + 20);
+}
+
+u64? anim-player-free-rope-states(u64? arg_0, u64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64 arg_5, u64? arg_6) {
+    u64 var_0 = *(u64 *)(*(arg_1 + 8) + 384);
+    u64? var_1 = player-anim-speed-mult(var_0, *(u64 *)arg_5);
+    return arg_2 + ((arg_3 * var_1) * arg_4);
+}
+
+f32 anim-player-free-rope-states__anim-node-blend@2048(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32 *)(*arg_0 + 232);
+}
+
+u64? anim-player-free-rope-states__anim-transition-group@3110__anim-transition-condition-lambda@7120__(u8 arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_0 = player-animation-abort-active?(arg_2, arg_1);
+    bool var_1 = var_0 && *(u8 *)(*arg_0 + 208);
+    return var_1;
+}
+
+u64 anim-player-free-rope-states__anim-node-animation@3128(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64 *)((*(arg_1 + 16) + 2432) + 48);
+}
+
+f32 anim-player-free-rope-states__anim-node-blend@2f48__anim-node-blend@4c08____anim-node-blend@6830____anim-node-blend@7988__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32 *)((*(arg_0 + 16) + 2432) + 28);
+}
+
+f32 anim-player-free-rope-states__anim-node-blend@2f48__anim-node-blend@4c08__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32 *)((*(arg_0 + 16) + 2432) + 32);
+}
+
+f32 anim-player-free-rope-states__anim-node-blend@5080__anim-node-blend@6898__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32 *)((*(arg_0 + 16) + 2432) + 28);
+}
+
+f32 anim-player-free-rope-states__anim-node-blend@21e8__anim-node-blend@3bd8__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32 *)((*(arg_0 + 16) + 2432) + 36);
+}
+
+u64 anim-player-free-rope-states__anim-node-blend@2590__anim-node-blend@3b18____anim-node-animation@6ad0__(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64 *)((*(arg_1 + 16) + 240) + 32);
+}
+
+u64 anim-player-free-rope-states__anim-node-blend@2590__anim-node-animation@6a98__(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64 *)((*(arg_1 + 16) + 240) + 48);
+}
+
+u64 anim-player-free-rope-states__anim-node-animation@48f8(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64 *)((*(arg_1 + 16) + 240) + 40);
+}
+

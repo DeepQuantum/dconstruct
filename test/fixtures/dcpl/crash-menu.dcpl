@@ -78,3 +78,23 @@ u64? crash-game-menu-script() {
     return var_0;
 }
 
+u64? crash-the-game() {
+    u64? var_0 = print-float(*0, self);
+    return var_0;
+}
+
+u64? crash-the-game-2() {
+    u64? var_0 = crash-the-game();
+    return var_0;
+}
+
+u64? crash-the-game-3() {
+    u64? var_0 = crash-the-game-2();
+    return var_0;
+}
+
+u64? crash-game-menu-script() {
+    u64? var_0 = crash-the-game-3();
+    return var_0;
+}
+

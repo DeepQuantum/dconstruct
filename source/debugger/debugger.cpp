@@ -3,16 +3,18 @@
 
 #include <DbgEng.h>
 #include <atomic>
+#include <cassert>
+#include <cstring>
 #include <disassembly/disassembler.h>
 #include <expected>
+#include <memory>
 #include <mutex>
 #include <optional>
+#include <stop_token>
 #include <string_view>
 
 
 namespace dconstruct::debugger {
-
-//static constexpr ULONG64 PARSE_INSTRUCTION_BREAKPOINT_RVA = 0x1414B6B27 - CONST_MODULE_BASE;
 
 [[nodiscard]] std::expected<ULONG, std::string> debugger::get_tlou_pid() {
     static constexpr std::wstring_view process_name = L"tlou-ii.exe"sv;
@@ -51,6 +53,32 @@ template<typename T>
         return std::unexpected{std::format("ReadVirtual failed @ {:#x} (hr={:#x}, read={}/{})", addr, static_cast<u32>(hr), read, sizeof(T) * elements)};
     }
     return result;
+}
+
+[[nodiscard]] BinaryFile debugger::create_debugger_binary_file() const {
+    static constexpr u64 fake_size = sizeof(DC_Header) + 16;
+    std::byte* raw_bytes = static_cast<std::byte*>(::operator new[](fake_size, std::align_val_t(64)));
+    std::memset(raw_bytes, 0, fake_size);
+
+    BinaryFile::byte_uptr bytes(raw_bytes);
+    auto* header = reinterpret_cast<DC_Header*>(bytes.get());
+    header->m_magic = DC_MAGIC;
+    header->m_versionNumber = DC_VERSION;
+    header->m_textSize = sizeof(DC_Header);
+    header->m_stringsOffset = 0;
+    header->field_10 = 1;
+    header->m_numEntries = 0;
+    header->m_pStartOfData = nullptr;
+
+    BinaryFile file{"<debugger>", fake_size, std::move(bytes), header};
+
+    std::byte* pointed_at = static_cast<std::byte*>(::operator new[](1, std::align_val_t(64)));
+    *pointed_at = std::byte{0};
+    file.m_pointedAtTable = BinaryFile::byte_uptr(pointed_at);
+    file.m_relocTable = location(file.m_bytes.get() + sizeof(DC_Header) + sizeof(u32));
+    file.m_strings = location(nullptr);
+
+    return file;
 }
 
 [[nodiscard]] std::optional<std::string> debugger::request_attach() {
@@ -183,6 +211,7 @@ void debugger::cleanup_session() {
     m_registers->GetIndexByName("rdi", &rdi);
     m_registers->GetIndexByName("rcx", &rcx);
     m_registers->GetIndexByName("rsp", &rsp);
+    m_registers->GetIndexByName("r14", &r14);
 
     return std::nullopt;
 }
@@ -199,7 +228,8 @@ void debugger::cleanup_session() {
     m_state.store(debugger::STATE::ATTACHED, std::memory_order_release);
     {
         std::lock_guard guard(m_mutex);
-        return std::move(std::exchange(m_snapshot, nullptr));
+        assert(m_snapshot && "should always have a snapshot here");
+        return m_snapshot;
     }
 }
 
@@ -211,9 +241,193 @@ void debugger::store_error(std::string_view error) {
     }
 }
 
+[[nodiscard]] std::unique_ptr<u64[]> debugger::read_stack_frame() {
+    DEBUG_VALUE stack_frame_start{};
+    m_registers->GetValue(rdi, &stack_frame_start);
+
+    res_msg gp_registers_res = read_virtual<u64>(stack_frame_start.I64, ARGUMENT_REGISTERS_IDX * 2);
+
+    if (!gp_registers_res) {
+        store_error(gp_registers_res.error());
+        return nullptr;
+    }
+    return std::move(*gp_registers_res);
+}
+
+void debugger::request_single_step() {
+    {
+        std::lock_guard guard(m_mutex);
+        m_command = COMMAND::SINGLE_STEP;
+    }
+    m_commandCv.notify_one();
+}
+
+
+void debugger::request_continue() {
+    {
+        std::lock_guard guard(m_mutex);
+        m_command = COMMAND::CONTINUE;
+    }
+    m_commandCv.notify_one();
+}
+
+[[nodiscard]] debugger::COMMAND debugger::await_command(std::stop_token st) {
+    std::unique_lock lock(m_mutex);
+    m_commandCv.wait(lock, st, [this] () { return m_command != COMMAND::NONE; });
+    return std::exchange(m_command, COMMAND::NONE);
+}
+
+[[nodiscard]] std::shared_ptr<debugger_snapshot> debugger::capture_initial_snapshot(const sid64 sid, const ULONG thread_id) {
+
+    DEBUG_VALUE instruction_idx_addr{};
+    m_registers->GetValue(r14, &instruction_idx_addr);
+
+    res_msg<u64> instruction_idx_res = read_virtual<u32>(instruction_idx_addr.I64);
+    if (!instruction_idx_res) {
+        store_error(std::move(instruction_idx_res.error()));
+        return nullptr;
+    }
+
+
+    if (*instruction_idx_res != 0) {
+        store_error("istr idx wasn't 0");
+        return nullptr;
+    }
+
+
+    DEBUG_VALUE script_lambda_val{};
+    m_registers->GetValue(rax, &script_lambda_val);
+    DEBUG_VALUE stack_frame_start{};
+    m_registers->GetValue(rdi, &stack_frame_start);
+
+    res_msg<ScriptLambda> script_lamba_res = read_virtual<ScriptLambda>(script_lambda_val.I64);
+
+    if (!script_lamba_res) {
+        store_error(script_lamba_res.error());
+        return nullptr;
+    }
+
+    if (script_lamba_res->m_instructionFlag != 0xdeadbeef1337f00d) {
+        store_error("found function but magic number was wrong"sv);
+        return nullptr;
+    }
+
+    const u64* istr_addr = script_lamba_res->m_pInstruction;
+    const u64* symbol_table_addr = script_lamba_res->m_pSymbols;
+
+    const u64 num_instructions = script_lamba_res->m_numInstructions;
+
+    const u64 num_symbols = (script_lamba_res->m_sum - 12) / 4 - num_instructions;
+
+    res_msg instructions_res = read_virtual<Instruction>(p64(istr_addr), num_instructions);
+    if (!instructions_res) {
+        store_error(instructions_res.error());
+        return nullptr;
+    }
+    res_msg symbols_res = read_virtual<u64>(p64(symbol_table_addr), num_symbols);
+    if (!symbols_res) {
+        store_error(symbols_res.error());
+        return nullptr;
+    }
+
+    std::unique_ptr stack_frame = read_stack_frame();
+    if (!stack_frame) {
+        return nullptr;
+    }
+
+    m_functionData.emplace_back(std::move(*instructions_res), std::move(*symbols_res));
+
+    std::shared_ptr func_disassembly = Disassembler::create_function_disassembly(
+        m_functionData.back().m_instructions.get(),
+        num_instructions,
+        m_sidbase->lookup(*m_currentlyDebuggingSid, m_sidCache),
+        location(m_functionData.back().m_symbols.get()),
+        reinterpret_cast<u64>(istr_addr),
+        sizeof(Instruction),
+        game_type::T2R,
+        *m_sidbase,
+        m_sidCache
+    );
+
+    static const char empty_debugger_string[] = "";
+    for (const function_disassembly_line& line : func_disassembly->m_lines) {
+        if (line.m_instruction.opcode == Opcode::LoadStaticPointerImm && line.m_instruction.operand1 < num_symbols) {
+            m_functionData.back().m_symbols[line.m_instruction.operand1] = reinterpret_cast<u64>(empty_debugger_string);
+        }
+    }
+
+    BinaryFile debugger_file = create_debugger_binary_file();
+    auto decompiled = std::make_shared<ast::function_definition>(
+        dcompiler::decomp_function{
+            *func_disassembly,
+            debugger_file,
+            *m_sidbase,
+            ControlFlowGraph::build(*func_disassembly)
+        }.decompile(dcompiler::OPTIMIZATION_KIND::NONE)
+    );
+
+    auto snapshot = std::make_unique<debugger_snapshot>();
+    snapshot->m_func = std::move(func_disassembly);
+    snapshot->m_decomp = std::move(decompiled);
+    std::memcpy(&snapshot->m_generalPurposeRegisters, stack_frame.get(), ARGUMENT_REGISTERS_IDX * sizeof(u64));
+    std::memcpy(&snapshot->m_argumentRegisters, stack_frame.get() + ARGUMENT_REGISTERS_IDX, ARGUMENT_REGISTERS_IDX * sizeof(u64));
+    snapshot->m_sid = sid;
+    snapshot->m_scriptLambdaPtr = script_lambda_val.I64;
+    snapshot->m_stackFramePtr = stack_frame_start.I64;
+    snapshot->m_debugThreadId = thread_id;
+    snapshot->m_instructionIdx = 1;
+    return snapshot;
+}
+
+[[nodiscard]] res_msg<std::shared_ptr<debugger_snapshot>> debugger::capture_next_snapshot(const sid64 sid, const ULONG thread_id) {
+    DEBUG_VALUE script_lambda_val{};
+    m_registers->GetValue(rax, &script_lambda_val);
+    DEBUG_VALUE stack_frame_start{};
+    m_registers->GetValue(rdi, &stack_frame_start);
+
+    debugger_snapshot old_snapshot_copy{};
+    {
+        std::lock_guard lock(m_mutex);
+        assert(m_snapshot && "next snapshot capture requires a previous snapshot");
+        old_snapshot_copy = *m_snapshot;
+    }
+
+    if (old_snapshot_copy.m_sid != sid ||
+        old_snapshot_copy.m_scriptLambdaPtr != script_lambda_val.I64 ||
+        old_snapshot_copy.m_stackFramePtr != stack_frame_start.I64 ||
+        old_snapshot_copy.m_debugThreadId != thread_id) {
+        return nullptr;
+    }
+
+    DEBUG_VALUE instruction_idx_addr{};
+    m_registers->GetValue(r14, &instruction_idx_addr);
+
+    res_msg<u64> instruction_idx_res = read_virtual<u32>(instruction_idx_addr.I64);
+    if (!instruction_idx_res) {
+        return std::unexpected{std::move(instruction_idx_res.error())};
+    }
+
+    const u64 instruction_idx = *instruction_idx_res;
+
+    assert(instruction_idx == old_snapshot_copy.m_instructionIdx);
+
+    ++old_snapshot_copy.m_instructionIdx;
+
+    std::unique_ptr stack_frame = read_stack_frame();
+
+    if (!stack_frame) {
+        return nullptr;
+    }
+
+    std::memcpy(&old_snapshot_copy.m_generalPurposeRegisters, stack_frame.get(), ARGUMENT_REGISTERS_IDX * sizeof(u64));
+    std::memcpy(&old_snapshot_copy.m_argumentRegisters, stack_frame.get() + ARGUMENT_REGISTERS_IDX, ARGUMENT_REGISTERS_IDX * sizeof(u64));
+
+    return std::make_shared<debugger_snapshot>(std::move(old_snapshot_copy));
+}
+
 void debugger::loop(std::stop_token st) {
+    m_control->SetExecutionStatus(DEBUG_STATUS_GO);
     while (!st.stop_requested()) {
-        m_control->SetExecutionStatus(DEBUG_STATUS_GO);
         if (m_control->WaitForEvent(DEBUG_WAIT_DEFAULT, INFINITE) != S_OK) {
             break;
         }
@@ -221,84 +435,69 @@ void debugger::loop(std::stop_token st) {
         DEBUG_LAST_EVENT_INFO_BREAKPOINT info{};
         m_control->GetLastEventInformation(&type, &prod_id, &thread_id, &info, sizeof(info), &used, nullptr, 0, nullptr);
         if (type != DEBUG_EVENT_BREAKPOINT) {
-            continue;
-        }
-
-        if (m_state.load(std::memory_order_acquire) == STATE::SNAPSHOT_READY) {
+            m_control->SetExecutionStatus(DEBUG_STATUS_GO);
             continue;
         }
 
         DEBUG_VALUE stack_pointer{};
         m_registers->GetValue(rsp, &stack_pointer);
 
-        const u64 sid_location = stack_pointer.I64 + SID_LOCATION_STACK_POINTER_OFFSET;
-
-        res_msg sid = read_virtual<sid64>(sid_location);
-
+        res_msg sid = read_virtual<sid64>(stack_pointer.I64 + SID_LOCATION_STACK_POINTER_OFFSET);
         if (!sid) {
             store_error(std::move(sid.error()));
             break;
         }
 
-        const bool sid_found = std::any_of(m_toMatchSIDs.begin(), m_toMatchSIDs.end(), [needle = *sid] (const sid64 sid) { return needle == sid; } );
-
+        const bool sid_found = std::any_of(m_toMatchSIDs.begin(), m_toMatchSIDs.end(), [needle = *sid] (const sid64 sid) { return needle == sid; });
         if (!sid_found) {
+            m_control->SetExecutionStatus(DEBUG_STATUS_GO);
             continue;
         }
 
-        DEBUG_VALUE script_lambda_val{};
-        m_registers->GetValue(rax, &script_lambda_val);
-
-        res_msg<ScriptLambda> script_lamba_res = read_virtual<ScriptLambda>(script_lambda_val.I64);
-
-        if (!script_lamba_res) {
-            store_error(script_lamba_res.error());
-            break;
+        if (m_currentlyDebuggingSid) {
+            if (*m_currentlyDebuggingSid != *sid) {
+                m_control->SetExecutionStatus(DEBUG_STATUS_GO);
+                continue;
+            }
+            res_msg snapshot = capture_next_snapshot(*sid, thread_id);
+            if (!snapshot) {
+                store_error(snapshot.error());
+                break;
+            } else if (*snapshot == nullptr) {
+                continue;
+            }
+            {
+                std::lock_guard lock(m_mutex);
+                m_snapshot = std::move(*snapshot);
+            }
+        } else {
+            m_currentlyDebuggingSid = *sid;
+            std::shared_ptr snapshot = capture_initial_snapshot(*sid, thread_id);
+            if (!snapshot) {
+                break;
+            }
+            {
+                std::lock_guard lock(m_mutex);
+                m_snapshot = std::move(snapshot);
+            }
         }
 
-        if (script_lamba_res->m_instructionFlag != 0xdeadbeef1337f00d) {
-            store_error("found function but magic number was wrong"sv);
-            break;
-        }
-
-        const u64* istr_addr = script_lamba_res->m_pInstruction;
-        const u64* symbol_table_addr = script_lamba_res->m_pSymbols;
-
-        const u64 num_instructions = script_lamba_res->m_numInstructions;
-
-        const u64 num_symbols = (script_lamba_res->m_sum - 12) / 4 - num_instructions;
-
-        res_msg instructions_res = read_virtual<Instruction>((u64)istr_addr, num_instructions);
-        if (!instructions_res) {
-            store_error(instructions_res.error());
-            break;
-        }
-        res_msg symbols_res = read_virtual<u64>((u64)symbol_table_addr, num_symbols);
-        if (!symbols_res) {
-            store_error(symbols_res.error());
-            break;
-        }
-
-        m_functionData.emplace_back(std::move(*instructions_res), std::move(*symbols_res));
-
-        std::shared_ptr func_disassembly = Disassembler::create_function_disassembly(
-            m_functionData.back().m_instructions.get(),
-            num_instructions,
-            "anon",
-            location(m_functionData.back().m_symbols.get()),
-            reinterpret_cast<u64>(istr_addr),
-            sizeof(Instruction),
-            game_type::T2R,
-            *m_sidbase,
-            m_sidCache
-        );
-
-        {
-            std::lock_guard lock(m_mutex);
-            m_snapshot = std::make_shared<debugger_snapshot>(std::move(func_disassembly));
-        }
         m_state.store(STATE::SNAPSHOT_READY, std::memory_order_release);
+
+        switch (await_command(st)) {
+            case COMMAND::CONTINUE:
+                m_bp->RemoveFlags(DEBUG_BREAKPOINT_ENABLED);
+                m_currentlyDebuggingSid.reset();
+                m_control->SetExecutionStatus(DEBUG_STATUS_GO);
+                break;
+            case COMMAND::SINGLE_STEP:
+                m_control->SetExecutionStatus(DEBUG_STATUS_GO);
+                break;
+            case COMMAND::NONE:
+                break;
+        }
     }
+    m_control->SetExecutionStatus(DEBUG_STATUS_GO);
 }
 
 }

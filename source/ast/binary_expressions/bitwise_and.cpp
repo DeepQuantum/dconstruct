@@ -12,7 +12,7 @@ namespace dconstruct::ast {
         const std::optional<reg_idx> destination
     ) const noexcept {
         const emission_res lhs = m_lhs->emit_dc(fn, global);
-        if (lhs) {
+        if (!lhs) {
             return lhs;
         }
 
@@ -28,7 +28,7 @@ namespace dconstruct::ast {
             return and_destination;
         }
 
-        fn.emit_instruction(Opcode::OpBitOr, *and_destination, *lhs, *rhs);
+        fn.emit_instruction(Opcode::OpBitAnd, *and_destination, *lhs, *rhs);
         fn.free_register(*lhs);
         fn.free_register(*rhs);
 

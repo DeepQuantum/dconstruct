@@ -376,3 +376,140 @@ u64? player-supine^stand-evade-contextual-left__start-func-array@2790(u64? arg_0
     return var_6;
 }
 
+f32 player-supine^stand-evade-right__melee-attack@180__character-melee-info@2370__(u64? arg_0, u64? arg_1, u64? arg_2) {
+    return 0.40;
+}
+
+u64? player-supine^stand-evade-right__start-func-array@2448(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = melee-fact-get-symbol(player, contextual-dodge-npc);
+    u64? var_1 = valid-contextual-dodge?(var_0, 18, 255);
+    u64? var_2 = player-can-stand-up?();
+    u64? var_3 = get-melee-evade-dir(arg_1);
+    u64? var_4 = vector-magnitude(var_3);
+    u64? var_5 = melee-contextual-evade-matches-dir?(arg_1, arg_2, 3);
+    bool var_6 = var_2 && var_4 > 0.00 && var_5 && 1 && 1;
+    return var_6;
+}
+
+u16 player-supine^stand-evade-right(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    u64? var_0 = is-player?(arg_1);
+    u16 var_1;
+    if (var_0) {
+        u64? var_2 = melee-fact-set-bool(arg_1, is-dodging, 0);
+        var_1 = var_2;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 player-supine^stand-evade-right__melee-event-list@2520(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = player-melee?();
+    u64? var_1 = melee-weapon-bit-check(arg_1, #0000008410000000, 0, 0);
+    u16 var_2;
+    if (var_0 && var_1) {
+        u64? var_3 = holster-player-weapon-instantly(0.00, 0);
+        var_2 = var_3;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u64? player-prone^stand-evade-left__start-func-array@1d58(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = melee-fact-get-symbol(player, contextual-dodge-npc);
+    u64? var_1 = valid-contextual-dodge?(var_0, 18, 255);
+    u64? var_2 = player-can-stand-up?();
+    u64? var_3 = get-melee-evade-dir(arg_1);
+    u64? var_4 = vector-magnitude(var_3);
+    u64? var_5 = melee-contextual-evade-matches-dir?(arg_1, arg_2, 2);
+    bool var_6 = var_2 && var_4 > 0.00 && var_5 && 1 && 1;
+    return var_6;
+}
+
+f32 player-supine^stand-evade-forward__melee-attack@940__character-melee-info@2088__(u64? arg_0, u64? arg_1, u64? arg_2) {
+    return 0.60;
+}
+
+u64? player-supine^stand-evade-forward__start-func-array@2460(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = melee-fact-get-symbol(player, contextual-dodge-npc);
+    u64? var_1 = valid-contextual-dodge?(var_0, 18, 255);
+    u64? var_2 = player-can-stand-up?();
+    u64? var_3 = get-melee-evade-dir(arg_1);
+    u64? var_4 = vector-magnitude(var_3);
+    u64? var_5 = melee-contextual-evade-matches-dir?(arg_1, arg_2, 0);
+    bool var_6 = var_2 && var_4 > 0.00 && var_5 && 1 && 1;
+    return var_6;
+}
+
+u64? player-supine^stand-evade-contextual-right__start-func-array@2778(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = melee-fact-get-symbol(player, contextual-dodge-npc);
+    u64? var_1 = valid-contextual-dodge?(var_0, 18, 255);
+    u64? var_2 = player-can-stand-up?();
+    u64? var_3 = get-melee-evade-dir(arg_1);
+    u64? var_4 = vector-magnitude(var_3);
+    u64? var_5 = melee-contextual-evade-matches-dir?(arg_1, arg_2, 3);
+    bool var_6 = var_2 && var_4 > 0.00 && var_5 && 1 && 1;
+    return var_6;
+}
+
+u16 player-supine^stand-evade-contextual-right(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = is-player?(arg_1);
+    u64? var_1 = character-is-dead?(arg_2);
+    u16 var_2;
+    if (var_0 || !0 && var_1) {
+        u64? var_3 = get-delta-time();
+        joypad-disable-commands-timed(var_3, melee-attack);
+        u64? var_4 = invalidate-single-melee-command-queue(arg_1, melee-attack);
+        var_2 = var_4;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u64? player-supine^stand-evade-back__start-func-array@2430(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = melee-fact-get-symbol(player, contextual-dodge-npc);
+    u64? var_1 = valid-contextual-dodge?(var_0, 18, 255);
+    u64? var_2 = player-can-stand-up?();
+    u64? var_3 = get-melee-evade-dir(arg_1);
+    u64? var_4 = vector-magnitude(var_3);
+    u64? var_5 = melee-contextual-evade-matches-dir?(arg_1, arg_2, 1);
+    bool var_6 = var_2 && var_4 > 0.00 && var_5 && 1 && 1;
+    return var_6;
+}
+
+u64? player-supine^stand-evade-180__start-func-array@2418(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = melee-fact-get-symbol(player, contextual-dodge-npc);
+    u64? var_1 = valid-contextual-dodge?(var_0, 18, 255);
+    u64? var_2 = player-can-stand-up?();
+    u64? var_3 = get-melee-evade-dir(arg_1);
+    u64? var_4 = vector-magnitude(var_3);
+    u64? var_5 = melee-contextual-evade-matches-dir?(arg_1, arg_2, 0);
+    u64? var_6 = get-object-rotation(arg_1);
+    u64? var_7 = get-local-z(var_6);
+    u64? var_8 = camera-locator(0);
+    u64? var_9 = get-locator-rotation(var_8);
+    u64? var_10 = get-local-z(var_9);
+    u64? var_11 = angle-in-between-vectors-plus(var_7, var_10, 1);
+    u64? var_12 = get-object-rotation(arg_1);
+    u64? var_13 = get-local-z(var_12);
+    u64? var_14 = camera-locator(0);
+    u64? var_15 = get-locator-rotation(var_14);
+    u64? var_16 = get-local-z(var_15);
+    u64? var_17 = angle-in-between-vectors-plus(var_13, var_16, 1);
+    bool var_18 = var_2 && var_4 > 0.00 && var_5 || var_11 > 135.00 && var_17 < -135.00 && var_17 < -135.00;
+    return var_18;
+}
+
+u64? player-supine^stand-evade-contextual-left__start-func-array@2790(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = melee-fact-get-symbol(player, contextual-dodge-npc);
+    u64? var_1 = valid-contextual-dodge?(var_0, 18, 255);
+    u64? var_2 = player-can-stand-up?();
+    u64? var_3 = get-melee-evade-dir(arg_1);
+    u64? var_4 = vector-magnitude(var_3);
+    u64? var_5 = melee-contextual-evade-matches-dir?(arg_1, arg_2, 2);
+    bool var_6 = var_2 && var_4 > 0.00 && var_5 && 1 && 1;
+    return var_6;
+}
+

@@ -18,3 +18,8 @@ u64? top-level() {
     return var_0;
 }
 
+u64? top-level() {
+    u64? var_0 = sync-audio-environment-meta-data();
+    return var_0;
+}
+

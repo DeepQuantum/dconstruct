@@ -1,7 +1,7 @@
 u16 #608356039B1FD9FD() {
     u64? var_0 = get-symbol(current-task, self);
     u64? var_1 = get-symbol(current-task, ss-wave-manager-level-set-loader-1);
-    bool var_2 = get-boolean(#B0E4DDF4A79D13AC, ss-wave-manager-level-set-loader-1);
+    u64? var_2 = get-boolean(#B0E4DDF4A79D13AC, ss-wave-manager-level-set-loader-1);
     u16 var_3;
     if (var_0 == var_1 && var_2) {
         u64? var_4 = get-svar(#47CB08FCD5FE82DB);

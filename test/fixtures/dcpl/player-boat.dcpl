@@ -238,3 +238,71 @@ u64 anim-player-boat-states__anim-node-animation@810(u64? arg_0, u64 arg_1, u64?
     return *(u64*)((*arg_1 + 816) + 8);
 }
 
+u64? anim-player-boat-states__actor-state-list@48__anim-transition-group@660____anim-transition-condition-lambda@1b10__(u8 arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_0 = player-animation-abort-active?(arg_2, arg_1);
+    bool var_1 = var_0 && *(u8 *)(*arg_0 + 208);
+    return var_1;
+}
+
+u64? anim-player-boat-states(u64? arg_0, u64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64 arg_5, u64? arg_6) {
+    u64 var_0 = *(u64 *)(*(arg_1 + 8) + 384);
+    u64? var_1 = player-anim-speed-mult(var_0, *(u64 *)arg_5);
+    return arg_2 + ((arg_3 * var_1) * arg_4);
+}
+
+f32 anim-player-boat-states__anim-node-blend@758__anim-node-blend@1560____anim-node-blend@1c58____anim-node-blend@1ed8____anim-node-blend@2bc0____anim-node-blend@32f0____anim-node-animation@34f0__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return *(f32 *)(*(arg_0 + 16) + 2884);
+}
+
+u64? anim-player-boat-states__anim-node-blend@758__anim-node-blend@1560____anim-node-blend@1c58____anim-node-blend@1ed8__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    f32 var_0 = *(f32 *)((*(arg_0 + 16) + 2884) + 8);
+    u64? var_1 = lerp-scale(0.50, 1.00, 0.00, 1.00, var_0);
+    return var_1;
+}
+
+f32 anim-player-boat-states__anim-node-blend@758__anim-node-blend@2e78____anim-node-blend@3330____anim-node-blend@36e0__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32 *)((*arg_0 + 816) + 136);
+}
+
+f32 anim-player-boat-states__anim-node-blend@758(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32 *)((*arg_0 + 816) + 140);
+}
+
+f32 anim-player-boat-states__anim-node-blend@3130__anim-node-blend@3758__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32 *)((*arg_0 + 816) + 144);
+}
+
+f32 anim-player-boat-states__anim-node-blend@24b0__anim-node-blend@2e00____anim-node-blend@3070__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32 *)((*arg_0 + 816) + 136);
+}
+
+f32 anim-player-boat-states__anim-node-blend@2cc8__anim-node-blend@30f0__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32 *)((*arg_0 + 816) + 144);
+}
+
+u64? anim-player-boat-states__anim-transition-group@870__anim-transition-condition-lambda@1980__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    bool var_0 = *(f32 *)((*(arg_0 + 16) + 2884) + 8) < 0.50 && *(f32 *)((*(arg_0 + 16) + 2884) + 4) < -1.00;
+    return var_0;
+}
+
+u8 anim-player-boat-states__anim-transition-condition-lambda@1e10(u8 arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return *(u8 *)((*(arg_0 + 16) + 2884) + 12);
+}
+
+f32 anim-player-boat-states__anim-node-blend@900__anim-node-blend@14b0____anim-node-animation@1c98__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return *(f32 *)(*(arg_0 + 16) + 2884);
+}
+
+f32 anim-player-boat-states__anim-node-blend@15a0__anim-node-blend@1b38____anim-node-blend@22a8__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32 *)((*arg_0 + 816) + 136);
+}
+
+f32 anim-player-boat-states__anim-node-blend@1cd0__anim-node-blend@2470__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32 *)((*arg_0 + 816) + 144);
+}
+
+u64? anim-player-boat-states__anim-transition-group@580__anim-transition-condition-lambda@1d50__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    bool var_0 = *(f32 *)((*(arg_0 + 16) + 2884) + 8) >= 0.50 && *(f32 *)((*(arg_0 + 16) + 2884) + 4) > -1.00;
+    return var_0;
+}
+

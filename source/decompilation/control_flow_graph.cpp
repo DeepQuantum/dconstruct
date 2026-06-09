@@ -536,7 +536,7 @@ namespace dconstruct {
         std::vector<node_reg_pair> node_stack;
 
         if (start_line) {
-            const auto [read_first, _x, _y] = start_node.get_register_nature_starting_at(start_line, m_isScriptFunction);
+            const auto [read_first, _x, _y] = start_node.get_register_nature_starting_at(start_line, !m_isScriptFunction);
             read |= read_first & check_regs;
             check_regs &= ~read_first;
             checked[start_node.m_index] = true;
@@ -599,7 +599,7 @@ namespace dconstruct {
         std::cout << "check reg " << std::to_string(reg_to_check) << '\n';
 #endif
         if (start_line) {
-            const auto [read_once, read_twice, written] = start_node.get_register_nature_starting_at(start_line, m_isScriptFunction);
+            const auto [read_once, read_twice, written] = start_node.get_register_nature_starting_at(start_line, !m_isScriptFunction);
 #ifdef _TRACE
             std::cout << "using start line " << start_line << " , "
                       << " read_first: " << pretty_regset(read_once)

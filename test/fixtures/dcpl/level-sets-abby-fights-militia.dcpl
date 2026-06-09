@@ -350,3 +350,91 @@ u64? tsk-afm-cavalry-highway-combat__level-set@aa0__level-scripted-set@1338__() 
     return var_1;
 }
 
+u64? tsk-afm-brewery-start__level-set@480__level-scripted-set@cc0__() {
+    u64? var_0 = player-in-state?(Prone);
+    return var_0;
+}
+
+u64? tsk-afm-brewery-start__level-scripted-set@cd8() {
+    u64? var_0 = player-in-state?(Prone);
+    return !var_0;
+}
+
+u64? tsk-afm-capitol-window-lift__level-set@4c8__level-scripted-set@1860__() {
+    u64? var_0 = get-boolean(#6E6134CA72189CC7, ss-afm-burning-village-window-lift-1);
+    return var_0;
+}
+
+u64? tsk-afm-capitol-arrive__level-set@540__level-scripted-set@1a70__() {
+    u64? var_0 = player-in-region?(#948A9B5F75FAD88B, 2);
+    return var_0;
+}
+
+u64? tsk-afm-capitol-arrive__level-scripted-set@18f0() {
+    u64? var_0 = player-in-region?(#351EF377C571750F, 2);
+    return var_0;
+}
+
+u64? tsk-afm-capitol-arrive__level-scripted-set@ea0() {
+    u64? var_0 = task-not-complete?(abby-fights-militia, afm-horse-chase-knock-off);
+    return var_0;
+}
+
+u16 tsk-afm-capitol-arrive__level-scripted-set@1758() {
+    return 1;
+}
+
+u64? tsk-afm-capitol-docks__level-set@6d0__level-scripted-set@1350__() {
+    u64? var_0 = task-not-complete?(abby-fights-militia, afm-burning-village-brute-combat);
+    return var_0;
+}
+
+u64? tsk-afm-capitol-docks__level-scripted-set@1128() {
+    u64? var_0 = task-not-complete?(abby-fights-militia, afm-burning-village-brute-struggle);
+    return var_0;
+}
+
+u64? tsk-afm-capitol-docks__level-scripted-set@e10() {
+    u64? var_0 = task-not-complete?(abby-fights-militia, afm-burning-village-find-boat);
+    return var_0;
+}
+
+u64? tsk-afm-capitol-docks__level-scripted-set@13e0() {
+    u64? var_0 = task-not-complete?(abby-fights-militia, afm-burning-village-escape);
+    return var_0;
+}
+
+u64? tsk-afm-capitol-collapse__level-set@728__level-scripted-set@1650__() {
+    u64? var_0 = task-continue-active?(abby-fights-militia, afm-burning-village-collapse, crawl);
+    u64? var_1 = task-continue-active?(abby-fights-militia, afm-burning-village-collapse, pull-backpack);
+    u64? var_2 = task-continue-active?(abby-fights-militia, afm-burning-village-collapse, exit);
+    bool var_3 = var_0 || var_1 && var_2;
+    return var_3;
+}
+
+u64? afm-burning-village-ocean-scripted-set__level-set@770__level-scripted-set@1b78__() {
+    u64? var_0 = task-range-active?(abby-fights-militia, afm-burning-village-arrive, abby-fights-militia, afm-burning-village-brute-combat);
+    return !var_0;
+}
+
+u64? afm-burning-village-ocean-scripted-set__level-scripted-set@1098() {
+    u64? var_0 = task-range-active?(abby-fights-militia, afm-burning-village-arrive, abby-fights-militia, afm-burning-village-brute-combat);
+    return var_0;
+}
+
+bool tsk-afm-river__level-set@898__level-scripted-set@cf0__() {
+    u64? var_0 = stat-value?(afm-approaching-river-school);
+    return var_0 == 0;
+}
+
+bool tsk-afm-river__level-scripted-set@df8() {
+    u64? var_0 = stat-value?(afm-approaching-river-school);
+    return var_0 > 0;
+}
+
+u64? tsk-afm-cavalry-highway-combat__level-set@aa0__level-scripted-set@1338__() {
+    u64? var_0 = player-in-region?(#AC7A04EF24700691, 2);
+    u64? var_1 = !(var_0);
+    return var_1;
+}
+

@@ -74,7 +74,7 @@ namespace dconstruct::ast {
         if (!neg_destination) {
             return neg_destination;
         }
-        if (const literal* literal_rhs = m_rhs->as_literal(); is_arithmetic(literal_rhs->get_type())) {
+        if (const literal* literal_rhs = m_rhs->as_literal(); literal_rhs && is_arithmetic(literal_rhs->get_type())) {
             const std::optional<primitive_number> value = get_number(literal_rhs->m_value);
             assert(value);
             const auto opt_emit = std::visit(

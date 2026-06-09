@@ -1318,3 +1318,333 @@ u64? npc-vs-yara-standing-struggle-critical-back-enter__start-func-array@84b8(u6
     return var_3;
 }
 
+f32 npc-vs-buddy-fist-standing-struggle-back-intro__melee-attack@3f0__character-melee-info@7ad0__(u64? arg_0, u64? arg_1, u64? arg_2) {
+    return 0.00;
+}
+
+u64? npc-vs-buddy-fist-standing-struggle-back-intro__start-func-array@7e30(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = npc-is-buddy?(arg_2);
+    if (!var_0) {
+        melee-debug-text-file-line-fail("(npc-is-buddy? defender)", "t2r/src/game/scriptx/melee/buddy-standing/imports/buddy-macros-npc.dcx", 229);
+    }
+    u64? var_1 = npc-is-infected?(arg_1);
+    u64? var_2 = melee-fact-get-bool(arg_2, melee-buddy-prevent-infected-grapples);
+    melee-debug-text-file-line-fail("(or (not (npc-is-infected? attacker)) (not (melee-fact-get-bool defender (quote melee-buddy-prevent-infected-grapples))))", "t2r/src/game/scriptx/melee/buddy-standing/imports/buddy-macros-npc.dcx", 230);
+    bool var_3 = var_0 || !var_1 && !var_2 && !var_2 && !var_2;
+    return var_3;
+}
+
+u16 npc-vs-buddy-fist-standing-struggle-back-intro(i64 arg_0, i64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    u16 var_0;
+    if (arg_0 == arg_1) {
+        u64? var_1 = fact-remove(arg_1, stunned);
+        var_0 = var_1;
+    } else {
+        var_0 = 0;
+    }
+    return var_0;
+}
+
+u64? npc-vs-buddy-fist-standing-struggle-back-intro__melee-event-list@53c8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = melee-fact-set-time(arg_1, melee-time-since-entered-struggle);
+    return var_0;
+}
+
+u64? npc-vs-buddy-fist-standing-struggle-back-intro__melee-event-transitions@10f48(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    return arg_2;
+}
+
+u16 npc-vs-yara-standing-struggle-critical-loop__melee-attack@5e0(i64 arg_0, u64? arg_1, i64 arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    u16 var_0;
+    if (arg_0 == arg_2) {
+        u64? var_1 = melee-fact-get-bool(arg_2, loop-valid);
+        if (!var_1) {
+            melee-fact-remove(arg_1, stunned);
+            melee-fact-remove(arg_2, buddy-low-health-state);
+            melee-fact-remove(arg_2, already-shouted-for-help-1);
+            melee-fact-remove(arg_2, already-shouted-for-help-2);
+            melee-fact-remove(arg_2, already-shouted-for-help-3);
+            u64? var_2 = new-boxed-value(7, arg_2);
+            u64? var_3 = new-boxed-value(7, arg_1);
+            u64? var_4 = broadcast-event(buddy-exited-struggle-rescue, var_2, var_3);
+            var_0 = var_4;
+        } else {
+            u64? var_5 = melee-fact-remove(arg_2, loop-valid);
+            var_0 = var_5;
+        }
+    } else {
+        var_0 = 0;
+    }
+    return var_0;
+}
+
+u64? npc-vs-yara-standing-struggle-critical-loop(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = melee-fact-get-time-since(arg_1, melee-time-entered-struggle);
+    u64? var_1 = lerp-scale(23.00 * 0.15, 23.00 * 0.95, 1.00, 0.00, var_0);
+    u64? var_2 = melee-fact-set-float(arg_2, buddy-hud-health, var_1);
+    return var_2;
+}
+
+u64? npc-vs-buddy-1h-blunt-standing-struggle-fail__melee-attack@7d0__melee-event-list@78a8__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = character-set-invincibility(arg_1, 4, 0);
+    return var_0;
+}
+
+u64? npc-vs-buddy-1h-blunt-standing-struggle-fail__melee-attack@7d0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    f32 var_0 = (f32)(1 / 30);
+    u64? var_1 = give-i-frames(arg_1, var_0);
+    return var_1;
+}
+
+u64? npc-vs-buddy-1h-blunt-standing-struggle-fail(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    melee-fact-set-bool(arg_1, stunned, 0);
+    request-dialog(buddy-killed, player, arg_2, 0, 0, 0, 0);
+    melee-fact-set-bool(player, buddy-dead, 1);
+    melee-fact-set-bool(arg_2, buddy-low-health-state, 0);
+    set-svar-as-boolean(death-tip-buddy-rescue, 1);
+    promote-post-death-tip(TIP_BUDDY_RESCUE, 1);
+    character-set-invincibility(arg_2, 0, 0);
+    u64? var_0 = npc-die(arg_2, 0, 0, 1, 1);
+    return var_0;
+}
+
+u64? #1E4337F991192045(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    f32 var_0;
+    if (!(0.00 == 0.00)) {
+        var_0 = 0.00;
+    } else {
+        var_0 = 0.00;
+    }
+    u64? var_1 = play-melee-facial-gesture(arg_2, 8, var_0, 0.10);
+    return var_1;
+}
+
+u64? infected-vs-yara-standing-struggle-critical-intro__start-func-array@67a8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = npc-is-buddy?(arg_2);
+    if (!var_0) {
+        melee-debug-text-file-line-fail("(npc-is-buddy? defender)", "t2r/src/game/scriptx/melee/buddy-standing/imports/buddy-macros-npc.dcx", 229);
+    }
+    u64? var_1 = npc-is-infected?(arg_1);
+    u64? var_2 = melee-fact-get-bool(arg_2, melee-buddy-prevent-infected-grapples);
+    melee-debug-text-file-line-fail("(or (not (npc-is-infected? attacker)) (not (melee-fact-get-bool defender (quote melee-buddy-prevent-infected-grapples))))", "t2r/src/game/scriptx/melee/buddy-standing/imports/buddy-macros-npc.dcx", 230);
+    bool var_3 = var_0 || !var_1 && !var_2 && !var_2 && !var_2;
+    return var_3;
+}
+
+u64? #42C357B5FEF0D3E6(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    f32 var_0;
+    if (!(0.00 == 0.00)) {
+        var_0 = 0.00;
+    } else {
+        var_0 = 0.00;
+    }
+    u64? var_1 = play-melee-facial-gesture(arg_2, 12, var_0, 0.10);
+    return var_1;
+}
+
+u64? npc-vs-yara-standing-struggle-critical-front-enter__start-func-array@82a8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = npc-is-buddy?(arg_2);
+    if (!var_0) {
+        melee-debug-text-file-line-fail("(npc-is-buddy? defender)", "t2r/src/game/scriptx/melee/buddy-standing/imports/buddy-macros-npc.dcx", 229);
+    }
+    u64? var_1 = npc-is-infected?(arg_1);
+    u64? var_2 = melee-fact-get-bool(arg_2, melee-buddy-prevent-infected-grapples);
+    melee-debug-text-file-line-fail("(or (not (npc-is-infected? attacker)) (not (melee-fact-get-bool defender (quote melee-buddy-prevent-infected-grapples))))", "t2r/src/game/scriptx/melee/buddy-standing/imports/buddy-macros-npc.dcx", 230);
+    bool var_3 = var_0 || !var_1 && !var_2 && !var_2 && !var_2;
+    return var_3;
+}
+
+u64? #52ED1317B803EBC4(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    f32 var_0;
+    if (!(0.00 == 0.00)) {
+        var_0 = 0.00;
+    } else {
+        var_0 = 0.00;
+    }
+    u64? var_1 = play-melee-facial-gesture(arg_2, 14, var_0, 0.20);
+    return var_1;
+}
+
+u64? buddy-npc-death-standing-struggle-fail(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    f32 var_0;
+    if (!(0.00 == 0.00)) {
+        var_0 = 0.00;
+    } else {
+        var_0 = 0.00;
+    }
+    u64? var_1 = play-melee-facial-gesture(arg_1, 3, var_0, 0.10);
+    return var_1;
+}
+
+u64? inf-vs-buddy-front-standing-struggle-back-intro__start-func-array@6898(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = npc-is-buddy?(arg_2);
+    if (!var_0) {
+        melee-debug-text-file-line-fail("(npc-is-buddy? defender)", "t2r/src/game/scriptx/melee/buddy-standing/imports/buddy-macros-npc.dcx", 229);
+    }
+    u64? var_1 = npc-is-infected?(arg_1);
+    u64? var_2 = melee-fact-get-bool(arg_2, melee-buddy-prevent-infected-grapples);
+    melee-debug-text-file-line-fail("(or (not (npc-is-infected? attacker)) (not (melee-fact-get-bool defender (quote melee-buddy-prevent-infected-grapples))))", "t2r/src/game/scriptx/melee/buddy-standing/imports/buddy-macros-npc.dcx", 230);
+    bool var_3 = var_0 || !var_1 && !var_2 && !var_2 && !var_2;
+    return var_3;
+}
+
+u64? buddy-infected-death-dina-clicker(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    f32 var_0;
+    if (!(0.00 == 0.00)) {
+        var_0 = 0.00;
+    } else {
+        var_0 = 0.00;
+    }
+    u64? var_1 = play-melee-facial-gesture(arg_2, 3, var_0, 0.10);
+    return var_1;
+}
+
+f32 inf-vs-buddy-front-standing-struggle-success__melee-attack@2100__character-melee-info@7338__(u64? arg_0, u64? arg_1, u64? arg_2) {
+    return 0.60;
+}
+
+u64? inf-vs-buddy-front-standing-struggle-success__melee-event-list@58a8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = log-event("melee-npc-vs-buddy-struggle-success", 1, "", 0, 0);
+    return var_0;
+}
+
+u64? inf-vs-buddy-front-standing-struggle-success(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    f32 var_0;
+    if (!(0.00 == 0.00)) {
+        var_0 = 0.00;
+    } else {
+        var_0 = 0.00;
+    }
+    u64? var_1 = play-melee-facial-gesture(arg_1, 12, var_0, 0.10);
+    return var_1;
+}
+
+u64? #708BF7F98884B4F7(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    f32 var_0;
+    if (!(0.00 == 0.00)) {
+        var_0 = 0.00;
+    } else {
+        var_0 = 0.00;
+    }
+    u64? var_1 = play-melee-facial-gesture(arg_2, 14, var_0, 0.00);
+    return var_1;
+}
+
+u16 inf-vs-buddy-front-standing-struggle-loop(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    return 0;
+}
+
+u64? inf-vs-buddy-m-front-standing-struggle-loop(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    f32 var_0;
+    if (!(0.00 == 0.00)) {
+        var_0 = 0.00;
+    } else {
+        var_0 = 0.00;
+    }
+    u64? var_1 = play-melee-facial-gesture(arg_1, 14, var_0, 0.10);
+    return var_1;
+}
+
+u64? inf-vs-buddy-m-front-standing-struggle-back-intro__start-func-array@53b0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = npc-is-buddy?(arg_2);
+    if (!var_0) {
+        melee-debug-text-file-line-fail("(npc-is-buddy? defender)", "t2r/src/game/scriptx/melee/buddy-standing/imports/buddy-macros-npc.dcx", 229);
+    }
+    u64? var_1 = npc-is-infected?(arg_1);
+    u64? var_2 = melee-fact-get-bool(arg_2, melee-buddy-prevent-infected-grapples);
+    melee-debug-text-file-line-fail("(or (not (npc-is-infected? attacker)) (not (melee-fact-get-bool defender (quote melee-buddy-prevent-infected-grapples))))", "t2r/src/game/scriptx/melee/buddy-standing/imports/buddy-macros-npc.dcx", 230);
+    bool var_3 = var_0 || !var_1 && !var_2 && !var_2 && !var_2;
+    return var_3;
+}
+
+u64? inf-vs-buddy-m-front-standing-struggle-front-intro__start-func-array@5740(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = npc-is-buddy?(arg_2);
+    if (!var_0) {
+        melee-debug-text-file-line-fail("(npc-is-buddy? defender)", "t2r/src/game/scriptx/melee/buddy-standing/imports/buddy-macros-npc.dcx", 229);
+    }
+    u64? var_1 = npc-is-infected?(arg_1);
+    u64? var_2 = melee-fact-get-bool(arg_2, melee-buddy-prevent-infected-grapples);
+    melee-debug-text-file-line-fail("(or (not (npc-is-infected? attacker)) (not (melee-fact-get-bool defender (quote melee-buddy-prevent-infected-grapples))))", "t2r/src/game/scriptx/melee/buddy-standing/imports/buddy-macros-npc.dcx", 230);
+    bool var_3 = var_0 || !var_1 && !var_2 && !var_2 && !var_2;
+    return var_3;
+}
+
+u64? infected-vs-buddy-m-machete-counter-stomach-hit__melee-attack@3a30__start-func-array@5218__(u64? arg_0, u64? arg_1, i64 arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, bool arg_13, u64? arg_14, u64? arg_15) {
+    if (!arg_13) {
+        melee-debug-text-file-line-fail("attack-data", "t2r/src/game/scriptx/melee/buddy-standing/imports/buddy-macros-npc.dcx", 73);
+    }
+    u64? var_0 = melee-fact-get-symbol(arg_2, marked-for-buddy-finisher);
+    melee-debug-text-file-line-fail("(!= (melee-fact-get-symbol defender (quote marked-for-buddy-finisher)) defender)", "t2r/src/game/scriptx/melee/buddy-standing/imports/buddy-macros-npc.dcx", 74);
+    bool var_1 = arg_13 && var_0 != arg_2 && var_0 != arg_2;
+    return var_1;
+}
+
+u64? infected-vs-buddy-m-machete-counter-stomach-hit__melee-event-list@7c20(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = npc-unholster-melee-weapon(arg_2, 2);
+    return var_0;
+}
+
+u64? infected-vs-buddy-m-machete-counter-stomach-hit(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = character-in-range-of-hit?(arg_1, arg_2, buddy-m-1hblade-vs-inf-counter-02--buddy-m, buddy-m-1hblade-vs-inf-counter-02--inf-f, 0.30, 0.50);
+    return var_0;
+}
+
+u64? inf-vs-buddy-m-front-standing-struggle-success(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    f32 var_0;
+    if (!(0.00 == 0.00)) {
+        var_0 = 0.00;
+    } else {
+        var_0 = 0.00;
+    }
+    u64? var_1 = play-melee-facial-gesture(arg_1, 25, var_0, 0.40);
+    return var_1;
+}
+
+u64? inf-vs-buddy-front-standing-struggle-front-intro__start-func-array@7548(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = npc-is-buddy?(arg_2);
+    if (!var_0) {
+        melee-debug-text-file-line-fail("(npc-is-buddy? defender)", "t2r/src/game/scriptx/melee/buddy-standing/imports/buddy-macros-npc.dcx", 229);
+    }
+    u64? var_1 = npc-is-infected?(arg_1);
+    u64? var_2 = melee-fact-get-bool(arg_2, melee-buddy-prevent-infected-grapples);
+    melee-debug-text-file-line-fail("(or (not (npc-is-infected? attacker)) (not (melee-fact-get-bool defender (quote melee-buddy-prevent-infected-grapples))))", "t2r/src/game/scriptx/melee/buddy-standing/imports/buddy-macros-npc.dcx", 230);
+    bool var_3 = var_0 || !var_1 && !var_2 && !var_2 && !var_2;
+    return var_3;
+}
+
+u16 infected-vs-buddy-m-machete-counter-stomach-hit-sync__melee-attack@47c0(i64 arg_0, i64 arg_1, i64 arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    if (arg_0 == arg_1) {
+        abort-melee-action(arg_2);
+    }
+    u16 var_0;
+    if (arg_0 == arg_2) {
+        u64? var_1 = abort-melee-action(arg_1);
+        var_0 = var_1;
+    } else {
+        var_0 = 0;
+    }
+    return var_0;
+}
+
+u64? infected-vs-buddy-m-machete-counter-stomach-hit-sync__melee-event-list@6f30(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = reset-melee-sequence-count(arg_1);
+    return var_0;
+}
+
+u64? infected-vs-buddy-m-machete-counter-stomach-hit-sync(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = reset-melee-sequence-count(arg_2);
+    return var_0;
+}
+
+u64? npc-vs-yara-standing-struggle-critical-back-enter__start-func-array@84b8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = npc-is-buddy?(arg_2);
+    if (!var_0) {
+        melee-debug-text-file-line-fail("(npc-is-buddy? defender)", "t2r/src/game/scriptx/melee/buddy-standing/imports/buddy-macros-npc.dcx", 229);
+    }
+    u64? var_1 = npc-is-infected?(arg_1);
+    u64? var_2 = melee-fact-get-bool(arg_2, melee-buddy-prevent-infected-grapples);
+    melee-debug-text-file-line-fail("(or (not (npc-is-infected? attacker)) (not (melee-fact-get-bool defender (quote melee-buddy-prevent-infected-grapples))))", "t2r/src/game/scriptx/melee/buddy-standing/imports/buddy-macros-npc.dcx", 230);
+    bool var_3 = var_0 || !var_1 && !var_2 && !var_2 && !var_2;
+    return var_3;
+}
+

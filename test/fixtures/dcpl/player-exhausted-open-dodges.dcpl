@@ -1444,3 +1444,485 @@ u64? player-exhausted-dodge-right-lt-a-open(u64? arg_0, u64? arg_1, u64? arg_2, 
     return var_36;
 }
 
+u64? player-exhausted-dodge-back-lt-a-open__melee-attack@c0__character-melee-info@fe0__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    u64? var_0 = get-bf-from-cache(arg_6, 0);
+    u64? var_1 = melee-dodge-pose-calibration(arg_2, ellie-1h-dodge-open^run-back--left-ft, arg_5, var_0);
+    return var_1;
+}
+
+f32 player-exhausted-dodge-back-lt-a-open__melee-attack@c0(u64? arg_0, u64? arg_1, u64? arg_2) {
+    u64? var_0 = get-joypad-stick-intensity(move, 0.20, 1.00);
+    f32 var_1;
+    if (var_0 == 0.00) {
+        var_1 = 0.70;
+    } else {
+        var_1 = 0.40;
+    }
+    return var_1;
+}
+
+u64? player-exhausted-dodge-back-lt-a-open__start-func-array@e50(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = player-can-stand-up?();
+    if (!var_0) {
+        melee-debug-text-file-line-fail("(player-can-stand-up?)", "t2r/src/game/scriptx/melee/player-standing/imports/player-standing-macros.dcx", 7996);
+    }
+    u64? var_1 = fact-exists?(arg_1, time-to-next-valid-dodge);
+    u64? var_2 = melee-fact-get-time-since(arg_1, last-dodge-time);
+    u64? var_3 = melee-fact-get-float(arg_1, time-to-next-valid-dodge);
+    bool var_4 = var_0 && var_1 && var_2 > var_3;
+    return var_4;
+}
+
+u16 player-exhausted-dodge-back-lt-a-open(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    u64? var_0 = is-player?(arg_0);
+    u16 var_1;
+    if (var_0) {
+        melee-fact-set-bool(arg_1, successful-dodge, 0);
+        melee-fact-set-bool(arg_1, is-dodging, 0);
+        u64? var_2 = get-layer-animation-frame(arg_0, base);
+        u64? var_3 = round-float(15.00 - var_2);
+        u64? var_4 = minmax(var_3, 0.00, 999.00);
+        u16 var_5;
+        if ((var_4 / 30.00) > 0.00) {
+            u64? var_6 = is-final-build?();
+            if (!var_6) {
+                u64? var_7 = #5445173390656D6D("Run off i-frames awarded: %f", var_4 / 30.00);
+                display(var_7, 19);
+            }
+            u64? var_8 = give-i-frames(arg_0, var_4 / 30.00);
+            var_5 = var_8;
+        } else {
+            var_5 = 0;
+        }
+        var_1 = var_5;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 player-exhausted-dodge-back-lt-a-open__melee-event-list@fc8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    melee-log-player-event("melee-player-dodge-open", 1);
+    pose-blend(arg_1, ellie-1h-dodge-open^run-back--left-ft);
+    send-event(reset-dodge-spam, ss-melee-dodge-attack-spam);
+    u64? var_0 = is-player?(arg_1);
+    u16 var_1;
+    if (var_0) {
+        u64? var_2 = melee-fact-set-bool(arg_1, is-dodging, 1);
+        var_1 = var_2;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+sid player-exhausted-dodge-back-lt-a-open__melee-event-transitions@6ce8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return player-evade-back-attacks;
+}
+
+u64? player-exhausted-dodge-forward-rt-a-open__melee-attack@2b0__character-melee-info@da8__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    u64? var_0 = get-bf-from-cache(arg_6, 0);
+    u64? var_1 = melee-dodge-pose-calibration(arg_2, ellie-1h-dodge-open^run-forward--right-ft, arg_5, var_0);
+    return var_1;
+}
+
+u64? player-exhausted-dodge-forward-rt-a-open__start-func-array@fb0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = player-can-stand-up?();
+    if (!var_0) {
+        melee-debug-text-file-line-fail("(player-can-stand-up?)", "t2r/src/game/scriptx/melee/player-standing/imports/player-standing-macros.dcx", 7996);
+    }
+    u64? var_1 = fact-exists?(arg_1, time-to-next-valid-dodge);
+    u64? var_2 = melee-fact-get-time-since(arg_1, last-dodge-time);
+    u64? var_3 = melee-fact-get-float(arg_1, time-to-next-valid-dodge);
+    bool var_4 = var_0 && var_1 && var_2 > var_3;
+    return var_4;
+}
+
+u16 player-exhausted-dodge-forward-rt-a-open__melee-event-list@ca0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    melee-log-player-event("melee-player-dodge-open", 1);
+    pose-blend(arg_1, ellie-1h-dodge-open^run-forward--right-ft);
+    send-event(reset-dodge-spam, ss-melee-dodge-attack-spam);
+    u64? var_0 = is-player?(arg_1);
+    u16 var_1;
+    if (var_0) {
+        u64? var_2 = melee-fact-set-bool(arg_1, is-dodging, 1);
+        var_1 = var_2;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 player-exhausted-dodge-forward-rt-a-open(u64? arg_0, bool arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = darray-count(all-enemy-npcs);
+    begin-foreach();
+    for (u64 i = 0; i < var_0; i++) {
+        u64? var_1 = darray-at(all-enemy-npcs, i);
+        u16 var_2;
+        if (var_1 && *(u16 *)(var_1 + 12) == 7) {
+            var_2 = *(u64 *)var_1;
+        } else if (var_1 && *(u16 *)(var_1 + 12) == 5) {
+            var_2 = *(u64 *)var_1;
+        } else if (var_1 && *(u16 *)(var_1 + 12) == 4) {
+            var_2 = *(u64 *)var_1;
+        } else {
+            var_2 = 0;
+        }
+        u64? var_3 = npc-alive?(var_2);
+        if (var_3) {
+            u64? var_4 = get-object-distance(arg_1, var_2);
+            bool var_5 = !(arg_1 == 0) && !(var_2 == 0) && var_4 < 2.50 && var_4 > 0.00;
+            u64? var_6 = new-boxed-value(6, var_4);
+            u64? var_7 = new-boxed-value(6, 0.00);
+            u64? var_8 = new-boxed-value(6, 2.50);
+            u64? var_9;
+            if (var_5) {
+                u64? var_10 = new-boxed-value(7, true);
+                var_9 = var_10;
+            } else {
+                u64? var_11 = new-boxed-value(7, false);
+                var_9 = var_11;
+            }
+            do-melee-log("characters-in-range? [[f]] [[f]] [[f]] [[s]]", var_6, var_7, var_8, var_9);
+            u64? var_12 = character-melee-event-active?(var_2, 4, 0);
+            if (var_5 && var_12) {
+                melee-fact-set-bool(arg_1, successful-dodge, 1);
+            }
+        }
+    }
+    u64? var_13 = end-foreach();
+    u64? var_14 = get-layer-animation-frame(arg_1, base);
+    u64? var_15 = melee-fact-get-bool(arg_1, successful-dodge);
+    u16 var_16;
+    if (var_14 >= 16.00 && var_15) {
+        player-save-action-time(successful-dodge);
+        melee-fact-set-time(arg_1, last-successful-dodge);
+        u64? var_17 = get-melee-target(arg_1);
+        u64? var_18 = melee-fact-set-symbol(arg_1, last-successful-dodge-target, var_17);
+        var_16 = var_18;
+    } else {
+        var_16 = 0;
+    }
+    return var_16;
+}
+
+u64? player-exhausted-dodge-forward-lt-a-open__melee-attack@4a0__character-melee-info@1248__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    u64? var_0 = get-bf-from-cache(arg_6, 0);
+    u64? var_1 = melee-dodge-pose-calibration(arg_2, ellie-1h-dodge-open^run-forward--left-ft, arg_5, var_0);
+    return var_1;
+}
+
+u64? player-exhausted-dodge-forward-lt-a-open__start-func-array@1150(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = player-can-stand-up?();
+    if (!var_0) {
+        melee-debug-text-file-line-fail("(player-can-stand-up?)", "t2r/src/game/scriptx/melee/player-standing/imports/player-standing-macros.dcx", 7996);
+    }
+    u64? var_1 = fact-exists?(arg_1, time-to-next-valid-dodge);
+    u64? var_2 = melee-fact-get-time-since(arg_1, last-dodge-time);
+    u64? var_3 = melee-fact-get-float(arg_1, time-to-next-valid-dodge);
+    bool var_4 = var_0 && var_1 && var_2 > var_3;
+    return var_4;
+}
+
+u16 player-exhausted-dodge-forward-lt-a-open__melee-event-list@c88(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    melee-log-player-event("melee-player-dodge-open", 1);
+    pose-blend(arg_1, ellie-1h-dodge-open^run-forward--left-ft);
+    send-event(reset-dodge-spam, ss-melee-dodge-attack-spam);
+    u64? var_0 = is-player?(arg_1);
+    u16 var_1;
+    if (var_0) {
+        u64? var_2 = melee-fact-set-bool(arg_1, is-dodging, 1);
+        var_1 = var_2;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u64? player-exhausted-dodge-forward-lt-a-open(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = get-object-locator(arg_1);
+    u64? var_1 = get-locator-position(var_0);
+    u64? var_2 = get-bf-from-cache(arg_9, 0);
+    u64? var_3 = get-locator-rotation(var_2);
+    u64? var_4 = get-joypad-stick-ws(move);
+    u64? var_5 = get-joypad-stick-ws(move);
+    u64? var_6;
+    if (*(f32 *)var_4 != 0.00 && *(f32 *)(var_5 + 8) != 0.00) {
+        u64? var_7 = melee-fact-get-symbol(player, contextual-dodge-npc);
+        u64? var_8 = get-joypad-stick-ws(move);
+        u64? var_9 = get-object-position(player);
+        u64? var_10 = divert-vector-around-character(var_7, var_8, var_9, 45.00);
+        u64? var_11 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+        u64? var_12 = get-angle-from-anim(arg_1, ellie-1h-dodge-open^run-forward--left-ft);
+        u64? var_13 = quat-from-axis-angle(var_11, var_12);
+        u64? var_14 = rotate-vector(var_10, var_13);
+        u64? var_15 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+        u64? var_16 = quat-from-look-at(var_14, var_15);
+        var_6 = var_16;
+    } else {
+        u64? var_17 = get-bf-from-cache(arg_9, 0);
+        u64? var_18 = get-locator-position(var_17);
+        u64? var_19 = melee-fact-get-symbol(player, contextual-dodge-npc);
+        u64? var_20 = get-bf-from-cache(arg_9, 0);
+        u64? var_21 = get-z-vec-from-bound-frame(var_20);
+        u64? var_22 = get-object-position(player);
+        u64? var_23 = divert-vector-around-character(var_19, var_21, var_22, 45.00);
+        u64? var_24 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+        u64? var_25 = quat-from-look-at(var_23, var_24);
+        u64? var_26 = alloc-bound-frame(var_18, var_25, 0, 0, 0);
+        u64? var_27 = get-locator-rotation(var_26);
+        var_6 = var_27;
+    }
+    u64? var_28 = get-layer-animation-frame(arg_1, base);
+    u64? var_29 = get-stick-dodge-response-multi-degrees(var_28, 1);
+    u64? var_30 = rotate-quat-toward(var_3, var_6, var_29, 1);
+    u64? var_31 = alloc-bound-frame(var_1, var_30, 0, 0, 0);
+    u64? var_32 = get-layer-animation-phase(arg_1, base);
+    u64? var_33 = get-ap-ref-from-align(arg_1, ellie-1h-dodge-open^run-forward--left-ft, var_31, var_32, apReference, 0);
+    set-cache-bound-frame(arg_9, var_33, 0);
+    u64? var_34 = get-bf-from-cache(arg_9, 0);
+    u64? var_35 = frames-to-sec(1);
+    u64? var_36 = debug-draw-locator(var_34, 0.50, var_35, 0, 2.00, 0);
+    return var_36;
+}
+
+u64? player-exhausted-dodge-back-rt-a-open__melee-attack@690__character-melee-info@e80__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    u64? var_0 = get-bf-from-cache(arg_6, 0);
+    u64? var_1 = melee-dodge-pose-calibration(arg_2, ellie-1h-dodge-open^run-back--right-ft, arg_5, var_0);
+    return var_1;
+}
+
+u64? player-exhausted-dodge-back-rt-a-open__start-func-array@f28(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = player-can-stand-up?();
+    if (!var_0) {
+        melee-debug-text-file-line-fail("(player-can-stand-up?)", "t2r/src/game/scriptx/melee/player-standing/imports/player-standing-macros.dcx", 7996);
+    }
+    u64? var_1 = fact-exists?(arg_1, time-to-next-valid-dodge);
+    u64? var_2 = melee-fact-get-time-since(arg_1, last-dodge-time);
+    u64? var_3 = melee-fact-get-float(arg_1, time-to-next-valid-dodge);
+    bool var_4 = var_0 && var_1 && var_2 > var_3;
+    return var_4;
+}
+
+u16 player-exhausted-dodge-back-rt-a-open__melee-event-list@d60(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    melee-log-player-event("melee-player-dodge-open", 1);
+    pose-blend(arg_1, ellie-1h-dodge-open^run-back--right-ft);
+    send-event(reset-dodge-spam, ss-melee-dodge-attack-spam);
+    u64? var_0 = is-player?(arg_1);
+    u16 var_1;
+    if (var_0) {
+        u64? var_2 = melee-fact-set-bool(arg_1, is-dodging, 1);
+        var_1 = var_2;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u64? player-exhausted-dodge-back-rt-a-open(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = get-object-locator(arg_1);
+    u64? var_1 = get-locator-position(var_0);
+    u64? var_2 = get-bf-from-cache(arg_9, 0);
+    u64? var_3 = get-locator-rotation(var_2);
+    u64? var_4 = get-joypad-stick-ws(move);
+    u64? var_5 = get-joypad-stick-ws(move);
+    u64? var_6;
+    if (*(f32 *)var_4 != 0.00 && *(f32 *)(var_5 + 8) != 0.00) {
+        u64? var_7 = melee-fact-get-symbol(player, contextual-dodge-npc);
+        u64? var_8 = get-joypad-stick-ws(move);
+        u64? var_9 = get-object-position(player);
+        u64? var_10 = divert-vector-around-character(var_7, var_8, var_9, 45.00);
+        u64? var_11 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+        u64? var_12 = get-angle-from-anim(arg_1, ellie-1h-dodge-open^run-back--right-ft);
+        u64? var_13 = quat-from-axis-angle(var_11, var_12);
+        u64? var_14 = rotate-vector(var_10, var_13);
+        u64? var_15 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+        u64? var_16 = quat-from-look-at(var_14, var_15);
+        var_6 = var_16;
+    } else {
+        u64? var_17 = get-bf-from-cache(arg_9, 0);
+        u64? var_18 = get-locator-position(var_17);
+        u64? var_19 = melee-fact-get-symbol(player, contextual-dodge-npc);
+        u64? var_20 = get-bf-from-cache(arg_9, 0);
+        u64? var_21 = get-z-vec-from-bound-frame(var_20);
+        u64? var_22 = get-object-position(player);
+        u64? var_23 = divert-vector-around-character(var_19, var_21, var_22, 45.00);
+        u64? var_24 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+        u64? var_25 = quat-from-look-at(var_23, var_24);
+        u64? var_26 = alloc-bound-frame(var_18, var_25, 0, 0, 0);
+        u64? var_27 = get-locator-rotation(var_26);
+        var_6 = var_27;
+    }
+    u64? var_28 = get-layer-animation-frame(arg_1, base);
+    u64? var_29 = get-stick-dodge-response-multi-degrees(var_28, 1);
+    u64? var_30 = rotate-quat-toward(var_3, var_6, var_29, 1);
+    u64? var_31 = alloc-bound-frame(var_1, var_30, 0, 0, 0);
+    u64? var_32 = get-layer-animation-phase(arg_1, base);
+    u64? var_33 = get-ap-ref-from-align(arg_1, ellie-1h-dodge-open^run-back--right-ft, var_31, var_32, apReference, 0);
+    set-cache-bound-frame(arg_9, var_33, 0);
+    u64? var_34 = get-bf-from-cache(arg_9, 0);
+    u64? var_35 = frames-to-sec(1);
+    u64? var_36 = debug-draw-locator(var_34, 0.50, var_35, 0, 2.00, 0);
+    return var_36;
+}
+
+u64? player-exhausted-dodge-left-lt-a-open__melee-attack@880__character-melee-info@cb8__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    u64? var_0 = get-bf-from-cache(arg_6, 0);
+    u64? var_1 = melee-dodge-pose-calibration(arg_2, ellie-1h-dodge-open^run-left, arg_5, var_0);
+    return var_1;
+}
+
+u64? player-exhausted-dodge-left-lt-a-open__start-func-array@f98(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = player-can-stand-up?();
+    if (!var_0) {
+        melee-debug-text-file-line-fail("(player-can-stand-up?)", "t2r/src/game/scriptx/melee/player-standing/imports/player-standing-macros.dcx", 7996);
+    }
+    u64? var_1 = fact-exists?(arg_1, time-to-next-valid-dodge);
+    u64? var_2 = melee-fact-get-time-since(arg_1, last-dodge-time);
+    u64? var_3 = melee-fact-get-float(arg_1, time-to-next-valid-dodge);
+    bool var_4 = var_0 && var_1 && var_2 > var_3;
+    return var_4;
+}
+
+u16 player-exhausted-dodge-left-lt-a-open__melee-event-list@c70(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    melee-log-player-event("melee-player-dodge-open", 1);
+    pose-blend(arg_1, ellie-1h-dodge-open^run-left);
+    send-event(reset-dodge-spam, ss-melee-dodge-attack-spam);
+    u64? var_0 = is-player?(arg_1);
+    u16 var_1;
+    if (var_0) {
+        u64? var_2 = melee-fact-set-bool(arg_1, is-dodging, 1);
+        var_1 = var_2;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u64? player-exhausted-dodge-left-lt-a-open(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = get-object-locator(arg_1);
+    u64? var_1 = get-locator-position(var_0);
+    u64? var_2 = get-bf-from-cache(arg_9, 0);
+    u64? var_3 = get-locator-rotation(var_2);
+    u64? var_4 = get-joypad-stick-ws(move);
+    u64? var_5 = get-joypad-stick-ws(move);
+    u64? var_6;
+    if (*(f32 *)var_4 != 0.00 && *(f32 *)(var_5 + 8) != 0.00) {
+        u64? var_7 = melee-fact-get-symbol(player, contextual-dodge-npc);
+        u64? var_8 = get-joypad-stick-ws(move);
+        u64? var_9 = get-object-position(player);
+        u64? var_10 = divert-vector-around-character(var_7, var_8, var_9, 45.00);
+        u64? var_11 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+        u64? var_12 = get-angle-from-anim(arg_1, ellie-1h-dodge-open^run-left);
+        u64? var_13 = quat-from-axis-angle(var_11, var_12);
+        u64? var_14 = rotate-vector(var_10, var_13);
+        u64? var_15 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+        u64? var_16 = quat-from-look-at(var_14, var_15);
+        var_6 = var_16;
+    } else {
+        u64? var_17 = get-bf-from-cache(arg_9, 0);
+        u64? var_18 = get-locator-position(var_17);
+        u64? var_19 = melee-fact-get-symbol(player, contextual-dodge-npc);
+        u64? var_20 = get-bf-from-cache(arg_9, 0);
+        u64? var_21 = get-z-vec-from-bound-frame(var_20);
+        u64? var_22 = get-object-position(player);
+        u64? var_23 = divert-vector-around-character(var_19, var_21, var_22, 45.00);
+        u64? var_24 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+        u64? var_25 = quat-from-look-at(var_23, var_24);
+        u64? var_26 = alloc-bound-frame(var_18, var_25, 0, 0, 0);
+        u64? var_27 = get-locator-rotation(var_26);
+        var_6 = var_27;
+    }
+    u64? var_28 = get-layer-animation-frame(arg_1, base);
+    u64? var_29 = get-stick-dodge-response-multi-degrees(var_28, 1);
+    u64? var_30 = rotate-quat-toward(var_3, var_6, var_29, 1);
+    u64? var_31 = alloc-bound-frame(var_1, var_30, 0, 0, 0);
+    u64? var_32 = get-layer-animation-phase(arg_1, base);
+    u64? var_33 = get-ap-ref-from-align(arg_1, ellie-1h-dodge-open^run-left, var_31, var_32, apReference, 0);
+    set-cache-bound-frame(arg_9, var_33, 0);
+    u64? var_34 = get-bf-from-cache(arg_9, 0);
+    u64? var_35 = frames-to-sec(1);
+    u64? var_36 = debug-draw-locator(var_34, 0.50, var_35, 0, 2.00, 0);
+    return var_36;
+}
+
+u64? player-exhausted-dodge-right-lt-a-open__melee-attack@a70__character-melee-info@12f0__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    u64? var_0 = get-bf-from-cache(arg_6, 0);
+    u64? var_1 = melee-dodge-pose-calibration(arg_2, ellie-1h-dodge-open^run-right, arg_5, var_0);
+    return var_1;
+}
+
+u64? player-exhausted-dodge-right-lt-a-open__start-func-array@d78(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = player-can-stand-up?();
+    if (!var_0) {
+        melee-debug-text-file-line-fail("(player-can-stand-up?)", "t2r/src/game/scriptx/melee/player-standing/imports/player-standing-macros.dcx", 7996);
+    }
+    u64? var_1 = fact-exists?(arg_1, time-to-next-valid-dodge);
+    u64? var_2 = melee-fact-get-time-since(arg_1, last-dodge-time);
+    u64? var_3 = melee-fact-get-float(arg_1, time-to-next-valid-dodge);
+    bool var_4 = var_0 && var_1 && var_2 > var_3;
+    return var_4;
+}
+
+u16 player-exhausted-dodge-right-lt-a-open__melee-event-list@d90(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    melee-log-player-event("melee-player-dodge-open", 1);
+    pose-blend(arg_1, ellie-1h-dodge-open^run-right);
+    send-event(reset-dodge-spam, ss-melee-dodge-attack-spam);
+    u64? var_0 = is-player?(arg_1);
+    u16 var_1;
+    if (var_0) {
+        u64? var_2 = melee-fact-set-bool(arg_1, is-dodging, 1);
+        var_1 = var_2;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u64? player-exhausted-dodge-right-lt-a-open(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = get-object-locator(arg_1);
+    u64? var_1 = get-locator-position(var_0);
+    u64? var_2 = get-bf-from-cache(arg_9, 0);
+    u64? var_3 = get-locator-rotation(var_2);
+    u64? var_4 = get-joypad-stick-ws(move);
+    u64? var_5 = get-joypad-stick-ws(move);
+    u64? var_6;
+    if (*(f32 *)var_4 != 0.00 && *(f32 *)(var_5 + 8) != 0.00) {
+        u64? var_7 = melee-fact-get-symbol(player, contextual-dodge-npc);
+        u64? var_8 = get-joypad-stick-ws(move);
+        u64? var_9 = get-object-position(player);
+        u64? var_10 = divert-vector-around-character(var_7, var_8, var_9, 45.00);
+        u64? var_11 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+        u64? var_12 = get-angle-from-anim(arg_1, ellie-1h-dodge-open^run-right);
+        u64? var_13 = quat-from-axis-angle(var_11, var_12);
+        u64? var_14 = rotate-vector(var_10, var_13);
+        u64? var_15 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+        u64? var_16 = quat-from-look-at(var_14, var_15);
+        var_6 = var_16;
+    } else {
+        u64? var_17 = get-bf-from-cache(arg_9, 0);
+        u64? var_18 = get-locator-position(var_17);
+        u64? var_19 = melee-fact-get-symbol(player, contextual-dodge-npc);
+        u64? var_20 = get-bf-from-cache(arg_9, 0);
+        u64? var_21 = get-z-vec-from-bound-frame(var_20);
+        u64? var_22 = get-object-position(player);
+        u64? var_23 = divert-vector-around-character(var_19, var_21, var_22, 45.00);
+        u64? var_24 = alloc-vector(0.00, 1.00, 0.00, 1.00, 0);
+        u64? var_25 = quat-from-look-at(var_23, var_24);
+        u64? var_26 = alloc-bound-frame(var_18, var_25, 0, 0, 0);
+        u64? var_27 = get-locator-rotation(var_26);
+        var_6 = var_27;
+    }
+    u64? var_28 = get-layer-animation-frame(arg_1, base);
+    u64? var_29 = get-stick-dodge-response-multi-degrees(var_28, 1);
+    u64? var_30 = rotate-quat-toward(var_3, var_6, var_29, 1);
+    u64? var_31 = alloc-bound-frame(var_1, var_30, 0, 0, 0);
+    u64? var_32 = get-layer-animation-phase(arg_1, base);
+    u64? var_33 = get-ap-ref-from-align(arg_1, ellie-1h-dodge-open^run-right, var_31, var_32, apReference, 0);
+    set-cache-bound-frame(arg_9, var_33, 0);
+    u64? var_34 = get-bf-from-cache(arg_9, 0);
+    u64? var_35 = frames-to-sec(1);
+    u64? var_36 = debug-draw-locator(var_34, 0.50, var_35, 0, 2.00, 0);
+    return var_36;
+}
+

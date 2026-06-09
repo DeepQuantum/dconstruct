@@ -35,8 +35,18 @@ namespace dconstruct::testing {
         const SymbolTable& table = {}
     ) {
         BinaryFile file = *BinaryFile::from_path(TEST_DIR + R"(\dummy.bin)");
-        Disassembler da{&file, &base};
-        auto fd = *da.create_function_disassembly(std::move(istrs), name, table.m_location);
+        const std::shared_ptr<function_disassembly> fd_ptr = Disassembler::create_function_disassembly(
+            istrs.data(),
+            istrs.size(),
+            name,
+            table.m_location,
+            0,
+            sizeof(Instruction),
+            game_type::T2R,
+            base,
+            file.m_sidCache
+        );
+        const function_disassembly& fd = *fd_ptr;
         auto dc_func = dconstruct::dcompiler::decomp_function(fd, file, base, ControlFlowGraph::build(fd));
         return dc_func.decompile(dcompiler::OPTIMIZATION_KIND::NONE);
     }

@@ -28,3 +28,15 @@ u64? anim-player-weapons-old-states__actor-state-list@48(u64? arg_0, u64 arg_1, 
     return arg_2 + ((arg_3 * var_1) * arg_4);
 }
 
+u64? anim-player-weapons-old-states__actor-state-list@48__anim-transition-group@ac0____anim-transition-condition-lambda@1e30__(u8 arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_0 = player-animation-abort-active?(arg_2, arg_1);
+    bool var_1 = var_0 && *(u8 *)(*arg_0 + 208);
+    return var_1;
+}
+
+u64? anim-player-weapons-old-states(u64? arg_0, u64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64 arg_5, u64? arg_6) {
+    u64 var_0 = *(u64 *)(*(arg_1 + 8) + 384);
+    u64? var_1 = player-anim-speed-mult(var_0, *(u64 *)arg_5);
+    return arg_2 + ((arg_3 * var_1) * arg_4);
+}
+

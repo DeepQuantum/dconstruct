@@ -2714,3 +2714,682 @@ f32 npc-enemy-abby-knife-grab-2-struggle__melee-camera-info@2f40(u64? arg_0, u64
     return var_1;
 }
 
+u16 set-OoB-grab-ap(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = melee-fact-get-bool(arg_0, reorient-grab);
+    u16 var_1;
+    if (var_0) {
+        u64? var_2 = get-object-locator(arg_1);
+        u64? var_3 = get-ap-ref-from-align(arg_1, arg_3, var_2, arg_4, apReference, 0);
+        u64? var_4 = get-locator-position(var_3);
+        u64? var_5 = get-object-locator(arg_1);
+        u64? var_6 = get-align-from-ap-ref(arg_1, arg_3, var_5, arg_5, apReference);
+        u64? var_7 = get-spawner-locator(pos-center-of-arena-1, 1);
+        u64? var_8 = rotate-locator-lookat(var_6, var_7, 1.00, 0);
+        u64? var_9 = get-ap-ref-from-align(arg_1, arg_3, var_8, arg_5, apReference, 0);
+        u64? var_10 = get-locator-rotation(var_9);
+        u64? var_11 = alloc-bound-frame(var_4, var_10, 0, 0, 0);
+        u64? var_12 = set-cache-bound-frame(arg_2, var_11, 0);
+        var_1 = var_12;
+    } else {
+        var_1 = 1;
+    }
+    return var_1;
+}
+
+u64? npc-enemy-abby-knife-grab-1-struggle__melee-attack@5d0__start-func-array@32c8__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = get-animation-duration(arg_2, ellie-vs-abby-struggle--ellie);
+    u64? var_1 = get-animation-duration(arg_2, ellie-vs-abby-struggle--ellie);
+    f32 var_2 = 60.00 / (var_0 * 30.00);
+    f32 var_3 = 60.00 / (var_1 * 30.00);
+    u64? var_4 = set-OoB-grab-ap(arg_1, arg_2, arg_13, ellie-vs-abby-struggle--ellie, var_2, var_3);
+    return var_4;
+}
+
+u64? npc-enemy-abby-knife-grab-1-struggle__melee-attack@5d0(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = get-object-distance(arg_1, arg_2);
+    bool var_1 = !(arg_1 == 0) && !(arg_2 == 0) && var_0 < 3.00 && var_0 > 0.00;
+    u64? var_2 = new-boxed-value(6, var_0);
+    u64? var_3 = new-boxed-value(6, 0.00);
+    u64? var_4 = new-boxed-value(6, 3.00);
+    u64? var_5;
+    if (var_1) {
+        u64? var_6 = new-boxed-value(7, true);
+        var_5 = var_6;
+    } else {
+        u64? var_7 = new-boxed-value(7, false);
+        var_5 = var_7;
+    }
+    do-melee-log("characters-in-range? [[f]] [[f]] [[f]] [[s]]", var_2, var_3, var_4, var_5);
+    if (!var_1) {
+        melee-debug-text-file-line-fail("(characters-in-range? attacker defender 3.0 0.0)", "t2r/src/game/scriptx/melee/npc-standing/imports/npc-standing-macros.dcx", 5632);
+    }
+    u64? var_8 = character-in-i-frame?(arg_1);
+    melee-debug-text-file-line-fail("(if ignore-i-frames #t (not (character-in-i-frame? attacker)))", "t2r/src/game/scriptx/melee/npc-standing/imports/npc-standing-macros.dcx", 5633);
+    bool var_9 = var_1 && !var_8 && !var_8;
+    return var_9;
+}
+
+u16 npc-enemy-abby-knife-grab-1-struggle(i64 arg_0, i64 arg_1, i64 arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    player-reset-button-mash();
+    melee-fact-set-bool(arg_0, in-synced-grab-struggle, 0);
+    if (arg_0 == arg_2) {
+        fact-remove(arg_2, struggle-hud-settings);
+        fact-remove(arg_2, show-struggle-hud);
+        melee-fact-set-time(arg_2, npc-grab-enter-success);
+    }
+    u16 var_0;
+    if (arg_0 == arg_1) {
+        melee-fact-remove(arg_1, last-mash-increment);
+        melee-fact-remove(arg_1, mash-count);
+        u64? var_1 = melee-fact-remove(arg_1, force-mashable-struggle);
+        var_0 = var_1;
+    } else {
+        var_0 = 0;
+    }
+    return var_0;
+}
+
+u64? npc-enemy-abby-knife-grab-1-struggle__melee-event-list@2f28(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = melee-fact-set-int(arg_1, mash-count, 0);
+    return var_0;
+}
+
+f32 npc-enemy-abby-knife-grab-1-struggle__melee-camera-info@3920(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_0 = is-camera-animated?();
+    f32 var_1;
+    if (var_0) {
+        var_1 = 0.46;
+    } else {
+        var_1 = 1.00;
+    }
+    return var_1;
+}
+
+f32 npc-enemy-abby-knife-grab-2-struggle-enter__melee-attack@7c0__character-melee-info@4d40__(u64? arg_0, u64? arg_1, u64? arg_2) {
+    return 0.20;
+}
+
+u64? npc-enemy-abby-knife-grab-2-struggle-enter__start-func-array@2a70(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = has-hyper-armor?(arg_2);
+    if (!!var_0) {
+        melee-debug-text-file-line-fail("(if respect-i-frames? (not (has-hyper-armor? defender)) #t)", "t2r/src/game/scriptx/melee/npc-standing/imports/npc-standing-macros.dcx", 3995);
+    }
+    u64? var_1 = get-object-position(arg_2);
+    u64? var_2 = get-object-position(arg_1);
+    u64? var_3 = point-sub(var_1, var_2);
+    u64? var_4 = against-wall-relative?(arg_8, var_3, 0, 2.00, 0.00, arg_13, 0, 1);
+    bool var_5 = !var_0 || 0 && 0 && var_4;
+    return var_5;
+}
+
+u16 npc-enemy-abby-knife-grab-2-struggle-enter(i64 arg_0, i64 arg_1, i64 arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    u64? var_0 = is-player?(arg_0);
+    if (0 > 0 && !var_0) {
+        melee-fact-set-bool(arg_0, stunned, 0);
+        melee-fact-set-bool(arg_0, show-strike-prompt, 0);
+    }
+    if (arg_0 == arg_1) {
+        melee-fact-remove(arg_1, time-in-struggle);
+        u64? var_1 = is-player?(arg_1);
+        if (!(0 == 0) && var_1) {
+            player-feather-blend-to-partial(0, 1.00, 1.00);
+        }
+    }
+    u16 var_2;
+    if (arg_0 == arg_2) {
+        u64? var_3 = is-player?(arg_2);
+        if (var_3) {
+            set-character-force-contact-with-big-collision(arg_2, 0, 0);
+        }
+        u64? var_4 = is-player?(arg_2);
+        if (!(0 == 0) && var_4) {
+            u64? var_5 = player-feather-blend-to-partial(0, 1.00, 1.00);
+            var_2 = var_5;
+        } else {
+            var_2 = 0;
+        }
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u64? npc-enemy-abby-knife-grab-2-struggle-enter__melee-event-list@4270(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    invalidate-single-melee-command-queue(arg_2, melee-attack);
+    joypad-disable-commands-timed(0.00, melee-attack);
+    invalidate-single-melee-command-queue(arg_2, evade);
+    invalidate-single-melee-command-queue(arg_2, evade-pre);
+    invalidate-single-melee-command-queue(arg_2, evade-start);
+    invalidate-single-melee-command-queue(arg_2, evade-release);
+    invalidate-single-melee-command-queue(arg_2, evade-climb);
+    u64? var_0 = joypad-disable-commands-timed(0.00, evade, evade-start, evade-pre, evade-release, evade-climb);
+    return var_0;
+}
+
+u16 npc-enemy-abby-knife-grab-1-struggle-enter__melee-event-list@3bd8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = is-player-ellie?(arg_2);
+    u16 var_1;
+    if (var_0) {
+        u64? var_2 = holster-player-weapon(4, 1.00);
+        var_1 = var_2;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 npc-enemy-abby-knife-grab-1-struggle-enter(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = is-player?(arg_1);
+    u64? var_1 = is-player?(arg_2);
+    u16 var_2;
+    if (var_0 && var_1) {
+        start-rumble(melee-standing-finisher-strong-rumble-settings, 0);
+        u64? var_3 = get-object-locator(arg_2);
+        u64? var_4 = camera-shake-melee(var_3, 0.50, 0.50, 1);
+        var_2 = var_4;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u16 npc-enemy-abby-knife-grab-2-tell__melee-attack@ba0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = lookup-symbol(npc-enemy-abby-knife-grab-2-swing, melee-attack);
+    u64? var_1 = lookup-symbol(npc-enemy-abby-knife-grab-2-swing, melee-attack);
+    u32 var_2 = *(u32 *)(*(var_1 + 296) + 40);
+    u64? var_3 = check-valid-swing-type(arg_1, var_2);
+    u16 var_4;
+    if (0 && var_0 && var_3) {
+        var_4 = 2;
+    } else {
+        var_4 = 1;
+    }
+    return var_4;
+}
+
+u64? npc-enemy-abby-knife-grab-2-tell__start-func-array@2ce8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = melee-fact-get-bool(arg_1, enemy-abby-counter-pose);
+    return !var_0;
+}
+
+u64? npc-enemy-abby-knife-grab-2-tell(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = npc-is-melee-behavior-condition-active?(arg_1, 19, 0.50);
+    u64? var_1;
+    if (var_0) {
+        u64? var_2 = get-object-distance(arg_1, arg_2);
+        bool var_3 = !(arg_1 == 0) && !(arg_2 == 0) && var_2 < (2.75 + 1.00) && var_2 > 0.00;
+        u64? var_4 = new-boxed-value(6, var_2);
+        u64? var_5 = new-boxed-value(6, 0.00);
+        u64? var_6 = new-boxed-value(6, 2.75 + 1.00);
+        u64? var_7;
+        if (var_3) {
+            u64? var_8 = new-boxed-value(7, true);
+            var_7 = var_8;
+        } else {
+            u64? var_9 = new-boxed-value(7, false);
+            var_7 = var_9;
+        }
+        do-melee-log("characters-in-range? [[f]] [[f]] [[f]] [[s]]", var_4, var_5, var_6, var_7);
+        var_1 = var_3;
+    } else {
+        u64? var_10 = get-object-distance(arg_1, arg_2);
+        bool var_11 = !(arg_1 == 0) && !(arg_2 == 0) && var_10 < 2.75 && var_10 > 0.00;
+        u64? var_12 = new-boxed-value(6, var_10);
+        u64? var_13 = new-boxed-value(6, 0.00);
+        u64? var_14 = new-boxed-value(6, 2.75);
+        u64? var_15;
+        if (var_11) {
+            u64? var_16 = new-boxed-value(7, true);
+            var_15 = var_16;
+        } else {
+            u64? var_17 = new-boxed-value(7, false);
+            var_15 = var_17;
+        }
+        do-melee-log("characters-in-range? [[f]] [[f]] [[f]] [[s]]", var_12, var_13, var_14, var_15);
+        var_1 = var_11;
+    }
+    if (!var_1) {
+        melee-debug-text-file-line-fail("(if (npc-is-melee-behavior-condition-active? attacker (melee-behavior-condition-enum target-unreachable) 0.5) (characters-in-range? attacker defender (+ range-max 1.0) range-min) (characters-in-range? attacker defender range-max range-min))", "t2r/src/game/scriptx/melee/npc-standing/imports/npc-standing-macros.dcx", 2837);
+    }
+    u64? var_18 = get-object-locator(arg_1);
+    u64? var_19 = get-object-locator(arg_2);
+    u64? var_20 = melee-direction-check-locator-90s(var_18, var_19, 15, 90.00);
+    bool var_21 = var_1 && !(15 == 15) && var_20;
+    return var_21;
+}
+
+u64? npc-enemy-abby-knife-grab-2-tell__melee-event-list@4e98(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = disable-vox-melee-death-callout(arg_1, arg_2);
+    return var_0;
+}
+
+u64? npc-enemy-abby-knife-grab-2-tell__melee-event-advanced@25580(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = estimate-frames-til-hit(arg_1);
+    u64? var_1 = npc-swing-speed-flex(arg_1, arg_2, (f32)var_0, 1);
+    return var_1;
+}
+
+u64? npc-enemy-abby-knife-grab-2-tell__melee-event-advanced@264d8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = npc-enemy-ellie?(arg_1);
+    u64? var_1 = character-in-unsynced-melee-attack-as-attacker?(arg_2);
+    u64? var_2 = character-in-melee-attack-of-other-character?(arg_1, arg_2);
+    u64? var_3 = get-current-melee-attack(arg_2);
+    u64? var_4 = get-current-melee-attack(arg_2);
+    bool var_5 = 0 || var_0 && var_1 && var_2 && var_3 && *(u64 *)(var_4 + 16) == melee-player-contextual-dodge && !(*(u64 *)(var_4 + 16) == melee-player-contextual-dodge);
+    return var_5;
+}
+
+sid npc-enemy-abby-knife-grab-2-tell__melee-event-transitions@22170(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return npc-execution-surprises;
+}
+
+u16 npc-enemy-abby-knife-grab-1-tell__melee-attack@d90(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = lookup-symbol(npc-enemy-abby-knife-grab-1-swing, melee-attack);
+    u64? var_1 = lookup-symbol(npc-enemy-abby-knife-grab-1-swing, melee-attack);
+    u32 var_2 = *(u32 *)(*(var_1 + 296) + 40);
+    u64? var_3 = check-valid-swing-type(arg_1, var_2);
+    u16 var_4;
+    if (0 && var_0 && var_3) {
+        var_4 = 2;
+    } else {
+        var_4 = 1;
+    }
+    return var_4;
+}
+
+u64? npc-enemy-abby-knife-grab-1-tell(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = npc-is-melee-behavior-condition-active?(arg_1, 19, 0.50);
+    u64? var_1;
+    if (var_0) {
+        u64? var_2 = get-object-distance(arg_1, arg_2);
+        bool var_3 = !(arg_1 == 0) && !(arg_2 == 0) && var_2 < (3.25 + 1.00) && var_2 > 0.00;
+        u64? var_4 = new-boxed-value(6, var_2);
+        u64? var_5 = new-boxed-value(6, 0.00);
+        u64? var_6 = new-boxed-value(6, 3.25 + 1.00);
+        u64? var_7;
+        if (var_3) {
+            u64? var_8 = new-boxed-value(7, true);
+            var_7 = var_8;
+        } else {
+            u64? var_9 = new-boxed-value(7, false);
+            var_7 = var_9;
+        }
+        do-melee-log("characters-in-range? [[f]] [[f]] [[f]] [[s]]", var_4, var_5, var_6, var_7);
+        var_1 = var_3;
+    } else {
+        u64? var_10 = get-object-distance(arg_1, arg_2);
+        bool var_11 = !(arg_1 == 0) && !(arg_2 == 0) && var_10 < 3.25 && var_10 > 0.00;
+        u64? var_12 = new-boxed-value(6, var_10);
+        u64? var_13 = new-boxed-value(6, 0.00);
+        u64? var_14 = new-boxed-value(6, 3.25);
+        u64? var_15;
+        if (var_11) {
+            u64? var_16 = new-boxed-value(7, true);
+            var_15 = var_16;
+        } else {
+            u64? var_17 = new-boxed-value(7, false);
+            var_15 = var_17;
+        }
+        do-melee-log("characters-in-range? [[f]] [[f]] [[f]] [[s]]", var_12, var_13, var_14, var_15);
+        var_1 = var_11;
+    }
+    if (!var_1) {
+        melee-debug-text-file-line-fail("(if (npc-is-melee-behavior-condition-active? attacker (melee-behavior-condition-enum target-unreachable) 0.5) (characters-in-range? attacker defender (+ range-max 1.0) range-min) (characters-in-range? attacker defender range-max range-min))", "t2r/src/game/scriptx/melee/npc-standing/imports/npc-standing-macros.dcx", 2837);
+    }
+    u64? var_18 = get-object-locator(arg_1);
+    u64? var_19 = get-object-locator(arg_2);
+    u64? var_20 = melee-direction-check-locator-90s(var_18, var_19, 15, 90.00);
+    bool var_21 = var_1 && !(15 == 15) && var_20;
+    return var_21;
+}
+
+f32 npc-enemy-abby-knife-grab-2-struggle-success__melee-attack@f80__character-melee-info@4430__(u64? arg_0, u64? arg_1, u64? arg_2) {
+    return 0.80;
+}
+
+f32 npc-enemy-abby-knife-grab-2-struggle-success__character-melee-info@4b80(u64? arg_0, u64? arg_1, u64? arg_2) {
+    return 1.00;
+}
+
+u64? npc-enemy-abby-knife-grab-2-struggle-success__start-func-array@3618(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = has-hyper-armor?(arg_2);
+    if (!!var_0) {
+        melee-debug-text-file-line-fail("(if respect-i-frames? (not (has-hyper-armor? defender)) #t)", "t2r/src/game/scriptx/melee/npc-standing/imports/npc-standing-macros.dcx", 3995);
+    }
+    u64? var_1 = get-object-position(arg_2);
+    u64? var_2 = get-object-position(arg_1);
+    u64? var_3 = point-sub(var_1, var_2);
+    u64? var_4 = against-wall-relative?(arg_8, var_3, 0, 2.00, 0.00, arg_13, 0, 1);
+    bool var_5 = !var_0 || 0 && 0 && var_4;
+    return var_5;
+}
+
+u64? npc-enemy-abby-knife-grab-2-struggle-success(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = set-OoB-grab-ap(arg_1, arg_2, arg_13, ellie-vs-abby-knife-struggle-2-success--ellie, 0.00, 1.00);
+    return var_0;
+}
+
+u64? npc-enemy-abby-knife-grab-2-struggle-success__melee-event-list@4720(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = send-event(vox-ellie-vs-abby-knife-struggle-2-success, ss-vox-san-ellie-abby-fight-igc-stem-controller-1);
+    return var_0;
+}
+
+f32 npc-enemy-abby-knife-grab-1-swing__melee-attack@1170__character-melee-info@2a88__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    f32 var_0;
+    if (0 && 1) {
+        var_0 = 0.00;
+    } else {
+        f32 var_1 = *(f32 *)(*(arg_0 + 296) + 52);
+        u64? var_2 = minmax(var_1, 0.00, 6.00);
+        u64? var_3 = frames-to-sec((i32)var_2);
+        var_0 = var_3;
+    }
+    return var_0;
+}
+
+u16 npc-enemy-abby-knife-grab-1-swing__start-func-array@2ef8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    return 1;
+}
+
+u64? npc-enemy-abby-knife-grab-1-swing(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    u64? var_0 = melee-fact-remove(arg_0, tell-init-defender-move);
+    return var_0;
+}
+
+u16 npc-enemy-abby-knife-grab-1-swing__melee-event-list@2b48(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = get-character-weapon-id(arg_1);
+    u64? var_1 = string-debug(var_0);
+    log-event("melee-npc-swing", 1, var_1, 0, 0);
+    set-swing-type-fact(arg_1, 9);
+    u64? var_2 = npc-brute?(arg_1);
+    if (var_2) {
+        melee-fact-set-int(arg_1, brute-melee-hit-count, 0);
+    }
+    u64? var_3 = npc-enemy-abby?(arg_1);
+    u16 var_4;
+    if (var_3) {
+        u64? var_5 = melee-fact-set-int(arg_1, abby-melee-hit-count, 0);
+        var_4 = var_5;
+    } else {
+        var_4 = 0;
+    }
+    return var_4;
+}
+
+u64? npc-enemy-abby-knife-grab-1-swing__melee-event-advanced@27d70(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = character-in-unsynced-melee-attack-as-attacker?(arg_2);
+    u64? var_1 = character-in-melee-attack-of-other-character?(arg_1, arg_2);
+    u64? var_2 = get-current-melee-attack(arg_2);
+    u64? var_3 = get-current-melee-attack(arg_2);
+    bool var_4 = var_0 && var_1 && var_2 && *(u64 *)(var_3 + 16) == melee-player-contextual-dodge;
+    return !var_4;
+}
+
+u64? npc-enemy-abby-knife-grab-1-swing__melee-event-advanced@25db8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = melee-fact-get-bool(arg_1, npc-enemy-abby-punish-dodge);
+    return var_0;
+}
+
+u16 npc-enemy-abby-knife-grab-1-swing__melee-event-advanced@22e18(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    return 1;
+}
+
+f32 npc-enemy-abby-knife-grab-2-struggle-fail__melee-attack@1360__character-melee-info@3d58__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    f32 var_0;
+    if (-1 > -1) {
+        var_0 = -1.00;
+    } else {
+        u64? var_1 = is-npc?(arg_2);
+        u64? var_2 = is-npc?(arg_3);
+        if (var_1 && var_2) {
+            var_0 = 0.50;
+        } else {
+            var_0 = 0.00;
+        }
+    }
+    return var_0;
+}
+
+f32 npc-enemy-abby-knife-grab-2-struggle-fail__melee-attack@1360(u64? arg_0, u64? arg_1, u64? arg_2) {
+    u64? var_0 = is-npc?(arg_2);
+    f32 var_1;
+    if (var_0) {
+        var_1 = 0.60;
+    } else {
+        var_1 = 0.20;
+    }
+    return var_1;
+}
+
+f32 npc-enemy-abby-knife-grab-2-struggle-fail(u64? arg_0, u64? arg_1, u64? arg_2) {
+    u64? var_0 = is-npc?(arg_1);
+    f32 var_1;
+    if (var_0) {
+        var_1 = 0.60;
+    } else {
+        var_1 = 0.20;
+    }
+    return var_1;
+}
+
+u64? npc-enemy-abby-knife-grab-2-struggle-fail__start-func-array@2b30(u64? arg_0, u64? arg_1, string arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = character-melee-event-active?(arg_2, 211, 0);
+    if (!!var_0) {
+        melee-debug-text-file-line-fail("(not (character-melee-event-active? defender (melee-event-type hide-all-uninvolved-characters)))", "t2r/src/game/scriptx/melee/npc-standing/imports/npc-standing-macros.dcx", 3496);
+    }
+    melee-debug-text-file-line-fail("(if player-is-prone (and (player-in-state? (quote Prone)) (prone-pull-out-clear? attacker-probes)) #t)", "t2r/src/game/scriptx/melee/npc-standing/imports/npc-standing-macros.dcx", 3498);
+    bool var_1 = !var_0 && 1 && 1;
+    return var_1;
+}
+
+u16 npc-enemy-abby-knife-grab-2-struggle-fail__melee-event-list@2f10(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = is-player?(arg_2);
+    u16 var_1;
+    if (var_0) {
+        gui2-disable-categories/f(256);
+        set-all-character-weapons-invisible/f(player, -2, -2, -2, -2);
+        joypad-disable-all-commands();
+        u64? var_2 = interrupt-forced-camera-dof-focus();
+        var_1 = var_2;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+f32 npc-enemy-abby-knife-grab-1-struggle-success__melee-attack@1550__character-melee-info@41c8__(u64? arg_0, u64? arg_1, u64? arg_2) {
+    return 0.60;
+}
+
+u64? npc-enemy-abby-knife-grab-1-struggle-success(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = set-OoB-grab-ap(arg_1, arg_2, arg_13, ellie-vs-abby-struggle-success--ellie, 0.00, 1.00);
+    return var_0;
+}
+
+u64? npc-enemy-abby-knife-grab-1-struggle-success__melee-event-list@3600(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = send-event(vox-ellie-vs-abby-struggle-success, ss-vox-san-ellie-abby-fight-igc-stem-controller-1);
+    return var_0;
+}
+
+u16 npc-enemy-abby-fist-grab-1-swing(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = fact-exists?(arg_1, hit-reaction-abort-frame);
+    u16 var_1;
+    if (var_0) {
+        u64? var_2 = lookup-symbol(npc-enemy-abby-fist-grab-1-struggle-enter, melee-attack);
+        if (!(*(i32 *)(*(var_2 + 296) + 128) == 0)) {
+            u64? var_3 = melee-fact-get-int(arg_1, hit-reaction-abort-frame);
+            u64? var_4 = lookup-symbol(npc-enemy-abby-fist-grab-1-struggle-enter, melee-attack);
+            f32 var_5 = ((f32)var_3 + (f32)*(i32 *)(*(var_4 + 296) + 128)) / 2.00;
+            u64? var_6 = round-float-up(var_5);
+            u64? var_7 = melee-fact-set-int(arg_1, hit-reaction-abort-frame, (i32)var_6);
+            var_1 = var_7;
+        } else {
+            var_1 = 0;
+        }
+    } else {
+        u64? var_8 = lookup-symbol(npc-enemy-abby-fist-grab-1-struggle-enter, melee-attack);
+        i32 var_9 = *(i32 *)(*(var_8 + 296) + 128);
+        u64? var_10 = melee-fact-set-int(arg_1, hit-reaction-abort-frame, var_9);
+        var_1 = var_10;
+    }
+    return var_1;
+}
+
+u16 npc-enemy-abby-fist-grab-1-tell__melee-attack@1b20(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = lookup-symbol(npc-enemy-abby-fist-grab-1-swing, melee-attack);
+    u64? var_1 = lookup-symbol(npc-enemy-abby-fist-grab-1-swing, melee-attack);
+    u32 var_2 = *(u32 *)(*(var_1 + 296) + 40);
+    u64? var_3 = check-valid-swing-type(arg_1, var_2);
+    u16 var_4;
+    if (0 && var_0 && var_3) {
+        var_4 = 2;
+    } else {
+        var_4 = 1;
+    }
+    return var_4;
+}
+
+u16 npc-enemy-abby-fist-grab-1-tell(i64 arg_0, i64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    u64? var_0 = get-animation-duration(arg_0, ellie-vs-abby-fist-struggle-tell--abby);
+    u64? var_1 = get-animation-frame(arg_0, 2, ellie-vs-abby-fist-struggle-tell--abby);
+    u16 var_2;
+    if (arg_0 == arg_1 && ((var_0 * 30.00) - var_1) > 2.00) {
+        u64? var_3 = is-final-build?();
+        if (!var_3) {
+            f32 var_4 = (var_0 * 30.00) - var_1;
+            u64? var_5 = #5445173390656D6D("TELL INTERUPTED: interupted by %f frames", var_4);
+            display(var_5, 19);
+        }
+        u64? var_6 = melee-fact-set-time(arg_0, last-time-tell-interupted);
+        var_2 = var_6;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+f32 npc-enemy-abby-fist-grab-1-struggle-success__character-melee-info@4930(u64? arg_0, u64? arg_1, u64? arg_2) {
+    return 1.20;
+}
+
+u64? npc-enemy-abby-fist-grab-1-struggle-success(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = set-OoB-grab-ap(arg_1, arg_2, arg_13, ellie-vs-abby-fist-struggle-success--ellie, 0.00, 1.00);
+    return var_0;
+}
+
+u64? npc-enemy-abby-fist-grab-1-struggle-success__melee-event-list@33d8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = send-event(vox-ellie-vs-abby-fist-struggle-success, ss-vox-san-ellie-abby-fight-igc-stem-controller-1);
+    return var_0;
+}
+
+u64? npc-enemy-abby-fist-grab-1-struggle__melee-attack@1f00__start-func-array@31a0__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = get-animation-duration(arg_2, ellie-vs-abby-fist-struggle--ellie);
+    u64? var_1 = get-animation-duration(arg_2, ellie-vs-abby-fist-struggle--ellie);
+    f32 var_2 = 98.00 / (var_0 * 30.00);
+    f32 var_3 = 98.00 / (var_1 * 30.00);
+    u64? var_4 = set-OoB-grab-ap(arg_1, arg_2, arg_13, ellie-vs-abby-fist-struggle--ellie, var_2, var_3);
+    return var_4;
+}
+
+u64? npc-enemy-abby-fist-grab-1-struggle(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = button-mashes-are-holds?();
+    u64? var_1;
+    if (var_0) {
+        u64? var_2 = player-mash-success?(10 - 2, -1.00);
+        var_1 = var_2;
+    } else {
+        u64? var_3 = is-rogue-mode?();
+        if (-1 > -1 && var_3) {
+            u64? var_4 = player-mash-success?(-1, -1.00);
+            var_1 = var_4;
+        } else {
+            u64? var_5 = player-mash-success?(10, -1.00);
+            var_1 = var_5;
+        }
+    }
+    return var_1;
+}
+
+f32 npc-enemy-abby-fist-grab-1-struggle__melee-camera-info@3038(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_0 = is-camera-animated?();
+    f32 var_1;
+    if (var_0) {
+        var_1 = 0.80;
+    } else {
+        var_1 = 1.00;
+    }
+    return var_1;
+}
+
+u64? npc-enemy-abby-knife-grab-1-struggle-fail(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = is-player?(arg_2);
+    if (var_0) {
+        u64? var_1 = new-boxed-value(7, arg_1);
+        send-event(synced-finisher-v-player, ss-promote-death-hints, var_1);
+    }
+    u64? var_2 = string-debug(npc-enemy-abby-knife-grab-1-struggle-fail);
+    u64? var_3 = log-event("melee-npc-finisher", 1, var_2, 0, 0);
+    return var_3;
+}
+
+u16 npc-enemy-abby-knife-grab-2-swing(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = fact-exists?(arg_1, hit-reaction-abort-frame);
+    u16 var_1;
+    if (var_0) {
+        u64? var_2 = lookup-symbol(npc-enemy-abby-knife-grab-2-struggle-enter, melee-attack);
+        if (!(*(i32 *)(*(var_2 + 296) + 128) == 0)) {
+            u64? var_3 = melee-fact-get-int(arg_1, hit-reaction-abort-frame);
+            u64? var_4 = lookup-symbol(npc-enemy-abby-knife-grab-2-struggle-enter, melee-attack);
+            f32 var_5 = ((f32)var_3 + (f32)*(i32 *)(*(var_4 + 296) + 128)) / 2.00;
+            u64? var_6 = round-float-up(var_5);
+            u64? var_7 = melee-fact-set-int(arg_1, hit-reaction-abort-frame, (i32)var_6);
+            var_1 = var_7;
+        } else {
+            var_1 = 0;
+        }
+    } else {
+        u64? var_8 = lookup-symbol(npc-enemy-abby-knife-grab-2-struggle-enter, melee-attack);
+        i32 var_9 = *(i32 *)(*(var_8 + 296) + 128);
+        u64? var_10 = melee-fact-set-int(arg_1, hit-reaction-abort-frame, var_9);
+        var_1 = var_10;
+    }
+    return var_1;
+}
+
+u64? npc-enemy-abby-fist-grab-1-struggle-fail(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = is-player?(arg_2);
+    if (var_0) {
+        u64? var_1 = new-boxed-value(7, arg_1);
+        send-event(synced-finisher-v-player, ss-promote-death-hints, var_1);
+    }
+    u64? var_2 = string-debug(npc-enemy-abby-fist-grab-1-struggle-fail);
+    u64? var_3 = log-event("melee-npc-finisher", 1, var_2, 0, 0);
+    return var_3;
+}
+
+u64? npc-enemy-abby-knife-grab-2-struggle__melee-attack@26c0__start-func-array@3d40__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = get-animation-duration(arg_2, ellie-vs-abby-knife-struggle-2--ellie);
+    u64? var_1 = get-animation-duration(arg_2, ellie-vs-abby-knife-struggle-2--ellie);
+    f32 var_2 = 65.00 / (var_0 * 30.00);
+    f32 var_3 = 65.00 / (var_1 * 30.00);
+    u64? var_4 = set-OoB-grab-ap(arg_1, arg_2, arg_13, ellie-vs-abby-knife-struggle-2--ellie, var_2, var_3);
+    return var_4;
+}
+
+u64? npc-enemy-abby-knife-grab-2-struggle(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = string-debug(npc-enemy-abby-knife-grab-2-struggle);
+    u64? var_1 = log-event("melee-npc-standing-grab", 1, var_0, 0, 0);
+    return var_1;
+}
+
+f32 npc-enemy-abby-knife-grab-2-struggle__melee-camera-info@2f40(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_0 = is-camera-animated?();
+    f32 var_1;
+    if (var_0) {
+        var_1 = 0.70;
+    } else {
+        var_1 = 1.00;
+    }
+    return var_1;
+}
+

@@ -550,3 +550,141 @@ u64? tsk-nor-hospital-chase__level-scripted-set@1a10() {
     return !var_0;
 }
 
+u64? tsk-nor-torture-nora__level-set@510__level-scripted-set@1068__() {
+    u64? var_0 = task-complete?(find-nora, nor-follow-coughing-corridor);
+    return !var_0;
+}
+
+u64? tsk-nor-torture-nora__level-scripted-set@1080() {
+    u64? var_0 = task-active?(find-nora, nor-torture-nora);
+    return var_0;
+}
+
+u64? tsk-nor-torture-nora__level-scripted-set@f48() {
+    u64? var_0 = task-complete?(find-nora, nor-torture-nora);
+    return var_0;
+}
+
+u64? tsk-nor-hospital-approach-interrogation__level-set@560__level-scripted-set@1a28__() {
+    u64? var_0 = task-complete?(find-nora, nor-hospital-approach-building-interior);
+    return var_0;
+}
+
+u64? tsk-nor-hospital-basement-follow-coughing__level-set@6b8__level-scripted-set@13e0__() {
+    u64? var_0 = get-boolean(igc-started?, ss-nor-spore-basement-torture-door-1);
+    return !var_0;
+}
+
+u64? tsk-nor-hospital-basement-follow-coughing__level-scripted-set@18c0() {
+    u64? var_0 = get-boolean(igc-started?, ss-nor-spore-basement-torture-door-1);
+    return var_0;
+}
+
+u64? nor-ellie-alone-interiors__level-set@738__level-scripted-set@17b8__() {
+    u64? var_0 = stat-value?(nor-alone-load-upper-interiors);
+    u64? var_1 = is-high-contrast-mode-toggled-on?();
+    bool var_2 = var_0 > 0 && var_1;
+    return var_2;
+}
+
+bool nor-ellie-alone-interiors__level-scripted-set@1248() {
+    u64? var_0 = stat-value?(nor-alone-load-upper-interiors);
+    return var_0 > 0;
+}
+
+bool nor-ellie-alone-interiors__level-scripted-set@1470() {
+    u64? var_0 = stat-value?(nor-alone-load-upper-interiors);
+    return var_0 == 0;
+}
+
+u64? nor-ellie-alone-stalkers-or-workbench__level-set@788__level-scripted-set@1140__() {
+    u64? var_0 = stat-value?(nor-alone-load-upper-interiors);
+    u64? var_1 = stat-value?(nor-alone-load-workbench-anims);
+    bool var_2 = var_0 > 0 && var_1 > 0;
+    return var_2;
+}
+
+u64? nor-ellie-alone-stalkers-or-workbench__level-scripted-set@13c8() {
+    u64? var_0 = stat-value?(nor-alone-load-upper-interiors);
+    u64? var_1 = stat-value?(nor-alone-load-workbench-anims);
+    bool var_2 = var_0 > 0 && var_1 == 0;
+    return var_2;
+}
+
+u16 nor-ellie-alone-stalkers-or-workbench__level-scripted-set@f60() {
+    return 1;
+}
+
+bool tsk-nor-ellie-alone__level-set@7d8__level-scripted-set@19f8__() {
+    u64? var_0 = stat-value?(nor-alone-unload-military-checkpoint);
+    return var_0 > 0;
+}
+
+bool tsk-nor-ellie-alone__level-scripted-set@1128() {
+    u64? var_0 = stat-value?(nor-alone-unload-military-checkpoint);
+    return var_0 == 0;
+}
+
+u64? #78C87FE4D38925F1__level-set@820__level-scripted-set@1e00__() {
+    u64? var_0 = is-chronological-mode-enabled?();
+    u64? var_1 = !(var_0);
+    return var_1;
+}
+
+u64? #78C87FE4D38925F1__level-scripted-set@1f20() {
+    u64? var_0 = is-chronological-mode-enabled?();
+    return var_0;
+}
+
+bool tsk-nor-forest-squeeze-through__level-set@8a0__level-scripted-set@1e90__() {
+    u64? var_0 = stat-value?(nor-forest-load-stripmall-interior);
+    return var_0 > 0;
+}
+
+bool tsk-nor-forest-squeeze-through__level-scripted-set@1fb0() {
+    u64? var_0 = stat-value?(nor-forest-load-stripmall-interior);
+    return var_0 == 0;
+}
+
+bool nor-backrooms-scriptset__level-set@9d8__level-scripted-set@e28__() {
+    u64? var_0 = stat-value?(nor-forest-player-valved-in-stripmall);
+    return var_0 > 0;
+}
+
+bool nor-backrooms-scriptset__level-scripted-set@1500() {
+    u64? var_0 = stat-value?(nor-forest-player-valved-in-stripmall);
+    return var_0 == 0;
+}
+
+u64? tsk-nor-infiltrate-hospital__level-set@a28__level-scripted-set@1968__() {
+    u64? var_0 = task-continue-active?(find-nora, nor-infiltrate-hospital, combat-done);
+    return var_0;
+}
+
+u64? tsk-nor-infiltrate-hospital__level-scripted-set@1c80() {
+    u64? var_0 = stat-value?(nor-infiltrate-entered-hospital);
+    u64? var_1 = task-complete?(find-nora, nor-infiltrate-hospital);
+    bool var_2 = var_0 == 1 && !var_1;
+    return var_2;
+}
+
+u64? tsk-nor-infiltrate-hospital__level-scripted-set@1110() {
+    u64? var_0 = task-complete?(find-nora, nor-infiltrate-hospital);
+    return var_0;
+}
+
+u64? tsk-nor-infiltrate-hospital__level-scripted-set@e40() {
+    u64? var_0 = task-complete?(find-nora, nor-infiltrate-hospital);
+    return !var_0;
+}
+
+u64? tsk-nor-hospital-chase__level-set@c28__level-scripted-set@1680__() {
+    u64? var_0 = task-complete?(find-nora, nor-noras-chase-lobby-skybridge);
+    return var_0;
+}
+
+u64? tsk-nor-hospital-chase__level-scripted-set@1a10() {
+    u64? var_0 = task-complete?(find-nora, nor-noras-chase-lobby-skybridge);
+    return !var_0;
+}
+

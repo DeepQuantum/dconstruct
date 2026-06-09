@@ -38,3 +38,19 @@ u64? anim-player-inventory2-states(u64? arg_0, u64 arg_1, u64? arg_2, u64? arg_3
     return arg_2 + ((arg_3 * var_1) * arg_4);
 }
 
+f32 anim-player-inventory2-states__actor-state-list@48(u64? arg_0, u64? arg_1, f32 arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32 *)(*(arg_2 + 16) + 3136);
+}
+
+u64? anim-player-inventory2-states(u64? arg_0, u64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64 arg_5, u64? arg_6) {
+    u64 var_0 = *(u64 *)(*(arg_1 + 8) + 384);
+    u64? var_1 = player-anim-speed-mult(var_0, *(u64 *)arg_5);
+    return arg_2 + ((arg_3 * var_1) * arg_4);
+}
+
+u64? anim-player-inventory2-states__anim-transition-group@2230__anim-transition-condition-lambda@6710__(u8 arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_0 = player-animation-abort-active?(arg_2, arg_1);
+    bool var_1 = var_0 && *(u8 *)(*arg_0 + 208);
+    return var_1;
+}
+
