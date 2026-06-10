@@ -191,7 +191,7 @@ private:
 
     void store_error(std::string_view error);
 
-    [[nodiscard]] COMMAND await_command(std::stop_token st);
+    [[nodiscard]] std::optional<COMMAND> await_command(std::stop_token st);
 
     WRL::ComPtr<IDebugClient> m_client;
     WRL::ComPtr<IDebugControl> m_control;
@@ -213,7 +213,7 @@ private:
     std::shared_ptr<debugger_snapshot> m_snapshot;
     std::atomic<STATE> m_state = STATE::DETACHED;
     std::condition_variable_any m_commandCv;
-    COMMAND m_command;
+    COMMAND m_command = COMMAND::NONE;
 
     std::optional<sid64> m_currentlyDebuggingSid = std::nullopt;
 

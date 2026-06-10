@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <array>
 #include <cctype>
 #include <chrono>
 #include <cmath>
@@ -7,11 +8,13 @@
 #include <cstring>
 #include <expected>
 #include <filesystem>
+#include <format>
 #include <fstream>
 #include <memory>
 #include <optional>
 #include <print>
 #include <sstream>
+#include <span>
 #include <string>
 #include <string_view>
 #include <unordered_map>
@@ -45,6 +48,8 @@
 #endif
 #include <GLFW/glfw3native.h>
 
+#include "debugger/debugger.h"
+
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 
@@ -57,7 +62,6 @@ namespace dconstruct::ui {
     constexpr f32 SPLITTER_WIDTH = 6.0F;
     constexpr f32 MIN_PANEL_WIDTH = 120.0F;
     constexpr f32 ENTRY_CELL_LEFT_PADDING = 4.0F;
-    constexpr f32 FUNCTION_INSTRUCTION_COLUMN_WIDTH = 560.0F;
     constexpr i32 MAX_FORCE_OPEN_NODES = 10000;
     constexpr i32 EXPAND_SHALLOW_DEPTH = 2;
     constexpr i32 EXPAND_RECURSIVE_DEPTH = 1 << 30;
@@ -156,6 +160,7 @@ namespace dconstruct::ui {
         std::vector<i32> m_depthStack;
         std::vector<ImGuiID> m_closeIds;
         std::unordered_map<const function_disassembly*, ast::code_color_buffer> m_decompiled;
+        std::unordered_map<const function_disassembly*, ast::code_color_buffer> m_asmColored;
         std::unordered_map<const function_disassembly*, std::string> m_decompErrors;
         std::unordered_map<const function_disassembly*, bool> m_lambdaViewDcpl;
         bool m_dirty = false;
@@ -189,6 +194,33 @@ namespace dconstruct::ui {
         f64 m_startCursorY = 0.0;
     };
 
+    constexpr u32 VM_REGISTER_COUNT = 49;
+    constexpr i32 VM_REGISTER_COLUMNS = 5;
+    constexpr i32 VM_NORMAL_DEFAULT_ROWS = 2;
+    constexpr i32 VM_ARGUMENT_DEFAULT_ROWS = 1;
+    constexpr f32 DEBUGGER_OUTPUT_HEIGHT = 150.0F;
+
+    struct debugger_state {
+        bool m_active = false;
+        bool m_expandNormal = false;
+        bool m_expandArgs = false;
+        f32 m_leftWidth = 0.0F;
+        f32 m_middleWidth = 0.0F;
+        std::array<u64, VM_REGISTER_COUNT> m_registers{};
+        std::array<u64, VM_REGISTER_COUNT> m_argRegisters{};
+        std::shared_ptr<dconstruct::debugger::debugger_snapshot> m_snapshot;
+        ast::code_color_buffer m_instructionsAndSymbols;
+        ast::code_color_buffer m_decomp;
+        i32 m_activeInstructionLine = -1;
+        bool m_scrollToActiveLine = false;
+        dconstruct::debugger::debugger::STATE m_lastPollState = dconstruct::debugger::debugger::STATE::DETACHED;
+        bool m_hasPollState = false;
+        bool m_sidsSeeded = false;
+        dconstruct::debugger::debugger m_debugger;
+
+        void render(const dconstruct::debugger::debugger_snapshot& snapshot);
+    };
+
     struct app_state {
         std::unique_ptr<SIDBase> m_sidbase;
         std::vector<document> m_documents;
@@ -216,6 +248,7 @@ namespace dconstruct::ui {
         std::unordered_map<std::string, ast::function_to_mapped_vars> m_pendingTypeMaps;
         std::string m_colorScheme = "qntm";
         std::string m_previewScheme;
+        debugger_state m_debugger;
     };
 
     void glfw_error_callback(int error, const char* description) {
@@ -352,7 +385,7 @@ namespace dconstruct::ui {
         ofn.Flags = OFN_FILEMUSTEXIST | OFN_PATHMUSTEXIST | OFN_NOCHANGEDIR;
         ofn.lpstrTitle = title;
 
-        if (GetOpenFileNameA(&ofn) == TRUE) {
+        if (GetOpenFileNameA(&ofn) != 0) {
             return std::string(buffer);
         }
         return {};
@@ -450,7 +483,7 @@ namespace dconstruct::ui {
                 }
             }
             auto decomp_func = dcompiler::decomp_function{*func, *doc.m_file, *state.m_sidbase, ControlFlowGraph::build(*func), std::nullopt, nullptr, function_scope};
-            const ast::function_definition& def = decomp_func.decompile(optimizations);
+            ast::function_definition def = decomp_func.decompile(optimizations);
             color_buffer.m_currentIndent = 0;
             color_buffer.reserve(256);
             def.to_pseudo_c_colored_string(color_buffer);
@@ -468,6 +501,7 @@ namespace dconstruct::ui {
         doc.m_editor.reset();
         doc.m_editingValue = 0;
         doc.m_decompiled.clear();
+        doc.m_asmColored.clear();
         doc.m_decompErrors.clear();
         doc.m_lambdaViewDcpl.clear();
 
@@ -1351,6 +1385,23 @@ namespace dconstruct::ui {
             if (ImGui::MenuItem("Settings")) {
                 settings_clicked = true;
             }
+            {
+#ifdef NDEBUG
+                constexpr bool debugger_enabled = false;
+#else
+                constexpr bool debugger_enabled = true;
+#endif
+                const bool debugger_active = state.m_debugger.m_active;
+                if (debugger_active) {
+                    ImGui::PushStyleColor(ImGuiCol_Text, qui::color::active_palette().Highlight);
+                }
+                if (ImGui::MenuItem("Debugger", nullptr, false, debugger_enabled)) {
+                    state.m_debugger.m_active = !state.m_debugger.m_active;
+                }
+                if (debugger_active) {
+                    ImGui::PopStyleColor();
+                }
+            }
             ImGui::PopStyleVar(3);
 
             const char* donate_label = "Donate";
@@ -2206,6 +2257,9 @@ namespace dconstruct::ui {
         th.gutter_background = qui::code::to_u32(scheme_lookup("CODE_GUTTER_BG", qui::color::active_palette().WindowBackground));
         th.gutter_text = qui::code::to_u32(scheme_lookup("CODE_GUTTER_TEXT", qui::color::active_palette().TextDisabled));
         th.current_line = qui::code::to_u32(scheme_lookup("CODE_CURRENT_LINE", qui::color::rgba(0xFF, 0xFF, 0xFF, 0x0D)));
+        ImVec4 active_line_fallback = qui::color::active_palette().Highlight;
+        active_line_fallback.w = 0.18F;
+        th.active_line = qui::code::to_u32(scheme_lookup("CODE_ACTIVE_LINE", active_line_fallback));
         th.text = qui::code::to_u32(scheme_lookup("CODE_BLANK", qui::color::active_palette().Text));
         return th;
     }
@@ -2827,6 +2881,8 @@ namespace dconstruct::ui {
     void dv_draw_value(value_view v, const disassembled_values_t::value_type& value, i32 index, const char* member_name = nullptr);
     void dv_draw_function(value_view v, const function_disassembly& func, i32 index);
     void dv_draw_function_body(value_view v, const function_disassembly& func);
+    void append_debugger_span(ast::code_color_buffer& buffer, ast::AST_COLOR color, std::string text);
+    void append_debugger_instruction_text(ast::code_color_buffer& buffer, std::string_view text);
     void dv_function_switch_and_body(value_view v, const function_disassembly& func, const void* id, bool open);
     void dv_draw_state_script(value_view v, const ast::state_script& script, i32 index);
     void dv_draw_map(value_view v, const disassembled_value& entry, const void* id, i32 index);
@@ -3373,20 +3429,20 @@ namespace dconstruct::ui {
 
         ImGui::SetNextItemOpen(true, ImGuiCond_Once);
         if (dv_node(v, &instructions_node, gcol::Group(), "Instructions", nullptr, false)) {
-            if (ImGui::BeginTable("##instructions", 2, table_flags)) {
-                ImGui::TableSetupColumn("Instruction", ImGuiTableColumnFlags_WidthFixed, FUNCTION_INSTRUCTION_COLUMN_WIDTH);
-                ImGui::TableSetupColumn("Comment", ImGuiTableColumnFlags_WidthStretch);
-                ImGui::TableHeadersRow();
-
+            ast::code_color_buffer& colored = v.doc->m_asmColored[&func];
+            if (colored.empty()) {
+                colored.reserve(lines.size() * 12);
                 for (const function_disassembly_line& line : lines) {
-                    ImGui::TableNextRow();
-                    ImGui::TableSetColumnIndex(0);
-                    ImGui::TextUnformatted(line.m_text.c_str());
-                    ImGui::TableSetColumnIndex(1);
-                    ImGui::TextColored(qui::color::active_palette().TextDisabled, "%s", line.m_comment.c_str());
+                    append_debugger_instruction_text(colored, line.m_text);
+                    if (!line.m_comment.empty()) {
+                        const u32 padding = static_cast<u32>(std::max(2, 64 - static_cast<i32>(line.m_text.size())));
+                        append_debugger_span(colored, ast::AST_COLOR::BLANK, std::string(padding, ' '));
+                        append_debugger_span(colored, ast::AST_COLOR::COMMENT, line.m_comment);
+                    }
+                    append_debugger_span(colored, ast::AST_COLOR::BLANK, "\n");
                 }
-                ImGui::EndTable();
             }
+            render_decompiled_code("##instructions", *v.state, colored);
             dv_tree_pop(v);
         }
 
@@ -4142,6 +4198,673 @@ namespace dconstruct::ui {
         }
     }
 
+    bool debugger_vertical_splitter(const char* id, f32 height, f32& width) {
+        ImGui::PushStyleColor(ImGuiCol_Button, qui::color::rgba(0x00, 0x00, 0x00, 0x00));
+        ImGui::PushStyleColor(ImGuiCol_ButtonHovered, qui::color::active_palette().SeparatorHovered);
+        ImGui::PushStyleColor(ImGuiCol_ButtonActive, qui::color::active_palette().SeparatorActive);
+        ImGui::Button(id, ImVec2(SPLITTER_WIDTH, height));
+        const bool active = ImGui::IsItemActive();
+        if (ImGui::IsItemHovered() || active) {
+            ImGui::SetMouseCursor(ImGuiMouseCursor_ResizeEW);
+        }
+        if (active) {
+            width += ImGui::GetIO().MouseDelta.x;
+        }
+        ImGui::PopStyleColor(3);
+        return active;
+    }
+
+    void debugger_section_header(const char* text) {
+        if (ImFont* section_font = qui::font_semi_bold(); section_font != nullptr) {
+            ImGui::PushFont(section_font);
+            ImGui::PushStyleColor(ImGuiCol_Text, qui::color::active_palette().Highlight);
+            ImGui::TextUnformatted(text);
+            ImGui::PopStyleColor();
+            ImGui::PopFont();
+        } else {
+            ImGui::TextUnformatted(text);
+        }
+        ImGui::Dummy(ImVec2(0.0F, 4.0F));
+    }
+
+    std::string format_register_float(f32 value) {
+        std::string text = std::format("{}", value);
+        if (text.find_first_of(".eEnN") == std::string::npos) {
+            text += ".0";
+        }
+        return text;
+    }
+
+    void draw_vm_register_value(const ImVec4& color, const std::string& text) {
+        const f32 avail = ImGui::GetContentRegionAvail().x;
+        const f32 text_width = ImGui::CalcTextSize(text.c_str()).x;
+        if (text_width < avail) {
+            ImGui::SetCursorPosX(ImGui::GetCursorPosX() + (avail - text_width));
+        }
+        ImGui::PushStyleColor(ImGuiCol_Text, color);
+        ImGui::TextUnformatted(text.c_str());
+        ImGui::PopStyleColor();
+    }
+
+    void draw_vm_register_cell(const app_state& state, const char* reg_prefix, i32 index, u64 value) {
+        char name[32];
+        std::snprintf(name, sizeof(name), "%s%d", reg_prefix, index);
+
+        ImFont* bold = qui::font_bold();
+        if (bold != nullptr) {
+            ImGui::PushFont(bold);
+        }
+        const f32 name_avail = ImGui::GetContentRegionAvail().x;
+        const f32 name_width = ImGui::CalcTextSize(name).x;
+        if (name_width < name_avail) {
+            ImGui::SetCursorPosX(ImGui::GetCursorPosX() + (name_avail - name_width) * 0.5F);
+        }
+        ImGui::PushStyleColor(ImGuiCol_Text, qui::color::active_palette().Highlight);
+        ImGui::TextUnformatted(name);
+        ImGui::PopStyleColor();
+        if (bold != nullptr) {
+            ImGui::PopFont();
+        }
+        ImGui::Separator();
+
+        ImFont* mono = qui::font_medium();
+        if (mono != nullptr) {
+            ImGui::PushFont(mono);
+        }
+
+        draw_vm_register_value(gcol::Int(), std::format("0x{:016X}", value));
+
+        f32 as_float = 0.0F;
+        const u32 low_bits = static_cast<u32>(value & 0xFFFFFFFFULL);
+        std::memcpy(&as_float, &low_bits, sizeof(as_float));
+        draw_vm_register_value(gcol::Float(), format_register_float(as_float));
+
+        const char* sid_name = state.m_sidbase != nullptr ? state.m_sidbase->lookup(static_cast<sid64>(value)) : nullptr;
+        draw_vm_register_value(gcol::Sid(), sid_name != nullptr ? std::string(sid_name) : std::format("#{:016X}", value));
+
+        draw_vm_register_value(gcol::String(), std::format("\xE2\x86\x92 0x{:016X}", value));
+
+        if (mono != nullptr) {
+            ImGui::PopFont();
+        }
+    }
+
+    void draw_vm_register_grid(
+        const app_state& state,
+        const char* id,
+        const char* reg_prefix,
+        std::span<const u64> values,
+        i32 default_rows,
+        bool& expanded
+    ) {
+        const i32 total = static_cast<i32>(values.size());
+        const i32 default_count = std::min(total, VM_REGISTER_COLUMNS * default_rows);
+        const i32 shown = expanded ? total : default_count;
+
+        constexpr ImGuiTableFlags table_flags =
+            ImGuiTableFlags_Borders |
+            ImGuiTableFlags_SizingStretchSame;
+
+        if (ImGui::BeginTable(id, VM_REGISTER_COLUMNS, table_flags)) {
+            for (i32 i = 0; i < shown; ++i) {
+                ImGui::TableNextColumn();
+                draw_vm_register_cell(state, reg_prefix, i, values[static_cast<u32>(i)]);
+            }
+            ImGui::EndTable();
+        }
+
+        if (total > default_count) {
+            ImGui::Dummy(ImVec2(0.0F, 2.0F));
+            const i32 hidden = total - default_count;
+            char label[64];
+            if (expanded) {
+                std::snprintf(label, sizeof(label), "Collapse##%s", id);
+            } else {
+                std::snprintf(label, sizeof(label), "Expand (+%d)##%s", hidden, id);
+            }
+            ImGui::PushStyleColor(ImGuiCol_Button, qui::color::rgba(0x00, 0x00, 0x00, 0x00));
+            ImGui::PushStyleColor(ImGuiCol_ButtonHovered, qui::color::active_palette().TableRowBackgroundAlt);
+            ImGui::PushStyleColor(ImGuiCol_ButtonActive, qui::color::active_palette().TableRowBackgroundAlt);
+            if (ImGui::Button(label, ImVec2(-FLT_MIN, 0.0F))) {
+                expanded = !expanded;
+            }
+            ImGui::PopStyleColor(3);
+        }
+    }
+
+    void append_debugger_span(ast::code_color_buffer& buffer, const ast::AST_COLOR color, std::string text) {
+        if (!text.empty()) {
+            buffer.emplace_back(color, std::move(text));
+        }
+    }
+
+    bool debugger_token_is_number(std::string_view token) {
+        if (token.empty()) {
+            return false;
+        }
+        if (token.starts_with("0x") || token.starts_with("0X")) {
+            return token.size() > 2 && std::all_of(token.begin() + 2, token.end(), [](const char c) {
+                return std::isxdigit(static_cast<unsigned char>(c)) != 0;
+            });
+        }
+        return std::all_of(token.begin(), token.end(), [](const char c) {
+            return std::isdigit(static_cast<unsigned char>(c)) != 0;
+        });
+    }
+
+    void append_debugger_instruction_text(ast::code_color_buffer& buffer, std::string_view text) {
+        std::size_t token_index = 0;
+        std::size_t pos = 0;
+        while (pos < text.size()) {
+            const std::size_t start = pos;
+            if (std::isspace(static_cast<unsigned char>(text[pos])) != 0) {
+                while (pos < text.size() && std::isspace(static_cast<unsigned char>(text[pos])) != 0) {
+                    ++pos;
+                }
+                append_debugger_span(buffer, ast::AST_COLOR::BLANK, std::string(text.substr(start, pos - start)));
+                continue;
+            }
+
+            while (pos < text.size() && std::isspace(static_cast<unsigned char>(text[pos])) == 0) {
+                ++pos;
+            }
+            const std::string_view token = text.substr(start, pos - start);
+            ast::AST_COLOR color = ast::AST_COLOR::IDENTIFIER;
+            if (token_index <= 5 || debugger_token_is_number(token)) {
+                color = ast::AST_COLOR::NUMBER;
+            } else if (token_index == 6) {
+                color = ast::AST_COLOR::KEYWORD;
+            } else if (token.find('#') != std::string_view::npos) {
+                color = ast::AST_COLOR::SID;
+            }
+            append_debugger_span(buffer, color, std::string(token));
+            ++token_index;
+        }
+    }
+
+    void append_debugger_symbol_value(ast::code_color_buffer& buffer, const SymbolTable& table, const u32 index, const ast::full_type& type) {
+        const location value_location = table.m_location + static_cast<u64>(index) * sizeof(u64);
+        const u64 raw = value_location.get<u64>();
+
+        std::visit(
+            [&](auto&& entry) -> void {
+                using T = std::decay_t<decltype(entry)>;
+                if constexpr (std::is_same_v<T, ast::primitive_type>) {
+                    switch (entry.m_type) {
+                        case ast::primitive_kind::I32: {
+                            append_debugger_span(buffer, ast::AST_COLOR::TYPE, "int: ");
+                            append_debugger_span(buffer, ast::AST_COLOR::NUMBER, std::format("{}", value_location.get<i32>()));
+                            return;
+                        }
+                        case ast::primitive_kind::I64: {
+                            append_debugger_span(buffer, ast::AST_COLOR::TYPE, "int64: ");
+                            append_debugger_span(buffer, ast::AST_COLOR::NUMBER, std::format("{}", value_location.get<i64>()));
+                            return;
+                        }
+                        case ast::primitive_kind::U64: {
+                            append_debugger_span(buffer, ast::AST_COLOR::TYPE, "uint64: ");
+                            append_debugger_span(buffer, ast::AST_COLOR::NUMBER, std::format("{}", raw));
+                            return;
+                        }
+                        case ast::primitive_kind::F32: {
+                            append_debugger_span(buffer, ast::AST_COLOR::TYPE, "float: ");
+                            append_debugger_span(buffer, ast::AST_COLOR::NUMBER, std::format("{}", value_location.get<f32>()));
+                            return;
+                        }
+                        case ast::primitive_kind::STRING: {
+                            append_debugger_span(buffer, ast::AST_COLOR::TYPE, "string pointer: ");
+                            append_debugger_span(buffer, ast::AST_COLOR::STRING, std::format("0x{:016X}", raw));
+                            return;
+                        }
+                        case ast::primitive_kind::SID: {
+                            append_debugger_span(buffer, ast::AST_COLOR::TYPE, "sid: ");
+                            append_debugger_span(buffer, ast::AST_COLOR::SID, int_to_string_id(static_cast<sid64>(raw)));
+                            return;
+                        }
+                        default: {
+                            append_debugger_span(buffer, ast::AST_COLOR::TYPE, std::format("{}: ", ast::kind_to_string(entry.m_type)));
+                            append_debugger_span(buffer, ast::AST_COLOR::NUMBER, std::format("0x{:016X}", raw));
+                            return;
+                        }
+                    }
+                } else if constexpr (std::is_same_v<T, ast::function_type>) {
+                    append_debugger_span(buffer, ast::AST_COLOR::TYPE, "function: ");
+                    append_debugger_span(buffer, ast::AST_COLOR::SID, int_to_string_id(static_cast<sid64>(raw)));
+                    append_debugger_span(buffer, ast::AST_COLOR::BLANK, " ");
+                    append_debugger_span(buffer, ast::AST_COLOR::TYPE, ast::type_to_declaration_string(type));
+                } else if constexpr (std::is_same_v<T, ast::ptr_type>) {
+                    append_debugger_span(buffer, ast::AST_COLOR::TYPE, "pointer: ");
+                    append_debugger_span(buffer, ast::AST_COLOR::NUMBER, std::format("0x{:016X}", raw));
+                    append_debugger_span(buffer, ast::AST_COLOR::BLANK, " (");
+                    append_debugger_span(buffer, ast::AST_COLOR::TYPE, ast::type_to_declaration_string(type));
+                    append_debugger_span(buffer, ast::AST_COLOR::BLANK, ")");
+                } else if constexpr (std::is_same_v<T, std::monostate>) {
+                    append_debugger_span(buffer, ast::AST_COLOR::TYPE, "unknown: ");
+                    append_debugger_span(buffer, ast::AST_COLOR::NUMBER, std::format("0x{:016X}", raw));
+                } else {
+                    append_debugger_span(buffer, ast::AST_COLOR::TYPE, std::format("{}: ", ast::type_to_declaration_string(type)));
+                    append_debugger_span(buffer, ast::AST_COLOR::NUMBER, std::format("0x{:016X}", raw));
+                }
+            },
+            type
+        );
+    }
+
+    void debugger_state::render(const dconstruct::debugger::debugger_snapshot& snapshot) {
+        m_registers = snapshot.m_generalPurposeRegisters;
+        m_argRegisters = snapshot.m_argumentRegisters;
+
+        m_instructionsAndSymbols.clear();
+        m_decomp.clear();
+        m_activeInstructionLine = -1;
+        if (snapshot.m_func == nullptr) {
+            append_debugger_span(m_instructionsAndSymbols, ast::AST_COLOR::COMMENT, "; no debugger snapshot\n");
+            return;
+        }
+
+        if (snapshot.m_decomp != nullptr) {
+            ast::code_color_serialization_buffer color_buffer;
+            color_buffer.m_currentIndent = 0;
+            color_buffer.reserve(256);
+            snapshot.m_decomp->to_pseudo_c_colored_string(color_buffer);
+            m_decomp = color_buffer.take();
+        }
+
+        const function_disassembly& func = *snapshot.m_func;
+        m_instructionsAndSymbols.reserve(func.m_lines.size() * 96 + func.m_stackFrame.m_symbolTable.m_types.size() * 72 + 256);
+        append_debugger_span(m_instructionsAndSymbols, ast::AST_COLOR::COMMENT, std::format("; {}\n\n", func.get_id()));
+        append_debugger_span(m_instructionsAndSymbols, ast::AST_COLOR::KEYWORD, "INSTRUCTIONS");
+        append_debugger_span(m_instructionsAndSymbols, ast::AST_COLOR::PUNCTUATION, ":\n");
+
+        i32 row = 0;
+        for (const auto& [_, text] : m_instructionsAndSymbols) {
+            row += static_cast<i32>(std::count(text.begin(), text.end(), '\n'));
+        }
+
+        for (const function_disassembly_line& line : func.m_lines) {
+            if (static_cast<u64>(line.m_location) == snapshot.m_instructionIdx) {
+                m_activeInstructionLine = row;
+                m_scrollToActiveLine = true;
+            }
+            ++row;
+            append_debugger_instruction_text(m_instructionsAndSymbols, line.m_text);
+            if (!line.m_comment.empty()) {
+                const u32 padding = static_cast<u32>(std::max(2, 64 - static_cast<i32>(line.m_text.size())));
+                append_debugger_span(m_instructionsAndSymbols, ast::AST_COLOR::BLANK, std::string(padding, ' '));
+                append_debugger_span(m_instructionsAndSymbols, ast::AST_COLOR::COMMENT, line.m_comment);
+            }
+            append_debugger_span(m_instructionsAndSymbols, ast::AST_COLOR::BLANK, "\n");
+        }
+
+        append_debugger_span(m_instructionsAndSymbols, ast::AST_COLOR::BLANK, "\n");
+        append_debugger_span(m_instructionsAndSymbols, ast::AST_COLOR::KEYWORD, "SYMBOL TABLE");
+        append_debugger_span(m_instructionsAndSymbols, ast::AST_COLOR::PUNCTUATION, ":\n");
+        const SymbolTable& symbol_table = func.m_stackFrame.m_symbolTable;
+        if (symbol_table.m_types.empty()) {
+            append_debugger_span(m_instructionsAndSymbols, ast::AST_COLOR::COMMENT, "; empty\n");
+            return;
+        }
+
+        for (u32 i = 0; i < symbol_table.m_types.size(); ++i) {
+            append_debugger_span(m_instructionsAndSymbols, ast::AST_COLOR::NUMBER, std::format("{:04X}", i));
+            append_debugger_span(m_instructionsAndSymbols, ast::AST_COLOR::BLANK, "  ");
+            append_debugger_symbol_value(m_instructionsAndSymbols, symbol_table, i, symbol_table.m_types[i]);
+            append_debugger_span(m_instructionsAndSymbols, ast::AST_COLOR::BLANK, "\n");
+        }
+    }
+
+    void draw_debugger_vm_panel(app_state& state, const ImVec2& size) {
+        ImGui::BeginChild("##dbg_vm_inner", size, ImGuiChildFlags_None, ImGuiWindowFlags_AlwaysVerticalScrollbar);
+
+        debugger_state& dbg = state.m_debugger;
+
+        debugger_section_header("Registers");
+        draw_vm_register_grid(state, "##dbg_vm_registers", "r", dbg.m_registers, VM_NORMAL_DEFAULT_ROWS, dbg.m_expandNormal);
+
+        ImGui::Dummy(ImVec2(0.0F, 12.0F));
+
+        debugger_section_header("Arguments");
+        draw_vm_register_grid(state, "##dbg_vm_arguments", "a", dbg.m_argRegisters, VM_ARGUMENT_DEFAULT_ROWS, dbg.m_expandArgs);
+
+        ImGui::EndChild();
+    }
+
+    enum class debug_icon {
+        continue_run,
+        step_instruction,
+        step_line,
+        detach
+    };
+
+    void debugger_draw_control_icon(ImDrawList* dl, debug_icon icon, ImVec2 center, f32 radius, ImU32 color) {
+        const f32 thickness = std::max(1.6F, radius * 0.2F);
+        switch (icon) {
+            case debug_icon::continue_run: {
+                dl->AddTriangleFilled(
+                    ImVec2(center.x - radius * 0.55F, center.y - radius * 0.85F),
+                    ImVec2(center.x - radius * 0.55F, center.y + radius * 0.85F),
+                    ImVec2(center.x + radius * 0.9F, center.y),
+                    color
+                );
+                break;
+            }
+            case debug_icon::step_instruction: {
+                const f32 shaft_top = center.y - radius * 0.95F;
+                const f32 shaft_bottom = center.y + radius * 0.1F;
+                dl->AddLine(ImVec2(center.x, shaft_top), ImVec2(center.x, shaft_bottom), color, thickness);
+                dl->AddTriangleFilled(
+                    ImVec2(center.x - radius * 0.5F, shaft_bottom),
+                    ImVec2(center.x + radius * 0.5F, shaft_bottom),
+                    ImVec2(center.x, shaft_bottom + radius * 0.55F),
+                    color
+                );
+                dl->AddCircleFilled(ImVec2(center.x, center.y + radius * 1.05F), radius * 0.27F, color);
+                break;
+            }
+            case debug_icon::step_line: {
+                const ImVec2 arc_center(center.x, center.y + radius * 0.2F);
+                const f32 arc_radius = radius * 0.95F;
+                dl->PathArcTo(arc_center, arc_radius, IM_PI, IM_PI * 2.0F, 20);
+                dl->PathStroke(color, ImDrawFlags_None, thickness);
+                const f32 tip_x = arc_center.x + arc_radius;
+                dl->AddTriangleFilled(
+                    ImVec2(tip_x - radius * 0.34F, arc_center.y - radius * 0.34F),
+                    ImVec2(tip_x + radius * 0.34F, arc_center.y - radius * 0.34F),
+                    ImVec2(tip_x, arc_center.y + radius * 0.3F),
+                    color
+                );
+                dl->AddCircleFilled(ImVec2(center.x, arc_center.y + radius * 0.05F), radius * 0.27F, color);
+                break;
+            }
+            case debug_icon::detach: {
+                dl->AddRectFilled(
+                    ImVec2(center.x - radius * 0.72F, center.y - radius * 0.72F),
+                    ImVec2(center.x + radius * 0.72F, center.y + radius * 0.72F),
+                    color,
+                    radius * 0.12F
+                );
+                break;
+            }
+        }
+    }
+
+    bool debugger_control_button(const char* id, debug_icon icon, const ImVec4& color, const char* tooltip) {
+        const f32 size = ImGui::GetFrameHeight();
+        const ImVec2 origin = ImGui::GetCursorScreenPos();
+        const bool pressed = ImGui::Button(id, ImVec2(size, size));
+        if (tooltip != nullptr && ImGui::IsItemHovered()) {
+            ImGui::SetTooltip("%s", tooltip);
+        }
+        ImDrawList* dl = ImGui::GetWindowDrawList();
+        const ImVec2 center(origin.x + size * 0.5F, origin.y + size * 0.5F);
+        debugger_draw_control_icon(dl, icon, center, size * 0.28F, ImGui::GetColorU32(color));
+        return pressed;
+    }
+
+    void seed_debugger_sids(debugger_state& dbg) {
+        if (dbg.m_sidsSeeded) {
+            return;
+        }
+        constexpr std::array sids{SID("ss-main-menu-lightbar-controller player-ellie (on ((update)))")};
+        dbg.m_debugger.set_sids(sids.begin(), sids.end());
+        dbg.m_sidsSeeded = true;
+    }
+
+    void request_debugger_attach(debugger_state& dbg, const SIDBase* sidbase) {
+        seed_debugger_sids(dbg);
+        dbg.m_debugger.set_sidbase(sidbase);
+        if (std::optional<std::string> attach_error = dbg.m_debugger.request_attach()) {
+            dbg.m_debugger.append_output(std::format("[debugger] error: {}\n", *attach_error));
+        }
+    }
+
+    void clear_debugger_snapshot_view(debugger_state& dbg) {
+        dbg.m_snapshot.reset();
+        dbg.m_instructionsAndSymbols.clear();
+        dbg.m_decomp.clear();
+        dbg.m_registers.fill(0);
+        dbg.m_argRegisters.fill(0);
+        dbg.m_activeInstructionLine = -1;
+        dbg.m_scrollToActiveLine = false;
+    }
+
+    void update_debugger_from_backend(debugger_state& dbg) {
+        using debugger_type = dconstruct::debugger::debugger;
+
+        const debugger_type::STATE state = dbg.m_debugger.poll_state();
+        const bool state_changed = !dbg.m_hasPollState || state != dbg.m_lastPollState;
+        debugger_type::STATE final_state = state;
+
+        switch (state) {
+            case debugger_type::STATE::DETACHED: {
+                if (state_changed) {
+                    dbg.m_debugger.append_output("[debugger] detached\n");
+                }
+                break;
+            }
+            case debugger_type::STATE::ATTACHING: {
+                if (state_changed) {
+                    dbg.m_debugger.append_output("[debugger] waiting for attach...\n");
+                }
+                break;
+            }
+            case debugger_type::STATE::ATTACHED: {
+                if (state_changed) {
+                    dbg.m_debugger.append_output("[debugger] attached, but no bp hit yet.\n");
+                }
+                break;
+            }
+            case debugger_type::STATE::SNAPSHOT_READY: {
+                std::shared_ptr snapshot = dbg.m_debugger.poll_snapshot();
+                final_state = dbg.m_debugger.poll_state();
+                dbg.m_snapshot = std::move(snapshot);
+                dbg.render(*dbg.m_snapshot);
+                dbg.m_debugger.append_output(std::format("[debugger] got function: {}\n", dbg.m_snapshot->m_func->get_id()));
+                break;
+            }
+            case debugger_type::STATE::ERROR: {
+                if (std::optional<std::string> error = dbg.m_debugger.poll_error()) {
+                    dbg.m_debugger.append_output(std::format("[debugger] error: {}\n", *error));
+                } else if (state_changed) {
+                    dbg.m_debugger.append_output("[debugger] error\n");
+                }
+                dbg.m_debugger.detach();
+                final_state = dbg.m_debugger.poll_state();
+                break;
+            }
+        }
+
+        dbg.m_lastPollState = final_state;
+        dbg.m_hasPollState = true;
+    }
+
+    void draw_debugger_controls(debugger_state& dbg, const SIDBase* sidbase) {
+        const f32 button_size = ImGui::GetFrameHeight();
+        const f32 spacing = ImGui::GetStyle().ItemSpacing.x;
+        const dconstruct::debugger::debugger::STATE state = dbg.m_debugger.poll_state();
+        const bool attached = dbg.m_debugger.is_attached();
+        const bool attaching = state == dconstruct::debugger::debugger::STATE::ATTACHING;
+        const bool can_detach = attached || attaching;
+        const char* attach_label = attached ? "Attached to tlou-ii.exe" : attaching ? "Attaching..." : "Attach to tlou-ii.exe process";
+        const f32 attach_width = ImGui::CalcTextSize(attach_label).x + ImGui::GetStyle().FramePadding.x * 2.0F;
+        const f32 total_width = attach_width + button_size * 4.0F + spacing * 4.0F;
+        const f32 avail = ImGui::GetContentRegionAvail().x;
+        if (total_width < avail) {
+            ImGui::SetCursorPosX(ImGui::GetCursorPosX() + (avail - total_width) * 0.5F);
+        }
+
+        ImGui::BeginDisabled(attached || attaching);
+        if (ImGui::Button(attach_label, ImVec2(attach_width, button_size))) {
+            request_debugger_attach(dbg, sidbase);
+        }
+        ImGui::EndDisabled();
+        ImGui::SameLine();
+
+        ImGui::PushStyleColor(ImGuiCol_Button, qui::color::rgba(0x00, 0x00, 0x00, 0x00));
+        ImGui::PushStyleColor(ImGuiCol_ButtonHovered, qui::color::active_palette().TableRowBackgroundAlt);
+        ImGui::PushStyleColor(ImGuiCol_ButtonActive, qui::color::active_palette().TableRowBackgroundAlt);
+
+        ImGui::BeginDisabled(!attached);
+        if (debugger_control_button("##dbg_continue", debug_icon::continue_run, qui::color::active_palette().AccentGreen, "Continue")) {
+            dbg.m_debugger.request_continue();
+            dbg.m_debugger.append_output("[debugger] continue\n");
+        }
+        ImGui::SameLine();
+        if (debugger_control_button("##dbg_step_instruction", debug_icon::step_instruction, qui::color::active_palette().AccentYellow, "Next instruction")) {
+            dbg.m_debugger.request_single_step();
+            dbg.m_debugger.append_output("[debugger] step instruction\n");
+        }
+        ImGui::SameLine();
+        if (debugger_control_button("##dbg_step_line", debug_icon::step_line, qui::color::active_palette().ButtonHovered, "Next line")) {
+            dbg.m_debugger.append_output("[debugger] step line\n");
+        }
+        ImGui::EndDisabled();
+
+        ImGui::SameLine();
+        ImGui::BeginDisabled(!can_detach);
+        if (debugger_control_button("##dbg_detach", debug_icon::detach, qui::color::active_palette().AccentRed, "Detach debugger")) {
+            dbg.m_debugger.detach();
+            clear_debugger_snapshot_view(dbg);
+            dbg.m_debugger.append_output("[debugger] detach requested\n");
+            dbg.m_lastPollState = dbg.m_debugger.poll_state();
+            dbg.m_hasPollState = true;
+        }
+        ImGui::EndDisabled();
+
+        ImGui::PopStyleColor(3);
+    }
+
+    void draw_debugger_view(app_state& state) {
+        const ImVec2 avail = ImGui::GetContentRegionAvail();
+        if (avail.x <= 1.0F || avail.y <= 1.0F) {
+            return;
+        }
+
+        debugger_state& dbg = state.m_debugger;
+        update_debugger_from_backend(dbg);
+        const bool attached = dbg.m_debugger.is_attached();
+        const bool panels_disabled = !attached && dbg.m_snapshot == nullptr;
+
+        const f32 panels_height = std::max(MIN_PANEL_WIDTH, avail.y - DEBUGGER_OUTPUT_HEIGHT - ImGui::GetStyle().ItemSpacing.y);
+
+        if (dbg.m_leftWidth <= 0.0F) {
+            dbg.m_leftWidth = avail.x * 0.28F;
+        }
+        if (dbg.m_middleWidth <= 0.0F) {
+            dbg.m_middleWidth = avail.x * 0.40F;
+        }
+
+        const f32 splitters = SPLITTER_WIDTH * 2.0F;
+        const f32 max_total = std::max(MIN_PANEL_WIDTH, avail.x - splitters - MIN_PANEL_WIDTH);
+        dbg.m_leftWidth = std::clamp(dbg.m_leftWidth, MIN_PANEL_WIDTH, max_total - MIN_PANEL_WIDTH);
+        const f32 middle_max = std::max(MIN_PANEL_WIDTH, avail.x - splitters - dbg.m_leftWidth - MIN_PANEL_WIDTH);
+        dbg.m_middleWidth = std::clamp(dbg.m_middleWidth, MIN_PANEL_WIDTH, middle_max);
+
+        const f32 left_block_width = dbg.m_leftWidth + SPLITTER_WIDTH + dbg.m_middleWidth;
+        ImGui::BeginChild("##dbg_left_block", ImVec2(left_block_width, panels_height));
+        {
+            draw_debugger_controls(dbg, state.m_sidbase.get());
+
+            ImGui::BeginDisabled(panels_disabled);
+            const f32 panels_row_height = std::max(1.0F, ImGui::GetContentRegionAvail().y - ImGui::GetStyle().ItemSpacing.y);
+
+            ImGui::BeginChild("##dbg_left", ImVec2(dbg.m_leftWidth, panels_row_height));
+            {
+                ImVec2 inner_size;
+                if (begin_labeled_table_frame("Instructions & Symbol Table", inner_size)) {
+                    if (dbg.m_snapshot != nullptr && !dbg.m_instructionsAndSymbols.empty()) {
+                        std::vector<qui::code::colored_span> spans;
+                        spans.reserve(dbg.m_instructionsAndSymbols.size());
+                        for (const auto& [color, text] : dbg.m_instructionsAndSymbols) {
+                            const ImVec4 resolved = scheme_lookup(code_color_key(color), qui::color::active_palette().Text);
+                            spans.push_back({qui::code::to_u32(resolved), text});
+                        }
+                        qui::code::code_window_colored("##dbg_instructions", spans, inner_size, scheme_code_theme(), nullptr, dbg.m_activeInstructionLine, dbg.m_scrollToActiveLine);
+                        dbg.m_scrollToActiveLine = false;
+                    } else {
+                        const std::array<qui::code::colored_span, 2> spans{{
+                            {qui::code::to_u32(scheme_lookup(code_color_key(ast::AST_COLOR::COMMENT), qui::color::active_palette().TextDisabled)), "; instructions and symbol table\n"},
+                            {qui::code::to_u32(scheme_lookup(code_color_key(ast::AST_COLOR::COMMENT), qui::color::active_palette().TextDisabled)), "; (waiting for breakpoint snapshot)\n"}
+                        }};
+                        qui::code::code_window_colored("##dbg_instructions", spans, inner_size, scheme_code_theme());
+                    }
+                }
+            }
+            ImGui::EndChild();
+
+            ImGui::SameLine(0.0F, 0.0F);
+            debugger_vertical_splitter("##dbg_splitter_left", panels_row_height, dbg.m_leftWidth);
+            ImGui::SameLine(0.0F, 0.0F);
+
+            ImGui::BeginChild("##dbg_middle", ImVec2(0.0F, panels_row_height));
+            {
+                ImVec2 inner_size;
+                if (begin_labeled_table_frame("Decompilation", inner_size)) {
+                    if (dbg.m_snapshot != nullptr && !dbg.m_decomp.empty()) {
+                        std::vector<qui::code::colored_span> spans;
+                        spans.reserve(dbg.m_decomp.size());
+                        for (const auto& [color, text] : dbg.m_decomp) {
+                            const ImVec4 resolved = scheme_lookup(code_color_key(color), qui::color::active_palette().Text);
+                            spans.push_back({qui::code::to_u32(resolved), text});
+                        }
+                        qui::code::code_window_colored("##dbg_decomp", spans, inner_size, scheme_code_theme());
+                    } else {
+                        const std::array<qui::code::colored_span, 1> spans{{
+                            {qui::code::to_u32(qui::color::active_palette().TextDisabled), "// decompilation will appear here"}
+                        }};
+                        qui::code::code_window_colored("##dbg_decomp", spans, inner_size, scheme_code_theme());
+                    }
+                }
+            }
+            ImGui::EndChild();
+            ImGui::EndDisabled();
+        }
+        ImGui::EndChild();
+
+        ImGui::SameLine(0.0F, 0.0F);
+        ImGui::BeginDisabled(panels_disabled);
+        debugger_vertical_splitter("##dbg_splitter_middle", panels_height, dbg.m_middleWidth);
+        ImGui::EndDisabled();
+        ImGui::SameLine(0.0F, 0.0F);
+
+        ImGui::BeginDisabled(panels_disabled);
+        ImGui::BeginChild("##dbg_right", ImVec2(0.0F, panels_height));
+        {
+            ImVec2 inner_size;
+            if (begin_labeled_table_frame("Virtual Machine", inner_size)) {
+                draw_debugger_vm_panel(state, inner_size);
+            }
+        }
+        ImGui::EndChild();
+        ImGui::EndDisabled();
+
+        ImVec2 output_size;
+        if (begin_labeled_table_frame("Output", output_size)) {
+            ImGui::BeginChild("##dbg_output", output_size, ImGuiChildFlags_None, ImGuiWindowFlags_AlwaysVerticalScrollbar);
+            const f32 scroll_y = ImGui::GetScrollY();
+            const f32 scroll_max_y = ImGui::GetScrollMaxY();
+            const bool stick_to_bottom = scroll_max_y <= 0.0F || scroll_y >= scroll_max_y - 2.0F;
+            if (ImFont* mono = qui::font_medium(); mono != nullptr) {
+                ImGui::PushFont(mono);
+            }
+            ImGui::PushStyleColor(ImGuiCol_Text, qui::color::active_palette().TextDisabled);
+            const std::string& output = dbg.m_debugger.output();
+            if (output.empty()) {
+                ImGui::TextUnformatted("Output will appear here.");
+            } else {
+                ImGui::TextUnformatted(output.c_str());
+                if (stick_to_bottom) {
+                    ImGui::SetScrollHereY(1.0F);
+                }
+            }
+            ImGui::PopStyleColor();
+            if (qui::font_medium() != nullptr) {
+                ImGui::PopFont();
+            }
+            ImGui::EndChild();
+        }
+    }
+
     void draw_content_area(f32 top_offset, app_state& state) {
         const ImGuiViewport* viewport = ImGui::GetMainViewport();
         ImGui::SetNextWindowPos(ImVec2(viewport->Pos.x, viewport->Pos.y + top_offset));
@@ -4180,6 +4903,14 @@ namespace dconstruct::ui {
         if (!io.WantTextInput && io.KeyCtrl &&
             (ImGui::IsKeyPressed(ImGuiKey_Y, false) || (io.KeyShift && ImGui::IsKeyPressed(ImGuiKey_Z, false)))) {
             redo_active_document(state);
+        }
+
+        if (state.m_debugger.m_active) {
+            draw_status_text(state);
+            ImGui::Dummy(ImVec2(0.0F, 0.0F));
+            draw_debugger_view(state);
+            ImGui::End();
+            return;
         }
 
         if (state.m_documents.empty()) {
@@ -4347,7 +5078,7 @@ int main() {
     HWND drop_hwnd = glfwGetWin32Window(window);
     dconstruct::ui::file_drop_target* drop_target = nullptr;
     if (SUCCEEDED(ole_result) && drop_hwnd != nullptr) {
-        DragAcceptFiles(drop_hwnd, FALSE);
+        DragAcceptFiles(drop_hwnd, false);
         drop_target = new dconstruct::ui::file_drop_target(&state);
         if (FAILED(RegisterDragDrop(drop_hwnd, drop_target))) {
             drop_target->Release();

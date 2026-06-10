@@ -108,7 +108,7 @@ namespace dconstruct {
         u8 insert_struct_or_arraylike(const location, disassembled_values_t&);
         [[nodiscard]] u32 get_size_array(const location);
         void insert_anonymous_array(const location, disassembled_values_t&);
-        [[nodiscard]] disassembled_value insert_array(const location, const u32);
+        [[nodiscard]] disassembled_value insert_array(const location, const u32, u32 struct_size = 0);
         [[nodiscard]] ast::state_script insert_state_script(const StateScript*);
         [[nodiscard]] disassembled_values_t insert_mapped_struct(const location, const std::pair<sid64, ast::full_type>&);
         void insert_unmapped_struct(const structs::unmapped*, disassembled_values_t&);

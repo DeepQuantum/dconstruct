@@ -163,6 +163,7 @@ void debugger::cleanup_session() {
 
     m_functionData.clear();
     m_debuggedFunctions.clear();
+    m_currentlyDebuggingSid = std::nullopt;
     m_opts = 0;
     rax = rdx = rbp = rsi = r15 = rdi = rcx = rsp = 0;
 }
@@ -271,9 +272,11 @@ void debugger::request_continue() {
     m_commandCv.notify_one();
 }
 
-[[nodiscard]] debugger::COMMAND debugger::await_command(std::stop_token st) {
+[[nodiscard]] std::optional<debugger::COMMAND> debugger::await_command(std::stop_token st) {
     std::unique_lock lock(m_mutex);
-    m_commandCv.wait(lock, st, [this] () { return m_command != COMMAND::NONE; });
+    if (!m_commandCv.wait(lock, st, [this] { return m_command != COMMAND::NONE; })) {
+        return std::nullopt;
+    }
     return std::exchange(m_command, COMMAND::NONE);
 }
 
@@ -281,19 +284,6 @@ void debugger::request_continue() {
 
     DEBUG_VALUE instruction_idx_addr{};
     m_registers->GetValue(r14, &instruction_idx_addr);
-
-    res_msg<u64> instruction_idx_res = read_virtual<u32>(instruction_idx_addr.I64);
-    if (!instruction_idx_res) {
-        store_error(std::move(instruction_idx_res.error()));
-        return nullptr;
-    }
-
-
-    if (*instruction_idx_res != 0) {
-        store_error("istr idx wasn't 0");
-        return nullptr;
-    }
-
 
     DEBUG_VALUE script_lambda_val{};
     m_registers->GetValue(rax, &script_lambda_val);
@@ -319,6 +309,8 @@ void debugger::request_continue() {
 
     const u64 num_symbols = (script_lamba_res->m_sum - 12) / 4 - num_instructions;
 
+
+
     res_msg instructions_res = read_virtual<Instruction>(p64(istr_addr), num_instructions);
     if (!instructions_res) {
         store_error(instructions_res.error());
@@ -340,7 +332,7 @@ void debugger::request_continue() {
     std::shared_ptr func_disassembly = Disassembler::create_function_disassembly(
         m_functionData.back().m_instructions.get(),
         num_instructions,
-        m_sidbase->lookup(*m_currentlyDebuggingSid, m_sidCache),
+        m_sidbase->lookup(sid, m_sidCache),
         location(m_functionData.back().m_symbols.get()),
         reinterpret_cast<u64>(istr_addr),
         sizeof(Instruction),
@@ -366,6 +358,12 @@ void debugger::request_continue() {
         }.decompile(dcompiler::OPTIMIZATION_KIND::NONE)
     );
 
+    res_msg<u64> instruction_idx_res = read_virtual<u32>(instruction_idx_addr.I64);
+    if (!instruction_idx_res) {
+        store_error(std::move(instruction_idx_res.error()));
+        return nullptr;
+    }
+
     auto snapshot = std::make_unique<debugger_snapshot>();
     snapshot->m_func = std::move(func_disassembly);
     snapshot->m_decomp = std::move(decompiled);
@@ -375,7 +373,7 @@ void debugger::request_continue() {
     snapshot->m_scriptLambdaPtr = script_lambda_val.I64;
     snapshot->m_stackFramePtr = stack_frame_start.I64;
     snapshot->m_debugThreadId = thread_id;
-    snapshot->m_instructionIdx = 1;
+    snapshot->m_instructionIdx = *instruction_idx_res;
     return snapshot;
 }
 
@@ -393,7 +391,6 @@ void debugger::request_continue() {
     }
 
     if (old_snapshot_copy.m_sid != sid ||
-        old_snapshot_copy.m_scriptLambdaPtr != script_lambda_val.I64 ||
         old_snapshot_copy.m_stackFramePtr != stack_frame_start.I64 ||
         old_snapshot_copy.m_debugThreadId != thread_id) {
         return nullptr;
@@ -409,7 +406,7 @@ void debugger::request_continue() {
 
     const u64 instruction_idx = *instruction_idx_res;
 
-    assert(instruction_idx == old_snapshot_copy.m_instructionIdx);
+    assert(instruction_idx == old_snapshot_copy.m_instructionIdx + 1);
 
     ++old_snapshot_copy.m_instructionIdx;
 
@@ -471,11 +468,11 @@ void debugger::loop(std::stop_token st) {
                 m_snapshot = std::move(*snapshot);
             }
         } else {
-            m_currentlyDebuggingSid = *sid;
             std::shared_ptr snapshot = capture_initial_snapshot(*sid, thread_id);
             if (!snapshot) {
                 break;
             }
+            m_currentlyDebuggingSid = *sid;
             {
                 std::lock_guard lock(m_mutex);
                 m_snapshot = std::move(snapshot);
@@ -484,20 +481,26 @@ void debugger::loop(std::stop_token st) {
 
         m_state.store(STATE::SNAPSHOT_READY, std::memory_order_release);
 
-        switch (await_command(st)) {
-            case COMMAND::CONTINUE:
+        std::optional<COMMAND> command = await_command(st);
+        if (!command) {
+            continue;
+        }
+        switch (*command) {
+            case COMMAND::CONTINUE: {
                 m_bp->RemoveFlags(DEBUG_BREAKPOINT_ENABLED);
                 m_currentlyDebuggingSid.reset();
                 m_control->SetExecutionStatus(DEBUG_STATUS_GO);
                 break;
-            case COMMAND::SINGLE_STEP:
+            }
+            case COMMAND::SINGLE_STEP: {
                 m_control->SetExecutionStatus(DEBUG_STATUS_GO);
                 break;
-            case COMMAND::NONE:
-                break;
+            }
+            default: {
+                assert(false && "unreachable, as we should only continue when we have a m_command != NONE");
+            }
         }
     }
-    m_control->SetExecutionStatus(DEBUG_STATUS_GO);
 }
 
 }

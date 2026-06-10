@@ -102,13 +102,16 @@ namespace dconstruct {
         return bytes_inserted;
     }
 
+    // anonymous arrays are arrays that have no clear type ID and can be indexed at any position with any length.
+    // typically they are indexed via (u32 offset, u32 length, i32 const -1)
+    // right now i think they can only contain pointers to other structs, which means we can pass the element size 8
     void Disassembler::insert_anonymous_array(const location anon_array, disassembled_values_t& values) {
         const u32 anonymous_array_size = anon_array.get<u32>(8);
         if (anonymous_array_size > 50'000) {
             return;
         }
 
-        values.emplace_back(insert_array(anon_array, anonymous_array_size));
+        values.emplace_back(insert_array(anon_array, anonymous_array_size, sizeof(p64)));
     }
 
     [[nodiscard]] u32 Disassembler::get_size_array(const location array) {
@@ -137,7 +140,7 @@ namespace dconstruct {
         return size_array;
     }
 
-    disassembled_value Disassembler::insert_array(const location array, const u32 array_size) {
+    disassembled_value Disassembler::insert_array(const location array, const u32 array_size, u32 struct_size) {
         disassembled_value array_value{
             .m_typeId = SID("array"),
             .m_offset = get_offset(location().from(array)),
@@ -156,17 +159,20 @@ namespace dconstruct {
             member_offset += 8;
         }
 
-        const u8 type_id_padding = m_currentFile->is_string(member + member_offset) ? 0 : 8;
-        u32 struct_size = 0;
-        f32 struct_size_f = f32(member_offset - type_id_padding) / f32(array_size);
-        if (struct_size_f != std::trunc(struct_size_f) || struct_size_f == .0) {
-            struct_size_f = f32(member_offset) / f32(array_size);
-            if (struct_size_f != std::trunc(struct_size_f)) {
-                struct_size_f = std::round(struct_size_f / 8.f) * 8.f;
+
+        if (struct_size == 0) {
+            const u8 type_id_padding = m_currentFile->is_string(member + member_offset) ? 0 : 8;
+            f32 struct_size_f = f32(member_offset - type_id_padding) / f32(array_size);
+            if (struct_size_f != std::trunc(struct_size_f) || struct_size_f == .0) {
+                struct_size_f = f32(member_offset) / f32(array_size);
+                if (struct_size_f != std::trunc(struct_size_f)) {
+                    struct_size_f = std::round(struct_size_f / 8.f) * 8.f;
+                }
             }
+            // assert(struct_size_f != 0.0);
+            struct_size = (u32)struct_size_f;
         }
-        // assert(struct_size_f != 0.0);
-        struct_size = (u32)struct_size_f;
+
 
         for (u32 array_entry_count = 0; array_entry_count < array_size; ++array_entry_count) {
             member_offset = 0;

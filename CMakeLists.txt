@@ -2,6 +2,10 @@ cmake_minimum_required(VERSION 3.16)
 
 project(dconstruct LANGUAGES CXX)
 
+if(NOT WIN32)
+    message(FATAL_ERROR "dconstruct only supports Windows.")
+endif()
+
 set(VERSION_NUMBER "2.1.0")
 
 set(CMAKE_CXX_STANDARD 23)
@@ -93,25 +97,17 @@ endif()
 
 add_library(dconstruct_lib ${BASE_SOURCE_FILES})
 
-if(WIN32)
-    target_link_libraries(
-        dconstruct_lib
-        # ${LLVM_LIBS}
-        ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/gvc.lib
-        ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/cgraph.lib
-        ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/gvplugin_core.lib
-        ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/gvplugin_pango.lib
-    )
-    target_include_directories(dconstruct_lib PRIVATE
-        ${SOURCE_DIR}/Graphviz-13.1.0-win64/include
-    )
-else()
-    target_link_libraries(
-        dconstruct_lib
-        gvc
-        cgraph
-    )
-endif()
+target_link_libraries(
+    dconstruct_lib
+    # ${LLVM_LIBS}
+    ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/gvc.lib
+    ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/cgraph.lib
+    ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/gvplugin_core.lib
+    ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/gvplugin_pango.lib
+)
+target_include_directories(dconstruct_lib PRIVATE
+    ${SOURCE_DIR}/Graphviz-13.1.0-win64/include
+)
 
 target_link_libraries(dconstruct_lib
     $<$<CXX_COMPILER_ID:GNU>: tbb12>
@@ -119,25 +115,23 @@ target_link_libraries(dconstruct_lib
     # dxbc_shader_decomp
 )
 
-if(WIN32)
-    set(GRAPHVIZ_BIN "${SOURCE_DIR}/Graphviz-13.1.0-win64/bin")
-    set(DCONSTRUCT_RUNTIME_DLLS
-        "${GRAPHVIZ_BIN}/cdt.dll"
-        "${GRAPHVIZ_BIN}/cgraph.dll"
-        "${GRAPHVIZ_BIN}/gvc.dll"
-        "${GRAPHVIZ_BIN}/gvplugin_core.dll"
-        "${GRAPHVIZ_BIN}/gvplugin_dot_layout.dll"
-        "${GRAPHVIZ_BIN}/gvplugin_pango.dll"
-        "${GRAPHVIZ_BIN}/libexpat.dll"
-        "${GRAPHVIZ_BIN}/pathplan.dll"
-        "${GRAPHVIZ_BIN}/xdot.dll"
-    )
-    add_custom_command(TARGET dconstruct_lib POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E echo "Copying runtime DLLs next to dconstruct_lib"
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${DCONSTRUCT_RUNTIME_DLLS} "$<TARGET_FILE_DIR:dconstruct_lib>"
-        VERBATIM
-    )
-endif()
+set(GRAPHVIZ_BIN "${SOURCE_DIR}/Graphviz-13.1.0-win64/bin")
+set(DCONSTRUCT_RUNTIME_DLLS
+    "${GRAPHVIZ_BIN}/cdt.dll"
+    "${GRAPHVIZ_BIN}/cgraph.dll"
+    "${GRAPHVIZ_BIN}/gvc.dll"
+    "${GRAPHVIZ_BIN}/gvplugin_core.dll"
+    "${GRAPHVIZ_BIN}/gvplugin_dot_layout.dll"
+    "${GRAPHVIZ_BIN}/gvplugin_pango.dll"
+    "${GRAPHVIZ_BIN}/libexpat.dll"
+    "${GRAPHVIZ_BIN}/pathplan.dll"
+    "${GRAPHVIZ_BIN}/xdot.dll"
+)
+add_custom_command(TARGET dconstruct_lib POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E echo "Copying runtime DLLs next to dconstruct_lib"
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different ${DCONSTRUCT_RUNTIME_DLLS} "$<TARGET_FILE_DIR:dconstruct_lib>"
+    VERBATIM
+)
 
 add_custom_command(TARGET dconstruct_lib POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E echo "Copying optional runtime fixtures next to dconstruct_lib"
@@ -238,23 +232,21 @@ add_executable(
     ${SOURCE_DIR}/sidbase/tools/decode_sidbase.cpp
 )
 
-if(WIN32)
-    add_executable(
-        dconstruct_debugger
-        ${SOURCE_DIR}/debugger/debugger.cpp
-        ${SOURCE_DIR}/debugger/main.cpp
-    )
+add_executable(
+    dconstruct_debugger
+    ${SOURCE_DIR}/debugger/debugger.cpp
+    ${SOURCE_DIR}/debugger/main.cpp
+)
 
-    target_link_libraries(dconstruct_debugger PRIVATE dbgeng dconstruct_lib)
+target_link_libraries(dconstruct_debugger PRIVATE dbgeng dconstruct_lib)
 
-    target_compile_options(dconstruct_debugger PRIVATE
-        $<$<CONFIG:Release>:/GL>
-    )
+target_compile_options(dconstruct_debugger PRIVATE
+    $<$<CONFIG:Release>:/GL>
+)
 
-    target_link_options(dconstruct_debugger PRIVATE
-        $<$<CONFIG:Release>:/LTCG>
-    )
-endif()
+target_link_options(dconstruct_debugger PRIVATE
+    $<$<CONFIG:Release>:/LTCG>
+)
 
 set(BUILDINFO_H "${CMAKE_CURRENT_BINARY_DIR}/buildinfo.h")
 add_custom_command(
@@ -283,7 +275,8 @@ add_subdirectory(${SOURCE_DIR}/qui)
 
 add_executable(dconstruct_ui
     ${SOURCE_DIR}/ui/main.cpp
-    $<$<BOOL:${WIN32}>:${CMAKE_SOURCE_DIR}/resources/dconstruct.rc>
+    ${SOURCE_DIR}/debugger/debugger.cpp
+    ${CMAKE_SOURCE_DIR}/resources/dconstruct.rc
 )
 
 target_link_libraries(dconstruct_ui PRIVATE
@@ -306,10 +299,8 @@ add_custom_command(TARGET dconstruct_ui POST_BUILD
     VERBATIM
 )
 
-if(WIN32)
-    target_link_libraries(dconstruct_ui PRIVATE comdlg32 ole32 shell32)
-    target_include_directories(dconstruct_ui PRIVATE ${CMAKE_SOURCE_DIR}/resources)
-endif()
+target_link_libraries(dconstruct_ui PRIVATE comdlg32 ole32 shell32 dbgeng)
+target_include_directories(dconstruct_ui PRIVATE ${CMAKE_SOURCE_DIR}/resources)
 
 set_target_properties(dconstruct_ui PROPERTIES
     CXX_STANDARD ${CMAKE_CXX_STANDARD}
@@ -322,53 +313,6 @@ target_compile_options(dconstruct_ui PRIVATE
 )
 
 target_link_options(dconstruct_ui PRIVATE
-    $<$<CONFIG:Release>:/LTCG>
-    $<$<CXX_COMPILER_ID:MSVC>:/SUBSYSTEM:WINDOWS>
-    $<$<CXX_COMPILER_ID:MSVC>:/ENTRY:mainCRTStartup>
-)
-
-add_executable(dconstruct_debugger_ui
-    ${SOURCE_DIR}/ui/main_with_debugger.cpp
-    ${SOURCE_DIR}/debugger/debugger.cpp
-    $<$<BOOL:${WIN32}>:${CMAKE_SOURCE_DIR}/resources/dconstruct.rc>
-)
-
-target_link_libraries(dconstruct_debugger_ui PRIVATE
-    qui_base::qui_base
-    dconstruct_lib
-)
-
-target_include_directories(dconstruct_debugger_ui PRIVATE ${SOURCE_DIR}/qui/source/stb)
-add_dependencies(dconstruct_debugger_ui generate_buildinfo)
-
-add_custom_command(TARGET dconstruct_debugger_ui POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E make_directory "$<TARGET_FILE_DIR:dconstruct_debugger_ui>/fonts"
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "${CMAKE_SOURCE_DIR}/resources/GeistMono-Medium.ttf"
-        "${CMAKE_SOURCE_DIR}/resources/GeistMono-SemiBold.ttf"
-        "${CMAKE_SOURCE_DIR}/resources/GeistMono-Bold.ttf"
-        "${CMAKE_SOURCE_DIR}/resources/OFL.txt"
-        "$<TARGET_FILE_DIR:dconstruct_debugger_ui>/fonts"
-    COMMENT "Copying fonts and license into $<TARGET_FILE_DIR:dconstruct_debugger_ui>/fonts"
-    VERBATIM
-)
-
-if(WIN32)
-    target_link_libraries(dconstruct_debugger_ui PRIVATE comdlg32 ole32 shell32 dbgeng)
-    target_include_directories(dconstruct_debugger_ui PRIVATE ${CMAKE_SOURCE_DIR}/resources)
-endif()
-
-set_target_properties(dconstruct_debugger_ui PROPERTIES
-    CXX_STANDARD ${CMAKE_CXX_STANDARD}
-    CXX_STANDARD_REQUIRED ON
-    CXX_EXTENSIONS OFF
-)
-
-target_compile_options(dconstruct_debugger_ui PRIVATE
-    $<$<CONFIG:Release>:/GL>
-)
-
-target_link_options(dconstruct_debugger_ui PRIVATE
     $<$<CONFIG:Release>:/LTCG>
     $<$<CXX_COMPILER_ID:MSVC>:/SUBSYSTEM:WINDOWS>
     $<$<CXX_COMPILER_ID:MSVC>:/ENTRY:mainCRTStartup>
