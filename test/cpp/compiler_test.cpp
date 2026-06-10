@@ -107,15 +107,15 @@ namespace dconstruct::testing {
             if (body_err) {
                 return std::unexpected{*body_err};
             }
-            if (fn.m_returnBranchLocations.empty()) {
-                fn.emit_instruction(Opcode::Return, 0_r, 0_r);
-            } else if (fn.m_returnBranchLocations.back() == fn.m_instructions.size() - 2) {
+            if (!fn.m_returnBranchLocations.empty() && fn.m_returnBranchLocations.back() == fn.m_instructions.size() - 1) {
                 fn.m_instructions.back() = Instruction(Opcode::Return, 0_r, 0_r);
                 fn.m_returnBranchLocations.pop_back();
+            } else {
+                fn.emit_instruction(Opcode::Return, 0_r, 0_r);
             }
             const u16 return_location = fn.m_instructions.size() - 1;
             for (const u64 branch_location : fn.m_returnBranchLocations) {
-                Instruction& branch = fn.m_instructions[branch_location + 1];
+                Instruction& branch = fn.m_instructions[branch_location];
                 branch.set_lo_hi(return_location);
             }
             functions.push_back(std::move(fn));
@@ -2093,6 +2093,40 @@ namespace dconstruct::testing {
                 Instruction{Opcode::Branch, 6, 0, 0},
                 Instruction{Opcode::LoadU16Imm, 1, 3, 0},
                 Instruction{Opcode::Move, 0, 1, 0},
+                Instruction{Opcode::Return, 0, 0, 0},
+            }
+        );
+    }
+
+    TEST(COMPILER, VoidReturn) {
+        expect_instructions(
+            "u0 main() { return; }",
+            {
+                Instruction{Opcode::Return, 0, 0, 0},
+            }
+        );
+    }
+
+    TEST(COMPILER, VoidEarlyReturn) {
+        expect_instructions(
+            "u0 main(i32 a) { if (a) { return; } return; }",
+            {
+                Instruction{Opcode::Move, 0, 49, 0},
+                Instruction{Opcode::BranchIfNot, 3, 0, 0},
+                Instruction{Opcode::Branch, 3, 0, 0},
+                Instruction{Opcode::Return, 0, 0, 0},
+            }
+        );
+    }
+
+    TEST(COMPILER, VoidReturnNotLastStatement) {
+        expect_instructions(
+            "u0 main() { if (1) { return; } u16 x = 0; }",
+            {
+                Instruction{Opcode::LoadU16Imm, 0, 1, 0},
+                Instruction{Opcode::BranchIfNot, 3, 0, 0},
+                Instruction{Opcode::Branch, 4, 0, 0},
+                Instruction{Opcode::LoadU16Imm, 0, 0, 0},
                 Instruction{Opcode::Return, 0, 0, 0},
             }
         );

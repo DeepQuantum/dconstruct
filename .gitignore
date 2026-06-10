@@ -117,3 +117,4 @@ imgui.ini
 !source/Graphviz-13.1.0-win64/bin/**
 .clangd
 .zed
+aire/

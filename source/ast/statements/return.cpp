@@ -1,5 +1,6 @@
 #include "ast/statements/return.h"
-#include "ast/primary_expressions/struct_access.h"
+#include "ast/type.h"
+#include <variant>
 
 namespace dconstruct::ast {
 
@@ -60,7 +61,7 @@ namespace dconstruct::ast {
             scope.m_computedReturnType = true;
             return {};
         } else {
-            if (!std::holds_alternative<std::monostate>(*scope.m_expectedReturnType)) {
+            if (!std::holds_alternative<ast::primitive_type>(*scope.m_expectedReturnType) || std::get<ast::primitive_type>(*scope.m_expectedReturnType).m_type != primitive_kind::NOTHING) {
                 return {semantic_check_error{"cannot return a value because function has type void", this}};
             }
             scope.m_computedReturnType = true;
@@ -72,16 +73,16 @@ namespace dconstruct::ast {
         compilation::function& fn,
         compilation::global_state& global
     ) const noexcept {
-        const emission_res expr_res = m_expr->emit_dc(fn, global);
-        if (!expr_res) {
-            return expr_res.error();
+        if (m_expr) {
+            const emission_res expr_res = m_expr->emit_dc(fn, global);
+            if (!expr_res) {
+                return expr_res.error();
+            }
+            if (*expr_res != 0_r) {
+                fn.emit_instruction(Opcode::Move, 0_r, *expr_res);
+            }
         }
-        if (*expr_res != 0_r) {
-            fn.m_returnBranchLocations.push_back(fn.m_instructions.size());
-            fn.emit_instruction(Opcode::Move, 0_r, *expr_res);
-        } else {
-            fn.m_returnBranchLocations.push_back(fn.m_instructions.size() - 1);
-        }
+        fn.m_returnBranchLocations.push_back(fn.m_instructions.size());
         fn.emit_instruction(Opcode::Branch, compilation::function::BRANCH_PLACEHOLDER, 0_r, compilation::function::BRANCH_PLACEHOLDER);
         return std::nullopt;
     }

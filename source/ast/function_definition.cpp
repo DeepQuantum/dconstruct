@@ -126,18 +126,18 @@ namespace dconstruct::ast {
             return std::unexpected{*body_err};
         }
 
-        if (fn.m_returnBranchLocations.empty()) {
-            fn.emit_instruction(Opcode::Return, 0_r, 0_r);
-        } else if (fn.m_returnBranchLocations.back() == fn.m_instructions.size() - 2) {
+        if (!fn.m_returnBranchLocations.empty() && fn.m_returnBranchLocations.back() == fn.m_instructions.size() - 1) {
             assert(fn.m_instructions.back().opcode == Opcode::Branch);
             fn.m_instructions.back() = Instruction(Opcode::Return, 0_r, 0_r);
             fn.m_returnBranchLocations.pop_back();
+        } else {
+            fn.emit_instruction(Opcode::Return, 0_r, 0_r);
         }
 
         const u16 return_location = fn.m_instructions.size() - 1;
 
         for (const u64 branch_location : fn.m_returnBranchLocations) {
-            Instruction& branch = fn.m_instructions[branch_location + 1];
+            Instruction& branch = fn.m_instructions[branch_location];
             assert(branch.opcode == Opcode::Branch);
             assert(branch.destination == compilation::function::BRANCH_PLACEHOLDER);
             branch.set_lo_hi(return_location);

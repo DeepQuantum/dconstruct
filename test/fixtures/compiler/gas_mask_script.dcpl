@@ -4,12 +4,6 @@
 
 @include "keycodes.dcpl"
 
-@add_pak level-name sp-all {
-    actor gas-mask-base
-    actor gas-mask-ellie
-    actor gas-mask-dina
-    actor anim-ellie-player-gestures
-}
 
 using #set-gas-mask-setting-id as far (u64, u64) -> u64*;
 using #wait-equip-gas-mask as near (u64, u64, u64) -> u64;
@@ -32,6 +26,13 @@ using #spawn-script as far (string, string, u64, u64) -> u0;
 
 using #internal-put-on-gas-mask as near (u64, u64) -> u64;
 
+using #get-gas-mask-setting-id as far (u64) -> u64;
+
+
+using #set-visible as far (u64, u64) -> u0;
+
+using #player-gas-mask-narrative-mode/f as near (u64, u64, u64) -> u0;
+
 // ellie = 0
 // dina = 2
 // jessie = 7
@@ -45,7 +46,7 @@ u64 get_gas_mask_setup(u64 current_character) {
         0 -> #*ellie-gas-mask-setup*,
         1 -> #*abby-gas-mask-setup*,
         2 -> #*dina-gas-mask-setup*,
-        3 -> #*joel-gas-mask-setup*, // joel
+        3 -> #*joel-gas-mask-setup*,
         4 -> #*lev-gas-mask-setup*,
         else -> null
     };
@@ -62,9 +63,7 @@ statescript #gas-mask-toggle {
                     u16 version_major = 1;
                     u16 version_minor = 1;
 
-                     >> "launched custom gas mask script, version %d.%d" $ version_major, version_minor;
-                     >> "current mask: %p" $ current_mask;
-                    u64* current_mask = #get-gas-mask(#player);
+                    >> "launched custom gas mask script, version %d.%d" $ version_major, version_minor;
 
                     u64 current_character = 0;
                     if (#is-rogue-mode?()) {
@@ -74,16 +73,24 @@ statescript #gas-mask-toggle {
                     }
                     >> "getting gas mask setup...";
 
-                     u64 gas_mask_setup = get_gas_mask_setup(current_character);
+                    if (current_character != 0 && current_character != 1) {
+                        >> "charcter %d is not abby or eliie, returning" $ current_character;
+                        return;
+                    }
+
+                    u64 gas_mask_setup = get_gas_mask_setup(current_character);
                     >> "got gas mask setup: %p" $ gas_mask_setup;
                     if (gas_mask_setup == null) {
                         >> "invalid gas mask setup, defaulting to ellie";
                         gas_mask_setup = #*ellie-gas-mask-setup*;
                     }
 
-                    #set-gas-mask-setting-id(#player, #*ellie-gas-mask-setup*);
-                    //u64* gas_mask_setting_id_ptr = #lookup-symbol(gas_mask_setup, #gas-mask-setup);
-                    //>> "gas mask setting ptr: %p" $ gas_mask_setting_id_ptr;
+                    #set-gas-mask-setting-id(#player, gas_mask_setup);
+
+                    u64 gas_mask_setting_id = #get-gas-mask-setting-id(#player);
+                    >> "gas mask setting ptr: %X" $ gas_mask_setting_id;
+
+
                     => #wait-keyboard-input;
                 }
             }
@@ -106,27 +113,36 @@ statescript #gas-mask-toggle {
             track #main {
                 lambda {
 
-                    >> "arrived in custom-put-on-mask audio only";
+                    >> "arrived in custom-put-on-mask";
 
                     if (!#is-script-running?(#ss-gas-mask-material-controller-1)) {
                         >> "not running";
                     }
+                    u64 mask = #spawn-gas-mask(#player);
+                    #wait-equip-gas-mask(#player, mask, 0);
 
-                    #wait-equip-gas-mask(#player, 0, 0);
-                    u64* current_mask = #get-gas-mask(#player);
-
-
-                    >> "current mask: %p" $ current_mask;
+                    >> "current mask: %X" $ mask;
 
                     #audio-set-gas-mask-flag(#player, 0);
+
+                    => #mask-on;
                 }
             }
         }
         block update {
             track #main {
                 lambda {
+                    #player-gas-mask-narrative-mode/f(1, 0, #*gas-mask-narrative-mode-settings*);
+                }
+            }
+        }
+    }
+    state #mask-on {
+        block update {
+            track #main {
+                lambda {
                     if (#keyboard-button-pressed?(Keycodes.FUNCTION_2)) {
-                        >> "pressed inside put on gas mask, moving to #custom-remove-mask";
+                        >> "pressed while mask on, moving to #custom-remove-mask";
                         => #custom-remove-mask;
                     }
                 }
@@ -138,18 +154,17 @@ statescript #gas-mask-toggle {
             track #main {
                 lambda {
                     >> "arrived in remove-gas-mask";
-                    #wait-remove-gas-mask(#player, 0, 0);
+                    #wait-remove-gas-mask(#player, 0, 1);
                     #audio-clear-gas-mask-flag(#player);
+
+                    => #wait-keyboard-input;
                 }
             }
         }
         block update {
             track #main {
                 lambda {
-                    if (#keyboard-button-pressed?(Keycodes.FUNCTION_2)) {
-                        >> "pressed inside remove gas mask, moving to #custom-put-on-mask";
-                        => #custom-put-on-mask;
-                    }
+                    #player-gas-mask-narrative-mode/f(1, 0, #*gas-mask-narrative-mode-settings*);
                 }
             }
         }
