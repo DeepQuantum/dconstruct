@@ -76,7 +76,7 @@ namespace dconstruct {
                 return 8;
             }
             if (m_currentFile->is_string(ptr_value)) {
-                values.emplace_back(ptr_value.as<char>());
+                values.emplace_back(string_value{ptr_value.as<char>(), get_offset(struct_location)});
                 bytes_inserted = 8;
                 return bytes_inserted;
             }
@@ -93,7 +93,7 @@ namespace dconstruct {
             bytes_inserted = 8;
         } else {
             if (struct_location >= m_currentFile->m_strings) {
-                values.emplace_back(struct_location.as<char>());
+                values.emplace_back(string_value{struct_location.as<char>(), std::nullopt});
                 bytes_inserted = 8;
             } else {
                 bytes_inserted = insert_next_struct_member(struct_location, values);
@@ -212,7 +212,7 @@ namespace dconstruct {
         u8 member_size;
         if (m_currentFile->is_file_ptr(member)) {
             if (member >= m_currentFile->m_strings) {
-                values.emplace_back(member.as<char>());
+                values.emplace_back(string_value{member.as<char>(), std::nullopt});
             } else {
                 insert_struct_or_arraylike(member, values);
             }
@@ -252,7 +252,7 @@ namespace dconstruct {
                         return sizeof(sid64);
                     }
                     case ast::primitive_kind::STRING: {
-                        values.emplace_back(member.as<char>());
+                        values.emplace_back(string_value{member.as<char>(), std::nullopt});
                         return sizeof(const char*);
                     }
                     case ast::primitive_kind::U8: {
@@ -534,8 +534,8 @@ namespace dconstruct {
                     append_format("sid: %s\n", m_sidbase->lookup(*entry, m_currentFile->m_sidCache));
                 } else if constexpr (std::is_same_v<T, const f32*>) {
                     append_format("float: %.2f\n", *entry);
-                } else if constexpr (std::is_same_v<T, const char*>) {
-                    append_format("string: \"%s\"\n", entry != nullptr ? entry : "");
+                } else if constexpr (std::is_same_v<T, string_value>) {
+                    append_format("string: \"%s\"\n", entry.m_chars != nullptr ? entry.m_chars : "");
                 } else if constexpr (std::is_same_v<T, const structs::map*>) {
                     append_format("keys: [0x%05X], values: [0x%05X]\n\n", get_offset(entry->keys.data), get_offset(entry->values.data));
                 }

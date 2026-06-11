@@ -10,6 +10,7 @@
 #include <filesystem>
 #include <format>
 #include <fstream>
+#include <limits>
 #include <memory>
 #include <optional>
 #include <print>
@@ -82,6 +83,11 @@ namespace dconstruct::ui {
         std::string m_text;
     };
 
+    struct pending_string_add {
+        u64 m_pointerOffset = 0;
+        std::string m_text;
+    };
+
     using mapped_var_value = std::pair<ast::full_type, std::optional<std::string>>;
 
     struct type_map_record {
@@ -136,6 +142,8 @@ namespace dconstruct::ui {
         const std::vector<disassembled_entry>* m_entries = nullptr;
         std::string m_path;
         std::string m_name;
+        std::size_t m_idSeed = 0;
+        f32 m_stringListWidth = 0.0F;
         i32 m_selectedEntry = -1;
         f32 m_listWidth = 0.0F;
         std::string m_entrySearch;
@@ -149,6 +157,11 @@ namespace dconstruct::ui {
         ImVec2 m_menuMousePos = ImVec2(0.0F, 0.0F);
         std::optional<u64> m_menuStructPtrOffset;
         sid64 m_menuStructTypeId = 0;
+        std::optional<u64> m_menuStringPtrOffset;
+        bool m_stringMenuAddingNew = false;
+        bool m_stringMenuFocusInput = false;
+        std::string m_stringMenuBuffer;
+        std::optional<pending_string_add> m_pendingStringAdd;
         ImGuiID m_opTarget = 0;
         ImGuiID m_opPendingTarget = 0;
         tree_op m_opMode = tree_op::none;
@@ -494,6 +507,21 @@ namespace dconstruct::ui {
         }
     }
 
+    f32 measure_string_table_width(const BinaryFile& file) {
+        const char* file_base = reinterpret_cast<const char*>(file.m_bytes.get());
+        const char* cursor = file.m_strings.as<char>();
+        const char* end = file_base + file.m_dcheader->m_textSize;
+        f32 width = 0.0F;
+        while (cursor < end) {
+            const std::size_t len = strnlen(cursor, static_cast<std::size_t>(end - cursor));
+            if (len > 0) {
+                width = std::max(width, ImGui::CalcTextSize(cursor, cursor + len).x);
+            }
+            cursor += len + 1;
+        }
+        return width;
+    }
+
     void disassemble_document(app_state& state, document& doc) {
         doc.m_entries = nullptr;
         doc.m_selectedEntry = -1;
@@ -517,6 +545,7 @@ namespace dconstruct::ui {
 
         const ImGuiStyle& style = ImGui::GetStyle();
         doc.m_listWidth = measure_entry_list_width(state, doc) + style.WindowPadding.x * 2.0F + style.ScrollbarSize + 8.0F;
+        doc.m_stringListWidth = measure_string_table_width(*doc.m_file);
     }
 
     void close_document(app_state& state, const i32 index) {
@@ -560,6 +589,7 @@ namespace dconstruct::ui {
         doc.m_file = std::make_unique<BinaryFile>(std::move(*file_res));
         doc.m_path = path;
         doc.m_name = filename_from_path(path);
+        doc.m_idSeed = std::hash<std::string>{}(doc.m_path);
         if (auto it = state.m_pendingTypeMaps.find(std::filesystem::path(doc.m_name).stem().string()); it != state.m_pendingTypeMaps.end()) {
             doc.m_functionScopes = it->second;
         }
@@ -2757,15 +2787,15 @@ namespace dconstruct::ui {
         return static_cast<u32>(reinterpret_cast<p64>(ptr) - reinterpret_cast<p64>(doc.m_file->m_dcheader));
     }
 
-    // A tree-node id that stays stable across re-disassembly (the underlying file
-    // bytes are not reallocated), so ImGui keeps the expand state and scroll
-    // position when an edit triggers a re-disassemble. The top bit is set so these
-    // ids live in a separate space from the raw file-data pointers that primitive
-    // leaves use as their ids (m_dcheader aliases m_bytes.get(), so without this a
-    // node and a same-offset leaf would hash to a conflicting ImGui ID).
+    // A tree-node id derived from the file offset rather than the buffer address,
+    // so ImGui keeps the expand state when an edit triggers a re-disassemble, even
+    // when expanding the string table reallocates the file buffer. The top bit is
+    // set so these ids live in a separate space from the raw file-data pointers
+    // that primitive leaves use as their ids, and the per-document seed keeps
+    // same-offset nodes of different documents from sharing tree state (all
+    // documents draw into the same window storage).
     const void* stable_id(const document& doc, u64 offset) {
-        const std::uintptr_t base = reinterpret_cast<std::uintptr_t>(doc.m_file->m_bytes.get() + offset);
-        return reinterpret_cast<const void*>(base | (std::uintptr_t{1} << 63));
+        return reinterpret_cast<const void*>((doc.m_idSeed ^ offset) | (std::uintptr_t{1} << 63));
     }
 
     void dv_draw_member_name(const char* member_name) {
@@ -2788,7 +2818,7 @@ namespace dconstruct::ui {
         return measure_text(qui::font_bold(), buffer);
     }
 
-    bool dv_node(value_view v, const void* id, const ImVec4& color, const char* label, const char* suffix, bool leaf, const char* member_name = nullptr, const char* index_prefix = nullptr, std::optional<u64> struct_ptr_offset = std::nullopt, sid64 struct_type_id = 0) {
+    bool dv_node(value_view v, const void* id, const ImVec4& color, const char* label, const char* suffix, bool leaf, const char* member_name = nullptr, const char* index_prefix = nullptr, std::optional<u64> struct_ptr_offset = std::nullopt, sid64 struct_type_id = 0, std::optional<u64> string_ptr_offset = std::nullopt) {
         document* doc = v.doc;
         const ImGuiID node_im_id = ImGui::GetID(id);
         i32 node_depth = -1;
@@ -2831,12 +2861,16 @@ namespace dconstruct::ui {
         ImGui::PushStyleColor(ImGuiCol_Text, color);
         const bool open = ImGui::TreeNodeEx(id, flags, "%s", node_label);
         ImGui::PopStyleColor();
-        if (!leaf && ImGui::IsItemClicked(ImGuiMouseButton_Right)) {
+        if ((!leaf || string_ptr_offset.has_value()) && ImGui::IsItemClicked(ImGuiMouseButton_Right)) {
             doc->m_menuTarget = node_im_id;
             doc->m_openMenu = true;
             doc->m_menuMousePos = ImGui::GetMousePos();
             doc->m_menuStructPtrOffset = struct_ptr_offset;
             doc->m_menuStructTypeId = struct_type_id;
+            doc->m_menuStringPtrOffset = string_ptr_offset;
+            doc->m_stringMenuAddingNew = false;
+            doc->m_stringMenuFocusInput = false;
+            doc->m_stringMenuBuffer.clear();
         }
         if (use_name) {
             dv_draw_member_name(member_name);
@@ -3186,9 +3220,9 @@ namespace dconstruct::ui {
             } else if constexpr (std::is_same_v<T, const f32*>) {
                 std::snprintf(label, sizeof(label), "%s%.2f", prefix, *entry);
                 dv_editable_leaf(v, entry, entry, edit_kind::Float, gcol::Float(), label, ": float", prefix, member_name);
-            } else if constexpr (std::is_same_v<T, const char*>) {
-                std::snprintf(label, sizeof(label), "%s\"%s\"", prefix, entry != nullptr ? entry : "");
-                dv_node(v, entry, gcol::String(), label, ": string", true, member_name, prefix);
+            } else if constexpr (std::is_same_v<T, string_value>) {
+                std::snprintf(label, sizeof(label), "%s\"%s\"", prefix, entry.m_chars != nullptr ? entry.m_chars : "");
+                dv_node(v, entry.m_chars, gcol::String(), label, ": string", true, member_name, prefix, std::nullopt, 0, entry.m_pointerOffset);
             } else if constexpr (std::is_same_v<T, const structs::map*>) {
                 std::snprintf(label, sizeof(label), "%smap", prefix);
                 std::snprintf(
@@ -3254,8 +3288,8 @@ namespace dconstruct::ui {
                 result = v.state->m_sidbase->lookup(*entry, v.doc->m_file->m_sidCache);
             } else if constexpr (std::is_same_v<T, const f32*>) {
                 result = std::format("{}", *entry);
-            } else if constexpr (std::is_same_v<T, const char*>) {
-                result = entry != nullptr ? entry : "";
+            } else if constexpr (std::is_same_v<T, string_value>) {
+                result = entry.m_chars != nullptr ? entry.m_chars : "";
             }
         }, value);
         return result;
@@ -3813,6 +3847,69 @@ namespace dconstruct::ui {
         dv_tree_pop(v);
     }
 
+    void draw_string_table_menu(document& doc) {
+        const BinaryFile& file = *doc.m_file;
+        const u64 ptr_offset = *doc.m_menuStringPtrOffset;
+        const char* file_base = reinterpret_cast<const char*>(file.m_bytes.get());
+        const char* current_target = ptr_offset + sizeof(p64) <= file.m_size
+            ? *reinterpret_cast<const char* const*>(file_base + ptr_offset)
+            : nullptr;
+        const char* strings_begin = file.m_strings.as<char>();
+        const char* strings_end = file_base + file.m_dcheader->m_textSize;
+
+        ImGui::PushStyleColor(ImGuiCol_Text, qui::color::active_palette().TextDisabled);
+        ImGui::Text("string pointer at [0x%05X]", static_cast<u32>(ptr_offset));
+        ImGui::PopStyleColor();
+
+        const ImGuiStyle& style = ImGui::GetStyle();
+        const ImVec2 work_size = ImGui::GetMainViewport()->WorkSize;
+        const f32 list_width = std::max(
+            380.0F,
+            std::min(doc.m_stringListWidth + style.ScrollbarSize + style.FramePadding.x * 2.0F + 8.0F, work_size.x * 0.6F));
+        const f32 list_height = std::min(520.0F, work_size.y * 0.7F);
+
+        ImGui::BeginChild("##string_table_list", ImVec2(list_width, list_height));
+        const char* cursor = strings_begin;
+        while (cursor < strings_end) {
+            const std::size_t len = strnlen(cursor, static_cast<std::size_t>(strings_end - cursor));
+            if (len > 0) {
+                ImGui::PushID(cursor);
+                if (ImGui::Selectable(cursor, cursor == current_target)) {
+                    const p64 base = reinterpret_cast<p64>(file.m_bytes.get());
+                    doc.m_pendingEdits.emplace_back(
+                        static_cast<u32>(ptr_offset),
+                        edit_kind::Int64,
+                        std::to_string(base + static_cast<u64>(cursor - file_base)));
+                    ImGui::CloseCurrentPopup();
+                }
+                ImGui::PopID();
+            }
+            cursor += len + 1;
+        }
+        ImGui::EndChild();
+
+        ImGui::Separator();
+        if (!doc.m_stringMenuAddingNew) {
+            if (ImGui::Selectable("Add new string to file", false, ImGuiSelectableFlags_NoAutoClosePopups)) {
+                doc.m_stringMenuAddingNew = true;
+                doc.m_stringMenuFocusInput = true;
+                doc.m_stringMenuBuffer.clear();
+            }
+        } else {
+            if (doc.m_stringMenuFocusInput) {
+                ImGui::SetKeyboardFocusHere();
+                doc.m_stringMenuFocusInput = false;
+            }
+            ImGui::SetNextItemWidth(list_width);
+            const bool entered = ImGui::InputTextWithHint(
+                "##new_string_table_entry", "new string", &doc.m_stringMenuBuffer, ImGuiInputTextFlags_EnterReturnsTrue);
+            if (entered && !doc.m_stringMenuBuffer.empty()) {
+                doc.m_pendingStringAdd = pending_string_add{ptr_offset, doc.m_stringMenuBuffer};
+                ImGui::CloseCurrentPopup();
+            }
+        }
+    }
+
     void draw_entry_detail(app_state& state, document& doc) {
         if (doc.m_entries == nullptr || state.m_sidbase == nullptr || doc.m_file == nullptr) {
             qui::text_label("Not disassembled.");
@@ -3876,35 +3973,39 @@ namespace dconstruct::ui {
             doc.m_openMenu = false;
         }
         if (ImGui::BeginPopup("##dv_context_menu")) {
-            if (doc.m_menuStructPtrOffset.has_value() && doc.m_file != nullptr) {
-                if (ImGui::MenuItem("Change Struct Pointer")) {
-                    const u64 ptr_offset = *doc.m_menuStructPtrOffset;
-                    const p64 base = reinterpret_cast<p64>(doc.m_file->m_bytes.get());
-                    const u64 current_target = *reinterpret_cast<const u64*>(doc.m_file->m_bytes.get() + ptr_offset) - base;
-                    struct_pointer_edit edit;
-                    edit.m_pointerOffset = ptr_offset;
-                    edit.m_currentTypeId = doc.m_menuStructTypeId;
-                    edit.m_text = std::format("0x{:X}", static_cast<u32>(current_target));
-                    edit.m_pos = doc.m_menuMousePos;
-                    edit.m_focus = true;
-                    doc.m_structPointerEdit = std::move(edit);
+            if (doc.m_menuStringPtrOffset.has_value() && doc.m_file != nullptr) {
+                draw_string_table_menu(doc);
+            } else {
+                if (doc.m_menuStructPtrOffset.has_value() && doc.m_file != nullptr) {
+                    if (ImGui::MenuItem("Change Struct Pointer")) {
+                        const u64 ptr_offset = *doc.m_menuStructPtrOffset;
+                        const p64 base = reinterpret_cast<p64>(doc.m_file->m_bytes.get());
+                        const u64 current_target = *reinterpret_cast<const u64*>(doc.m_file->m_bytes.get() + ptr_offset) - base;
+                        struct_pointer_edit edit;
+                        edit.m_pointerOffset = ptr_offset;
+                        edit.m_currentTypeId = doc.m_menuStructTypeId;
+                        edit.m_text = std::format("0x{:X}", static_cast<u32>(current_target));
+                        edit.m_pos = doc.m_menuMousePos;
+                        edit.m_focus = true;
+                        doc.m_structPointerEdit = std::move(edit);
+                    }
+                    ImGui::Separator();
                 }
-                ImGui::Separator();
-            }
-            if (ImGui::MenuItem("Expand all children")) {
-                doc.m_opPendingTarget = doc.m_menuTarget;
-                doc.m_opPendingMode = tree_op::expand;
-                doc.m_opPendingMaxDepth = EXPAND_SHALLOW_DEPTH;
-            }
-            if (ImGui::MenuItem("Expand all children recursively")) {
-                doc.m_opPendingTarget = doc.m_menuTarget;
-                doc.m_opPendingMode = tree_op::expand;
-                doc.m_opPendingMaxDepth = EXPAND_RECURSIVE_DEPTH;
-            }
-            if (ImGui::MenuItem("Collapse all children")) {
-                doc.m_opPendingTarget = doc.m_menuTarget;
-                doc.m_opPendingMode = tree_op::close;
-                doc.m_opPendingMaxDepth = 0;
+                if (ImGui::MenuItem("Expand all children")) {
+                    doc.m_opPendingTarget = doc.m_menuTarget;
+                    doc.m_opPendingMode = tree_op::expand;
+                    doc.m_opPendingMaxDepth = EXPAND_SHALLOW_DEPTH;
+                }
+                if (ImGui::MenuItem("Expand all children recursively")) {
+                    doc.m_opPendingTarget = doc.m_menuTarget;
+                    doc.m_opPendingMode = tree_op::expand;
+                    doc.m_opPendingMaxDepth = EXPAND_RECURSIVE_DEPTH;
+                }
+                if (ImGui::MenuItem("Collapse all children")) {
+                    doc.m_opPendingTarget = doc.m_menuTarget;
+                    doc.m_opPendingMode = tree_op::close;
+                    doc.m_opPendingMaxDepth = 0;
+                }
             }
             ImGui::EndPopup();
         }
@@ -4034,6 +4135,33 @@ namespace dconstruct::ui {
         doc.m_undoStack.push_back({edit.m_offset, edit.m_kind, std::move(old_bytes), std::move(new_bytes), old_text, new_text});
         log_event("Edit applied [{}] 0x{:05X}: {} -> {}", doc.m_name, edit.m_offset, old_text, new_text);
         return true;
+    }
+
+    void process_pending_string_add(document& doc) {
+        if (!doc.m_pendingStringAdd) {
+            return;
+        }
+        if (doc.m_editor == nullptr || doc.m_file == nullptr) {
+            doc.m_pendingStringAdd.reset();
+            return;
+        }
+        const pending_string_add add = std::move(*doc.m_pendingStringAdd);
+        doc.m_pendingStringAdd.reset();
+
+        const u64 new_string_offset = doc.m_file->m_dcheader->m_textSize;
+        doc.m_editor->expand_binary_file_string_table(*doc.m_file, add.m_text);
+
+        doc.m_undoStack.clear();
+        doc.m_redoStack.clear();
+        doc.m_savedDepth = std::numeric_limits<std::size_t>::max();
+        update_dirty(doc);
+
+        const p64 base = reinterpret_cast<p64>(doc.m_file->m_bytes.get());
+        doc.m_pendingEdits.emplace_back(
+            static_cast<u32>(add.m_pointerOffset),
+            edit_kind::Int64,
+            std::to_string(base + new_string_offset));
+        log_event("String table expanded [{}]: \"{}\" at 0x{:05X}", doc.m_name, add.m_text, new_string_offset);
     }
 
     void process_pending_edits(app_state& state, document& doc) {
@@ -4951,6 +5079,7 @@ namespace dconstruct::ui {
 
         if (document* doc = active_document(state)) {
             draw_document(state, *doc);
+            process_pending_string_add(*doc);
             process_pending_edits(state, *doc);
         }
 

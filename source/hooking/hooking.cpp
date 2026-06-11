@@ -5,12 +5,9 @@
 #include "MinHook.h"
 #include <filesystem>
 #include <format>
-#include <print>
 #include <fstream>
 #include <memory>
 #include <mutex>
-#include <string>
-#include <system_error>
 #include <utility>
 #include <array>
 
@@ -241,12 +238,12 @@ namespace dconstruct::hooking {
         // load_sidbase();
         // log("module base: {:016X}, ida image base: {:016X}", module_base, IMAGE_BASE);
 
-        void* display_target = (void*)(module_base + DISPLAY_OFFSET);
-        MH_CreateHook(display_target, &display_hook, reinterpret_cast<void**>(&display_orig));
+        LPVOID display_target = reinterpret_cast<LPVOID>(module_base + DISPLAY_OFFSET);
+        MH_CreateHook(display_target, reinterpret_cast<LPVOID>(&display_hook), reinterpret_cast<LPVOID*>(&display_orig));
         MH_EnableHook(display_target);
 
-        void* is_final_build_target = (void*)(module_base + IS_FINAL_BUILD_OFFSET);
-        MH_CreateHook(is_final_build_target, &is_final_build_hook, reinterpret_cast<void**>(&is_final_build_orig));
+        LPVOID is_final_build_target = reinterpret_cast<LPVOID>(module_base + IS_FINAL_BUILD_OFFSET);
+        MH_CreateHook(is_final_build_target, reinterpret_cast<LPVOID>(&is_final_build_hook), reinterpret_cast<LPVOID*>(&is_final_build_orig));
         MH_EnableHook(is_final_build_target);
 
         // void* invoke_function_target = (void*)(base + INVOKE_FUNCTION_OFFSET);

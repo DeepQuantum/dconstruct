@@ -22,7 +22,12 @@ namespace dconstruct {
 
     struct mapped_value;
 
-    using disassembled_value_content = std::variant<disassembled_value, mapped_value, std::shared_ptr<function_disassembly>, const ast::state_script*, const u8*, const u16*, const u32*, const i32*, const u64*, const f32*, const char*, const structs::map*>;
+    struct string_value {
+        const char* m_chars = nullptr;
+        std::optional<u64> m_pointerOffset;
+    };
+
+    using disassembled_value_content = std::variant<disassembled_value, mapped_value, std::shared_ptr<function_disassembly>, const ast::state_script*, const u8*, const u16*, const u32*, const i32*, const u64*, const f32*, string_value, const structs::map*>;
 
     using disassembled_values_t = std::vector<disassembled_value_content>;
 

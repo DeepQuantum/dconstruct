@@ -1,5 +1,7 @@
 #include "disassembly/edit_disassembler.h"
+#include <algorithm>
 #include <cctype>
+#include <cstring>
 #include <iostream>
 
 //-e 0xE98[0]=test
@@ -132,6 +134,33 @@ namespace dconstruct {
             return write_edited_file();
         }
         return std::nullopt;
+    }
+
+    void EditDisassembler::expand_binary_file_string_table(BinaryFile& file, const std::string& new_string) {
+        static constexpr u8 RELOC_TABLE_COMPRESSION_SIZE = 64;
+
+        const u64 appended_size = new_string.size() + sizeof('\0');
+        const u64 old_text_size = file.m_dcheader->m_textSize;
+        const u32 old_reloc_table_size = *reinterpret_cast<const u32*>(file.m_bytes.get() + old_text_size);
+        const u64 new_text_size = old_text_size + appended_size;
+        const u32 covering_reloc_table_size = static_cast<u32>((new_text_size + RELOC_TABLE_COMPRESSION_SIZE - 1) / RELOC_TABLE_COMPRESSION_SIZE);
+        const u32 new_reloc_table_size = std::max(old_reloc_table_size, covering_reloc_table_size);
+        const u64 new_size = new_text_size + sizeof(u32) + new_reloc_table_size;
+
+        const auto unmapped = file.get_unmapped();
+
+        auto new_data = BinaryFile::byte_uptr(static_cast<std::byte*>(::operator new[](new_size, std::align_val_t(64))));
+        std::memcpy(new_data.get(), unmapped.get(), old_text_size);
+        std::memcpy(new_data.get() + old_text_size, new_string.c_str(), appended_size);
+        *reinterpret_cast<u32*>(new_data.get() + new_text_size) = new_reloc_table_size;
+        std::memcpy(new_data.get() + new_text_size + sizeof(u32), unmapped.get() + old_text_size + sizeof(u32), old_reloc_table_size);
+        std::memset(new_data.get() + new_text_size + sizeof(u32) + old_reloc_table_size, 0, new_reloc_table_size - old_reloc_table_size);
+
+        file.m_bytes = std::move(new_data);
+        file.m_size = new_size;
+        file.m_dcheader = reinterpret_cast<DC_Header*>(file.m_bytes.get());
+        file.m_dcheader->m_textSize = static_cast<u32>(new_text_size);
+        file.read_reloc_table();
     }
 
     error_msg EditDisassembler::write_edited_file() {

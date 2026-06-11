@@ -4,6 +4,10 @@
 
 @include "keycodes.dcpl"
 
+@add_pak level-name sp-all {
+    actor gas-mask-base
+    actor gas-mask-ellie
+}
 
 using #set-gas-mask-setting-id as far (u64, u64) -> u64*;
 using #wait-equip-gas-mask as near (u64, u64, u64) -> u64;
@@ -12,25 +16,16 @@ using #spawn-gas-mask as near (u64) -> u64;
 using #keyboard-button-pressed? as far (u64) -> bool;
 using #audio-set-gas-mask-flag as far (u64, u64) -> u0;
 using #audio-clear-gas-mask-flag as far (u64) -> u0;
-
 using #is-rogue-mode? as far () -> bool;
 using #rogue-get-player-character as far () -> u64;
 using #lookup-symbol as far (u64, u64) -> u64*;
-
 using #get-gas-mask as far (u64) -> u64*;
-
 using #is-script-running? as near (u64)  -> bool;
-
 using #spawn-persistent-script as far (string, string, u64) -> u0;
 using #spawn-script as far (string, string, u64, u64) -> u0;
-
 using #internal-put-on-gas-mask as near (u64, u64) -> u64;
-
 using #get-gas-mask-setting-id as far (u64) -> u64;
-
-
 using #set-visible as far (u64, u64) -> u0;
-
 using #player-gas-mask-narrative-mode/f as near (u64, u64, u64) -> u0;
 
 // ellie = 0
@@ -41,7 +36,6 @@ using #player-gas-mask-narrative-mode/f as near (u64, u64, u64) -> u0;
 // abby = 1
 // lev = 4
 u64 get_gas_mask_setup(u64 current_character) {
-    >> "arrived in get_gas-mask_setup";
     return match (current_character) {
         0 -> #*ellie-gas-mask-setup*,
         1 -> #*abby-gas-mask-setup*,
@@ -63,7 +57,7 @@ statescript #gas-mask-toggle {
                     u16 version_major = 1;
                     u16 version_minor = 1;
 
-                    >> "launched custom gas mask script, version %d.%d" $ version_major, version_minor;
+                   // >> "launched custom gas mask script, version %d.%d" $ version_major, version_minor;
 
                     u64 current_character = 0;
                     if (#is-rogue-mode?()) {
@@ -71,7 +65,7 @@ statescript #gas-mask-toggle {
                         current_character = #rogue-get-player-character();
                         >> "got character %d" $ current_character;
                     }
-                    >> "getting gas mask setup...";
+                    //>> "getting gas mask setup...";
 
                     if (current_character != 0 && current_character != 1) {
                         >> "charcter %d is not abby or eliie, returning" $ current_character;
@@ -79,7 +73,7 @@ statescript #gas-mask-toggle {
                     }
 
                     u64 gas_mask_setup = get_gas_mask_setup(current_character);
-                    >> "got gas mask setup: %p" $ gas_mask_setup;
+                    //>> "got gas mask setup: %p" $ gas_mask_setup;
                     if (gas_mask_setup == null) {
                         >> "invalid gas mask setup, defaulting to ellie";
                         gas_mask_setup = #*ellie-gas-mask-setup*;
@@ -88,7 +82,7 @@ statescript #gas-mask-toggle {
                     #set-gas-mask-setting-id(#player, gas_mask_setup);
 
                     u64 gas_mask_setting_id = #get-gas-mask-setting-id(#player);
-                    >> "gas mask setting ptr: %X" $ gas_mask_setting_id;
+                    //>> "gas mask setting ptr: %X" $ gas_mask_setting_id;
 
 
                     => #wait-keyboard-input;

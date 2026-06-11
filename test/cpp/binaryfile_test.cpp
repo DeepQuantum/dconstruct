@@ -4,11 +4,59 @@
 #include <fstream>
 #include "compilation/function.h"
 #include "disassembly/disassembler.h"
+#include "disassembly/edit_disassembler.h"
 
 namespace dconstruct::testing {
 
     static const std::filesystem::path TEST_ROOT = DCONSTRUCT_TEST_ROOT;
     static SIDBase base = *SIDBase::from_binary(TEST_ROOT / "fixtures" / "dc" / "test_sidbase.bin");
+
+    TEST(BINARYFILE, ExpandStringTable) {
+        BinaryFile file = *BinaryFile::from_path(TEST_ROOT / "fixtures" / "dc" / "accessibility-script-funcs.bin");
+
+        Disassembler before_disassembler(&file, &base);
+        const std::string before = before_disassembler.disassembly_to_string(before_disassembler.disassemble());
+
+        const u32 old_text_size = file.m_dcheader->m_textSize;
+        const u32 old_reloc_table_size = *reinterpret_cast<const u32*>(file.m_bytes.get() + old_text_size);
+        const u32 old_num_entries = file.m_dcheader->m_numEntries;
+
+        EditDisassembler editor(&file, &base, {});
+        const std::string new_string = "dconstruct-expand-test";
+        editor.expand_binary_file_string_table(file, new_string);
+
+        EXPECT_EQ(file.m_dcheader->m_magic, DC_MAGIC);
+        EXPECT_EQ(file.m_dcheader->m_versionNumber, DC_VERSION);
+        EXPECT_EQ(file.m_dcheader->m_numEntries, old_num_entries);
+        EXPECT_EQ(file.m_dcheader->m_textSize, old_text_size + new_string.size() + 1);
+        EXPECT_STREQ(reinterpret_cast<const char*>(file.m_bytes.get() + old_text_size), new_string.c_str());
+
+        const u32 new_reloc_table_size = *reinterpret_cast<const u32*>(file.m_bytes.get() + file.m_dcheader->m_textSize);
+        EXPECT_GE(new_reloc_table_size, old_reloc_table_size);
+        EXPECT_GE(static_cast<u64>(new_reloc_table_size) * 64, static_cast<u64>(file.m_dcheader->m_textSize));
+        EXPECT_EQ(file.m_size, file.m_dcheader->m_textSize + sizeof(u32) + new_reloc_table_size);
+
+        Disassembler after_disassembler(&file, &base);
+        const std::string after = after_disassembler.disassembly_to_string(after_disassembler.disassemble());
+        EXPECT_EQ(before, after);
+
+        const std::filesystem::path tmp = std::filesystem::temp_directory_path() / "dconstruct_expand_test.bin";
+        {
+            const auto unmapped = file.get_unmapped();
+            std::ofstream out(tmp, std::ios::binary);
+            out.write(reinterpret_cast<const char*>(unmapped.get()), file.m_size);
+        }
+        auto reloaded = BinaryFile::from_path(tmp);
+        ASSERT_TRUE(reloaded.has_value());
+        EXPECT_EQ(reloaded->m_size, file.m_size);
+        EXPECT_STREQ(reinterpret_cast<const char*>(reloaded->m_bytes.get() + old_text_size), new_string.c_str());
+
+        Disassembler reloaded_disassembler(&*reloaded, &base);
+        const std::string reloaded_text = reloaded_disassembler.disassembly_to_string(reloaded_disassembler.disassemble());
+        EXPECT_EQ(before, reloaded_text);
+
+        std::filesystem::remove(tmp);
+    }
 
     TEST(BINARYFILE, Transplant1) {
         std::filesystem::path input = "C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/rogue/script-callbacks.bin";

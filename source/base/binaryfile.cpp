@@ -5,8 +5,6 @@
 #include <filesystem>
 #include <immintrin.h>
 #include <cstring>
-#include <chrono>
-#include <numeric>
 
 namespace dconstruct {
 
@@ -27,7 +25,7 @@ namespace dconstruct {
             return std::unexpected{path.string() + " is empty.\n"};
         }
 
-        auto* dcheader = reinterpret_cast<DC_Header*>(bytes.get());
+        DC_Header* dcheader = reinterpret_cast<DC_Header*>(bytes.get());
 
         if (dcheader->m_magic != DC_MAGIC) {
             return std::unexpected{"not a DC-file. magic number doesn't equal 0x44433030: " + std::to_string(*(uint32_t*)bytes.get()) + '\n'};

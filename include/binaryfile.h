@@ -42,8 +42,12 @@ namespace dconstruct {
         };
     };
 
+    class EditDisassembler;
+
     class BinaryFile {
+    public:
         friend class debugger::debugger;
+        friend class EditDisassembler;
 
         struct aligned_deleter {
             void operator()(std::byte* p) const noexcept {
@@ -52,8 +56,6 @@ namespace dconstruct {
         };
 
         using byte_uptr = std::unique_ptr<std::byte[], aligned_deleter>;
-
-    public:
         BinaryFile(std::filesystem::path path, const u64 size, byte_uptr&& bytes, DC_Header* dcheader) noexcept : m_path(std::move(path)), m_size(size), m_bytes(std::move(bytes)), m_dcheader(dcheader) {};
 
         [[nodiscard]] static std::expected<BinaryFile, std::string> from_path(const std::filesystem::path& path) noexcept;
@@ -72,6 +74,8 @@ namespace dconstruct {
         byte_uptr m_pointedAtTable;
         location m_strings;
         location m_relocTable;
+
+
 
     private:
         void read_reloc_table() noexcept;
