@@ -16,7 +16,7 @@ namespace dconstruct {
 }
 
 namespace dconstruct::compilation {
-    struct function {
+    struct function_context {
         static constexpr u8 BRANCH_PLACEHOLDER = 0xFF;
 
         enum class SYMBOL_TABLE_POINTER_KIND {
@@ -25,15 +25,15 @@ namespace dconstruct::compilation {
             GENERAL,
         };
 
-        function() noexcept = default;
+        function_context() noexcept = default;
 
-        function(const function& rhs) noexcept :
+        function_context(const function_context& rhs) noexcept :
             m_instructions(rhs.m_instructions),
             m_symbolTable(rhs.m_symbolTable),
             m_symbolTableEntryPointers(rhs.m_symbolTableEntryPointers),
             m_name(rhs.m_name) {}
 
-        function& operator=(const function& rhs) noexcept {
+        function_context& operator=(const function_context& rhs) noexcept {
             m_instructions = rhs.m_instructions;
             m_symbolTable = rhs.m_symbolTable;
             m_symbolTableEntryPointers = rhs.m_symbolTableEntryPointers;
@@ -41,8 +41,8 @@ namespace dconstruct::compilation {
             return *this;
         }
 
-        function(function&& rhs) noexcept = default;
-        function& operator=(function&& rhs) noexcept = default;
+        function_context(function_context&& rhs) noexcept = default;
+        function_context& operator=(function_context&& rhs) noexcept = default;
 
         [[nodiscard]] program_binary_element to_binary_element() const noexcept;
 

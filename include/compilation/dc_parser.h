@@ -1,5 +1,6 @@
 #pragma once
 
+#include "ast/function_definition.h"
 #include "base.h"
 #include "tokens.h"
 #include "ast/ast.h"
@@ -88,6 +89,7 @@ namespace dconstruct::compilation {
         [[nodiscard]] std::optional<ast::struct_type> make_struct_type();
         [[nodiscard]] std::optional<std::unique_ptr<ast::using_declaration>> make_using_declaration();
         [[nodiscard]] std::optional<ast::enum_type> make_enum_type();
+        [[nodiscard]] std::unique_ptr<ast::function_definition> make_function_definition_header();
         [[nodiscard]] std::unique_ptr<ast::function_definition> make_function_definition();
         [[nodiscard]] std::optional<global> make_global();
         [[nodiscard]] ast::full_type make_type_from_string(const std::string&);

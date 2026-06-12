@@ -72,7 +72,7 @@ namespace dconstruct::ast {
     }
 
     [[nodiscard]] emission_err while_stmt::emit_dc(
-        compilation::function& fn,
+        compilation::function_context& fn,
         compilation::global_state& global
     ) const noexcept {
         u16 head_location = static_cast<u16>(fn.m_instructions.size());

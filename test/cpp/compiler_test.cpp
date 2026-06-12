@@ -68,7 +68,7 @@ namespace dconstruct::testing {
         return {!program.m_declarations.empty() ? std::move(static_cast<ast::function_definition*>(program.m_declarations[0].get())->m_body.m_statements) : std::list<stmnt_uptr>{}, errors};
     }
 
-    [[nodiscard]] static std::expected<std::vector<compilation::function>, std::string> compile_to_functions(const std::string& code) {
+    [[nodiscard]] static std::expected<std::vector<compilation::function_context>, std::string> compile_to_functions(const std::string& code) {
         const auto [tokens, lex_errors] = get_tokens(code);
         if (!lex_errors.empty()) {
             return std::unexpected{"lex errors: " + lex_errors.front().m_message};
@@ -84,13 +84,13 @@ namespace dconstruct::testing {
             return std::unexpected{"semantic errors: " + semantic_errors.front().m_message};
         }
         compilation::global_state global{};
-        std::vector<compilation::function> functions;
+        std::vector<compilation::function_context> functions;
         for (const auto& decl : program.m_declarations) {
             auto* func_def = dynamic_cast<const ast::function_definition*>(decl.get());
             if (!func_def) {
                 continue;
             }
-            compilation::function fn{};
+            compilation::function_context fn{};
             if (std::holds_alternative<std::string>(func_def->m_name)) {
                 fn.m_name = std::get<std::string>(func_def->m_name);
             }
@@ -2027,7 +2027,7 @@ namespace dconstruct::testing {
         ASSERT_TRUE(functions) << functions.error();
         ASSERT_EQ(functions->size(), 1);
 
-        const compilation::function& fn = (*functions)[0];
+        const compilation::function_context& fn = (*functions)[0];
         EXPECT_EQ(
             fn.m_instructions,
             (std::vector<Instruction>{
@@ -2046,9 +2046,9 @@ namespace dconstruct::testing {
         EXPECT_EQ(fn.m_symbolTable[2], SID("dina"));
 
         ASSERT_EQ(fn.m_symbolTableEntryPointers.size(), 3);
-        EXPECT_EQ(fn.m_symbolTableEntryPointers[0], compilation::function::SYMBOL_TABLE_POINTER_KIND::STRING);
-        EXPECT_EQ(fn.m_symbolTableEntryPointers[1], compilation::function::SYMBOL_TABLE_POINTER_KIND::NONE);
-        EXPECT_EQ(fn.m_symbolTableEntryPointers[2], compilation::function::SYMBOL_TABLE_POINTER_KIND::NONE);
+        EXPECT_EQ(fn.m_symbolTableEntryPointers[0], compilation::function_context::SYMBOL_TABLE_POINTER_KIND::STRING);
+        EXPECT_EQ(fn.m_symbolTableEntryPointers[1], compilation::function_context::SYMBOL_TABLE_POINTER_KIND::NONE);
+        EXPECT_EQ(fn.m_symbolTableEntryPointers[2], compilation::function_context::SYMBOL_TABLE_POINTER_KIND::NONE);
     }
 
     TEST(COMPILER, MatchArrayCompilationElseLoadsDefault) {
@@ -2072,7 +2072,7 @@ namespace dconstruct::testing {
             Instruction{Opcode::Move, 0, 1, 0},
             Instruction{Opcode::Return, 0, 0, 0},
         };
-        const compilation::function& fn = (*functions)[0];
+        const compilation::function_context& fn = (*functions)[0];
         EXPECT_EQ(fn.m_instructions, expected);
 
         ASSERT_EQ(fn.m_symbolTable.size(), 5);
@@ -2385,7 +2385,7 @@ namespace dconstruct::testing {
         EXPECT_EQ(instructions.back().opcode, Opcode::Return);
     }
 
-    static bool symbol_table_contains(const compilation::function& fn, const u64 value) {
+    static bool symbol_table_contains(const compilation::function_context& fn, const u64 value) {
         return std::find(fn.m_symbolTable.begin(), fn.m_symbolTable.end(), value) != fn.m_symbolTable.end();
     }
 
@@ -2660,7 +2660,7 @@ namespace dconstruct::testing {
         ASSERT_TRUE(functions) << functions.error();
         ASSERT_FALSE(functions->empty());
 
-        const compilation::function& fn = functions->back();
+        const compilation::function_context& fn = functions->back();
         EXPECT_TRUE(std::any_of(fn.m_instructions.begin(), fn.m_instructions.end(), [](const Instruction& instruction) {
             return instruction.opcode == Opcode::Call;
         }));
@@ -2675,7 +2675,7 @@ namespace dconstruct::testing {
         ASSERT_TRUE(functions) << functions.error();
         ASSERT_FALSE(functions->empty());
 
-        const compilation::function& fn = functions->back();
+        const compilation::function_context& fn = functions->back();
         EXPECT_TRUE(std::any_of(fn.m_instructions.begin(), fn.m_instructions.end(), [](const Instruction& instruction) {
             return instruction.opcode == Opcode::CallFf;
         }));
@@ -2687,7 +2687,7 @@ namespace dconstruct::testing {
         ASSERT_TRUE(functions) << functions.error();
         ASSERT_FALSE(functions->empty());
 
-        const compilation::function& fn = (*functions)[0];
+        const compilation::function_context& fn = (*functions)[0];
         EXPECT_TRUE(std::any_of(fn.m_instructions.begin(), fn.m_instructions.end(), [](const Instruction& instruction) {
             return instruction.opcode == Opcode::LoadStaticU64Imm;
         }));
@@ -2699,7 +2699,7 @@ namespace dconstruct::testing {
         ASSERT_TRUE(functions) << functions.error();
         ASSERT_FALSE(functions->empty());
 
-        const compilation::function& fn = (*functions)[0];
+        const compilation::function_context& fn = (*functions)[0];
         EXPECT_TRUE(std::any_of(fn.m_instructions.begin(), fn.m_instructions.end(), [](const Instruction& instruction) {
             return instruction.opcode == Opcode::LoadStaticFloatImm;
         }));
@@ -2711,12 +2711,12 @@ namespace dconstruct::testing {
         ASSERT_TRUE(functions) << functions.error();
         ASSERT_FALSE(functions->empty());
 
-        const compilation::function& fn = (*functions)[0];
+        const compilation::function_context& fn = (*functions)[0];
         EXPECT_TRUE(std::any_of(fn.m_instructions.begin(), fn.m_instructions.end(), [](const Instruction& instruction) {
             return instruction.opcode == Opcode::LoadStaticPointerImm;
         }));
         ASSERT_FALSE(fn.m_symbolTableEntryPointers.empty());
-        EXPECT_EQ(fn.m_symbolTableEntryPointers[0], compilation::function::SYMBOL_TABLE_POINTER_KIND::STRING);
+        EXPECT_EQ(fn.m_symbolTableEntryPointers[0], compilation::function_context::SYMBOL_TABLE_POINTER_KIND::STRING);
     }
 
     TEST(COMPILER, ForLoopEmission) {
@@ -2737,7 +2737,7 @@ namespace dconstruct::testing {
         const auto type_res = expr.get_type_checked(scope);
         ASSERT_TRUE(type_res) << type_res.error().m_message;
 
-        compilation::function fn{};
+        compilation::function_context fn{};
         compilation::global_state global{};
         const emission_res result = expr.emit_dc(fn, global, std::nullopt);
         ASSERT_TRUE(result) << result.error();
@@ -2798,6 +2798,83 @@ namespace dconstruct::testing {
             ast::make_type_from_prim(ast::primitive_kind::STRING)
         );
         EXPECT_TRUE(mismatched.has_value());
+    }
+
+    [[nodiscard]] static bool symbol_table_contains_string(const function_disassembly& fn, const std::string_view expected) {
+        const SymbolTable& table = fn.m_stackFrame.m_symbolTable;
+        for (u32 i = 0; i < table.m_types.size(); ++i) {
+            const auto* prim = std::get_if<ast::primitive_type>(&table.m_types[i]);
+            if (prim == nullptr || prim->m_type != ast::primitive_kind::STRING) {
+                continue;
+            }
+            const char* str = table.m_location.get<const char*>(i * sizeof(u64));
+            if (str != nullptr && expected == str) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    TEST(COMPILER, RetargetStateScriptLambda) {
+        static SIDBase full_sidbase = *SIDBase::from_binary(TEST_DIR + "sidbase_new_fixed.bin");
+        const std::filesystem::path target = TEST_ROOT / "fixtures" / "dc" / "ss-hub-lockbox.bin";
+
+        const std::string source =
+            "u0 #wait-for-spawn@start@main@0() {\n"
+            "    >> \"hello world\";\n"
+            "}\n";
+
+        compilation::global_state global{};
+        const std::optional<std::vector<compilation::program_binary_element>> elements = compilation::run_compilation(source, global);
+        ASSERT_TRUE(elements.has_value());
+        ASSERT_EQ(elements->size(), 1);
+
+        const auto binary = compilation::disassemble_target(target, full_sidbase, *elements, global);
+        ASSERT_TRUE(binary.has_value()) << binary.error();
+        const auto& [bytes, size] = *binary;
+        ASSERT_GT(size, 0);
+
+        const std::filesystem::path output = std::filesystem::temp_directory_path() / "dconstruct-retarget-ss-hub-lockbox.bin";
+        {
+            std::ofstream of(output, std::ios::binary | std::ios::trunc);
+            ASSERT_TRUE(of.is_open());
+            of.write(reinterpret_cast<const char*>(bytes.get()), size);
+        }
+
+        std::expected<BinaryFile, std::string> file = BinaryFile::from_path(output);
+        ASSERT_TRUE(file.has_value()) << file.error();
+
+        Disassembler disassembler(&*file, &full_sidbase);
+        (void)disassembler.disassemble();
+        ASSERT_TRUE(disassembler.has_state_script());
+
+        const ast::state_script* state_script = disassembler.get_state_script();
+        EXPECT_EQ(state_script->m_declarations.size(), 31);
+        ASSERT_FALSE(state_script->m_states.empty());
+        EXPECT_EQ(state_script->m_states[state_script->m_initialStateIdx].m_name, "--all--");
+
+        const std::vector<const function_disassembly*> funcs = disassembler.get_named_functions();
+        EXPECT_EQ(funcs.size(), 75);
+
+        const function_disassembly* replaced = nullptr;
+        const function_disassembly* untouched = nullptr;
+        for (const function_disassembly* func : funcs) {
+            if (func->get_id() == "wait-for-spawn@start@main@0") {
+                replaced = func;
+            } else if (func->get_id() == "spawn-lockbox@start@main@0") {
+                untouched = func;
+            }
+        }
+
+        ASSERT_NE(replaced, nullptr);
+        EXPECT_EQ(replaced->m_lines.size(), 4);
+        EXPECT_TRUE(symbol_table_contains_string(*replaced, "hello world"));
+
+        ASSERT_NE(untouched, nullptr);
+        EXPECT_GT(untouched->m_lines.size(), 4);
+        EXPECT_FALSE(symbol_table_contains_string(*untouched, "hello world"));
+
+        std::filesystem::remove(output);
     }
 
 }

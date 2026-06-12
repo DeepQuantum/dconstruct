@@ -40,7 +40,7 @@ namespace dconstruct::ast {
     }
 
     [[nodiscard]] emission_err breakpoint::emit_dc(
-        compilation::function& fn,
+        compilation::function_context& fn,
         compilation::global_state& global
     ) const noexcept {
         fn.emit_instruction(Opcode::StoreArray, 00, 00, 00);

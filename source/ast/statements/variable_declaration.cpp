@@ -71,7 +71,7 @@ namespace dconstruct::ast {
     }
 
     [[nodiscard]] emission_err variable_declaration::emit_dc(
-        compilation::function& fn,
+        compilation::function_context& fn,
         compilation::global_state& global
     ) const noexcept {
         const emission_res new_var_reg = fn.get_next_unused_register();

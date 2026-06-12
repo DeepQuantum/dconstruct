@@ -111,7 +111,7 @@ namespace dconstruct::ast {
     }
 
     [[nodiscard]] emission_err if_stmt::emit_dc(
-        compilation::function& fn,
+        compilation::function_context& fn,
         compilation::global_state& global
     ) const noexcept {
         const condition_branch_res false_branches = m_condition->emit_dc_branch(fn, global, false);
@@ -127,7 +127,7 @@ namespace dconstruct::ast {
         u64 else_skip_location = 0;
         if (m_else) {
             else_skip_location = fn.m_instructions.size();
-            fn.emit_instruction(Opcode::Branch, compilation::function::BRANCH_PLACEHOLDER, 00, compilation::function::BRANCH_PLACEHOLDER);
+            fn.emit_instruction(Opcode::Branch, compilation::function_context::BRANCH_PLACEHOLDER, 00, compilation::function_context::BRANCH_PLACEHOLDER);
 
             const emission_err else_err = m_else->emit_dc(fn, global);
             if (else_err) {

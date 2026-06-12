@@ -7,7 +7,7 @@
 
 namespace dconstruct::compilation {
 
-    [[nodiscard]] program_binary_element function::to_binary_element() const noexcept {
+    [[nodiscard]] program_binary_element function_context::to_binary_element() const noexcept {
         constexpr sid64 global_sid = SID("global");
         constexpr sid64 function_sid = SID("function");
         constexpr sid64 script_lambda_sid = SID("script-lambda");
@@ -40,7 +40,7 @@ namespace dconstruct::compilation {
             element.push_bytes(istr, 0b0);
         }
         for (u32 i = 0; i < m_symbolTable.size(); ++i) {
-            if (m_symbolTableEntryPointers[i] == compilation::function::SYMBOL_TABLE_POINTER_KIND::STRING) {
+            if (m_symbolTableEntryPointers[i] == compilation::function_context::SYMBOL_TABLE_POINTER_KIND::STRING) {
                 element.insert_string_offset();
                 element.push_bytes(m_symbolTable[i], 0b1);
             } else {
@@ -50,7 +50,7 @@ namespace dconstruct::compilation {
         return element;
     }
 
-    [[nodiscard]] std::expected<reg_idx, std::string> function::get_next_unused_register() noexcept {
+    [[nodiscard]] std::expected<reg_idx, std::string> function_context::get_next_unused_register() noexcept {
         u64 reg_set_num = m_usedRegisters.to_ullong();
 
         constexpr u64 all_50_bits_used = 0x3FFFFFFFFFFFFull;
@@ -64,17 +64,17 @@ namespace dconstruct::compilation {
         return next_unused;
     }
 
-    void function::free_register(const reg_idx reg) noexcept {
+    void function_context::free_register(const reg_idx reg) noexcept {
         if (!m_varsToRegs.value_used(reg)) {
             m_usedRegisters.set(reg, false);
         }
     }
 
-    void function::free_lvalue_register(const reg_idx reg) noexcept {
+    void function_context::free_lvalue_register(const reg_idx reg) noexcept {
         m_usedRegisters.set(reg, false);
     }
 
-    std::optional<std::string> function::save_used_argument_registers(const u8 count) noexcept {
+    std::optional<std::string> function_context::save_used_argument_registers(const u8 count) noexcept {
         reg_set saved;
         for (u32 i = 0; i < count; ++i) {
             const std::expected<reg_idx, std::string> reg = get_next_unused_register();
@@ -88,7 +88,7 @@ namespace dconstruct::compilation {
         return std::nullopt;
     }
 
-    void function::restore_used_argument_registers() noexcept {
+    void function_context::restore_used_argument_registers() noexcept {
         const reg_set regs = m_savedArgumentsTemporaryRegs.back();
         m_savedArgumentsTemporaryRegs.pop_back();
         u64 num = regs.to_ullong();
@@ -101,7 +101,7 @@ namespace dconstruct::compilation {
         }
     }
 
-    void function::emit_instruction(
+    void function_context::emit_instruction(
         const Opcode opcode,
         const u8 destination,
         const u8 operand1,
@@ -114,7 +114,7 @@ namespace dconstruct::compilation {
         }
     }
 
-    void function::emit_lohi_instruction(const Opcode opcode, const u8 destination, const u16 lo_hi) noexcept {
+    void function_context::emit_lohi_instruction(const Opcode opcode, const u8 destination, const u16 lo_hi) noexcept {
         if (!m_deferred.empty()) {
             m_deferred.back().first.emplace_back(opcode, destination, lo_hi & 0xFF, (lo_hi >> 8) & 0xFF);
         } else {
@@ -122,7 +122,7 @@ namespace dconstruct::compilation {
         }
     }
 
-    [[nodiscard]] u16 function::add_to_symbol_table(
+    [[nodiscard]] u16 function_context::add_to_symbol_table(
         const u64 value,
         const SYMBOL_TABLE_POINTER_KIND pointer_kind
     ) noexcept {
@@ -137,15 +137,15 @@ namespace dconstruct::compilation {
         }
     }
 
-    [[nodiscard]] u64 function::get_size_in_bytes() const noexcept {
+    [[nodiscard]] u64 function_context::get_size_in_bytes() const noexcept {
         return sizeof(sid64) + sizeof(ScriptLambda) + m_instructions.size() * sizeof(Instruction) + m_symbolTable.size() * sizeof(u64);
     }
 
-    [[nodiscard]] u64 function::get_scriptlambda_sum() const noexcept {
+    [[nodiscard]] u64 function_context::get_scriptlambda_sum() const noexcept {
         return 12 + 4 * (m_instructions.size() + m_symbolTable.size());
     }
 
-    [[nodiscard]] emission_res function::fix_destination(const std::optional<reg_idx> passed_through_destination) noexcept {
+    [[nodiscard]] emission_res function_context::fix_destination(const std::optional<reg_idx> passed_through_destination) noexcept {
         if (passed_through_destination) {
             return *passed_through_destination;
         } else {
@@ -153,11 +153,11 @@ namespace dconstruct::compilation {
         }
     }
 
-    void function::push_deferred() noexcept {
+    void function_context::push_deferred() noexcept {
         m_deferred.emplace_back(std::vector<Instruction>(), m_deferred.empty() ? m_instructions.size() : m_deferred.back().first.size());
     }
 
-    void function::pop_deferred() noexcept {
+    void function_context::pop_deferred() noexcept {
         const auto [instructions, save_point] = std::move(m_deferred.back());
         m_deferred.pop_back();
         std::vector<Instruction>& next_back = m_deferred.empty() ? m_instructions : m_deferred.back().first;

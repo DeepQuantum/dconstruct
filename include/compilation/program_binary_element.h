@@ -5,7 +5,6 @@
 #include "DCScript.h"
 
 namespace dconstruct::compilation {
-    struct function;
     struct global_state;
 
     struct program_binary_element {

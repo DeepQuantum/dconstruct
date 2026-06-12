@@ -35,7 +35,6 @@ namespace dconstruct {
         sid64 m_typeId;
         p64 m_offset;
         disassembled_values_t m_values;
-        std::optional<u64> m_arraySize;
         std::optional<u64> m_pointerOffset;
     };
 
@@ -95,6 +94,10 @@ namespace dconstruct {
 
         [[nodiscard]] bool has_state_script() const noexcept {
             return m_stateScript.has_value();
+        }
+
+        [[nodiscard]] ast::state_script* get_state_script() noexcept {
+            return m_stateScript.has_value() ? &*m_stateScript : nullptr;
         }
 
         void disassemble_functions_from_bin_file();

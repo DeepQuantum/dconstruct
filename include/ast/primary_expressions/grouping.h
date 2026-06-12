@@ -20,14 +20,14 @@ namespace dconstruct::ast {
         [[nodiscard]] u16 calc_complexity() const noexcept final;
         [[nodiscard]] std::unique_ptr<struct_access> to_struct_access() noexcept final;
         [[nodiscard]] emission_res emit_dc(
-            compilation::function& fn,
+            compilation::function_context& fn,
             compilation::global_state& global,
             const std::optional<reg_idx> destination
         ) const noexcept {
             return m_expr->emit_dc(fn, global, destination);
         }
         [[nodiscard]] condition_branch_res emit_dc_branch(
-            compilation::function& fn,
+            compilation::function_context& fn,
             compilation::global_state& global,
             const bool branch_when_true
         ) const noexcept final {

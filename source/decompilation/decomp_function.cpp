@@ -19,16 +19,6 @@ namespace dconstruct::dcompiler {
         return nullptr;
     }
 
-    [[nodiscard]] std::unique_ptr<ast::identifier> decomp_function::make_current_var(
-        const ast::full_type& type,
-        expr_uptr expr
-    ) {
-        if (auto var_mapped_entry = m_functionScope->find(m_varCount); var_mapped_entry != m_functionScope->end()) {
-        }
-
-        return std::make_unique<ast::identifier>(get_next_var());
-    }
-
     void decomp_function::append_to_current_block(stmnt_uptr&& statement) {
         m_blockStack.top().get().m_statements.push_back(std::move(statement));
     }
@@ -87,6 +77,22 @@ namespace dconstruct::dcompiler {
         m_functionDefinition = std::make_unique<ast::function_definition>();
         m_functionDefinition->m_name = m_disassembly.m_id;
 
+        const auto& register_args = m_disassembly.m_stackFrame.m_registerArgs;
+
+        const ast::function_type* known_type = m_knownFunctionType;
+        if (known_type != nullptr && known_type->m_arguments.size() != register_args.size()) {
+            m_error = "known function type specifies " + std::to_string(known_type->m_arguments.size()) +
+                " argument(s) but the disassembly has " + std::to_string(register_args.size());
+            known_type = nullptr;
+        }
+
+        if (known_type != nullptr) {
+            m_functionDefinition->m_type = *known_type;
+            m_functionDefinition->m_type.m_return = std::make_shared<ast::full_type>(
+                known_type->m_return != nullptr ? *known_type->m_return : ast::full_type{}
+            );
+        }
+
         m_blockStack.push(std::ref(m_functionDefinition->m_body));
         for (reg_idx i = 0; i < ARGUMENT_REGISTERS_IDX; ++i) {
             m_registersToVars.emplace(i, std::stack<std::unique_ptr<ast::identifier>>());
@@ -96,10 +102,21 @@ namespace dconstruct::dcompiler {
             m_registersToVars.emplace(i, std::stack<std::unique_ptr<ast::identifier>>());
         }
 
-        for (reg_idx i = 0; i < m_disassembly.m_stackFrame.m_registerArgs.size(); ++i) {
-            const auto& arg_type = m_disassembly.m_stackFrame.m_registerArgs.at(i);
-            m_arguments.push_back(ast::variable_declaration(arg_type, "arg_" + std::to_string(i)));
-            m_functionDefinition->m_parameters.emplace_back(arg_type, "arg_" + std::to_string(i));
+        for (reg_idx i = 0; i < register_args.size(); ++i) {
+            ast::full_type arg_type = register_args.at(i);
+            if (known_type != nullptr) {
+                const ast::ref_full_type& known_arg_type = known_type->m_arguments[i].second;
+                if (known_arg_type != nullptr && !is_unknown(*known_arg_type)) {
+                    arg_type = *known_arg_type;
+                }
+                m_functionDefinition->m_type.m_arguments[i].second = std::make_shared<ast::full_type>(arg_type);
+            }
+            const std::string arg_name = "arg_" + std::to_string(i);
+            if (!is_unknown(arg_type)) {
+                m_transformableExpressions[ARGUMENT_REGISTERS_IDX + i]->set_type(arg_type);
+            }
+            m_arguments.push_back(ast::variable_declaration(arg_type, arg_name));
+            m_functionDefinition->m_parameters.emplace_back(arg_type, arg_name);
         }
 
         emit_node(m_graph[0], m_graph.m_nodes.back().m_index);
@@ -1359,7 +1376,12 @@ namespace dconstruct::dcompiler {
     }
 
     void decomp_function::insert_return(const reg_idx dest) {
-        *m_functionDefinition->m_type.m_return = m_transformableExpressions[dest]->get_type_unchecked(m_env);
+        if (m_functionDefinition->m_type.m_return == nullptr) {
+            m_functionDefinition->m_type.m_return = std::make_shared<ast::full_type>();
+        }
+        if (is_unknown(*m_functionDefinition->m_type.m_return)) {
+            *m_functionDefinition->m_type.m_return = m_transformableExpressions[dest]->get_type_unchecked(m_env);
+        }
         append_to_current_block(std::make_unique<ast::return_stmt>(std::move(m_transformableExpressions[dest])));
     }
 

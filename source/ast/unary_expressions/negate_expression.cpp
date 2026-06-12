@@ -66,7 +66,7 @@ namespace dconstruct::ast {
     }
 
     [[nodiscard]] emission_res negate_expr::emit_dc(
-        compilation::function& fn,
+        compilation::function_context& fn,
         compilation::global_state& global,
         const std::optional<reg_idx> opt_destination
     ) const noexcept {

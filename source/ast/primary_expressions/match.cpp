@@ -387,7 +387,7 @@ namespace dconstruct::ast {
     }
 
     [[nodiscard]] emission_res match_expr::emit_dc(
-        compilation::function& fn,
+        compilation::function_context& fn,
         compilation::global_state& global,
         const std::optional<reg_idx> destination
     ) const noexcept {
@@ -411,7 +411,7 @@ namespace dconstruct::ast {
     }
 
     [[nodiscard]] emission_res match_expr::emit_dc_array_approach(
-        compilation::function& fn,
+        compilation::function_context& fn,
         compilation::global_state& global,
         const reg_idx condition_reg,
         const std::optional<reg_idx> destination
@@ -482,7 +482,7 @@ namespace dconstruct::ast {
             fn.emit_lohi_instruction(Opcode::LoadU16Imm, *range_dest, default_end_idx);
             fn.emit_instruction(Opcode::IGreaterThan, *range_dest, condition_reg, *range_dest);
             default_branch = fn.m_instructions.size();
-            fn.emit_instruction(Opcode::BranchIfNot, compilation::function::BRANCH_PLACEHOLDER, *range_dest, compilation::function::BRANCH_PLACEHOLDER);
+            fn.emit_instruction(Opcode::BranchIfNot, compilation::function_context::BRANCH_PLACEHOLDER, *range_dest, compilation::function_context::BRANCH_PLACEHOLDER);
             fn.free_register(*range_dest);
         }
 
@@ -497,7 +497,7 @@ namespace dconstruct::ast {
             fn.emit_instruction(Opcode::LoadStaticU64Imm, *load_dest_res, (u8)*default_symbol_table_entry);
 
             end_branch = fn.m_instructions.size();
-            fn.emit_instruction(Opcode::Branch, compilation::function::BRANCH_PLACEHOLDER, 0, compilation::function::BRANCH_PLACEHOLDER);
+            fn.emit_instruction(Opcode::Branch, compilation::function_context::BRANCH_PLACEHOLDER, 0, compilation::function_context::BRANCH_PLACEHOLDER);
         }
         const u64 default_location = fn.m_instructions.size();
         if (start_idx != 0) {

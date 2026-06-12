@@ -53,7 +53,8 @@ namespace dconstruct::dcompiler {
             ControlFlowGraph graph,
             std::optional<std::filesystem::path> graph_path = std::nullopt,
             const std::unordered_map<sid64, ast::full_type>* known_types = nullptr,
-            const ast::mapped_var_scope* function_scope = nullptr
+            const ast::mapped_var_scope* function_scope = nullptr,
+            const ast::function_type* mapped_function_type = nullptr
         ) noexcept :
             m_disassembly(func),
             m_file(file),
@@ -63,14 +64,15 @@ namespace dconstruct::dcompiler {
             m_parsedNodes(graph.m_nodes.size(), false),
             m_ipdomsEmitted(m_graph.m_nodes.size(), false),
             m_knownTypes(known_types),
-            m_functionScope(function_scope) {};
+            m_functionScope(function_scope),
+            m_knownFunctionType(mapped_function_type) {};
 
         [[nodiscard]] ast::function_definition decompile(const OPTIMIZATION_KIND optimizations = OPTIMIZATION_KIND::NONE);
 
         [[nodiscard]] const std::pair<ast::full_type, std::optional<std::string>>* find_in_scope();
 
+        decomp_function(decomp_function&&) noexcept = delete;
         decomp_function& operator=(decomp_function&&) noexcept = delete;
-
         decomp_function(const decomp_function&) = delete;
         decomp_function& operator=(const decomp_function&) = delete;
 
@@ -187,9 +189,10 @@ namespace dconstruct::dcompiler {
         node_set m_ipdomsEmitted;
         std::stack<std::reference_wrapper<ast::block>> m_blockStack;
         std::vector<ast::variable_declaration> m_arguments;
-        const std::unordered_map<sid64, ast::full_type>* m_knownTypes;
+        const std::unordered_map<sid64, ast::full_type>* m_knownTypes = nullptr;
         std::unique_ptr<ast::function_definition> m_functionDefinition;
-        const ast::mapped_var_scope* m_functionScope;
+        const ast::mapped_var_scope* m_functionScope = nullptr;
+        const ast::function_type* m_knownFunctionType = nullptr;
         const function_disassembly& m_disassembly;
         const BinaryFile& m_file;
         const SIDBase& m_sidbase;

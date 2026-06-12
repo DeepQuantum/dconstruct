@@ -42,9 +42,11 @@ namespace dconstruct::hooking {
 
     QWORD* __fastcall display_hook(QWORD*, QWORD*, const char**);
 
-    char __fastcall invoke_function_hook(i64 a1, i64 a2, u32 a3, QWORD* a4, i64 a5);
+    char __fastcall invoke_function_hook(i64, i64, u32, QWORD*, i64);
 
     QWORD* __fastcall lookup_hook(u64 a1);
+
+    QWORD* __fastcall debug_draw_string_2d_hook(QWORD*, i32, i64, i64);
 
     decltype(&is_final_build_hook) is_final_build_orig = nullptr;
     decltype(&display_hook) display_orig = nullptr;
@@ -166,6 +168,7 @@ namespace dconstruct::hooking {
     static constexpr p64 DISPLAY_OFFSET = 0x140D3DA40 - IMAGE_BASE;
     static constexpr p64 INVOKE_FUNCTION_OFFSET = 0x141613510 - IMAGE_BASE;
     static constexpr p64 LOOKUP_OFFSET = 0x141356D60 - IMAGE_BASE;
+    static constexpr p64 DEBUG_DRAW_SRING_2D_OFFSET = 0x140D3BE10 - IMAGE_BASE;
 
     void create_opcode_default_switch_override(p64 start_default_block, p64 target_location, p64 continue_location) {
         log("target_location: {:x}, start_default_block: {:x}", target_location, start_default_block);

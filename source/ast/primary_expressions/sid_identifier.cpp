@@ -67,14 +67,14 @@ namespace dconstruct::ast {
     }
 
     [[nodiscard]] std::expected<u16, std::string> sid_identifier::emit_to_symbol_table(
-        compilation::function& fn,
+        compilation::function_context& fn,
         compilation::global_state&
     ) const noexcept {
         return fn.add_to_symbol_table(SID(get_raw_string().c_str()));
     }
 
     [[nodiscard]] emission_res sid_identifier::emit_dc_callee(
-        compilation::function& fn,
+        compilation::function_context& fn,
         compilation::global_state& global,
         const std::optional<reg_idx> destination
     ) const noexcept {
@@ -90,7 +90,7 @@ namespace dconstruct::ast {
     }
 
     [[nodiscard]] emission_res sid_identifier::emit_dc(
-        compilation::function& fn,
+        compilation::function_context& fn,
         compilation::global_state& global,
         const std::optional<reg_idx> destination
     ) const noexcept {

@@ -14,6 +14,6 @@ namespace dconstruct::ast {
         void member_access_optimization_pass() noexcept final;
         void regex_optimization_pass() noexcept final;
         [[nodiscard]] std::vector<semantic_check_error> check_semantics(compilation::scope& scope) const noexcept final;
-        [[nodiscard]] emission_err emit_dc(compilation::function& fn, compilation::global_state& global) const noexcept final;
+        [[nodiscard]] emission_err emit_dc(compilation::function_context& fn, compilation::global_state& global) const noexcept final;
     };
 }

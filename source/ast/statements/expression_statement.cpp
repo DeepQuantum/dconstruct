@@ -45,7 +45,7 @@ namespace dconstruct::ast {
     }
 
     [[nodiscard]] emission_err expression_stmt::emit_dc(
-        compilation::function& fn,
+        compilation::function_context& fn,
         compilation::global_state& global
     ) const noexcept {
         const emission_res expr_res = m_expression->emit_dc(fn, global);

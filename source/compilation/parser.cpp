@@ -1,5 +1,8 @@
 
+#include "ast/function_definition.h"
 #include "compilation/dc_parser.h"
+#include <memory>
+#include <variant>
 
 namespace dconstruct::compilation {
 
@@ -366,7 +369,7 @@ namespace dconstruct::compilation {
         return enum_t;
     }
 
-    [[nodiscard]] std::unique_ptr<ast::function_definition> Parser::make_function_definition() {
+    [[nodiscard]] std::unique_ptr<ast::function_definition> Parser::make_function_definition_header() {
         std::optional<ast::full_type> return_type = make_type();
         if (!return_type) {
             return nullptr;
@@ -410,6 +413,16 @@ namespace dconstruct::compilation {
         }
 
         if (!consume(token_type::RIGHT_PAREN, "expected ')' after function parameters")) {
+            return nullptr;
+        }
+
+        return func_def;
+    }
+
+    [[nodiscard]] std::unique_ptr<ast::function_definition> Parser::make_function_definition() {
+        std::unique_ptr<ast::function_definition> func_def = make_function_definition_header();
+
+        if (!func_def) {
             return nullptr;
         }
 
@@ -1508,8 +1521,22 @@ namespace dconstruct::compilation {
 
         ast::function_to_mapped_vars function_scopes;
 
-        while (match(token_type::SID)) {
-            const std::string name = previous().m_lexeme.substr(1, previous().m_lexeme.size() - 1);
+        while (!match(token_type::RIGHT_BRACE)) {
+
+            std::string function_name;
+            if (match(token_type::SID)) {
+                function_name = previous().m_lexeme.substr(1, previous().m_lexeme.size() - 1);
+            } else {
+                std::unique_ptr<ast::function_definition> function_definition_header = make_function_definition_header();
+                if (!function_definition_header) {
+                    m_errors.emplace_back(previous(), "expected either a raw function SID (e.g. #my-function) or a function definition (e.g. u64 #my-function(u64 parameter)");
+                    return std::nullopt;
+                }
+                assert(std::holds_alternative<std::string>(function_definition_header->m_name));
+                function_name = std::move(std::get<std::string>(function_definition_header->m_name));
+                function_scopes[SID("global")][SID(function_name.c_str())] = std::make_pair(std::move(function_definition_header->m_type), std::nullopt);
+            }
+
             if (!consume(token_type::LEFT_BRACE, "expected {")) {
                 return std::nullopt;
             }
@@ -1545,10 +1572,7 @@ namespace dconstruct::compilation {
             if (!consume(token_type::RIGHT_BRACE, "expected }")) {
                 return std::nullopt;
             }
-            function_scopes.emplace(SID(name.c_str()), std::move(var_scope));
-        }
-        if (!consume(token_type::RIGHT_BRACE, "expected }")) {
-            return std::nullopt;
+            function_scopes.emplace(SID(function_name.c_str()), std::move(var_scope));
         }
 
         return function_scopes;

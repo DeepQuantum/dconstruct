@@ -65,7 +65,7 @@ namespace dconstruct::ast {
     }
 
     [[nodiscard]] emission_res logical_expr::emit_dc(
-        compilation::function& fn,
+        compilation::function_context& fn,
         compilation::global_state& global,
         const std::optional<reg_idx> destination
     ) const noexcept {
@@ -83,7 +83,7 @@ namespace dconstruct::ast {
             }
 
             const u16 lhs_false_branch = static_cast<u16>(fn.m_instructions.size());
-            fn.emit_instruction(Opcode::BranchIfNot, compilation::function::BRANCH_PLACEHOLDER, *lhs, compilation::function::BRANCH_PLACEHOLDER);
+            fn.emit_instruction(Opcode::BranchIfNot, compilation::function_context::BRANCH_PLACEHOLDER, *lhs, compilation::function_context::BRANCH_PLACEHOLDER);
             fn.free_register(*lhs);
 
             const emission_res rhs = m_rhs->emit_dc(fn, global);
@@ -92,11 +92,11 @@ namespace dconstruct::ast {
             }
 
             const u16 rhs_false_branch = static_cast<u16>(fn.m_instructions.size());
-            fn.emit_instruction(Opcode::BranchIfNot, compilation::function::BRANCH_PLACEHOLDER, *rhs, compilation::function::BRANCH_PLACEHOLDER);
+            fn.emit_instruction(Opcode::BranchIfNot, compilation::function_context::BRANCH_PLACEHOLDER, *rhs, compilation::function_context::BRANCH_PLACEHOLDER);
             fn.free_register(*rhs);
 
             const u16 done_branch = static_cast<u16>(fn.m_instructions.size());
-            fn.emit_instruction(Opcode::Branch, compilation::function::BRANCH_PLACEHOLDER, 00, compilation::function::BRANCH_PLACEHOLDER);
+            fn.emit_instruction(Opcode::Branch, compilation::function_context::BRANCH_PLACEHOLDER, 00, compilation::function_context::BRANCH_PLACEHOLDER);
 
             const u16 set_false_location = static_cast<u16>(fn.m_instructions.size());
             fn.emit_instruction(Opcode::LoadU16Imm, *logical_destination, 0, 0);
@@ -117,7 +117,7 @@ namespace dconstruct::ast {
         }
 
         const u16 lhs_true_branch = static_cast<u16>(fn.m_instructions.size());
-        fn.emit_instruction(Opcode::BranchIf, compilation::function::BRANCH_PLACEHOLDER, *lhs, compilation::function::BRANCH_PLACEHOLDER);
+        fn.emit_instruction(Opcode::BranchIf, compilation::function_context::BRANCH_PLACEHOLDER, *lhs, compilation::function_context::BRANCH_PLACEHOLDER);
         fn.free_register(*lhs);
 
         const emission_res rhs = m_rhs->emit_dc(fn, global);
@@ -126,11 +126,11 @@ namespace dconstruct::ast {
         }
 
         const u16 rhs_true_branch = static_cast<u16>(fn.m_instructions.size());
-        fn.emit_instruction(Opcode::BranchIf, compilation::function::BRANCH_PLACEHOLDER, *rhs, compilation::function::BRANCH_PLACEHOLDER);
+        fn.emit_instruction(Opcode::BranchIf, compilation::function_context::BRANCH_PLACEHOLDER, *rhs, compilation::function_context::BRANCH_PLACEHOLDER);
         fn.free_register(*rhs);
 
         const u16 done_branch = static_cast<u16>(fn.m_instructions.size());
-        fn.emit_instruction(Opcode::Branch, compilation::function::BRANCH_PLACEHOLDER, 00, compilation::function::BRANCH_PLACEHOLDER);
+        fn.emit_instruction(Opcode::Branch, compilation::function_context::BRANCH_PLACEHOLDER, 00, compilation::function_context::BRANCH_PLACEHOLDER);
 
         const u16 set_true_location = static_cast<u16>(fn.m_instructions.size());
         fn.emit_instruction(Opcode::LoadU16Imm, *logical_destination, 1, 0);
@@ -144,7 +144,7 @@ namespace dconstruct::ast {
     }
 
     [[nodiscard]] condition_branch_res logical_expr::emit_dc_branch(
-        compilation::function& fn,
+        compilation::function_context& fn,
         compilation::global_state& global,
         const bool branch_when_true
     ) const noexcept {

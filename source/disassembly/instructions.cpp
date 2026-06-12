@@ -12,9 +12,9 @@ namespace dconstruct {
         result.reserve(total_size);
         result += m_state.m_name;
         result += SEP;
-        result += m_track.m_name;
-        result += SEP;
         result += m_event.m_name;
+        result += SEP;
+        result += m_track.m_name;
         result += SEP;
         result += idx_str;
         return result;

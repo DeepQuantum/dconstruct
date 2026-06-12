@@ -123,7 +123,7 @@ namespace dconstruct::ast {
     }
 
     [[nodiscard]] std::expected<u16, std::string> literal::emit_to_symbol_table(
-        compilation::function& fn,
+        compilation::function_context& fn,
         compilation::global_state& global
     ) const noexcept {
         return std::visit(
@@ -138,7 +138,7 @@ namespace dconstruct::ast {
                         }
                     }
                     const u64 size = global.add_string(std::move(lit));
-                    return fn.add_to_symbol_table(size, compilation::function::SYMBOL_TABLE_POINTER_KIND::STRING);
+                    return fn.add_to_symbol_table(size, compilation::function_context::SYMBOL_TABLE_POINTER_KIND::STRING);
                 } else if constexpr (std::is_integral_v<T>) {
                     return fn.add_to_symbol_table(static_cast<u64>(lit));
                 } else if constexpr (std::is_same_v<T, f32>) {
@@ -156,7 +156,7 @@ namespace dconstruct::ast {
     }
 
     [[nodiscard]] emission_res literal::emit_dc(
-        compilation::function& fn,
+        compilation::function_context& fn,
         compilation::global_state& global,
         const std::optional<reg_idx> destination
     ) const noexcept {
@@ -179,7 +179,7 @@ namespace dconstruct::ast {
                         }
                     }
                     const u64 size = global.add_string(std::move(lit));
-                    const u8 table_idx = fn.add_to_symbol_table(size, compilation::function::SYMBOL_TABLE_POINTER_KIND::STRING);
+                    const u8 table_idx = fn.add_to_symbol_table(size, compilation::function_context::SYMBOL_TABLE_POINTER_KIND::STRING);
                     fn.emit_instruction(Opcode::LoadStaticPointerImm, *literal_dest, table_idx);
                     return *literal_dest;
                 } else if constexpr (std::is_integral_v<T>) {

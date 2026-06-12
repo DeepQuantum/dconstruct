@@ -70,7 +70,7 @@ namespace dconstruct::ast {
     }
 
     [[nodiscard]] emission_err return_stmt::emit_dc(
-        compilation::function& fn,
+        compilation::function_context& fn,
         compilation::global_state& global
     ) const noexcept {
         if (m_expr) {
@@ -83,7 +83,7 @@ namespace dconstruct::ast {
             }
         }
         fn.m_returnBranchLocations.push_back(fn.m_instructions.size());
-        fn.emit_instruction(Opcode::Branch, compilation::function::BRANCH_PLACEHOLDER, 0_r, compilation::function::BRANCH_PLACEHOLDER);
+        fn.emit_instruction(Opcode::Branch, compilation::function_context::BRANCH_PLACEHOLDER, 0_r, compilation::function_context::BRANCH_PLACEHOLDER);
         return std::nullopt;
     }
 

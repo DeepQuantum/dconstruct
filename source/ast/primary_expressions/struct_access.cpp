@@ -134,7 +134,7 @@ namespace dconstruct::ast {
         return compilation::source_location{m_memberName.m_file, m_memberName.m_line};
     }
 
-    [[nodiscard]] emission_res struct_access::emit_dc(compilation::function& fn, compilation::global_state& global, const std::optional<reg_idx> opt_destination) const noexcept {
+    [[nodiscard]] emission_res struct_access::emit_dc(compilation::function_context& fn, compilation::global_state& global, const std::optional<reg_idx> opt_destination) const noexcept {
         const std::optional<full_type> lhs_cached_type = m_lhs->get_type();
         if (!lhs_cached_type) {
             return std::unexpected{"struct member access emitted before type checking"};
@@ -185,7 +185,7 @@ namespace dconstruct::ast {
         return *load_destination;
     }
 
-    [[nodiscard]] lvalue_emission_res struct_access::emit_dc_lvalue(compilation::function& fn, compilation::global_state& global) const noexcept {
+    [[nodiscard]] lvalue_emission_res struct_access::emit_dc_lvalue(compilation::function_context& fn, compilation::global_state& global) const noexcept {
         const std::optional<full_type> lhs_cached_type = m_lhs->get_type();
         if (!lhs_cached_type) {
             return std::unexpected{"struct member access emitted before type checking"};

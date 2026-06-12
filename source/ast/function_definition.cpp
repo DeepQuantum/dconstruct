@@ -105,7 +105,11 @@ namespace dconstruct::ast {
     }
 
     [[nodiscard]] program_binary_result function_definition::emit_dc(compilation::global_state& global) const noexcept {
-        compilation::function fn{};
+        if (m_cachedElement) {
+            return *m_cachedElement;
+        }
+
+        compilation::function_context fn{};
         if (const std::string* name = std::get_if<std::string>(&m_name)) {
             fn.m_name = *name;
         }
@@ -139,7 +143,7 @@ namespace dconstruct::ast {
         for (const u64 branch_location : fn.m_returnBranchLocations) {
             Instruction& branch = fn.m_instructions[branch_location];
             assert(branch.opcode == Opcode::Branch);
-            assert(branch.destination == compilation::function::BRANCH_PLACEHOLDER);
+            assert(branch.destination == compilation::function_context::BRANCH_PLACEHOLDER);
             branch.set_lo_hi(return_location);
         }
 

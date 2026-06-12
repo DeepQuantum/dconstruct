@@ -1,7 +1,6 @@
 #include "ast/state_script/state_script.h"
 #include "ast/primary_expressions/literal.h"
 #include "compilation/function.h"
-#include <array>
 #include <numeric>
 #include <unordered_set>
 
@@ -163,6 +162,32 @@ namespace dconstruct::ast {
         return true;
     }
 
+    void state_script::from_functions(const std::vector<std::pair<const function_disassembly*, compilation::program_binary_element>>& functions) noexcept {
+        for (const auto& [function, element] : functions) {
+            const auto* id = std::get_if<state_script_function_id>(&function->m_id);
+            if (id == nullptr || id->m_state.m_idx >= m_states.size()) {
+                continue;
+            }
+            state_script_state& state = m_states[id->m_state.m_idx];
+            if (id->m_event.m_idx >= state.m_blocks.size()) {
+                continue;
+            }
+            state_script_block& block = state.m_blocks[id->m_event.m_idx];
+            if (id->m_track.m_idx >= block.m_tracks.size()) {
+                continue;
+            }
+            state_script_track& track = block.m_tracks[id->m_track.m_idx];
+            if (id->m_idx >= track.m_lambdas.size()) {
+                continue;
+            }
+            function_definition lambda;
+            lambda.m_name = *id;
+            lambda.m_type.m_return = std::make_shared<full_type>(make_type_from_prim(primitive_kind::NOTHING));
+            lambda.set_program_binary_element(element);
+            track.m_lambdas[id->m_idx] = std::move(lambda);
+        }
+    }
+
     [[nodiscard]] program_binary_result state_script::emit_dc(compilation::global_state& global) const noexcept {
         constexpr sid64 state_script_sid = SID("state-script");
         constexpr sid64 array_sid = SID("array");
@@ -244,12 +269,12 @@ namespace dconstruct::ast {
         const StateScript ss = {
             script_name,
             nullptr,
-            SID(m_states[0].m_name.c_str()),
+            m_rawStateScript != nullptr ? m_rawStateScript->m_initialStateId : SID(m_states[m_initialStateIdx].m_name.c_str()),
             nullptr,
             0x0,
             nullptr,
             static_cast<i16>(m_states.size()),
-            0x0,
+            m_rawStateScript != nullptr ? m_rawStateScript->m_line : static_cast<i16>(0),
             0x0,
             reinterpret_cast<const char*>(debug_str_idx),
             nullptr,
@@ -264,22 +289,26 @@ namespace dconstruct::ast {
                 const u64 options_offset = element.m_rawData.size();
                 patch_u64(state_script_offset + offsetof(StateScript, m_pSsOptions), options_offset);
 
+                const SsOptions* raw_options = m_rawStateScript != nullptr ? m_rawStateScript->m_pSsOptions : nullptr;
                 u64 options_string_idx = 0;
                 if (!m_optionsString.empty()) {
                     options_string_idx = global.add_string(m_optionsString);
+                    element.insert_string_offset();
+                } else if (raw_options != nullptr && raw_options->m_optionString != nullptr) {
+                    options_string_idx = global.add_string(raw_options->m_optionString);
                     element.insert_string_offset();
                 }
 
                 const SsOptions ss_options = {
                     reinterpret_cast<const char*>(options_string_idx),
+                    raw_options != nullptr ? raw_options->m_unknownFlags : 0x0,
                     0x0,
-                    0x0,
                     nullptr,
                     nullptr,
                     nullptr,
                     nullptr,
-                    5,
-                    0,
+                    raw_options != nullptr ? raw_options->m_always5 : 5,
+                    raw_options != nullptr ? raw_options->m_mostly0 : 0,
                     0x0,
                     0x0,
                 };
@@ -310,7 +339,53 @@ namespace dconstruct::ast {
             }
         }
 
-        if (!m_declarations.empty()) {
+        const SsDeclarationList* raw_declarations = m_rawStateScript != nullptr ? m_rawStateScript->m_pSsDeclList : nullptr;
+        if (raw_declarations != nullptr && raw_declarations->m_numDeclarations > 0) {
+            element.push_bytes(ss_decl_list_sid, 0b0);
+            const u64 declaration_list_offset = element.m_rawData.size();
+            patch_u64(state_script_offset + offsetof(StateScript, m_pSsDeclList), declaration_list_offset);
+
+            const SsDeclarationList decl_list = {
+                raw_declarations->m_totalDeclarationSize,
+                raw_declarations->m_numDeclarations,
+                nullptr,
+            };
+            element.push_bytes(decl_list, 0b10);
+
+            element.push_bytes(array_sid, 0b0);
+            patch_u64(declaration_list_offset + offsetof(SsDeclarationList, m_pDeclarations), element.m_rawData.size());
+
+            std::vector<u64> declaration_value_ptr_offsets;
+            declaration_value_ptr_offsets.reserve(raw_declarations->m_numDeclarations);
+            for (u32 i = 0; i < raw_declarations->m_numDeclarations; ++i) {
+                SsDeclaration decl = raw_declarations->m_pDeclarations[i];
+                decl.m_declIdString = nullptr;
+                decl.m_pDeclValue = nullptr;
+                declaration_value_ptr_offsets.push_back(element.m_rawData.size() + offsetof(SsDeclaration, m_pDeclValue));
+                element.push_bytes(decl, 0b01'0010);
+            }
+
+            u16 previous_size_sum = 0;
+            for (u32 i = 0; i < raw_declarations->m_numDeclarations; ++i) {
+                const SsDeclaration& original = raw_declarations->m_pDeclarations[i];
+                const u16 delta_size = original.m_varSizeSum >= previous_size_sum ? original.m_varSizeSum - previous_size_sum : 0;
+                previous_size_sum = original.m_varSizeSum;
+                if (original.m_pDeclValue == nullptr) {
+                    continue;
+                }
+                element.push_bytes(original.m_declTypeId, 0b0);
+                patch_u64(declaration_value_ptr_offsets[i], element.m_rawData.size());
+
+                const u64 value_size = delta_size != 0 ? delta_size : sizeof(u64);
+                const u8* value_bytes = static_cast<const u8*>(original.m_pDeclValue);
+                const u64 chunks = (value_size + sizeof(u64) - 1) / sizeof(u64);
+                for (u64 chunk = 0; chunk < chunks; ++chunk) {
+                    u64 word = 0;
+                    std::memcpy(&word, value_bytes + chunk * sizeof(u64), std::min<u64>(sizeof(u64), value_size - chunk * sizeof(u64)));
+                    element.push_bytes(word, 0b0);
+                }
+            }
+        } else if (!m_declarations.empty()) {
             element.push_bytes(ss_decl_list_sid, 0b0);
             const u64 declaration_list_offset = element.m_rawData.size();
             patch_u64(state_script_offset + offsetof(StateScript, m_pSsDeclList), declaration_list_offset);

@@ -95,7 +95,7 @@ namespace dconstruct::ast {
     }
 
     [[nodiscard]] emission_err for_stmt::emit_dc(
-        compilation::function& fn,
+        compilation::function_context& fn,
         compilation::global_state& global
     ) const noexcept {
         compilation::environment<reg_idx> old_saved = std::move(fn.m_varsToRegs);

@@ -145,7 +145,6 @@ namespace dconstruct {
             .m_typeId = SID("array"),
             .m_offset = get_offset(location().from(array)),
             .m_values = {},
-            .m_arraySize = std::nullopt,
         };
 
         if (array_size == 0) {
@@ -180,7 +179,6 @@ namespace dconstruct {
                 .m_typeId = 0,
                 .m_offset = get_offset(member + array_entry_count * struct_size),
                 .m_values = {},
-                .m_arraySize = std::nullopt,
             };
 
             while (member_offset < struct_size) {
@@ -891,6 +889,13 @@ namespace dconstruct {
             std::move(options),
             std::move(declarations),
             std::move(states)};
+        script.m_rawStateScript = stateScript;
+        for (i16 i = 0; i < stateScript->m_stateCount; ++i) {
+            if (stateScript->m_pSsStateTable[i].m_stateId == stateScript->m_initialStateId) {
+                script.m_initialStateIdx = static_cast<u64>(i);
+                break;
+            }
+        }
         return script;
     }
 

@@ -64,7 +64,7 @@ namespace dconstruct::ast {
     }
 
     [[nodiscard]] lvalue_emission_res identifier::emit_dc_lvalue(
-        compilation::function& fn,
+        compilation::function_context& fn,
         compilation::global_state& global
     ) const noexcept {
         const reg_idx* var_location = fn.m_varsToRegs.lookup(m_name.m_lexeme);
@@ -77,7 +77,7 @@ namespace dconstruct::ast {
     }
 
     [[nodiscard]] emission_res identifier::emit_dc_callee(
-        compilation::function& fn,
+        compilation::function_context& fn,
         compilation::global_state& global,
         const std::optional<reg_idx> destination
     ) const noexcept {
@@ -89,7 +89,7 @@ namespace dconstruct::ast {
     }
 
     [[nodiscard]] emission_res identifier::emit_dc(
-        compilation::function& fn,
+        compilation::function_context& fn,
         compilation::global_state& global,
         const std::optional<reg_idx> destination
     ) const noexcept {

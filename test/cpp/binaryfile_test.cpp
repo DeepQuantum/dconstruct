@@ -78,7 +78,7 @@ namespace dconstruct::testing {
         Disassembler disassembler(&file, &base);
         disassembler.disassemble();
 
-        std::vector<compilation::function> converted;
+        std::vector<compilation::function_context> converted;
         compilation::global_state global;
 
         auto funcs = disassembler.get_all_functions();
@@ -90,7 +90,7 @@ namespace dconstruct::testing {
         );
 
         for (const auto* f : funcs) {
-            compilation::function cf;
+            compilation::function_context cf;
             const std::string id = f->get_id();
             if (id.starts_with("#")) {
                 cf.m_name = std::stoull(id.substr(1, id.size() - 1), nullptr, 16);
@@ -101,20 +101,20 @@ namespace dconstruct::testing {
                 cf.m_instructions.push_back(line.m_instruction);
             }
             for (u32 i = 0; i < f->m_stackFrame.m_symbolTable.m_types.size(); ++i) {
-                const compilation::function::SYMBOL_TABLE_POINTER_KIND kind = std::visit(
+                const compilation::function_context::SYMBOL_TABLE_POINTER_KIND kind = std::visit(
                     [](auto&& type) {
                         using T = std::decay_t<decltype(type)>;
                         if constexpr (std::is_same_v<T, ast::primitive_type>) {
-                            return type.m_type == ast::primitive_kind::STRING ? compilation::function::SYMBOL_TABLE_POINTER_KIND::STRING : compilation::function::SYMBOL_TABLE_POINTER_KIND::NONE;
+                            return type.m_type == ast::primitive_kind::STRING ? compilation::function_context::SYMBOL_TABLE_POINTER_KIND::STRING : compilation::function_context::SYMBOL_TABLE_POINTER_KIND::NONE;
                         } else if constexpr (std::is_same_v<T, ast::ptr_type>) {
-                            return compilation::function::SYMBOL_TABLE_POINTER_KIND::GENERAL;
+                            return compilation::function_context::SYMBOL_TABLE_POINTER_KIND::GENERAL;
                         } else {
-                            return compilation::function::SYMBOL_TABLE_POINTER_KIND::NONE;
+                            return compilation::function_context::SYMBOL_TABLE_POINTER_KIND::NONE;
                         }
                     },
                     f->m_stackFrame.m_symbolTable.m_types[i]
                 );
-                if (kind == compilation::function::SYMBOL_TABLE_POINTER_KIND::STRING) {
+                if (kind == compilation::function_context::SYMBOL_TABLE_POINTER_KIND::STRING) {
                     const u32 size = global.add_string(f->m_stackFrame.m_symbolTable.m_location.get<const char*>(i * 8));
                     cf.m_symbolTable.push_back(size);
                 } else {

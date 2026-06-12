@@ -1,1031 +1,313 @@
-#include "BinaryFile.h"
-#include "decompilation/decomp_function.h"
-#include "disassembly/disassembler.h"
-#include "ast/ast.h"
-#include <array>
-#include <filesystem>
-#include <fstream>
 #include <gtest/gtest.h>
-
-const std::filesystem::path TEST_ROOT = DCONSTRUCT_TEST_ROOT;
-const std::string TEST_DIR = (TEST_ROOT / "fixtures" / "dc").string() + "/";
-const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
+#include "compilation/lexer.h"
+#include "compilation/dc_parser.h"
+#include "disassembly/disassembler.h"
+#include "disassembly/instructions.h"
+#include "decompilation/decomp_function.h"
+#include "binaryfile.h"
+#include "ast/ast.h"
+#include <expected>
+#include <filesystem>
+#include <memory>
+#include <optional>
+#include <string>
+#include <utility>
+#include <vector>
 
 namespace dconstruct::testing {
 
-    static SIDBase base = *SIDBase::from_binary(TEST_DIR + R"(\test_sidbase.bin)");
+    const std::filesystem::path DECOMP_TEST_ROOT = DCONSTRUCT_TEST_ROOT;
+    const std::string DECOMP_FIXTURE_DIR = (DECOMP_TEST_ROOT / "fixtures" / "dc").string() + "/";
 
-    static function_disassembly get_function_disassembly(const std::string& path, const u32 offset) {
-        SIDBase base = *SIDBase::from_binary(TEST_DIR + "test_sidbase.bin");
-        auto file_res = BinaryFile::from_path(TEST_DIR + path);
-        if (!file_res) {
-            std::cerr << file_res.error() << "\n";
-            std::terminate();
+    struct decomp_case {
+        std::vector<Instruction> m_instructions;
+        std::string m_name = "test-function";
+        std::string m_typeMap{};
+        std::optional<ast::function_type> m_knownFunctionType{};
+        std::vector<u64> m_symbolTable{};
+        dcompiler::OPTIMIZATION_KIND m_optimizations = dcompiler::OPTIMIZATION_KIND::NONE;
+    };
+
+    struct decomp_result {
+        ast::function_definition m_function;
+        std::optional<std::string> m_error;
+
+        [[nodiscard]] std::string pseudo_c() const {
+            return m_function.to_pseudo_c_string();
         }
-        auto& file = *file_res;
-        Disassembler disassembler(&file, &base);
-        const ScriptLambda* lambda_ptr = disassembler.get_value_ptr_at<ScriptLambda>(offset);
-        const function_disassembly fd = *disassembler.create_function_disassembly(lambda_ptr, "");
-        return fd;
+    };
+
+    [[nodiscard]] static std::expected<ast::function_to_mapped_vars, std::string> parse_type_map(const std::string& source) {
+        compilation::Lexer lexer{source};
+        const auto [tokens, lex_errors] = lexer.get_results();
+        if (!lex_errors.empty()) {
+            return std::unexpected{"lex error: " + lex_errors.front().m_message};
+        }
+        compilation::Parser parser{tokens};
+        std::optional<ast::function_to_mapped_vars> typemap = parser.make_typemap();
+        if (!typemap || !parser.get_errors().empty()) {
+            std::string message = "parse errors:";
+            for (const auto& error : parser.get_errors()) {
+                message += " " + error.m_message;
+            }
+            return std::unexpected{message};
+        }
+        return std::move(*typemap);
     }
 
-    static ast::function_definition decompile_instructions_with_disassembly(
-        std::vector<Instruction>&& istrs,
-        const std::string& name = "Test",
-        const SymbolTable& table = {}
-    ) {
-        BinaryFile file = *BinaryFile::from_path(TEST_DIR + R"(\dummy.bin)");
-        const std::shared_ptr<function_disassembly> fd_ptr = Disassembler::create_function_disassembly(
-            istrs.data(),
-            istrs.size(),
-            name,
-            table.m_location,
+    [[nodiscard]] static decomp_result run_decompilation(decomp_case test) {
+        static SIDBase sidbase = *SIDBase::from_binary(DECOMP_FIXTURE_DIR + "test_sidbase.bin");
+        BinaryFile file = *BinaryFile::from_path(DECOMP_FIXTURE_DIR + "dummy.bin");
+
+        ast::function_to_mapped_vars scopes;
+        if (!test.m_typeMap.empty()) {
+            auto scopes_res = parse_type_map(test.m_typeMap);
+            if (!scopes_res) {
+                ADD_FAILURE() << scopes_res.error();
+                return {};
+            }
+            scopes = std::move(*scopes_res);
+        }
+
+        const sid64 function_sid = SID(test.m_name.c_str());
+
+        const ast::mapped_var_scope* function_scope = nullptr;
+        if (const auto entry = scopes.find(function_sid); entry != scopes.end()) {
+            function_scope = &entry->second;
+        }
+
+        const ast::function_type* known_function_type = nullptr;
+        if (test.m_knownFunctionType) {
+            known_function_type = &*test.m_knownFunctionType;
+        } else if (const auto global_entry = scopes.find(SID("global")); global_entry != scopes.end()) {
+            if (const auto entry = global_entry->second.find(function_sid); entry != global_entry->second.end()) {
+                known_function_type = std::get_if<ast::function_type>(&entry->second.first);
+            }
+        }
+
+        const std::shared_ptr<function_disassembly> fd = Disassembler::create_function_disassembly(
+            test.m_instructions.data(),
+            test.m_instructions.size(),
+            test.m_name,
+            location(test.m_symbolTable.data()),
             0,
             sizeof(Instruction),
             game_type::T2R,
-            base,
+            sidbase,
             file.m_sidCache
         );
-        const function_disassembly& fd = *fd_ptr;
-        auto dc_func = dconstruct::dcompiler::decomp_function(fd, file, base, ControlFlowGraph::build(fd));
-        return dc_func.decompile(dcompiler::OPTIMIZATION_KIND::NONE);
+
+        dcompiler::decomp_function decomp{
+            *fd,
+            file,
+            sidbase,
+            ControlFlowGraph::build(*fd),
+            std::nullopt,
+            nullptr,
+            function_scope,
+            known_function_type
+        };
+        ast::function_definition definition = decomp.decompile(test.m_optimizations);
+        return {std::move(definition), std::move(decomp.m_error)};
     }
 
-    static std::string get_decompiled_function_from_file(
-        const std::string& path,
-        const std::string& function_id,
-        const bool optimize = false
-    ) {
-        auto file_res = BinaryFile::from_path(path);
-        if (!file_res) {
-            std::cerr << file_res.error() << "\n";
-            std::terminate();
-        }
-        auto& file = *file_res;
-        Disassembler da{&file, &base};
-        da.disassemble();
-        for (const auto* func : da.get_all_functions()) {
-            if (func->get_id() == function_id) {
-                auto fd = dcompiler::decomp_function{*func, file, base, ControlFlowGraph::build(*func)};
-                return fd.decompile(optimize ? dcompiler::OPTIMIZATION_KIND::AST : dcompiler::OPTIMIZATION_KIND::NONE).to_pseudo_c_string();
-            }
-        }
-        return "";
-    }
-
-    static std::string get_decompiled_node_from_file(
-        const std::string& path,
-        const std::string& function_id,
-        const node_id node
-    ) {
-        auto file_res = BinaryFile::from_path(path);
-        if (!file_res) {
-            std::cerr << file_res.error() << "\n";
-            std::terminate();
-        }
-        auto& file = *file_res;
-        Disassembler da{&file, &base};
-        da.disassemble();
-        for (const auto* func : da.get_all_functions()) {
-            if (func->get_id() == function_id) {
-                auto fd = dcompiler::decomp_function{*func, file, base, ControlFlowGraph::build(*func)};
-                return fd.decompile().to_pseudo_c_string();
-            }
-        }
-        return "";
-    }
-
-    static void decomp_test(
-        const std::string& filepath,
-        const std::string& id,
-        const std::string& expected,
-        dconstruct::ast::LANGUAGE_FLAGS stream_lang = dconstruct::ast::LANGUAGE_FLAGS::RACKET,
-        const bool optimize = false,
-        const bool use_pascal = false
-    ) {
-        auto file_res = BinaryFile::from_path(filepath);
-        if (!file_res) {
-            std::cerr << file_res.error() << "\n";
-            std::terminate();
-        }
-        auto& file = *file_res;
-        Disassembler da{&file, &base};
-        da.disassemble();
-        std::ofstream asm_out(DCPL_PATH + dconstruct::sanitize_dc_string(id) + ".asm", std::ios::binary);
-        asm_out << da.disassembly_to_string(da.get_disassembled_entries());
-        const auto funcs = da.get_all_functions();
-        const auto func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly* f) { return f->get_id() == id; });
-        ASSERT_NE(func, funcs.end());
-        auto dc_func = dcompiler::decomp_function{**func, file, base, ControlFlowGraph::build(**func), DCPL_PATH + dconstruct::sanitize_dc_string(id) + ".svg"};
-        std::ofstream file_out(DCPL_PATH + dconstruct::sanitize_dc_string(id) + ".dcpl");
-        ast::ast_serialization_buffer out;
-        out.m_flags = stream_lang;
-        if (use_pascal) {
-            out.set_flag(ast::LANGUAGE_FLAGS::FUNCTION_NAMES_PASCAL);
-        }
-        out.append(dc_func.decompile(optimize ? dcompiler::OPTIMIZATION_KIND::AST : dcompiler::OPTIMIZATION_KIND::NONE));
-        file_out << out.str();
-        ASSERT_EQ(expected, out.str());
-    }
-
-    TEST(DECOMPILER, BasicLoadImmediate) {
-        compilation::scope env{};
-        std::vector<Instruction> istrs = {
+    TEST(DECOMPILER, ReturnLiteral) {
+        decomp_case test{};
+        test.m_instructions = {
             {Opcode::LoadU16Imm, 0, 1, 0},
             {Opcode::Return, 0, 0, 0}};
-        const auto& func = decompile_instructions_with_disassembly(std::move(istrs), "BasicLoadImmediate");
+        const decomp_result result = run_decompilation(std::move(test));
 
-        ASSERT_EQ(func.m_body.m_statements.size(), 1);
-
-        const auto& actual = *static_cast<const ast::return_stmt*>(func.m_body.m_statements.front().get());
-        const auto& rhs = actual.m_expr->get_type_unchecked(env);
-
-        ASSERT_FALSE(std::holds_alternative<std::monostate>(rhs));
-
-        const auto& type = rhs;
-
-        auto expected = ast::return_stmt(std::make_unique<ast::literal>(static_cast<u16>(1)));
-
-        ASSERT_EQ(actual, expected);
+        EXPECT_FALSE(result.m_error.has_value());
+        const std::string expected =
+            "u16 test-function() {\n"
+            "    return 1;\n"
+            "}";
+        EXPECT_EQ(expected, result.pseudo_c());
     }
 
-    TEST(DECOMPILER, BasicLoadImmediateString) {
-        dconstruct::compilation::scope env{};
-        const auto& func = decompile_instructions_with_disassembly(
-            {{Opcode::LoadU16Imm, 0, 1, 0},
-            {Opcode::Return, 0, 0, 0}},
-            "BasicLoadImmediateString"
-        );
-        ASSERT_EQ(func.m_body.m_statements.size(), 1);
-
-        const auto& actual = *static_cast<const ast::return_stmt*>(func.m_body.m_statements.front().get());
-        const auto& rhs = actual.m_expr->get_type_unchecked(env);
-
-        ASSERT_FALSE(std::holds_alternative<std::monostate>(rhs));
-
-        const auto& type = rhs;
-
-        ast::ast_serialization_buffer actual_buffer;
-        actual.pseudo_c(actual_buffer);
-        const std::string actual_str = actual_buffer.take();
-        const std::string expected_str = "return 1;";
-        ASSERT_EQ(expected_str, actual_str);
-    }
-
-    TEST(DECOMPILER, BasicLoadImmediatesString) {
-        std::vector<Instruction> istrs = {
-            {Opcode::LoadU16Imm, 0, 1, 0},
-            {Opcode::LoadU16Imm, 2, 5, 5},
-            {Opcode::Return, 0, 0, 0}};
-        const auto& func = decompile_instructions_with_disassembly(std::move(istrs), "BasicLoadImmediatesString");
-
-        const auto& actual = func.m_body.m_statements;
-        const std::string expected = "return 1;";
-        ast::ast_serialization_buffer buffer;
-        for (const auto& stmt : actual) {
-            stmt->pseudo_c(buffer);
-        }
-        EXPECT_EQ(expected, buffer.str());
-    }
-
-    TEST(DECOMPILER, BasicIdentifierAdd) {
-        const u16 dest = 2;
-        std::vector<Instruction> istrs = {
+    TEST(DECOMPILER, ReturnBinaryExpression) {
+        decomp_case test{};
+        test.m_instructions = {
             {Opcode::LoadU16Imm, 0, 1, 0},
             {Opcode::LoadU16Imm, 1, 5, 5},
-            {Opcode::IAdd, dest, 0, 1},
-            {Opcode::Return, dest, 0, 0}};
-        const auto& func = decompile_instructions_with_disassembly(std::move(istrs), "BasicIdentifierAdd");
+            {Opcode::IAdd, 2, 0, 1},
+            {Opcode::Return, 2, 0, 0}};
+        const decomp_result result = run_decompilation(std::move(test));
 
-        const auto& actual = static_cast<const ast::return_stmt&>(*func.m_body.m_statements.front());
-        const std::string expected = "return 1 + 1285;";
-        ast::ast_serialization_buffer buffer;
-        buffer.append(actual);
-        EXPECT_EQ(expected, buffer.str());
-    }
-
-    TEST(DECOMPILER, TwoAdds) {
-        const u16 dest = 2;
-        std::vector<Instruction> istrs = {
-            {Opcode::LoadU16Imm, 0, 1, 0},
-            {Opcode::LoadU16Imm, 1, 5, 5},
-            {Opcode::IAdd, dest, 0, 1},
-            {Opcode::IAdd, dest, 2, 2},
-            {Opcode::Return, dest, 0, 0}};
-        const auto& func = decompile_instructions_with_disassembly(std::move(istrs), "TwoAdds");
-
-        const auto& actual = func.m_body.m_statements.front();
-        const std::string expected = "return (1 + 1285) + (1 + 1285);";
-
-        ast::ast_serialization_buffer buffer;
-        buffer.append(*actual);
-        EXPECT_EQ(expected, buffer.str());
-    }
-
-    TEST(DECOMPILER, Call1) {
-        std::vector<Instruction> istrs = {
-            {Opcode::LookupPointer, 0, 0, 0},
-            {Opcode::LoadU16Imm, 49, 5, 0},
-            {Opcode::Call, 0, 0, 1},
-            {Opcode::Return, 0, 0, 0}};
-        std::vector<u64> table_entries;
-        table_entries.push_back(SID("ddict-key-count"));
-        std::vector<ast::full_type> symbol_table_types;
-        symbol_table_types.push_back(ast::make_function(ast::make_type_from_prim(ast::primitive_kind::I32), ast::function_type::DISTANCE::NEAR, {{"ddict", ast::make_type_from_prim(ast::primitive_kind::I32)}}));
-        SymbolTable table{location(table_entries.data()), std::move(symbol_table_types)};
-        const auto& func = decompile_instructions_with_disassembly(std::move(istrs), "Call1", std::move(table));
-
-        const auto& actual = func.m_body;
+        EXPECT_FALSE(result.m_error.has_value());
         const std::string expected =
-            "{\n"
-            "    u64? var_0 = ddict-key-count(5);\n"
-            "    return var_0;\n"
+            "u16 test-function() {\n"
+            "    return 1 + 1285;\n"
             "}";
-
-        ast::ast_serialization_buffer buffer;
-        buffer.append(actual);
-        EXPECT_EQ(expected, buffer.str());
+        EXPECT_EQ(expected, result.pseudo_c());
     }
 
-    TEST(DECOMPILER, FullFunc1) {
-        const std::string filepath = TEST_DIR + R"(\ss-wave-manager.bin)";
-        const std::string expected =
-            "u64? #7C28D25188889230(u64? arg_0) {\n"
-            "    u64? var_0 = #E16F9CC43A37FADA(arg_0);\n"
-            "    return var_0 * -1.00;\n"
-            "}";
-
-        const std::string actual = get_decompiled_function_from_file(filepath, "#7C28D25188889230");
-
-        ASSERT_EQ(expected, actual);
-    }
-
-    TEST(DECOMPILER, FullFunc2) {
-        const std::string filepath = TEST_DIR + R"(\ss-wave-manager.bin)";
-        const std::string expected =
-            "u64? #E16F9CC43A37FADA(u64? arg_0) {\n"
-            "    u64? var_0 = get-region-centroid(arg_0, 0);\n"
-            "    u64? var_1 = get-object-position(player);\n"
-            "    u64? var_2 = distance-between-points(var_0, var_1);\n"
-            "    return var_2;\n"
-            "}";
-
-        const std::string actual = get_decompiled_function_from_file(filepath, "#E16F9CC43A37FADA");
-
-        ASSERT_EQ(expected, actual);
-    }
-
-    TEST(DECOMPILER, ImmediatePostdominator1) {
-        const std::string filepath = TEST_DIR + R"(\ss-wave-manager.bin)";
-        auto file_res = BinaryFile::from_path(filepath);
-        if (!file_res) {
-            std::cerr << file_res.error() << "\n";
-            std::terminate();
-        }
-        auto& file = *file_res;
-        Disassembler da{&file, &base};
-        da.disassemble();
-        const std::string id = "#8A8D5C923D5DDB3B";
-        const auto funcs = da.get_all_functions();
-        const auto func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly* f) { return f->get_id() == id; });
-        ASSERT_NE(func, funcs.end());
-        const auto dc_func = dcompiler::decomp_function{**func, file, base, ControlFlowGraph::build(**func)};
-        for (const auto& node : dc_func.m_graph.m_nodes) {
-            ASSERT_EQ(node.m_ipdom, 0x3);
-        }
-    }
-
-    TEST(DECOMPILER, ArgumentType) {
-        std::vector<Instruction> istrs = {
+    TEST(DECOMPILER, RegisterArgumentTypes) {
+        decomp_case test{};
+        test.m_instructions = {
             {Opcode::Move, 0, 49, 0},
             {Opcode::LoadU16Imm, 1, 5, 0},
             {Opcode::IEqual, 2, 0, 1},
             {Opcode::Return, 2, 0, 0}};
-        const auto& func = decompile_instructions_with_disassembly(std::move(istrs), "DetermineArgumentType");
-        const auto& actual = func.to_pseudo_c_string();
+        const decomp_result result = run_decompilation(std::move(test));
 
+        EXPECT_FALSE(result.m_error.has_value());
         const std::string expected =
-            "bool DetermineArgumentType(u16 arg_0) {\n"
+            "bool test-function(u16 arg_0) {\n"
             "    return arg_0 == 5;\n"
             "}";
-
-        EXPECT_EQ(expected, actual);
+        EXPECT_EQ(expected, result.pseudo_c());
     }
 
-    TEST(DECOMPILER, RegistersToEmit1) {
-        const std::string filepath = TEST_DIR + R"(\ss-wave-manager.bin)";
-        auto file_res = BinaryFile::from_path(filepath);
-        if (!file_res) {
-            std::cerr << file_res.error() << "\n";
-            std::terminate();
-        }
-        auto& file = *file_res;
-        Disassembler da{&file, &base};
-        da.disassemble();
-        const std::string id = "#8A8D5C923D5DDB3B";
-        const auto funcs = da.get_all_functions();
-        const auto func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly* f) { return f->get_id() == id; });
-        ASSERT_NE(func, funcs.end());
-        const auto dc_func = dcompiler::decomp_function{**func, file, base, ControlFlowGraph::build(**func)};
-        const reg_set registers_to_emit = dc_func.m_graph.get_branch_phi_registers(dc_func.m_graph[0]);
-        ASSERT_TRUE(registers_to_emit.test(0));
-    }
-
-    TEST(DECOMPILER, If1) {
-        const std::string filepath = TEST_DIR + R"(\ss-wave-manager.bin)";
-        const std::string id = "#8A8D5C923D5DDB3B";
-        const std::string expected =
-            "i32 #8A8D5C923D5DDB3B() {\n"
-            "    i32 var_0;\n"
-            "    if (get-int32(#5389CC70A44E7358, self) > 0) {\n"
-            "        var_0 = get-int32(#5389CC70A44E7358, self);\n"
-            "    } else {\n"
-            "        var_0 = get-int32(#CEF93DF859F605EA, self);\n"
+    TEST(DECOMPILER, KnownFunctionTypeSetsParameterAndReturnTypes) {
+        decomp_case test{};
+        test.m_instructions = {
+            {Opcode::Move, 0, 49, 0},
+            {Opcode::LoadU16Imm, 1, 5, 0},
+            {Opcode::IEqual, 2, 0, 1},
+            {Opcode::Return, 2, 0, 0}};
+        test.m_typeMap =
+            "typemap {\n"
+            "    i64 #test-function(i32 x) {\n"
             "    }\n"
-            "    return var_0;\n"
             "}";
-        decomp_test(filepath, id, expected, dconstruct::ast::LANGUAGE_FLAGS::C, true);
-    }
+        const decomp_result result = run_decompilation(std::move(test));
 
-    TEST(DECOMPILER, If2) {
-        const std::string filepath = TEST_DIR + R"(\ss-wave-manager.bin)";
-        const std::string id = "#C3B48D02AC9ECB46";
+        EXPECT_FALSE(result.m_error.has_value());
         const std::string expected =
-            "bool DetermineArgumentType(i64 arg_0) {\n"
+            "i64 test-function(i32 arg_0) {\n"
             "    return arg_0 == 5;\n"
             "}";
-        decomp_test(filepath, id, expected, dconstruct::ast::LANGUAGE_FLAGS::C);
+        EXPECT_EQ(expected, result.pseudo_c());
+
+        ASSERT_EQ(result.m_function.m_parameters.size(), 1);
+        ASSERT_TRUE(std::holds_alternative<ast::primitive_type>(result.m_function.m_parameters[0].m_type));
+        EXPECT_EQ(std::get<ast::primitive_type>(result.m_function.m_parameters[0].m_type).m_type, ast::primitive_kind::I32);
+
+        ASSERT_NE(result.m_function.m_type.m_return, nullptr);
+        ASSERT_TRUE(std::holds_alternative<ast::primitive_type>(*result.m_function.m_type.m_return));
+        EXPECT_EQ(std::get<ast::primitive_type>(*result.m_function.m_type.m_return).m_type, ast::primitive_kind::I64);
     }
 
-    TEST(DECOMPILER, If3) {
-        const std::string filepath = TEST_DIR + R"(\ss-wave-manager.bin)";
-        auto file_res = BinaryFile::from_path(filepath);
-        if (!file_res) {
-            std::cerr << file_res.error() << "\n";
-            std::terminate();
-        }
-        auto& file = *file_res;
-        Disassembler da{&file, &base};
-        da.disassemble();
-        const std::string id = "#BC06CBDEAE8344C7";
-        const auto funcs = da.get_all_functions();
-        const auto func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly* f) { return f->get_id() == id; });
-        ASSERT_NE(func, funcs.end());
-        const auto dc_func = dcompiler::decomp_function{**func, file, base, ControlFlowGraph::build(**func)}.decompile();
-        const std::string expected =
-            "string #BC06CBDEAE8344C7(u16 arg_0) {\n"
-            "    string var_0;\n"
-            "    if (arg_0 == 0) {\n"
-            "        var_0 = \"none\";\n"
-            "    } else if (arg_0 == 1) {\n"
-            "        var_0 = \"potential\";\n"
-            "    } else if (arg_0 == 2) {\n"
-            "        var_0 = \"certain\";\n"
-            "    } else if (arg_0 == 3) {\n"
-            "        var_0 = \"missing\";\n"
-            "    } else if (arg_0 == 4) {\n"
-            "        var_0 = \"lost\";\n"
-            "    } else {\n"
-            "        var_0 = \"invalid\";\n"
+    TEST(DECOMPILER, KnownFunctionTypeSetsArgumentIdentifierType) {
+        decomp_case test{};
+        test.m_instructions = {
+            {Opcode::Move, 0, 49, 0},
+            {Opcode::Return, 0, 0, 0}};
+        test.m_typeMap =
+            "typemap {\n"
+            "    i32 #test-function(i32 x) {\n"
             "    }\n"
-            "    return var_0;\n"
             "}";
-        std::ofstream out(DCPL_PATH + id + ".dcpl");
-        out << dc_func.to_pseudo_c_string();
-        ASSERT_EQ(dc_func.to_pseudo_c_string(), expected);
+        const decomp_result result = run_decompilation(std::move(test));
+
+        EXPECT_FALSE(result.m_error.has_value());
+        ASSERT_EQ(result.m_function.m_body.m_statements.size(), 1);
+        const auto& return_stmt = static_cast<const ast::return_stmt&>(*result.m_function.m_body.m_statements.front());
+        const std::optional<ast::full_type> identifier_type = return_stmt.m_expr->get_type();
+        ASSERT_TRUE(identifier_type.has_value());
+        ASSERT_TRUE(std::holds_alternative<ast::primitive_type>(*identifier_type));
+        EXPECT_EQ(std::get<ast::primitive_type>(*identifier_type).m_type, ast::primitive_kind::I32);
     }
 
-    TEST(DECOMPILER, Loop1) {
-        const std::string filepath = TEST_DIR + R"(\ss-wave-manager.bin)";
-        const std::string id = "#14C6FC79122F4A87";
+    TEST(DECOMPILER, KnownFunctionTypeUnknownArgumentFallsBackToRegisterArg) {
+        decomp_case test{};
+        test.m_instructions = {
+            {Opcode::Move, 0, 49, 0},
+            {Opcode::LoadU16Imm, 1, 5, 0},
+            {Opcode::IEqual, 2, 0, 1},
+            {Opcode::Return, 2, 0, 0}};
+        ast::function_type known_type{};
+        known_type.m_arguments.emplace_back("x", std::make_shared<ast::full_type>());
+        test.m_knownFunctionType = std::move(known_type);
+        const decomp_result result = run_decompilation(std::move(test));
+
+        EXPECT_FALSE(result.m_error.has_value());
         const std::string expected =
-            "function DetermineArgumentType(i64 arg_0) {\n"
+            "bool test-function(u16 arg_0) {\n"
             "    return arg_0 == 5;\n"
             "}";
-        decomp_test(filepath, id, expected, dconstruct::ast::LANGUAGE_FLAGS::C);
+        EXPECT_EQ(expected, result.pseudo_c());
     }
 
-    TEST(DECOMPILER, ShortCircuit1) {
-        const std::string filepath = TEST_DIR + R"(\ss-wave-manager.bin)";
-        const std::string id = "#B97D31F760DB0E8E";
+    TEST(DECOMPILER, KnownFunctionTypeArgumentCountMismatchSetsError) {
+        decomp_case test{};
+        test.m_instructions = {
+            {Opcode::Move, 0, 49, 0},
+            {Opcode::LoadU16Imm, 1, 5, 0},
+            {Opcode::IEqual, 2, 0, 1},
+            {Opcode::Return, 2, 0, 0}};
+        test.m_typeMap =
+            "typemap {\n"
+            "    i64 #test-function(i32 x, i32 y) {\n"
+            "    }\n"
+            "}";
+        const decomp_result result = run_decompilation(std::move(test));
+
+        ASSERT_TRUE(result.m_error.has_value());
+        EXPECT_NE(result.m_error->find("2 argument(s)"), std::string::npos);
         const std::string expected =
-            "function DetermineArgumentType(i64 arg_0) {\n"
+            "bool test-function(u16 arg_0) {\n"
             "    return arg_0 == 5;\n"
             "}";
-        decomp_test(filepath, id, expected, dconstruct::ast::LANGUAGE_FLAGS::C);
+        EXPECT_EQ(expected, result.pseudo_c());
     }
 
-    TEST(DECOMPILER, ShortCircuit2) {
-        const std::string filepath = TEST_DIR + R"(\ss-wave-manager.bin)";
-        auto file_res = BinaryFile::from_path(filepath);
-        const std::string id = "#608356039B1FD9FD";
-        const std::string expected = "function DetermineArgumentType(i64 arg_0) {\n"
-                                     "    return arg_0 == 5;\n"
-                                     "}";
-        decomp_test(filepath, id, expected, dconstruct::ast::LANGUAGE_FLAGS::C);
+    TEST(DECOMPILER, KnownReturnTypeIsNotOverwrittenByReturnStatement) {
+        decomp_case test{};
+        test.m_instructions = {
+            {Opcode::LoadU16Imm, 0, 1, 0},
+            {Opcode::Return, 0, 0, 0}};
+        ast::function_type known_type{};
+        known_type.m_return = std::make_shared<ast::full_type>(ast::make_type_from_prim(ast::primitive_kind::F32));
+        test.m_knownFunctionType = std::move(known_type);
+        const decomp_result result = run_decompilation(std::move(test));
+
+        EXPECT_FALSE(result.m_error.has_value());
+        ASSERT_NE(result.m_function.m_type.m_return, nullptr);
+        ASSERT_TRUE(std::holds_alternative<ast::primitive_type>(*result.m_function.m_type.m_return));
+        EXPECT_EQ(std::get<ast::primitive_type>(*result.m_function.m_type.m_return).m_type, ast::primitive_kind::F32);
     }
 
-    TEST(DECOMPILER, Loop2) {
-        const std::string filepath = TEST_DIR + R"(\ss-wave-manager.bin)";
-        const std::string id = "#E5FCFC6B95B3F669";
-        const std::string expected =
-            "function DetermineArgumentType(i64 arg_0) {\n"
-            "    return arg_0 == 5;\n"
-            "}";
-        decomp_test(filepath, id, expected, dconstruct::ast::LANGUAGE_FLAGS::C);
+    TEST(DECOMPILER, KnownFunctionTypeIsNotMutatedByDecompilation) {
+        decomp_case test{};
+        test.m_instructions = {
+            {Opcode::LoadU16Imm, 0, 1, 0},
+            {Opcode::Return, 0, 0, 0}};
+        ast::function_type known_type{};
+        test.m_knownFunctionType = known_type;
+        const decomp_result result = run_decompilation(test);
+
+        EXPECT_FALSE(result.m_error.has_value());
+        ASSERT_NE(result.m_function.m_type.m_return, nullptr);
+        EXPECT_FALSE(is_unknown(*result.m_function.m_type.m_return));
+        ASSERT_NE(test.m_knownFunctionType->m_return, nullptr);
+        EXPECT_TRUE(is_unknown(*test.m_knownFunctionType->m_return));
     }
 
-    TEST(DECOMPILER, Loop3) {
-        const std::string filepath = TEST_DIR + R"(\ss-wave-manager.bin)";
-        const std::string id = "#A548628CB635DC72";
-        const std::string expected =
-            "function DetermineArgumentType(i64 arg_0) {\n"
-            "    return arg_0 == 5;\n"
-            "}";
-        decomp_test(filepath, id, expected, dconstruct::ast::LANGUAGE_FLAGS::C);
-    }
-
-    TEST(DECOMPILER, If5) {
-        const std::string filepath = TEST_DIR + R"(\ss-wave-manager.bin)";
-        const std::string id = "#43DF4E5E85BFD47C";
-        const std::string expected =
-            "function DetermineArgumentType(i64 arg_0) {\n"
-            "    return arg_0 == 5;\n"
-            "}";
-        decomp_test(filepath, id, expected, dconstruct::ast::LANGUAGE_FLAGS::C);
-    }
-
-    TEST(DECOMPILER, If6) {
-        const std::string filepath = TEST_DIR + R"(\ss-wave-manager.bin)";
-        const std::string id = "#14C6FC79122F4A87";
-        const std::string expected = "function DetermineArgumentType(i64 arg_0) {\n"
-                                     "    return arg_0 == 5;\n"
-                                     "}";
-        decomp_test(filepath, id, expected, dconstruct::ast::LANGUAGE_FLAGS::C);
-    }
-
-    TEST(DECOMPILER, NodeRegisters0) {
-        const std::string filepath = TEST_DIR + R"(\ss-wave-manager.bin)";
-        auto file_res = BinaryFile::from_path(filepath);
-        if (!file_res) {
-            std::cerr << file_res.error() << "\n";
-            std::terminate();
-        }
-        auto& file = *file_res;
-        Disassembler da{&file, &base};
-        da.disassemble();
-        const std::string id = "select-spawn-regions@main@start@0";
-        const auto funcs = da.get_all_functions();
-        const auto func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly* f) { return f->get_id() == id; });
-        ASSERT_NE(func, funcs.end());
-        const auto dc_func = dcompiler::decomp_function{**func, file, base, ControlFlowGraph::build(**func)};
-        const auto& node0 = dc_func.m_graph.m_nodes[0];
-        ASSERT_EQ(node0.m_regs.m_readFirst, 0b0);
-        ASSERT_EQ(node0.m_regs.m_written, 0b1);
-        const auto& node1 = dc_func.m_graph.m_nodes[1];
-        ASSERT_EQ(node1.m_regs.m_readFirst, 0b0);
-        ASSERT_EQ(node1.m_regs.m_written, 0b111);
-        const auto& node2 = dc_func.m_graph.m_nodes[2];
-        ASSERT_EQ(node2.m_regs.m_readFirst, 0b0);
-        ASSERT_EQ(node2.m_regs.m_written, 0b1);
-        const auto& node3 = dc_func.m_graph.m_nodes[3];
-        ASSERT_EQ(node3.m_regs.m_readFirst, 0b0);
-        ASSERT_EQ(node3.m_regs.m_written, 0b0);
-    }
-
-    TEST(DECOMPILER, SpecialFunc1) {
-        const std::string filepath = TEST_DIR + R"(\ss-boss-health-tts.bin)";
-        const std::string id = "wait-for-tts@main@start@0";
-        const std::string expected = "?";
-        decomp_test(filepath, id, expected, dconstruct::ast::LANGUAGE_FLAGS::C);
-    }
-
-    TEST(DECOMPILER, AllFuncs) {
-        const std::string filepath = R"(C:\Program Files (x86)\Steam\steamapps\common\The Last of Us Part II\build\pc\main\bin_unpacked\dc1\ss\ss-ground-animal-flee.bin)";
-        auto file_res = BinaryFile::from_path(filepath);
-        if (!file_res) {
-            std::cerr << file_res.error() << "\n";
-            std::terminate();
-        }
-        auto& file = *file_res;
-        Disassembler da{&file, &base};
-        da.disassemble();
-        std::ofstream asm_out(R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\fixtures\dcpl\\blbl.asm)", std::ios::binary);
-        asm_out << da.disassembly_to_string(da.get_disassembled_entries());
-        const auto& funcs = da.get_named_functions();
-        std::set<std::string> emitted{};
-        std::ofstream out(R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\fixtures\dcpl\\asdad.dcpl)");
-        ast::ast_serialization_buffer buffer;
-        buffer.m_flags = dconstruct::ast::LANGUAGE_FLAGS::C;
-        const auto start = std::chrono::high_resolution_clock::now();
-        for (const auto* func : funcs) {
-            if (emitted.contains(func->get_id())) {
-                continue;
-            }
-            emitted.insert(func->get_id());
-            try {
-                std::cout << func->get_id() << "\n";
-                const auto dc_func = dcompiler::decomp_function{*func, file, base, ControlFlowGraph::build(*func)}.decompile(dcompiler::OPTIMIZATION_KIND::AST);
-                buffer.append(dc_func);
-            } catch (const std::exception& e) {
-                std::cout << e.what();
-            }
-        }
-        out << buffer.str();
-        const auto stop = std::chrono::high_resolution_clock::now();
-        const auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start).count();
-        std::cout << "took " << duration << "ms\n";
-    }
-
-    TEST(DECOMPILER, FullGame) {
-        const std::filesystem::path base_path = DCPL_PATH;
-        for (const auto& entry : std::filesystem::recursive_directory_iterator(R"(C:\Program Files (x86)\Steam\steamapps\common\The Last of Us Part II\build\pc\main\bin_unpacked\dc1)")) {
-            if (entry.path().extension() != ".bin") {
-                continue;
-            }
-            std::filesystem::path new_path = base_path / entry.path().filename().replace_extension(".dcpl");
-            std::filesystem::path disassembly_path = base_path / entry.path().filename().replace_extension(".asm");
-            std::set<std::string> emitted{};
-
-            auto file_res = BinaryFile::from_path(entry.path());
-            if (!file_res) {
-                std::cerr << file_res.error() << "\n";
-                std::terminate();
-            }
-            auto& file = *file_res;
-            std::cout << file.m_path << "\n";
-            Disassembler da{&file, &base};
-            da.disassemble();
-            const auto& funcs = da.get_named_functions();
-            for (const auto* func : funcs) {
-                if (emitted.contains(func->get_id())) {
-                    continue;
-                }
-                emitted.insert(func->get_id());
-                try {
-                    // std::cout << func->get_id() << "\n";
-                    const auto dc_func = dcompiler::decomp_function{*func, file, base, ControlFlowGraph::build(*func)}.decompile(dcompiler::OPTIMIZATION_KIND::NONE);
-                    std::ofstream out(new_path, std::ios::app);
-                    out << dc_func.to_pseudo_c_string() << "\n\n";
-                } catch (const std::exception& e) {
-                    std::cout << e.what() << '\n';
-                }
-            }
-        }
-    }
-
-    TEST(DECOMPILER_RACKET, Racket0) {
-        const std::string filepath = TEST_DIR + R"(\behaviors.bin)";
-        const std::string id = "anonymous@25880";
-        const std::string expected =
-            "(or\n"
-            "    (melee-fact-get-bool arg_2 disable-grabs)\n"
-            "    (npc-struggle-cooldown-func arg_2 arg_3 10.00 20.00 1)\n"
-            "    (character-in-struggle? arg_3 16)\n"
-            "    (< (melee-fact-get-time-since arg_3 last-time-in-prone-struggle) 5.00)\n"
-            ")";
-        decomp_test(filepath, id, expected);
-    }
-
-    TEST(DECOMPILER_RACKET, Racket1) {
-        const std::string filepath = TEST_DIR + R"(\behaviors.bin)";
-        const std::string id = "anonymous@25038";
-        const std::string expected =
-            "(and\n"
-            "    (or\n"
-            "        (shambler-standing-explode-line-of-motion-check arg_2 arg_3)\n"
-            "        (and\n"
-            "            (is-rogue-mode?)\n"
-            "            (is-player? arg_3)\n"
-            "            (or\n"
-            "                (player-is-prone?)\n"
-            "                (player-is-supine?)\n"
-            "            )\n"
-            "            (player-in-prone-hiding-region?)\n"
-            "        )\n"
-            "    )\n"
-            "    (> (melee-fact-get-time-since player shambler-explode) 5.00)\n"
-            "    (> (melee-fact-get-time-since arg_2 time-since-in-finisher-fail) 2.00)\n"
-            ")";
-        decomp_test(filepath, id, expected);
-    }
-
-    TEST(DECOMPILER_RACKET, Racket2) {
-        const std::string filepath = TEST_DIR + R"(\behaviors.bin)";
-        const std::string id = "anonymous@25b88";
-        const std::string expected =
-            "(and\n"
-            "    (or\n"
-            "        (shambler-standing-explode-line-of-motion-check arg_2 arg_3)\n"
-            "        (and\n"
-            "            (is-rogue-mode?)\n"
-            "            (is-player? arg_3)\n"
-            "            (or\n"
-            "                (player-is-prone?)\n"
-            "                (player-is-supine?)\n"
-            "            )\n"
-            "            (player-in-prone-hiding-region?)\n"
-            "        )\n"
-            "        (and\n"
-            "            (is-rogue-mode?)\n"
-            "            (is-player? arg_3)\n"
-            "            (not (npc-can-path-to-object? arg_2 arg_3))\n"
-            "            (<= (distance-between-points (npc-get-nav-destination arg_2) (get-object-position arg_3)) 4.00)\n"
-            "        )\n"
-            "    )\n"
-            "    (> (melee-fact-get-time-since player shambler-explode) 5.00)\n"
-            "    (> (melee-fact-get-time-since arg_2 time-since-in-finisher-fail) 1.50)\n"
-            ")";
-        decomp_test(filepath, id, expected);
-    }
-
-    TEST(DECOMPILER_RACKET, Racket3) {
-        const std::string filepath = TEST_DIR + R"(\behaviors.bin)";
-        const std::string id = "anonymous@267d8";
-        const std::string expected =
-            "(and\n"
-            "    (not (character-in-struggle? arg_3 16))\n"
-            "    (> (melee-fact-get-time-since arg_3 last-time-in-prone-struggle) 5.00)\n"
-            "    (not (and\n"
-            "        (character-in-melee-attack-as-attacker? arg_3)\n"
-            "        (character-in-melee-attack-of-other-character? arg_2 arg_3)\n"
-            "        (get-current-melee-attack arg_3)\n"
-            "        (== (* u64*-> (+ (get-current-melee-attack arg_3) 16)) melee-player-swing-free)\n"
-            "        (not (dog-in-melee-with-character? arg_3))\n"
-            "    ))\n"
-            ")";
-        decomp_test(filepath, id, expected);
-    }
-
-    TEST(DECOMPILER_RACKET, Racket4) {
-        const std::string filepath = TEST_DIR + R"(\behaviors.bin)";
-        const std::string id = "anonymous@25930";
-        const std::string expected =
-            "(and\n"
-            "    (not (character-in-struggle? arg_3 16))\n"
-            "    (> (melee-fact-get-time-since arg_3 last-time-in-prone-struggle) 5.00)\n"
-            "    (not (and\n"
-            "        (character-in-melee-attack-as-attacker? arg_3)\n"
-            "        (character-in-melee-attack-of-other-character? arg_2 arg_3)\n"
-            "        (get-current-melee-attack arg_3)\n"
-            "        (== (* u64*-> (+ (get-current-melee-attack arg_3) 16)) melee-player-swing-free)\n"
-            "        (not (dog-in-melee-with-character? arg_3))\n"
-            "    ))\n"
-            ")";
-        decomp_test(filepath, id, expected);
-    }
-
-    TEST(DECOMPILER, Var1) {
-        const std::string filepath = TEST_DIR + R"(\ss-wave-manager.bin)";
-        const std::string id = "#8A8D5C923D5DDB3B";
-        std::string expected =
-            "i32 #8A8D5C923D5DDB3B() {\n"
-            "    i32 var_0 = get-int32(#5389CC70A44E7358, self);\n"
-            "    i32 var_1;\n"
-            "    if (var_0 > 0) {\n"
-            "        i32 var_2 = get-int32(#5389CC70A44E7358, self);\n"
-            "        var_1 = var_2;\n"
-            "    } else {\n"
-            "        i32 var_3 = get-int32(#CEF93DF859F605EA, self);\n"
-            "        var_1 = var_3;\n"
-            "    }\n"
-            "    return var_1;\n"
-            "}";
-        decomp_test(filepath, id, expected, dconstruct::ast::LANGUAGE_FLAGS::C);
-    }
-
-    TEST(DECOMPILER, Var2) {
-        const std::string filepath = TEST_DIR + R"(\ss-wave-manager.bin)";
-        const std::string id = "select-wave-composition@main@start@0";
-        std::string expected =
-            "void select-wave-composition@main@start@0() {\n"
-            "    u64? var_0 = is-final-build?();\n"
-            "    if (!var_0) {\n"
-            "        u64? var_1 = #5445173390656D6D(\"DEB - WM: --SELECT WAVE COMPOSITION--\")\n"
-            "        display(var_1, 19);\n"
+    TEST(DECOMPILER, VarMapAliasAndType) {
+        decomp_case test{};
+        test.m_instructions = {
+            {Opcode::LookupPointer, 0, 0, 0},
+            {Opcode::LoadU16Imm, 49, 5, 0},
+            {Opcode::Call, 0, 0, 1},
+            {Opcode::Return, 0, 0, 0}};
+        test.m_symbolTable = {SID("ddict-key-count")};
+        test.m_typeMap =
+            "typemap {\n"
+            "    #test-function {\n"
+            "        0 i32 -> key_count;\n"
             "    }\n"
             "}";
-        decomp_test(filepath, id, expected, dconstruct::ast::LANGUAGE_FLAGS::C);
-    }
+        const decomp_result result = run_decompilation(std::move(test));
 
-    TEST(DECOMPILER, RacketSqrt) {
-        const std::string filepath = TEST_DIR + R"(\user-script-funcs-impl.bin)";
-        const std::string id = "sqrt-sign";
-        const std::string expected = "(sqrt-sign ?)";
-        decomp_test(filepath, id, expected, ast::LANGUAGE_FLAGS::RACKET, true);
-    }
-
-    TEST(DECOMPILER, Optimization1) {
-        const std::string filepath = TEST_DIR + R"(\ss-wave-manager.bin)";
-        const std::string id = "#14C6FC79122F4A87";
-        const std::string expected = "";
-        decomp_test(filepath, id, expected, ast::LANGUAGE_FLAGS::C, true);
-    }
-
-    TEST(DECOMPILER, Optimization2) {
-        const std::string filepath = TEST_DIR + R"(\animal-behavior.bin)";
-        const std::string id = "large-bird-panic-get-fly-anim-id";
-        const std::string expected = "";
-        decomp_test(filepath, id, expected, ast::LANGUAGE_FLAGS::C, true);
-    }
-
-    TEST(DECOMPILER, Optimization3) {
-        const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/player-upgrade-script-funcs-impl.bin)";
-        const std::string id = "can-purchase-any-upgrades-in-branch-points?";
-        const std::string expected = "";
-        decomp_test(filepath, id, expected, ast::LANGUAGE_FLAGS::C, true);
-    }
-
-    TEST(DECOMPILER, Optimization4) {
-        const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/melee-script-funcs-impl.bin)";
-        const std::string id = "npc-ratking?";
+        EXPECT_FALSE(result.m_error.has_value());
         const std::string expected =
-            "u64? npc-ratking?(bool arg_0) {\n"
-            "    return !(arg_0 == 0) && is-npc?(arg_0) && npc-get-archetype(arg_0) && *(u64*)(npc-get-archetype(arg_0) + 392) == *infected-ratking-params*;\n"
+            "i32 test-function() {\n"
+            "    i32 key_count = ddict-key-count(5);\n"
+            "    return key_count;\n"
             "}";
-        decomp_test(filepath, id, expected, ast::LANGUAGE_FLAGS::C, true);
-    }
-
-    TEST(DECOMPILER, Optimization5) {
-        const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/script-user-funcs-impl.bin)";
-        const std::string id = "wait-until-anim-fully-faded-in";
-        const std::string expected =
-            "u64? wait-until-anim-fully-faded-in(u64? arg_0, u64? arg_1) {\n"
-            "    u64? var_1;\n"
-            "    while (get-animation-fade(arg_0, arg_1) < 1.00) {\n"
-            "        wait-one-frame();\n"
-            "    }\n"
-            "    return var_1;\n"
-            "}";
-        decomp_test(filepath, id, expected, ast::LANGUAGE_FLAGS::C, true);
-    }
-
-    TEST(DECOMPILER, Optimization6) {
-        const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/ss/ss-transition-line-chooser.bin)";
-        const std::string id = "play-transition-from-bucket";
-        const std::string expected =
-            "u64? wait-until-anim-fully-faded-in(u64? arg_0, u64? arg_1) {\n"
-            "    u64? var_1;\n"
-            "    while (get-animation-fade(arg_0, arg_1) < 1.00) {\n"
-            "        wait-one-frame();\n"
-            "    }\n"
-            "    return var_1;\n"
-            "}";
-        decomp_test(filepath, id, expected, ast::LANGUAGE_FLAGS::C, true);
-    }
-
-    TEST(DECOMPILER, Optimization7) {
-        const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/script-user-funcs-impl.bin)";
-        const std::string id = "bmm-deactivate-all";
-        const std::string expected =
-            "u64? bmm-deactivate-all(u64? arg_0) {\n"
-            "    foreach (u64? var_1 : arg_0) {\n"
-            "        u16 var_2;\n"
-            "        if (var_1 && *(u16*)(var_1 + 12) == 7) {\n"
-            "            var_2 = *(u64*)var_1;\n"
-            "        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {\n"
-            "            var_2 = *(u64*)var_1;\n"
-            "        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {\n"
-            "            var_2 = *(u64*)var_1;\n"
-            "        } else {\n"
-            "            var_2 = 0;\n"
-            "        }\n"
-            "        net-send-event-all(deactivate, var_2);\n"
-            "    }\n"
-            "}";
-        decomp_test(filepath, id, expected, ast::LANGUAGE_FLAGS::C, true);
-    }
-
-    TEST(DECOMPILER, CallArguments) {
-        const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/ss/ss-locator-action-pack.bin)";
-        const std::string id = "move-to-entry@main@start@3";
-        const std::string expected =
-            "void move-to-entry@main@start@3() {\n"
-            "    npc-look-at-point(\n"
-            "        get-symbol(npc, self),\n"
-            "        offset-point(\n"
-            "            get-spawner-position(get-self-id(), 1),\n"
-            "            vector-scale(\n"
-            "                get-locator-distance-y(\n"
-            "                    get-spawner-locator(get-self-id(), 1),\n"
-            "                    get-attach-point-locator(get-symbol(npc, self), targHead)\n"
-            "                ),\n"
-            "                get-world-y-vec()\n"
-            "            )\n"
-            "        ),\n"
-            "        -1.00\n"
-            "    );\n"
-            "}";
-        decomp_test(filepath, id, expected, ast::LANGUAGE_FLAGS::C, true);
-    }
-
-    TEST(DECOMPILER, Foreach2) {
-        const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/nd-script-funcs.bin)";
-        const std::string id = "set-bit";
-        const std::string expected = "";
-        decomp_test(filepath, id, expected, ast::LANGUAGE_FLAGS::C, true);
-    }
-
-    TEST(DECOMPILER, Match1) {
-        const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/ss-rogue/rogue-misc-defines.bin)";
-        const std::string id = "#C57EE0A64537AE8F";
-        const std::string expected =
-            "string #C57EE0A64537AE8F(u16 arg_0) {\n"
-            "    return match (arg_0) {\n"
-            "        0 -> \"Militia\"\n"
-            "        1 -> \"Scars\"\n"
-            "        2 -> \"Rattlers\"\n"
-            "        3 -> \"Infected\"\n"
-            "        4 -> \"Max Num Factions\"\n"
-            "        else -> \"Invalid\"\n"
-            "    };\n"
-            "}";
-        decomp_test(filepath, id, expected, ast::LANGUAGE_FLAGS::C, true);
-    }
-
-    TEST(DECOMPILER, Match4) {
-        const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/ss-rogue/rogue-misc-defines.bin)";
-        const std::string id = "#77C65B88D2083D05";
-        const std::string expected =
-            "u64?* #77C65B88D2083D05(u16 arg_0) {\n"
-            "    return match (arg_0) {\n"
-            "        0 -> MENU_ROGUE_FACTION_MILITIA\n"
-            "        1 -> MENU_ROGUE_FACTION_SCARS\n"
-            "        2 -> MENU_ROGUE_FACTION_RATTLERS\n"
-            "        3 -> MENU_ROGUE_FACTION_INFECTED\n"
-            "        else -> *invalid-symbol*\n"
-            "    };\n"
-            "}";
-        decomp_test(filepath, id, expected, ast::LANGUAGE_FLAGS::C, true);
-    }
-
-    TEST(DECOMPILER, Optimization8) {
-        const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/animal-behavior.bin)";
-        const std::string id = "get-landing-anim-id";
-        const std::string expected =
-            "u64?* #77C65B88D2083D05(u16 arg_0) {\n"
-            "    return match (arg_0) {\n"
-            "        0 -> MENU_ROGUE_FACTION_MILITIA\n"
-            "        1 -> MENU_ROGUE_FACTION_SCARS\n"
-            "        2 -> MENU_ROGUE_FACTION_RATTLERS\n"
-            "        3 -> MENU_ROGUE_FACTION_INFECTED\n"
-            "        else -> *invalid-symbol*\n"
-            "    };\n"
-            "}";
-        decomp_test(filepath, id, expected, ast::LANGUAGE_FLAGS::C, false);
-    }
-
-    TEST(DECOMPILER, NewFileFormat1) {
-        const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/ss/ss-animal-flee-simple-loop.bin)";
-        auto file_res = BinaryFile::from_path(filepath);
-        if (!file_res) {
-            std::cerr << file_res.error() << "\n";
-            std::terminate();
-        }
-        auto& file = *file_res;
-        Disassembler da{&file, &base};
-        da.disassemble();
-        std::ofstream asm_out(DCPL_PATH + "animal_behavior.asm", std::ios::binary);
-        asm_out << da.disassembly_to_string(da.get_disassembled_entries());
-        const auto funcs = da.get_all_functions();
-        std::vector<ast::function_definition> decompiled_funcs;
-        for (const auto* func : funcs) {
-            decompiled_funcs.push_back(dcompiler::decomp_function{*func, file, base, ControlFlowGraph::build(*func), DCPL_PATH + "animal_behavior.svg"}.decompile());
-        }
-        dcompiler::state_script_functions full_file_decomp(decompiled_funcs);
-
-        std::ofstream file_out(DCPL_PATH + dconstruct::sanitize_dc_string("animal_behavior") + ".dcpl");
-        ast::ast_serialization_buffer buffer;
-        full_file_decomp.to_string(buffer);
-        file_out << buffer.str();
-    }
-
-    TEST(DECOMPILER, Optimization10) {
-        const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/anim-gas-mask-impl.bin)";
-        const std::string id = "internal-put-on-gas-mask";
-        const std::string expected = "";
-        decomp_test(filepath, id, expected, ast::LANGUAGE_FLAGS::C, true);
-    }
-
-    TEST(DECOMPILER, Optimization11) {
-        const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/animal-behavior.bin)";
-        const std::string id = "get-landing-anim-id";
-        const std::string expected = "";
-        decomp_test(filepath, id, expected, ast::LANGUAGE_FLAGS::C, true);
-    }
-
-    TEST(DECOMPILER, Optimization12) {
-        const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/ss-rogue/ss-survival-manager.bin)";
-        const std::string id = "survival-setup-level@main@start@36";
-        const std::string expected = "";
-        decomp_test(filepath, id, expected, ast::LANGUAGE_FLAGS::C, true);
-    }
-
-    TEST(DECOMPILER, Optimization13) {
-        const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/ss-abby-fights-militia/ss-afm-horse-chase-combat.bin)";
-        const std::string id = "start-chase@militia-1@start@6";
-        const std::string expected = "";
-        decomp_test(filepath, id, expected, ast::LANGUAGE_FLAGS::C, true);
-    }
-
-    TEST(DECOMPILER, Optimization14) {
-        const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/melee-script-funcs-impl.bin)";
-        const std::string id = "npc-contextual-parry-cooldown";
-        const std::string expected = "";
-        decomp_test(filepath, id, expected, ast::LANGUAGE_FLAGS::C, false);
-    }
-
-    TEST(DECOMPILER, Optimization15) {
-        const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/nd-script-funcs.bin)";
-        const std::string id = "darray-extend";
-        const std::string expected =
-            "u64? darray-extend(u64? arg_0, u64? arg_1) {\n"
-            "    foreach (u64? element : arg_1) {\n"
-            "        darray-append(arg_0, element, 0);\n"
-            "    }\n"
-            "}";
-        decomp_test(filepath, id, expected, ast::LANGUAGE_FLAGS::C, true);
-    }
-
-    TEST(DECOMPILER, Optimization16) {
-        const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1\ss-test\ss-test-cwohlwend\ss-npc-begs-for-life-tester.bin)";
-        const std::string id = "main@begs-for-life@start@0";
-        const std::string expected = "";
-        decomp_test(filepath, id, expected, ast::LANGUAGE_FLAGS::C, true);
-    }
-
-    TEST(DECOMPILER, WhileFix1) {
-        const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1\ss/ss-ground-animal-flee.bin)";
-        const std::string id = "setup@main@start@2";
-        const std::string expected = "";
-        decomp_test(filepath, id, expected, ast::LANGUAGE_FLAGS::C, false);
-    }
-
-    TEST(DECOMPILER, WhileFix2) {
-        const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1\ss/ss-ground-animal-flee.bin)";
-        const std::string id = "setup@main@start@0";
-        const std::string expected = "";
-        decomp_test(filepath, id, expected, ast::LANGUAGE_FLAGS::C, true);
-    }
-
-    TEST(DECOMPILER, Crash1) {
-        const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1\npc-script-funcs.bin)";
-        const std::string id = "wait-npc-play-feather-blend-with-turn-to";
-        const std::string expected = "";
-        decomp_test(filepath, id, expected, ast::LANGUAGE_FLAGS::C, true);
-    }
-
-    TEST(DECOMPILER, Crash2) {
-        const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1\nd-script-funcs.bin)";
-        const std::string id = "ddict-print";
-        const std::string expected = "";
-        decomp_test(filepath, id, expected, ast::LANGUAGE_FLAGS::C, true);
-    }
-
-    TEST(DECOMPILER, Crash3) {
-        const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1\\ss-watchtower\\ss-wat-infected-tunnels-station-combat-hardpoint.bin)";
-        const std::string id = "assign-to-hardpoint@main@start@0";
-        const std::string expected = "";
-        decomp_test(filepath, id, expected, ast::LANGUAGE_FLAGS::C, true);
-    }
-
-    TEST(DECOMPILER, MaxMatchTest) {
-        const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1\\workbench-script-funcs-impl.bin)";
-        const std::string id = "get-worst-stat";
-        const std::string expected = "";
-        decomp_test(filepath, id, expected, ast::LANGUAGE_FLAGS::C, true);
-    }
-
-    TEST(DECOMPILER, ArgumentType1) {
-        const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1\\script-user-funcs-impl.bin)";
-        const std::string id = "absf";
-        const std::string expected =
-            "u64? absf(u64? arg_0) {\n"
-            "    u64? var_0;\n"
-            "    if (arg_0 < 0.00) {\n"
-            "        var_0 = negf(arg_0);\n"
-            "    } else {\n"
-            "        var_0 = arg_0;\n"
-            "    }\n"
-            "    return var_0;\n"
-            "}";
-        decomp_test(filepath, id, expected, ast::LANGUAGE_FLAGS::C, true);
-    }
-
-    TEST(DECOMPILER, PascalCase1) {
-        const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/rogue-ui-funcs.bin)";
-        const std::string id = "#025F02BAF8891C15";
-        const std::string expected =
-            "u16 #025F02BAF8891C15() {\n"
-            "    u16 var_2;\n"
-            "    if (!Gui2WidgetExists?(#B24D085F0897DBDD())) {\n"
-            "        #124853C9AAD97175(\"t2r-hud-rogue/t2r-hud-challenge\", \"hud-challenge\");\n"
-            "        var_2 = Gui2AssignToCategory(#B24D085F0897DBDD(), 65536);\n"
-            "    } else {\n"
-            "        var_2 = 0;\n"
-            "    }\n"
-            "    return var_2;\n"
-            "}\n";
-        decomp_test(filepath, id, expected, ast::LANGUAGE_FLAGS::C, true, true);
+        EXPECT_EQ(expected, result.pseudo_c());
     }
 }

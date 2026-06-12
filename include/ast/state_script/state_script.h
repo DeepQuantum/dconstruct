@@ -8,6 +8,10 @@
 #include <string>
 #include <vector>
 
+namespace dconstruct {
+    struct StateScript;
+}
+
 namespace dconstruct::ast {
 
     struct state_script : public global_declaration {
@@ -32,10 +36,12 @@ namespace dconstruct::ast {
         void pseudo_racket(ast_serialization_buffer& buffer) const final;
         void regex_optimization_pass() noexcept final;
 
-        [[nodiscard]] virtual std::vector<semantic_check_error> check_semantics(compilation::scope&) const noexcept final;
-        [[nodiscard]] virtual program_binary_result emit_dc(compilation::global_state& global) const noexcept final;
+        [[nodiscard]] std::vector<semantic_check_error> check_semantics(compilation::scope&) const noexcept final;
+        [[nodiscard]] program_binary_result emit_dc(compilation::global_state& global) const noexcept final;
 
         [[nodiscard]] bool equals(const state_script& rhs) const noexcept;
+
+        void from_functions(const std::vector<std::pair<const function_disassembly*, compilation::program_binary_element>>& functions) noexcept;
 
         std::string m_name;
         std::string m_optionsString;
@@ -44,6 +50,7 @@ namespace dconstruct::ast {
         std::vector<state_script_state> m_states;
 
         u64 m_initialStateIdx = 0;
+        const StateScript* m_rawStateScript = nullptr;
     };
 
     [[nodiscard]] bool operator==(const state_script& lhs, const state_script& rhs) noexcept;

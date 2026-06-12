@@ -85,7 +85,7 @@ namespace dconstruct::ast {
     }
 
     [[nodiscard]] emission_res subscript_expr::emit_dc(
-        compilation::function& fn,
+        compilation::function_context& fn,
         compilation::global_state& global,
         const std::optional<reg_idx> opt_destination
     ) const noexcept {
@@ -124,7 +124,7 @@ namespace dconstruct::ast {
     }
 
     [[nodiscard]] lvalue_emission_res subscript_expr::emit_dc_lvalue(
-        compilation::function& fn,
+        compilation::function_context& fn,
         compilation::global_state& global
     ) const noexcept {
         lvalue_emission_res lhs_res = m_lhs->emit_dc_lvalue(fn, global);

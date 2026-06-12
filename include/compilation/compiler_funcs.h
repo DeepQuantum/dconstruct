@@ -166,9 +166,10 @@ namespace dconstruct::compilation {
         }
 
         std::vector<compilation::program_binary_element> converted;
+        std::vector<std::pair<const function_disassembly*, compilation::program_binary_element>> state_script_lambdas;
 
         for (const auto& f : funcs) {
-            function cf{};
+            function_context cf{};
             const std::string id = f->get_id();
             if (id.starts_with("#")) {
                 cf.m_name = std::stoull(id.substr(1, id.size() - 1), nullptr, 16);
@@ -182,7 +183,11 @@ namespace dconstruct::compilation {
 
             const auto replacement_it = target_elements_by_sid.find(disassembled_function_name_id);
             if (replacement_it != target_elements_by_sid.end()) {
-                converted.push_back(*replacement_it->second);
+                if (f->m_isScriptFunction) {
+                    state_script_lambdas.emplace_back(f, *replacement_it->second);
+                } else {
+                    converted.push_back(*replacement_it->second);
+                }
                 continue;
             }
 
@@ -190,20 +195,20 @@ namespace dconstruct::compilation {
                 cf.m_instructions.push_back(line.m_instruction);
             }
             for (u32 i = 0; i < f->m_stackFrame.m_symbolTable.m_types.size(); ++i) {
-                const function::SYMBOL_TABLE_POINTER_KIND kind = std::visit(
+                const function_context::SYMBOL_TABLE_POINTER_KIND kind = std::visit(
                     [](auto&& type) {
                         using T = std::decay_t<decltype(type)>;
                         if constexpr (std::is_same_v<T, ast::primitive_type>) {
-                            return type.m_type == ast::primitive_kind::STRING ? function::SYMBOL_TABLE_POINTER_KIND::STRING : function::SYMBOL_TABLE_POINTER_KIND::NONE;
+                            return type.m_type == ast::primitive_kind::STRING ? function_context::SYMBOL_TABLE_POINTER_KIND::STRING : function_context::SYMBOL_TABLE_POINTER_KIND::NONE;
                         } else if constexpr (std::is_same_v<T, ast::ptr_type>) {
-                            return function::SYMBOL_TABLE_POINTER_KIND::GENERAL;
+                            return function_context::SYMBOL_TABLE_POINTER_KIND::GENERAL;
                         } else {
-                            return function::SYMBOL_TABLE_POINTER_KIND::NONE;
+                            return function_context::SYMBOL_TABLE_POINTER_KIND::NONE;
                         }
                     },
                     f->m_stackFrame.m_symbolTable.m_types[i]
                 );
-                if (kind == function::SYMBOL_TABLE_POINTER_KIND::STRING) {
+                if (kind == function_context::SYMBOL_TABLE_POINTER_KIND::STRING) {
                     const u32 size = global.add_string(f->m_stackFrame.m_symbolTable.m_location.get<const char*>(i * 8));
                     cf.m_symbolTable.push_back(size);
                 } else {
@@ -211,7 +216,21 @@ namespace dconstruct::compilation {
                 }
                 cf.m_symbolTableEntryPointers.push_back(kind);
             }
-            converted.push_back(cf.to_binary_element());
+            if (f->m_isScriptFunction) {
+                state_script_lambdas.emplace_back(f, cf.to_binary_element());
+            } else {
+                converted.push_back(cf.to_binary_element());
+            }
+        }
+
+        if (disassembler.has_state_script()) {
+            ast::state_script* state_script = disassembler.get_state_script();
+            state_script->from_functions(state_script_lambdas);
+            ast::program_binary_result state_script_element = state_script->emit_dc(global);
+            if (!state_script_element) {
+                return std::unexpected{state_script_element.error()};
+            }
+            converted.push_back(std::move(*state_script_element));
         }
 
         return ast::program::make_binary(std::move(converted), global);

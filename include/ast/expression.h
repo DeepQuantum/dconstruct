@@ -89,20 +89,20 @@ namespace dconstruct::ast {
         [[nodiscard]] virtual std::optional<i64> raw_pattern_number() const noexcept { return std::nullopt; }
 
         [[nodiscard]] virtual std::expected<u16, std::string> emit_to_symbol_table(
-            compilation::function&,
+            compilation::function_context&,
             compilation::global_state&
         ) const noexcept {
             return std::unexpected{"expression cannot be emitted to symbol table"};
         }
 
         [[nodiscard]] virtual emission_res emit_dc(
-            compilation::function& fn,
+            compilation::function_context& fn,
             compilation::global_state& global,
             const std::optional<reg_idx> destination = std::nullopt
         ) const noexcept { return 0; }
 
         [[nodiscard]] virtual condition_branch_res emit_dc_branch(
-            compilation::function& fn,
+            compilation::function_context& fn,
             compilation::global_state& global,
             const bool branch_when_true
         ) const noexcept {
@@ -114,15 +114,15 @@ namespace dconstruct::ast {
             const u64 branch_location = fn.m_instructions.size();
             fn.emit_instruction(
                 branch_when_true ? Opcode::BranchIf : Opcode::BranchIfNot,
-                compilation::function::BRANCH_PLACEHOLDER,
+                compilation::function_context::BRANCH_PLACEHOLDER,
                 *condition,
-                compilation::function::BRANCH_PLACEHOLDER
+                compilation::function_context::BRANCH_PLACEHOLDER
             );
             fn.free_register(*condition);
             return std::vector<u64>{branch_location};
         }
         [[nodiscard]] virtual emission_res emit_dc_callee(
-            compilation::function& fn,
+            compilation::function_context& fn,
             compilation::global_state& global,
             const std::optional<reg_idx> destination = std::nullopt
         ) const noexcept { return emit_dc(fn, global, destination); }
@@ -130,7 +130,7 @@ namespace dconstruct::ast {
         [[nodiscard]] virtual bool is_l_evaluable() const noexcept { return false; }
 
         [[nodiscard]] virtual lvalue_emission_res emit_dc_lvalue(
-            compilation::function& fn,
+            compilation::function_context& fn,
             compilation::global_state& global
         ) const noexcept {
             return std::unexpected{"not an lvalue"};
@@ -179,7 +179,7 @@ namespace dconstruct::ast {
     };
 
     inline void patch_branch_targets(
-        compilation::function& fn,
+        compilation::function_context& fn,
         const std::vector<u64>& branch_locations,
         const u16 target
     ) noexcept {
