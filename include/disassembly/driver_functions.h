@@ -2,7 +2,6 @@
 
 #include "ast/ast_source.h"
 #include "disassembly/disassembler.h"
-#include "disassembly/mapping_registry.h"
 #include "decompilation/decomp_function.h"
 #include "about.h"
 #include "cxxopts.hpp"
@@ -59,13 +58,6 @@ namespace dconstruct::disassembly {
         const std::filesystem::path& out,
         const dconstruct::SIDBase& sidbase,
         const std::unordered_map<sid64, dconstruct::ast::full_type>& type_map,
-        const dconstruct::game_type game = dconstruct::game_type::T2R
-    );
-
-    void map_types_multiple_to_file(
-        const std::filesystem::path& in,
-        const dconstruct::SIDBase& sidbase,
-        const std::filesystem::path& out_types_file,
         const dconstruct::game_type game = dconstruct::game_type::T2R
     );
 

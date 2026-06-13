@@ -5216,8 +5216,9 @@ int main() {
     }
 
     dconstruct::ui::log_event("Start");
-    if (std::filesystem::exists("sidbase.bin")) {
-        dconstruct::ui::load_sidbase(state, "sidbase.bin");
+    const std::filesystem::path sidbase_path = dconstruct::executable_relative_sidbase();
+    if (std::filesystem::exists(sidbase_path)) {
+        dconstruct::ui::load_sidbase(state, sidbase_path.string());
     }
     dconstruct::ui::load_var_maps_directory(state);
 

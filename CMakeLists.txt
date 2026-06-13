@@ -13,6 +13,24 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/source")
 
+set(DCONSTRUCT_SIDBASE "${CMAKE_CURRENT_SOURCE_DIR}/test/fixtures/dc/sidbase_new_fixed.bin")
+
+# Copies sidbase.bin next to the given target's executable. Every dconstruct
+# program resolves its sidbase from sidbase.bin in its own directory, so any
+# target that needs the sidbase at runtime must stage it next to the exe.
+function(stage_sidbase_next_to target)
+    if(EXISTS "${DCONSTRUCT_SIDBASE}")
+        add_custom_command(TARGET ${target} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                "${DCONSTRUCT_SIDBASE}" "$<TARGET_FILE_DIR:${target}>/sidbase.bin"
+            COMMENT "Copying sidbase.bin next to ${target}"
+            VERBATIM
+        )
+    else()
+        message(WARNING "sidbase fixture not found, not staging next to ${target}: ${DCONSTRUCT_SIDBASE}")
+    endif()
+endfunction()
+
 include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}
     "${CMAKE_CURRENT_SOURCE_DIR}/include"
@@ -128,7 +146,7 @@ add_custom_command(TARGET dconstruct_lib POST_BUILD
 add_custom_command(TARGET dconstruct_lib POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E echo "Copying optional runtime fixtures next to dconstruct_lib"
     COMMAND ${CMAKE_COMMAND}
-        "-DSOURCE_SIDBASE=${CMAKE_CURRENT_SOURCE_DIR}/test/fixtures/dc/sidbase_new_fixed.bin"
+        "-DSOURCE_SIDBASE=${DCONSTRUCT_SIDBASE}"
         "-DSOURCE_VAR_MAPS=${CMAKE_CURRENT_SOURCE_DIR}/test/var_maps"
         "-DDEST_DIR=$<TARGET_FILE_DIR:dconstruct_lib>"
         -P "${CMAKE_CURRENT_SOURCE_DIR}/scripts/stage_runtime_fixtures.cmake"
@@ -156,6 +174,7 @@ endif()
 
 target_link_libraries(dconstruct_test PRIVATE dconstruct_lib GTest::gtest_main)
 target_compile_definitions(dconstruct_test PRIVATE DCONSTRUCT_TEST_ROOT="${CMAKE_CURRENT_TEST_DIR}")
+stage_sidbase_next_to(dconstruct_test)
 
 include(GoogleTest)
 gtest_discover_tests(dconstruct_test WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
@@ -174,6 +193,7 @@ endif()
 
 
 target_link_libraries(dconstruct PRIVATE dconstruct_lib)
+stage_sidbase_next_to(dconstruct)
 
 
 set(BUILDINFO_H "${CMAKE_CURRENT_BINARY_DIR}/buildinfo.h")
@@ -218,6 +238,7 @@ add_executable(
 
 
 target_link_libraries(dcc PRIVATE dconstruct_lib)
+stage_sidbase_next_to(dcc)
 
 add_executable(
     decode_sidbase
@@ -278,6 +299,7 @@ target_link_libraries(dconstruct_ui PRIVATE
 
 target_include_directories(dconstruct_ui PRIVATE ${SOURCE_DIR}/qui/source/stb)
 add_dependencies(dconstruct_ui generate_buildinfo)
+stage_sidbase_next_to(dconstruct_ui)
 
 add_custom_command(TARGET dconstruct_ui POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E make_directory "$<TARGET_FILE_DIR:dconstruct_ui>/fonts"

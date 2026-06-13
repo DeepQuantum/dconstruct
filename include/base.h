@@ -11,6 +11,7 @@
 #include <bit>
 #include <cassert>
 #include <expected>
+#include <filesystem>
 
 
 #ifdef __INTELLISENSE__
@@ -78,6 +79,12 @@ namespace dconstruct {
     using reg_set = std::bitset<ARGUMENT_REGISTERS_IDX + 1>;
     using argument_reg_set = std::bitset<ARGUMENT_REGISTERS_IDX + 1>;
     using node_set = std::vector<bool>;
+
+    [[nodiscard]] std::filesystem::path executable_path();
+
+    [[nodiscard]] inline std::filesystem::path executable_relative_sidbase() {
+        return executable_path().parent_path() / "sidbase.bin";
+    }
 
     static std::string sanitize_dc_string(const std::string& dc_string) {
         std::string sanitized;

@@ -274,7 +274,7 @@ namespace dconstruct::compilation {
     [[nodiscard]] static std::optional<cxxopts::ParseResult> get_command_line_options(int argc, char* argv[]) {
         cxxopts::Options options("dcc", "a compiler targeting the dc bytecode used in several NaughtyDog video games.");
 
-        options.add_options("input/output")("i,input", "input DCPL file that will be compiled", cxxopts::value<std::string>(), "<path>")("t,target", "the original binary file that will be recompiled", cxxopts::value<std::string>(), "<path>")("o,output", "output location of the recompiled binary; relative to <mod>/bin/dc1 when --mod is provided", cxxopts::value<std::string>(), "<path>")("mod", "path to the mod directory; derives output, modules.bin, mod-named pak68 file, and repackage location", cxxopts::value<std::string>(), "<path>")("s,sidbase", "path to the sidbase", cxxopts::value<std::string>(), "sidbase.bin");
+        options.add_options("input/output")("i,input", "input DCPL file that will be compiled; @game, @mod, and @target are set via directives inside the file", cxxopts::value<std::string>(), "<path>");
 
         options.parse_positional({"i"});
         cxxopts::ParseResult opts;
@@ -631,6 +631,29 @@ namespace dconstruct::compilation {
         modules_file.write(reinterpret_cast<const char*>(unmapped_bytes.get()), file.m_size);
 
         return *summary;
+    }
+
+    [[nodiscard]] static errmsg prepare_mod_workspace(const compiler_options& options) {
+        std::error_code ec;
+        const std::filesystem::path mod_dc1 = options.m_modules.parent_path();
+        std::filesystem::create_directories(mod_dc1, ec);
+        if (ec) {
+            return "couldn't create mod directory " + mod_dc1.string() + ": " + ec.message();
+        }
+        std::filesystem::create_directories(options.m_output.parent_path(), ec);
+        if (ec) {
+            return "couldn't create output directory " + options.m_output.parent_path().string() + ": " + ec.message();
+        }
+
+        const std::filesystem::path modules_source = game_dc1_dir(options.m_game) / "modules.bin";
+        if (!std::filesystem::exists(modules_source)) {
+            return "expected a vanilla modules.bin in the game's dc1 directory but got missing path " + modules_source.string();
+        }
+        std::filesystem::copy_file(modules_source, options.m_modules, std::filesystem::copy_options::overwrite_existing, ec);
+        if (ec) {
+            return "couldn't copy modules.bin from " + modules_source.string() + " to " + options.m_modules.string() + ": " + ec.message();
+        }
+        return std::nullopt;
     }
 
     static resstr<compiler_output_summary> create_output(

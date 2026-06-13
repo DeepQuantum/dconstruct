@@ -19,6 +19,7 @@ namespace dconstruct::compilation {
         ) noexcept;
         [[nodiscard]] static resstr<compiler_options> parse(const cxxopts::ParseResult& args, std::string& source) noexcept;
 
+        std::filesystem::path m_game;
         std::optional<std::filesystem::path> m_mod;
         std::optional<std::filesystem::path> m_repackage;
         std::optional<std::filesystem::path> m_pak68;
@@ -30,12 +31,13 @@ namespace dconstruct::compilation {
         bool m_standalone = false;
 
     private:
-        [[nodiscard]] static resstr<compiler_options> from_args(const cxxopts::ParseResult& args) noexcept;
         [[nodiscard]] static resstr<compiler_options> from_dcpl(
             std::string& source,
             const std::filesystem::path& source_path,
             std::vector<source_location>& line_map
         ) noexcept;
     };
+
+    [[nodiscard]] std::filesystem::path game_dc1_dir(const std::filesystem::path& game) noexcept;
 
 }

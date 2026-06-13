@@ -243,9 +243,6 @@ namespace dconstruct::hooking {
         const p64 extended_opcode_switch_location = (jump_extended_opcode_switch_location + 5) + (*(i32*)(jump_extended_opcode_switch_location + 1));
         create_opcode_default_switch_override(module_base + DEFAULT_CASE_RUN_SCRIPT, extended_opcode_switch_location, module_base + CONTINUE_ADDRESS);
 
-        // load_sidbase();
-        // log("module base: {:016X}, ida image base: {:016X}", module_base, IMAGE_BASE);
-
         LPVOID display_target = reinterpret_cast<LPVOID>(module_base + DISPLAY_OFFSET);
         MH_CreateHook(display_target, reinterpret_cast<LPVOID>(&display_hook), reinterpret_cast<LPVOID*>(&display_orig));
         MH_EnableHook(display_target);

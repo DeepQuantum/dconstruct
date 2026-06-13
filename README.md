@@ -57,7 +57,7 @@ To decompile a file, add the `--decompile` flag when running the command.
 
 - `-o` - output path. If your input path is a folder, this cannot be a file. If no output is specified, the .txt file will be put next to the input file. If the input is a folder and no output is specified, the program will create a "output" directoy in the current working directory and put all the files in there.
 
-- `-s` - specify a path the the sidbase. By default, the program will look in path for the directory.
+- The sidbase is loaded from `sidbase.bin` located next to the executable.
 
 - `--no_decompile` - don'T emit decompiled pseudo code into a .dcpl file. The file will be placed next to the .asm file. This is false by default.
 

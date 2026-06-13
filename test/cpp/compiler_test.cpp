@@ -39,7 +39,8 @@ namespace dconstruct::testing {
     }
 
     static std::string dcpl_prelude() {
-        return "@output \"test/fixtures/compiler/include_out.bin\"\n@sidbase \"" + TEST_DIR + "test_sidbase.bin\"\n";
+        std::filesystem::create_directories("test/fixtures/compiler/include_game");
+        return "@game \"test/fixtures/compiler/include_game\"\n@mod \"include_mod\"\n";
     }
 
     static std::tuple<ast::program, std::unordered_map<std::string, ast::full_type>, std::vector<compilation::parsing_error>> get_parse_results(const std::vector<compilation::token>& tokens) {
@@ -297,9 +298,10 @@ namespace dconstruct::testing {
     }
 
     TEST(COMPILER, AddPakParsesAndAppliesMultilineEntries) {
-        const std::filesystem::path mod_path = "test/fixtures/compiler/pak68_macro_mod";
+        const std::filesystem::path game_path = "test/fixtures/compiler/pak68_macro_game";
+        const std::filesystem::path mod_path = game_path / "mods" / "pak68_macro_mod";
         const std::filesystem::path pak_path = mod_path / "pak68_macro_mod-pak68.txt";
-        std::filesystem::create_directories(pak_path.parent_path());
+        std::filesystem::create_directories(mod_path);
         {
             std::ofstream out{pak_path};
             out << "level-name sp-all\n"
@@ -309,15 +311,13 @@ namespace dconstruct::testing {
         }
 
         std::string source =
-            "@mod \"test/fixtures/compiler/pak68_macro_mod\"\n"
-            "@output \"pak68-macro\"\n"
-            "@sidbase \"" +
-            TEST_DIR + "test_sidbase.bin\"\n"
-                       "@add_pak level-name sp-all {\n"
-                       "  symbol #gas-mask-ellie\n"
-                       "  actor dina\n"
-                       "}\n"
-                       "u32 main() { return 0; }\n";
+            "@game \"test/fixtures/compiler/pak68_macro_game\"\n"
+            "@mod \"pak68_macro_mod\"\n"
+            "@add_pak level-name sp-all {\n"
+            "  symbol #gas-mask-ellie\n"
+            "  actor dina\n"
+            "}\n"
+            "u32 main() { return 0; }\n";
         std::vector<compilation::source_location> line_map;
 
         auto options = compilation::compiler_options::parse(get_empty_options(), source, "test/fixtures/compiler/pak68_macro_test.dcpl", line_map);
@@ -345,16 +345,14 @@ namespace dconstruct::testing {
     }
 
     TEST(COMPILER, AddPakRejectsUnknownType) {
-        const std::filesystem::path mod_path = "test/fixtures/compiler/pak68_unknown_type_mod";
-        std::filesystem::create_directories(mod_path);
+        const std::filesystem::path game_path = "test/fixtures/compiler/pak68_unknown_type_game";
+        std::filesystem::create_directories(game_path / "mods" / "pak68_unknown_type_mod");
 
         std::string source =
-            "@mod \"test/fixtures/compiler/pak68_unknown_type_mod\"\n"
-            "@output \"pak68-unknown-type\"\n"
-            "@sidbase \"" +
-            TEST_DIR + "test_sidbase.bin\"\n"
-                       "@add_pak level-name sp-all { nope #gas-mask-ellie }\n"
-                       "u32 main() { return 0; }\n";
+            "@game \"test/fixtures/compiler/pak68_unknown_type_game\"\n"
+            "@mod \"pak68_unknown_type_mod\"\n"
+            "@add_pak level-name sp-all { nope #gas-mask-ellie }\n"
+            "u32 main() { return 0; }\n";
         std::vector<compilation::source_location> line_map;
 
         auto options = compilation::compiler_options::parse(get_empty_options(), source, "test/fixtures/compiler/pak68_unknown_type_test.dcpl", line_map);
@@ -363,18 +361,17 @@ namespace dconstruct::testing {
     }
 
     TEST(COMPILER, AddPakCreatesMissingLevel) {
-        const std::filesystem::path mod_path = "test/fixtures/compiler/pak68_missing_level_mod";
+        const std::filesystem::path game_path = "test/fixtures/compiler/pak68_missing_level_game";
+        const std::filesystem::path mod_path = game_path / "mods" / "pak68_missing_level_mod";
         const std::filesystem::path pak_path = mod_path / "pak68_missing_level_mod-pak68.txt";
         std::filesystem::create_directories(mod_path);
         std::filesystem::remove(pak_path);
 
         std::string source =
-            "@mod \"test/fixtures/compiler/pak68_missing_level_mod\"\n"
-            "@output \"pak68-missing-level\"\n"
-            "@sidbase \"" +
-            TEST_DIR + "test_sidbase.bin\"\n"
-                       "@add_pak level-name missing-level { symbol #gas-mask-ellie }\n"
-                       "u32 main() { return 0; }\n";
+            "@game \"test/fixtures/compiler/pak68_missing_level_game\"\n"
+            "@mod \"pak68_missing_level_mod\"\n"
+            "@add_pak level-name missing-level { symbol #gas-mask-ellie }\n"
+            "u32 main() { return 0; }\n";
         std::vector<compilation::source_location> line_map;
 
         auto options = compilation::compiler_options::parse(get_empty_options(), source, "test/fixtures/compiler/pak68_missing_level_test.dcpl", line_map);
@@ -394,30 +391,23 @@ namespace dconstruct::testing {
         EXPECT_NE(contents.str().find("level-name missing-level\nsymbol gas-mask-ellie\n"), std::string::npos);
     }
 
-    TEST(COMPILER, ModDerivesRelativeOutputModulesPakAndRepackage) {
-        const std::filesystem::path mod_path = "test/fixtures/compiler/derived_mod";
-        std::filesystem::create_directories(mod_path / "bin" / "dc1");
-        {
-            std::ofstream modules{mod_path / "bin" / "dc1" / "modules.bin", std::ios::binary};
-            modules << "placeholder";
-        }
-        {
-            std::ofstream pak{mod_path / "pak68.txt"};
-            pak << "level-name sp-all\n";
-        }
+    TEST(COMPILER, ModDerivesStandaloneOutputModulesPakAndRepackage) {
+        const std::filesystem::path game_path = "test/fixtures/compiler/derived_game";
+        const std::filesystem::path mod_path = game_path / "mods" / "derived_mod";
+        std::filesystem::create_directories(game_path / "mods");
 
         std::string source =
-            "@mod \"test/fixtures/compiler/derived_mod\"\n"
-            "@output \"ss-rogue/test-script-qntm\"\n"
-            "@sidbase \"" +
-            TEST_DIR + "test_sidbase.bin\"\n"
-                       "u32 main() { return 0; }\n";
+            "@game \"test/fixtures/compiler/derived_game\"\n"
+            "@mod \"derived_mod\"\n"
+            "u32 main() { return 0; }\n";
         std::vector<compilation::source_location> line_map;
 
         auto options = compilation::compiler_options::parse(get_empty_options(), source, "test/fixtures/compiler/derived_mod_test.dcpl", line_map);
         ASSERT_TRUE(options) << options.error();
         EXPECT_TRUE(options->m_standalone);
-        EXPECT_EQ(options->m_output, mod_path / "bin" / "dc1" / "ss-rogue" / "test-script-qntm.bin");
+        EXPECT_TRUE(options->m_target.empty());
+        EXPECT_EQ(options->m_game, game_path);
+        EXPECT_EQ(options->m_output, mod_path / "bin" / "dc1" / "derived_mod.bin");
         EXPECT_EQ(options->m_modules, mod_path / "bin" / "dc1" / "modules.bin");
         ASSERT_TRUE(options->m_pak68);
         EXPECT_EQ(*options->m_pak68, mod_path / "derived_mod-pak68.txt");
@@ -436,33 +426,87 @@ namespace dconstruct::testing {
         );
     }
 
-    TEST(COMPILER, ModOutputRootDirectoryRelativeToMod) {
-        const std::filesystem::path mod_path = "test/fixtures/compiler/rooted_output_mod";
-        std::filesystem::create_directories(mod_path);
+    TEST(COMPILER, TargetModeResolvesAgainstGameDc1) {
+        const std::filesystem::path game_path = "test/fixtures/compiler/target_mode_game";
+        const std::filesystem::path game_dc1 = game_path / "build" / "pc" / "main" / "bin_unpacked" / "dc1";
+        std::filesystem::create_directories(game_dc1 / "rogue");
+        std::filesystem::create_directories(game_path / "mods");
+        {
+            std::ofstream target{game_dc1 / "rogue" / "script-callbacks.bin", std::ios::binary};
+            target << "placeholder";
+        }
 
         std::string source =
-            "@mod \"test/fixtures/compiler/rooted_output_mod\"\n"
-            "@output \"/bin/dc1/script-callbacks\"\n"
-            "@sidbase \"" +
-            TEST_DIR + "test_sidbase.bin\"\n"
-                       "u32 main() { return 0; }\n";
+            "@game \"test/fixtures/compiler/target_mode_game\"\n"
+            "@mod \"target_mode_mod\"\n"
+            "@target \"rogue/script-callbacks\"\n"
+            "u32 main() { return 0; }\n";
         std::vector<compilation::source_location> line_map;
 
-        auto options = compilation::compiler_options::parse(get_empty_options(), source, "test/fixtures/compiler/rooted_output_mod_test.dcpl", line_map);
+        auto options = compilation::compiler_options::parse(get_empty_options(), source, "test/fixtures/compiler/target_mode_test.dcpl", line_map);
         ASSERT_TRUE(options) << options.error();
-        EXPECT_EQ(options->m_output, mod_path / "bin" / "dc1" / "script-callbacks.bin");
+        EXPECT_FALSE(options->m_standalone);
+        EXPECT_EQ(options->m_target, game_dc1 / "rogue" / "script-callbacks.bin");
+        EXPECT_EQ(options->m_output, game_path / "mods" / "target_mode_mod" / "bin" / "dc1" / "rogue" / "script-callbacks.bin");
+        EXPECT_EQ(options->m_modules, game_path / "mods" / "target_mode_mod" / "bin" / "dc1" / "modules.bin");
+    }
 
-        std::string source_without_leading_slash =
-            "@mod \"test/fixtures/compiler/rooted_output_mod\"\n"
-            "@output \"bin/dc1/script-callbacks\"\n"
-            "@sidbase \"" +
-            TEST_DIR + "test_sidbase.bin\"\n"
-                       "u32 main() { return 0; }\n";
-        line_map.clear();
+    TEST(COMPILER, MissingGameDirectiveFails) {
+        std::string source =
+            "@mod \"no_game_mod\"\n"
+            "u32 main() { return 0; }\n";
+        std::vector<compilation::source_location> line_map;
 
-        options = compilation::compiler_options::parse(get_empty_options(), source_without_leading_slash, "test/fixtures/compiler/rooted_output_mod_test.dcpl", line_map);
+        auto options = compilation::compiler_options::parse(get_empty_options(), source, "test/fixtures/compiler/no_game_test.dcpl", line_map);
+        ASSERT_FALSE(options);
+        EXPECT_NE(options.error().find("@game"), std::string::npos);
+    }
+
+    TEST(COMPILER, MissingTargetFileFails) {
+        const std::filesystem::path game_path = "test/fixtures/compiler/missing_target_game";
+        std::filesystem::create_directories(game_path / "build" / "pc" / "main" / "bin_unpacked" / "dc1");
+
+        std::string source =
+            "@game \"test/fixtures/compiler/missing_target_game\"\n"
+            "@mod \"missing_target_mod\"\n"
+            "@target \"rogue/does-not-exist\"\n"
+            "u32 main() { return 0; }\n";
+        std::vector<compilation::source_location> line_map;
+
+        auto options = compilation::compiler_options::parse(get_empty_options(), source, "test/fixtures/compiler/missing_target_test.dcpl", line_map);
+        ASSERT_FALSE(options);
+        EXPECT_NE(options.error().find("missing path"), std::string::npos);
+    }
+
+    TEST(COMPILER, PrepareModWorkspaceCopiesFreshModules) {
+        const std::filesystem::path game_path = "test/fixtures/compiler/prepare_game";
+        const std::filesystem::path game_dc1 = game_path / "build" / "pc" / "main" / "bin_unpacked" / "dc1";
+        const std::filesystem::path mod_dc1 = game_path / "mods" / "prepare_mod" / "bin" / "dc1";
+        std::filesystem::create_directories(game_dc1);
+        std::filesystem::create_directories(game_path / "mods");
+        std::filesystem::remove_all(game_path / "mods" / "prepare_mod");
+        std::filesystem::copy_file(
+            TEST_DIR + "sidbase_new_fixed.bin",
+            game_dc1 / "modules.bin",
+            std::filesystem::copy_options::overwrite_existing
+        );
+
+        std::string source =
+            "@game \"test/fixtures/compiler/prepare_game\"\n"
+            "@mod \"prepare_mod\"\n"
+            "u32 main() { return 0; }\n";
+        std::vector<compilation::source_location> line_map;
+
+        auto options = compilation::compiler_options::parse(get_empty_options(), source, "test/fixtures/compiler/prepare_test.dcpl", line_map);
         ASSERT_TRUE(options) << options.error();
-        EXPECT_EQ(options->m_output, mod_path / "bin" / "dc1" / "script-callbacks.bin");
+
+        const dconstruct::errmsg err = compilation::prepare_mod_workspace(*options);
+        ASSERT_FALSE(err) << *err;
+        EXPECT_TRUE(std::filesystem::exists(mod_dc1 / "modules.bin"));
+        EXPECT_EQ(
+            std::filesystem::file_size(mod_dc1 / "modules.bin"),
+            std::filesystem::file_size(game_dc1 / "modules.bin")
+        );
     }
 
     TEST(COMPILER, PatchModulesSizeHandlesMixedPathSeparators) {

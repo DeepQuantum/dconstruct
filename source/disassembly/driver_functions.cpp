@@ -2,17 +2,14 @@
 
 #include "disassembly/disassembler.h"
 #include "disassembly/edit_disassembler.h"
-#include "disassembly/mapping_disassembler.h"
 #include "decompilation/decomp_function.h"
 #include "compilation/compiler_funcs.h"
 #include "buildinfo.h"
-#include <codecvt>
 #include <cstddef>
 #include <fstream>
 #include <sstream>
 #include <algorithm>
 #include <execution>
-#include <windows.h>
 #include <set>
 #include <print>
 
@@ -156,47 +153,6 @@ constexpr i32 BOX_WIDTH = 100;
     append_line(std::string(BOX_WIDTH, '#'));
     out << '\n';
     return out.str();
-}
-
-void map_types_multiple(
-    const std::filesystem::path& in,
-    const dconstruct::SIDBase& sidbase,
-    dconstruct::MappingRegistry& registry,
-    const dconstruct::game_type game
-) {
-    std::vector<std::filesystem::path> filepaths;
-
-    for (const auto& entry : std::filesystem::recursive_directory_iterator(in)) {
-        if (entry.path().extension() != ".bin") {
-            continue;
-        }
-        filepaths.emplace_back(entry.path());
-    }
-
-    std::for_each(
-        std::execution::par_unseq,
-        filepaths.begin(),
-        filepaths.end(),
-        [&](const std::filesystem::path& entry) {
-            std::println("mapping types in {}...", entry.string());
-            auto file_res = dconstruct::BinaryFile::from_path(entry.string());
-            if (!file_res) {
-                return;
-            }
-            auto& file = *file_res;
-            dconstruct::MappingDisassembler disassembler(&file, &sidbase, registry, game);
-            disassembler.ingest();
-        }
-    );
-}
-
-[[nodiscard]] std::wstring get_executable_path() {
-    wchar_t buffer[MAX_PATH];
-    const DWORD len = GetModuleFileNameW(nullptr, buffer, MAX_PATH);
-    if (len == 0 || len == MAX_PATH) {
-        throw std::runtime_error("GetModuleFileNameW failed");
-    }
-    return std::wstring(buffer, len);
 }
 
 }
@@ -417,16 +373,6 @@ void disassemble_multiple(
     std::println("took {}ms", time_taken.count());
 }
 
-void map_types_multiple_to_file(
-    const std::filesystem::path& in,
-    const dconstruct::SIDBase& sidbase,
-    const std::filesystem::path& out_types_file,
-    const dconstruct::game_type game
-) {
-    dconstruct::MappingRegistry registry;
-    map_types_multiple(in, sidbase, registry, game);
-    registry.dump_types_file(out_types_file, sidbase);
-}
 
 std::vector<std::string> edits_from_file(const std::filesystem::path& path) {
     std::ifstream edit_in(path);
@@ -587,11 +533,6 @@ std::vector<std::string> edits_from_file(const std::filesystem::path& path) {
 [[nodiscard]] std::optional<std::pair<cxxopts::Options, cxxopts::ParseResult>> get_command_line_options(int argc, char* argv[]) {
     cxxopts::Options options("dconstruct", "\na program for disassembling, editing and decompiling tlouii dc files. use --about for a more detailed description.\n");
 
-    using convert_type = std::codecvt_utf8<wchar_t>;
-    std::wstring_convert<convert_type, wchar_t> converter;
-
-    const std::filesystem::path current_program_path = converter.to_bytes(get_executable_path());
-
     options.add_options("information")
         ("h, help", "display this message")
         ("help_edit", "help with editing a file")
@@ -599,7 +540,6 @@ std::vector<std::string> edits_from_file(const std::filesystem::path& path) {
     options.add_options("input/output")
         ("i,input", "input DC file or folder", cxxopts::value<std::string>(), "<path>")
         ("o,output", "output file or folder", cxxopts::value<std::string>()->default_value(""), DEFAULT_OUT)
-        ("s,sidbase", "sidbase file", cxxopts::value<std::string>()->default_value((current_program_path.parent_path() / "sidbase.bin").string()), "<path>")
         ("type_defines", "a .dcpl file for defining new types", cxxopts::value<std::string>()->default_value(""))
         ("type_map", "one or more .dcplmap files for declaring the types of variables for the decompiler. a map file is matched to a .bin file by having the same filename (without extension).", cxxopts::value<std::vector<std::string>>());
     options.add_options("configuration")
@@ -609,8 +549,7 @@ std::vector<std::string> edits_from_file(const std::filesystem::path& path) {
         ("show_warnings", "don't show warnings for functions that couldn't be decompiled.", cxxopts::value<bool>()->default_value("false"))
         ("language", "specify the DCPL pseudo language type. current options are 'C', 'Racket' (closest to original DC), or 'Python'. default is 'C'.", cxxopts::value<std::string>()->default_value("C"))
         ("g,game_type", "game type. current options are 't2r', 't1x', or 'uc4'. default is 't2r'.", cxxopts::value<std::string>()->default_value("t2r"))
-        ("graphs", "emit control flow graph SVGs of the named functions when decompiling. only emits graphs of size >1. SIGNIFICANTLY slows down decompilation.", cxxopts::value<bool>()->default_value("false"))
-        ("map_types", "don't emit disassembly or decompilation output, just map as many struct types as possible and emit them to a file specified by --output", cxxopts::value<bool>()->default_value("false"));
+        ("graphs", "emit control flow graph SVGs of the named functions when decompiling. only emits graphs of size >1. SIGNIFICANTLY slows down decompilation.", cxxopts::value<bool>()->default_value("false"));
 
     options.add_options("edit")
         ("e,edit", "make an edit at a specific address. may only be specified during single file disassembly.", cxxopts::value<std::vector<std::string>>(), "<addr>[<offset>]=<new_value>")

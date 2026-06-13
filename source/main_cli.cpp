@@ -93,7 +93,7 @@ int main(int argc, char* argv[]) {
 
     const bool output_is_folder = std::filesystem::is_directory(output);
 
-    const std::filesystem::path sidbase_path = opts["s"].as<std::string>();
+    const std::filesystem::path sidbase_path = dconstruct::executable_relative_sidbase();
     const std::string game_type_string = opts["game_type"].as<std::string>();
     const auto game_type_opt = dconstruct::disassembly::get_game_type(game_type_string);
 
@@ -107,26 +107,6 @@ int main(int argc, char* argv[]) {
     if (!std::filesystem::exists(sidbase_path)) {
         std::println(stderr, "error: sidbase path {} doesn't exist", sidbase_path.string());
         return -1;
-    }
-
-    const bool map_types = opts["map_types"].as<bool>();
-
-    if (map_types) {
-        if (std::filesystem::is_directory(output)) {
-            std::println(stderr, "error: output path must be a file when using --map_types");
-            return -1;
-        }
-        if (!std::filesystem::is_directory(filepath)) {
-            std::println(stderr, "error: input path must be a folder when using --map_types");
-            return -1;
-        }
-        const dconstruct::resstr<dconstruct::SIDBase> sidbase_opt = dconstruct::SIDBase::from_binary(sidbase_path);
-        if (!sidbase_opt) {
-            std::println(stderr, "error: couldn't load sidbase: {}", sidbase_opt.error());
-            return -1;
-        }
-        dconstruct::disassembly::map_types_multiple_to_file(filepath, *sidbase_opt, output, game);
-        return 0;
     }
 
     const bool decompile = !opts["no_decompile"].as<bool>();

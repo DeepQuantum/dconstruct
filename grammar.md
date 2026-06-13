@@ -257,11 +257,10 @@ Precompiler directives are line-based instructions that begin with `@` and are c
 precompiler_directive ::= "@" path_directive_name " " quoted_path
                         | "@add_pak" pak_category_type pak_category_name "{" pak_entry+ "}"
 
-path_directive_name   ::= "target"
-                        | "include"
-                        | "output"
-                        | "sidbase"
+path_directive_name   ::= "game"
                         | "mod"
+                        | "target"
+                        | "include"
 
 quoted_path           ::= '"' path_char* '"'
 pak_category_type     ::= identifier
@@ -269,24 +268,35 @@ pak_category_name     ::= identifier
 pak_entry             ::= pak_type sid_identifier newline
 ```
 
+Everything is resolved relative to the game directory. Two paths are derived from `@game`:
+
+- the **game dc1**: `<game>/build/pc/main/bin_unpacked/dc1` — the original, vanilla game data.
+- the **mod dc1**: `<game>/mods/<mod>/bin/dc1` — where this mod's output is written.
+
 Currently supported directives:
 
-- `@target "<path>"` — path to the original game binary being edited/recompiled (for adding new functions and hooking existing ones).
+- `@game "<path>"` — path to the game directory. **Required.** Must already exist.
+- `@mod "<name>"` — name of the mod. **Required.** The mod folder `<game>/mods/<name>` and its `bin/dc1` subdirectory are created automatically. pak68 is resolved as `<game>/mods/<name>/<name>-pak68.txt`, and after compilation the mod folder is repackaged into `<game>/mods/<name>.psarc`.
+- `@target "<relative-path>"` — selects **target mode**. The path is resolved against the game dc1 (`<game>/build/pc/main/bin_unpacked/dc1/<relative-path>`); that original file is read, edited, and the result is written to the same relative path inside the mod dc1. A missing `.bin` extension is added automatically.
+- If no `@target` is given, the compiler runs in **standalone mode** and writes the declarations directly into the mod dc1 as `<name>.bin`.
+- In both modes, a fresh `modules.bin` is copied from the game dc1 into the mod dc1 before compiling (compilation edits it in place).
 - `@include "<relative-path>"` — include another DCPL file at this location. Each resolved file is included at most once.
-- If no `@target` is provided, the compiler runs in standalone mode and writes only the declarations in the input file to `@output`.
-- `@mod "<path>"` — path to the mod directory. When present, relative `@output` paths are resolved below `<path>/bin/dc1`, `modules.bin` is resolved as `<path>/bin/dc1/modules.bin`, and pak68 is resolved as `<path>/<mod-folder-name>-pak68.txt`.
-- Providing `@mod` also repackages that mod directory into a `.psarc` archive after compilation. The mod folder no longer needs an `_unpacked` suffix; the folder name is used exactly for the archive prefix.
-- `@output "<relative-path>"` — destination path for the newly compiled binary. With `@mod`, a missing `.bin` extension is added automatically.
-- `@sidbase "<path>"` — path to the SID base map (`hash -> string`) used to resolve string IDs.
+- The SID base map (`hash -> string`) used to resolve string IDs is loaded from `sidbase.bin` next to the executable.
 - `@add_pak <category_type> <category_name> { <type> #sid ... }` — add pak68 entries to a category section. Use the pak68 first-column category token, for example `@add_pak level-name sp-all { ... }`. If the section does not exist, it is added to pak68.txt. The compiler validates the pak68 path, category type, and entry type before compiling.
 
-Example:
+Example (target mode):
 
 ```dcpl
-@target "C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/rogue/script-callbacks.bin"
-@mod "C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/mods/bin_unpacked"
-@output "rogue/script-callbacks"
-@sidbase "C:/Program Files/dconstruct-518-1-52-0-1768320617/bin/sidbase.bin"
+@game "C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II"
+@mod "gas-mask-toggle"
+@target "rogue/script-callbacks"
+```
+
+Example (standalone mode — output goes to `<game>/mods/my-script/bin/dc1/my-script.bin`):
+
+```dcpl
+@game "C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II"
+@mod "my-script"
 ```
 
 > [!IMPORTANT]

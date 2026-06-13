@@ -178,14 +178,6 @@ namespace dconstruct::compilation {
                 continue;
             }
 
-            if (line == "@standalone") {
-                return location_error(loc, "@standalone has been removed; omit @target to compile standalone");
-            }
-
-            if (line == "@repackage") {
-                return location_error(loc, "@repackage has been removed; providing @mod now implies repackage");
-            }
-
             const u64 first_space = line.find_first_of(' ', 1);
             if (first_space == std::string::npos) {
                 return location_error(loc, "malformed precompiler directive");
@@ -275,16 +267,12 @@ namespace dconstruct::compilation {
             stripped_source += '\n';
             line_map.push_back(loc);
 
-            if (directive_name == "standalone") {
-                return location_error(loc, "@standalone has been removed; omit @target to compile standalone");
+            if (directive_name == "game") {
+                options.m_game = path;
             } else if (directive_name == "target") {
                 options.m_target = path;
             } else if (directive_name == "mod") {
                 options.m_mod = path;
-            } else if (directive_name == "output") {
-                options.m_output = path;
-            } else if (directive_name == "sidbase") {
-                options.m_sidbase = path;
             } else {
                 return location_error(loc, "unknown precompiler directive: " + std::string(directive_name));
             }
@@ -293,33 +281,8 @@ namespace dconstruct::compilation {
         return std::nullopt;
     }
 
-    [[nodiscard]] resstr<compiler_options> compiler_options::from_args(const cxxopts::ParseResult& args) noexcept {
-        std::filesystem::path target_binary_filepath;
-        if (args.count("t") == 1) {
-            target_binary_filepath = args["t"].as<std::string>();
-        }
-
-        std::filesystem::path output_filepath;
-        if (args.count("o") == 1) {
-            output_filepath = args["o"].as<std::string>();
-        }
-
-        std::optional<std::filesystem::path> mod_filepath;
-        if (args.count("mod") == 1) {
-            mod_filepath = args["mod"].as<std::string>();
-        }
-
-        std::filesystem::path sidbase_filepath;
-        if (args.count("s") == 1) {
-            sidbase_filepath = args["s"].as<std::string>();
-        }
-
-        compiler_options out;
-        out.m_target = std::move(target_binary_filepath);
-        out.m_mod = std::move(mod_filepath);
-        out.m_output = std::move(output_filepath);
-        out.m_sidbase = std::move(sidbase_filepath);
-        return out;
+    [[nodiscard]] std::filesystem::path game_dc1_dir(const std::filesystem::path& game) noexcept {
+        return game / "build" / "pc" / "main" / "bin_unpacked" / "dc1";
     }
 
     [[nodiscard]] resstr<compiler_options> compiler_options::from_dcpl(
@@ -343,94 +306,11 @@ namespace dconstruct::compilation {
         return out;
     }
 
-    [[nodiscard]] resstr<std::filesystem::path> check_single_path_provided(
-        const std::filesystem::path& lhs,
-        const std::filesystem::path& rhs,
-        std::string param_name,
-        bool check_exists = true
-    ) noexcept {
-        if (lhs.empty() && rhs.empty()) {
-            return std::unexpected{"no precompiler directive or command line argument found for the required parameter '" + std::move(param_name) + '\''};
-        } else if (!lhs.empty() && !rhs.empty()) {
-            return std::unexpected{"provided both a command line argument and a precompiler directive for the option '" + std::move(param_name) + "\'. please only provide one or the other."};
-        } else if (!lhs.empty()) {
-            if (!std::filesystem::exists(lhs) && check_exists) {
-                return std::unexpected{"expected file to exist but got missing path " + lhs.string()};
-            } else {
-                return lhs;
-            }
-        } else {
-            if (!std::filesystem::exists(rhs) && check_exists) {
-                return std::unexpected{"expected file to exist but got missing path " + rhs.string()};
-            } else {
-                return rhs;
-            }
-        }
-    }
-
-    [[nodiscard]] resstr<std::optional<std::filesystem::path>> check_optional_path_provided(
-        const std::optional<std::filesystem::path>& lhs,
-        const std::optional<std::filesystem::path>& rhs,
-        std::string param_name,
-        const bool check_directory = false
-    ) noexcept {
-        if (lhs && rhs) {
-            return std::unexpected{"provided both a command line argument and a precompiler directive for the option '" + std::move(param_name) + "\'. please only provide one or the other."};
-        }
-
-        std::optional<std::filesystem::path> out = lhs ? lhs : rhs;
-        if (out) {
-            if (!std::filesystem::exists(*out)) {
-                return std::unexpected{"expected path to exist but got missing path " + out->string()};
-            }
-            if (check_directory && !std::filesystem::is_directory(*out)) {
-                return std::unexpected{"expected directory but got non-directory path " + out->string()};
-            }
-        }
-        return out;
-    }
-
     [[nodiscard]] static std::filesystem::path append_bin_extension_if_missing(std::filesystem::path path) {
         if (!path.has_extension()) {
             path += ".bin";
         }
         return path;
-    }
-
-    [[nodiscard]] static bool path_component_equals(const std::filesystem::path& lhs, const char* rhs) {
-        const std::string lhs_str = lhs.string();
-        const std::string_view rhs_str{rhs};
-        if (lhs_str.size() != rhs_str.size()) {
-            return false;
-        }
-        for (u32 i = 0; i < lhs_str.size(); ++i) {
-            if (std::tolower(static_cast<unsigned char>(lhs_str[i])) != std::tolower(static_cast<unsigned char>(rhs_str[i]))) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    [[nodiscard]] static bool path_starts_with_bin_dc1(const std::filesystem::path& path) {
-        auto iter = path.begin();
-        if (iter == path.end() || !path_component_equals(*iter, "bin")) {
-            return false;
-        }
-        ++iter;
-        return iter != path.end() && path_component_equals(*iter, "dc1");
-    }
-
-    [[nodiscard]] static std::filesystem::path resolve_mod_output_path(
-        const std::filesystem::path& mod,
-        std::filesystem::path output
-    ) {
-        if (output.has_root_directory()) {
-            output = output.relative_path();
-        }
-        if (path_starts_with_bin_dc1(output)) {
-            return append_bin_extension_if_missing(mod / output);
-        }
-        return append_bin_extension_if_missing(mod / "bin" / "dc1" / output);
     }
 
     [[nodiscard]] static std::string mod_folder_name(const std::filesystem::path& mod) {
@@ -450,90 +330,72 @@ namespace dconstruct::compilation {
         const std::filesystem::path& source_path,
         std::vector<source_location>& line_map
     ) noexcept {
-        resstr<compiler_options> from_args = compiler_options::from_args(args);
-        if (!from_args) {
-            return from_args;
-        }
         resstr<compiler_options> from_dcpl = compiler_options::from_dcpl(source, source_path, line_map);
         if (!from_dcpl) {
             return from_dcpl;
         }
 
-        resstr<std::optional<std::filesystem::path>> mod_res =
-            check_optional_path_provided(from_args->m_mod, from_dcpl->m_mod, "mod", true);
-        if (!mod_res) {
-            return std::unexpected{std::move(mod_res.error())};
+        const std::filesystem::path game = from_dcpl->m_game;
+        if (game.empty()) {
+            return std::unexpected{"missing required @game directive"};
         }
-        std::optional<std::filesystem::path> mod = std::move(*mod_res);
+        if (!std::filesystem::is_directory(game)) {
+            return std::unexpected{"@game must point to an existing game directory but got " + game.string()};
+        }
 
-        resstr<std::filesystem::path> output_res = check_single_path_provided(from_args->m_output, from_dcpl->m_output, "output", false);
-        if (!output_res) {
-            return std::unexpected{std::move(output_res.error())};
+        if (!from_dcpl->m_mod || from_dcpl->m_mod->empty()) {
+            return std::unexpected{"missing required @mod directive"};
         }
+        const std::filesystem::path mod_name = *from_dcpl->m_mod;
+        if (mod_name.is_absolute() || mod_name.has_root_name()) {
+            return std::unexpected{"@mod must be a relative mod name placed under <game>/mods but got " + mod_name.string()};
+        }
+
+        const std::filesystem::path game_dc1 = game_dc1_dir(game);
+        const std::filesystem::path mod_dir = game / "mods" / mod_name;
+        const std::filesystem::path mod_dc1 = mod_dir / "bin" / "dc1";
+
+        const std::filesystem::path& target_relative = from_dcpl->m_target;
+        const bool standalone = target_relative.empty();
 
         std::filesystem::path target;
-        if (!from_args->m_target.empty() && !from_dcpl->m_target.empty()) {
-            return std::unexpected{"provided both a command line argument and a precompiler directive for the option 'target'. please only provide one or the other."};
-        } else if (!from_args->m_target.empty()) {
-            target = std::move(from_args->m_target);
+        std::filesystem::path output;
+        if (standalone) {
+            output = mod_dc1 / (mod_folder_name(mod_dir) + ".bin");
         } else {
-            target = std::move(from_dcpl->m_target);
-        }
-        if (!target.empty() && !std::filesystem::exists(target)) {
-            return std::unexpected{"expected file to exist but got missing path " + target.string()};
-        }
-        const bool standalone = target.empty();
-
-        const std::filesystem::path output_directive = *output_res;
-        std::filesystem::path output = output_directive;
-        if (mod) {
-            if (output.is_absolute() || output.has_root_name()) {
-                return std::unexpected{"@output must be relative when @mod is provided"};
+            if (target_relative.is_absolute() || target_relative.has_root_name()) {
+                return std::unexpected{"@target must be relative to the game's dc1 directory but got " + target_relative.string()};
             }
-            output = resolve_mod_output_path(*mod, std::move(output));
-        }
-
-        std::filesystem::path modules;
-        if (mod) {
-            const std::filesystem::path derived_modules = *mod / "bin" / "dc1" / "modules.bin";
-            if (!standalone || std::filesystem::exists(derived_modules)) {
-                if (!std::filesystem::exists(derived_modules)) {
-                    return std::unexpected{"expected modules.bin at " + derived_modules.string()};
-                }
-                modules = derived_modules;
+            target = append_bin_extension_if_missing(game_dc1 / target_relative);
+            if (!std::filesystem::exists(target)) {
+                return std::unexpected{"expected target file to exist in the game's dc1 directory but got missing path " + target.string()};
             }
-        } else if (!standalone) {
-            return std::unexpected{"non-standalone compile requires @mod so modules.bin can be resolved"};
+            output = append_bin_extension_if_missing(mod_dc1 / target_relative);
         }
 
-        resstr<std::filesystem::path> sidbase_res = check_single_path_provided(from_args->m_sidbase, from_dcpl->m_sidbase, "sidbase");
-        if (!sidbase_res) {
-            return std::unexpected{std::move(sidbase_res.error())};
+        const std::filesystem::path modules = mod_dc1 / "modules.bin";
+
+        std::filesystem::path sidbase = executable_relative_sidbase();
+        if (!std::filesystem::exists(sidbase)) {
+            return std::unexpected{"expected sidbase.bin next to the executable but got missing path " + sidbase.string()};
         }
 
-        std::optional<std::filesystem::path> repackage_res = mod;
-
-        std::optional<std::filesystem::path> pak68_res = std::nullopt;
-        if (mod) {
-            pak68_res = resolve_mod_pak68_path(*mod);
-        } else if (!from_dcpl->m_pak68Edits.empty()) {
-            return std::unexpected{"@add_pak requires @mod so the pak68 file can be resolved"};
-        }
-
-        if (pak68_res && !from_dcpl->m_pak68Edits.empty()) {
-            if (const errmsg pak68_err = validate_pak68_edits(*pak68_res, from_dcpl->m_pak68Edits)) {
+        const std::filesystem::path pak68 = resolve_mod_pak68_path(mod_dir);
+        if (!from_dcpl->m_pak68Edits.empty()) {
+            if (const errmsg pak68_err = validate_pak68_edits(pak68, from_dcpl->m_pak68Edits)) {
                 return std::unexpected{*pak68_err};
             }
         }
 
         compiler_options out;
+        out.m_game = game;
         out.m_target = std::move(target);
-        out.m_mod = std::move(mod);
+        out.m_mod = mod_dir;
         out.m_output = std::move(output);
-        out.m_modules = std::move(modules);
-        out.m_sidbase = std::move(*sidbase_res);
-        out.m_repackage = std::move(repackage_res);
-        out.m_pak68 = std::move(pak68_res);
+        out.m_modules = modules;
+        out.m_sidbase = std::move(sidbase);
+        out.m_repackage = mod_dir;
+        out.m_pak68 = pak68;
         out.m_pak68Edits = std::move(from_dcpl->m_pak68Edits);
         out.m_standalone = standalone;
         return out;
