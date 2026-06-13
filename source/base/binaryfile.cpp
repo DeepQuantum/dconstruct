@@ -8,7 +8,7 @@
 
 namespace dconstruct {
 
-    [[nodiscard]] std::expected<BinaryFile, std::string> BinaryFile::from_path(const std::filesystem::path& path) noexcept {
+    [[nodiscard]] resstr<BinaryFile> BinaryFile::from_path(const std::filesystem::path& path) noexcept {
         std::ifstream scriptstream(path, std::ios::binary);
 
         if (!scriptstream.is_open()) {

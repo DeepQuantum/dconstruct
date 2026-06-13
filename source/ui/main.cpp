@@ -819,7 +819,7 @@ namespace dconstruct::ui {
         return "u64";
     }
 
-    std::expected<ast::full_type, std::string> parse_type_text(const app_state& state, const std::string& type_text) {
+    resstr<ast::full_type> parse_type_text(const app_state& state, const std::string& type_text) {
         const std::string source = "typemap { #__dconstruct_type_probe { 0 " + type_text + "; } }";
         compilation::Lexer lexer{source};
         const auto [tokens, lex_errors] = lexer.get_results();
@@ -4119,7 +4119,7 @@ namespace dconstruct::ui {
                 return {.m_editType = EditType::INT32, .I32 = 0};
             }();
 
-            if (const error_msg err = doc.m_editor->apply_edit(edit.m_offset, 0, value); err.has_value()) {
+            if (const errmsg err = doc.m_editor->apply_edit(edit.m_offset, 0, value); err.has_value()) {
                 show_error_box(state, *err);
                 return false;
             }
@@ -4237,7 +4237,7 @@ namespace dconstruct::ui {
             return false;
         }
         if (byte_edit_depth(doc) != doc.m_savedDepth) {
-            if (const error_msg err = doc.m_editor->write_edited_file(); err.has_value()) {
+            if (const errmsg err = doc.m_editor->write_edited_file(); err.has_value()) {
                 show_error_box(state, *err);
                 return false;
             }
@@ -4741,7 +4741,7 @@ namespace dconstruct::ui {
     void request_debugger_attach(debugger_state& dbg, const SIDBase* sidbase) {
         seed_debugger_sids(dbg);
         dbg.m_debugger.set_sidbase(sidbase);
-        if (std::optional<std::string> attach_error = dbg.m_debugger.request_attach()) {
+        if (errmsg attach_error = dbg.m_debugger.request_attach()) {
             dbg.m_debugger.append_output(std::format("[debugger] error: {}\n", *attach_error));
         }
     }
@@ -4791,7 +4791,7 @@ namespace dconstruct::ui {
                 break;
             }
             case debugger_type::STATE::ERROR: {
-                if (std::optional<std::string> error = dbg.m_debugger.poll_error()) {
+                if (errmsg error = dbg.m_debugger.poll_error()) {
                     dbg.m_debugger.append_output(std::format("[debugger] error: {}\n", *error));
                 } else if (state_changed) {
                     dbg.m_debugger.append_output("[debugger] error\n");

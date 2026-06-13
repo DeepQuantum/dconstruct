@@ -30,14 +30,14 @@ namespace dconstruct::testing {
 
     struct decomp_result {
         ast::function_definition m_function;
-        std::optional<std::string> m_error;
+        errmsg m_error;
 
         [[nodiscard]] std::string pseudo_c() const {
             return m_function.to_pseudo_c_string();
         }
     };
 
-    [[nodiscard]] static std::expected<ast::function_to_mapped_vars, std::string> parse_type_map(const std::string& source) {
+    [[nodiscard]] static resstr<ast::function_to_mapped_vars> parse_type_map(const std::string& source) {
         compilation::Lexer lexer{source};
         const auto [tokens, lex_errors] = lexer.get_results();
         if (!lex_errors.empty()) {

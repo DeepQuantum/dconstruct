@@ -84,7 +84,7 @@ public:
         CONTINUE
     };
 
-    [[nodiscard]] std::optional<std::string> request_attach();
+    [[nodiscard]] errmsg request_attach();
     void detach();
 
     debugger() {
@@ -126,7 +126,7 @@ public:
     void request_continue();
 
     [[nodiscard]] std::shared_ptr<debugger_snapshot> poll_snapshot();
-    [[nodiscard]] std::optional<std::string> poll_error();
+    [[nodiscard]] errmsg poll_error();
 
 
     debugger(debugger&) = delete;
@@ -142,7 +142,7 @@ public:
 private:
     void loop(std::stop_token st);
 
-    [[nodiscard]] std::optional<std::string> attach();
+    [[nodiscard]] errmsg attach();
     void cleanup_session();
 
     struct OutputSink : IDebugOutputCallbacks {
@@ -175,19 +175,19 @@ private:
         std::unique_ptr<u64[]> m_symbols;
     };
 
-    [[nodiscard]] static std::expected<ULONG, std::string> get_tlou_pid();
+    [[nodiscard]] static resstr<ULONG> get_tlou_pid();
     [[nodiscard]] BinaryFile create_debugger_binary_file() const;
 
     template<typename T>
-    [[nodiscard]] std::expected<T, std::string> read_virtual(u64 addr);
+    [[nodiscard]] resstr<T> read_virtual(u64 addr);
 
     [[nodiscard]] std::unique_ptr<u64[]> read_stack_frame();
 
     template<typename T>
-    [[nodiscard]] std::expected<std::unique_ptr<T[]>, std::string> read_virtual(u64 addr, u64 num_elements);
+    [[nodiscard]] resstr<std::unique_ptr<T[]>> read_virtual(u64 addr, u64 num_elements);
 
     [[nodiscard]] std::shared_ptr<debugger_snapshot> capture_initial_snapshot(sid64 sid, ULONG thread_id);
-    [[nodiscard]] res_msg<std::shared_ptr<debugger_snapshot>> capture_next_snapshot(sid64 sid, ULONG thread_id);
+    [[nodiscard]] resstr<std::shared_ptr<debugger_snapshot>> capture_next_snapshot(sid64 sid, ULONG thread_id);
 
     void store_error(std::string_view error);
 
@@ -209,7 +209,7 @@ private:
     mutable std::mutex m_mutex;
     std::jthread m_debugThread;
 
-    std::optional<std::string> m_error;
+    errmsg m_error;
     std::shared_ptr<debugger_snapshot> m_snapshot;
     std::atomic<STATE> m_state = STATE::DETACHED;
     std::condition_variable_any m_commandCv;

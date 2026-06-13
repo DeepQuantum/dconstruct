@@ -24,8 +24,8 @@ namespace dconstruct::ast {
             return rhs_type;
         }
 
-        const std::optional<std::string> invalid_dereference = std::visit(
-            [](auto&& rhs_type) -> std::optional<std::string> {
+        const errmsg invalid_dereference = std::visit(
+            [](auto&& rhs_type) -> errmsg {
                 using T = std::decay_t<decltype(rhs_type)>;
 
                 if constexpr (is_pointer<T>) {
@@ -52,12 +52,12 @@ namespace dconstruct::ast {
         return m_rhs->is_l_evaluable();
     }
 
-    [[nodiscard]] emission_res dereference_expr::emit_dc(
+    [[nodiscard]] resstr<reg_idx> dereference_expr::emit_dc(
         compilation::function_context& fn,
         compilation::global_state& global,
         const std::optional<reg_idx> opt_destination
     ) const noexcept {
-        emission_res rhs = m_rhs->emit_dc(fn, global);
+        resstr<reg_idx> rhs = m_rhs->emit_dc(fn, global);
         if (!rhs) {
             return rhs;
         }
@@ -69,12 +69,12 @@ namespace dconstruct::ast {
 
         const primitive_kind kind = std::get<primitive_type>(*ptr_t.m_pointedAt).m_type;
 
-        std::expected<Opcode, std::string> load_opcode = get_load_opcode(*ptr_t.m_pointedAt);
+        resstr<Opcode> load_opcode = get_load_opcode(*ptr_t.m_pointedAt);
         if (!load_opcode) {
             return std::unexpected{std::move(load_opcode.error())};
         }
 
-        emission_res load_destination = fn.fix_destination(opt_destination);
+        resstr<reg_idx> load_destination = fn.fix_destination(opt_destination);
         if (!load_destination) {
             return load_destination;
         }
@@ -85,11 +85,11 @@ namespace dconstruct::ast {
         return *load_destination;
     }
 
-    [[nodiscard]] lvalue_emission_res dereference_expr::emit_dc_lvalue(
+    [[nodiscard]] resstr<std::pair<reg_idx, Opcode>> dereference_expr::emit_dc_lvalue(
         compilation::function_context& fn,
         compilation::global_state& global
     ) const noexcept {
-        lvalue_emission_res rhs = m_rhs->emit_dc_lvalue(fn, global);
+        resstr<std::pair<reg_idx, Opcode>> rhs = m_rhs->emit_dc_lvalue(fn, global);
         if (!rhs) {
             return rhs;
         }
@@ -97,7 +97,7 @@ namespace dconstruct::ast {
         assert(std::holds_alternative<ptr_type>(*m_rhs->get_type()));
         const ptr_type& ptr_t = std::get<ptr_type>(*m_rhs->get_type());
 
-        std::expected<Opcode, std::string> store_opcode = get_store_opcode(*ptr_t.m_pointedAt);
+        resstr<Opcode> store_opcode = get_store_opcode(*ptr_t.m_pointedAt);
         if (!store_opcode) {
             return std::unexpected{std::move(store_opcode.error())};
         }

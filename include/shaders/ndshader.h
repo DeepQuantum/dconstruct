@@ -18,7 +18,7 @@ namespace dconstruct::shaders {
     //     static constexpr u8 NDSHADER_DXBC_OFFSET = 0x28;
     //
     // public:
-    //     using expected = std::expected<ndshader_file, std::string>;
+    //     using expected = resstr<ndshader_file>;
     //
     //     [[nodiscard]] static ndshader_file::expected parse_from_file(const std::filesystem::path &path) noexcept;
     //

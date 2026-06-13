@@ -50,12 +50,12 @@ namespace dconstruct::compilation {
     [[nodiscard]] std::optional<pak68_type> pak68_type_from_string(std::string_view name) noexcept;
     [[nodiscard]] std::string_view pak68_type_to_string(pak68_type type) noexcept;
 
-    [[nodiscard]] std::optional<std::string> validate_pak68_edits(
+    [[nodiscard]] errmsg validate_pak68_edits(
         const std::filesystem::path& path,
         const std::vector<pak68_edit_request>& requests
     ) noexcept;
 
-    [[nodiscard]] std::expected<std::vector<pak68_edit_summary>, std::string> apply_pak68_edits(
+    [[nodiscard]] resstr<std::vector<pak68_edit_summary>> apply_pak68_edits(
         const std::filesystem::path& path,
         const std::vector<pak68_edit_request>& requests
     ) noexcept;

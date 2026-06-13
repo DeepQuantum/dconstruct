@@ -273,8 +273,7 @@ namespace dconstruct {
             } else {
                 return insert_struct_or_arraylike(member, values);
             }
-        },
-                          type);
+        }, type);
     }
 
     const std::vector<disassembled_entry>& Disassembler::disassemble() {
@@ -587,7 +586,7 @@ namespace dconstruct {
             .m_typeId = effective_type_id,
             .m_offset = offset,
             .m_values = {},
-            .m_arraySize = std::nullopt,
+            .m_pointerOffset = std::nullopt,
         };
 
         m_currentEmbeddedFunctionId.m_outerStructs.emplace_back(struct_name, offset);
@@ -646,7 +645,7 @@ namespace dconstruct {
                             .m_typeId = SID("array"),
                             .m_offset = get_offset(data_start),
                             .m_values = {},
-                            .m_arraySize = std::nullopt,
+                            .m_pointerOffset = std::nullopt,
                         };
                         for (u32 i = 0; i < count; ++i) {
                             insert_struct_or_arraylike(data_start + i * sizeof(u64), entries.m_values);
@@ -806,7 +805,7 @@ namespace dconstruct {
                 break;
             }
             case BLOCK_TYPE::EVENT: {
-                function_name.m_event.m_name = std::string("event ").append(raw_sid_name(m_sidbase->lookup(block->m_blockEventId, m_currentFile->m_sidCache)));
+                function_name.m_event.m_name = std::string("event_").append(raw_sid_name(m_sidbase->lookup(block->m_blockEventId, m_currentFile->m_sidCache)));
                 break;
             }
             case BLOCK_TYPE::UPDATE: {

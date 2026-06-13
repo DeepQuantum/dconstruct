@@ -92,11 +92,11 @@ namespace dconstruct::disassembly {
 
     using type_map_t = std::unordered_map<sid64, ast::full_type>;
 
-    [[nodiscard]] std::expected<type_map_t, std::string> parse_type_defs_file(const std::filesystem::path& filepath);
+    [[nodiscard]] resstr<type_map_t> parse_type_defs_file(const std::filesystem::path& filepath);
 
     // function -> <var, type>
 
-    [[nodiscard]] std::expected<ast::function_to_mapped_vars, std::string> parse_var_type_map_file(const std::filesystem::path& filepath, const std::unordered_map<sid64, ast::full_type>* mapped_types = nullptr);
+    [[nodiscard]] resstr<ast::function_to_mapped_vars> parse_var_type_map_file(const std::filesystem::path& filepath, const std::unordered_map<sid64, ast::full_type>* mapped_types = nullptr);
 
     [[nodiscard]] std::optional<std::pair<cxxopts::Options, cxxopts::ParseResult>> get_command_line_options(int argc, char* argv[]);
 

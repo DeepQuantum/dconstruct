@@ -83,7 +83,7 @@ namespace dconstruct::ast {
         return make_type_from_prim(primitive_kind::U64);
     }
 
-    [[nodiscard]] emission_res sizeof_expr::emit_dc(
+    [[nodiscard]] resstr<reg_idx> sizeof_expr::emit_dc(
         compilation::function_context& fn,
         compilation::global_state& global,
         const std::optional<reg_idx> destination
@@ -102,7 +102,7 @@ namespace dconstruct::ast {
             return std::unexpected{"expected type with size less than " + std::to_string(std::numeric_limits<u16>::max()) + " but got size " + std::to_string(type_size)};
         }
 
-        const emission_res sizeof_dest = fn.fix_destination(destination);
+        const resstr<reg_idx> sizeof_dest = fn.fix_destination(destination);
         if (!sizeof_dest) {
             return sizeof_dest;
         }

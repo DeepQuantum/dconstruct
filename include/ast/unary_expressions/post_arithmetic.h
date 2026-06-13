@@ -14,6 +14,6 @@ namespace dconstruct::ast {
         void to_pseudo_c_colored_string(code_color_serialization_buffer& buffer) const noexcept final;
         [[nodiscard]] expr_uptr simplify() const final;
         [[nodiscard]] semantic_check_res compute_type_checked(compilation::scope& env) const noexcept final;
-        [[nodiscard]] emission_res emit_dc(compilation::function_context& fn, compilation::global_state& global, const std::optional<reg_idx> destination) const noexcept final;
+        [[nodiscard]] resstr<reg_idx> emit_dc(compilation::function_context& fn, compilation::global_state& global, const std::optional<reg_idx> destination) const noexcept final;
     };
 }

@@ -35,7 +35,7 @@ namespace dconstruct {
         }
     }
 
-    error_msg EditDisassembler::apply_edit(
+    errmsg EditDisassembler::apply_edit(
         const u64 struct_offset,
         const u32 member_index,
         const BinaryFileEdit& value
@@ -101,7 +101,7 @@ namespace dconstruct {
         return std::nullopt;
     }
 
-    error_msg EditDisassembler::apply_file_edits() noexcept {
+    errmsg EditDisassembler::apply_file_edits() noexcept {
         bool applied_at_least_one = false;
         u16 edit_index = 0;
         for (const auto& edit_str : m_edits) {
@@ -125,7 +125,7 @@ namespace dconstruct {
 
             const BinaryFileEdit edit = get_edit_value_from_string(str_value);
 
-            if (const error_msg err = apply_edit(struct_location, member_index, edit); err.has_value()) {
+            if (const errmsg err = apply_edit(struct_location, member_index, edit); err.has_value()) {
                 return err;
             }
             applied_at_least_one = true;
@@ -163,7 +163,7 @@ namespace dconstruct {
         file.read_reloc_table();
     }
 
-    error_msg EditDisassembler::write_edited_file() {
+    errmsg EditDisassembler::write_edited_file() {
         const std::filesystem::path& file_path = m_currentFile->m_path;
         const std::size_t expected_size = m_currentFile->m_size;
         std::cout << "writing edits to original file: " << file_path << '\n';

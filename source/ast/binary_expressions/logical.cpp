@@ -38,8 +38,8 @@ namespace dconstruct::ast {
             return rhs_type;
         }
 
-        const std::optional<std::string> invalid_logical = std::visit(
-            [](auto&& lhs_type, auto&& rhs_type) -> std::optional<std::string> {
+        const errmsg invalid_logical = std::visit(
+            [](auto&& lhs_type, auto&& rhs_type) -> errmsg {
                 using lhs_t = std::decay_t<decltype(lhs_type)>;
                 using rhs_t = std::decay_t<decltype(rhs_type)>;
 
@@ -64,12 +64,12 @@ namespace dconstruct::ast {
         return std::unexpected{semantic_check_error{*invalid_logical, this}};
     }
 
-    [[nodiscard]] emission_res logical_expr::emit_dc(
+    [[nodiscard]] resstr<reg_idx> logical_expr::emit_dc(
         compilation::function_context& fn,
         compilation::global_state& global,
         const std::optional<reg_idx> destination
     ) const noexcept {
-        const emission_res logical_destination = fn.fix_destination(destination);
+        const resstr<reg_idx> logical_destination = fn.fix_destination(destination);
         if (!logical_destination) {
             return logical_destination;
         }
@@ -77,7 +77,7 @@ namespace dconstruct::ast {
         if (m_operator.m_lexeme == "&&") {
             fn.emit_instruction(Opcode::LoadU16Imm, *logical_destination, 1, 0);
 
-            const emission_res lhs = m_lhs->emit_dc(fn, global);
+            const resstr<reg_idx> lhs = m_lhs->emit_dc(fn, global);
             if (!lhs) {
                 return lhs;
             }
@@ -86,7 +86,7 @@ namespace dconstruct::ast {
             fn.emit_instruction(Opcode::BranchIfNot, compilation::function_context::BRANCH_PLACEHOLDER, *lhs, compilation::function_context::BRANCH_PLACEHOLDER);
             fn.free_register(*lhs);
 
-            const emission_res rhs = m_rhs->emit_dc(fn, global);
+            const resstr<reg_idx> rhs = m_rhs->emit_dc(fn, global);
             if (!rhs) {
                 return rhs;
             }
@@ -111,7 +111,7 @@ namespace dconstruct::ast {
 
         fn.emit_instruction(Opcode::LoadU16Imm, *logical_destination, 0, 0);
 
-        const emission_res lhs = m_lhs->emit_dc(fn, global);
+        const resstr<reg_idx> lhs = m_lhs->emit_dc(fn, global);
         if (!lhs) {
             return lhs;
         }
@@ -120,7 +120,7 @@ namespace dconstruct::ast {
         fn.emit_instruction(Opcode::BranchIf, compilation::function_context::BRANCH_PLACEHOLDER, *lhs, compilation::function_context::BRANCH_PLACEHOLDER);
         fn.free_register(*lhs);
 
-        const emission_res rhs = m_rhs->emit_dc(fn, global);
+        const resstr<reg_idx> rhs = m_rhs->emit_dc(fn, global);
         if (!rhs) {
             return rhs;
         }
@@ -143,7 +143,7 @@ namespace dconstruct::ast {
         return *logical_destination;
     }
 
-    [[nodiscard]] condition_branch_res logical_expr::emit_dc_branch(
+    [[nodiscard]] resstr<std::vector<u64>> logical_expr::emit_dc_branch(
         compilation::function_context& fn,
         compilation::global_state& global,
         const bool branch_when_true
@@ -151,12 +151,12 @@ namespace dconstruct::ast {
         const bool is_and = m_operator.m_lexeme == "&&";
 
         if (is_and && !branch_when_true) {
-            condition_branch_res lhs_false = m_lhs->emit_dc_branch(fn, global, false);
+            resstr<std::vector<u64>> lhs_false = m_lhs->emit_dc_branch(fn, global, false);
             if (!lhs_false) {
                 return std::unexpected{lhs_false.error()};
             }
 
-            condition_branch_res rhs_false = m_rhs->emit_dc_branch(fn, global, false);
+            resstr<std::vector<u64>> rhs_false = m_rhs->emit_dc_branch(fn, global, false);
             if (!rhs_false) {
                 return std::unexpected{rhs_false.error()};
             }
@@ -166,12 +166,12 @@ namespace dconstruct::ast {
         }
 
         if (is_and) {
-            condition_branch_res lhs_false = m_lhs->emit_dc_branch(fn, global, false);
+            resstr<std::vector<u64>> lhs_false = m_lhs->emit_dc_branch(fn, global, false);
             if (!lhs_false) {
                 return std::unexpected{lhs_false.error()};
             }
 
-            condition_branch_res rhs_true = m_rhs->emit_dc_branch(fn, global, true);
+            resstr<std::vector<u64>> rhs_true = m_rhs->emit_dc_branch(fn, global, true);
             if (!rhs_true) {
                 return std::unexpected{rhs_true.error()};
             }
@@ -181,12 +181,12 @@ namespace dconstruct::ast {
         }
 
         if (branch_when_true) {
-            condition_branch_res lhs_true = m_lhs->emit_dc_branch(fn, global, true);
+            resstr<std::vector<u64>> lhs_true = m_lhs->emit_dc_branch(fn, global, true);
             if (!lhs_true) {
                 return std::unexpected{lhs_true.error()};
             }
 
-            condition_branch_res rhs_true = m_rhs->emit_dc_branch(fn, global, true);
+            resstr<std::vector<u64>> rhs_true = m_rhs->emit_dc_branch(fn, global, true);
             if (!rhs_true) {
                 return std::unexpected{rhs_true.error()};
             }
@@ -195,12 +195,12 @@ namespace dconstruct::ast {
             return lhs_true;
         }
 
-        condition_branch_res lhs_true = m_lhs->emit_dc_branch(fn, global, true);
+        resstr<std::vector<u64>> lhs_true = m_lhs->emit_dc_branch(fn, global, true);
         if (!lhs_true) {
             return std::unexpected{lhs_true.error()};
         }
 
-        condition_branch_res rhs_false = m_rhs->emit_dc_branch(fn, global, false);
+        resstr<std::vector<u64>> rhs_false = m_rhs->emit_dc_branch(fn, global, false);
         if (!rhs_false) {
             return std::unexpected{rhs_false.error()};
         }

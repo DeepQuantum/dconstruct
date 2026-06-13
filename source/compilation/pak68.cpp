@@ -35,7 +35,7 @@ namespace dconstruct::compilation {
         return line;
     }
 
-    [[nodiscard]] std::expected<std::vector<std::string>, std::string> load_lines(const std::filesystem::path& path) noexcept {
+    [[nodiscard]] resstr<std::vector<std::string>> load_lines(const std::filesystem::path& path) noexcept {
         std::error_code ec;
         if (!std::filesystem::exists(path, ec)) {
             return std::vector<std::string>{};
@@ -126,7 +126,7 @@ namespace dconstruct::compilation {
         return "<unknown>";
     }
 
-    [[nodiscard]] std::optional<std::string> validate_pak68_edits(
+    [[nodiscard]] errmsg validate_pak68_edits(
         const std::filesystem::path& path,
         const std::vector<pak68_edit_request>& requests
     ) noexcept {
@@ -135,7 +135,7 @@ namespace dconstruct::compilation {
             return "expected pak68 path to be a file but got " + path.string();
         }
 
-        const std::expected<std::vector<std::string>, std::string> lines = load_lines(path);
+        const resstr<std::vector<std::string>> lines = load_lines(path);
         if (!lines) {
             return lines.error();
         }
@@ -143,7 +143,7 @@ namespace dconstruct::compilation {
         return std::nullopt;
     }
 
-    [[nodiscard]] std::expected<std::vector<pak68_edit_summary>, std::string> apply_pak68_edits(
+    [[nodiscard]] resstr<std::vector<pak68_edit_summary>> apply_pak68_edits(
         const std::filesystem::path& path,
         const std::vector<pak68_edit_request>& requests
     ) noexcept {
@@ -151,11 +151,11 @@ namespace dconstruct::compilation {
             return std::vector<pak68_edit_summary>{};
         }
 
-        if (const std::optional<std::string> validation_err = validate_pak68_edits(path, requests)) {
+        if (const errmsg validation_err = validate_pak68_edits(path, requests)) {
             return std::unexpected{*validation_err};
         }
 
-        std::expected<std::vector<std::string>, std::string> lines = load_lines(path);
+        resstr<std::vector<std::string>> lines = load_lines(path);
         if (!lines) {
             return std::unexpected{lines.error()};
         }

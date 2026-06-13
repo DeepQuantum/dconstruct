@@ -26,7 +26,7 @@ int main() {
                 if (attach_requested) {
                     return 0;
                 }
-                if (std::optional<std::string> attach_error = db.request_attach()) {
+                if (dconstruct::errmsg attach_error = db.request_attach()) {
                     std::println(stderr, "error: {}", *attach_error);
                     return 1;
                 }
@@ -54,7 +54,7 @@ int main() {
                 return 0;
             }
             case debugger::STATE::ERROR: {
-                if (std::optional<std::string> error = db.poll_error()) {
+                if (dconstruct::errmsg error = db.poll_error()) {
                     std::println(stderr, "error: {}", *error);
                 } else {
                     std::println(stderr, "error");

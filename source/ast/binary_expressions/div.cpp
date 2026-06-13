@@ -19,8 +19,8 @@ namespace dconstruct::ast {
             return rhs_type;
         }
 
-        const std::expected<full_type, std::string> valid_div = std::visit(
-            [](auto&& lhs_type, auto&& rhs_type) -> std::expected<full_type, std::string> {
+        const resstr<full_type> valid_div = std::visit(
+            [](auto&& lhs_type, auto&& rhs_type) -> resstr<full_type> {
                 using lhs_t = std::decay_t<decltype(lhs_type)>;
                 using rhs_t = std::decay_t<decltype(rhs_type)>;
 
@@ -53,17 +53,17 @@ namespace dconstruct::ast {
         return *valid_div;
     }
 
-    [[nodiscard]] emission_res div_expr::emit_dc(
+    [[nodiscard]] resstr<reg_idx> div_expr::emit_dc(
         compilation::function_context& fn,
         compilation::global_state& global,
         const std::optional<reg_idx> destination
     ) const noexcept {
-        const emission_res lhs = m_lhs->emit_dc(fn, global);
+        const resstr<reg_idx> lhs = m_lhs->emit_dc(fn, global);
         if (!lhs) {
             return lhs;
         }
 
-        const emission_res rhs = m_rhs->emit_dc(fn, global);
+        const resstr<reg_idx> rhs = m_rhs->emit_dc(fn, global);
         if (!rhs) {
             return rhs;
         }
@@ -71,7 +71,7 @@ namespace dconstruct::ast {
         assert(std::holds_alternative<primitive_type>(*m_type));
         const Opcode div_opcode = is_integral(std::get<primitive_type>(*m_type).m_type) ? Opcode::IDiv : Opcode::FDiv;
 
-        const emission_res div_destination = fn.fix_destination(destination);
+        const resstr<reg_idx> div_destination = fn.fix_destination(destination);
         if (!div_destination) {
             return div_destination;
         }

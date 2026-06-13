@@ -23,7 +23,7 @@ namespace dconstruct::ast {
         [[nodiscard]] std::unique_ptr<struct_access> to_struct_access() noexcept final;
         [[nodiscard]] expr_uptr* get_first_argument() noexcept final;
         [[nodiscard]] std::optional<compilation::source_location> source_location() const noexcept final { return compilation::source_location{m_token.m_file, m_token.m_line}; }
-        [[nodiscard]] emission_res emit_dc(compilation::function_context& fn, compilation::global_state& global, std::optional<reg_idx> destination) const noexcept final;
+        [[nodiscard]] resstr<reg_idx> emit_dc(compilation::function_context& fn, compilation::global_state& global, std::optional<reg_idx> destination) const noexcept final;
         
 
         static constexpr u16 MAX_NON_SPLIT_COMPLEXITY = 10;

@@ -63,7 +63,7 @@ namespace dconstruct::ast {
         return *type;
     }
 
-    [[nodiscard]] lvalue_emission_res identifier::emit_dc_lvalue(
+    [[nodiscard]] resstr<std::pair<reg_idx, Opcode>> identifier::emit_dc_lvalue(
         compilation::function_context& fn,
         compilation::global_state& global
     ) const noexcept {
@@ -76,7 +76,7 @@ namespace dconstruct::ast {
         return std::tuple{*var_location, Opcode::Move};
     }
 
-    [[nodiscard]] emission_res identifier::emit_dc_callee(
+    [[nodiscard]] resstr<reg_idx> identifier::emit_dc_callee(
         compilation::function_context& fn,
         compilation::global_state& global,
         const std::optional<reg_idx> destination
@@ -88,7 +88,7 @@ namespace dconstruct::ast {
         return true_destination;
     }
 
-    [[nodiscard]] emission_res identifier::emit_dc(
+    [[nodiscard]] resstr<reg_idx> identifier::emit_dc(
         compilation::function_context& fn,
         compilation::global_state& global,
         const std::optional<reg_idx> destination

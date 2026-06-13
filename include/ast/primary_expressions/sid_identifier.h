@@ -29,9 +29,9 @@ namespace dconstruct::ast {
         [[nodiscard]] std::optional<compilation::source_location> source_location() const noexcept final { return compilation::source_location{m_name.m_file, m_name.m_line}; }
         [[nodiscard]] bool is_dead_code() const noexcept final { return true; }
         [[nodiscard]] std::unique_ptr<struct_access> to_struct_access() noexcept final;
-        [[nodiscard]] std::expected<u16, std::string> emit_to_symbol_table(compilation::function_context& fn, compilation::global_state& global) const noexcept final;
-        [[nodiscard]] emission_res emit_dc_callee(compilation::function_context& fn, compilation::global_state& global, const std::optional<reg_idx> destination) const noexcept final;
-        [[nodiscard]] emission_res emit_dc(compilation::function_context& fn, compilation::global_state& global, const std::optional<reg_idx> destination) const noexcept final;
+        [[nodiscard]] resstr<u16> emit_to_symbol_table(compilation::function_context& fn, compilation::global_state& global) const noexcept final;
+        [[nodiscard]] resstr<reg_idx> emit_dc_callee(compilation::function_context& fn, compilation::global_state& global, const std::optional<reg_idx> destination) const noexcept final;
+        [[nodiscard]] resstr<reg_idx> emit_dc(compilation::function_context& fn, compilation::global_state& global, const std::optional<reg_idx> destination) const noexcept final;
 
         [[nodiscard]] std::string get_raw_string() const noexcept;
 

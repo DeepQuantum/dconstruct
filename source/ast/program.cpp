@@ -83,7 +83,7 @@ namespace dconstruct::ast {
         }
     }
 
-    [[nodiscard]] std::expected<std::pair<std::unique_ptr<std::byte[]>, u64>, std::string> program::make_binary(
+    [[nodiscard]] resstr<std::pair<std::unique_ptr<std::byte[]>, u64>> program::make_binary(
         std::vector<compilation::program_binary_element> program_elements,
         const compilation::global_state& global
     ) noexcept {
@@ -224,12 +224,12 @@ namespace dconstruct::ast {
         current_size += sizeof(reloc_table_size);
         current_size += reloc_table_size;
         assert(current_size == total_size);
-        std::expected<std::pair<std::unique_ptr<std::byte[]>, u64>, std::string> result;
+        resstr<std::pair<std::unique_ptr<std::byte[]>, u64>> result;
         result.emplace(std::move(out), total_size);
         return result;
     }
 
-    [[nodiscard]] std::expected<std::pair<std::unique_ptr<std::byte[]>, u64>, std::string> program::compile_to_file(const compilation::scope& scope) const noexcept {
+    [[nodiscard]] resstr<std::pair<std::unique_ptr<std::byte[]>, u64>> program::compile_to_file(const compilation::scope& scope) const noexcept {
         compilation::global_state global{};
         auto functions = compile_binary_elements(scope, global);
         if (!functions) {
@@ -238,7 +238,7 @@ namespace dconstruct::ast {
         return make_binary(std::move(*functions), global);
     }
 
-    [[nodiscard]] std::expected<std::pair<std::unique_ptr<std::byte[]>, u64>, std::string> program::compile_to_file(
+    [[nodiscard]] resstr<std::pair<std::unique_ptr<std::byte[]>, u64>> program::compile_to_file(
         const compilation::scope& scope,
         compilation::global_state& global
     ) const noexcept {
@@ -249,7 +249,7 @@ namespace dconstruct::ast {
         return make_binary(std::move(*functions), global);
     }
 
-    [[nodiscard]] std::expected<std::vector<compilation::program_binary_element>, std::string> program::compile_binary_elements(
+    [[nodiscard]] resstr<std::vector<compilation::program_binary_element>> program::compile_binary_elements(
         const compilation::scope& scope,
         compilation::global_state& global
     ) const noexcept {
@@ -261,7 +261,7 @@ namespace dconstruct::ast {
         std::vector<compilation::program_binary_element> functions;
         functions.reserve(m_declarations.size());
         for (u32 i = 0; i < m_declarations.size(); ++i) {
-            program_binary_result res = m_declarations[i]->emit_dc(global);
+            resstr<compilation::program_binary_element> res = m_declarations[i]->emit_dc(global);
 
             if (!res) {
                 return std::unexpected{res.error()};
@@ -274,7 +274,7 @@ namespace dconstruct::ast {
         return functions;
     }
 
-    [[nodiscard]] std::expected<std::vector<compilation::program_binary_element>, std::string> program::compile_binary_elements(const compilation::scope& scope) const noexcept {
+    [[nodiscard]] resstr<std::vector<compilation::program_binary_element>> program::compile_binary_elements(const compilation::scope& scope) const noexcept {
         compilation::global_state global{};
         return compile_binary_elements(scope, global);
     }

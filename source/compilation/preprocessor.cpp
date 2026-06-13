@@ -43,7 +43,7 @@ namespace dconstruct::compilation {
         return value;
     }
 
-    [[nodiscard]] static std::expected<std::filesystem::path, std::string> parse_quoted_path(
+    [[nodiscard]] static resstr<std::filesystem::path> parse_quoted_path(
         const std::string& line,
         const u64 first_space,
         const source_location& loc
@@ -56,7 +56,7 @@ namespace dconstruct::compilation {
         return std::filesystem::path{std::string(line.data() + first_quote + 1, last_quote - first_quote - 1)};
     }
 
-    [[nodiscard]] static std::expected<pak68_entry, std::string> parse_pak68_entry(
+    [[nodiscard]] static resstr<pak68_entry> parse_pak68_entry(
         const std::string_view line,
         const source_location& loc
     ) noexcept {
@@ -95,7 +95,7 @@ namespace dconstruct::compilation {
         std::string_view m_afterOpen;
     };
 
-    [[nodiscard]] static std::expected<add_pak_header, std::string> parse_add_pak_header(
+    [[nodiscard]] static resstr<add_pak_header> parse_add_pak_header(
         const std::string& line,
         const source_location& loc
     ) noexcept {
@@ -126,7 +126,7 @@ namespace dconstruct::compilation {
         return add_pak_header{std::move(category_type), std::move(category_name), after_open};
     }
 
-    [[nodiscard]] static std::optional<std::string> parse_add_pak_entries_from_segment(
+    [[nodiscard]] static errmsg parse_add_pak_entries_from_segment(
         std::string_view segment,
         const bool closes_block,
         const source_location& loc,
@@ -145,7 +145,7 @@ namespace dconstruct::compilation {
             return std::nullopt;
         }
 
-        std::expected<pak68_entry, std::string> entry = parse_pak68_entry(segment, loc);
+        resstr<pak68_entry> entry = parse_pak68_entry(segment, loc);
         if (!entry) {
             return entry.error();
         }
@@ -153,7 +153,7 @@ namespace dconstruct::compilation {
         return std::nullopt;
     }
 
-    [[nodiscard]] static std::optional<std::string> preprocess_dcpl(
+    [[nodiscard]] static errmsg preprocess_dcpl(
         const std::string& source,
         const std::filesystem::path& source_path,
         compiler_options& options,
@@ -196,7 +196,7 @@ namespace dconstruct::compilation {
                 stripped_source += '\n';
                 line_map.push_back(loc);
 
-                std::expected<add_pak_header, std::string> header = parse_add_pak_header(line, loc);
+                resstr<add_pak_header> header = parse_add_pak_header(line, loc);
                 if (!header) {
                     return header.error();
                 }
@@ -208,7 +208,7 @@ namespace dconstruct::compilation {
 
                 std::string_view segment = header->m_afterOpen;
                 bool closes_block = segment.find('}') != std::string_view::npos;
-                if (std::optional<std::string> err = parse_add_pak_entries_from_segment(segment, closes_block, loc, request)) {
+                if (errmsg err = parse_add_pak_entries_from_segment(segment, closes_block, loc, request)) {
                     return err;
                 }
 
@@ -225,7 +225,7 @@ namespace dconstruct::compilation {
 
                     segment = block_line;
                     closes_block = segment.find('}') != std::string_view::npos;
-                    if (std::optional<std::string> err = parse_add_pak_entries_from_segment(segment, closes_block, block_loc, request)) {
+                    if (errmsg err = parse_add_pak_entries_from_segment(segment, closes_block, block_loc, request)) {
                         return err;
                     }
                 }
@@ -237,7 +237,7 @@ namespace dconstruct::compilation {
                 continue;
             }
 
-            std::expected<std::filesystem::path, std::string> path_res = parse_quoted_path(line, first_space, loc);
+            resstr<std::filesystem::path> path_res = parse_quoted_path(line, first_space, loc);
             if (!path_res) {
                 return path_res.error();
             }
@@ -266,7 +266,7 @@ namespace dconstruct::compilation {
 
                 std::stringstream input;
                 input << include_in.rdbuf();
-                if (std::optional<std::string> err = preprocess_dcpl(input.str(), include_path, options, included_paths, stripped_source, line_map)) {
+                if (errmsg err = preprocess_dcpl(input.str(), include_path, options, included_paths, stripped_source, line_map)) {
                     return err;
                 }
                 continue;
@@ -293,7 +293,7 @@ namespace dconstruct::compilation {
         return std::nullopt;
     }
 
-    [[nodiscard]] std::expected<compiler_options, std::string> compiler_options::from_args(const cxxopts::ParseResult& args) noexcept {
+    [[nodiscard]] resstr<compiler_options> compiler_options::from_args(const cxxopts::ParseResult& args) noexcept {
         std::filesystem::path target_binary_filepath;
         if (args.count("t") == 1) {
             target_binary_filepath = args["t"].as<std::string>();
@@ -322,7 +322,7 @@ namespace dconstruct::compilation {
         return out;
     }
 
-    [[nodiscard]] std::expected<compiler_options, std::string> compiler_options::from_dcpl(
+    [[nodiscard]] resstr<compiler_options> compiler_options::from_dcpl(
         std::string& source,
         const std::filesystem::path& source_path,
         std::vector<source_location>& line_map
@@ -334,7 +334,7 @@ namespace dconstruct::compilation {
 
         std::unordered_set<std::string> included_paths;
         included_paths.insert(canonical_existing_path(source_path).string());
-        if (std::optional<std::string> err = preprocess_dcpl(source, source_path, out, included_paths, stripped_source, line_map)) {
+        if (errmsg err = preprocess_dcpl(source, source_path, out, included_paths, stripped_source, line_map)) {
             return std::unexpected{std::move(*err)};
         }
         stripped_source.shrink_to_fit();
@@ -343,7 +343,7 @@ namespace dconstruct::compilation {
         return out;
     }
 
-    [[nodiscard]] std::expected<std::filesystem::path, std::string> check_single_path_provided(
+    [[nodiscard]] resstr<std::filesystem::path> check_single_path_provided(
         const std::filesystem::path& lhs,
         const std::filesystem::path& rhs,
         std::string param_name,
@@ -368,7 +368,7 @@ namespace dconstruct::compilation {
         }
     }
 
-    [[nodiscard]] std::expected<std::optional<std::filesystem::path>, std::string> check_optional_path_provided(
+    [[nodiscard]] resstr<std::optional<std::filesystem::path>> check_optional_path_provided(
         const std::optional<std::filesystem::path>& lhs,
         const std::optional<std::filesystem::path>& rhs,
         std::string param_name,
@@ -444,29 +444,29 @@ namespace dconstruct::compilation {
         return mod / (mod_folder_name(mod) + "-pak68.txt");
     }
 
-    [[nodiscard]] std::expected<compiler_options, std::string> compiler_options::parse(
+    [[nodiscard]] resstr<compiler_options> compiler_options::parse(
         const cxxopts::ParseResult& args,
         std::string& source,
         const std::filesystem::path& source_path,
         std::vector<source_location>& line_map
     ) noexcept {
-        std::expected<compiler_options, std::string> from_args = compiler_options::from_args(args);
+        resstr<compiler_options> from_args = compiler_options::from_args(args);
         if (!from_args) {
             return from_args;
         }
-        std::expected<compiler_options, std::string> from_dcpl = compiler_options::from_dcpl(source, source_path, line_map);
+        resstr<compiler_options> from_dcpl = compiler_options::from_dcpl(source, source_path, line_map);
         if (!from_dcpl) {
             return from_dcpl;
         }
 
-        std::expected<std::optional<std::filesystem::path>, std::string> mod_res =
+        resstr<std::optional<std::filesystem::path>> mod_res =
             check_optional_path_provided(from_args->m_mod, from_dcpl->m_mod, "mod", true);
         if (!mod_res) {
             return std::unexpected{std::move(mod_res.error())};
         }
         std::optional<std::filesystem::path> mod = std::move(*mod_res);
 
-        std::expected<std::filesystem::path, std::string> output_res = check_single_path_provided(from_args->m_output, from_dcpl->m_output, "output", false);
+        resstr<std::filesystem::path> output_res = check_single_path_provided(from_args->m_output, from_dcpl->m_output, "output", false);
         if (!output_res) {
             return std::unexpected{std::move(output_res.error())};
         }
@@ -506,7 +506,7 @@ namespace dconstruct::compilation {
             return std::unexpected{"non-standalone compile requires @mod so modules.bin can be resolved"};
         }
 
-        std::expected<std::filesystem::path, std::string> sidbase_res = check_single_path_provided(from_args->m_sidbase, from_dcpl->m_sidbase, "sidbase");
+        resstr<std::filesystem::path> sidbase_res = check_single_path_provided(from_args->m_sidbase, from_dcpl->m_sidbase, "sidbase");
         if (!sidbase_res) {
             return std::unexpected{std::move(sidbase_res.error())};
         }
@@ -521,7 +521,7 @@ namespace dconstruct::compilation {
         }
 
         if (pak68_res && !from_dcpl->m_pak68Edits.empty()) {
-            if (const std::optional<std::string> pak68_err = validate_pak68_edits(*pak68_res, from_dcpl->m_pak68Edits)) {
+            if (const errmsg pak68_err = validate_pak68_edits(*pak68_res, from_dcpl->m_pak68Edits)) {
                 return std::unexpected{*pak68_err};
             }
         }
@@ -539,7 +539,7 @@ namespace dconstruct::compilation {
         return out;
     }
 
-    [[nodiscard]] std::expected<compiler_options, std::string> compiler_options::parse(
+    [[nodiscard]] resstr<compiler_options> compiler_options::parse(
         const cxxopts::ParseResult& args,
         std::string& source
     ) noexcept {

@@ -41,8 +41,8 @@ namespace dconstruct::ast {
             return rhs_res;
         }
 
-        const std::optional<std::string> invalid_negate = std::visit(
-            [](auto&& rhs_type) -> std::optional<std::string> {
+        const errmsg invalid_negate = std::visit(
+            [](auto&& rhs_type) -> errmsg {
                 using T = std::decay_t<decltype(rhs_type)>;
 
                 if constexpr (is_primitive<T>) {
@@ -65,12 +65,12 @@ namespace dconstruct::ast {
         return std::unexpected{semantic_check_error{*invalid_negate, this}};
     }
 
-    [[nodiscard]] emission_res negate_expr::emit_dc(
+    [[nodiscard]] resstr<reg_idx> negate_expr::emit_dc(
         compilation::function_context& fn,
         compilation::global_state& global,
         const std::optional<reg_idx> opt_destination
     ) const noexcept {
-        const emission_res neg_destination = fn.fix_destination(opt_destination);
+        const resstr<reg_idx> neg_destination = fn.fix_destination(opt_destination);
         if (!neg_destination) {
             return neg_destination;
         }
@@ -111,7 +111,7 @@ namespace dconstruct::ast {
             return *neg_destination;
 
         } else {
-            const emission_res rhs_res = m_rhs->emit_dc(fn, global);
+            const resstr<reg_idx> rhs_res = m_rhs->emit_dc(fn, global);
 
             if (!rhs_res) {
                 return rhs_res;

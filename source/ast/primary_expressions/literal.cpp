@@ -122,12 +122,12 @@ namespace dconstruct::ast {
         return get_raw_number(m_value);
     }
 
-    [[nodiscard]] std::expected<u16, std::string> literal::emit_to_symbol_table(
+    [[nodiscard]] resstr<u16> literal::emit_to_symbol_table(
         compilation::function_context& fn,
         compilation::global_state& global
     ) const noexcept {
         return std::visit(
-            [&](auto&& lit) -> std::expected<u16, std::string> {
+            [&](auto&& lit) -> resstr<u16> {
                 using T = std::decay_t<decltype(lit)>;
 
                 if constexpr (std::is_same_v<T, std::string>) {
@@ -155,16 +155,16 @@ namespace dconstruct::ast {
         );
     }
 
-    [[nodiscard]] emission_res literal::emit_dc(
+    [[nodiscard]] resstr<reg_idx> literal::emit_dc(
         compilation::function_context& fn,
         compilation::global_state& global,
         const std::optional<reg_idx> destination
     ) const noexcept {
         return std::visit(
-            [&](auto&& lit) -> emission_res {
+            [&](auto&& lit) -> resstr<reg_idx> {
                 using T = std::decay_t<decltype(lit)>;
 
-                emission_res literal_dest = fn.fix_destination(destination);
+                resstr<reg_idx> literal_dest = fn.fix_destination(destination);
                 if (!literal_dest) {
                     return literal_dest;
                 }

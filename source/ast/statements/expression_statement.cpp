@@ -44,11 +44,11 @@ namespace dconstruct::ast {
         return {};
     }
 
-    [[nodiscard]] emission_err expression_stmt::emit_dc(
+    [[nodiscard]] errmsg expression_stmt::emit_dc(
         compilation::function_context& fn,
         compilation::global_state& global
     ) const noexcept {
-        const emission_res expr_res = m_expression->emit_dc(fn, global);
+        const resstr<reg_idx> expr_res = m_expression->emit_dc(fn, global);
         if (!expr_res) {
             return expr_res.error();
         }

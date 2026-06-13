@@ -6,24 +6,24 @@ namespace dconstruct::ast {
         return nullptr;
     }
 
-    [[nodiscard]] emission_res bitwise_and_expr::emit_dc(
+    [[nodiscard]] resstr<reg_idx> bitwise_and_expr::emit_dc(
         compilation::function_context& fn,
         compilation::global_state& global,
         const std::optional<reg_idx> destination
     ) const noexcept {
-        const emission_res lhs = m_lhs->emit_dc(fn, global);
+        const resstr<reg_idx> lhs = m_lhs->emit_dc(fn, global);
         if (!lhs) {
             return lhs;
         }
 
-        const emission_res rhs = m_rhs->emit_dc(fn, global);
+        const resstr<reg_idx> rhs = m_rhs->emit_dc(fn, global);
         if (!rhs) {
             return rhs;
         }
 
         assert(std::holds_alternative<primitive_type>(*m_type));
 
-        const emission_res and_destination = fn.fix_destination(destination);
+        const resstr<reg_idx> and_destination = fn.fix_destination(destination);
         if (!and_destination) {
             return and_destination;
         }
@@ -48,8 +48,8 @@ namespace dconstruct::ast {
             return rhs_type;
         }
 
-        const std::optional<std::string> invalid_bitwise_and = std::visit(
-            [](auto&& lhs_type, auto&& rhs_type) -> std::optional<std::string> {
+        const errmsg invalid_bitwise_and = std::visit(
+            [](auto&& lhs_type, auto&& rhs_type) -> errmsg {
                 using lhs_t = std::decay_t<decltype(lhs_type)>;
                 using rhs_t = std::decay_t<decltype(rhs_type)>;
 

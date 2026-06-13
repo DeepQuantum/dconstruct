@@ -5,6 +5,7 @@
 #include "compilation/preprocessor.h"
 #include "compilation/function.h"
 #include "disassembly/disassembler.h"
+#include "disassembly/driver_functions.h"
 #include "disassembly/instructions.h"
 #include "decompilation/decomp_function.h"
 #include "binaryfile.h"
@@ -14,6 +15,9 @@
 #include <algorithm>
 #include <bit>
 #include <filesystem>
+#include <optional>
+#include <regex>
+#include <sstream>
 
 namespace dconstruct::testing {
 
@@ -68,7 +72,7 @@ namespace dconstruct::testing {
         return {!program.m_declarations.empty() ? std::move(static_cast<ast::function_definition*>(program.m_declarations[0].get())->m_body.m_statements) : std::list<stmnt_uptr>{}, errors};
     }
 
-    [[nodiscard]] static std::expected<std::vector<compilation::function_context>, std::string> compile_to_functions(const std::string& code) {
+    [[nodiscard]] static resstr<std::vector<compilation::function_context>> compile_to_functions(const std::string& code) {
         const auto [tokens, lex_errors] = get_tokens(code);
         if (!lex_errors.empty()) {
             return std::unexpected{"lex errors: " + lex_errors.front().m_message};
@@ -2389,6 +2393,50 @@ namespace dconstruct::testing {
         return std::find(fn.m_symbolTable.begin(), fn.m_symbolTable.end(), value) != fn.m_symbolTable.end();
     }
 
+    [[nodiscard]] static u16 instruction_static_index(const Instruction& instruction) {
+        return static_cast<u16>(instruction.operand1) | (static_cast<u16>(instruction.operand2) << 8);
+    }
+
+    [[nodiscard]] static std::optional<u64> static_argument_at_call(
+        const compilation::function_context& fn,
+        const sid64 callee,
+        const u8 argument_index
+    ) {
+        std::array<std::optional<u64>, MAX_REGISTER> register_values{};
+
+        for (const Instruction& instruction : fn.m_instructions) {
+            switch (instruction.opcode) {
+                case Opcode::LoadStaticU64Imm:
+                case Opcode::LookupPointer: {
+                    const u16 symbol_index = instruction_static_index(instruction);
+                    if (symbol_index < fn.m_symbolTable.size()) {
+                        register_values[instruction.destination] = fn.m_symbolTable[symbol_index];
+                    } else {
+                        register_values[instruction.destination] = std::nullopt;
+                    }
+                    break;
+                }
+                case Opcode::Move:
+                    register_values[instruction.destination] = register_values[instruction.operand1];
+                    break;
+                case Opcode::Call:
+                case Opcode::CallFf:
+                    if (register_values[instruction.operand1] == callee) {
+                        return register_values[ARGUMENT_REGISTERS_IDX + argument_index];
+                    }
+                    register_values[instruction.destination] = std::nullopt;
+                    break;
+                default:
+                    if (!instruction.destination_is_immediate()) {
+                        register_values[instruction.destination] = std::nullopt;
+                    }
+                    break;
+            }
+        }
+
+        return std::nullopt;
+    }
+
     TEST(COMPILER, LexerKeywords2) {
         const auto [tokens, errors] = get_tokens("for break continue sizeof null true false using as near far auto");
 
@@ -2682,6 +2730,47 @@ namespace dconstruct::testing {
         EXPECT_TRUE(symbol_table_contains(fn, SID("foo")));
     }
 
+    TEST(COMPILER, NestedCallDoesNotClobberEarlierNearArgument) {
+        const std::string code =
+            "using #outer as near (u64, u64) -> u64;"
+            "using #inner as near (u64) -> u64;"
+            "using #first as u64;"
+            "using #second as u64;"
+            "u64 main() { return #outer(#first, #inner(#second)); }";
+
+        auto functions = compile_to_functions(code);
+        ASSERT_TRUE(functions) << functions.error();
+        ASSERT_FALSE(functions->empty());
+
+        const compilation::function_context& fn = functions->back();
+        const std::optional<u64> first_arg = static_argument_at_call(fn, SID("outer"), 0);
+        ASSERT_TRUE(first_arg.has_value());
+        EXPECT_EQ(*first_arg, SID("first"));
+    }
+
+    TEST(COMPILER, NestedCallDoesNotClobberEarlierFarArguments) {
+        const std::string code =
+            "using #outer as far (u64, u64, u64) -> u64;"
+            "using #inner as near (u64, u64) -> u64;"
+            "using #first as u64;"
+            "using #second as u64;"
+            "using #third as u64;"
+            "using #fourth as u64;"
+            "u64 main() { return #outer(#first, #second, #inner(#third, #fourth)); }";
+
+        auto functions = compile_to_functions(code);
+        ASSERT_TRUE(functions) << functions.error();
+        ASSERT_FALSE(functions->empty());
+
+        const compilation::function_context& fn = functions->back();
+        const std::optional<u64> first_arg = static_argument_at_call(fn, SID("outer"), 0);
+        const std::optional<u64> second_arg = static_argument_at_call(fn, SID("outer"), 1);
+        ASSERT_TRUE(first_arg.has_value());
+        ASSERT_TRUE(second_arg.has_value());
+        EXPECT_EQ(*first_arg, SID("first"));
+        EXPECT_EQ(*second_arg, SID("second"));
+    }
+
     TEST(COMPILER, SidLiteralEmission) {
         auto functions = compile_to_functions("u64 main() { u64 s = #ellie; return s; }");
         ASSERT_TRUE(functions) << functions.error();
@@ -2739,7 +2828,7 @@ namespace dconstruct::testing {
 
         compilation::function_context fn{};
         compilation::global_state global{};
-        const emission_res result = expr.emit_dc(fn, global, std::nullopt);
+        const resstr<reg_idx> result = expr.emit_dc(fn, global, std::nullopt);
         ASSERT_TRUE(result) << result.error();
 
         const std::vector<Instruction> expected = {
@@ -2819,6 +2908,12 @@ namespace dconstruct::testing {
         static SIDBase full_sidbase = *SIDBase::from_binary(TEST_DIR + "sidbase_new_fixed.bin");
         const std::filesystem::path target = TEST_ROOT / "fixtures" / "dc" / "ss-hub-lockbox.bin";
 
+        resstr<BinaryFile> original_file = BinaryFile::from_path(target);
+        ASSERT_TRUE(original_file.has_value()) << original_file.error();
+        Disassembler original_disassembler(&*original_file, &full_sidbase);
+        (void)original_disassembler.disassemble();
+        const u64 expected_function_count = original_disassembler.get_named_functions().size();
+
         const std::string source =
             "u0 #wait-for-spawn@start@main@0() {\n"
             "    >> \"hello world\";\n"
@@ -2841,7 +2936,7 @@ namespace dconstruct::testing {
             of.write(reinterpret_cast<const char*>(bytes.get()), size);
         }
 
-        std::expected<BinaryFile, std::string> file = BinaryFile::from_path(output);
+        resstr<BinaryFile> file = BinaryFile::from_path(output);
         ASSERT_TRUE(file.has_value()) << file.error();
 
         Disassembler disassembler(&*file, &full_sidbase);
@@ -2854,7 +2949,7 @@ namespace dconstruct::testing {
         EXPECT_EQ(state_script->m_states[state_script->m_initialStateIdx].m_name, "--all--");
 
         const std::vector<const function_disassembly*> funcs = disassembler.get_named_functions();
-        EXPECT_EQ(funcs.size(), 75);
+        EXPECT_GE(funcs.size(), expected_function_count);
 
         const function_disassembly* replaced = nullptr;
         const function_disassembly* untouched = nullptr;
@@ -2875,6 +2970,275 @@ namespace dconstruct::testing {
         EXPECT_FALSE(symbol_table_contains_string(*untouched, "hello world"));
 
         std::filesystem::remove(output);
+    }
+
+    struct entry_record {
+        sid64 m_name;
+        sid64 m_type;
+        u64 m_offset;
+    };
+
+    [[nodiscard]] static std::vector<entry_record> read_entry_records(const BinaryFile& file) {
+        std::vector<entry_record> records;
+        const Entry* entries = file.m_dcheader->m_pStartOfData;
+        const p64 image_base = reinterpret_cast<p64>(file.m_bytes.get());
+        for (u32 i = 0; i < file.m_dcheader->m_numEntries; ++i) {
+            records.push_back({entries[i].m_nameID, entries[i].m_typeId, reinterpret_cast<p64>(entries[i].m_entryPtr) - image_base});
+        }
+        return records;
+    }
+
+    static void write_binary_file(const std::filesystem::path& path, const std::byte* bytes, const u64 size) {
+        std::ofstream of(path, std::ios::binary | std::ios::trunc);
+        ASSERT_TRUE(of.is_open());
+        of.write(reinterpret_cast<const char*>(bytes), size);
+    }
+
+    TEST(COMPILER, TargetPatchPreservesAllEntries) {
+        static SIDBase full_sidbase = *SIDBase::from_binary(TEST_DIR + "sidbase_new_fixed.bin");
+        const std::filesystem::path target = TEST_ROOT / "fixtures" / "dc" / "ss-hub-lockbox.bin";
+
+        resstr<BinaryFile> original = BinaryFile::from_path(target);
+        ASSERT_TRUE(original.has_value()) << original.error();
+        const std::vector<entry_record> original_entries = read_entry_records(*original);
+        ASSERT_EQ(original_entries.size(), 7);
+        const u64 old_strings_start = original->m_dcheader->m_stringsOffset;
+        const u64 old_text_size = original->m_dcheader->m_textSize;
+        const u64 entry_table_offset = reinterpret_cast<p64>(original->m_dcheader->m_pStartOfData) - reinterpret_cast<p64>(original->m_bytes.get());
+        const BinaryFile::byte_uptr original_unmapped = original->get_unmapped();
+
+        Disassembler original_disassembler(&*original, &full_sidbase);
+        (void)original_disassembler.disassemble();
+        const std::vector<const function_disassembly*> original_funcs = original_disassembler.get_named_functions();
+        const u64 expected_function_count = original_funcs.size();
+        std::unordered_set<std::string> original_function_ids;
+        for (const function_disassembly* func : original_funcs) {
+            original_function_ids.insert(func->get_id());
+        }
+
+        const std::string source =
+            "u0 #wait-for-spawn@start@main@0() {\n"
+            "    >> \"hello world\";\n"
+            "}\n";
+
+        compilation::global_state global{};
+        const std::optional<std::vector<compilation::program_binary_element>> elements = compilation::run_compilation(source, global);
+        ASSERT_TRUE(elements.has_value());
+
+        const auto binary = compilation::disassemble_target(target, full_sidbase, *elements, global);
+        ASSERT_TRUE(binary.has_value()) << binary.error();
+        const auto& [bytes, size] = *binary;
+        ASSERT_GT(size, original->m_size);
+
+        const std::filesystem::path output = std::filesystem::temp_directory_path() / "dconstruct-patch-ss-hub-lockbox.bin";
+        write_binary_file(output, bytes.get(), size);
+
+        resstr<BinaryFile> patched = BinaryFile::from_path(output);
+        ASSERT_TRUE(patched.has_value()) << patched.error();
+
+        const std::vector<entry_record> patched_entries = read_entry_records(*patched);
+        ASSERT_EQ(patched_entries.size(), original_entries.size());
+
+        const sid64 state_script_name = SID("ss-hub-lockbox");
+        u64 state_script_entry_pointer_slot = 0;
+        u64 old_state_script_offset = 0;
+        for (u64 i = 0; i < original_entries.size(); ++i) {
+            EXPECT_EQ(patched_entries[i].m_name, original_entries[i].m_name);
+            EXPECT_EQ(patched_entries[i].m_type, original_entries[i].m_type);
+            if (original_entries[i].m_name == state_script_name) {
+                EXPECT_GE(patched_entries[i].m_offset, old_strings_start);
+                state_script_entry_pointer_slot = entry_table_offset + i * sizeof(Entry) + offsetof(Entry, m_entryPtr);
+                old_state_script_offset = original_entries[i].m_offset;
+            } else {
+                EXPECT_EQ(patched_entries[i].m_offset, original_entries[i].m_offset);
+            }
+        }
+        ASSERT_NE(state_script_entry_pointer_slot, 0);
+        EXPECT_TRUE(patched->gets_pointed_at(location(patched->m_bytes.get() + old_state_script_offset)));
+
+        const u64 new_strings_start = patched->m_dcheader->m_stringsOffset;
+        const u64 string_delta = new_strings_start - old_strings_start;
+        ASSERT_GT(string_delta, 0);
+
+        const BinaryFile::byte_uptr patched_unmapped = patched->get_unmapped();
+        const std::byte* old_raw = original_unmapped.get();
+        const std::byte* new_raw = patched_unmapped.get();
+        const u8* old_reloc = reinterpret_cast<const u8*>(old_raw + old_text_size + sizeof(u32));
+
+        for (u64 slot = 0; slot < old_strings_start / sizeof(u64); ++slot) {
+            const u64 offset = slot * sizeof(u64);
+            if (offset == offsetof(DC_Header, m_textSize) || offset == state_script_entry_pointer_slot) {
+                continue;
+            }
+            u64 old_value, new_value;
+            std::memcpy(&old_value, old_raw + offset, sizeof(old_value));
+            std::memcpy(&new_value, new_raw + offset, sizeof(new_value));
+            const bool relocated = (old_reloc[slot / 8] & (1 << (slot % 8))) != 0;
+            if (relocated && old_value >= old_strings_start) {
+                EXPECT_EQ(new_value, old_value + string_delta) << "string pointer at offset 0x" << std::hex << offset;
+            } else {
+                EXPECT_EQ(new_value, old_value) << "data at offset 0x" << std::hex << offset;
+            }
+        }
+
+        EXPECT_EQ(std::memcmp(new_raw + new_strings_start, old_raw + old_strings_start, old_text_size - old_strings_start), 0);
+
+        Disassembler disassembler(&*patched, &full_sidbase);
+        (void)disassembler.disassemble();
+        ASSERT_TRUE(disassembler.has_state_script());
+        EXPECT_EQ(disassembler.get_state_script()->m_declarations.size(), 31);
+
+        const std::vector<const function_disassembly*> funcs = disassembler.get_named_functions();
+        EXPECT_GE(funcs.size(), expected_function_count);
+
+        std::unordered_set<std::string> patched_function_ids;
+        const function_disassembly* replaced = nullptr;
+        const function_disassembly* untouched = nullptr;
+        for (const function_disassembly* func : funcs) {
+            patched_function_ids.insert(func->get_id());
+            if (func->get_id() == "wait-for-spawn@start@main@0") {
+                replaced = func;
+            } else if (func->get_id() == "spawn-lockbox@start@main@0") {
+                untouched = func;
+            }
+        }
+        for (const std::string& id : original_function_ids) {
+            EXPECT_TRUE(patched_function_ids.contains(id)) << "function " << id << " missing from the patched binary";
+        }
+        ASSERT_NE(replaced, nullptr);
+        EXPECT_EQ(replaced->m_lines.size(), 4);
+        EXPECT_TRUE(symbol_table_contains_string(*replaced, "hello world"));
+        ASSERT_NE(untouched, nullptr);
+        EXPECT_FALSE(symbol_table_contains_string(*untouched, "hello world"));
+
+        const std::string second_source =
+            "u0 #wait-for-spawn@start@main@0() {\n"
+            "    >> \"hello again\";\n"
+            "}\n";
+
+        compilation::global_state second_global{};
+        const std::optional<std::vector<compilation::program_binary_element>> second_elements = compilation::run_compilation(second_source, second_global);
+        ASSERT_TRUE(second_elements.has_value());
+
+        const auto second_binary = compilation::disassemble_target(output, full_sidbase, *second_elements, second_global);
+        ASSERT_TRUE(second_binary.has_value()) << second_binary.error();
+        const auto& [second_bytes, second_size] = *second_binary;
+
+        const std::filesystem::path second_output = std::filesystem::temp_directory_path() / "dconstruct-patch-twice-ss-hub-lockbox.bin";
+        write_binary_file(second_output, second_bytes.get(), second_size);
+
+        resstr<BinaryFile> repatched = BinaryFile::from_path(second_output);
+        ASSERT_TRUE(repatched.has_value()) << repatched.error();
+
+        const std::vector<entry_record> repatched_entries = read_entry_records(*repatched);
+        ASSERT_EQ(repatched_entries.size(), original_entries.size());
+        for (u64 i = 0; i < original_entries.size(); ++i) {
+            EXPECT_EQ(repatched_entries[i].m_name, original_entries[i].m_name);
+            EXPECT_EQ(repatched_entries[i].m_type, original_entries[i].m_type);
+            if (original_entries[i].m_name != state_script_name) {
+                EXPECT_EQ(repatched_entries[i].m_offset, original_entries[i].m_offset);
+            }
+        }
+
+        Disassembler second_disassembler(&*repatched, &full_sidbase);
+        (void)second_disassembler.disassemble();
+        ASSERT_TRUE(second_disassembler.has_state_script());
+        EXPECT_EQ(second_disassembler.get_state_script()->m_declarations.size(), 31);
+
+        const std::vector<const function_disassembly*> second_funcs = second_disassembler.get_named_functions();
+        EXPECT_EQ(second_funcs.size(), funcs.size());
+
+        std::unordered_set<std::string> repatched_function_ids;
+        const function_disassembly* second_replaced = nullptr;
+        for (const function_disassembly* func : second_funcs) {
+            repatched_function_ids.insert(func->get_id());
+            if (func->get_id() == "wait-for-spawn@start@main@0") {
+                second_replaced = func;
+            }
+        }
+        for (const std::string& id : original_function_ids) {
+            EXPECT_TRUE(repatched_function_ids.contains(id)) << "function " << id << " missing from the twice-patched binary";
+        }
+        ASSERT_NE(second_replaced, nullptr);
+        EXPECT_TRUE(symbol_table_contains_string(*second_replaced, "hello again"));
+        EXPECT_FALSE(symbol_table_contains_string(*second_replaced, "hello world"));
+
+        std::filesystem::remove(output);
+        std::filesystem::remove(second_output);
+    }
+
+    [[nodiscard]] static std::string normalized_asm_without_offsets(const std::filesystem::path& asm_path) {
+        std::ifstream file(asm_path);
+        std::stringstream buffer;
+        buffer << file.rdbuf();
+        static const std::regex offset_pattern{"0x[0-9a-fA-F]+"};
+        return std::regex_replace(buffer.str(), offset_pattern, "0x");
+    }
+
+    [[nodiscard]] static std::vector<std::string> split_asm_entry_sections(const std::string& listing) {
+        std::vector<std::string> sections;
+        const std::string marker = "##########  ENTRY";
+        u64 header_start = listing.find(marker);
+        while (header_start != std::string::npos) {
+            u64 body_start = listing.find('\n', header_start);
+            if (body_start == std::string::npos) {
+                break;
+            }
+            ++body_start;
+            const u64 next_header = listing.find(marker, body_start);
+            const u64 body_end = next_header == std::string::npos ? listing.size() : listing.rfind('\n', next_header) + 1;
+            sections.push_back(listing.substr(body_start, body_end - body_start));
+            header_start = next_header;
+        }
+        return sections;
+    }
+
+    TEST(COMPILER, TargetPatchDisassemblyMatchesOriginal) {
+        static SIDBase full_sidbase = *SIDBase::from_binary(TEST_DIR + "sidbase_new_fixed.bin");
+        const std::filesystem::path target = TEST_ROOT / "fixtures" / "dc" / "ss-hub-lockbox.bin";
+
+        const std::string source =
+            "u0 #wait-for-spawn@start@main@0() {\n"
+            "    >> \"hello world\";\n"
+            "}\n";
+
+        compilation::global_state global{};
+        const std::optional<std::vector<compilation::program_binary_element>> elements = compilation::run_compilation(source, global);
+        ASSERT_TRUE(elements.has_value());
+
+        const auto binary = compilation::disassemble_target(target, full_sidbase, *elements, global);
+        ASSERT_TRUE(binary.has_value()) << binary.error();
+        const auto& [bytes, size] = *binary;
+
+        const std::filesystem::path patched_bin = std::filesystem::temp_directory_path() / "dconstruct-disasm-patched-ss-hub-lockbox.bin";
+        write_binary_file(patched_bin, bytes.get(), size);
+
+        const std::filesystem::path original_asm = std::filesystem::temp_directory_path() / "dconstruct-disasm-original-ss-hub-lockbox.asm";
+        const std::filesystem::path patched_asm = std::filesystem::temp_directory_path() / "dconstruct-disasm-patched-ss-hub-lockbox.asm";
+        const std::unordered_map<sid64, ast::full_type> type_map;
+        disassembly::disasm_file(target, original_asm, full_sidbase, type_map);
+        disassembly::disasm_file(patched_bin, patched_asm, full_sidbase, type_map);
+
+        const std::string original_listing = normalized_asm_without_offsets(original_asm);
+        const std::string patched_listing = normalized_asm_without_offsets(patched_asm);
+        const std::vector<std::string> original_sections = split_asm_entry_sections(original_listing);
+        const std::vector<std::string> patched_sections = split_asm_entry_sections(patched_listing);
+        ASSERT_EQ(original_sections.size(), 7);
+        EXPECT_EQ(patched_sections.size(), original_sections.size());
+
+        for (const std::string& section : original_sections) {
+            const bool is_replaced_state_script = section.find("ss-hub-lockbox = state-script") != std::string::npos;
+            const bool present = patched_listing.find(section) != std::string::npos;
+            if (is_replaced_state_script) {
+                EXPECT_FALSE(present) << "the replaced state script disassembles identically to the original";
+            } else {
+                EXPECT_TRUE(present) << "entry section missing from the patched disassembly:\n" << section.substr(0, 300);
+            }
+        }
+
+        std::filesystem::remove(patched_bin);
+        std::filesystem::remove(original_asm);
+        std::filesystem::remove(patched_asm);
     }
 
 }

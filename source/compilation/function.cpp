@@ -43,6 +43,9 @@ namespace dconstruct::compilation {
             if (m_symbolTableEntryPointers[i] == compilation::function_context::SYMBOL_TABLE_POINTER_KIND::STRING) {
                 element.insert_string_offset();
                 element.push_bytes(m_symbolTable[i], 0b1);
+            } else if (m_symbolTableEntryPointers[i] == compilation::function_context::SYMBOL_TABLE_POINTER_KIND::ABSOLUTE) {
+                element.insert_absolute_offset();
+                element.push_bytes(m_symbolTable[i], 0b1);
             } else {
                 element.push_bytes(m_symbolTable[i], 0b0);
             }
@@ -50,7 +53,7 @@ namespace dconstruct::compilation {
         return element;
     }
 
-    [[nodiscard]] std::expected<reg_idx, std::string> function_context::get_next_unused_register() noexcept {
+    [[nodiscard]] resstr<reg_idx> function_context::get_next_unused_register() noexcept {
         u64 reg_set_num = m_usedRegisters.to_ullong();
 
         constexpr u64 all_50_bits_used = 0x3FFFFFFFFFFFFull;
@@ -74,10 +77,10 @@ namespace dconstruct::compilation {
         m_usedRegisters.set(reg, false);
     }
 
-    std::optional<std::string> function_context::save_used_argument_registers(const u8 count) noexcept {
+    errmsg function_context::save_used_argument_registers(const u8 count) noexcept {
         reg_set saved;
         for (u32 i = 0; i < count; ++i) {
-            const std::expected<reg_idx, std::string> reg = get_next_unused_register();
+            const resstr<reg_idx> reg = get_next_unused_register();
             if (!reg) {
                 return reg.error();
             }
@@ -145,7 +148,7 @@ namespace dconstruct::compilation {
         return 12 + 4 * (m_instructions.size() + m_symbolTable.size());
     }
 
-    [[nodiscard]] emission_res function_context::fix_destination(const std::optional<reg_idx> passed_through_destination) noexcept {
+    [[nodiscard]] resstr<reg_idx> function_context::fix_destination(const std::optional<reg_idx> passed_through_destination) noexcept {
         if (passed_through_destination) {
             return *passed_through_destination;
         } else {

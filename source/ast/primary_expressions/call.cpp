@@ -8,6 +8,7 @@
 #include <array>
 #include <format>
 #include <string_view>
+#include <vector>
 
 namespace dconstruct::ast {
 
@@ -256,16 +257,16 @@ namespace dconstruct::ast {
         return *func_type.m_return;
     }
 
-    [[nodiscard]] emission_res call_expr::emit_dc(
+    [[nodiscard]] resstr<reg_idx> call_expr::emit_dc(
         compilation::function_context& fn,
         compilation::global_state& global,
         const std::optional<reg_idx> destination
     ) const noexcept {
         fn.push_deferred();
 
-        emission_res callee;
+        resstr<reg_idx> callee;
         if (destination) {
-            const emission_res callee_destination = (*destination >= ARGUMENT_REGISTERS_IDX) ? fn.get_next_unused_register() : *destination;
+            const resstr<reg_idx> callee_destination = (*destination >= ARGUMENT_REGISTERS_IDX) ? fn.get_next_unused_register() : *destination;
             if (!callee_destination) {
                 return callee_destination;
             }
@@ -278,14 +279,20 @@ namespace dconstruct::ast {
             return callee;
         }
 
+        std::vector<reg_idx> argument_registers;
+        argument_registers.reserve(m_arguments.size());
+
         for (u32 i = 0; i < m_arguments.size(); ++i) {
-            const emission_res arg_reg = m_arguments[i]->emit_dc(fn, global, ARGUMENT_REGISTERS_IDX + i);
+            const resstr<reg_idx> arg_reg = m_arguments[i]->emit_dc(fn, global);
             if (!arg_reg) {
                 return arg_reg;
             }
-            if (*arg_reg != ARGUMENT_REGISTERS_IDX + i) {
-                fn.emit_instruction(Opcode::Move, ARGUMENT_REGISTERS_IDX + i, *arg_reg);
-            }
+            argument_registers.push_back(*arg_reg);
+        }
+
+        for (u32 i = 0; i < argument_registers.size(); ++i) {
+            fn.emit_instruction(Opcode::Move, ARGUMENT_REGISTERS_IDX + i, argument_registers[i]);
+            fn.free_register(argument_registers[i]);
         }
 
         const std::optional<full_type> callee_type = m_callee->get_type();
@@ -360,7 +367,7 @@ namespace dconstruct::ast {
             assert(boxed_kind_num_res);
 
             std::string new_name = std::format("boxed_{}", BOXED_VALUE_IDS[*boxed_kind_num_res]);
-            
+
             m_callee = std::make_unique<identifier>(std::move(new_name));
 
             m_arguments.erase(m_arguments.begin());

@@ -6,7 +6,7 @@
 
 namespace dconstruct {
 
-    [[nodiscard]] std::expected<SIDBase, std::string> SIDBase::from_binary(const std::filesystem::path& path) noexcept {
+    [[nodiscard]] resstr<SIDBase> SIDBase::from_binary(const std::filesystem::path& path) noexcept {
         std::ifstream sidfile(path, std::ios::binary);
 
         if (!sidfile.is_open()) {

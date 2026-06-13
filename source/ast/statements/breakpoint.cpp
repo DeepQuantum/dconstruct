@@ -39,7 +39,7 @@ namespace dconstruct::ast {
         return {};
     }
 
-    [[nodiscard]] emission_err breakpoint::emit_dc(
+    [[nodiscard]] errmsg breakpoint::emit_dc(
         compilation::function_context& fn,
         compilation::global_state& global
     ) const noexcept {

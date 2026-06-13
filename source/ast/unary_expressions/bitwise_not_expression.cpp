@@ -16,8 +16,8 @@ namespace dconstruct::ast {
             return rhs_type;
         }
 
-        const std::optional<std::string> invalid_bitwise_not = std::visit(
-            [](auto&& arg) -> std::optional<std::string> {
+        const errmsg invalid_bitwise_not = std::visit(
+            [](auto&& arg) -> errmsg {
                 using T = std::decay_t<decltype(arg)>;
 
                 if constexpr (is_primitive<T>) {
@@ -38,17 +38,17 @@ namespace dconstruct::ast {
         return std::unexpected{semantic_check_error{*invalid_bitwise_not, this}};
     }
 
-    [[nodiscard]] emission_res bitwise_not_expr::emit_dc(
+    [[nodiscard]] resstr<reg_idx> bitwise_not_expr::emit_dc(
         compilation::function_context& fn,
         compilation::global_state& global,
         const std::optional<reg_idx> destination
     ) const noexcept {
-        const emission_res rhs_res = m_rhs->emit_dc(fn, global);
+        const resstr<reg_idx> rhs_res = m_rhs->emit_dc(fn, global);
         if (!rhs_res) {
             return rhs_res;
         }
 
-        const emission_res not_destination = fn.fix_destination(destination);
+        const resstr<reg_idx> not_destination = fn.fix_destination(destination);
         if (!not_destination) {
             return not_destination;
         }

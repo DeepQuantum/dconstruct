@@ -55,7 +55,7 @@ namespace dconstruct::ast {
             if (!expr_type) {
                 return {expr_type.error()};
             }
-            if (const std::optional<std::string> err = not_assignable_reason(*scope.m_expectedReturnType, *expr_type)) {
+            if (const errmsg err = not_assignable_reason(*scope.m_expectedReturnType, *expr_type)) {
                 return {semantic_check_error{*err}};
             }
             scope.m_computedReturnType = true;
@@ -69,12 +69,12 @@ namespace dconstruct::ast {
         }
     }
 
-    [[nodiscard]] emission_err return_stmt::emit_dc(
+    [[nodiscard]] errmsg return_stmt::emit_dc(
         compilation::function_context& fn,
         compilation::global_state& global
     ) const noexcept {
         if (m_expr) {
-            const emission_res expr_res = m_expr->emit_dc(fn, global);
+            const resstr<reg_idx> expr_res = m_expr->emit_dc(fn, global);
             if (!expr_res) {
                 return expr_res.error();
             }

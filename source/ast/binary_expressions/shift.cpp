@@ -15,8 +15,8 @@ namespace dconstruct::ast {
             return rhs_type;
         }
 
-        const std::expected<full_type, std::string> valid_shift = std::visit(
-            [](auto&& lhs_type, auto&& rhs_type) -> std::expected<full_type, std::string> {
+        const resstr<full_type> valid_shift = std::visit(
+            [](auto&& lhs_type, auto&& rhs_type) -> resstr<full_type> {
                 using lhs_t = std::decay_t<decltype(lhs_type)>;
                 using rhs_t = std::decay_t<decltype(rhs_type)>;
 

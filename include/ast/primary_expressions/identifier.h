@@ -29,9 +29,9 @@ namespace dconstruct::ast {
         [[nodiscard]] bool is_dead_code() const noexcept final { return true; }
         [[nodiscard]] bool is_l_evaluable() const noexcept final { return true; }
         [[nodiscard]] std::unique_ptr<struct_access> to_struct_access() noexcept final;
-        [[nodiscard]] lvalue_emission_res emit_dc_lvalue(compilation::function_context& fn, compilation::global_state& global) const noexcept final;
-        [[nodiscard]] emission_res emit_dc(compilation::function_context& fn, compilation::global_state& global, const std::optional<reg_idx> destination) const noexcept final;
-        [[nodiscard]] emission_res emit_dc_callee(compilation::function_context& fn, compilation::global_state& global, const std::optional<reg_idx> destination) const noexcept final;
+        [[nodiscard]] resstr<std::pair<reg_idx, Opcode>> emit_dc_lvalue(compilation::function_context& fn, compilation::global_state& global) const noexcept final;
+        [[nodiscard]] resstr<reg_idx> emit_dc(compilation::function_context& fn, compilation::global_state& global, const std::optional<reg_idx> destination) const noexcept final;
+        [[nodiscard]] resstr<reg_idx> emit_dc_callee(compilation::function_context& fn, compilation::global_state& global, const std::optional<reg_idx> destination) const noexcept final;
 
         VAR_OPTIMIZATION_ACTION var_optimization_pass(var_optimization_env& env) noexcept;
         FOREACH_OPTIMIZATION_ACTION foreach_optimization_pass(foreach_optimization_env& env) noexcept;

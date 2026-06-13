@@ -233,7 +233,7 @@ void decomp_file(
 
     if (game != dconstruct::game_type::UC4 && !edits.empty()) {
         dconstruct::EditDisassembler ed(&file, &base, edits, game);
-        if (const dconstruct::error_msg err = ed.apply_file_edits(); err.has_value()) {
+        if (const dconstruct::errmsg err = ed.apply_file_edits(); err.has_value()) {
             std::println(stderr, "{}", *err);
         }
     }
@@ -321,7 +321,7 @@ void disasm_file(
 
     if (!edits.empty() && game != dconstruct::game_type::UC4) {
         dconstruct::EditDisassembler ed(&file, &base, edits, game);
-        if (const dconstruct::error_msg err = ed.apply_file_edits(); err.has_value()) {
+        if (const dconstruct::errmsg err = ed.apply_file_edits(); err.has_value()) {
             std::println(stderr, "{}", *err);
         }
     }
@@ -469,7 +469,7 @@ std::vector<std::string> edits_from_file(const std::filesystem::path& path) {
     return std::nullopt;
 }
 
-[[nodiscard]] std::expected<type_map_t, std::string> parse_type_defs_file(const std::filesystem::path& filepath) {
+[[nodiscard]] resstr<type_map_t> parse_type_defs_file(const std::filesystem::path& filepath) {
 
     using namespace compilation;
 
@@ -539,7 +539,7 @@ std::vector<std::string> edits_from_file(const std::filesystem::path& path) {
     return type_results;
 }
 
-[[nodiscard]] std::expected<ast::function_to_mapped_vars, std::string> parse_var_type_map_file(
+[[nodiscard]] resstr<ast::function_to_mapped_vars> parse_var_type_map_file(
     const std::filesystem::path& filepath,
     const std::unordered_map<sid64, ast::full_type>* mapped_types
 ) {

@@ -33,10 +33,10 @@ namespace dconstruct {
         }
         ~EditDisassembler() override = default;
 
-        error_msg apply_file_edits() noexcept;
-        error_msg apply_edit(const u64 offset, const u32 member_index, const BinaryFileEdit& value) noexcept;
+        errmsg apply_file_edits() noexcept;
+        errmsg apply_edit(const u64 offset, const u32 member_index, const BinaryFileEdit& value) noexcept;
         [[nodiscard]] BinaryFileEdit get_edit_value_from_string(const std::string& str_value) const noexcept;
-        error_msg write_edited_file();
+        errmsg write_edited_file();
         void expand_binary_file_string_table(BinaryFile& file, const std::string& new_string);
 
     private:

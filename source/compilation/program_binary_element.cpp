@@ -35,6 +35,10 @@ namespace dconstruct::compilation {
         m_stringOffsets.emplace_back(m_rawData.size() + offset);
     }
 
+    void program_binary_element::insert_absolute_offset() noexcept {
+        m_absoluteOffsets.emplace_back(m_rawData.size());
+    }
+
     void program_binary_element::adjust_offsets(const u64 offset) noexcept {
         const u64 chunks = m_rawData.size() / sizeof(u64);
         for (u64 i = 0; i < chunks; ++i) {

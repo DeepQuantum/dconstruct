@@ -17,7 +17,7 @@ namespace dconstruct {
     public:
         SIDBase(const u64 num_entries, std::unique_ptr<std::byte[]>&& bytes, SIDBaseEntry* entries, const sid64 lowest, const sid64 highest, const std::size_t byte_size) : m_numEntries(num_entries), m_sidbytes(std::move(bytes)), m_entries(entries), m_lowestSid(lowest), m_highestSid(highest), m_byteSize(byte_size) {};
 
-        [[nodiscard]] static std::expected<SIDBase, std::string> from_binary(const std::filesystem::path& path) noexcept;
+        [[nodiscard]] static resstr<SIDBase> from_binary(const std::filesystem::path& path) noexcept;
 
         [[nodiscard]] static SIDBase from_caches(const std::vector<std::map<sid64, std::string>>& caches);
 

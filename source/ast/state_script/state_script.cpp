@@ -188,7 +188,7 @@ namespace dconstruct::ast {
         }
     }
 
-    [[nodiscard]] program_binary_result state_script::emit_dc(compilation::global_state& global) const noexcept {
+    [[nodiscard]] resstr<compilation::program_binary_element> state_script::emit_dc(compilation::global_state& global) const noexcept {
         constexpr sid64 state_script_sid = SID("state-script");
         constexpr sid64 array_sid = SID("array");
         constexpr sid64 ss_options_sid = SID("ss-options");
@@ -235,11 +235,16 @@ namespace dconstruct::ast {
         const auto append_lambda_element = [&element](compilation::program_binary_element&& fn_element) noexcept {
             const u64 base_offset = element.m_rawData.size();
             std::unordered_set<u64> string_offset_chunks;
-            string_offset_chunks.reserve(fn_element.m_stringOffsets.size());
+            string_offset_chunks.reserve(fn_element.m_stringOffsets.size() + fn_element.m_absoluteOffsets.size());
 
             for (const u64 string_offset : fn_element.m_stringOffsets) {
                 string_offset_chunks.insert(string_offset / sizeof(u64));
                 element.m_stringOffsets.push_back(base_offset + string_offset);
+            }
+
+            for (const u64 absolute_offset : fn_element.m_absoluteOffsets) {
+                string_offset_chunks.insert(absolute_offset / sizeof(u64));
+                element.m_absoluteOffsets.push_back(base_offset + absolute_offset);
             }
 
             const u64 chunks = fn_element.m_rawData.size() / sizeof(u64);
@@ -562,7 +567,7 @@ namespace dconstruct::ast {
                             return std::unexpected{"cannot emit raw disassembly lambda in state '" + state.m_name + "' block '" + block.block_type_to_string() + "' track '" + track.m_name + "' lambda " + std::to_string(lambda_idx)};
                         }
 
-                        program_binary_result lambda_element_res = lambda->emit_dc(global);
+                        resstr<compilation::program_binary_element> lambda_element_res = lambda->emit_dc(global);
                         if (!lambda_element_res) {
                             return std::unexpected{"failed to emit lambda in state '" + state.m_name + "' block '" + block.block_type_to_string() + "' track '" + track.m_name + "' lambda " + std::to_string(lambda_idx) + ": " + lambda_element_res.error()};
                         }

@@ -1,8 +1,0 @@
-@target "C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/ss-rogue/ss-hub-lockbox.bin"
-@mod "C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/mods/hub-box-skip"
-@output "ss-rogue/ss-hub-lockbox.bin"
-@sidbase "C:/Users/damix/Documents/GitHub/TLOU2Modding/dconstruct/test/fixtures/dc/sidbase_new_fixed.bin"
-
-u0 #get-hub-lockbox-interior-look() {
-    >> "hello world";
-}

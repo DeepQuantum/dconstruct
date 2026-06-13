@@ -59,7 +59,7 @@ namespace dconstruct::ast {
                 return {init_type.error()};
             }
 
-            const std::optional<std::string> assign_err = not_assignable_reason(m_type, *init_type);
+            const errmsg assign_err = not_assignable_reason(m_type, *init_type);
 
             if (assign_err) {
                 return {semantic_check_error{*assign_err}};
@@ -70,11 +70,11 @@ namespace dconstruct::ast {
         return {};
     }
 
-    [[nodiscard]] emission_err variable_declaration::emit_dc(
+    [[nodiscard]] errmsg variable_declaration::emit_dc(
         compilation::function_context& fn,
         compilation::global_state& global
     ) const noexcept {
-        const emission_res new_var_reg = fn.get_next_unused_register();
+        const resstr<reg_idx> new_var_reg = fn.get_next_unused_register();
         if (!new_var_reg) {
             return new_var_reg.error();
         }
@@ -82,7 +82,7 @@ namespace dconstruct::ast {
         fn.m_varsToRegs.define(m_identifier, *new_var_reg);
 
         if (m_init) {
-            const emission_res init_emit = m_init->emit_dc(fn, global, *new_var_reg);
+            const resstr<reg_idx> init_emit = m_init->emit_dc(fn, global, *new_var_reg);
             if (!init_emit) {
                 return init_emit.error();
             }

@@ -44,8 +44,8 @@ namespace dconstruct::ast {
             errors.push_back(std::move(cond_type.error()));
         }
 
-        std::optional<std::string> invalid_condition = std::visit(
-            [](auto&& cond) -> std::optional<std::string> {
+        errmsg invalid_condition = std::visit(
+            [](auto&& cond) -> errmsg {
                 using cond_t = std::decay_t<decltype(cond)>;
 
                 if constexpr (is_primitive<cond_t>) {
@@ -71,18 +71,18 @@ namespace dconstruct::ast {
         return errors;
     }
 
-    [[nodiscard]] emission_err while_stmt::emit_dc(
+    [[nodiscard]] errmsg while_stmt::emit_dc(
         compilation::function_context& fn,
         compilation::global_state& global
     ) const noexcept {
         u16 head_location = static_cast<u16>(fn.m_instructions.size());
 
-        const condition_branch_res false_branches = m_condition->emit_dc_branch(fn, global, false);
+        const resstr<std::vector<u64>> false_branches = m_condition->emit_dc_branch(fn, global, false);
         if (!false_branches) {
             return false_branches.error();
         }
 
-        const emission_err body_err = m_body->emit_dc(fn, global);
+        const errmsg body_err = m_body->emit_dc(fn, global);
         if (body_err) {
             return body_err;
         }

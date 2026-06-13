@@ -120,7 +120,7 @@ int main(int argc, char* argv[]) {
             std::println(stderr, "error: input path must be a folder when using --map_types");
             return -1;
         }
-        const std::expected<dconstruct::SIDBase, std::string> sidbase_opt = dconstruct::SIDBase::from_binary(sidbase_path);
+        const dconstruct::resstr<dconstruct::SIDBase> sidbase_opt = dconstruct::SIDBase::from_binary(sidbase_path);
         if (!sidbase_opt) {
             std::println(stderr, "error: couldn't load sidbase: {}", sidbase_opt.error());
             return -1;

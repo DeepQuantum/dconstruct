@@ -29,14 +29,14 @@ int main(int argc, char* argv[]) {
     std::string source = input.str();
     std::vector<dconstruct::compilation::source_location> line_map;
 
-    const std::expected<dconstruct::compilation::compiler_options, std::string> compiler_options_res =
+    const dconstruct::resstr<dconstruct::compilation::compiler_options> compiler_options_res =
         dconstruct::compilation::compiler_options::parse(opts, source, source_code_filepath, line_map);
     if (!compiler_options_res) {
         std::cerr << compiler_options_res.error() << "\n";
         return -1;
     }
 
-    const std::expected<dconstruct::SIDBase, std::string> sidbase_res = dconstruct::SIDBase::from_binary(compiler_options_res->m_sidbase);
+    const dconstruct::resstr<dconstruct::SIDBase> sidbase_res = dconstruct::SIDBase::from_binary(compiler_options_res->m_sidbase);
     if (!sidbase_res) {
         std::cerr << sidbase_res.error() << "\n";
         return -1;
@@ -62,7 +62,7 @@ int main(int argc, char* argv[]) {
     }
     if (compiler_options_res->m_pak68) {
         pak68_edits = dconstruct::compilation::pak68_edits_for_compile(*compiler_options_res, compile_res->m_stateScriptNames);
-        if (const std::optional<std::string> pak68_err =
+        if (const dconstruct::errmsg pak68_err =
                 dconstruct::compilation::validate_pak68_edits(*compiler_options_res->m_pak68, pak68_edits)) {
             std::cerr << *pak68_err << "\n";
             return -1;
@@ -77,7 +77,7 @@ int main(int argc, char* argv[]) {
 
     std::vector<dconstruct::compilation::pak68_edit_summary> pak68_summaries;
     if (compiler_options_res->m_pak68) {
-        const std::expected<std::vector<dconstruct::compilation::pak68_edit_summary>, std::string> pak68_res =
+        const dconstruct::resstr<std::vector<dconstruct::compilation::pak68_edit_summary>> pak68_res =
             dconstruct::compilation::apply_pak68_edits(*compiler_options_res->m_pak68, pak68_edits);
         if (!pak68_res) {
             std::cerr << pak68_res.error() << "\n";
@@ -88,7 +88,7 @@ int main(int argc, char* argv[]) {
 
     std::optional<std::filesystem::path> psarc_output;
     if (compiler_options_res->m_repackage) {
-        const std::expected<std::filesystem::path, std::string> repackage_res = dconstruct::compilation::repackage_psarc(*compiler_options_res->m_repackage);
+        const dconstruct::resstr<std::filesystem::path> repackage_res = dconstruct::compilation::repackage_psarc(*compiler_options_res->m_repackage);
         if (!repackage_res) {
             std::cerr << repackage_res.error() << "\n";
             return -1;

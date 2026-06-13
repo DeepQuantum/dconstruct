@@ -184,7 +184,7 @@ namespace dconstruct::dcompiler {
         std::unordered_map<reg_idx, std::stack<std::unique_ptr<ast::identifier>>> m_registersToVars;
         ControlFlowGraph m_graph;
         std::optional<std::filesystem::path> m_graphPath;
-        std::optional<std::string> m_error;
+        errmsg m_error;
         node_set m_parsedNodes;
         node_set m_ipdomsEmitted;
         std::stack<std::reference_wrapper<ast::block>> m_blockStack;

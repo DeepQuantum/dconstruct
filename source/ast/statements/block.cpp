@@ -261,7 +261,7 @@ namespace dconstruct::ast {
         }
     }
 
-    [[nodiscard]] emission_err block::emit_dc(
+    [[nodiscard]] errmsg block::emit_dc(
         compilation::function_context& fn,
         compilation::global_state& global
     ) const noexcept {
@@ -270,7 +270,7 @@ namespace dconstruct::ast {
         fn.m_varsToRegs = std::move(new_env);
 
         for (const auto& statement : m_statements) {
-            const emission_err err = statement->emit_dc(fn, global);
+            const errmsg err = statement->emit_dc(fn, global);
             if (err) {
                 return err;
             }

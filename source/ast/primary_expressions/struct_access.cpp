@@ -134,7 +134,7 @@ namespace dconstruct::ast {
         return compilation::source_location{m_memberName.m_file, m_memberName.m_line};
     }
 
-    [[nodiscard]] emission_res struct_access::emit_dc(compilation::function_context& fn, compilation::global_state& global, const std::optional<reg_idx> opt_destination) const noexcept {
+    [[nodiscard]] resstr<reg_idx> struct_access::emit_dc(compilation::function_context& fn, compilation::global_state& global, const std::optional<reg_idx> opt_destination) const noexcept {
         const std::optional<full_type> lhs_cached_type = m_lhs->get_type();
         if (!lhs_cached_type) {
             return std::unexpected{"struct member access emitted before type checking"};
@@ -147,22 +147,22 @@ namespace dconstruct::ast {
 
         const auto* member_info = std::get<1>(*member);
         const u64 member_offset = std::get<2>(*member);
-        std::expected<Opcode, std::string> load_opcode = get_load_opcode(*member_info->second);
+        resstr<Opcode> load_opcode = get_load_opcode(*member_info->second);
         if (!load_opcode) {
             return std::unexpected{std::move(load_opcode.error())};
         }
 
-        emission_res base_res = m_lhs->emit_dc(fn, global);
+        resstr<reg_idx> base_res = m_lhs->emit_dc(fn, global);
         if (!base_res) {
             return base_res;
         }
 
-        const emission_res load_destination = fn.fix_destination(opt_destination);
+        const resstr<reg_idx> load_destination = fn.fix_destination(opt_destination);
         if (!load_destination) {
             return load_destination;
         }
 
-        emission_res address_res = load_destination;
+        resstr<reg_idx> address_res = load_destination;
         if (*address_res == *base_res) {
             address_res = fn.get_next_unused_register();
         }
@@ -185,7 +185,7 @@ namespace dconstruct::ast {
         return *load_destination;
     }
 
-    [[nodiscard]] lvalue_emission_res struct_access::emit_dc_lvalue(compilation::function_context& fn, compilation::global_state& global) const noexcept {
+    [[nodiscard]] resstr<std::pair<reg_idx, Opcode>> struct_access::emit_dc_lvalue(compilation::function_context& fn, compilation::global_state& global) const noexcept {
         const std::optional<full_type> lhs_cached_type = m_lhs->get_type();
         if (!lhs_cached_type) {
             return std::unexpected{"struct member access emitted before type checking"};
@@ -199,12 +199,12 @@ namespace dconstruct::ast {
         const auto* member_info = std::get<1>(*member);
         const u64 member_offset = std::get<2>(*member);
 
-        emission_res base_res = m_lhs->emit_dc(fn, global);
+        resstr<reg_idx> base_res = m_lhs->emit_dc(fn, global);
         if (!base_res) {
             return std::unexpected{std::move(base_res.error())};
         }
 
-        emission_res address_res = fn.get_next_unused_register();
+        resstr<reg_idx> address_res = fn.get_next_unused_register();
         if (!address_res) {
             return std::unexpected{std::move(address_res.error())};
         }
@@ -216,7 +216,7 @@ namespace dconstruct::ast {
         }
         fn.free_register(*base_res);
 
-        std::expected<Opcode, std::string> store_opcode = get_store_opcode(*member_info->second);
+        resstr<Opcode> store_opcode = get_store_opcode(*member_info->second);
         if (!store_opcode) {
             fn.free_register(*address_res);
             return std::unexpected{std::move(store_opcode.error())};

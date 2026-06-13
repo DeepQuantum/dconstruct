@@ -31,7 +31,7 @@ namespace dconstruct::ast {
         return {};
     }
 
-    [[nodiscard]] program_binary_result using_declaration::emit_dc(compilation::global_state& global) const noexcept {
+    [[nodiscard]] resstr<compilation::program_binary_element> using_declaration::emit_dc(compilation::global_state& global) const noexcept {
         return compilation::program_binary_element{0};
     }
 

@@ -58,7 +58,7 @@ namespace dconstruct {
         using byte_uptr = std::unique_ptr<std::byte[], aligned_deleter>;
         BinaryFile(std::filesystem::path path, const u64 size, byte_uptr&& bytes, DC_Header* dcheader) noexcept : m_path(std::move(path)), m_size(size), m_bytes(std::move(bytes)), m_dcheader(dcheader) {};
 
-        [[nodiscard]] static std::expected<BinaryFile, std::string> from_path(const std::filesystem::path& path) noexcept;
+        [[nodiscard]] static resstr<BinaryFile> from_path(const std::filesystem::path& path) noexcept;
 
         [[nodiscard]] bool is_file_ptr(const location) const noexcept;
         [[nodiscard]] bool gets_pointed_at(const location) const noexcept;

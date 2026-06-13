@@ -49,8 +49,8 @@ namespace dconstruct::ast {
             return make_type_from_prim(primitive_kind::BOOL);
         }
 
-        const std::optional<std::string> invalid_compare = std::visit(
-            [](auto&& lhs_type, auto&& rhs_type) -> std::optional<std::string> {
+        const errmsg invalid_compare = std::visit(
+            [](auto&& lhs_type, auto&& rhs_type) -> errmsg {
                 using lhs_t = std::decay_t<decltype(lhs_type)>;
                 using rhs_t = std::decay_t<decltype(rhs_type)>;
 
@@ -77,22 +77,22 @@ namespace dconstruct::ast {
         return std::unexpected{semantic_check_error{*invalid_compare, this}};
     }
 
-    [[nodiscard]] emission_res compare_expr::emit_dc(
+    [[nodiscard]] resstr<reg_idx> compare_expr::emit_dc(
         compilation::function_context& fn,
         compilation::global_state& global,
         const std::optional<reg_idx> destination
     ) const noexcept {
-        const emission_res lhs = m_lhs->emit_dc(fn, global);
+        const resstr<reg_idx> lhs = m_lhs->emit_dc(fn, global);
         if (!lhs) {
             return lhs;
         }
 
-        const emission_res rhs = m_rhs->emit_dc(fn, global);
+        const resstr<reg_idx> rhs = m_rhs->emit_dc(fn, global);
         if (!rhs) {
             return rhs;
         }
 
-        const emission_res comp_destination = destination ? *destination : fn.get_next_unused_register();
+        const resstr<reg_idx> comp_destination = destination ? *destination : fn.get_next_unused_register();
         if (!comp_destination) {
             return comp_destination;
         }

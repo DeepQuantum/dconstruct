@@ -65,7 +65,7 @@ namespace dconstruct::ast {
             return std::unexpected{semantic_check_error{"expected lvalue for assignment but got rvalue", m_lhs.get()}};
         }
 
-        std::optional<std::string> assignable_err = not_assignable_reason(*lhs_type, *rhs_type);
+        errmsg assignable_err = not_assignable_reason(*lhs_type, *rhs_type);
 
         if (assignable_err) {
             return std::unexpected{semantic_check_error{std::move(*assignable_err)}};
@@ -73,17 +73,17 @@ namespace dconstruct::ast {
         return *rhs_type;
     }
 
-    [[nodiscard]] emission_res assign_expr::emit_dc(
+    [[nodiscard]] resstr<reg_idx> assign_expr::emit_dc(
         compilation::function_context& fn,
         compilation::global_state& global,
         const std::optional<reg_idx> destination
     ) const noexcept {
-        const lvalue_emission_res lvalue = m_lhs->emit_dc_lvalue(fn, global);
+        const resstr<std::pair<reg_idx, Opcode>> lvalue = m_lhs->emit_dc_lvalue(fn, global);
         if (!lvalue) {
             return std::unexpected{std::move(lvalue.error())};
         }
         const auto& [lvalue_reg, opcode] = *lvalue;
-        emission_res rvalue;
+        resstr<reg_idx> rvalue;
 
         if (opcode == Opcode::Move) {
             rvalue = m_rhs->emit_dc(fn, global, lvalue_reg);
@@ -96,7 +96,7 @@ namespace dconstruct::ast {
         }
         if (*rvalue != lvalue_reg) {
             if (is_store_opcode(opcode)) {
-                const emission_res throwaway = fn.get_next_unused_register();
+                const resstr<reg_idx> throwaway = fn.get_next_unused_register();
                 if (!throwaway) {
                     return throwaway;
                 }

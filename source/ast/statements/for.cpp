@@ -62,8 +62,8 @@ namespace dconstruct::ast {
             errors.emplace_back(std::move(cond_type.error()));
         }
 
-        std::optional<std::string> invalid_condition = std::visit(
-            [](auto&& cond) -> std::optional<std::string> {
+        errmsg invalid_condition = std::visit(
+            [](auto&& cond) -> errmsg {
                 using cond_t = std::decay_t<decltype(cond)>;
 
                 if constexpr (is_primitive<cond_t>) {
@@ -94,7 +94,7 @@ namespace dconstruct::ast {
         return errors;
     }
 
-    [[nodiscard]] emission_err for_stmt::emit_dc(
+    [[nodiscard]] errmsg for_stmt::emit_dc(
         compilation::function_context& fn,
         compilation::global_state& global
     ) const noexcept {
@@ -107,24 +107,24 @@ namespace dconstruct::ast {
         // body
         // incr
 
-        const emission_err init_err = m_init->emit_dc(fn, global);
+        const errmsg init_err = m_init->emit_dc(fn, global);
         if (init_err) {
             return init_err;
         }
 
         u16 head_location = static_cast<u16>(fn.m_instructions.size());
 
-        const condition_branch_res false_branches = m_condition->emit_dc_branch(fn, global, false);
+        const resstr<std::vector<u64>> false_branches = m_condition->emit_dc_branch(fn, global, false);
         if (!false_branches) {
             return false_branches.error();
         }
 
-        const emission_err body_err = m_body->emit_dc(fn, global);
+        const errmsg body_err = m_body->emit_dc(fn, global);
         if (body_err) {
             return body_err;
         }
 
-        const emission_res incr_res = m_incr->emit_dc(fn, global);
+        const resstr<reg_idx> incr_res = m_incr->emit_dc(fn, global);
         if (!incr_res) {
             return incr_res.error();
         }

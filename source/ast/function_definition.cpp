@@ -104,7 +104,7 @@ namespace dconstruct::ast {
         return res;
     }
 
-    [[nodiscard]] program_binary_result function_definition::emit_dc(compilation::global_state& global) const noexcept {
+    [[nodiscard]] resstr<compilation::program_binary_element> function_definition::emit_dc(compilation::global_state& global) const noexcept {
         if (m_cachedElement) {
             return *m_cachedElement;
         }
@@ -116,7 +116,7 @@ namespace dconstruct::ast {
 
         for (u32 i = 0; i < m_parameters.size(); ++i) {
             const parameter& param = m_parameters[i];
-            const emission_res new_var_reg = fn.get_next_unused_register();
+            const resstr<reg_idx> new_var_reg = fn.get_next_unused_register();
             if (!new_var_reg) {
                 return std::unexpected{new_var_reg.error()};
             }
@@ -125,7 +125,7 @@ namespace dconstruct::ast {
             fn.emit_instruction(Opcode::Move, *new_var_reg, ARGUMENT_REGISTERS_IDX + i);
         }
 
-        const emission_err body_err = m_body.emit_dc(fn, global);
+        const errmsg body_err = m_body.emit_dc(fn, global);
         if (body_err) {
             return std::unexpected{*body_err};
         }

@@ -64,9 +64,9 @@ namespace dconstruct {
     using res = std::expected<R, T>;
 
     template<typename T>
-    using res_msg = res<T, std::string>;
+    using resstr = res<T, std::string>;
 
-    using error_msg = std::optional<std::string>;
+    using errmsg = std::optional<std::string>;
 
     using reg_idx = u8;
     using node_id = u16;

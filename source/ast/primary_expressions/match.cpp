@@ -236,8 +236,8 @@ namespace dconstruct::ast {
                 return cond_type;
             }
 
-            const std::optional<std::string> invalid_type = std::visit(
-                [](auto&& cond) -> std::optional<std::string> {
+            const errmsg invalid_type = std::visit(
+                [](auto&& cond) -> errmsg {
                     using T = std::decay_t<decltype(cond)>;
 
                     if constexpr (is_primitive<T>) {
@@ -262,8 +262,8 @@ namespace dconstruct::ast {
             return match_var_type;
         }
 
-        const std::optional<std::string> invalid_match_var_type = std::visit(
-            [](auto&& arg) -> std::optional<std::string> {
+        const errmsg invalid_match_var_type = std::visit(
+            [](auto&& arg) -> errmsg {
                 using match_var_t = std::decay_t<decltype(arg)>;
 
                 if constexpr (is_primitive<match_var_t>) {
@@ -291,7 +291,7 @@ namespace dconstruct::ast {
                 return pattern_type;
             }
 
-            if (const std::optional<std::string> pattern_err = not_assignable_reason(*match_var_type, *pattern_type)) {
+            if (const errmsg pattern_err = not_assignable_reason(*match_var_type, *pattern_type)) {
                 return std::unexpected{semantic_check_error{
                     "expected pattern type " + type_to_declaration_string(*match_var_type) + " but got " + type_to_declaration_string(*pattern_type), pattern.get()}};
             }
@@ -386,12 +386,12 @@ namespace dconstruct::ast {
         m_hasDensity = true;
     }
 
-    [[nodiscard]] emission_res match_expr::emit_dc(
+    [[nodiscard]] resstr<reg_idx> match_expr::emit_dc(
         compilation::function_context& fn,
         compilation::global_state& global,
         const std::optional<reg_idx> destination
     ) const noexcept {
-        const emission_res condition = m_conditions.back()->emit_dc(fn, global);
+        const resstr<reg_idx> condition = m_conditions.back()->emit_dc(fn, global);
         if (!condition) {
             return condition;
         }
@@ -410,7 +410,7 @@ namespace dconstruct::ast {
         return std::unexpected{"match expression is not dense enough for array compilation"};
     }
 
-    [[nodiscard]] emission_res match_expr::emit_dc_array_approach(
+    [[nodiscard]] resstr<reg_idx> match_expr::emit_dc_array_approach(
         compilation::function_context& fn,
         compilation::global_state& global,
         const reg_idx condition_reg,
@@ -426,7 +426,7 @@ namespace dconstruct::ast {
 
         static const literal sentinel{SID("sentinel")};
 
-        const auto emit_default_to_symbol_table = [&]() -> std::expected<u16, std::string> {
+        const auto emit_default_to_symbol_table = [&]() -> resstr<u16> {
             if (m_default) {
                 return m_default->emit_to_symbol_table(fn, global);
             }
@@ -434,7 +434,7 @@ namespace dconstruct::ast {
         };
 
         std::optional<u64> default_symbol_table_entry;
-        std::expected<u16, std::string> symbol_table_entry_res;
+        resstr<u16> symbol_table_entry_res;
         for (i64 i = m_min; i <= m_max; ++i) {
             if (match_it != m_matchPairs.end() && static_cast<u16>(*match_it->first->raw_pattern_number()) == i) {
                 symbol_table_entry_res = match_it->second->emit_to_symbol_table(fn, global);
@@ -468,7 +468,7 @@ namespace dconstruct::ast {
             u64 max_idx = fn.add_to_symbol_table(m_max);
             u64 offset = fn.add_to_symbol_table(default_end_idx);
 
-            const emission_res range_dest = fn.get_next_unused_register();
+            const resstr<reg_idx> range_dest = fn.get_next_unused_register();
             if (!range_dest) {
                 return range_dest;
             }
@@ -486,7 +486,7 @@ namespace dconstruct::ast {
             fn.free_register(*range_dest);
         }
 
-        const emission_res load_dest_res = fn.fix_destination(destination);
+        const resstr<reg_idx> load_dest_res = fn.fix_destination(destination);
         if (!load_dest_res) {
             return load_dest_res;
         }

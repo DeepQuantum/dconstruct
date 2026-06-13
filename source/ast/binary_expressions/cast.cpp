@@ -43,8 +43,8 @@ namespace dconstruct::ast {
             return m_castType;
         }
 
-        const std::optional<std::string> invalid_cast = std::visit(
-            [](auto&& cast_type, auto&& expr_type) -> std::optional<std::string> {
+        const errmsg invalid_cast = std::visit(
+            [](auto&& cast_type, auto&& expr_type) -> errmsg {
                 using cast_t = std::decay_t<decltype(cast_type)>;
                 using expr_t = std::decay_t<decltype(expr_type)>;
 
@@ -121,12 +121,12 @@ namespace dconstruct::ast {
         return nullptr;
     }
 
-    [[nodiscard]] emission_res cast_expr::emit_dc(
+    [[nodiscard]] resstr<reg_idx> cast_expr::emit_dc(
         compilation::function_context& fn,
         compilation::global_state& global,
         const std::optional<reg_idx> destination
     ) const noexcept {
-        const emission_res expr_res = m_rhs->emit_dc(fn, global);
+        const resstr<reg_idx> expr_res = m_rhs->emit_dc(fn, global);
         if (!expr_res) {
             return expr_res;
         }
@@ -152,7 +152,7 @@ namespace dconstruct::ast {
             return *expr_res;
         }
 
-        const emission_res cast_destination = fn.fix_destination(destination);
+        const resstr<reg_idx> cast_destination = fn.fix_destination(destination);
         if (!cast_destination) {
             return cast_destination;
         }

@@ -26,11 +26,14 @@ namespace dconstruct::compilation {
         void insert_string_offset() noexcept;
         void insert_string_offset(const u64 offset) noexcept;
 
+        void insert_absolute_offset() noexcept;
+
         void adjust_offsets(const u64 offset) noexcept;
 
         Entry m_entry;
         std::vector<std::byte> m_rawData;
         std::vector<u64> m_stringOffsets;
+        std::vector<u64> m_absoluteOffsets;
         std::vector<bool> m_relocTable;
 
         u64 m_byteOffset = 0;

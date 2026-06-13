@@ -34,8 +34,8 @@ namespace dconstruct::ast {
             return rhs_type;
         }
 
-        const std::optional<std::string> invalid_increment = std::visit(
-            [](auto&& rhs_type) -> std::optional<std::string> {
+        const errmsg invalid_increment = std::visit(
+            [](auto&& rhs_type) -> errmsg {
                 using T = std::decay_t<decltype(rhs_type)>;
 
                 if constexpr (std::is_same_v<T, primitive_type>) {
@@ -58,18 +58,18 @@ namespace dconstruct::ast {
         return std::unexpected{semantic_check_error{*invalid_increment, this}};
     }
 
-    [[nodiscard]] emission_res post_arithmetic_expression::emit_dc(
+    [[nodiscard]] resstr<reg_idx> post_arithmetic_expression::emit_dc(
         compilation::function_context& fn,
         compilation::global_state& global,
         const std::optional<reg_idx> destination
     ) const noexcept {
-        const lvalue_emission_res expr_res = m_rhs->emit_dc_lvalue(fn, global);
+        const resstr<std::pair<reg_idx, Opcode>> expr_res = m_rhs->emit_dc_lvalue(fn, global);
         if (!expr_res) {
             return std::unexpected{std::move(expr_res.error())};
         }
 
         if (m_operator.m_type == compilation::token_type::MINUS_MINUS) {
-            const emission_res tmp_reg = fn.get_next_unused_register();
+            const resstr<reg_idx> tmp_reg = fn.get_next_unused_register();
             if (!tmp_reg) {
                 return tmp_reg;
             }

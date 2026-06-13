@@ -84,29 +84,29 @@ namespace dconstruct::ast {
         return *std::get<ptr_type>(*lhs_type).m_pointedAt;
     }
 
-    [[nodiscard]] emission_res subscript_expr::emit_dc(
+    [[nodiscard]] resstr<reg_idx> subscript_expr::emit_dc(
         compilation::function_context& fn,
         compilation::global_state& global,
         const std::optional<reg_idx> opt_destination
     ) const noexcept {
-        const emission_res lhs_res = m_lhs->emit_dc(fn, global);
+        const resstr<reg_idx> lhs_res = m_lhs->emit_dc(fn, global);
         if (!lhs_res) {
             return lhs_res;
         }
 
-        const emission_res rhs_res = m_rhs->emit_dc(fn, global);
+        const resstr<reg_idx> rhs_res = m_rhs->emit_dc(fn, global);
         if (!rhs_res) {
             return rhs_res;
         }
 
         const ptr_type& ptr_t = std::get<ptr_type>(*m_lhs->get_type());
 
-        std::expected<Opcode, std::string> load_opcode = get_load_opcode(*ptr_t.m_pointedAt);
+        resstr<Opcode> load_opcode = get_load_opcode(*ptr_t.m_pointedAt);
         if (!load_opcode) {
             return std::unexpected{std::move(load_opcode.error())};
         }
 
-        const emission_res load_destination = fn.fix_destination(opt_destination);
+        const resstr<reg_idx> load_destination = fn.fix_destination(opt_destination);
         if (!load_destination) {
             return load_destination;
         }
@@ -123,28 +123,28 @@ namespace dconstruct::ast {
         return *load_destination;
     }
 
-    [[nodiscard]] lvalue_emission_res subscript_expr::emit_dc_lvalue(
+    [[nodiscard]] resstr<std::pair<reg_idx, Opcode>> subscript_expr::emit_dc_lvalue(
         compilation::function_context& fn,
         compilation::global_state& global
     ) const noexcept {
-        lvalue_emission_res lhs_res = m_lhs->emit_dc_lvalue(fn, global);
+        resstr<std::pair<reg_idx, Opcode>> lhs_res = m_lhs->emit_dc_lvalue(fn, global);
         if (!lhs_res) {
             return std::unexpected{std::move(lhs_res.error())};
         }
 
-        emission_res rhs_res = m_rhs->emit_dc(fn, global);
+        resstr<reg_idx> rhs_res = m_rhs->emit_dc(fn, global);
         if (!rhs_res) {
             return std::unexpected{std::move(rhs_res.error())};
         }
 
         const ptr_type& ptr_t = std::get<ptr_type>(*m_lhs->get_type());
 
-        std::expected<Opcode, std::string> store_opcode = get_store_opcode(*ptr_t.m_pointedAt);
+        resstr<Opcode> store_opcode = get_store_opcode(*ptr_t.m_pointedAt);
         if (!store_opcode) {
             return std::unexpected{std::move(store_opcode.error())};
         }
 
-        emission_res store_destination = fn.get_next_unused_register();
+        resstr<reg_idx> store_destination = fn.get_next_unused_register();
         if (!store_destination) {
             return std::unexpected{std::move(store_destination.error())};
         }

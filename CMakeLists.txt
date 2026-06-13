@@ -12,7 +12,6 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/source")
-# add_subdirectory(${SOURCE_DIR}/llvm/llvm)
 
 include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}
@@ -42,13 +41,6 @@ FetchContent_Declare(
 #set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 
 FetchContent_MakeAvailable(googletest)
-
-# set(LLVM_BUILD_TOOLS OFF CACHE BOOL "" FORCE)
-# set(LLVM_ENABLE_PROJECTS "" CACHE STRING "" FORCE)
-# set(LLVM_TARGETS_TO_BUILD "X86" CACHE STRING "" FORCE)
-# set(LLVM_EXPERIMENTAL_TARGETS_TO_BUILD "DirectX" CACHE STRING "" FORCE)
-# set(LLVM_ENABLE_ASSERTIONS OFF CACHE BOOL "" FORCE)
-
 
 # llvm_map_components_to_libnames(LLVM_LIBS
 #     core
@@ -328,6 +320,10 @@ add_library(dconstruct_hooking SHARED
     "${SOURCE_DIR}/base/sidbase.cpp"
 )
 
+set_source_files_properties("${SOURCE_DIR}/hooking/extended_opcodes.asm"
+    PROPERTIES LANGUAGE ASM_MASM
+)
+
 target_include_directories(dconstruct_hooking PRIVATE "${SOURCE_DIR}/minhook/include")
 
 target_link_libraries(dconstruct_hooking PRIVATE minhook)
@@ -337,5 +333,39 @@ target_compile_options(dconstruct_hooking PRIVATE
 )
 
 target_link_options(dconstruct_hooking PRIVATE
+    $<$<CONFIG:Release>:/LTCG>
+)
+
+set(LLVM_ENABLE_PROJECTS "" CACHE STRING "" FORCE)
+set(LLVM_TARGETS_TO_BUILD "X86" CACHE STRING "" FORCE)
+set(LLVM_BUILD_TOOLS OFF CACHE BOOL "" FORCE)
+set(LLVM_INCLUDE_TESTS OFF CACHE BOOL "" FORCE)
+set(LLVM_INCLUDE_EXAMPLES OFF CACHE BOOL "" FORCE)
+set(LLVM_INCLUDE_BENCHMARKS OFF CACHE BOOL "" FORCE)
+set(LLVM_INCLUDE_DOCS OFF CACHE BOOL "" FORCE)
+set(LLVM_DISABLE_ASSEMBLY_FILES ON CACHE BOOL "" FORCE)
+
+add_subdirectory(${SOURCE_DIR}/llvm/llvm EXCLUDE_FROM_ALL)
+
+add_library(llvm_transpile
+    "${SOURCE_DIR}/llvm_transpile/llvm_transpile.cpp"
+)
+
+target_include_directories(llvm_transpile SYSTEM PUBLIC
+    "${SOURCE_DIR}/llvm/llvm/include"
+    "${LLVM_BINARY_DIR}/include"
+)
+
+target_link_libraries(llvm_transpile PUBLIC
+    dconstruct_lib
+    LLVMCore
+    LLVMSupport
+)
+
+target_compile_options(llvm_transpile PRIVATE
+    $<$<CONFIG:Release>:/GL>
+)
+
+target_link_options(llvm_transpile PRIVATE
     $<$<CONFIG:Release>:/LTCG>
 )

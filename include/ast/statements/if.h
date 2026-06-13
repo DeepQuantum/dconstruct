@@ -23,7 +23,7 @@ namespace dconstruct::ast {
         [[nodiscard]] std::unique_ptr<statement> clone() const noexcept final;
         [[nodiscard]] const statement* inlineable_else_statement() const noexcept final;
         [[nodiscard]] std::vector<semantic_check_error> check_semantics(compilation::scope& env) const noexcept final;
-        [[nodiscard]] emission_err emit_dc(compilation::function_context& fn, compilation::global_state& global) const noexcept final;
+        [[nodiscard]] errmsg emit_dc(compilation::function_context& fn, compilation::global_state& global) const noexcept final;
 
         VAR_OPTIMIZATION_ACTION var_optimization_pass(var_optimization_env& env) noexcept final;
         FOREACH_OPTIMIZATION_ACTION foreach_optimization_pass(foreach_optimization_env& env) noexcept final;

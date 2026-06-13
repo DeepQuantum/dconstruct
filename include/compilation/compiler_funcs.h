@@ -7,16 +7,19 @@
 #include "binaryfile.h"
 #include "disassembly/disassembler.h"
 #include "compilation/preprocessor.h"
+#include "compilation/target_patcher.h"
 #include "ast/ast.h"
 #include <fstream>
 #include <sstream>
 #include <filesystem>
 #include <unordered_map>
+#include <unordered_set>
 #include <array>
 #include <string_view>
 #include <chrono>
 #include <algorithm>
 #include <cstring>
+#include <format>
 
 namespace dconstruct::compilation {
 
@@ -105,7 +108,7 @@ namespace dconstruct::compilation {
             }
         }
 
-        std::expected<std::vector<compilation::program_binary_element>, std::string> compile_res = program.compile_binary_elements(base_scope, global);
+        resstr<std::vector<compilation::program_binary_element>> compile_res = program.compile_binary_elements(base_scope, global);
         if (!compile_res) {
             std::cerr << "[compilation error] " << compile_res.error() << "\n";
             return std::nullopt;
@@ -137,13 +140,13 @@ namespace dconstruct::compilation {
         return run_compilation(source_code, global, line_map);
     }
 
-    [[nodiscard]] static std::expected<std::pair<std::unique_ptr<std::byte[]>, u64>, std::string> disassemble_target(
+    [[nodiscard]] static resstr<std::pair<std::unique_ptr<std::byte[]>, u64>> disassemble_target(
         const std::filesystem::path& target_filepath,
         const SIDBase& sidbase,
         const std::vector<compilation::program_binary_element>& target_elements,
         global_state& global
     ) {
-        std::expected<BinaryFile, std::string> file_res = BinaryFile::from_path(target_filepath);
+        resstr<BinaryFile> file_res = BinaryFile::from_path(target_filepath);
         if (!file_res) {
             return std::unexpected{file_res.error()};
         }
@@ -165,8 +168,24 @@ namespace dconstruct::compilation {
             target_elements_by_sid.emplace(target_element.m_entry.m_nameID, &target_element);
         }
 
-        std::vector<compilation::program_binary_element> converted;
+        std::unordered_set<sid64> target_entry_sids;
+        target_entry_sids.reserve(file_res->m_dcheader->m_numEntries);
+        const Entry* target_entries = file_res->m_dcheader->m_pStartOfData;
+        for (u32 i = 0; i < file_res->m_dcheader->m_numEntries; ++i) {
+            target_entry_sids.insert(target_entries[i].m_nameID);
+        }
+
+        std::vector<compilation::program_binary_element> patched_elements;
+        std::unordered_set<sid64> consumed;
+        for (const compilation::program_binary_element& target_element : target_elements) {
+            if (target_entry_sids.contains(target_element.m_entry.m_nameID)) {
+                patched_elements.push_back(target_element);
+                consumed.insert(target_element.m_entry.m_nameID);
+            }
+        }
+
         std::vector<std::pair<const function_disassembly*, compilation::program_binary_element>> state_script_lambdas;
+        bool replaced_state_script_lambda = false;
 
         for (const auto& f : funcs) {
             function_context cf{};
@@ -181,13 +200,15 @@ namespace dconstruct::compilation {
                                                             ? std::get<sid64>(cf.m_name)
                                                             : SID(std::get<std::string>(cf.m_name).c_str());
 
+            if (!f->m_isScriptFunction) {
+                continue;
+            }
+
             const auto replacement_it = target_elements_by_sid.find(disassembled_function_name_id);
-            if (replacement_it != target_elements_by_sid.end()) {
-                if (f->m_isScriptFunction) {
-                    state_script_lambdas.emplace_back(f, *replacement_it->second);
-                } else {
-                    converted.push_back(*replacement_it->second);
-                }
+            if (replacement_it != target_elements_by_sid.end() && !consumed.contains(disassembled_function_name_id)) {
+                consumed.insert(disassembled_function_name_id);
+                state_script_lambdas.emplace_back(f, *replacement_it->second);
+                replaced_state_script_lambda = true;
                 continue;
             }
 
@@ -195,7 +216,7 @@ namespace dconstruct::compilation {
                 cf.m_instructions.push_back(line.m_instruction);
             }
             for (u32 i = 0; i < f->m_stackFrame.m_symbolTable.m_types.size(); ++i) {
-                const function_context::SYMBOL_TABLE_POINTER_KIND kind = std::visit(
+                function_context::SYMBOL_TABLE_POINTER_KIND kind = std::visit(
                     [](auto&& type) {
                         using T = std::decay_t<decltype(type)>;
                         if constexpr (std::is_same_v<T, ast::primitive_type>) {
@@ -212,28 +233,42 @@ namespace dconstruct::compilation {
                     const u32 size = global.add_string(f->m_stackFrame.m_symbolTable.m_location.get<const char*>(i * 8));
                     cf.m_symbolTable.push_back(size);
                 } else {
-                    cf.m_symbolTable.push_back(f->m_stackFrame.m_symbolTable.m_location.get<u64>(i * 8));
+                    u64 value = f->m_stackFrame.m_symbolTable.m_location.get<u64>(i * 8);
+                    if (file_res->is_file_ptr(f->m_stackFrame.m_symbolTable.m_location + i * 8)) {
+                        value -= reinterpret_cast<p64>(file_res->m_bytes.get());
+                        kind = function_context::SYMBOL_TABLE_POINTER_KIND::ABSOLUTE;
+                    }
+                    cf.m_symbolTable.push_back(value);
                 }
                 cf.m_symbolTableEntryPointers.push_back(kind);
             }
-            if (f->m_isScriptFunction) {
-                state_script_lambdas.emplace_back(f, cf.to_binary_element());
-            } else {
-                converted.push_back(cf.to_binary_element());
+            state_script_lambdas.emplace_back(f, cf.to_binary_element());
+        }
+
+        for (const compilation::program_binary_element& target_element : target_elements) {
+            if (!consumed.contains(target_element.m_entry.m_nameID)) {
+                std::cerr << std::format("[warning] compiled entry #{:016X} matches no entry or state script lambda in the target and will be ignored\n", target_element.m_entry.m_nameID);
             }
         }
 
-        if (disassembler.has_state_script()) {
+        if (replaced_state_script_lambda) {
+            if (!disassembler.has_state_script()) {
+                return std::unexpected{"a state script lambda was replaced but the target contains no state script"};
+            }
             ast::state_script* state_script = disassembler.get_state_script();
             state_script->from_functions(state_script_lambdas);
-            ast::program_binary_result state_script_element = state_script->emit_dc(global);
+            resstr<compilation::program_binary_element> state_script_element = state_script->emit_dc(global);
             if (!state_script_element) {
                 return std::unexpected{state_script_element.error()};
             }
-            converted.push_back(std::move(*state_script_element));
+            patched_elements.push_back(std::move(*state_script_element));
         }
 
-        return ast::program::make_binary(std::move(converted), global);
+        if (patched_elements.empty()) {
+            return std::unexpected{"none of the compiled entries match an entry or state script lambda in " + target_filepath.string()};
+        }
+
+        return compilation::patch_target_binary(*file_res, std::move(patched_elements), global);
     }
 
     [[nodiscard]] static std::optional<cxxopts::ParseResult> get_command_line_options(int argc, char* argv[]) {
@@ -394,7 +429,7 @@ namespace dconstruct::compilation {
         u64 m_rawEntryOffset = 0;
     };
 
-    [[nodiscard]] static std::expected<modules_patch_summary, std::string> recompile_modules_with_entry(
+    [[nodiscard]] static resstr<modules_patch_summary> recompile_modules_with_entry(
         const ModuleInfoArray& module_array,
         const std::filesystem::path& modules,
         const std::string& target_name,
@@ -529,7 +564,7 @@ namespace dconstruct::compilation {
         return normalized;
     }
 
-    [[nodiscard]] static std::expected<modules_patch_summary, std::string> patch_modules_size(
+    [[nodiscard]] static resstr<modules_patch_summary> patch_modules_size(
         const std::filesystem::path& modules,
         const std::filesystem::path& output,
         const u64 new_size,
@@ -549,7 +584,7 @@ namespace dconstruct::compilation {
         const bool refresh_exports = !exports.empty();
         const std::vector<sid64> normalized_exports = normalized_module_exports(target_name, exports);
 
-        std::expected<BinaryFile, std::string> file_res = BinaryFile::from_path(modules);
+        resstr<BinaryFile> file_res = BinaryFile::from_path(modules);
         if (!file_res) {
             return std::unexpected{file_res.error()};
         }
@@ -598,8 +633,8 @@ namespace dconstruct::compilation {
         return *summary;
     }
 
-    static std::expected<compiler_output_summary, std::string> create_output(
-        const std::expected<dconstruct::compilation::compiler_options, std::string>& filepaths,
+    static resstr<compiler_output_summary> create_output(
+        const resstr<dconstruct::compilation::compiler_options>& filepaths,
         const dconstruct::SIDBase& sidbase,
         const std::vector<dconstruct::compilation::program_binary_element>& functions,
         dconstruct::compilation::global_state& global
@@ -624,11 +659,11 @@ namespace dconstruct::compilation {
         summary.m_size = size;
 
         if (!filepaths->m_modules.empty()) {
-            std::expected<modules_patch_summary, std::string> patch = patch_modules_size(
+            resstr<modules_patch_summary> patch = patch_modules_size(
                 filepaths->m_modules,
                 filepaths->m_output,
                 size,
-                module_exports_for_elements(functions)
+                filepaths->m_standalone ? module_exports_for_elements(functions) : std::vector<sid64>{}
             );
             if (!patch) {
                 return std::unexpected{patch.error()};
@@ -645,7 +680,7 @@ namespace dconstruct::compilation {
         return psarc_path;
     }
 
-    [[nodiscard]] static std::expected<std::filesystem::path, std::string> repackage_psarc(const std::filesystem::path& directory_path) {
+    [[nodiscard]] static resstr<std::filesystem::path> repackage_psarc(const std::filesystem::path& directory_path) {
         const std::filesystem::path psarc_path = repackage_psarc_path(directory_path);
         const std::string command = "ndarc -c \"" + directory_path.string() + "\" -o \"" + psarc_path.string() + "\"";
         const int result = std::system(command.c_str());

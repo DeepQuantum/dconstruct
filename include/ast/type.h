@@ -199,9 +199,9 @@ namespace dconstruct::ast {
 
     [[nodiscard]] std::optional<primitive_kind> get_dominating_prim(const primitive_kind lhs, const primitive_kind rhs);
 
-    [[nodiscard]] std::optional<std::string> not_assignable_reason(const full_type& assignee, const full_type& assign_value);
+    [[nodiscard]] errmsg not_assignable_reason(const full_type& assignee, const full_type& assign_value);
 
-    [[nodiscard]] std::expected<full_type, std::string> is_valid_binary_op(const full_type& lhs, const full_type& rhs, const std::string& op);
+    [[nodiscard]] resstr<full_type> is_valid_binary_op(const full_type& lhs, const full_type& rhs, const std::string& op);
 
     template <typename T>
     inline constexpr bool is_primitive = std::is_same_v<T, primitive_type>;
@@ -214,9 +214,9 @@ namespace dconstruct::ast {
 
     [[nodiscard]] const full_type* get_dominating_type(const full_type& lhs, const full_type& rhs);
 
-    [[nodiscard]] std::expected<Opcode, std::string> get_load_opcode(const full_type& type);
-    [[nodiscard]] std::expected<Opcode, std::string> get_static_load_opcode(const full_type& type);
-    [[nodiscard]] std::expected<Opcode, std::string> get_store_opcode(const full_type& type);
+    [[nodiscard]] resstr<Opcode> get_load_opcode(const full_type& type);
+    [[nodiscard]] resstr<Opcode> get_static_load_opcode(const full_type& type);
+    [[nodiscard]] resstr<Opcode> get_store_opcode(const full_type& type);
 
     extern const std::string UNKNOWN_TYPE_NAME;
 

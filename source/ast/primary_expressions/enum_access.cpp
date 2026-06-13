@@ -64,12 +64,12 @@ namespace dconstruct::ast {
         return type;
     }
 
-    [[nodiscard]] emission_res enum_access::emit_dc(
+    [[nodiscard]] resstr<reg_idx> enum_access::emit_dc(
         compilation::function_context& fn,
         compilation::global_state& global,
         const std::optional<reg_idx> destination
     ) const noexcept {
-        emission_res res = m_value.emit_dc(fn, global, destination);
+        resstr<reg_idx> res = m_value.emit_dc(fn, global, destination);
         if (!res) {
             return std::unexpected{"can't compile enum member " + qualified_name() + ": " + res.error()};
         }

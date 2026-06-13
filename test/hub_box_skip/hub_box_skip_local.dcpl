@@ -1,8 +1,58 @@
 @target "C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/ss-rogue/ss-hub-lockbox.bin"
-@mod "C:/Users/damix/Documents/GitHub/TLOU2Modding/dconstruct/test/hub_box_skip/mod"
+@mod "C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/mods/hub_box_skip"
 @output "ss-rogue/ss-hub-lockbox.bin"
 @sidbase "C:/Users/damix/Documents/GitHub/TLOU2Modding/dconstruct/test/fixtures/dc/sidbase_new_fixed.bin"
 
-u0 #wait-for-spawn@start@main@0() {
-    >> "hello world";
+using #get-svar as near (u64) -> u64;
+using #set-svar as near (u64, u64) -> u64;
+using #get-svar-as-boolean as near (u64) -> bool;
+using #set-svar-as-boolean as near (u64, u64) -> u64;
+using #populate-hub-rewards as near () -> u64;
+using #inventory-item-add-quantity as near (u64, u64) -> u64;
+using #get-int32 as far (u64, u64) -> u64;
+using #send-event as far (u64, u64, u64) -> u64;
+using #new-boxed-value as far (u64, u64) -> u64;
+using #broadcast-event as far (u64) -> u64;
+using #go as far (u64, u64) -> u64;
+using #rogue-get-is-resumed-run as far () -> bool;
+using #encounter--get-current-encounter-ddict as near () -> u64;
+using #encounter--has-upgrade-manual? as near (u64) -> bool;
+using #encounter--get-upgrade-manual as near (u64) -> u64;
+using #give-upgrade-path as near (u64, u64) -> u64;
+
+u0 #spawn-lockbox@start@main@0() {
+    >> "here";
+    if (#get-svar(#hub-opened-crate) == 0) {
+        >> "here too";
+        bool hasManual = #encounter--has-upgrade-manual?(#encounter--get-current-encounter-ddict());
+        bool resumedRun = #rogue-get-is-resumed-run();
+        bool waitingForCollect = #get-svar-as-boolean(#hub-reward-wait-collect);
+
+        if (!(resumedRun && hasManual && !waitingForCollect)) {
+            >> "giving out rewards.";
+            #populate-hub-rewards();
+            #inventory-item-add-quantity(#parts, #get-int32(#hud-parts-count, #self));
+            #inventory-item-add-quantity(#player-upgrade-supplements, #get-int32(#hud-supplements-count, #self));
+            #set-svar(#vendor-currency, #get-svar(#vendor-currency) + #get-int32(#hud-currency-count, #self));
+            #send-event(
+                #pick-up-vendor-currency,
+                #canvas.hudRoot.healthAndAmmoV2.currency-count,
+                #new-boxed-value(2, #get-int32(#hud-currency-count, #self))
+            );
+            #inventory-item-add-quantity(#vendor-currency, #get-int32(#hud-currency-count, #self));
+            #broadcast-event(#vendor-changed);
+        }
+
+        #set-svar-as-boolean(#hub-reward-wait-collect, 0);
+
+        if (hasManual) {
+            #give-upgrade-path(#encounter--get-upgrade-manual(#encounter--get-current-encounter-ddict()), 0);
+        }
+
+        #set-svar(#hub-opened-crate, 1);
+    }
+}
+
+u0 #spawn-lockbox@start@main@1() {
+    => #spawn-empty-lockbox;
 }

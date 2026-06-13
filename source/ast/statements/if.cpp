@@ -77,8 +77,8 @@ namespace dconstruct::ast {
             return errors;
         }
 
-        std::optional<std::string> invalid_condition = std::visit(
-            [](auto&& cond) -> std::optional<std::string> {
+        errmsg invalid_condition = std::visit(
+            [](auto&& cond) -> errmsg {
                 using cond_t = std::decay_t<decltype(cond)>;
 
                 if constexpr (is_primitive<cond_t>) {
@@ -110,16 +110,16 @@ namespace dconstruct::ast {
         return errors;
     }
 
-    [[nodiscard]] emission_err if_stmt::emit_dc(
+    [[nodiscard]] errmsg if_stmt::emit_dc(
         compilation::function_context& fn,
         compilation::global_state& global
     ) const noexcept {
-        const condition_branch_res false_branches = m_condition->emit_dc_branch(fn, global, false);
+        const resstr<std::vector<u64>> false_branches = m_condition->emit_dc_branch(fn, global, false);
         if (!false_branches) {
             return false_branches.error();
         }
 
-        const emission_err then_err = m_then->emit_dc(fn, global);
+        const errmsg then_err = m_then->emit_dc(fn, global);
         if (then_err) {
             return then_err;
         }
@@ -129,7 +129,7 @@ namespace dconstruct::ast {
             else_skip_location = fn.m_instructions.size();
             fn.emit_instruction(Opcode::Branch, compilation::function_context::BRANCH_PLACEHOLDER, 00, compilation::function_context::BRANCH_PLACEHOLDER);
 
-            const emission_err else_err = m_else->emit_dc(fn, global);
+            const errmsg else_err = m_else->emit_dc(fn, global);
             if (else_err) {
                 return else_err;
             }

@@ -37,7 +37,7 @@ namespace dconstruct::ast {
         [[nodiscard]] semantic_check_res compute_type_checked(compilation::scope& env) const noexcept final;
         [[nodiscard]] u16 calc_complexity() const noexcept final;
         [[nodiscard]] std::unique_ptr<struct_access> to_struct_access() noexcept final;
-        [[nodiscard]] emission_res emit_dc(compilation::function_context& fn, compilation::global_state& global, const std::optional<reg_idx> destination = std::nullopt) const noexcept final;
+        [[nodiscard]] resstr<reg_idx> emit_dc(compilation::function_context& fn, compilation::global_state& global, const std::optional<reg_idx> destination = std::nullopt) const noexcept final;
 
         //[[nodiscard]] llvm_res emit_llvm(llvm::LLVMContext&, llvm::IRBuilder<>&, llvm::Module&, const compiler::scope&) const noexcept final {return std::};
         VAR_OPTIMIZATION_ACTION var_optimization_pass(var_optimization_env& env) noexcept final;
@@ -55,7 +55,7 @@ namespace dconstruct::ast {
         void sort_matches() noexcept;
         void calc_density_R() noexcept;
 
-        [[nodiscard]] emission_res emit_dc_array_approach(
+        [[nodiscard]] resstr<reg_idx> emit_dc_array_approach(
             compilation::function_context& fn,
             compilation::global_state& global,
             reg_idx condition,

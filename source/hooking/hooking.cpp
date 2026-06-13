@@ -3,6 +3,7 @@
 #include "sidbase.h"
 #include <windows.h>
 #include "MinHook.h"
+#include <chrono>
 #include <filesystem>
 #include <format>
 #include <fstream>
@@ -35,7 +36,9 @@ namespace dconstruct::hooking {
         if (!out) {
             return;
         }
-        out << std::vformat(fmt, std::make_format_args(args...)) << '\n';
+        const auto now = std::chrono::current_zone()->to_local(
+            std::chrono::floor<std::chrono::milliseconds>(std::chrono::system_clock::now()));
+        out << std::format("[{:%H:%M:%S}] ", now) << std::vformat(fmt, std::make_format_args(args...)) << '\n';
     }
 
     QWORD* __fastcall is_final_build_hook(QWORD*);
@@ -114,7 +117,9 @@ namespace dconstruct::hooking {
     }
 
     QWORD* __fastcall display_hook(QWORD* a1, QWORD* __dummy, const char** message) {
-        log_runtime(*message);
+        if (message) {
+            log_runtime(*message);
+        }
         *a1 = 0;
         return a1;
     }
@@ -245,9 +250,9 @@ namespace dconstruct::hooking {
         MH_CreateHook(display_target, reinterpret_cast<LPVOID>(&display_hook), reinterpret_cast<LPVOID*>(&display_orig));
         MH_EnableHook(display_target);
 
-        LPVOID is_final_build_target = reinterpret_cast<LPVOID>(module_base + IS_FINAL_BUILD_OFFSET);
-        MH_CreateHook(is_final_build_target, reinterpret_cast<LPVOID>(&is_final_build_hook), reinterpret_cast<LPVOID*>(&is_final_build_orig));
-        MH_EnableHook(is_final_build_target);
+        // LPVOID is_final_build_target = reinterpret_cast<LPVOID>(module_base + IS_FINAL_BUILD_OFFSET);
+        // MH_CreateHook(is_final_build_target, reinterpret_cast<LPVOID>(&is_final_build_hook), reinterpret_cast<LPVOID*>(&is_final_build_orig));
+        // MH_EnableHook(is_final_build_target);
 
         // void* invoke_function_target = (void*)(base + INVOKE_FUNCTION_OFFSET);
         // MH_CreateHook(invoke_function_target, &invoke_function_hook, reinterpret_cast<void**>(&invoke_function_orig));

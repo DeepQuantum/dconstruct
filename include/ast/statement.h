@@ -17,7 +17,7 @@ namespace dconstruct::ast {
         [[nodiscard]] virtual std::unique_ptr<statement> clone() const noexcept = 0;
         [[nodiscard]] virtual const statement* inlineable_else_statement() const noexcept { return nullptr; }
         [[nodiscard]] virtual std::vector<semantic_check_error> check_semantics(compilation::scope& env) const noexcept = 0;
-        [[nodiscard]] virtual emission_err emit_dc(
+        [[nodiscard]] virtual errmsg emit_dc(
             compilation::function_context& fn,
             compilation::global_state& gen
         ) const noexcept { return "not implmenented"; };

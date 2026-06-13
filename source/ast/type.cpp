@@ -397,9 +397,9 @@ namespace dconstruct::ast {
         }, type);
     }
 
-    [[nodiscard]] std::expected<Opcode, std::string> get_load_opcode(const full_type& type) {
+    [[nodiscard]] resstr<Opcode> get_load_opcode(const full_type& type) {
         return std::visit(
-            [](auto&& arg) -> std::expected<Opcode, std::string> {
+            [](auto&& arg) -> resstr<Opcode> {
                 using T = std::decay_t<decltype(arg)>;
                 if constexpr (std::is_same_v<T, primitive_type>) {
                     const primitive_kind kind = arg.m_type;
@@ -435,9 +435,9 @@ namespace dconstruct::ast {
         );
     }
 
-    [[nodiscard]] std::expected<Opcode, std::string> get_static_load_opcode(const full_type& type) {
+    [[nodiscard]] resstr<Opcode> get_static_load_opcode(const full_type& type) {
         return std::visit(
-            [](auto&& arg) -> std::expected<Opcode, std::string> {
+            [](auto&& arg) -> resstr<Opcode> {
                 using T = std::decay_t<decltype(arg)>;
                 if constexpr (std::is_same_v<T, primitive_type>) {
                     const primitive_kind kind = arg.m_type;
@@ -458,9 +458,9 @@ namespace dconstruct::ast {
         );
     }
 
-    [[nodiscard]] std::expected<Opcode, std::string> get_store_opcode(const full_type& type) {
+    [[nodiscard]] resstr<Opcode> get_store_opcode(const full_type& type) {
         return std::visit(
-            [](auto&& arg) -> std::expected<Opcode, std::string> {
+            [](auto&& arg) -> resstr<Opcode> {
                 using T = std::decay_t<decltype(arg)>;
                 if constexpr (std::is_same_v<T, primitive_type>) {
                     const primitive_kind kind = arg.m_type;
@@ -590,12 +590,12 @@ namespace dconstruct::ast {
         return std::nullopt;
     }
 
-    [[nodiscard]] std::optional<std::string> not_assignable_reason(
+    [[nodiscard]] errmsg not_assignable_reason(
         const full_type& assignee,
         const full_type& assign_value
     ) {
         return std::visit(
-            [](auto&& lhs, auto&& rhs) -> std::optional<std::string> {
+            [](auto&& lhs, auto&& rhs) -> errmsg {
                 using lhs_t = std::decay_t<decltype(lhs)>;
                 using rhs_t = std::decay_t<decltype(rhs)>;
                 if constexpr (std::is_same_v<rhs_t, primitive_type>) {
@@ -624,13 +624,13 @@ namespace dconstruct::ast {
         );
     }
 
-    [[nodiscard]] std::expected<full_type, std::string> is_valid_binary_op(
+    [[nodiscard]] resstr<full_type> is_valid_binary_op(
         const full_type& lhs,
         const full_type& rhs,
         const std::string& op
     ) {
         return std::visit(
-            [&op](auto&& lhs, auto rhs) -> std::expected<full_type, std::string> {
+            [&op](auto&& lhs, auto rhs) -> resstr<full_type> {
                 using lhs_t = std::decay_t<decltype(lhs)>;
                 using rhs_t = std::decay_t<decltype(rhs)>;
                 if constexpr (!std::is_same_v<lhs_t, primitive_type>) {

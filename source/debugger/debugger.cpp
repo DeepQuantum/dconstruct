@@ -16,7 +16,7 @@
 
 namespace dconstruct::debugger {
 
-[[nodiscard]] std::expected<ULONG, std::string> debugger::get_tlou_pid() {
+[[nodiscard]] resstr<ULONG> debugger::get_tlou_pid() {
     static constexpr std::wstring_view process_name = L"tlou-ii.exe"sv;
     HANDLE snap = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
     if (snap == INVALID_HANDLE_VALUE)
@@ -34,7 +34,7 @@ namespace dconstruct::debugger {
 }
 
 template<typename T>
-[[nodiscard]] std::expected<T, std::string> debugger::read_virtual(u64 addr) {
+[[nodiscard]] resstr<T> debugger::read_virtual(u64 addr) {
     T value{};
     ULONG read{};
     const HRESULT hr = m_data->ReadVirtual(addr, &value, sizeof(T), &read);
@@ -45,7 +45,7 @@ template<typename T>
 }
 
 template<typename T>
-[[nodiscard]] std::expected<std::unique_ptr<T[]>, std::string> debugger::read_virtual(u64 addr, u64 elements) {
+[[nodiscard]] resstr<std::unique_ptr<T[]>> debugger::read_virtual(u64 addr, u64 elements) {
     std::unique_ptr<T[]> result = std::make_unique<T[]>(elements);
     ULONG read{};
     const HRESULT hr = m_data->ReadVirtual(addr, result.get(), sizeof(T) * elements, &read);
@@ -81,7 +81,7 @@ template<typename T>
     return file;
 }
 
-[[nodiscard]] std::optional<std::string> debugger::request_attach() {
+[[nodiscard]] errmsg debugger::request_attach() {
     if (m_debugThread.joinable()) {
         return "debugger thread already running";
     }
@@ -96,7 +96,7 @@ template<typename T>
 
     m_debugThread = std::jthread([this](std::stop_token stop) {
 
-        if (std::optional<std::string> attach_error = attach()) {
+        if (errmsg attach_error = attach()) {
             {
                 std::lock_guard guard(m_mutex);
                 m_error = std::move(*attach_error);
@@ -168,8 +168,8 @@ void debugger::cleanup_session() {
     rax = rdx = rbp = rsi = r15 = rdi = rcx = rsp = 0;
 }
 
-[[nodiscard]] std::optional<std::string> debugger::attach() {
-    const std::expected<ULONG, std::string> tlou_pid_res = get_tlou_pid();
+[[nodiscard]] errmsg debugger::attach() {
+    const resstr<ULONG> tlou_pid_res = get_tlou_pid();
 
     if (!tlou_pid_res) {
         return std::move(tlou_pid_res.error());
@@ -217,7 +217,7 @@ void debugger::cleanup_session() {
     return std::nullopt;
 }
 
-[[nodiscard]] std::optional<std::string> debugger::poll_error() {
+[[nodiscard]] errmsg debugger::poll_error() {
     std::lock_guard guard(m_mutex);
     return m_error;
 }
@@ -246,7 +246,7 @@ void debugger::store_error(std::string_view error) {
     DEBUG_VALUE stack_frame_start{};
     m_registers->GetValue(rdi, &stack_frame_start);
 
-    res_msg gp_registers_res = read_virtual<u64>(stack_frame_start.I64, ARGUMENT_REGISTERS_IDX * 2);
+    resstr gp_registers_res = read_virtual<u64>(stack_frame_start.I64, ARGUMENT_REGISTERS_IDX * 2);
 
     if (!gp_registers_res) {
         store_error(gp_registers_res.error());
@@ -290,7 +290,7 @@ void debugger::request_continue() {
     DEBUG_VALUE stack_frame_start{};
     m_registers->GetValue(rdi, &stack_frame_start);
 
-    res_msg<ScriptLambda> script_lamba_res = read_virtual<ScriptLambda>(script_lambda_val.I64);
+    resstr<ScriptLambda> script_lamba_res = read_virtual<ScriptLambda>(script_lambda_val.I64);
 
     if (!script_lamba_res) {
         store_error(script_lamba_res.error());
@@ -311,12 +311,12 @@ void debugger::request_continue() {
 
 
 
-    res_msg instructions_res = read_virtual<Instruction>(p64(istr_addr), num_instructions);
+    resstr instructions_res = read_virtual<Instruction>(p64(istr_addr), num_instructions);
     if (!instructions_res) {
         store_error(instructions_res.error());
         return nullptr;
     }
-    res_msg symbols_res = read_virtual<u64>(p64(symbol_table_addr), num_symbols);
+    resstr symbols_res = read_virtual<u64>(p64(symbol_table_addr), num_symbols);
     if (!symbols_res) {
         store_error(symbols_res.error());
         return nullptr;
@@ -358,7 +358,7 @@ void debugger::request_continue() {
         }.decompile(dcompiler::OPTIMIZATION_KIND::NONE)
     );
 
-    res_msg<u64> instruction_idx_res = read_virtual<u32>(instruction_idx_addr.I64);
+    resstr<u64> instruction_idx_res = read_virtual<u32>(instruction_idx_addr.I64);
     if (!instruction_idx_res) {
         store_error(std::move(instruction_idx_res.error()));
         return nullptr;
@@ -377,7 +377,7 @@ void debugger::request_continue() {
     return snapshot;
 }
 
-[[nodiscard]] res_msg<std::shared_ptr<debugger_snapshot>> debugger::capture_next_snapshot(const sid64 sid, const ULONG thread_id) {
+[[nodiscard]] resstr<std::shared_ptr<debugger_snapshot>> debugger::capture_next_snapshot(const sid64 sid, const ULONG thread_id) {
     DEBUG_VALUE script_lambda_val{};
     m_registers->GetValue(rax, &script_lambda_val);
     DEBUG_VALUE stack_frame_start{};
@@ -399,7 +399,7 @@ void debugger::request_continue() {
     DEBUG_VALUE instruction_idx_addr{};
     m_registers->GetValue(r14, &instruction_idx_addr);
 
-    res_msg<u64> instruction_idx_res = read_virtual<u32>(instruction_idx_addr.I64);
+    resstr<u64> instruction_idx_res = read_virtual<u32>(instruction_idx_addr.I64);
     if (!instruction_idx_res) {
         return std::unexpected{std::move(instruction_idx_res.error())};
     }
@@ -439,7 +439,7 @@ void debugger::loop(std::stop_token st) {
         DEBUG_VALUE stack_pointer{};
         m_registers->GetValue(rsp, &stack_pointer);
 
-        res_msg sid = read_virtual<sid64>(stack_pointer.I64 + SID_LOCATION_STACK_POINTER_OFFSET);
+        resstr sid = read_virtual<sid64>(stack_pointer.I64 + SID_LOCATION_STACK_POINTER_OFFSET);
         if (!sid) {
             store_error(std::move(sid.error()));
             break;
@@ -456,7 +456,7 @@ void debugger::loop(std::stop_token st) {
                 m_control->SetExecutionStatus(DEBUG_STATUS_GO);
                 continue;
             }
-            res_msg snapshot = capture_next_snapshot(*sid, thread_id);
+            resstr snapshot = capture_next_snapshot(*sid, thread_id);
             if (!snapshot) {
                 store_error(snapshot.error());
                 break;

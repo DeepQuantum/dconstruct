@@ -51,8 +51,8 @@ namespace dconstruct::ast {
             return condition_type;
         }
 
-        const std::optional<std::string> invalid_condition = std::visit(
-            [](auto&& cond) -> std::optional<std::string> {
+        const errmsg invalid_condition = std::visit(
+            [](auto&& cond) -> errmsg {
                 using cond_t = std::decay_t<decltype(cond)>;
 
                 if constexpr (is_primitive<cond_t>) {

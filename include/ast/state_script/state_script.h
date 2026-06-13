@@ -37,7 +37,7 @@ namespace dconstruct::ast {
         void regex_optimization_pass() noexcept final;
 
         [[nodiscard]] std::vector<semantic_check_error> check_semantics(compilation::scope&) const noexcept final;
-        [[nodiscard]] program_binary_result emit_dc(compilation::global_state& global) const noexcept final;
+        [[nodiscard]] resstr<compilation::program_binary_element> emit_dc(compilation::global_state& global) const noexcept final;
 
         [[nodiscard]] bool equals(const state_script& rhs) const noexcept;
 
