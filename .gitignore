@@ -118,3 +118,4 @@ imgui.ini
 .clangd
 .zed
 aire/
+/decompiled/**

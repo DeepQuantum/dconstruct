@@ -1147,15 +1147,16 @@ namespace dconstruct::dcompiler {
     [[nodiscard]] std::unique_ptr<ast::call_expr> decomp_function::make_call(const Instruction& istr) {
         expr_uptr callee = m_transformableExpressions[istr.destination]->clone();
         std::vector<expr_uptr> args;
-        const auto& callee_type = callee->get_type_unchecked(m_env);
-        const ast::function_type* func_type = std::get_if<ast::function_type>(&callee_type);
+        auto& callee_type = callee->get_type_unchecked(m_env);
+        ast::function_type* func_type = std::get_if<ast::function_type>(&callee_type);
         if (!func_type) {
             m_error = "trying to call non function " + callee->to_pseudo_c_string();
             callee->set_type(ast::function_type());
-            const auto& callee_type = callee->get_type_unchecked(m_env);
+            auto& callee_type = callee->get_type_unchecked(m_env);
             func_type = std::get_if<ast::function_type>(&callee_type);
         }
 
+        func_type->m_distanceType = istr.opcode == Opcode::Call ? ast::function_type::DISTANCE::NEAR : ast::function_type::DISTANCE::FAR;
 
         for (reg_idx i = 0; i < istr.operand2; ++i) {
             if (m_transformableExpressions[ARGUMENT_REGISTERS_IDX + i]->get_complexity() > MAX_EXPRESSION_COMPLEXITY) {

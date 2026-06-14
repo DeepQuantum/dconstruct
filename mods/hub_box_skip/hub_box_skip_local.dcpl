@@ -13,7 +13,6 @@ using #get-int32 as far (u64, u64) -> u64;
 using #send-event as far (u64, u64, u64) -> u64;
 using #new-boxed-value as far (u64, u64) -> u64;
 using #broadcast-event as far (u64) -> u64;
-using #go as far (u64, u64) -> u64;
 using #rogue-get-is-resumed-run as far () -> bool;
 using #encounter--get-current-encounter-ddict as near () -> u64;
 using #encounter--has-upgrade-manual? as near (u64) -> bool;

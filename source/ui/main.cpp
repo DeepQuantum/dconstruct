@@ -2926,6 +2926,7 @@ namespace dconstruct::ui {
         std::string text;
         ImVec4 color = gcol::Struct();
         std::optional<edit_kind> editKind;
+        bool isStringPointer = false;
     };
 
     void dv_index_prefix(char* buffer, std::size_t size, i32 index) {
@@ -3051,6 +3052,7 @@ namespace dconstruct::ui {
             .text = std::move(text),
             .color = color_for_value_prefix(prefix),
             .editKind = edit_kind_for_value_prefix(prefix),
+            .isStringPointer = prefix == "string",
         };
     }
 
@@ -3065,7 +3067,7 @@ namespace dconstruct::ui {
         return name;
     }
 
-    void dv_editable_table_value(value_view v, const void* id, const void* data_ptr, const typed_value_text& value) {
+    void dv_editable_table_value(value_view v, const void* id, const void* data_ptr, const typed_value_text& value, std::optional<u64> string_ptr_offset = std::nullopt) {
         document* doc = v.doc;
         const ImGuiID edit_id = ImGui::GetID(id);
         if (doc->m_editingValue == edit_id && value.editKind.has_value()) {
@@ -3096,6 +3098,17 @@ namespace dconstruct::ui {
         const ImVec2 hit_size(cell_width, ImGui::GetTextLineHeightWithSpacing());
         ImGui::InvisibleButton("##value_hit", hit_size);
         const bool double_clicked = ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left);
+        if (string_ptr_offset.has_value() && ImGui::IsItemClicked(ImGuiMouseButton_Right)) {
+            doc->m_menuTarget = edit_id;
+            doc->m_openMenu = true;
+            doc->m_menuMousePos = ImGui::GetMousePos();
+            doc->m_menuStructPtrOffset = std::nullopt;
+            doc->m_menuStructTypeId = 0;
+            doc->m_menuStringPtrOffset = string_ptr_offset;
+            doc->m_stringMenuAddingNew = false;
+            doc->m_stringMenuFocusInput = false;
+            doc->m_stringMenuBuffer.clear();
+        }
         ImGui::GetWindowDrawList()->AddText(text_pos, ImGui::ColorConvertFloat4ToU32(value.color), value.text.c_str());
         if (double_clicked && value.editKind.has_value() && ptr_in_file(*doc, data_ptr)) {
             doc->m_editingValue = edit_id;
@@ -3507,7 +3520,11 @@ namespace dconstruct::ui {
                         ImGui::TextColored(qui::color::active_palette().TextDisabled, "0x%06X", file_offset(*v.doc, value_location.m_ptr));
                         ImGui::TableSetColumnIndex(2);
                         ImGui::PushID(static_cast<i32>(i));
-                        dv_editable_table_value(v, value_location.m_ptr, value_location.m_ptr, value);
+                        dv_editable_table_value(
+                            v, value_location.m_ptr, value_location.m_ptr, value,
+                            value.isStringPointer
+                                ? std::optional<u64>{file_offset(*v.doc, value_location.m_ptr)}
+                                : std::nullopt);
                         ImGui::PopID();
                     }
                     ImGui::EndTable();
@@ -3888,24 +3905,27 @@ namespace dconstruct::ui {
         }
         ImGui::EndChild();
 
-        ImGui::Separator();
-        if (!doc.m_stringMenuAddingNew) {
-            if (ImGui::Selectable("Add new string to file", false, ImGuiSelectableFlags_NoAutoClosePopups)) {
-                doc.m_stringMenuAddingNew = true;
-                doc.m_stringMenuFocusInput = true;
-                doc.m_stringMenuBuffer.clear();
-            }
-        } else {
-            if (doc.m_stringMenuFocusInput) {
-                ImGui::SetKeyboardFocusHere();
-                doc.m_stringMenuFocusInput = false;
-            }
-            ImGui::SetNextItemWidth(list_width);
-            const bool entered = ImGui::InputTextWithHint(
-                "##new_string_table_entry", "new string", &doc.m_stringMenuBuffer, ImGuiInputTextFlags_EnterReturnsTrue);
-            if (entered && !doc.m_stringMenuBuffer.empty()) {
-                doc.m_pendingStringAdd = pending_string_add{ptr_offset, doc.m_stringMenuBuffer};
-                ImGui::CloseCurrentPopup();
+        constexpr bool allow_custom_string_entry = false;
+        if constexpr (allow_custom_string_entry) {
+            ImGui::Separator();
+            if (!doc.m_stringMenuAddingNew) {
+                if (ImGui::Selectable("Add new string to file", false, ImGuiSelectableFlags_NoAutoClosePopups)) {
+                    doc.m_stringMenuAddingNew = true;
+                    doc.m_stringMenuFocusInput = true;
+                    doc.m_stringMenuBuffer.clear();
+                }
+            } else {
+                if (doc.m_stringMenuFocusInput) {
+                    ImGui::SetKeyboardFocusHere();
+                    doc.m_stringMenuFocusInput = false;
+                }
+                ImGui::SetNextItemWidth(list_width);
+                const bool entered = ImGui::InputTextWithHint(
+                    "##new_string_table_entry", "new string", &doc.m_stringMenuBuffer, ImGuiInputTextFlags_EnterReturnsTrue);
+                if (entered && !doc.m_stringMenuBuffer.empty()) {
+                    doc.m_pendingStringAdd = pending_string_add{ptr_offset, doc.m_stringMenuBuffer};
+                    ImGui::CloseCurrentPopup();
+                }
             }
         }
     }

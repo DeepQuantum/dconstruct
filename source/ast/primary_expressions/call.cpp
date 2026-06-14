@@ -3,11 +3,12 @@
 #include "ast/primary_expressions/sid_identifier.h"
 #include "ast/primary_expressions/struct_access.h"
 #include "ast//primary_expressions/literal.h"
+#include "ast/type.h"
 
 #include <algorithm>
 #include <array>
 #include <format>
-#include <string_view>
+#include <variant>
 #include <vector>
 
 namespace dconstruct::ast {
@@ -76,6 +77,11 @@ namespace dconstruct::ast {
             }
             buffer.append(')');
         }
+        assert(m_callee->get_type());
+        assert(std::holds_alternative<ast::function_type>(*m_callee->get_type()));
+        if (std::get<ast::function_type>(*m_callee->get_type()).m_distanceType == ast::function_type::DISTANCE::FAR) {
+            buffer.append("!exe"sv);
+        }
     }
 
     void call_expr::to_pseudo_c_colored_string(code_color_serialization_buffer& buffer) const noexcept {
@@ -107,6 +113,9 @@ namespace dconstruct::ast {
                 }
             }
             buffer.append(AST_COLOR::PUNCTUATION, ')');
+        }
+        if (std::get<ast::function_type>(*m_type).m_distanceType == ast::function_type::DISTANCE::FAR) {
+            buffer.append(AST_COLOR::PUNCTUATION, "!exe"sv);
         }
     }
 
@@ -368,7 +377,9 @@ namespace dconstruct::ast {
 
             std::string new_name = std::format("boxed_{}", BOXED_VALUE_IDS[*boxed_kind_num_res]);
 
+            ast::function_type callee_type_bak = std::move(std::get<ast::function_type>(*m_callee->get_type()));
             m_callee = std::make_unique<identifier>(std::move(new_name));
+            m_callee->set_type(std::move(callee_type_bak));
 
             m_arguments.erase(m_arguments.begin());
         }

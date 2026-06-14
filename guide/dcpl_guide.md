@@ -1,15 +1,4 @@
-# Creating your own script mods with the DC pseudo language - A complete guide
 
-> ## Important: Alpha Version
->
-> The dcpl-compiler (`dcc`) is still being actively developed. As this is a completely custom programming language,
-> expect bugs and undefined behaviour, as well as breaking changes that might require you to update scripts as updates come in.
-
-This is a complete tutorial on how you can create custom script mods, involving both modifying existing scripts and creating completely new ones to introduce completely new behaviour into the game. The possibilities with this type of modding are endless, and I hope that this guide will serve as a good starter.
-
-The main part of this guide will be usage-based, but there are also technical explanations of how the games script files work. if this doesn't interest you feel free to skip these sections.
-
-In order to make script mods, you will (currently) need to use the DCPL programming language. If you are completely unfamiliar with programming, this guide will have some basic concepts, but it is recommended that you perhaps try to seek out a tutorial for a simple scripting language like JavaScript or Python, as many of the concepts will be applicable to this language as well.
 
 ## Background & Motivation
 
@@ -25,28 +14,4 @@ The scripting layer of TLOU is known as DC. It as a proprietary version of the p
 
 All DC files follow a concrete layout.
 
-# Making your first mod
-
-First, you'll need the `dcc.exe` program. You can put this anywhere, but it's recommended that you put it in your Windows Path variable so you can use it from everywhere. `dcc.exe` is a command line only program with not visual interface. You can find all of the options by typing `dcc --about`.
-
-There are two 'modes' for dcc: The `target` mode and the `standalone` mode. We will begin by describing the `target` mode.
-
-## The `target` mode
-
-The goal of `target` is to _edit_ an existing script file. Two types of entries inside of a .bin file can be edited: `script-lambda` (functions) and `state-script`-functions. If you instead want to edit static data like integers inside structs, you should use dconstruct.
-
-In this example, we are going to modify the game's scripts to skip the 'rewards box' after an encounter in No Return, and instead just giving us the rewards instantly.
-
-To start, create a fresh `.dcpl` file and name it something meaningful.
-
-Every `.dcpl` file begins with what's known as precompiler directivs. You can think of these as "meta" instructions that describe how the file will be compiled using what settings.
-
-The first precompiler directive in our example will be the `@target` directive: It tells the compiler what original .bin file we are going to edit. The `@target` directive is followed by a string path to your .bin file. In our example, we are going to edit the `ss-rogue/ss-hub-lockbox.bin` file. Determining what file you need to edit needs to be done by you before you can start editing.
-
-So our first line is:
-
-```py
-@target "path/to/game/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/ss-rogue/ss-hub-lockbox.bin"
-```
-
-##
+The Last of Us Part II's fundamentally has two types of functions, `near` and `far`. (Note: these are not there official designations but they're the ones I've adopted as I think they illustrate their different usages). `near` function are functions that are defined inside other scripts, as in, other bin files. You can find the definition to these functions by searching through the decompiled .dcpl files. `far` function on the other do not have a definition inside

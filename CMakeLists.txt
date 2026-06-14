@@ -6,7 +6,7 @@ if(NOT WIN32)
     message(FATAL_ERROR "dconstruct only supports Windows.")
 endif()
 
-set(VERSION_NUMBER "2.1.0")
+set(VERSION_NUMBER "2.2.0")
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -73,12 +73,12 @@ FetchContent_MakeAvailable(googletest)
 # )
 
 
-# add_library(dxbc_shader_decomp STATIC 
+# add_library(dxbc_shader_decomp STATIC
 #     "${SOURCE_DIR}/shaders/ndshader.cpp"
 # )
 
 # target_include_directories(dxbc_shader_decomp PRIVATE
-#     "${CMAKE_CURRENT_SOURCE_DIR}/include" 
+#     "${CMAKE_CURRENT_SOURCE_DIR}/include"
 #     "${LLVM_BINARY_DIR}/include"
 #     "${LLVM_SOURCE_DIR}/include"
 # )
@@ -101,7 +101,7 @@ if(MSVC)
 else()
     message("Not applying MSVC")
 endif()
-# target_link_libraries(dxbc_shader_decomp 
+# target_link_libraries(dxbc_shader_decomp
 #     ${LLVM_LIBS}
 # )
 
@@ -217,7 +217,7 @@ target_link_options(dconstruct_lib PRIVATE
     $<$<CONFIG:Release>:/LTCG>
 )
 
-target_compile_options(dconstruct PRIVATE 
+target_compile_options(dconstruct PRIVATE
     $<$<CONFIG:Release>:/GL>
 )
 
@@ -271,7 +271,7 @@ add_custom_command(
     COMMENT "Generating build info header by running scripts/buildinfo.py with compiler version"
 )
 
-target_compile_options(dcc PRIVATE 
+target_compile_options(dcc PRIVATE
     $<$<CONFIG:Release>:/GL>
 )
 
@@ -350,7 +350,7 @@ target_include_directories(dconstruct_hooking PRIVATE "${SOURCE_DIR}/minhook/inc
 
 target_link_libraries(dconstruct_hooking PRIVATE minhook)
 
-target_compile_options(dconstruct_hooking PRIVATE 
+target_compile_options(dconstruct_hooking PRIVATE
     $<$<AND:$<CONFIG:Release>,$<COMPILE_LANGUAGE:CXX>>:/GL>
 )
 
