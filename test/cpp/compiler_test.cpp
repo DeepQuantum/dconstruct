@@ -451,6 +451,44 @@ namespace dconstruct::testing {
         EXPECT_EQ(options->m_modules, game_path / "mods" / "target_mode_mod" / "bin" / "dc1" / "modules.bin");
     }
 
+    TEST(COMPILER, CommandLineAcceptsMultipleInputs) {
+        const char* argv[] = {"dcc", "first.dcpl", "second.dcpl"};
+        auto options = compilation::get_command_line_options(3, const_cast<char**>(argv));
+        ASSERT_TRUE(options);
+
+        const auto inputs = (*options)["i"].as<std::vector<std::string>>();
+        ASSERT_EQ(inputs.size(), 2);
+        EXPECT_EQ(inputs[0], "first.dcpl");
+        EXPECT_EQ(inputs[1], "second.dcpl");
+    }
+
+    TEST(COMPILER, DuplicateTargetDirectiveFails) {
+        const std::filesystem::path game_path = "test/fixtures/compiler/duplicate_target_game";
+        const std::filesystem::path game_dc1 = game_path / "build" / "pc" / "main" / "bin_unpacked" / "dc1";
+        std::filesystem::create_directories(game_dc1 / "rogue");
+        {
+            std::ofstream target{game_dc1 / "rogue" / "script-callbacks.bin", std::ios::binary};
+            target << "placeholder";
+        }
+
+        std::string source =
+            "@game \"test/fixtures/compiler/duplicate_target_game\"\n"
+            "@mod \"duplicate_target_mod\"\n"
+            "@target \"rogue/script-callbacks\"\n"
+            "@target \"rogue/script-callbacks\"\n"
+            "u32 main() { return 0; }\n";
+        std::vector<compilation::source_location> line_map;
+
+        auto options = compilation::compiler_options::parse(get_empty_options(), source, "test/fixtures/compiler/duplicate_target_test.dcpl", line_map);
+        EXPECT_FALSE(options);
+        if (!options) {
+            EXPECT_NE(options.error().find("multiple @target"), std::string::npos);
+        }
+
+        std::error_code cleanup_ec;
+        std::filesystem::remove_all(game_path, cleanup_ec);
+    }
+
     TEST(COMPILER, MissingGameDirectiveFails) {
         std::string source =
             "@mod \"no_game_mod\"\n"
@@ -640,6 +678,72 @@ namespace dconstruct::testing {
             }
         }
         EXPECT_TRUE(found);
+
+        std::filesystem::remove(modules_path, cleanup_ec);
+    }
+
+    TEST(COMPILER, PatchModulesSizesUpdatesMultipleEntries) {
+        const std::filesystem::path modules_path = "test/fixtures/compiler/modules_multiple_entries.bin";
+        std::error_code cleanup_ec;
+        std::filesystem::remove(modules_path, cleanup_ec);
+        std::filesystem::copy_file("test/fixtures/bin/modules.bin", modules_path, std::filesystem::copy_options::overwrite_existing);
+
+        const std::string existing_target = "ss-rogue/test-script-qntm";
+        const std::string new_target = "ss-rogue/generated-multi-module";
+        const std::vector<sid64> new_exports{
+            SID("generated-helper"),
+            SID("generated-multi-module"),
+        };
+
+        auto patches = compilation::patch_modules_sizes(
+            modules_path,
+            {
+                compilation::modules_patch_request{
+                    R"(C:/Game/mods/multi_mod/bin/dc1/ss-rogue/test-script-qntm.bin)",
+                    0x1111,
+                    {},
+                },
+                compilation::modules_patch_request{
+                    R"(C:/Game/mods/multi_mod/bin/dc1/ss-rogue/generated-multi-module.bin)",
+                    0x2222,
+                    new_exports,
+                },
+            }
+        );
+        ASSERT_TRUE(patches) << patches.error();
+        ASSERT_EQ(patches->size(), 2);
+        EXPECT_EQ((*patches)[0].m_targetName, existing_target);
+        EXPECT_EQ((*patches)[0].m_oldSize, 691);
+        EXPECT_EQ((*patches)[0].m_newSize, 0x1111);
+        EXPECT_EQ((*patches)[1].m_targetName, new_target);
+        EXPECT_EQ((*patches)[1].m_oldSize, 0);
+        EXPECT_EQ((*patches)[1].m_newSize, 0x2222);
+
+        auto patched_file = BinaryFile::from_path(modules_path);
+        ASSERT_TRUE(patched_file) << patched_file.error();
+        const auto* module_array = reinterpret_cast<const compilation::ModuleInfoArray*>(patched_file->m_dcheader->m_pStartOfData->m_entryPtr);
+
+        bool found_existing = false;
+        bool found_new = false;
+        for (u32 i = 0; i < module_array->m_numEntries; ++i) {
+            const ModulesEntry& entry = module_array->m_entries[i];
+            if (entry.m_nameSid == SID(existing_target.c_str())) {
+                found_existing = true;
+                EXPECT_EQ(entry.m_size, 0x1111);
+            }
+            if (entry.m_nameSid == SID(new_target.c_str())) {
+                found_new = true;
+                EXPECT_STREQ(entry.m_name, new_target.c_str());
+                EXPECT_EQ(entry.m_size, 0x2222);
+                ASSERT_NE(entry.m_exports, nullptr);
+                ASSERT_EQ(entry.m_exports->m_numEntries, new_exports.size());
+                for (u32 j = 0; j < entry.m_exports->m_numEntries; ++j) {
+                    EXPECT_EQ(entry.m_exports->m_pSymbols[j], new_exports[j]);
+                }
+            }
+        }
+        EXPECT_TRUE(found_existing);
+        EXPECT_TRUE(found_new);
 
         std::filesystem::remove(modules_path, cleanup_ec);
     }

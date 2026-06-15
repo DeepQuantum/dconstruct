@@ -270,6 +270,9 @@ namespace dconstruct::compilation {
             if (directive_name == "game") {
                 options.m_game = path;
             } else if (directive_name == "target") {
+                if (!options.m_target.empty()) {
+                    return location_error(loc, "multiple @target directives are not allowed");
+                }
                 options.m_target = path;
             } else if (directive_name == "mod") {
                 options.m_mod = path;

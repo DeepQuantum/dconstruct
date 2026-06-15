@@ -1,0 +1,25 @@
+[2026-06-15 00:49:22] Start
+[2026-06-15 00:49:22] Loaded sidbase: C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\build\Release\sidbase.bin (80400027 bytes)
+[2026-06-15 00:49:25] Loaded file: C:\Program Files (x86)\Steam\steamapps\common\The Last of Us Part II\mods\gas-mask-toggle\bin\dc1\anim-gas-mask-settings.bin
+[2026-06-15 00:51:29] Start
+[2026-06-15 00:51:29] Loaded sidbase: C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\build\Release\sidbase.bin (80400027 bytes)
+[2026-06-15 00:51:29] Loaded type definitions: C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\build\Release\var_maps\type_defines.dcpl (1 types)
+[2026-06-15 00:51:29] Parsed type map: C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\build\Release\var_maps\anim-gas-mask-impl.dcplmap
+[2026-06-15 00:51:32] Loaded file: C:\Program Files (x86)\Steam\steamapps\common\The Last of Us Part II\mods\gas-mask-toggle\bin\dc1\anim-gas-mask-settings.bin
+[2026-06-15 00:52:11] Edit applied [anim-gas-mask-settings.bin] 0x00318: joel-gas-mask-on-gesture -> abby-gas-mask-on-gesture
+[2026-06-15 00:52:15] Edit applied [anim-gas-mask-settings.bin] 0x00320: joel-gas-mask-off-gesture -> abby-gas-mask-off-gesture
+[2026-06-15 00:52:18] Edit applied [anim-gas-mask-settings.bin] 0x00328: joel-gas-mask-on--gas-mask -> abby-gas-mask-on--gas-mask
+[2026-06-15 00:52:25] Edit applied [anim-gas-mask-settings.bin] 0x00338: joel-gas-mask-off--gas-mask -> abby-gas-mask-off--gas-mask
+[2026-06-15 00:52:30] Edit applied [anim-gas-mask-settings.bin] 0x00340: gas-mask-standard -> gas-mask-abby
+[2026-06-15 00:52:40] Edit applied [anim-gas-mask-settings.bin] 0x00348: targDinaMask -> targAbbyMask
+[2026-06-15 00:52:43] Saved file: C:\Program Files (x86)\Steam\steamapps\common\The Last of Us Part II\mods\gas-mask-toggle\bin\dc1\anim-gas-mask-settings.bin
+[2026-06-15 00:54:00] Edit applied [anim-gas-mask-settings.bin] 0x00340: gas-mask-abby -> gas-mask-standard
+[2026-06-15 00:54:01] Saved file: C:\Program Files (x86)\Steam\steamapps\common\The Last of Us Part II\mods\gas-mask-toggle\bin\dc1\anim-gas-mask-settings.bin
+[2026-06-15 00:54:59] Edit applied [anim-gas-mask-settings.bin] 0x00348: targAbbyMask -> targDinaMask
+[2026-06-15 00:54:59] Saved file: C:\Program Files (x86)\Steam\steamapps\common\The Last of Us Part II\mods\gas-mask-toggle\bin\dc1\anim-gas-mask-settings.bin
+[2026-06-15 00:55:59] Edit applied [anim-gas-mask-settings.bin] 0x00348: targDinaMask -> targEllieMask
+[2026-06-15 00:55:59] Saved file: C:\Program Files (x86)\Steam\steamapps\common\The Last of Us Part II\mods\gas-mask-toggle\bin\dc1\anim-gas-mask-settings.bin
+[2026-06-15 00:57:15] Edit applied [anim-gas-mask-settings.bin] 0x00348: targEllieMask -> targDinaMask
+[2026-06-15 00:57:16] Saved file: C:\Program Files (x86)\Steam\steamapps\common\The Last of Us Part II\mods\gas-mask-toggle\bin\dc1\anim-gas-mask-settings.bin
+[2026-06-15 00:58:07] Edit applied [anim-gas-mask-settings.bin] 0x00348: targDinaMask -> targAbbyMask
+[2026-06-15 00:58:07] Saved file: C:\Program Files (x86)\Steam\steamapps\common\The Last of Us Part II\mods\gas-mask-toggle\bin\dc1\anim-gas-mask-settings.bin

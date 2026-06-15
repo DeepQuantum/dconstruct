@@ -274,7 +274,7 @@ namespace dconstruct::compilation {
     [[nodiscard]] static std::optional<cxxopts::ParseResult> get_command_line_options(int argc, char* argv[]) {
         cxxopts::Options options("dcc", "a compiler targeting the dc bytecode used in several NaughtyDog video games.");
 
-        options.add_options("input/output")("i,input", "input DCPL file that will be compiled; @game, @mod, and @target are set via directives inside the file", cxxopts::value<std::string>(), "<path>");
+        options.add_options("input/output")("i,input", "input DCPL file(s) that will be compiled; @game, @mod, and @target are set via directives inside each file", cxxopts::value<std::vector<std::string>>(), "<path>");
 
         options.parse_positional({"i"});
         cxxopts::ParseResult opts;
@@ -299,6 +299,12 @@ namespace dconstruct::compilation {
         std::filesystem::path m_output;
         u64 m_size = 0;
         std::optional<modules_patch_summary> m_modulesPatch;
+    };
+
+    struct modules_patch_request {
+        std::filesystem::path m_output;
+        u64 m_size = 0;
+        std::vector<sid64> m_exports;
     };
 
     struct ModuleInfoArray {
@@ -337,27 +343,6 @@ namespace dconstruct::compilation {
             symbols.push_back(symbol_array->m_pSymbols[i]);
         }
         return symbols;
-    }
-
-    [[nodiscard]] static bool modules_symbol_arrays_equal(
-        const SymbolArray* symbol_array,
-        const std::vector<sid64>& expected
-    ) {
-        if (symbol_array == nullptr) {
-            return expected.empty();
-        }
-        if (symbol_array->m_numEntries != expected.size()) {
-            return false;
-        }
-        if (symbol_array->m_pSymbols == nullptr) {
-            return expected.empty();
-        }
-        for (u32 i = 0; i < symbol_array->m_numEntries; ++i) {
-            if (symbol_array->m_pSymbols[i] != expected[i]) {
-                return false;
-            }
-        }
-        return true;
     }
 
     [[nodiscard]] static std::vector<sid64> default_module_exports(const std::string& target_name) {
@@ -429,54 +414,145 @@ namespace dconstruct::compilation {
         u64 m_rawEntryOffset = 0;
     };
 
-    [[nodiscard]] static resstr<modules_patch_summary> recompile_modules_with_entry(
-        const ModuleInfoArray& module_array,
-        const std::filesystem::path& modules,
-        const std::string& target_name,
-        const sid64 target_sid,
-        const u64 new_size,
-        const std::vector<sid64>& target_exports
+    [[nodiscard]] static std::vector<pak68_edit_request> pak68_edits_for_compile(
+        const compiler_options& options,
+        const std::vector<std::string>& state_script_names
     ) {
-        constexpr sid64 modules_sid = SID("*modules*");
-        constexpr sid64 module_info_array_sid = SID("module-info-array");
-        constexpr sid64 array_sid = SID("array");
-        constexpr u8 modules_entry_reloc_bits = 0b11001;
+        std::vector<pak68_edit_request> edits = options.m_pak68Edits;
+        for (const std::string& state_script_name : state_script_names) {
+            edits.push_back(pak68_edit_request{
+                "level-name",
+                "sp-all",
+                {pak68_entry{pak68_type::SYMBOL, state_script_name}},
+                {}});
+        }
+        return edits;
+    }
 
-        const std::vector<sid64> normalized_exports = normalized_module_exports(target_name, target_exports);
+    [[nodiscard]] static std::string normalized_generic_path_string(const std::filesystem::path& path) {
+        std::string normalized = path.generic_string();
+        std::ranges::replace(normalized, '\\', '/');
+        return normalized;
+    }
+
+    [[nodiscard]] static resstr<std::string> module_target_name_from_output(const std::filesystem::path& output) {
+        constexpr std::string_view needle = "/bin/dc1/";
+        const std::string normalized_output = normalized_generic_path_string(output);
+        const auto pos = normalized_output.find(needle);
+        if (pos == std::string_view::npos) {
+            return std::unexpected{"the path provided needs to have a 'bin/dc1' directory in it, so that the program can figure out the relative path to the modules."};
+        }
+
+        std::filesystem::path result = normalized_output.substr(pos + needle.size());
+        return result.replace_extension("").generic_string();
+    }
+
+    struct modules_patch_target {
+        std::string m_name;
+        sid64 m_sid = 0;
+        u64 m_newSize = 0;
+        u64 m_oldSize = 0;
+        std::vector<sid64> m_exports;
+    };
+
+    [[nodiscard]] static resstr<std::vector<modules_patch_summary>> patch_modules_sizes(
+        const std::filesystem::path& modules,
+        const std::vector<modules_patch_request>& requests
+    ) {
+        if (requests.empty()) {
+            return std::vector<modules_patch_summary>{};
+        }
+
+        std::vector<modules_patch_target> targets;
+        targets.reserve(requests.size());
+        std::unordered_map<sid64, u64> target_indices;
+        for (const modules_patch_request& request : requests) {
+            resstr<std::string> target_name = module_target_name_from_output(request.m_output);
+            if (!target_name) {
+                return std::unexpected{target_name.error()};
+            }
+            const sid64 target_sid = SID(target_name->c_str());
+            if (target_indices.contains(target_sid)) {
+                return std::unexpected{"modules.bin target " + *target_name + " was provided multiple times"};
+            }
+            target_indices[target_sid] = targets.size();
+            targets.push_back(modules_patch_target{
+                std::move(*target_name),
+                target_sid,
+                request.m_size,
+                0,
+                request.m_exports,
+            });
+        }
+
+        resstr<BinaryFile> file_res = BinaryFile::from_path(modules);
+        if (!file_res) {
+            return std::unexpected{file_res.error()};
+        }
+        BinaryFile& file = *file_res;
+
+        constexpr sid64 module_info_array_sid = SID("module-info-array");
+        if (file.m_dcheader->m_numEntries != 1) {
+            return std::unexpected{"modules.bin is expected to contain exactly one entry"};
+        }
+
+        Entry* file_entry = file.m_dcheader->m_pStartOfData;
+        if (file_entry == nullptr || file_entry->m_typeId != module_info_array_sid || file_entry->m_entryPtr == nullptr) {
+            return std::unexpected{"modules.bin does not contain a module-info-array entry"};
+        }
+
+        auto* module_array = const_cast<ModuleInfoArray*>(reinterpret_cast<const ModuleInfoArray*>(file_entry->m_entryPtr));
+        if (module_array->m_entries == nullptr) {
+            return std::unexpected{"modules.bin module-info-array does not point to a ModulesEntry array"};
+        }
+
         std::vector<module_entry_source> entries;
-        entries.reserve(static_cast<u64>(module_array.m_numEntries) + 1);
-        std::optional<u64> target_index;
-        u64 old_size = 0;
-        for (u32 i = 0; i < module_array.m_numEntries; ++i) {
-            const ModulesEntry& old_entry = module_array.m_entries[i];
+        entries.reserve(static_cast<u64>(module_array->m_numEntries) + requests.size());
+        std::unordered_map<sid64, u64> entry_indices;
+        for (u32 i = 0; i < module_array->m_numEntries; ++i) {
+            const ModulesEntry& old_entry = module_array->m_entries[i];
             if (old_entry.m_name == nullptr) {
                 return std::unexpected{"modules.bin contains a module entry with a null name"};
             }
-            const bool is_target = old_entry.m_nameSid == target_sid;
-            if (is_target) {
-                old_size = old_entry.m_size;
-                target_index = entries.size();
+            std::vector<sid64> exports = copy_modules_symbol_array(old_entry.m_exports);
+            u64 size = old_entry.m_size;
+            if (const auto target_it = target_indices.find(old_entry.m_nameSid); target_it != target_indices.end()) {
+                modules_patch_target& target = targets[target_it->second];
+                target.m_oldSize = old_entry.m_size;
+                size = target.m_newSize;
+                if (!target.m_exports.empty()) {
+                    exports = normalized_module_exports(target.m_name, target.m_exports);
+                }
             }
+            entry_indices[old_entry.m_nameSid] = entries.size();
             entries.push_back(module_entry_source{
                 old_entry.m_name,
                 old_entry.m_nameSid,
-                is_target ? new_size : old_entry.m_size,
+                size,
                 copy_modules_symbol_array(old_entry.m_imports),
-                is_target ? normalized_exports : copy_modules_symbol_array(old_entry.m_exports),
+                std::move(exports),
                 0,
             });
         }
-        if (!target_index) {
-            target_index = entries.size();
+
+        for (modules_patch_target& target : targets) {
+            if (entry_indices.contains(target.m_sid)) {
+                continue;
+            }
+            entry_indices[target.m_sid] = entries.size();
             entries.push_back(module_entry_source{
-                target_name,
-                target_sid,
-                new_size,
+                target.m_name,
+                target.m_sid,
+                target.m_newSize,
                 default_module_imports(),
-                normalized_exports,
+                normalized_module_exports(target.m_name, target.m_exports),
                 0,
             });
         }
+
+        constexpr sid64 modules_sid = SID("*modules*");
+        constexpr sid64 array_sid = SID("array");
+        constexpr u8 modules_entry_reloc_bits = 0b11001;
 
         program_binary_element element{entries.size() * sizeof(ModulesEntry)};
         global_state global{};
@@ -486,7 +562,7 @@ namespace dconstruct::compilation {
         const u64 module_array_offset = element.m_rawData.size();
         const ModuleInfoArray new_array{
             static_cast<u32>(entries.size()),
-            module_array.m_unk,
+            module_array->m_unk,
             nullptr,
         };
         element.push_bytes(new_array, 0b010);
@@ -538,30 +614,15 @@ namespace dconstruct::compilation {
         }
         modules_file.write(reinterpret_cast<const char*>(bytes.get()), size);
 
+        std::vector<modules_patch_summary> summaries;
+        summaries.reserve(targets.size());
         constexpr u64 raw_data_start = sizeof(DC_Header) + sizeof(sid64) + sizeof(Entry);
-        const u64 size_offset = raw_data_start + entries[*target_index].m_rawEntryOffset + offsetof(ModulesEntry, m_size);
-        return modules_patch_summary{modules, target_name, old_size, new_size, size_offset};
-    }
-
-    [[nodiscard]] static std::vector<pak68_edit_request> pak68_edits_for_compile(
-        const compiler_options& options,
-        const std::vector<std::string>& state_script_names
-    ) {
-        std::vector<pak68_edit_request> edits = options.m_pak68Edits;
-        for (const std::string& state_script_name : state_script_names) {
-            edits.push_back(pak68_edit_request{
-                "level-name",
-                "sp-all",
-                {pak68_entry{pak68_type::SYMBOL, state_script_name}},
-                {}});
+        for (const modules_patch_target& target : targets) {
+            const module_entry_source& source = entries[entry_indices.at(target.m_sid)];
+            const u64 size_offset = raw_data_start + source.m_rawEntryOffset + offsetof(ModulesEntry, m_size);
+            summaries.push_back(modules_patch_summary{modules, target.m_name, target.m_oldSize, target.m_newSize, size_offset});
         }
-        return edits;
-    }
-
-    [[nodiscard]] static std::string normalized_generic_path_string(const std::filesystem::path& path) {
-        std::string normalized = path.generic_string();
-        std::ranges::replace(normalized, '\\', '/');
-        return normalized;
+        return summaries;
     }
 
     [[nodiscard]] static resstr<modules_patch_summary> patch_modules_size(
@@ -570,67 +631,14 @@ namespace dconstruct::compilation {
         const u64 new_size,
         const std::vector<sid64>& exports = {}
     ) {
-        constexpr std::string_view needle = "/bin/dc1/";
-        const std::string normalized_output = normalized_generic_path_string(output);
-        const auto pos = normalized_output.find(needle);
-        if (pos == std::string_view::npos) {
-            return std::unexpected{"the path provided needs to have a 'bin/dc1' directory in it, so that the program can figure out the relative path to the modules."};
+        resstr<std::vector<modules_patch_summary>> summaries = patch_modules_sizes(
+            modules,
+            {modules_patch_request{output, new_size, exports}}
+        );
+        if (!summaries) {
+            return std::unexpected{summaries.error()};
         }
-
-        std::filesystem::path result = normalized_output.substr(pos + needle.size());
-
-        const std::string target_name = result.replace_extension("").generic_string();
-        const sid64 target_sid = SID(target_name.c_str());
-        const bool refresh_exports = !exports.empty();
-        const std::vector<sid64> normalized_exports = normalized_module_exports(target_name, exports);
-
-        resstr<BinaryFile> file_res = BinaryFile::from_path(modules);
-        if (!file_res) {
-            return std::unexpected{file_res.error()};
-        }
-        BinaryFile& file = *file_res;
-
-        constexpr sid64 module_info_array_sid = SID("module-info-array");
-        if (file.m_dcheader->m_numEntries != 1) {
-            return std::unexpected{"modules.bin is expected to contain exactly one entry"};
-        }
-
-        Entry* file_entry = file.m_dcheader->m_pStartOfData;
-        if (file_entry == nullptr || file_entry->m_typeId != module_info_array_sid || file_entry->m_entryPtr == nullptr) {
-            return std::unexpected{"modules.bin does not contain a module-info-array entry"};
-        }
-
-        auto* module_array = const_cast<ModuleInfoArray*>(reinterpret_cast<const ModuleInfoArray*>(file_entry->m_entryPtr));
-        if (module_array->m_entries == nullptr) {
-            return std::unexpected{"modules.bin module-info-array does not point to a ModulesEntry array"};
-        }
-
-        std::optional<modules_patch_summary> summary;
-        for (u32 i = 0; i < module_array->m_numEntries && !summary; ++i) {
-            ModulesEntry& modules_entry = module_array->m_entries[i];
-            if (modules_entry.m_nameSid == target_sid) {
-                const u64 old_size = modules_entry.m_size;
-                const auto base = reinterpret_cast<p64>(file.m_bytes.get());
-                const u64 size_offset = reinterpret_cast<p64>(&modules_entry.m_size) - base;
-                summary = modules_patch_summary{modules, target_name, old_size, new_size, size_offset};
-                if (refresh_exports && !modules_symbol_arrays_equal(modules_entry.m_exports, normalized_exports)) {
-                    return recompile_modules_with_entry(*module_array, modules, target_name, target_sid, new_size, normalized_exports);
-                }
-                modules_entry.m_size = new_size;
-            }
-        }
-        if (!summary) {
-            return recompile_modules_with_entry(*module_array, modules, target_name, target_sid, new_size, normalized_exports);
-        }
-
-        auto unmapped_bytes = file.get_unmapped();
-        std::ofstream modules_file{modules, std::ios::binary | std::ios::trunc};
-        if (!modules_file.is_open()) {
-            return std::unexpected{"couldn't open " + modules.string()};
-        }
-        modules_file.write(reinterpret_cast<const char*>(unmapped_bytes.get()), file.m_size);
-
-        return *summary;
+        return summaries->front();
     }
 
     [[nodiscard]] static errmsg prepare_mod_workspace(const compiler_options& options) {
@@ -657,42 +665,29 @@ namespace dconstruct::compilation {
     }
 
     static resstr<compiler_output_summary> create_output(
-        const resstr<dconstruct::compilation::compiler_options>& filepaths,
+        const dconstruct::compilation::compiler_options& filepaths,
         const dconstruct::SIDBase& sidbase,
         const std::vector<dconstruct::compilation::program_binary_element>& functions,
         dconstruct::compilation::global_state& global
     ) {
-        const auto binary_res = filepaths->m_standalone ? dconstruct::ast::program::make_binary(functions, global)
-                                                        : dconstruct::compilation::disassemble_target(filepaths->m_target, sidbase, functions, global);
+        const auto binary_res = filepaths.m_standalone ? dconstruct::ast::program::make_binary(functions, global)
+                                                       : dconstruct::compilation::disassemble_target(filepaths.m_target, sidbase, functions, global);
 
         if (!binary_res) {
             return std::unexpected{binary_res.error()};
         }
         const auto& [bytes, size] = *binary_res;
-        std::filesystem::create_directories(filepaths->m_output.parent_path());
-        std::ofstream of(filepaths->m_output, std::ios::binary);
+        std::filesystem::create_directories(filepaths.m_output.parent_path());
+        std::ofstream of(filepaths.m_output, std::ios::binary);
         if (!of.is_open()) {
-            return std::unexpected{"couldn't open filepath " + filepaths->m_output.string()};
+            return std::unexpected{"couldn't open filepath " + filepaths.m_output.string()};
         }
         of.write(reinterpret_cast<const char*>(bytes.get()), size);
         of.flush();
 
         compiler_output_summary summary;
-        summary.m_output = filepaths->m_output;
+        summary.m_output = filepaths.m_output;
         summary.m_size = size;
-
-        if (!filepaths->m_modules.empty()) {
-            resstr<modules_patch_summary> patch = patch_modules_size(
-                filepaths->m_modules,
-                filepaths->m_output,
-                size,
-                filepaths->m_standalone ? module_exports_for_elements(functions) : std::vector<sid64>{}
-            );
-            if (!patch) {
-                return std::unexpected{patch.error()};
-            }
-            summary.m_modulesPatch = std::move(*patch);
-        }
 
         return summary;
     }

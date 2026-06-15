@@ -14,4 +14,4 @@ The scripting layer of TLOU is known as DC. It as a proprietary version of the p
 
 All DC files follow a concrete layout.
 
-The Last of Us Part II's fundamentally has two types of functions, `near` and `far`. (Note: these are not there official designations but they're the ones I've adopted as I think they illustrate their different usages). `near` function are functions that are defined inside other scripts, as in, other bin files. You can find the definition to these functions by searching through the decompiled .dcpl files. `far` function on the other do not have a definition inside
+The Last of Us Part II's fundamentally has two types of functions, `near` and `far`. (Note: these are not there official designations but they're the ones I've adopted as I think they illustrate their different usages).

@@ -41,7 +41,12 @@ namespace dconstruct::dcompiler {
     [[nodiscard]] std::unique_ptr<ast::call_expr> decomp_function::make_load_symbol_table(const Instruction& istr) {
         std::vector<expr_uptr> arg;
         arg.push_back(m_transformableExpressions[istr.destination]->clone());
+        ast::function_type fake_call_type = ast::function_type{
+            std::make_shared<ast::full_type>(ast::make_type_from_prim(ast::primitive_kind::U64)), 
+            { std::make_pair(std::string("index"), std::make_shared<ast::full_type>(ast::make_type_from_prim(ast::primitive_kind::U64))) }
+        };
         auto callee = std::make_unique<ast::identifier>("symbol_table_load");
+        callee->set_type(std::move(fake_call_type));
         auto call = std::make_unique<ast::call_expr>(compilation::token{compilation::token_type::_EOF, ""}, std::move(callee), std::move(arg));
         return call;
     }

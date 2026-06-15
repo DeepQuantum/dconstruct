@@ -20,9 +20,9 @@ using #encounter--get-upgrade-manual as near (u64) -> u64;
 using #give-upgrade-path as near (u64, u64) -> u64;
 
 u0 #spawn-lockbox@start@main@0() {
-    >> "here";
-    if (#get-svar(#hub-opened-crate) == 0) {
-        >> "here too";
+    >> "reached spawn lockbox state";
+    if (!#get-svar(#hub-opened-crate)) {
+        >> "not opened lockbox yet, proceeding...";
         bool hasManual = #encounter--has-upgrade-manual?(#encounter--get-current-encounter-ddict());
         bool resumedRun = #rogue-get-is-resumed-run();
         bool waitingForCollect = #get-svar-as-boolean(#hub-reward-wait-collect);
@@ -49,10 +49,12 @@ u0 #spawn-lockbox@start@main@0() {
             #give-upgrade-path(#encounter--get-upgrade-manual(#encounter--get-current-encounter-ddict()), 0);
         }
 
+        >> "setting #hub-opened-crate to true";
         #set-svar(#hub-opened-crate, 1);
     }
 }
 
 u0 #spawn-lockbox@start@main@1() {
+    >> "skipping lock box and spawning empty one...";
     => #spawn-empty-lockbox;
 }

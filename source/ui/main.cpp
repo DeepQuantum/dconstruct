@@ -662,7 +662,7 @@ namespace dconstruct::ui {
     }
 
     void load_var_maps_directory(app_state& state) {
-        const std::filesystem::path dir = "var_maps";
+        const std::filesystem::path dir = dconstruct::executable_relative_var_maps();
         if (!std::filesystem::is_directory(dir)) {
             return;
         }
@@ -884,7 +884,7 @@ namespace dconstruct::ui {
     }
 
     bool write_document_typemap(app_state& state, document& doc, std::string& error) {
-        const std::filesystem::path dir = "var_maps";
+        const std::filesystem::path dir = dconstruct::executable_relative_var_maps();
         std::error_code ec;
         std::filesystem::create_directories(dir, ec);
         if (ec) {

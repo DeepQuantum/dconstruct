@@ -80,7 +80,7 @@ namespace dconstruct::ast {
         assert(m_callee->get_type());
         assert(std::holds_alternative<ast::function_type>(*m_callee->get_type()));
         if (std::get<ast::function_type>(*m_callee->get_type()).m_distanceType == ast::function_type::DISTANCE::FAR) {
-            buffer.append("!exe"sv);
+            buffer.append('!');
         }
     }
 
@@ -114,8 +114,10 @@ namespace dconstruct::ast {
             }
             buffer.append(AST_COLOR::PUNCTUATION, ')');
         }
-        if (std::get<ast::function_type>(*m_type).m_distanceType == ast::function_type::DISTANCE::FAR) {
-            buffer.append(AST_COLOR::PUNCTUATION, "!exe"sv);
+        assert(m_callee->get_type());
+        assert(std::holds_alternative<ast::function_type>(*m_callee->get_type()));
+        if (std::get<ast::function_type>(*m_callee->get_type()).m_distanceType == ast::function_type::DISTANCE::FAR) {
+            buffer.append(AST_COLOR::PUNCTUATION, '!');
         }
     }
 

@@ -139,7 +139,7 @@ namespace dconstruct::ast {
     struct ast_serialization_buffer : ast_buffer_wrapper<std::string> {
         using ast_buffer_wrapper::ast_buffer_wrapper;
 
-        void _append(const char value) {
+        void _append(char value) {
             m_buffer.push_back(value);
         }
 
@@ -191,7 +191,7 @@ namespace dconstruct::ast {
     struct code_color_serialization_buffer : ast_buffer_wrapper<code_color_buffer>  {
         using ast_buffer_wrapper::ast_buffer_wrapper;
 
-        void _append(const AST_COLOR color, const char value) {
+        void _append(const AST_COLOR color, char value) {
             m_buffer.emplace_back(color, std::string(1, value));
         }
 

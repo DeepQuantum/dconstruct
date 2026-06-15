@@ -86,6 +86,10 @@ namespace dconstruct {
         return executable_path().parent_path() / "sidbase.bin";
     }
 
+    [[nodiscard]] inline std::filesystem::path executable_relative_var_maps() {
+        return executable_path().parent_path() / "var_maps";
+    }
+
     static std::string sanitize_dc_string(const std::string& dc_string) {
         std::string sanitized;
         sanitized.reserve(dc_string.size());
