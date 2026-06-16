@@ -126,33 +126,29 @@ namespace dconstruct::ast {
         compilation::function_context& fn,
         compilation::global_state& global
     ) const noexcept {
-        return std::visit(
-            [&](auto&& lit) -> resstr<u16> {
-                using T = std::decay_t<decltype(lit)>;
-
-                if constexpr (std::is_same_v<T, std::string>) {
-                    if (m_type && std::holds_alternative<primitive_type>(*m_type)) {
-                        const primitive_kind kind = std::get<primitive_type>(*m_type).m_type;
-                        if (kind == primitive_kind::SID || kind == primitive_kind::SID32) {
-                            return fn.add_to_symbol_table(SID(lit.c_str()));
-                        }
+        return std::visit([&](auto&& lit) -> resstr<u16> {
+            using T = std::decay_t<decltype(lit)>;
+            if constexpr (std::is_same_v<T, std::string>) {
+                if (m_type && std::holds_alternative<primitive_type>(*m_type)) {
+                    const primitive_kind kind = std::get<primitive_type>(*m_type).m_type;
+                    if (kind == primitive_kind::SID || kind == primitive_kind::SID32) {
+                        return fn.add_to_symbol_table(SID(lit.c_str()));
                     }
-                    const u64 size = global.add_string(std::move(lit));
-                    return fn.add_to_symbol_table(size, compilation::function_context::SYMBOL_TABLE_POINTER_KIND::STRING);
-                } else if constexpr (std::is_integral_v<T>) {
-                    return fn.add_to_symbol_table(static_cast<u64>(lit));
-                } else if constexpr (std::is_same_v<T, f32>) {
-                    return fn.add_to_symbol_table(static_cast<u64>(std::bit_cast<u32>(lit)));
-                } else if constexpr (std::is_same_v<T, f64>) {
-                    return fn.add_to_symbol_table(std::bit_cast<u64>(lit));
-                } else if constexpr (std::is_same_v<T, std::nullptr_t>) {
-                    return fn.add_to_symbol_table(0);
-                } else {
-                    return std::unexpected{"can't add " + to_pseudo_c_string() + " to symbol table"};
                 }
-            },
-            m_value
-        );
+                const u64 size = global.add_string(std::move(lit));
+                return fn.add_to_symbol_table(size, compilation::function_context::SYMBOL_TABLE_POINTER_KIND::STRING);
+            } else if constexpr (std::is_integral_v<T>) {
+                return fn.add_to_symbol_table(static_cast<u64>(lit));
+            } else if constexpr (std::is_same_v<T, f32>) {
+                return fn.add_to_symbol_table(static_cast<u64>(std::bit_cast<u32>(lit)));
+            } else if constexpr (std::is_same_v<T, f64>) {
+                return fn.add_to_symbol_table(std::bit_cast<u64>(lit));
+            } else if constexpr (std::is_same_v<T, std::nullptr_t>) {
+                return fn.add_to_symbol_table(0);
+            } else {
+                return std::unexpected{"can't add " + to_pseudo_c_string() + " to symbol table"};
+            }
+        }, m_value);
     }
 
     [[nodiscard]] resstr<reg_idx> literal::emit_dc(

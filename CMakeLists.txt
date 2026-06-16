@@ -15,9 +15,6 @@ set(SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/source")
 
 set(DCONSTRUCT_SIDBASE "${CMAKE_CURRENT_SOURCE_DIR}/test/fixtures/dc/sidbase_new_fixed.bin")
 
-# Copies sidbase.bin next to the given target's executable. Every dconstruct
-# program resolves its sidbase from sidbase.bin in its own directory, so any
-# target that needs the sidbase at runtime must stage it next to the exe.
 function(stage_sidbase_next_to target)
     if(EXISTS "${DCONSTRUCT_SIDBASE}")
         add_custom_command(TARGET ${target} POST_BUILD
@@ -83,18 +80,15 @@ FetchContent_MakeAvailable(googletest)
 #     "${LLVM_SOURCE_DIR}/include"
 # )
 
-# Set optimization flags per configuration
 set(OPT_FLAGS_RELEASE "-O3")
 set(OPT_FLAGS_RELEASE_PROFILE "-O2 -fprofile-use -march=znver4 -mavx512f -fopenmp")
 set(OPT_FLAGS_RELWITHDEBINFO "-O2 -g -DNDEBUG -fopenmp")
 set(OPT_FLAGS_DEBUG "-O0 -g3")
 set(OPT_FLAGS_CREATE_PROFILE "-O2 -fprofile-generate -ftest-coverage -march=znver4 -mavx512f -fopenmp")
 
-# MSVC-specific flags
 set(MSVC_FLAGS "/MP")
 
 
-# Apply flags based on compiler
 if(MSVC)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")
     add_compile_options($<$<COMPILE_LANGUAGE:CXX>:/wd4624>)

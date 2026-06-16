@@ -1,5 +1,7 @@
 #pragma once
 
+#include "ast/type.h"
+#include "compilation/function.h"
 #include "cxxopts.hpp"
 #include "about.h"
 #include "compilation/lexer.h"
@@ -155,12 +157,9 @@ namespace dconstruct::compilation {
         disassembler.disassemble();
 
         std::vector<const function_disassembly*> funcs = disassembler.get_named_functions();
-        std::ranges::sort(
-            funcs,
-            [](const function_disassembly* a, const function_disassembly* b) {
-                return a->m_originalOffset < b->m_originalOffset;
-            }
-        );
+        std::ranges::sort(funcs, [](const function_disassembly* a, const function_disassembly* b) {
+            return a->m_originalOffset < b->m_originalOffset;
+        });
 
         std::unordered_map<sid64, const compilation::program_binary_element*> target_elements_by_sid;
         target_elements_by_sid.reserve(target_elements.size());
@@ -184,9 +183,6 @@ namespace dconstruct::compilation {
             }
         }
 
-        std::vector<std::pair<const function_disassembly*, compilation::program_binary_element>> state_script_lambdas;
-        bool replaced_state_script_lambda = false;
-
         for (const auto& f : funcs) {
             function_context cf{};
             const std::string id = f->get_id();
@@ -206,62 +202,21 @@ namespace dconstruct::compilation {
 
             const auto replacement_it = target_elements_by_sid.find(disassembled_function_name_id);
             if (replacement_it != target_elements_by_sid.end() && !consumed.contains(disassembled_function_name_id)) {
-                consumed.insert(disassembled_function_name_id);
-                state_script_lambdas.emplace_back(f, *replacement_it->second);
-                replaced_state_script_lambda = true;
-                continue;
-            }
-
-            for (const auto& line : f->m_lines) {
-                cf.m_instructions.push_back(line.m_instruction);
-            }
-            for (u32 i = 0; i < f->m_stackFrame.m_symbolTable.m_types.size(); ++i) {
-                function_context::SYMBOL_TABLE_POINTER_KIND kind = std::visit(
-                    [](auto&& type) {
-                        using T = std::decay_t<decltype(type)>;
-                        if constexpr (std::is_same_v<T, ast::primitive_type>) {
-                            return type.m_type == ast::primitive_kind::STRING ? function_context::SYMBOL_TABLE_POINTER_KIND::STRING : function_context::SYMBOL_TABLE_POINTER_KIND::NONE;
-                        } else if constexpr (std::is_same_v<T, ast::ptr_type>) {
-                            return function_context::SYMBOL_TABLE_POINTER_KIND::GENERAL;
-                        } else {
-                            return function_context::SYMBOL_TABLE_POINTER_KIND::NONE;
-                        }
-                    },
-                    f->m_stackFrame.m_symbolTable.m_types[i]
-                );
-                if (kind == function_context::SYMBOL_TABLE_POINTER_KIND::STRING) {
-                    const u32 size = global.add_string(f->m_stackFrame.m_symbolTable.m_location.get<const char*>(i * 8));
-                    cf.m_symbolTable.push_back(size);
-                } else {
-                    u64 value = f->m_stackFrame.m_symbolTable.m_location.get<u64>(i * 8);
-                    if (file_res->is_file_ptr(f->m_stackFrame.m_symbolTable.m_location + i * 8)) {
-                        value -= reinterpret_cast<p64>(file_res->m_bytes.get());
-                        kind = function_context::SYMBOL_TABLE_POINTER_KIND::ABSOLUTE;
-                    }
-                    cf.m_symbolTable.push_back(value);
+                if (!f->m_stateScriptLambdaPointerOffset) {
+                    return std::unexpected{"matched state script lambda " + id + " but couldn't find its SsLambda pointer slot"};
                 }
-                cf.m_symbolTableEntryPointers.push_back(kind);
+                compilation::program_binary_element replacement = *replacement_it->second;
+                replacement.m_targetPointerOffsets.push_back(*f->m_stateScriptLambdaPointerOffset);
+                replacement.m_targetPointerValueOffset = sizeof(sid64);
+                patched_elements.push_back(std::move(replacement));
+                consumed.insert(disassembled_function_name_id);
             }
-            state_script_lambdas.emplace_back(f, cf.to_binary_element());
         }
 
         for (const compilation::program_binary_element& target_element : target_elements) {
             if (!consumed.contains(target_element.m_entry.m_nameID)) {
                 std::cerr << std::format("[warning] compiled entry #{:016X} matches no entry or state script lambda in the target and will be ignored\n", target_element.m_entry.m_nameID);
             }
-        }
-
-        if (replaced_state_script_lambda) {
-            if (!disassembler.has_state_script()) {
-                return std::unexpected{"a state script lambda was replaced but the target contains no state script"};
-            }
-            ast::state_script* state_script = disassembler.get_state_script();
-            state_script->from_functions(state_script_lambdas);
-            resstr<compilation::program_binary_element> state_script_element = state_script->emit_dc(global);
-            if (!state_script_element) {
-                return std::unexpected{state_script_element.error()};
-            }
-            patched_elements.push_back(std::move(*state_script_element));
         }
 
         if (patched_elements.empty()) {

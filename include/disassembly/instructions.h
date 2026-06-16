@@ -7,6 +7,7 @@
 #include <map>
 #include <array>
 #include <limits>
+#include <optional>
 #include <ostream>
 
 namespace dconstruct {
@@ -476,6 +477,7 @@ namespace dconstruct {
         function_name_variant m_id;
         std::vector<function_disassembly_line> m_lines;
         u64 m_originalOffset = 0;
+        std::optional<u64> m_stateScriptLambdaPointerOffset;
         bool m_isScriptFunction;
         bool m_isEmbeddedFunction = false;
 

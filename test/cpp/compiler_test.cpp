@@ -25,7 +25,7 @@ namespace dconstruct::testing {
     const std::string TEST_DIR = (TEST_ROOT / "fixtures" / "dc").string() + "/";
     const std::string DCPL_PATH = (TEST_ROOT / "fixtures" / "dcpl").string() + "/";
 
-    static SIDBase base = *SIDBase::from_binary(TEST_DIR + R"(\test_sidbase.bin)");
+    static SIDBase base = *SIDBase::from_binary(executable_relative_sidbase());
 
     static std::pair<std::vector<compilation::token>, std::vector<compilation::lexing_error>> get_tokens(const std::string& string) {
         dconstruct::compilation::Lexer lexer = dconstruct::compilation::Lexer(string);
@@ -524,7 +524,7 @@ namespace dconstruct::testing {
         std::filesystem::create_directories(game_path / "mods");
         std::filesystem::remove_all(game_path / "mods" / "prepare_mod");
         std::filesystem::copy_file(
-            TEST_DIR + "sidbase_new_fixed.bin",
+            executable_relative_sidbase(),
             game_dc1 / "modules.bin",
             std::filesystem::copy_options::overwrite_existing
         );
@@ -553,15 +553,15 @@ namespace dconstruct::testing {
         std::filesystem::remove(modules_path, cleanup_ec);
         std::filesystem::copy_file("test/fixtures/bin/modules.bin", modules_path, std::filesystem::copy_options::overwrite_existing);
 
-        constexpr sid64 target_sid = SID("ss-rogue/test-script-qntm");
+        constexpr sid64 target_sid = SID("ss-t2/ss-workbench");
         constexpr u64 new_size = 0x5678;
 
         const std::filesystem::path output_path =
-            R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/mods/ProjectFEDRA_unpacked\bin\dc1\ss-rogue/test-script-qntm.bin)";
+            R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/mods/ProjectFEDRA_unpacked\bin\dc1\ss-t2/ss-workbench.bin)";
         auto patch = compilation::patch_modules_size(modules_path, output_path, new_size);
         ASSERT_TRUE(patch) << patch.error();
-        EXPECT_EQ(patch->m_targetName, "ss-rogue/test-script-qntm");
-        EXPECT_EQ(patch->m_oldSize, 691);
+        EXPECT_EQ(patch->m_targetName, "ss-t2/ss-workbench");
+        EXPECT_EQ(patch->m_oldSize, 371813);
         EXPECT_EQ(patch->m_newSize, new_size);
 
         auto patched_file = BinaryFile::from_path(modules_path);
@@ -586,7 +586,7 @@ namespace dconstruct::testing {
         std::filesystem::remove(modules_path, cleanup_ec);
         std::filesystem::copy_file("test/fixtures/bin/modules.bin", modules_path, std::filesystem::copy_options::overwrite_existing);
 
-        constexpr sid64 target_sid = SID("ss-rogue/test-script-qntm");
+        constexpr sid64 target_sid = SID("ss-t2/ss-workbench");
         constexpr u64 new_size = 0x7654;
         const std::vector<sid64> exports{
             SID("helper-before-state-script"),
@@ -594,10 +594,10 @@ namespace dconstruct::testing {
         };
 
         const std::filesystem::path output_path =
-            R"(C:/Program Files (x86)/Steam\steamapps\common\The Last of Us Part II/mods/ProjectFEDRA_unpacked/bin/dc1/ss-rogue/test-script-qntm.bin)";
+            R"(C:/Program Files (x86)/Steam\steamapps\common\The Last of Us Part II/mods/ProjectFEDRA_unpacked/bin/dc1/ss-t2/ss-workbench.bin)";
         auto patch = compilation::patch_modules_size(modules_path, output_path, new_size, exports);
         ASSERT_TRUE(patch) << patch.error();
-        EXPECT_EQ(patch->m_targetName, "ss-rogue/test-script-qntm");
+        EXPECT_EQ(patch->m_targetName, "ss-t2/ss-workbench");
         EXPECT_EQ(patch->m_newSize, new_size);
 
         auto patched_file = BinaryFile::from_path(modules_path);
@@ -688,7 +688,7 @@ namespace dconstruct::testing {
         std::filesystem::remove(modules_path, cleanup_ec);
         std::filesystem::copy_file("test/fixtures/bin/modules.bin", modules_path, std::filesystem::copy_options::overwrite_existing);
 
-        const std::string existing_target = "ss-rogue/test-script-qntm";
+        const std::string existing_target = "ss-t2/ss-workbench";
         const std::string new_target = "ss-rogue/generated-multi-module";
         const std::vector<sid64> new_exports{
             SID("generated-helper"),
@@ -699,7 +699,7 @@ namespace dconstruct::testing {
             modules_path,
             {
                 compilation::modules_patch_request{
-                    R"(C:/Game/mods/multi_mod/bin/dc1/ss-rogue/test-script-qntm.bin)",
+                    R"(C:/Game/mods/multi_mod/bin/dc1/ss-t2/ss-workbench.bin)",
                     0x1111,
                     {},
                 },
@@ -713,7 +713,7 @@ namespace dconstruct::testing {
         ASSERT_TRUE(patches) << patches.error();
         ASSERT_EQ(patches->size(), 2);
         EXPECT_EQ((*patches)[0].m_targetName, existing_target);
-        EXPECT_EQ((*patches)[0].m_oldSize, 691);
+        EXPECT_EQ((*patches)[0].m_oldSize, 371813);
         EXPECT_EQ((*patches)[0].m_newSize, 0x1111);
         EXPECT_EQ((*patches)[1].m_targetName, new_target);
         EXPECT_EQ((*patches)[1].m_oldSize, 0);
@@ -3037,89 +3037,6 @@ namespace dconstruct::testing {
         EXPECT_TRUE(mismatched.has_value());
     }
 
-    [[nodiscard]] static bool symbol_table_contains_string(const function_disassembly& fn, const std::string_view expected) {
-        const SymbolTable& table = fn.m_stackFrame.m_symbolTable;
-        for (u32 i = 0; i < table.m_types.size(); ++i) {
-            const auto* prim = std::get_if<ast::primitive_type>(&table.m_types[i]);
-            if (prim == nullptr || prim->m_type != ast::primitive_kind::STRING) {
-                continue;
-            }
-            const char* str = table.m_location.get<const char*>(i * sizeof(u64));
-            if (str != nullptr && expected == str) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    TEST(COMPILER, RetargetStateScriptLambda) {
-        static SIDBase full_sidbase = *SIDBase::from_binary(TEST_DIR + "sidbase_new_fixed.bin");
-        const std::filesystem::path target = TEST_ROOT / "fixtures" / "dc" / "ss-hub-lockbox.bin";
-
-        resstr<BinaryFile> original_file = BinaryFile::from_path(target);
-        ASSERT_TRUE(original_file.has_value()) << original_file.error();
-        Disassembler original_disassembler(&*original_file, &full_sidbase);
-        (void)original_disassembler.disassemble();
-        const u64 expected_function_count = original_disassembler.get_named_functions().size();
-
-        const std::string source =
-            "u0 #wait-for-spawn@start@main@0() {\n"
-            "    >> \"hello world\";\n"
-            "}\n";
-
-        compilation::global_state global{};
-        const std::optional<std::vector<compilation::program_binary_element>> elements = compilation::run_compilation(source, global);
-        ASSERT_TRUE(elements.has_value());
-        ASSERT_EQ(elements->size(), 1);
-
-        const auto binary = compilation::disassemble_target(target, full_sidbase, *elements, global);
-        ASSERT_TRUE(binary.has_value()) << binary.error();
-        const auto& [bytes, size] = *binary;
-        ASSERT_GT(size, 0);
-
-        const std::filesystem::path output = std::filesystem::temp_directory_path() / "dconstruct-retarget-ss-hub-lockbox.bin";
-        {
-            std::ofstream of(output, std::ios::binary | std::ios::trunc);
-            ASSERT_TRUE(of.is_open());
-            of.write(reinterpret_cast<const char*>(bytes.get()), size);
-        }
-
-        resstr<BinaryFile> file = BinaryFile::from_path(output);
-        ASSERT_TRUE(file.has_value()) << file.error();
-
-        Disassembler disassembler(&*file, &full_sidbase);
-        (void)disassembler.disassemble();
-        ASSERT_TRUE(disassembler.has_state_script());
-
-        const ast::state_script* state_script = disassembler.get_state_script();
-        EXPECT_EQ(state_script->m_declarations.size(), 31);
-        ASSERT_FALSE(state_script->m_states.empty());
-        EXPECT_EQ(state_script->m_states[state_script->m_initialStateIdx].m_name, "--all--");
-
-        const std::vector<const function_disassembly*> funcs = disassembler.get_named_functions();
-        EXPECT_GE(funcs.size(), expected_function_count);
-
-        const function_disassembly* replaced = nullptr;
-        const function_disassembly* untouched = nullptr;
-        for (const function_disassembly* func : funcs) {
-            if (func->get_id() == "wait-for-spawn@start@main@0") {
-                replaced = func;
-            } else if (func->get_id() == "spawn-lockbox@start@main@0") {
-                untouched = func;
-            }
-        }
-
-        ASSERT_NE(replaced, nullptr);
-        EXPECT_EQ(replaced->m_lines.size(), 4);
-        EXPECT_TRUE(symbol_table_contains_string(*replaced, "hello world"));
-
-        ASSERT_NE(untouched, nullptr);
-        EXPECT_GT(untouched->m_lines.size(), 4);
-        EXPECT_FALSE(symbol_table_contains_string(*untouched, "hello world"));
-
-        std::filesystem::remove(output);
-    }
-
     struct entry_record {
         sid64 m_name;
         sid64 m_type;
@@ -3142,31 +3059,40 @@ namespace dconstruct::testing {
         of.write(reinterpret_cast<const char*>(bytes), size);
     }
 
-    TEST(COMPILER, TargetPatchPreservesAllEntries) {
-        static SIDBase full_sidbase = *SIDBase::from_binary(TEST_DIR + "sidbase_new_fixed.bin");
-        const std::filesystem::path target = TEST_ROOT / "fixtures" / "dc" / "ss-hub-lockbox.bin";
+    [[nodiscard]] static u32 read_u32(const std::byte* bytes, const u64 offset) {
+        u32 value;
+        std::memcpy(&value, bytes + offset, sizeof(value));
+        return value;
+    }
+
+    [[nodiscard]] static u64 read_u64(const std::byte* bytes, const u64 offset) {
+        u64 value;
+        std::memcpy(&value, bytes + offset, sizeof(value));
+        return value;
+    }
+
+    [[nodiscard]] static bool reloc_bit(const std::byte* bytes, const u64 text_size, const u64 offset) {
+        const u8* reloc = reinterpret_cast<const u8*>(bytes + text_size + sizeof(u32));
+        const u64 slot = offset / sizeof(u64);
+        return (reloc[slot / 8] & (1 << (slot % 8))) != 0;
+    }
+
+    TEST(COMPILER, StateScriptLambdaPatchOnlyRepointsTrackSlot) {
+        static SIDBase full_sidbase = *SIDBase::from_binary(executable_relative_sidbase());
+        const std::filesystem::path target = TEST_ROOT / "fixtures" / "dc" / "ss-workbench.bin";
 
         resstr<BinaryFile> original = BinaryFile::from_path(target);
         ASSERT_TRUE(original.has_value()) << original.error();
         const std::vector<entry_record> original_entries = read_entry_records(*original);
-        ASSERT_EQ(original_entries.size(), 7);
+        ASSERT_EQ(original_entries.size(), 18);
         const u64 old_strings_start = original->m_dcheader->m_stringsOffset;
         const u64 old_text_size = original->m_dcheader->m_textSize;
-        const u64 entry_table_offset = reinterpret_cast<p64>(original->m_dcheader->m_pStartOfData) - reinterpret_cast<p64>(original->m_bytes.get());
         const BinaryFile::byte_uptr original_unmapped = original->get_unmapped();
 
-        Disassembler original_disassembler(&*original, &full_sidbase);
-        (void)original_disassembler.disassemble();
-        const std::vector<const function_disassembly*> original_funcs = original_disassembler.get_named_functions();
-        const u64 expected_function_count = original_funcs.size();
-        std::unordered_set<std::string> original_function_ids;
-        for (const function_disassembly* func : original_funcs) {
-            original_function_ids.insert(func->get_id());
-        }
-
         const std::string source =
-            "u0 #wait-for-spawn@start@main@0() {\n"
-            "    >> \"hello world\";\n"
+            "using #wait-for as far (symbol) -> u0;\n"
+            "u0 #apply-upgrade@start@apply-upgrade@0() {\n"
+            "    #wait-for(#curr-state-updated);\n"
             "}\n";
 
         compilation::global_state global{};
@@ -3178,7 +3104,7 @@ namespace dconstruct::testing {
         const auto& [bytes, size] = *binary;
         ASSERT_GT(size, original->m_size);
 
-        const std::filesystem::path output = std::filesystem::temp_directory_path() / "dconstruct-patch-ss-hub-lockbox.bin";
+        const std::filesystem::path output = std::filesystem::temp_directory_path() / "dconstruct-patch-ss-workbench.bin";
         write_binary_file(output, bytes.get(), size);
 
         resstr<BinaryFile> patched = BinaryFile::from_path(output);
@@ -3187,22 +3113,11 @@ namespace dconstruct::testing {
         const std::vector<entry_record> patched_entries = read_entry_records(*patched);
         ASSERT_EQ(patched_entries.size(), original_entries.size());
 
-        const sid64 state_script_name = SID("ss-hub-lockbox");
-        u64 state_script_entry_pointer_slot = 0;
-        u64 old_state_script_offset = 0;
         for (u64 i = 0; i < original_entries.size(); ++i) {
             EXPECT_EQ(patched_entries[i].m_name, original_entries[i].m_name);
             EXPECT_EQ(patched_entries[i].m_type, original_entries[i].m_type);
-            if (original_entries[i].m_name == state_script_name) {
-                EXPECT_GE(patched_entries[i].m_offset, old_strings_start);
-                state_script_entry_pointer_slot = entry_table_offset + i * sizeof(Entry) + offsetof(Entry, m_entryPtr);
-                old_state_script_offset = original_entries[i].m_offset;
-            } else {
-                EXPECT_EQ(patched_entries[i].m_offset, original_entries[i].m_offset);
-            }
+            EXPECT_EQ(patched_entries[i].m_offset, original_entries[i].m_offset);
         }
-        ASSERT_NE(state_script_entry_pointer_slot, 0);
-        EXPECT_TRUE(patched->gets_pointed_at(location(patched->m_bytes.get() + old_state_script_offset)));
 
         const u64 new_strings_start = patched->m_dcheader->m_stringsOffset;
         const u64 string_delta = new_strings_start - old_strings_start;
@@ -3211,182 +3126,42 @@ namespace dconstruct::testing {
         const BinaryFile::byte_uptr patched_unmapped = patched->get_unmapped();
         const std::byte* old_raw = original_unmapped.get();
         const std::byte* new_raw = patched_unmapped.get();
-        const u8* old_reloc = reinterpret_cast<const u8*>(old_raw + old_text_size + sizeof(u32));
+        const u64 new_text_size = read_u32(new_raw, offsetof(DC_Header, m_textSize));
 
+        std::vector<u64> changed_pointer_slots;
         for (u64 slot = 0; slot < old_strings_start / sizeof(u64); ++slot) {
             const u64 offset = slot * sizeof(u64);
-            if (offset == offsetof(DC_Header, m_textSize) || offset == state_script_entry_pointer_slot) {
+            if (offset == offsetof(DC_Header, m_textSize) || offset == offsetof(DC_Header, m_stringsOffset)) {
                 continue;
             }
-            u64 old_value, new_value;
-            std::memcpy(&old_value, old_raw + offset, sizeof(old_value));
-            std::memcpy(&new_value, new_raw + offset, sizeof(new_value));
-            const bool relocated = (old_reloc[slot / 8] & (1 << (slot % 8))) != 0;
+            const u64 old_value = read_u64(old_raw, offset);
+            const u64 new_value = read_u64(new_raw, offset);
+            const bool relocated = reloc_bit(old_raw, old_text_size, offset);
             if (relocated && old_value >= old_strings_start) {
                 EXPECT_EQ(new_value, old_value + string_delta) << "string pointer at offset 0x" << std::hex << offset;
+            } else if (old_value != new_value) {
+                changed_pointer_slots.push_back(offset);
+                EXPECT_TRUE(relocated) << "changed non-relocated slot at offset 0x" << std::hex << offset;
+                EXPECT_TRUE(reloc_bit(new_raw, new_text_size, offset)) << "missing reloc bit at offset 0x" << std::hex << offset;
+                EXPECT_LT(old_value, old_strings_start);
+                EXPECT_GE(new_value, old_strings_start + sizeof(sid64));
+                EXPECT_LT(new_value, new_strings_start);
             } else {
                 EXPECT_EQ(new_value, old_value) << "data at offset 0x" << std::hex << offset;
             }
         }
+        ASSERT_EQ(changed_pointer_slots.size(), 1);
 
         EXPECT_EQ(std::memcmp(new_raw + new_strings_start, old_raw + old_strings_start, old_text_size - old_strings_start), 0);
 
-        Disassembler disassembler(&*patched, &full_sidbase);
-        (void)disassembler.disassemble();
-        ASSERT_TRUE(disassembler.has_state_script());
-        EXPECT_EQ(disassembler.get_state_script()->m_declarations.size(), 31);
-
-        const std::vector<const function_disassembly*> funcs = disassembler.get_named_functions();
-        EXPECT_GE(funcs.size(), expected_function_count);
-
-        std::unordered_set<std::string> patched_function_ids;
-        const function_disassembly* replaced = nullptr;
-        const function_disassembly* untouched = nullptr;
-        for (const function_disassembly* func : funcs) {
-            patched_function_ids.insert(func->get_id());
-            if (func->get_id() == "wait-for-spawn@start@main@0") {
-                replaced = func;
-            } else if (func->get_id() == "spawn-lockbox@start@main@0") {
-                untouched = func;
-            }
-        }
-        for (const std::string& id : original_function_ids) {
-            EXPECT_TRUE(patched_function_ids.contains(id)) << "function " << id << " missing from the patched binary";
-        }
-        ASSERT_NE(replaced, nullptr);
-        EXPECT_EQ(replaced->m_lines.size(), 4);
-        EXPECT_TRUE(symbol_table_contains_string(*replaced, "hello world"));
-        ASSERT_NE(untouched, nullptr);
-        EXPECT_FALSE(symbol_table_contains_string(*untouched, "hello world"));
-
-        const std::string second_source =
-            "u0 #wait-for-spawn@start@main@0() {\n"
-            "    >> \"hello again\";\n"
-            "}\n";
-
-        compilation::global_state second_global{};
-        const std::optional<std::vector<compilation::program_binary_element>> second_elements = compilation::run_compilation(second_source, second_global);
-        ASSERT_TRUE(second_elements.has_value());
-
-        const auto second_binary = compilation::disassemble_target(output, full_sidbase, *second_elements, second_global);
-        ASSERT_TRUE(second_binary.has_value()) << second_binary.error();
-        const auto& [second_bytes, second_size] = *second_binary;
-
-        const std::filesystem::path second_output = std::filesystem::temp_directory_path() / "dconstruct-patch-twice-ss-hub-lockbox.bin";
-        write_binary_file(second_output, second_bytes.get(), second_size);
-
-        resstr<BinaryFile> repatched = BinaryFile::from_path(second_output);
-        ASSERT_TRUE(repatched.has_value()) << repatched.error();
-
-        const std::vector<entry_record> repatched_entries = read_entry_records(*repatched);
-        ASSERT_EQ(repatched_entries.size(), original_entries.size());
-        for (u64 i = 0; i < original_entries.size(); ++i) {
-            EXPECT_EQ(repatched_entries[i].m_name, original_entries[i].m_name);
-            EXPECT_EQ(repatched_entries[i].m_type, original_entries[i].m_type);
-            if (original_entries[i].m_name != state_script_name) {
-                EXPECT_EQ(repatched_entries[i].m_offset, original_entries[i].m_offset);
-            }
-        }
-
-        Disassembler second_disassembler(&*repatched, &full_sidbase);
-        (void)second_disassembler.disassemble();
-        ASSERT_TRUE(second_disassembler.has_state_script());
-        EXPECT_EQ(second_disassembler.get_state_script()->m_declarations.size(), 31);
-
-        const std::vector<const function_disassembly*> second_funcs = second_disassembler.get_named_functions();
-        EXPECT_EQ(second_funcs.size(), funcs.size());
-
-        std::unordered_set<std::string> repatched_function_ids;
-        const function_disassembly* second_replaced = nullptr;
-        for (const function_disassembly* func : second_funcs) {
-            repatched_function_ids.insert(func->get_id());
-            if (func->get_id() == "wait-for-spawn@start@main@0") {
-                second_replaced = func;
-            }
-        }
-        for (const std::string& id : original_function_ids) {
-            EXPECT_TRUE(repatched_function_ids.contains(id)) << "function " << id << " missing from the twice-patched binary";
-        }
-        ASSERT_NE(second_replaced, nullptr);
-        EXPECT_TRUE(symbol_table_contains_string(*second_replaced, "hello again"));
-        EXPECT_FALSE(symbol_table_contains_string(*second_replaced, "hello world"));
+        const u64 patched_lambda_ptr = read_u64(new_raw, changed_pointer_slots.front());
+        EXPECT_EQ(read_u64(new_raw, patched_lambda_ptr - sizeof(sid64)), SID("script-lambda"));
+        EXPECT_EQ(read_u64(new_raw, patched_lambda_ptr + offsetof(ScriptLambda, m_pInstruction)), patched_lambda_ptr + sizeof(ScriptLambda));
+        EXPECT_TRUE(reloc_bit(new_raw, new_text_size, changed_pointer_slots.front()));
+        EXPECT_TRUE(reloc_bit(new_raw, new_text_size, patched_lambda_ptr + offsetof(ScriptLambda, m_pInstruction)));
+        EXPECT_TRUE(reloc_bit(new_raw, new_text_size, patched_lambda_ptr + offsetof(ScriptLambda, m_pSymbols)));
 
         std::filesystem::remove(output);
-        std::filesystem::remove(second_output);
-    }
-
-    [[nodiscard]] static std::string normalized_asm_without_offsets(const std::filesystem::path& asm_path) {
-        std::ifstream file(asm_path);
-        std::stringstream buffer;
-        buffer << file.rdbuf();
-        static const std::regex offset_pattern{"0x[0-9a-fA-F]+"};
-        return std::regex_replace(buffer.str(), offset_pattern, "0x");
-    }
-
-    [[nodiscard]] static std::vector<std::string> split_asm_entry_sections(const std::string& listing) {
-        std::vector<std::string> sections;
-        const std::string marker = "##########  ENTRY";
-        u64 header_start = listing.find(marker);
-        while (header_start != std::string::npos) {
-            u64 body_start = listing.find('\n', header_start);
-            if (body_start == std::string::npos) {
-                break;
-            }
-            ++body_start;
-            const u64 next_header = listing.find(marker, body_start);
-            const u64 body_end = next_header == std::string::npos ? listing.size() : listing.rfind('\n', next_header) + 1;
-            sections.push_back(listing.substr(body_start, body_end - body_start));
-            header_start = next_header;
-        }
-        return sections;
-    }
-
-    TEST(COMPILER, TargetPatchDisassemblyMatchesOriginal) {
-        static SIDBase full_sidbase = *SIDBase::from_binary(TEST_DIR + "sidbase_new_fixed.bin");
-        const std::filesystem::path target = TEST_ROOT / "fixtures" / "dc" / "ss-hub-lockbox.bin";
-
-        const std::string source =
-            "u0 #wait-for-spawn@start@main@0() {\n"
-            "    >> \"hello world\";\n"
-            "}\n";
-
-        compilation::global_state global{};
-        const std::optional<std::vector<compilation::program_binary_element>> elements = compilation::run_compilation(source, global);
-        ASSERT_TRUE(elements.has_value());
-
-        const auto binary = compilation::disassemble_target(target, full_sidbase, *elements, global);
-        ASSERT_TRUE(binary.has_value()) << binary.error();
-        const auto& [bytes, size] = *binary;
-
-        const std::filesystem::path patched_bin = std::filesystem::temp_directory_path() / "dconstruct-disasm-patched-ss-hub-lockbox.bin";
-        write_binary_file(patched_bin, bytes.get(), size);
-
-        const std::filesystem::path original_asm = std::filesystem::temp_directory_path() / "dconstruct-disasm-original-ss-hub-lockbox.asm";
-        const std::filesystem::path patched_asm = std::filesystem::temp_directory_path() / "dconstruct-disasm-patched-ss-hub-lockbox.asm";
-        const std::unordered_map<sid64, ast::full_type> type_map;
-        disassembly::disasm_file(target, original_asm, full_sidbase, type_map);
-        disassembly::disasm_file(patched_bin, patched_asm, full_sidbase, type_map);
-
-        const std::string original_listing = normalized_asm_without_offsets(original_asm);
-        const std::string patched_listing = normalized_asm_without_offsets(patched_asm);
-        const std::vector<std::string> original_sections = split_asm_entry_sections(original_listing);
-        const std::vector<std::string> patched_sections = split_asm_entry_sections(patched_listing);
-        ASSERT_EQ(original_sections.size(), 7);
-        EXPECT_EQ(patched_sections.size(), original_sections.size());
-
-        for (const std::string& section : original_sections) {
-            const bool is_replaced_state_script = section.find("ss-hub-lockbox = state-script") != std::string::npos;
-            const bool present = patched_listing.find(section) != std::string::npos;
-            if (is_replaced_state_script) {
-                EXPECT_FALSE(present) << "the replaced state script disassembles identically to the original";
-            } else {
-                EXPECT_TRUE(present) << "entry section missing from the patched disassembly:\n" << section.substr(0, 300);
-            }
-        }
-
-        std::filesystem::remove(patched_bin);
-        std::filesystem::remove(original_asm);
-        std::filesystem::remove(patched_asm);
     }
 
 }

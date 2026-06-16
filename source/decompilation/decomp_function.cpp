@@ -42,7 +42,7 @@ namespace dconstruct::dcompiler {
         std::vector<expr_uptr> arg;
         arg.push_back(m_transformableExpressions[istr.destination]->clone());
         ast::function_type fake_call_type = ast::function_type{
-            std::make_shared<ast::full_type>(ast::make_type_from_prim(ast::primitive_kind::U64)), 
+            std::make_shared<ast::full_type>(ast::make_type_from_prim(ast::primitive_kind::U64)),
             { std::make_pair(std::string("index"), std::make_shared<ast::full_type>(ast::make_type_from_prim(ast::primitive_kind::U64))) }
         };
         auto callee = std::make_unique<ast::identifier>("symbol_table_load");
@@ -578,7 +578,7 @@ namespace dconstruct::dcompiler {
                     if (symbol_table.get<p64>(istr.operand1) >= (p64)(m_file.m_strings.m_ptr)) {
                         generated_expression = std::make_unique<ast::literal>(symbol_table.get<const char*>(istr.operand1));
                     } else {
-                        generated_expression = std::make_unique<ast::literal>("");
+                        generated_expression = std::make_unique<ast::literal>("[DATA POINTER]");
                     }
                     break;
                 }
@@ -604,7 +604,7 @@ namespace dconstruct::dcompiler {
                     const auto& type = m_disassembly.m_stackFrame.m_symbolTable.m_types[istr.operand1];
                     if (!std::holds_alternative<ast::function_type>(type)) {
                         generated_expression = std::move(lit);
-                        generated_expression->set_type(type);
+                        generated_expression->set_type(ast::ptr_type{});
                     } else {
                         m_transformableExpressions[istr.destination] = std::move(lit);
                         m_transformableExpressions[istr.destination]->set_type(type);

@@ -56,7 +56,7 @@ namespace dconstruct::testing {
     }
 
     [[nodiscard]] static decomp_result run_decompilation(decomp_case test) {
-        static SIDBase sidbase = *SIDBase::from_binary(DECOMP_FIXTURE_DIR + "test_sidbase.bin");
+        static SIDBase sidbase = *SIDBase::from_binary(executable_relative_sidbase());
         BinaryFile file = *BinaryFile::from_path(DECOMP_FIXTURE_DIR + "dummy.bin");
 
         ast::function_to_mapped_vars scopes;
@@ -94,7 +94,9 @@ namespace dconstruct::testing {
             sizeof(Instruction),
             game_type::T2R,
             sidbase,
-            file.m_sidCache
+            file.m_sidCache,
+            false,
+            file.m_strings
         );
 
         dcompiler::decomp_function decomp{

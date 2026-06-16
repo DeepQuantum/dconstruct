@@ -185,6 +185,8 @@ void decomp_file(
         std::terminate();
     }
 
+    //std::println(stderr, "{}", inpath.string());
+
     auto& file = *file_res;
 
     if (game != dconstruct::game_type::UC4 && !edits.empty()) {
@@ -229,6 +231,7 @@ void decomp_file(
         }
 
         for (const auto& func : funcs) {
+            //std::println(stderr, "{}", func->get_id());
             std::optional<std::filesystem::path> graph_path = std::nullopt;
             if (write_graphs) {
                 auto graph_dir = std::filesystem::path(out_decomp_filename).replace_extension("").concat("_graphs");
@@ -308,6 +311,7 @@ void decompile_multiple(
     }
 
     std::vector<std::filesystem::path> filepaths;
+
 
     for (const auto& entry : std::filesystem::recursive_directory_iterator(in)) {
         if (entry.path().extension() != ".bin") {

@@ -83,7 +83,8 @@ namespace dconstruct {
             const game_type game,
             const SIDBase& sidbase,
             std::map<sid64, std::string>& sidcache,
-            const bool is_script_function = false
+            const bool is_script_function,
+            const location& strings_offset
         );
 
         [[nodiscard]] const std::vector<const function_disassembly*> get_all_functions() noexcept;
@@ -125,7 +126,7 @@ namespace dconstruct {
         [[nodiscard]] std::optional<ast::variable_declaration> insert_variable(const SsDeclaration* var);
         [[nodiscard]] ast::state_script_block insert_on_block(const SsOnBlock* block, state_script_function_id& state_name);
         static void set_register_types(Register&, Register&, const ast::full_type type);
-        static void process_instruction(const u32, function_disassembly&, const u64, const game_type, const SIDBase&, std::map<sid64, std::string>&);
+        static void process_instruction(const u32, function_disassembly&, const u64, const game_type, const SIDBase&, std::map<sid64, std::string>&, const location);
         [[nodiscard]] u32 get_offset(const location) const noexcept;
         [[nodiscard]] u32 get_offset(const void*) const noexcept;
         [[nodiscard]] static bool pointer_gets_called(const u32, const u32, const function_disassembly&);

@@ -34,6 +34,8 @@ namespace dconstruct::compilation {
         std::vector<std::byte> m_rawData;
         std::vector<u64> m_stringOffsets;
         std::vector<u64> m_absoluteOffsets;
+        std::vector<u64> m_targetPointerOffsets;
+        u64 m_targetPointerValueOffset = 0;
         std::vector<bool> m_relocTable;
 
         u64 m_byteOffset = 0;

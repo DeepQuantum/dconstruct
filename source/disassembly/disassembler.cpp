@@ -5,6 +5,7 @@
 #include <functional>
 #include <sstream>
 #include <iostream>
+#include <print>
 
 namespace dconstruct {
 
@@ -833,6 +834,7 @@ namespace dconstruct {
                 SsLambda* ss_lambda = &track_ptr->m_pSsLambda[j];
                 std::shared_ptr function = create_function_disassembly(ss_lambda->m_pScriptLambda, function_name, true);
                 function->m_originalOffset = get_offset(ss_lambda->m_pScriptLambda);
+                function->m_stateScriptLambdaPointerOffset = get_offset(&ss_lambda->m_pScriptLambda);
                 lambdas.push_back(function);
                 m_functions.push_back(function);
             }
@@ -939,7 +941,7 @@ namespace dconstruct {
 
         for (u64 i = 0; i < instruction_count; ++i) {
             const p64 offset = get_offset(reinterpret_cast<const void*>(func->m_lines[i].m_globalPointer + func->m_lines[i].m_location));
-            process_instruction(i, *func, offset, m_game, *m_sidbase, m_currentFile->m_sidCache);
+            process_instruction(i, *func, offset, m_game, *m_sidbase, m_currentFile->m_sidCache, m_currentFile->m_strings);
             if (counting_args) {
                 if (func->m_lines[i].m_instruction.operand1 >= ARGUMENT_REGISTERS_IDX) {
                     func->m_stackFrame.m_registerArgs.push_back(std::monostate());
@@ -962,7 +964,8 @@ namespace dconstruct {
         const game_type game,
         const SIDBase& sidbase,
         std::map<sid64, std::string>& sidcache,
-        const bool is_script_function
+        const bool is_script_function,
+        const location& strings_offset
     ) {
         std::vector<function_disassembly_line> lines;
         lines.reserve(num_instructions);
@@ -982,7 +985,7 @@ namespace dconstruct {
 
         for (u64 i = 0; i < num_instructions; ++i) {
             const u64 offset = instruction_base_offset + i * instruction_stride;
-            process_instruction(i, *func, offset, game, sidbase, sidcache);
+            process_instruction(i, *func, offset, game, sidbase, sidcache, strings_offset);
             if (counting_args) {
                 if (func->m_lines[i].m_instruction.operand1 >= ARGUMENT_REGISTERS_IDX) {
                     func->m_stackFrame.m_registerArgs.push_back(std::monostate());
@@ -1016,7 +1019,8 @@ namespace dconstruct {
         const u32 disassembly_text_size,
         char* interpreted,
         const u32 interpreted_buffer_size,
-        const char* type_str) {
+        const char* type_str
+    ) {
         std::snprintf(varying, disassembly_text_size, "r%d, %d", dest, op1);
         const T value = frame.m_symbolTable.get<T>(op1);
         const auto new_type = make_type_from_prim(kind);
@@ -1061,7 +1065,8 @@ namespace dconstruct {
         const u32 interpreted_buffer_size,
         const char* type_format,
         const char* op1_str,
-        const char* op2_str) {
+        const char* op2_str
+    ) {
         frame[dest].m_type = ast::ptr_type{kind};
         frame[dest].m_value = Register::UNKNOWN_VAL;
         std::snprintf(varying, disassembly_text_size, "r%d, [r%d], r%d", dest, op1, op2);
@@ -1078,7 +1083,15 @@ namespace dconstruct {
         }
     }
 
-    void Disassembler::process_instruction(const u32 istr_idx, function_disassembly& fn, const u64 offset, const game_type game, const SIDBase& sidbase, std::map<sid64, std::string>& sidcache) {
+    void Disassembler::process_instruction(
+        const u32 istr_idx,
+        function_disassembly& fn,
+        const u64 offset,
+        const game_type game,
+        const SIDBase& sidbase,
+        std::map<sid64, std::string>& sidcache,
+        const location string_location
+    ) {
         function_disassembly_line& line = fn.m_lines[istr_idx];
         StackFrame& frame = fn.m_stackFrame;
 
@@ -1296,7 +1309,7 @@ namespace dconstruct {
                     table_entry = existing_type;
                     frame[dest].m_type = existing_type;
                 } else {
-                    table_entry = ast::ptr_type{};
+                    table_entry = ast::make_type_from_prim(ast::primitive_kind::SID);
                     frame[dest].m_type = ast::ptr_type{};
                     frame[dest].m_pointerOffset = 0;
                 }
@@ -1581,7 +1594,16 @@ namespace dconstruct {
                 break;
             }
             case Opcode::LoadStaticPointerImm: {
-                load_static_imm<p64, ast::primitive_kind::STRING>(dest, op1, frame, table_entry, varying, disassembly_text_size, interpreted, interpreted_buffer_size, "r%d = ST[%d] -> \"%s\"");
+                if (location{frame.m_symbolTable.get<const std::byte*>(op1)} >= string_location) [[likely]] {
+                    load_static_imm<p64, ast::primitive_kind::STRING>(dest, op1, frame, table_entry, varying, disassembly_text_size, interpreted, interpreted_buffer_size, "r%d = ST[%d] -> \"%s\"");
+                } else [[unlikely]] {
+                    std::snprintf(varying, disassembly_text_size, "r%d, %d", dest, op1);
+                    table_entry = ast::ptr_type{};
+                    frame[dest].m_fromSymbolTable = op1;
+                    frame[dest].m_type = ast::ptr_type{};
+                    frame[dest].m_value = frame.m_symbolTable.get<p64>(op1);
+                    std::snprintf(interpreted, interpreted_buffer_size, "r%d = ST[%d] -> PTR @ %llu", dest, op1, frame[dest].m_value);
+                }
                 break;
             }
             case Opcode::LoadStaticI64Imm: {
@@ -1760,7 +1782,8 @@ namespace dconstruct {
                     m_game,
                     *m_sidbase,
                     m_currentFile->m_sidCache,
-                    false
+                    false,
+                    m_currentFile->m_strings
                 );
                 m_functions.push_back(std::move(function_disassembly));
             }

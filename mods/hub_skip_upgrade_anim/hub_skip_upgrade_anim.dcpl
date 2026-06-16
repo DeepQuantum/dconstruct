@@ -3,29 +3,12 @@
 @mod "hub_skip_upgrade_anim"
 
 using #wait-for as far (symbol) -> u0;
-using #interactable-get-def-id as far (symbol) -> symbol;
-using #set-animation-phase as far (symbol, f32, u16, u16) -> symbol;
+using #set-animation-speed as far (symbol, f32, u16, u16) -> symbol;
+using #wait-one-frame as far () -> u0;
+using #set-low-health-screen-effect-fade-request as far (f32, f32) -> u0;
+using #inventory-item-add-quantity as near (symbol, u64) -> u0;
 
-// ss-workbench drives the gun-upgrade "assembling" sequence from its apply-upgrade
-// state. The actual upgrade work is spread across ~8 parallel tracks (apply-upgrade,
-// mag, upgrade-mesh, bullets, weapon-strap, ui, attach, ...) and every one of them is
-// gated on wait-until-anim-phase(player, <assemble-anim>, ...) -- i.e. the upgrade is
-// choreographed to the player assemble animation's timeline. You therefore cannot just
-// delete the animation; the apply tracks would hang on their phase waits.
-//
-// Instead we replace apply-upgrade@start@apply-upgrade@0 (vanilla: just
-// `wait-for(curr-state-updated)`). curr-state-updated is signalled at the top of the
-// animation track right after the assemble animation is started, so by the time this
-// lambda runs the player is already playing the assemble anim. For the No Return hub
-// theater workbench ONLY (interact-workbench-rogue-hub-theater), we snap that animation
-// straight to its end frame: every phase-gated apply track immediately sees phase >= its
-// target and fires the same frame, so the upgrade applies fully but instantly with no
-// visible assembling animation. Every other workbench (main game + in-encounter rogue
-// benches) takes the false branch and keeps the vanilla animation untouched.
-u0 #apply-upgrade@start@apply-upgrade@0() {
-    >> "here";
-    #wait-for(#curr-state-updated);
-    if (#interactable-get-def-id(#self) == #interact-workbench-rogue-hub-theater) {
-        #set-animation-phase(#player, 1.0, 1, 0)!exe;
-    }
+u0 #workbench-enter@start@screen-effects@0() {
+    #inventory-item-add-quantity(#parts, 1000);
+    #set-low-health-screen-effect-fade-request(0.00, 5.00);
 }

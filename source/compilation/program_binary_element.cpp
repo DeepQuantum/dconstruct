@@ -8,20 +8,6 @@ namespace dconstruct::compilation {
     }
 
     void program_binary_element::insert_into_reloctable(const u8 bits, const u64 num_bits) noexcept {
-        // const u8 bit_space_remaining = (8 - m_bitOffset % 8);
-        // if (bit_space_remaining >= num_bits) {
-        //     m_relocTable[m_byteOffset] |= bits << m_bitOffset;
-        //     m_bitOffset += num_bits;
-        //     assert(m_bitOffset <= 8);
-        //     if (m_bitOffset == 8) {
-        //         m_bitOffset = 0;
-        //         m_byteOffset++;
-        //     }
-        // } else {
-        //     m_relocTable[m_byteOffset++] |= bits << m_bitOffset;
-        //     m_relocTable[m_byteOffset] |= bits >> bit_space_remaining;
-        //     m_bitOffset = num_bits - bit_space_remaining;
-        // }
         for (u64 i = 0; i < num_bits; ++i) {
             m_relocTable.push_back((bits >> i) & 0x1);
         }

@@ -9,7 +9,7 @@
 namespace dconstruct::testing {
 
     static const std::filesystem::path TEST_ROOT = DCONSTRUCT_TEST_ROOT;
-    static SIDBase base = *SIDBase::from_binary(TEST_ROOT / "fixtures" / "dc" / "test_sidbase.bin");
+    static SIDBase base = *SIDBase::from_binary(executable_relative_sidbase());
 
     TEST(BINARYFILE, ExpandStringTable) {
         BinaryFile file = *BinaryFile::from_path(TEST_ROOT / "fixtures" / "dc" / "accessibility-script-funcs.bin");
@@ -106,8 +106,6 @@ namespace dconstruct::testing {
                         using T = std::decay_t<decltype(type)>;
                         if constexpr (std::is_same_v<T, ast::primitive_type>) {
                             return type.m_type == ast::primitive_kind::STRING ? compilation::function_context::SYMBOL_TABLE_POINTER_KIND::STRING : compilation::function_context::SYMBOL_TABLE_POINTER_KIND::NONE;
-                        } else if constexpr (std::is_same_v<T, ast::ptr_type>) {
-                            return compilation::function_context::SYMBOL_TABLE_POINTER_KIND::GENERAL;
                         } else {
                             return compilation::function_context::SYMBOL_TABLE_POINTER_KIND::NONE;
                         }

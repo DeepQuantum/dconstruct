@@ -150,6 +150,15 @@ namespace dconstruct::compilation {
             }
 
             bool repointed = false;
+            for (const u64 target_pointer_offset : element.m_targetPointerOffsets) {
+                if (target_pointer_offset % SLOT_SIZE != 0 || target_pointer_offset + SLOT_SIZE > old_strings_start) {
+                    return std::unexpected{std::format("target pointer offset {:#x} doesn't lie on an aligned slot in the original data region", target_pointer_offset)};
+                }
+                write(out.get(), target_pointer_offset, base + element.m_targetPointerValueOffset);
+                set_reloc_bit(new_reloc, target_pointer_offset / SLOT_SIZE);
+                repointed = true;
+            }
+
             for (u32 entry_index = 0; entry_index < num_entries; ++entry_index) {
                 const u64 entry_offset = entry_table_offset + entry_index * sizeof(Entry);
                 if (read_u64(out.get(), entry_offset + offsetof(Entry, m_nameID)) != element.m_entry.m_nameID) {

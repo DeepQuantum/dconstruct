@@ -338,7 +338,9 @@ void debugger::request_continue() {
         sizeof(Instruction),
         game_type::T2R,
         *m_sidbase,
-        m_sidCache
+        m_sidCache,
+        false,
+        location(nullptr)
     );
 
     static const char empty_debugger_string[] = "";

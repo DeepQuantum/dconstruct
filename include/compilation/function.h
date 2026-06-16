@@ -17,7 +17,6 @@ namespace dconstruct::compilation {
         enum class SYMBOL_TABLE_POINTER_KIND {
             NONE,
             STRING,
-            GENERAL,
             ABSOLUTE,
         };
 
