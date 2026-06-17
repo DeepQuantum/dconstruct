@@ -29,6 +29,12 @@ namespace dconstruct {
         [[nodiscard]] const char* lookup(const sid32 hash) const noexcept;
         [[nodiscard]] const char* lookup(const sid64 hash, std::map<sid64, std::string>& cache) const;
         [[nodiscard]] const char* lookup(const sid32 hash, std::map<sid64, std::string>& cache) const;
+        const std::vector<std::string>& acquire_strings() noexcept;
+
+        [[nodiscard]] DC_ALWAYS_INLINE const std::vector<std::string>& get_acquired_strings() const noexcept {
+            return m_acquiredStrings;
+        }
+
         sid64 m_lowestSid;
         sid64 m_highestSid;
 
@@ -37,5 +43,8 @@ namespace dconstruct {
         std::unique_ptr<std::byte[]> m_sidbytes;
         SIDBaseEntry* m_entries;
         std::size_t m_byteSize;
+
+        // for when we need to actually permanently own the strings in the sidbase.
+        std::vector<std::string> m_acquiredStrings;
     };
 }

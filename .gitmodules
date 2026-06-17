@@ -7,3 +7,6 @@
 [submodule "source/qui"]
 	path = source/qui
 	url = https://github.com/DeepQuantum/qui
+[submodule "source/lsp-framework"]
+	path = source/lsp-framework
+	url = https://github.com/leon-bckl/lsp-framework

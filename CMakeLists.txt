@@ -385,3 +385,55 @@ target_compile_options(llvm_transpile PRIVATE
 target_link_options(llvm_transpile PRIVATE
     $<$<CONFIG:Release>:/LTCG>
 )
+
+set(LSP_INSTALL OFF CACHE BOOL "" FORCE)
+add_subdirectory(${SOURCE_DIR}/lsp-framework EXCLUDE_FROM_ALL)
+
+add_executable(dcclsp
+    ${SOURCE_DIR}/dcclsp/main.cpp
+    ${SOURCE_DIR}/dcclsp/server.cpp
+    ${SOURCE_DIR}/dcclsp/sidbase_lookup.cpp
+)
+
+target_link_libraries(dcclsp PRIVATE
+    dconstruct_lib
+    lsp
+)
+
+target_include_directories(dcclsp PRIVATE
+    ${SOURCE_DIR}/qui/source
+    ${SOURCE_DIR}/qui/source/rapidfuzz-cpp
+)
+
+stage_sidbase_next_to(dcclsp)
+add_dependencies(dcclsp generate_buildinfo)
+
+target_compile_options(dcclsp PRIVATE
+    $<$<CONFIG:Release>:/GL>
+)
+
+target_link_options(dcclsp PRIVATE
+    $<$<CONFIG:Release>:/LTCG>
+)
+
+add_executable(dcclsp_test
+    ${CMAKE_CURRENT_TEST_DIR}/cpp/dcclsp_test.cpp
+    ${SOURCE_DIR}/dcclsp/server.cpp
+    ${SOURCE_DIR}/dcclsp/sidbase_lookup.cpp
+)
+
+
+target_link_libraries(dcclsp_test PRIVATE
+    dconstruct_lib
+    lsp
+    GTest::gtest_main
+)
+
+target_include_directories(dcclsp_test PRIVATE
+    ${SOURCE_DIR}/qui/source
+    ${SOURCE_DIR}/qui/source/rapidfuzz-cpp
+)
+
+add_dependencies(dcclsp_test generate_buildinfo)
+
+gtest_discover_tests(dcclsp_test WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")

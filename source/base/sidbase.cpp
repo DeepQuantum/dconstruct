@@ -1,4 +1,5 @@
 #include "sidbase.h"
+#include "base.h"
 #include <fstream>
 #include <filesystem>
 #include <iostream>
@@ -128,5 +129,14 @@ namespace dconstruct {
             return cache.emplace(hash, hash_string).first->second.c_str();
         }
         return cache.emplace(hash, int_to_string_id<sid32>(hash)).first->second.c_str();
+    }
+
+    [[nodiscard]] const std::vector<std::string>& SIDBase::acquire_strings() noexcept {
+        m_acquiredStrings.reserve(m_numEntries);
+        for (u64 i = 0; i < m_numEntries; ++i) {
+            const SIDBaseEntry& entry = m_entries[i];
+            m_acquiredStrings.emplace_back(reinterpret_cast<const char*>(&m_sidbytes[entry.offset]));
+        }
+        return m_acquiredStrings;
     }
 }
