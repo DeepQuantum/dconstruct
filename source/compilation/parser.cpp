@@ -1,5 +1,6 @@
 
 #include "ast/function_definition.h"
+#include "ast/primary_expressions/struct_access.h"
 #include "compilation/dc_parser.h"
 #include <memory>
 #include <variant>
@@ -194,11 +195,16 @@ namespace dconstruct::compilation {
     }
 
     [[nodiscard]] std::optional<ast::full_type> Parser::peek_type() {
-        if (!check(token_type::IDENTIFIER)) {
+        std::string type_name;
+
+        if (check(token_type::IDENTIFIER)) {
+            type_name = peek().m_lexeme;
+        } else if (check(token_type::SID)) {
+            type_name = peek().m_lexeme.substr(1, peek().m_lexeme.size() - 1);
+        } else {
             return match_function_type();
         }
 
-        const std::string type_name = peek().m_lexeme;
         if (!m_knownTypes.contains(type_name)) {
             return std::nullopt;
         }
@@ -1048,7 +1054,7 @@ namespace dconstruct::compilation {
                 expr = std::make_unique<ast::post_arithmetic_expression>(previous(), std::move(expr));
             } else if (match(token_type::LEFT_SQUARE)) {
                 expr = finish_subscript(std::move(expr));
-            } else if (match(token_type::DOT)) {
+            } else if (match(token_type::ARROW)) {
                 expr = finish_struct_access(std::move(expr));
             } else {
                 break;
@@ -1087,7 +1093,7 @@ namespace dconstruct::compilation {
         return nullptr;
     }
 
-    [[nodiscard]] expr_uptr Parser::finish_struct_access(expr_uptr&& lhs) {
+    [[nodiscard]] std::unique_ptr<ast::struct_access> Parser::finish_struct_access(expr_uptr&& lhs) {
         const token* member_name = consume(token_type::IDENTIFIER, "expected struct member name after '.'");
         if (!member_name) {
             return nullptr;

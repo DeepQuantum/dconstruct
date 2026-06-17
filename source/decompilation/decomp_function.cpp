@@ -1393,7 +1393,9 @@ namespace dconstruct::dcompiler {
 
     template <ast::primitive_kind kind>
     [[nodiscard]] expr_uptr decomp_function::make_store(const Instruction& istr) {
-        auto lhs = std::make_unique<ast::dereference_expr>(make_cast<u64>(istr, ast::ptr_type{kind}));
+        Instruction adjusted_instruction = istr;
+        adjusted_instruction.destination = istr.operand1;
+        auto lhs = std::make_unique<ast::dereference_expr>(make_cast<u64>(adjusted_instruction, ast::ptr_type{kind}));
         auto rhs = m_transformableExpressions[istr.operand2]->clone();
         auto res = std::make_unique<ast::assign_expr>(std::move(lhs), rhs->clone());
         append_to_current_block(res->clone());

@@ -84,7 +84,7 @@ namespace dconstruct::compilation {
         [[nodiscard]] std::optional<std::unique_ptr<ast::cast_expr>> make_cast();
         [[nodiscard]] std::unique_ptr<ast::call_expr> finish_call(expr_uptr&& expr);
         [[nodiscard]] std::unique_ptr<ast::subscript_expr> finish_subscript(expr_uptr&& expr);
-        [[nodiscard]] expr_uptr finish_struct_access(expr_uptr&& expr);
+        [[nodiscard]] std::unique_ptr<ast::struct_access> finish_struct_access(expr_uptr&& expr);
         [[nodiscard]] expr_uptr make_enum_access(const token& enum_name);
         [[nodiscard]] std::optional<ast::struct_type> make_struct_type();
         [[nodiscard]] std::optional<std::unique_ptr<ast::using_declaration>> make_using_declaration();

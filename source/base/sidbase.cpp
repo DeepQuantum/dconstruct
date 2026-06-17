@@ -4,6 +4,7 @@
 #include <filesystem>
 #include <iostream>
 #include <cstring>
+#include <format>
 
 namespace dconstruct {
 
@@ -11,7 +12,7 @@ namespace dconstruct {
         std::ifstream sidfile(path, std::ios::binary);
 
         if (!sidfile.is_open()) {
-            return std::unexpected{std::string("couldn't open sidbase at path \'") + path.string() + "'\n"};
+            return std::unexpected{std::format("couldn't open sidbase at path \'{}\'", path.string())};
         }
 
         std::size_t fsize = std::filesystem::file_size(path);
@@ -26,7 +27,7 @@ namespace dconstruct {
         auto entries = reinterpret_cast<SIDBaseEntry*>(temp_buffer + sizeof(u64));
         auto bytes = std::unique_ptr<std::byte[]>(temp_buffer);
         const sid64 lowest = entries[0].hash;
-        const sid64 highest = entries[num_entries - 1 - sizeof(u64)].hash;
+        const sid64 highest = entries[num_entries - 1].hash;
 
         return SIDBase{num_entries, std::move(bytes), entries, lowest, highest, fsize};
     }

@@ -28,7 +28,7 @@ namespace dconstruct::ast {
         return *m_expression == *rhs_ptr->m_expression;
     }
 
-    [[nodisarc]] std::unique_ptr<statement> expression_stmt::clone() const noexcept {
+    [[nodiscard]] std::unique_ptr<statement> expression_stmt::clone() const noexcept {
         return std::make_unique<expression_stmt>(m_expression->clone());
     }
 
