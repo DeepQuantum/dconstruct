@@ -7,6 +7,7 @@
 #include <memory>
 #include <string>
 #include <utility>
+#include <variant>
 #include <vector>
 
 namespace dconstruct::dcplsp {
@@ -17,7 +18,7 @@ namespace dconstruct::dcplsp {
             item.languageId = "dcpl";
             item.version = 1;
             item.text = std::move(text);
-            s.m_documents[uri.data()] = std::move(item);
+            s.m_documents[std::string(uri.data())] = std::move(item);
 
             lsp::CompletionParams params;
             params.textDocument.uri = uri;
@@ -173,6 +174,18 @@ namespace dconstruct::testing {
         return result.get<lsp::CompletionList>().items.size();
     }
 
+    static const lsp::CompletionItem* find_item(lsp::requests::TextDocument_Completion::Result& result, const std::string& label) {
+        if (result.isNull() || !result.holdsAlternative<lsp::CompletionList>()) {
+            return nullptr;
+        }
+        for (const auto& item : result.get<lsp::CompletionList>().items) {
+            if (item.label == label) {
+                return &item;
+            }
+        }
+        return nullptr;
+    }
+
     TEST(DCPLSP, ExtractsNeedleAtDocumentEnd) {
         dcplsp::server server{ make_sidbase({ { 1, "player-health" } }) };
         const lsp::Uri uri = lsp::Uri::parse("file:///a.dcpl");
@@ -215,7 +228,38 @@ namespace dconstruct::testing {
         auto result = dcplsp::server_test_access::complete(server, uri, " #foo bar", 0, 5);
 
         EXPECT_FALSE(dcplsp::server_test_access::errored(server));
-        EXPECT_TRUE(item_count(result) == 0);
+        EXPECT_TRUE(has_label(result, "foo"));
+    }
+
+    TEST(DCPLSP, NeedleAtEndOfNonFinalLineExcludesNewline) {
+        dcplsp::server server{ make_sidbase({ { 1, "foo" } }) };
+        const lsp::Uri uri = lsp::Uri::parse("file:///a.dcpl");
+        auto result = dcplsp::server_test_access::complete(server, uri, "#foo\nbar", 0, 4);
+
+        EXPECT_FALSE(dcplsp::server_test_access::errored(server));
+        EXPECT_TRUE(has_label(result, "foo"));
+    }
+
+    TEST(DCPLSP, CompletionReplacesTypedNeedleRange) {
+        dcplsp::server server{ make_sidbase({ { 1, "gas-mask-mat" } }) };
+        const lsp::Uri uri = lsp::Uri::parse("file:///a.dcpl");
+        auto result = dcplsp::server_test_access::complete(server, uri, "#gas-mask-", 0, 10);
+
+        EXPECT_FALSE(dcplsp::server_test_access::errored(server));
+        const lsp::CompletionItem* item = find_item(result, "gas-mask-mat");
+        ASSERT_NE(item, nullptr);
+
+        ASSERT_TRUE(item->textEdit.has_value());
+        ASSERT_TRUE(std::holds_alternative<lsp::TextEdit>(*item->textEdit));
+        const lsp::TextEdit& edit = std::get<lsp::TextEdit>(*item->textEdit);
+        EXPECT_EQ(edit.range.start.line, 0u);
+        EXPECT_EQ(edit.range.start.character, 1u);
+        EXPECT_EQ(edit.range.end.line, 0u);
+        EXPECT_EQ(edit.range.end.character, 10u);
+        EXPECT_EQ(edit.newText, "gas-mask-mat");
+
+        ASSERT_TRUE(item->filterText.has_value());
+        EXPECT_EQ(*item->filterText, "gas-mask-mat");
     }
 
     TEST(DCPLSP, HashAtDocumentStart) {

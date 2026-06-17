@@ -6,6 +6,7 @@
 #include <string_view>
 #include <print>
 #include <chrono>
+#include <ostream>
 
 using namespace std::string_view_literals;
 
@@ -13,8 +14,13 @@ namespace dconstruct::dcplsp {
 
     template<typename ...Args>
     void server::log(std::format_string<Args...> fmt, Args&& ...args) const {
+        std::ofstream log("dcplsp.log", std::ios::app);
+
         const auto now = std::chrono::floor<std::chrono::seconds>(std::chrono::system_clock::now());
         std::println(stderr, "[{:%Y-%m-%d %H:%M:%S}] {}", now, std::format(fmt, std::forward<Args>(args)...));
+        std::println(log, "[{:%Y-%m-%d %H:%M:%S}] {}", now, std::format(fmt, std::forward<Args>(args)...));
+
+        log.flush();
     }
 
     void server::init_callbacks() {
@@ -47,14 +53,14 @@ namespace dconstruct::dcplsp {
             using noti = lsp::notifications::TextDocument_DidOpen;
             m_messageHandler.add<noti>([this](noti::Params&& params) -> void {
                 log("opened document");
-                m_documents[params.textDocument.uri.data()] = std::move(params.textDocument);
+                m_documents[std::string(params.textDocument.uri.data())] = std::move(params.textDocument);
             });
         }
 
         {
             using noti = lsp::notifications::TextDocument_DidChange;
             m_messageHandler.add<noti>([this](noti::Params&& params) {
-                log("changed document document");
+                log("changed document");
                 this->on_document_did_change(std::move(params));
             });
         }
@@ -106,7 +112,7 @@ namespace dconstruct::dcplsp {
     }
 
     void server::on_document_did_change(lsp::notifications::TextDocument_DidChange::Params&& params) {
-        lsp::TextDocumentItem& doc = m_documents.at(params.textDocument.uri.data());
+        lsp::TextDocumentItem& doc = m_documents.at(std::string(params.textDocument.uri.data()));
         doc.version = params.textDocument.version;
 
         for (const auto& change : params.contentChanges) {
@@ -124,7 +130,7 @@ namespace dconstruct::dcplsp {
     }
 
     [[nodiscard]] lsp::requests::TextDocument_Completion::Result server::finish_hash_completion(lsp::requests::TextDocument_Completion::Params&& params) {
-        const lsp::TextDocumentItem& doc = m_documents.at(params.textDocument.uri.data());
+        const lsp::TextDocumentItem& doc = m_documents.at(std::string(params.textDocument.uri.data()));
         const u64 completion_pos = position_to_string_index(doc.text, params.position);
 
         if (completion_pos > doc.text.size()) {
@@ -142,9 +148,19 @@ namespace dconstruct::dcplsp {
             return {};
         }
 
-        std::string needle = doc.text.substr(hash + 1, completion_pos - hash);
+        std::string needle = doc.text.substr(hash + 1, completion_pos - hash - 1);
         log("needle: {}", needle);
         auto matches = get_sidbase_matches(needle, m_sidbase);
+
+        const lsp::Range replace_range {
+            .start = lsp::Position{ .line = params.position.line, .character = params.position.character - static_cast<lsp::uint>(needle.size()) },
+            .end   = params.position,
+        };
+        for (lsp::CompletionItem& item : matches.items) {
+            item.filterText = item.label;
+            item.textEdit = lsp::TextEdit{ .range = replace_range, .newText = item.label };
+        }
+
         log("found {} matches", matches.items.size());
         return matches;
     }

@@ -1,0 +1,9 @@
+id = "dcpl"
+name = "DCPL"
+version = "0.0.1"
+schema_version = 1
+description = "DCPL language support (dconstruct)"
+
+[language_servers.dcplsp]
+name = "dcpl language server"
+language = "DCPL"

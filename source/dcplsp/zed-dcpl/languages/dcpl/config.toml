@@ -1,0 +1,3 @@
+name = "DCPL"
+path_suffixes = ["dcpl"]
+completion_query_characters = ["-", "*", "+", ":"]

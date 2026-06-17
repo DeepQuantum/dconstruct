@@ -1,0 +1,166 @@
+@game "C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/"
+@mod "gas-mask-toggle"
+
+@include "keycodes.dcpl"
+
+@add_pak level-name sp-all {
+    actor gas-mask-abby
+    actor gas-mask-base
+    actor gas-mask-default
+    actor gas-mask-dina
+    actor gas-mask-ellie
+    actor gas-mask-hang
+    actor gas-mask-standard
+}
+
+using #set-gas-mask-setting-id as far (u64, u64) -> u64*;
+using #wait-equip-gas-mask as near (u64, u64, u64) -> u64;
+using #wait-remove-gas-mask as near (u64, u64, u64) -> u64;
+using #spawn-gas-mask as near (u64) -> u64;
+using #keyboard-button-pressed? as far (u64) -> bool;
+using #audio-set-gas-mask-flag as far (u64, u64) -> u0;
+using #audio-clear-gas-mask-flag as far (u64) -> u0;
+using #is-rogue-mode? as far () -> bool;
+using #rogue-get-player-character as far () -> u64;
+using #lookup-symbol as far (u64, u64) -> u64*;
+using #get-gas-mask as far (u64) -> u64*;
+using #is-script-running? as near (u64)  -> bool;
+using #spawn-persistent-script as far (string, string, u64) -> u0;
+using #spawn-script as far (string, string, u64, u64) -> u0;
+using #internal-put-on-gas-mask as near (u64, u64) -> u64;
+using #get-gas-mask-setting-id as far (u64) -> u64;
+using #set-visible as far (u64, u64) -> u0;
+using #player-gas-mask-narrative-mode/f as near (u64, u64, u64) -> u0;
+
+#sfx-pistol-beretta-npc
+
+// ellie = 0
+// dina = 2
+// jessie = 7
+// tommy = 5
+// joel = 3
+// abby = 1
+// lev = 4
+u64 get_gas_mask_setup(u64 current_character) {
+    return match (current_character) {
+        0 -> #*ellie-gas-mask-setup*,
+        1 -> #*abby-gas-mask-setup*,
+        2 -> #*dina-gas-mask-setup*,
+        3 -> #*joel-gas-mask-setup*,
+        4 -> #*lev-gas-mask-setup*,
+        else -> null
+    };
+}
+
+statescript #gas-mask-toggle {
+    options {
+        #player
+    }
+    state #tracking {
+        block start {
+            track #main {
+                lambda {
+                    u16 version_major = 2;
+                    u16 version_minor = 0;
+
+                    >> "launched custom gas mask script, version %d.%d" $ version_major, version_minor;
+
+                    u64 current_character = 0;
+                    if (#is-rogue-mode?()) {
+                        >> "in rogue, getting character";
+                        current_character = #rogue-get-player-character();
+                        >> "got character %d" $ current_character;
+                    }
+                    >> "getting gas mask setup...";
+
+                    u64 gas_mask_setup = get_gas_mask_setup(current_character);
+                    >> "got gas mask setup: %p" $ gas_mask_setup;
+                    if (gas_mask_setup == null) {
+                        >> "invalid gas mask setup, defaulting to ellie";
+                        gas_mask_setup = #*ellie-gas-mask-setup*;
+                    }
+
+                    #set-gas-mask-setting-id(#player, gas_mask_setup);
+
+                    u64 gas_mask_setting_id = #get-gas-mask-setting-id(#player);
+                    >> "gas mask setting ptr: %X" $ gas_mask_setting_id;
+
+                    => #wait-keyboard-input;
+                }
+            }
+        }
+    }
+    state #wait-keyboard-input {
+        block update {
+            track #main {
+                lambda {
+                    if (#keyboard-button-pressed?(Keycodes.FUNCTION_2)) {
+                        >> "pressed, moving to custom-put-on-mask";
+                        => #custom-put-on-mask;
+                    }
+                }
+            }
+        }
+    }
+    state #custom-put-on-mask {
+        block start {
+            track #main {
+                lambda {
+
+                    >> "arrived in custom-put-on-mask";
+
+                    if (!#is-script-running?(#ss-gas-mask-material-controller-1)) {
+                        >> "not running";
+                    }
+                    u64 mask = #spawn-gas-mask(#player);
+                    #wait-equip-gas-mask(#player, mask, 0);
+
+                    >> "current mask: %X" $ mask;
+
+                    #audio-set-gas-mask-flag(#player, 0);
+
+                    => #mask-on;
+                }
+            }
+        }
+        block update {
+            track #main {
+                lambda {
+                    #player-gas-mask-narrative-mode/f(1, 0, #*gas-mask-narrative-mode-settings*);
+                }
+            }
+        }
+    }
+    state #mask-on {
+        block update {
+            track #main {
+                lambda {
+                    if (#keyboard-button-pressed?(Keycodes.FUNCTION_2)) {
+                        >> "pressed while mask on, moving to #custom-remove-mask";
+                        => #custom-remove-mask;
+                    }
+                }
+            }
+        }
+    }
+    state #custom-remove-mask {
+        block start {
+            track #main {
+                lambda {
+                    >> "arrived in remove-gas-mask";
+                    #wait-remove-gas-mask(#player, 0, 1);
+                    #audio-clear-gas-mask-flag(#player);
+
+                    => #wait-keyboard-input;
+                }
+            }
+        }
+        block update {
+            track #main {
+                lambda {
+                    #player-gas-mask-narrative-mode/f(1, 0, #*gas-mask-narrative-mode-settings*);
+                }
+            }
+        }
+    }
+}

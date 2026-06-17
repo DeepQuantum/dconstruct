@@ -31,6 +31,10 @@ namespace dconstruct {
         [[nodiscard]] const char* lookup(const sid32 hash, std::map<sid64, std::string>& cache) const;
         const std::vector<std::string>& acquire_strings() noexcept;
 
+        [[nodiscard]] DC_ALWAYS_INLINE const std::vector<std::string>& get_normalized_acquired_strings() const noexcept {
+            return m_normalizedAcquiredStrings;
+        }
+
         [[nodiscard]] DC_ALWAYS_INLINE const std::vector<std::string>& get_acquired_strings() const noexcept {
             return m_acquiredStrings;
         }
@@ -46,5 +50,6 @@ namespace dconstruct {
 
         // for when we need to actually permanently own the strings in the sidbase.
         std::vector<std::string> m_acquiredStrings;
+        std::vector<std::string> m_normalizedAcquiredStrings;
     };
 }

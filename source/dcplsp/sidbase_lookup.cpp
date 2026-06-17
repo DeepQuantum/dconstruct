@@ -12,6 +12,7 @@ namespace dconstruct::dcplsp {
         }
 
         const std::vector<std::string>& choices = sidbase.get_acquired_strings();
+        const std::vector<std::string>& normalized_choices = sidbase.get_normalized_acquired_strings();
 
         std::println(stderr, "choices.size(): {}", choices.size());
 
@@ -19,14 +20,10 @@ namespace dconstruct::dcplsp {
         lsp::Array<lsp::CompletionItem> results;
 
         const std::string normalized_query = qui::fuzzy_normalize(needle);
-        for (std::size_t i = 0; i < choices.size(); ++i) {
-            const std::string normalized_choice = qui::fuzzy_normalize(choices[i]);
-            const std::size_t position = normalized_choice.find(normalized_query);
-            if (i < 10) {
-                std::println(stderr, "query: {} choice: {} pos: {}", normalized_query, normalized_choice, position);
-            }
+        for (u64 i = 0; i < normalized_choices.size() && matches.size() < max_sidbase_matches; ++i) {
+            const std::string normalized_choice = normalized_choices[i];
+            const u64 position = normalized_choice.find(normalized_query);
             if (position != std::string::npos) {
-                std::println(stderr, "found match {}", normalized_choice);
                 matches.push_back({i, static_cast<double>(position)});
             }
         }
@@ -36,7 +33,7 @@ namespace dconstruct::dcplsp {
         });
 
         results.reserve(max_sidbase_matches);
-        for (u64 i = 0; i < max_sidbase_matches && i < matches.size(); ++i) {
+        for (u64 i = 0; i < matches.size(); ++i) {
             results.push_back(lsp::CompletionItem {
                 .label = choices[matches[i].index],
                 .kind = lsp::CompletionItemKind::Constant,

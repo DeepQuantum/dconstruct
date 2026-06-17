@@ -40,7 +40,7 @@ namespace dconstruct::dcplsp {
         lsp::Connection m_connection;
         lsp::MessageHandler m_messageHandler;
         SIDBase m_sidbase;
-        std::unordered_map<std::string_view, lsp::TextDocumentItem> m_documents;
+        std::unordered_map<std::string, lsp::TextDocumentItem> m_documents;
         std::optional<STOP_REASON> m_stopReason;
         std::optional<std::string> m_error = std::nullopt;
         mutable std::ofstream m_logfile;

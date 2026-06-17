@@ -134,10 +134,16 @@ namespace dconstruct {
 
     [[nodiscard]] const std::vector<std::string>& SIDBase::acquire_strings() noexcept {
         m_acquiredStrings.reserve(m_numEntries);
+        m_normalizedAcquiredStrings.reserve(m_numEntries);
         for (u64 i = 0; i < m_numEntries; ++i) {
             const SIDBaseEntry& entry = m_entries[i];
             m_acquiredStrings.emplace_back(reinterpret_cast<const char*>(&m_sidbytes[entry.offset]));
+            m_normalizedAcquiredStrings.push_back(m_acquiredStrings.back());
+            for (char& ch : m_normalizedAcquiredStrings.back()) {
+                ch = std::tolower(ch);
+            }
         }
         return m_acquiredStrings;
     }
+
 }
