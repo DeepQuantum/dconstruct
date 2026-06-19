@@ -159,17 +159,19 @@ namespace dconstruct::compilation {
         compiler_options& options,
         std::unordered_set<std::string>& included_paths,
         std::string& stripped_source,
+        source_file_table& source_files,
         std::vector<source_location>& line_map
     ) noexcept {
         std::istringstream iss(source);
         const std::filesystem::path current_path = canonical_existing_path(source_path);
+        const std::filesystem::path* current_file = source_files.intern(current_path);
         const std::filesystem::path current_dir = current_path.parent_path();
         u32 line_number = 0;
 
         for (std::string raw_line; std::getline(iss, raw_line);) {
             ++line_number;
             const std::string line = normalize_directive_line(std::move(raw_line));
-            const source_location loc{current_path, line_number};
+            const source_location loc{current_file, line_number};
 
             if (!line.starts_with("@")) {
                 stripped_source += line;
@@ -211,7 +213,7 @@ namespace dconstruct::compilation {
                     }
                     ++line_number;
                     const std::string block_line = normalize_directive_line(std::move(raw_block_line));
-                    const source_location block_loc{current_path, line_number};
+                    const source_location block_loc{current_file, line_number};
                     stripped_source += '\n';
                     line_map.push_back(block_loc);
 
@@ -258,7 +260,7 @@ namespace dconstruct::compilation {
 
                 std::stringstream input;
                 input << include_in.rdbuf();
-                if (errmsg err = preprocess_dcpl(input.str(), include_path, options, included_paths, stripped_source, line_map)) {
+                if (errmsg err = preprocess_dcpl(input.str(), include_path, options, included_paths, stripped_source, source_files, line_map)) {
                     return err;
                 }
                 continue;
@@ -291,16 +293,18 @@ namespace dconstruct::compilation {
     [[nodiscard]] resstr<compiler_options> compiler_options::from_dcpl(
         std::string& source,
         const std::filesystem::path& source_path,
+        source_file_table& source_files,
         std::vector<source_location>& line_map
     ) noexcept {
         compiler_options out;
         std::string stripped_source;
         stripped_source.reserve(source.size());
+        source_files.clear();
         line_map.clear();
 
         std::unordered_set<std::string> included_paths;
         included_paths.insert(canonical_existing_path(source_path).string());
-        if (errmsg err = preprocess_dcpl(source, source_path, out, included_paths, stripped_source, line_map)) {
+        if (errmsg err = preprocess_dcpl(source, source_path, out, included_paths, stripped_source, source_files, line_map)) {
             return std::unexpected{std::move(*err)};
         }
         stripped_source.shrink_to_fit();
@@ -331,9 +335,10 @@ namespace dconstruct::compilation {
         const cxxopts::ParseResult& args,
         std::string& source,
         const std::filesystem::path& source_path,
+        source_file_table& source_files,
         std::vector<source_location>& line_map
     ) noexcept {
-        resstr<compiler_options> from_dcpl = compiler_options::from_dcpl(source, source_path, line_map);
+        resstr<compiler_options> from_dcpl = compiler_options::from_dcpl(source, source_path, source_files, line_map);
         if (!from_dcpl) {
             return from_dcpl;
         }
@@ -408,8 +413,9 @@ namespace dconstruct::compilation {
         const cxxopts::ParseResult& args,
         std::string& source
     ) noexcept {
+        source_file_table source_files;
         std::vector<source_location> line_map;
-        return parse(args, source, {}, line_map);
+        return parse(args, source, {}, source_files, line_map);
     }
 
 }

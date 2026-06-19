@@ -1,3 +1,4 @@
+#include "ast/type.h"
 #include "disassembly/custom_structs.h"
 #include <cmath>
 #include "disassembly/disassembler.h"
@@ -415,9 +416,82 @@ namespace dconstruct {
                     } else {
                         append_format("unknown: %llu\n", value_location.get<u64>());
                     }
-                },
-                           type);
+                },type);
             }
+        };
+
+        const auto append_state_script_lambda = [&](const ast::state_script_lambda& lam, const u32 indent) {
+            std::visit([&](const auto& lambda) {
+                using L = std::decay_t<decltype(lambda)>;
+                if constexpr (std::is_same_v<L, std::shared_ptr<function_disassembly>>) {
+                    out.append(indent, ' ');
+                    append_format("lambda %s {\n", lambda->get_id().c_str());
+                    append_function_disassembly(*lambda, indent + indent_per_level);
+                    out.append(indent, ' ');
+                    out += "}\n";
+                } else {
+                    ast::ast_serialization_buffer buffer;
+                    buffer.m_indentWidth = indent_per_level;
+                    buffer.append(lambda);
+                    append_indented_text(buffer.str(), indent);
+                    out += '\n';
+                }
+            }, lam);
+        };
+
+        const auto append_state_script = [&](const ast::state_script& script, const u32 indent) {
+            const u32 i1 = indent + indent_per_level;
+            const u32 i2 = i1 + indent_per_level;
+            const u32 i3 = i2 + indent_per_level;
+            const u32 i4 = i3 + indent_per_level;
+
+            out.append(indent, ' ');
+            append_format("statescript #%s {\n", script.m_name.c_str());
+
+            out.append(i1, ' ');
+            out += "options {\n";
+            for (const auto& opt : script.m_options) {
+                out.append(i2, ' ');
+                out += opt.to_pseudo_c_string();
+                out += '\n';
+            }
+            out.append(i1, ' ');
+            out += "}\n";
+
+            out.append(i1, ' ');
+            out += "declarations {\n";
+            for (const auto& decl : script.m_declarations) {
+                out.append(i2, ' ');
+                out += decl.m_identifier;
+                out += '\n';
+            }
+            out.append(i1, ' ');
+            out += "}\n";
+
+            for (const auto& state : script.m_states) {
+                out.append(i1, ' ');
+                append_format("state %s {\n", state.m_name.c_str());
+                for (const auto& block : state.m_blocks) {
+                    out.append(i2, ' ');
+                    append_format("block %s {\n", block.block_type_to_string().c_str());
+                    for (const auto& track : block.m_tracks) {
+                        out.append(i3, ' ');
+                        append_format("track %s {\n", track.m_name.c_str());
+                        for (const auto& lam : track.m_lambdas) {
+                            append_state_script_lambda(lam, i4);
+                        }
+                        out.append(i3, ' ');
+                        out += "}\n";
+                    }
+                    out.append(i2, ' ');
+                    out += "}\n";
+                }
+                out.append(i1, ' ');
+                out += "}\n";
+            }
+
+            out.append(indent, ' ');
+            out += "}\n";
         };
 
         std::function<void(const disassembled_values_t&, u32)> append_values;
@@ -468,13 +542,7 @@ namespace dconstruct {
             } else if (type_id == SID("state-script")) {
                 for (const auto& value : values) {
                     if (const auto* state_script = std::get_if<const ast::state_script*>(&value)) {
-                        ast::ast_serialization_buffer buffer;
-                        buffer.m_indentWidth = indent_per_level;
-                        buffer.append(**state_script);
-                        append_indented_text(buffer.str(), indent + indent_per_level);
-                        if (out.empty() || out.back() != '\n') {
-                            out += '\n';
-                        }
+                        append_state_script(**state_script, indent + indent_per_level);
                     }
                 }
             } else if (type_id == SID("map") || type_id == SID("map-32") || type_id == SID("render-settings-map") || type_id == SID("hash-table")) {
@@ -514,14 +582,8 @@ namespace dconstruct {
                     out += '\n';
                     append_function_disassembly(*entry, indent + indent_per_level);
                 } else if constexpr (std::is_same_v<T, const ast::state_script*>) {
-                    ast::ast_serialization_buffer buffer;
-                    buffer.m_indentWidth = indent_per_level;
-                    buffer.append(*entry);
                     out += '\n';
-                    append_indented_text(buffer.str(), indent + indent_per_level);
-                    if (out.empty() || out.back() != '\n') {
-                        out += '\n';
-                    }
+                    append_state_script(*entry, indent + indent_per_level);
                 } else if constexpr (std::is_same_v<T, const u8*>) {
                     append_format("u8: %u\n", *entry);
                 } else if constexpr (std::is_same_v<T, const u16*>) {
@@ -1009,71 +1071,6 @@ namespace dconstruct {
         }
     }
 
-    template <typename T, ast::primitive_kind kind>
-    void load_static_imm(
-        const u32 dest,
-        const u32 op1,
-        StackFrame& frame,
-        ast::full_type& table_entry,
-        char* varying,
-        const u32 disassembly_text_size,
-        char* interpreted,
-        const u32 interpreted_buffer_size,
-        const char* type_str
-    ) {
-        std::snprintf(varying, disassembly_text_size, "r%d, %d", dest, op1);
-        const T value = frame.m_symbolTable.get<T>(op1);
-        const auto new_type = make_type_from_prim(kind);
-        frame[dest].m_type = new_type;
-        frame[dest].m_fromSymbolTable = op1;
-        table_entry = new_type;
-        if constexpr (std::is_same_v<f32, T>) {
-            frame[dest].m_value = std::bit_cast<u32>(value);
-        } else {
-            frame[dest].m_value = value;
-        }
-        std::snprintf(interpreted, interpreted_buffer_size, type_str, dest, op1, value);
-    }
-
-    void load_nonstatic(
-        const u32 dest,
-        const u32 op1,
-        StackFrame& frame,
-        char* varying,
-        const u32 disassembly_text_size,
-        ast::primitive_kind kind,
-        char* interpreted,
-        const u32 interpreted_buffer_size,
-        const char* type_format,
-        const char* op1_str) {
-        frame[op1].m_type = ast::ptr_type{kind};
-        std::snprintf(varying, disassembly_text_size, "r%d, [r%d]", dest, op1);
-        frame[dest].m_type = make_type_from_prim(kind);
-        frame[dest].m_value = Register::UNKNOWN_VAL;
-        std::snprintf(interpreted, interpreted_buffer_size, type_format, dest, op1_str);
-    }
-
-    void store_nonstatic(
-        const u32 dest,
-        const u32 op1,
-        const u32 op2,
-        StackFrame& frame,
-        char* varying,
-        const u32 disassembly_text_size,
-        ast::primitive_kind kind,
-        char* interpreted,
-        const u32 interpreted_buffer_size,
-        const char* type_format,
-        const char* op1_str,
-        const char* op2_str
-    ) {
-        frame[dest].m_type = ast::ptr_type{kind};
-        frame[dest].m_value = Register::UNKNOWN_VAL;
-        std::snprintf(varying, disassembly_text_size, "r%d, [r%d], r%d", dest, op1, op2);
-        frame[op1].m_type = make_type_from_prim(kind);
-        std::snprintf(interpreted, interpreted_buffer_size, type_format, dest, op1_str, op2_str);
-    }
-
     void set_symbol_table_type(SymbolTable& symbol_table, const u32 idx, ast::full_type type) {
         if (idx >= symbol_table.m_types.size()) {
             symbol_table.m_types.resize(idx + 1);
@@ -1125,6 +1122,37 @@ namespace dconstruct {
         char op1_str[interpreted_buffer_size] = {0};
         char op2_str[interpreted_buffer_size] = {0};
 
+        auto load_nonstatic = [&](ast::primitive_kind kind, const char* type_format) -> void {
+            frame[op1].m_type = ast::ptr_type{kind};
+            std::snprintf(varying, disassembly_text_size, "r%d, [r%d]", dest, op1);
+            frame[dest].m_type = make_type_from_prim(kind);
+            frame[dest].m_value = Register::UNKNOWN_VAL;
+            std::snprintf(interpreted, interpreted_buffer_size, type_format, dest, op1_str);
+        };
+
+        auto store_nonstatic = [&](ast::primitive_kind kind, const char* type_format) -> void {
+            frame[dest].m_type = ast::ptr_type{kind};
+            frame[dest].m_value = Register::UNKNOWN_VAL;
+            std::snprintf(varying, disassembly_text_size, "r%d, [r%d], r%d", dest, op1, op2);
+            frame[op1].m_type = make_type_from_prim(kind);
+            std::snprintf(interpreted, interpreted_buffer_size, type_format, dest, op1_str, op2_str);
+        };
+
+        auto load_static_imm = [&]<typename T, ast::primitive_kind kind>(const char* type_format) -> void {
+            std::snprintf(varying, disassembly_text_size, "r%d, %d", dest, op1);
+            const T value = frame.m_symbolTable.get<T>(op1);
+            const auto new_type = make_type_from_prim(kind);
+            frame[dest].m_type = new_type;
+            frame[dest].m_fromSymbolTable = op1;
+            table_entry = new_type;
+            if constexpr (std::is_same_v<f32, T>) {
+                frame[dest].m_value = std::bit_cast<u32>(value);
+            } else {
+                frame[dest].m_value = value;
+            }
+            std::snprintf(interpreted, interpreted_buffer_size, type_format, dest, op1, value);
+        };
+
         if (!istr.destination_is_immediate()) {
             frame.to_string(dst_str, interpreted_buffer_size, dest, sidbase.lookup(frame[dest].m_value, sidcache));
             if (!is_unknown(frame[dest].m_type) && frame[dest].m_containsArg) {
@@ -1145,7 +1173,11 @@ namespace dconstruct {
         if (!istr.operand2_is_immediate()) {
             frame.to_string(op2_str, interpreted_buffer_size, op2, sidbase.lookup(frame[op2].m_value, sidcache));
         }
+
+
         const Opcode opcode = istr.opcode;
+
+
         switch (opcode) {
             case Opcode::Return: {
                 std::snprintf(varying, disassembly_text_size, "r%d", dest);
@@ -1228,11 +1260,11 @@ namespace dconstruct {
                 break;
             }
             case Opcode::LoadU32: {
-                load_nonstatic(dest, op1, frame, varying, disassembly_text_size, ast::primitive_kind::U32, interpreted, interpreted_buffer_size, "r%d = *(u32*)%s", op1_str);
+                load_nonstatic(ast::primitive_kind::U32, "r%d = *(u32*)%s");
                 break;
             }
             case Opcode::LoadFloat: {
-                load_nonstatic(dest, op1, frame, varying, disassembly_text_size, ast::primitive_kind::F32, interpreted, interpreted_buffer_size, "r%d = *(f32*)%s", op1_str);
+                load_nonstatic(ast::primitive_kind::F32, "r%d = *(f32*)%s");
                 break;
             }
             case Opcode::LoadPointer: {
@@ -1246,19 +1278,19 @@ namespace dconstruct {
                 break;
             }
             case Opcode::LoadI64: {
-                load_nonstatic(dest, op1, frame, varying, disassembly_text_size, ast::primitive_kind::I64, interpreted, interpreted_buffer_size, "r%d = *(i64*)%s", op1_str);
+                load_nonstatic(ast::primitive_kind::I64, "r%d = *(i64*)%s");
                 break;
             }
             case Opcode::LoadU64: {
-                load_nonstatic(dest, op1, frame, varying, disassembly_text_size, ast::primitive_kind::U64, interpreted, interpreted_buffer_size, "r%d = *(u64*)%s", op1_str);
+                load_nonstatic(ast::primitive_kind::U64, "r%d = *(u64*)%s");
                 break;
             }
             case Opcode::StoreInt: {
-                store_nonstatic(dest, op1, op2, frame, varying, disassembly_text_size, ast::primitive_kind::I32, interpreted, interpreted_buffer_size, "r%d, *(i32*)%s = %s", op1_str, op2_str);
+                store_nonstatic(ast::primitive_kind::I32, "r%d, *(i32*)%s = %s");
                 break;
             }
             case Opcode::StoreFloat: {
-                store_nonstatic(dest, op1, op2, frame, varying, disassembly_text_size, ast::primitive_kind::F32, interpreted, interpreted_buffer_size, "r%d, *(f32*)%s = %s", op1_str, op2_str);
+                store_nonstatic(ast::primitive_kind::F32, "r%d, *(f32*)%s = %s");
                 break;
             }
             case Opcode::StorePointer: {
@@ -1586,16 +1618,16 @@ namespace dconstruct {
                 break;
             }
             case Opcode::LoadStaticI32Imm: {
-                load_static_imm<i32, ast::primitive_kind::I32>(dest, op1, frame, table_entry, varying, disassembly_text_size, interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%d>");
+                load_static_imm.operator()<i32, ast::primitive_kind::I32>("r%d = ST[%d] -> <%d>");
                 break;
             }
             case Opcode::LoadStaticFloatImm: {
-                load_static_imm<f32, ast::primitive_kind::F32>(dest, op1, frame, table_entry, varying, disassembly_text_size, interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%f>");
+                load_static_imm.operator()<f32, ast::primitive_kind::F32>("r%d = ST[%d] -> <%f>");
                 break;
             }
             case Opcode::LoadStaticPointerImm: {
                 if (location{frame.m_symbolTable.get<const std::byte*>(op1)} >= string_location) [[likely]] {
-                    load_static_imm<p64, ast::primitive_kind::STRING>(dest, op1, frame, table_entry, varying, disassembly_text_size, interpreted, interpreted_buffer_size, "r%d = ST[%d] -> \"%s\"");
+                    load_static_imm.operator()<p64, ast::primitive_kind::STRING>("r%d = ST[%d] -> \"%s\"");
                 } else [[unlikely]] {
                     std::snprintf(varying, disassembly_text_size, "r%d, %d", dest, op1);
                     table_entry = ast::ptr_type{};
@@ -1607,7 +1639,7 @@ namespace dconstruct {
                 break;
             }
             case Opcode::LoadStaticI64Imm: {
-                load_static_imm<i64, ast::primitive_kind::I64>(dest, op1, frame, table_entry, varying, disassembly_text_size, interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%lli>");
+                load_static_imm.operator()<i64, ast::primitive_kind::I64>("r%d = ST[%d] -> <%lli>");
                 break;
             }
             case Opcode::LoadStaticU64Imm: {
@@ -1647,72 +1679,72 @@ namespace dconstruct {
                     std::snprintf(interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%s>", dest, op1, dst_str);
                     break;
                 } else {
-                    load_static_imm<u32, ast::primitive_kind::U32>(dest, op1, frame, table_entry, varying, disassembly_text_size, interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%u>");
+                    load_static_imm.operator()<u32, ast::primitive_kind::U32>("r%d = ST[%d] -> <%u>");
                 }
                 break;
             }
             case Opcode::LoadStaticI8Imm: {
-                load_static_imm<i8, ast::primitive_kind::I8>(dest, op1, frame, table_entry, varying, disassembly_text_size, interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%d>");
+                load_static_imm.operator()<i8, ast::primitive_kind::I8>("r%d = ST[%d] -> <%d>");
                 break;
             }
             case Opcode::LoadStaticI16Imm: {
-                load_static_imm<i16, ast::primitive_kind::I16>(dest, op1, frame, table_entry, varying, disassembly_text_size, interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%d>");
+                load_static_imm.operator()<i16, ast::primitive_kind::I16>("r%d = ST[%d] -> <%d>");
                 break;
             }
             case Opcode::LoadStaticU16Imm: {
-                load_static_imm<u16, ast::primitive_kind::U16>(dest, op1, frame, table_entry, varying, disassembly_text_size, interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%u>");
+                load_static_imm.operator()<u16, ast::primitive_kind::U16>("r%d = ST[%d] -> <%u>");
                 break;
             }
             case Opcode::LoadI8: {
-                load_nonstatic(dest, op1, frame, varying, disassembly_text_size, ast::primitive_kind::I8, interpreted, interpreted_buffer_size, "r%d = *(i8*)%s", op1_str);
+                load_nonstatic(ast::primitive_kind::I8, "r%d = *(i8*)%s");
                 break;
             }
             case Opcode::LoadU8: {
-                load_nonstatic(dest, op1, frame, varying, disassembly_text_size, ast::primitive_kind::U8, interpreted, interpreted_buffer_size, "r%d = *(u8*)%s", op1_str);
+                load_nonstatic(ast::primitive_kind::U8, "r%d = *(u8*)%s");
                 break;
             }
             case Opcode::LoadI16: {
-                load_nonstatic(dest, op1, frame, varying, disassembly_text_size, ast::primitive_kind::I16, interpreted, interpreted_buffer_size, "r%d = *(i16*)%s", op1_str);
+                load_nonstatic(ast::primitive_kind::I16, "r%d = *(i16*)%s");
                 break;
             }
             case Opcode::LoadU16: {
-                load_nonstatic(dest, op1, frame, varying, disassembly_text_size, ast::primitive_kind::U16, interpreted, interpreted_buffer_size, "r%d = *(u16*)%s", op1_str);
+                load_nonstatic(ast::primitive_kind::U16, "r%d = *(u16*)%s");
                 break;
             }
             case Opcode::LoadI32: {
-                load_nonstatic(dest, op1, frame, varying, disassembly_text_size, ast::primitive_kind::I32, interpreted, interpreted_buffer_size, "r%d = *(i32*)%s", op1_str);
+                load_nonstatic(ast::primitive_kind::I32, "r%d = *(i32*)%s");
                 break;
             }
             case Opcode::StoreI8: {
-                store_nonstatic(dest, op1, op2, frame, varying, disassembly_text_size, ast::primitive_kind::I8, interpreted, interpreted_buffer_size, "r%d, *(i8*)%s = %s", op1_str, op2_str);
+                store_nonstatic(ast::primitive_kind::I8, "r%d, *(i8*)%s = %s");
                 break;
             }
             case Opcode::StoreU8: {
-                store_nonstatic(dest, op1, op2, frame, varying, disassembly_text_size, ast::primitive_kind::U8, interpreted, interpreted_buffer_size, "r%d, *(u8*)%s = %s", op1_str, op2_str);
+                store_nonstatic(ast::primitive_kind::U8, "r%d, *(u8*)%s = %s");
                 break;
             }
             case Opcode::StoreI16: {
-                store_nonstatic(dest, op1, op2, frame, varying, disassembly_text_size, ast::primitive_kind::I16, interpreted, interpreted_buffer_size, "r%d, *(i16*)%s = %s", op1_str, op2_str);
+                store_nonstatic(ast::primitive_kind::I16, "r%d, *(i16*)%s = %s");
                 break;
             }
             case Opcode::StoreU16: {
-                store_nonstatic(dest, op1, op2, frame, varying, disassembly_text_size, ast::primitive_kind::U16, interpreted, interpreted_buffer_size, "r%d, *(u16*)%s = %s", op1_str, op2_str);
+                store_nonstatic(ast::primitive_kind::U16, "r%d, *(u16*)%s = %s");
                 break;
             }
             case Opcode::StoreI32: {
-                store_nonstatic(dest, op1, op2, frame, varying, disassembly_text_size, ast::primitive_kind::I32, interpreted, interpreted_buffer_size, "r%d, *(i32*)%s = %s", op1_str, op2_str);
+                store_nonstatic(ast::primitive_kind::I32, "r%d, *(i32*)%s = %s");
                 break;
             }
             case Opcode::StoreU32: {
-                store_nonstatic(dest, op1, op2, frame, varying, disassembly_text_size, ast::primitive_kind::U32, interpreted, interpreted_buffer_size, "r%d, *(u32*)%s = %s", op1_str, op2_str);
+                store_nonstatic(ast::primitive_kind::U32, "r%d, *(u32*)%s = %s");
                 break;
             }
             case Opcode::StoreI64: {
-                store_nonstatic(dest, op1, op2, frame, varying, disassembly_text_size, ast::primitive_kind::I64, interpreted, interpreted_buffer_size, "r%d, *(i64*)%s = %s", op1_str, op2_str);
+                store_nonstatic(ast::primitive_kind::I64, "r%d, *(i64*)%s = %s");
                 break;
             }
             case Opcode::StoreU64: {
-                store_nonstatic(dest, op1, op2, frame, varying, disassembly_text_size, ast::primitive_kind::U64, interpreted, interpreted_buffer_size, "r%d, *(u64*)%s = %s", op1_str, op2_str);
+                store_nonstatic(ast::primitive_kind::U64, "r%d, *(u64*)%s = %s");
                 break;
             }
             case Opcode::AssertPointer: {

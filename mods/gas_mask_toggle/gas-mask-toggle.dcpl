@@ -32,8 +32,6 @@ using #get-gas-mask-setting-id as far (u64) -> u64;
 using #set-visible as far (u64, u64) -> u0;
 using #player-gas-mask-narrative-mode/f as near (u64, u64, u64) -> u0;
 
-#sfx-pistol-beretta-npc
-
 // ellie = 0
 // dina = 2
 // jessie = 7

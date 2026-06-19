@@ -14,11 +14,11 @@ namespace dconstruct::compilation {
         lexing_error(u32 line, std::string message)
             : m_line(line), m_message(std::move(message)) {}
 
-        lexing_error(u32 line, std::filesystem::path file, std::string message)
-            : m_line(line), m_file(std::move(file)), m_message(std::move(message)) {}
+        lexing_error(u32 line, const std::filesystem::path* file, std::string message)
+            : m_line(line), m_file(file), m_message(std::move(message)) {}
 
         u32 m_line;
-        std::filesystem::path m_file;
+        const std::filesystem::path* m_file;
         std::string m_message;
 
         [[nodiscard]] bool operator==(const lexing_error& rhs) const noexcept;
@@ -99,8 +99,9 @@ namespace dconstruct::compilation {
         const std::vector<source_location>* m_lineMap = nullptr;
 
         u32 m_start = 0;
-        u32 m_current = 0;
+        u32 m_absolutePosition = 0;
         u32 m_line = 1;
+        u32 m_column = 0;
     };
 
 }

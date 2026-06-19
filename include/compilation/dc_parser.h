@@ -5,6 +5,7 @@
 #include "tokens.h"
 #include "ast/ast.h"
 
+#include <type_traits>
 #include <vector>
 #include <unordered_map>
 
@@ -27,6 +28,50 @@ namespace dconstruct::compilation {
         const std::unordered_map<std::string, ast::full_type>& get_known_types() const noexcept;
         [[nodiscard]] std::optional<ast::function_to_mapped_vars> make_typemap();
         void add_mapped_types(const std::unordered_map<sid64, ast::full_type>& types);
+
+        enum class SEMANTIC_TOKEN_TYPE : u32 {
+            KEYWORD = 0,
+            NUMBER = 1,
+            STRING = 2,
+            CONSTANT = 3,
+            FUNCTION = 4,
+            MACRO = 5,
+            VARIABLE = 6,
+            TYPE = 7,
+            COMMENT = 8,
+            OPERATOR = 9,
+        };
+
+        struct semantic_token_ctx {
+            std::vector<u32> m_tokens;
+            u32 m_prevLine = 0;
+            u32 m_prevChar = 0;
+
+            struct marker {
+                std::size_t m_tokenCount;
+                u32 m_prevLine;
+                u32 m_prevChar;
+            };
+
+            inline static const std::vector<std::string> TOKEN_TYPES = {
+                "keyword",
+                "number",
+                "string",
+                "constant",
+                "function",
+                "macro",
+                "variable",
+                "type",
+                "comment",
+                "operator",
+            };
+
+            void insert(const token& token, const SEMANTIC_TOKEN_TYPE type);
+            [[nodiscard]] marker mark() const noexcept;
+            void restore(marker mark);
+        };
+
+        [[nodiscard]] const std::vector<u32>& get_semantic_tokens() const noexcept;
 
     private:
         void synchronize_statements();
@@ -121,6 +166,8 @@ namespace dconstruct::compilation {
         std::vector<token> m_tokens;
 
         u32 m_current = 0;
+
+        semantic_token_ctx m_semanticTokenCtx{};
     };
 
     [[nodiscard]] bool operator==(const parsing_error& lhs, const parsing_error& rhs) noexcept;

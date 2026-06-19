@@ -1,5 +1,8 @@
 
+#include "ast/ast.h"
 #include "ast/function_definition.h"
+#include "ast/primary_expressions/identifier.h"
+#include "ast/primary_expressions/sid_identifier.h"
 #include "ast/primary_expressions/struct_access.h"
 #include "compilation/dc_parser.h"
 #include <memory>
@@ -26,8 +29,42 @@ namespace dconstruct::compilation {
         return m_knownTypes;
     }
 
+    const std::vector<u32>& Parser::get_semantic_tokens() const noexcept {
+        return m_semanticTokenCtx.m_tokens;
+    }
+
     [[nodiscard]] bool operator==(const parsing_error& lhs, const parsing_error& rhs) noexcept {
         return lhs.m_token == rhs.m_token && lhs.m_message == rhs.m_message;
+    }
+
+    void Parser::semantic_token_ctx::insert(const token& token, const SEMANTIC_TOKEN_TYPE token_type) {
+        if (token.m_lexeme.empty()) {
+            return;
+        }
+
+        const u32 line = token.m_line > 0 ? token.m_line - 1 : 0;
+        const u32 start_char = token.m_char >= token.m_lexeme.size()
+            ? token.m_char - static_cast<u32>(token.m_lexeme.size())
+            : token.m_char;
+        u32 delta_line = line - m_prevLine;
+        u32 delta_start_char = delta_line == 0 ? start_char - m_prevChar : start_char;
+        m_tokens.push_back(delta_line);
+        m_tokens.push_back(delta_start_char);
+        m_tokens.push_back(token.m_lexeme.size());
+        m_tokens.push_back(static_cast<u32>(token_type));
+        m_tokens.push_back(0);
+        m_prevLine = line;
+        m_prevChar = start_char;
+    }
+
+    Parser::semantic_token_ctx::marker Parser::semantic_token_ctx::mark() const noexcept {
+        return marker{m_tokens.size(), m_prevLine, m_prevChar};
+    }
+
+    void Parser::semantic_token_ctx::restore(const marker mark) {
+        m_tokens.resize(mark.m_tokenCount);
+        m_prevLine = mark.m_prevLine;
+        m_prevChar = mark.m_prevChar;
     }
 
     void Parser::synchronize_statements() {
@@ -137,6 +174,7 @@ namespace dconstruct::compilation {
 
     [[nodiscard]] std::optional<std::variant<ast::full_type, ast::ellipse>> Parser::peek_type_or_ellipse() {
         if (match(token_type::DOT_DOT_DOT)) {
+            m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
             return ast::ellipse{};
         } else {
             return peek_type();
@@ -149,6 +187,9 @@ namespace dconstruct::compilation {
             return std::nullopt;
         }
 
+        const auto semantic_mark = m_semanticTokenCtx.mark();
+        m_semanticTokenCtx.insert(peek(), SEMANTIC_TOKEN_TYPE::OPERATOR);
+
         u32 temp_current = m_current;
         m_current = temp_current + 1;
         std::vector<ast::full_type> param_types;
@@ -158,11 +199,13 @@ namespace dconstruct::compilation {
             do {
                 if (has_ellipse) {
                     m_errors.emplace_back(peek(), "ellipse must be last paramter inside function type");
+                    m_semanticTokenCtx.restore(semantic_mark);
                     return std::nullopt;
                 }
                 auto param_type = peek_type_or_ellipse();
                 if (!param_type) {
                     m_current = temp_current;
+                    m_semanticTokenCtx.restore(semantic_mark);
                     return std::nullopt;
                 }
                 if (std::holds_alternative<ast::ellipse>(*param_type)) {
@@ -170,19 +213,31 @@ namespace dconstruct::compilation {
                 } else {
                     param_types.push_back(std::get<ast::full_type>(*param_type)); // starting here we can be sure we're parsing a function type because there's no other construct like '(type...'
                 }
-            } while (match(token_type::COMMA) && !is_at_end());
+                if (match(token_type::COMMA)) {
+                    m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
+                } else {
+                    break;
+                }
+            } while (!is_at_end());
 
             if (!consume(token_type::RIGHT_PAREN, "expected ')' after function parameter types")) {
+                m_semanticTokenCtx.restore(semantic_mark);
                 return std::nullopt;
             }
+            m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
+        } else {
+            m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
         }
 
         if (!consume(token_type::ARROW, "expected '->' after function parameter types")) {
+            m_semanticTokenCtx.restore(semantic_mark);
             return std::nullopt;
         }
+        m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
 
         std::optional<ast::full_type> return_type = make_type();
         if (!return_type) {
+            m_semanticTokenCtx.restore(semantic_mark);
             return std::nullopt;
         }
         ast::function_type func_type;
@@ -209,12 +264,14 @@ namespace dconstruct::compilation {
             return std::nullopt;
         }
 
+        m_semanticTokenCtx.insert(peek(), SEMANTIC_TOKEN_TYPE::TYPE);
         advance();
 
         ast::full_type res = m_knownTypes.at(type_name);
 
         while (match(token_type::STAR) && !is_at_end()) {
             res = ast::ptr_type{std::make_unique<ast::full_type>(std::move(res))};
+            m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
         }
 
         return res;
@@ -235,6 +292,7 @@ namespace dconstruct::compilation {
             type_name = type_token.m_lexeme.substr(1, type_token.m_lexeme.size() - 1);
         } else {
             m_errors.emplace_back(type_token, "expected type name or identifier");
+            return std::nullopt;
         }
 
         if (!m_knownTypes.contains(type_name)) {
@@ -242,10 +300,13 @@ namespace dconstruct::compilation {
             return std::nullopt;
         }
 
+        m_semanticTokenCtx.insert(type_token, Parser::SEMANTIC_TOKEN_TYPE::TYPE);
+
         ast::full_type res = m_knownTypes.at(type_name);
 
         while (match(token_type::STAR) && !is_at_end()) {
             res = ast::ptr_type{std::make_unique<ast::full_type>(std::move(res))};
+            m_semanticTokenCtx.insert(previous(), Parser::SEMANTIC_TOKEN_TYPE::OPERATOR);
         }
 
         return res;
@@ -254,12 +315,16 @@ namespace dconstruct::compilation {
     [[nodiscard]] std::optional<global> Parser::make_global() {
         std::optional<global> res;
         if (match(token_type::STRUCT)) {
+            m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::KEYWORD);
             res = make_struct_type();
         } else if (match(token_type::ENUM)) {
+            m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::KEYWORD);
             res = make_enum_type();
         } else if (match(token_type::USING)) {
+            m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::KEYWORD);
             res = make_using_declaration();
         } else if (match(token_type::STATESCRIPT)) {
+            m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::KEYWORD);
             res = make_state_script();
         } else if (std::unique_ptr<ast::function_definition> func_def = make_function_definition()) {
             res = std::move(func_def);
@@ -280,9 +345,11 @@ namespace dconstruct::compilation {
         bool is_sid_name = false;
         if (match(token_type::IDENTIFIER)) {
             struct_name = previous().m_lexeme;
+            m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::TYPE);
         } else if (match(token_type::SID)) {
             struct_name = previous().m_lexeme.substr(1, peek().m_lexeme.size() - 2);
             is_sid_name = true;
+            m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::TYPE);
         } else {
             m_errors.emplace_back(previous(), "expected name after struct keyword");
         }
@@ -290,6 +357,7 @@ namespace dconstruct::compilation {
         if (!consume(token_type::LEFT_BRACE, "expected '{'")) {
             return std::nullopt;
         }
+        m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
 
         ast::struct_type struct_t;
         struct_t.m_name = std::move(struct_name);
@@ -308,6 +376,7 @@ namespace dconstruct::compilation {
         if (!consume(token_type::RIGHT_BRACE, "expected '}' after struct definition")) {
             return std::nullopt;
         }
+        m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
 
         m_knownTypes[struct_t.m_name] = struct_t;
 
@@ -320,9 +389,11 @@ namespace dconstruct::compilation {
 
         if (match(token_type::IDENTIFIER)) {
             enum_name = previous().m_lexeme;
+            m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::TYPE);
         } else if (match(token_type::SID)) {
             enum_name = previous().m_lexeme.substr(1, previous().m_lexeme.size() - 2);
             is_sid_name = true;
+            m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::TYPE);
         } else {
             m_errors.emplace_back(previous(), "expected name after enum keyword");
             return std::nullopt;
@@ -331,6 +402,7 @@ namespace dconstruct::compilation {
         if (!consume(token_type::LEFT_BRACE, "expected '{")) {
             return std::nullopt;
         }
+        m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
 
         ast::enum_type enum_t;
         enum_t.m_name = std::move(enum_name);
@@ -345,9 +417,11 @@ namespace dconstruct::compilation {
             if (!enum_value) {
                 return std::nullopt;
             }
+            m_semanticTokenCtx.insert(*enum_value, SEMANTIC_TOKEN_TYPE::CONSTANT);
 
             u64 value = counter;
             if (match(token_type::EQUAL)) {
+                m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
                 if (!has_assignments && counter > 0) {
                     m_errors.emplace_back(peek(), "expected all enums to have an assigned value, but the previous ones don't");
                     return std::nullopt;
@@ -357,6 +431,7 @@ namespace dconstruct::compilation {
                 if (!literal_token) {
                     return std::nullopt;
                 }
+                m_semanticTokenCtx.insert(*literal_token, SEMANTIC_TOKEN_TYPE::NUMBER);
                 value = std::get<u16>(literal_token->m_literal);
             } else if (has_assignments) {
                 m_errors.emplace_back(peek(), "expected either all enums to have an assigned value but " + enum_value->m_lexeme + " doesn't");
@@ -364,11 +439,17 @@ namespace dconstruct::compilation {
             }
             counter++;
             enum_t.m_enumerators[enum_value->m_lexeme] = value;
-        } while (match(token_type::COMMA));
+            if (match(token_type::COMMA)) {
+                m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
+            } else {
+                break;
+            }
+        } while (true);
 
         if (!consume(token_type::RIGHT_BRACE, "expected '}' after enum definition")) {
             return std::nullopt;
         }
+        m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
 
         m_knownTypes[enum_t.m_name] = enum_t;
 
@@ -384,8 +465,10 @@ namespace dconstruct::compilation {
         std::string func_name;
         if (match(token_type::IDENTIFIER)) {
             func_name = previous().m_lexeme;
+            m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::FUNCTION);
         } else if (match(token_type::SID)) {
             func_name = previous().m_lexeme.substr(1, peek().m_lexeme.size() - 2);
+            m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::FUNCTION);
         } else {
             m_errors.emplace_back(previous(), "expected function name or sid");
             return nullptr;
@@ -394,6 +477,7 @@ namespace dconstruct::compilation {
         if (!consume(token_type::LEFT_PAREN, "expected '(' after function name")) {
             return nullptr;
         }
+        m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
 
         std::unique_ptr<ast::function_definition> func_def = std::make_unique<ast::function_definition>();
         func_def->m_name = func_name;
@@ -408,6 +492,7 @@ namespace dconstruct::compilation {
             if (!param_name) {
                 return nullptr;
             }
+            m_semanticTokenCtx.insert(*param_name, SEMANTIC_TOKEN_TYPE::VARIABLE);
             func_def->m_type.m_arguments.emplace_back(param_name->m_lexeme, std::make_shared<ast::full_type>(*param_type));
             func_def->m_parameters.emplace_back(std::move(*param_type), param_name->m_lexeme);
 
@@ -415,12 +500,14 @@ namespace dconstruct::compilation {
                 if (!consume(token_type::COMMA, "expected ',' between parameters")) {
                     return nullptr;
                 }
+                m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
             }
         }
 
         if (!consume(token_type::RIGHT_PAREN, "expected ')' after function parameters")) {
             return nullptr;
         }
+        m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
 
         return func_def;
     }
@@ -435,6 +522,7 @@ namespace dconstruct::compilation {
         if (!consume(token_type::LEFT_BRACE, "expected '{' before function body")) {
             return nullptr;
         }
+        m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
 
         std::unique_ptr<ast::block> body = make_block();
         if (!body) {
@@ -451,12 +539,17 @@ namespace dconstruct::compilation {
             return std::nullopt;
         }
 
+        m_semanticTokenCtx.insert(*old_sid, SEMANTIC_TOKEN_TYPE::CONSTANT);
+
         if (!consume(token_type::AS, "expected 'as'")) {
             return std::nullopt;
         }
 
+        m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::KEYWORD);
+
         const token* far_spec = nullptr;
         if (match(token_type::FAR, token_type::NEAR)) {
+            m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::KEYWORD);
             far_spec = &previous();
         }
 
@@ -470,13 +563,11 @@ namespace dconstruct::compilation {
                 m_errors.emplace_back(previous(), "expected either 'near' or 'far' specification after 'using' when defining a function alias but got neither");
                 return std::nullopt;
             } else {
-                std::get<ast::function_type>(*new_type).m_distanceType = far_spec->m_type == token_type::FAR
-                                                                             ? ast::function_type::DISTANCE::FAR
-                                                                             : ast::function_type::DISTANCE::NEAR;
+                std::get<ast::function_type>(*new_type).m_distanceType = far_spec->m_type == token_type::FAR ? ast::function_type::DISTANCE::FAR : ast::function_type::DISTANCE::NEAR;
             }
         } else {
             if (far_spec) {
-                m_errors.emplace_back(previous(), "unexpected 'near' or 'far' specification on non-function alias but got '" + far_spec->m_lexeme + "'");
+                m_errors.emplace_back(previous(), "unexpected 'near' or 'far' specification on non-function alias,  got '" + far_spec->m_lexeme + "'");
                 return std::nullopt;
             }
         }
@@ -484,6 +575,9 @@ namespace dconstruct::compilation {
         if (!consume(token_type::SEMICOLON, "expected ';' at end of using declaration")) {
             return std::nullopt;
         }
+
+        m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
+
         return std::make_unique<ast::using_declaration>(ast::sid_identifier(*old_sid), std::move(*new_type));
     }
 
@@ -516,14 +610,17 @@ namespace dconstruct::compilation {
         if (!name) {
             return nullptr;
         }
+        m_semanticTokenCtx.insert(*name, SEMANTIC_TOKEN_TYPE::VARIABLE);
 
         expr_uptr init = nullptr;
         if (match(token_type::EQUAL)) {
+            m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
             init = make_expression();
         }
         if (!consume(token_type::SEMICOLON, "expected ';' after variable declaration")) {
             return nullptr;
         }
+        m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
 
         if (init) {
             return std::make_unique<ast::variable_declaration>(std::move(*type), name->m_lexeme, std::move(init));
@@ -537,14 +634,17 @@ namespace dconstruct::compilation {
         if (!name) {
             return nullptr;
         }
+        m_semanticTokenCtx.insert(*name, SEMANTIC_TOKEN_TYPE::VARIABLE);
 
         expr_uptr init = nullptr;
         if (match(token_type::EQUAL)) {
+            m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
             init = make_expression();
         }
         if (!consume(token_type::SEMICOLON, "expected ';' after variable declaration")) {
             return nullptr;
         }
+        m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
 
         if (init) {
             return std::make_unique<ast::variable_declaration>(std::move(type), name->m_lexeme, std::move(init));
@@ -571,6 +671,7 @@ namespace dconstruct::compilation {
         if (!consume(token_type::LEFT_PAREN, "expected '(' after 'while'")) {
             return nullptr;
         }
+        m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
         expr_uptr condition = make_expression();
         if (!condition) {
             return nullptr;
@@ -578,6 +679,7 @@ namespace dconstruct::compilation {
         if (!consume(token_type::RIGHT_PAREN, "expected ')' after while-condition")) {
             return nullptr;
         }
+        m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
         stmnt_uptr body = make_statement();
         if (!body) {
             return nullptr;
@@ -589,8 +691,10 @@ namespace dconstruct::compilation {
         if (!consume(token_type::LEFT_PAREN, "expected '(' after 'for'.")) {
             return nullptr;
         }
+        m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
         stmnt_uptr initializer = nullptr;
         if (match(token_type::SEMICOLON)) {
+            m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
             initializer = nullptr;
         } else if (std::optional<ast::full_type> type = peek_type()) {
             initializer = make_var_declaration(std::move(*type));
@@ -610,6 +714,7 @@ namespace dconstruct::compilation {
         if (!consume(token_type::SEMICOLON, "expected ';' after loop condition.")) {
             return nullptr;
         }
+        m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
         expr_uptr increment = nullptr;
         if (!check(token_type::RIGHT_PAREN)) {
             increment = make_expression();
@@ -620,6 +725,7 @@ namespace dconstruct::compilation {
         if (!consume(token_type::RIGHT_PAREN, "expected ')' at end of for-loop header")) {
             return nullptr;
         }
+        m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
         stmnt_uptr body = make_statement();
         if (!body) {
             return nullptr;
@@ -644,6 +750,7 @@ namespace dconstruct::compilation {
         if (!consume(token_type::LEFT_PAREN, "expected '(' after 'foreach'")) {
             return nullptr;
         }
+        m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
 
         std::optional<ast::full_type> type = make_type();
         if (!type) {
@@ -653,10 +760,12 @@ namespace dconstruct::compilation {
         if (!name) {
             return nullptr;
         }
+        m_semanticTokenCtx.insert(*name, SEMANTIC_TOKEN_TYPE::VARIABLE);
 
         if (!consume(token_type::COLON, "expected ':' after variable declaration")) {
             return nullptr;
         }
+        m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
 
         expr_uptr iterable = make_expression();
         if (!iterable) {
@@ -667,6 +776,7 @@ namespace dconstruct::compilation {
         if (!consume(token_type::RIGHT_PAREN, "expected ')' at end of foreach-loop header")) {
             return nullptr;
         }
+        m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
 
         stmnt_uptr body = make_statement();
         if (!body) {
@@ -679,18 +789,25 @@ namespace dconstruct::compilation {
 
     [[nodiscard]] stmnt_uptr Parser::make_statement() {
         if (match(token_type::IF)) {
+            m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::KEYWORD);
             return make_if();
         } else if (match(token_type::WHILE)) {
+            m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::KEYWORD);
             return make_while();
         } else if (match(token_type::FOR)) {
+            m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::KEYWORD);
             return make_for();
         } else if (match(token_type::FOREACH)) {
+            m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::KEYWORD);
             return make_foreach();
         } else if (match(token_type::LEFT_BRACE)) {
+            m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
             return make_block();
         } else if (match(token_type::RETURN)) {
+            m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::KEYWORD);
             return make_return();
         } else if (match(token_type::BREAKPOINT)) {
+            m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::KEYWORD);
             return make_breakpoint();
         } else {
             return make_expression_statement();
@@ -701,6 +818,7 @@ namespace dconstruct::compilation {
         if (!consume(token_type::SEMICOLON, "expected ';' after breakpoint value")) {
             return nullptr;
         }
+        m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
 
         return std::make_unique<ast::breakpoint>();
     }
@@ -709,6 +827,7 @@ namespace dconstruct::compilation {
         if (!consume(token_type::LEFT_PAREN, "expected '(' after 'if'")) {
             return nullptr;
         }
+        m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
         expr_uptr condition = make_expression();
         if (!condition) {
             return nullptr;
@@ -716,12 +835,14 @@ namespace dconstruct::compilation {
         if (!consume(token_type::RIGHT_PAREN, "expected ')' after if-condition")) {
             return nullptr;
         }
+        m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
         stmnt_uptr then_branch = make_statement();
         if (!then_branch) {
             return nullptr;
         }
         stmnt_uptr else_branch = nullptr;
         if (match(token_type::ELSE)) {
+            m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::KEYWORD);
             else_branch = make_statement();
             if (!else_branch) {
                 return nullptr;
@@ -740,11 +861,13 @@ namespace dconstruct::compilation {
         if (!consume(token_type::RIGHT_BRACE, "expected '}' after block.")) {
             return nullptr;
         }
+        m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
         return std::make_unique<ast::block>(std::move(statements));
     }
 
     [[nodiscard]] std::unique_ptr<ast::return_stmt> Parser::make_return() {
         if (match(token_type::SEMICOLON)) {
+            m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
             return std::make_unique<ast::return_stmt>(nullptr);
         }
         expr_uptr expression = make_expression();
@@ -752,6 +875,7 @@ namespace dconstruct::compilation {
         if (!consume(token_type::SEMICOLON, "expected ';' after return value")) {
             return nullptr;
         }
+        m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
 
         return std::make_unique<ast::return_stmt>(std::move(expression));
     }
@@ -764,6 +888,7 @@ namespace dconstruct::compilation {
         if (!consume(token_type::SEMICOLON, "expected ';' after expression")) {
             return nullptr;
         }
+        m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
         return std::make_unique<ast::expression_stmt>(std::move(expr));
     }
 
@@ -774,6 +899,7 @@ namespace dconstruct::compilation {
         }
         while (match(token_type::OR, token_type::PIPE_PIPE)) {
             const token op = previous();
+            m_semanticTokenCtx.insert(op, op.m_type == token_type::OR ? SEMANTIC_TOKEN_TYPE::KEYWORD : SEMANTIC_TOKEN_TYPE::OPERATOR);
             expr_uptr right = make_and();
             if (!right) {
                 return nullptr;
@@ -790,6 +916,7 @@ namespace dconstruct::compilation {
         }
         while (match(token_type::AND, token_type::AMPERSAND_AMPERSAND)) {
             const token op = previous();
+            m_semanticTokenCtx.insert(op, op.m_type == token_type::AND ? SEMANTIC_TOKEN_TYPE::KEYWORD : SEMANTIC_TOKEN_TYPE::OPERATOR);
             expr_uptr right = make_equality();
             if (!right) {
                 return nullptr;
@@ -806,6 +933,7 @@ namespace dconstruct::compilation {
         }
         if (match(token_type::EQUAL)) {
             const token equals = previous();
+            m_semanticTokenCtx.insert(equals, SEMANTIC_TOKEN_TYPE::OPERATOR);
             expr_uptr value = make_assignment();
             return std::make_unique<ast::assign_expr>(std::move(expr), std::move(value));
         }
@@ -820,6 +948,7 @@ namespace dconstruct::compilation {
 
         while (match(token_type::DOLLAR)) {
             const token op = previous();
+            m_semanticTokenCtx.insert(op, SEMANTIC_TOKEN_TYPE::OPERATOR);
 
             std::vector<expr_uptr> args;
             args.push_back(std::move(expr));
@@ -830,7 +959,12 @@ namespace dconstruct::compilation {
                     return nullptr;
                 }
                 args.push_back(std::move(replacement));
-            } while (match(token_type::COMMA));
+                if (match(token_type::COMMA)) {
+                    m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
+                } else {
+                    break;
+                }
+            } while (true);
 
             expr = std::make_unique<ast::call_expr>(
                 op,
@@ -853,6 +987,7 @@ namespace dconstruct::compilation {
         }
         while (match(token_type::BANG_EQUAL, token_type::EQUAL_EQUAL)) {
             const token& op = previous();
+            m_semanticTokenCtx.insert(op, SEMANTIC_TOKEN_TYPE::OPERATOR);
             expr_uptr right = make_comparison();
             if (!right) {
                 return nullptr;
@@ -879,6 +1014,7 @@ namespace dconstruct::compilation {
         }
         while (match(token_type::GREATER, token_type::GREATER_EQUAL, token_type::LESS, token_type::LESS_EQUAL)) {
             const token& op = previous();
+            m_semanticTokenCtx.insert(op, SEMANTIC_TOKEN_TYPE::OPERATOR);
             expr_uptr right = make_term();
             if (!right) {
                 return nullptr;
@@ -907,6 +1043,7 @@ namespace dconstruct::compilation {
         }
         while (match(token_type::MINUS, token_type::PLUS)) {
             const token& op = previous();
+            m_semanticTokenCtx.insert(op, SEMANTIC_TOKEN_TYPE::OPERATOR);
             expr_uptr right = make_factor();
             if (!right) {
                 return nullptr;
@@ -936,6 +1073,7 @@ namespace dconstruct::compilation {
         }
         while (match(token_type::SLASH, token_type::STAR)) {
             const token& op = previous();
+            m_semanticTokenCtx.insert(op, SEMANTIC_TOKEN_TYPE::OPERATOR);
             expr_uptr right = make_unary();
             if (!right) {
                 return nullptr;
@@ -972,6 +1110,7 @@ namespace dconstruct::compilation {
             token_type::EQUAL_GREATER
         )) {
             const token& op = previous();
+            m_semanticTokenCtx.insert(op, SEMANTIC_TOKEN_TYPE::OPERATOR);
             expr_uptr right = make_unary();
             if (!right) {
                 return nullptr;
@@ -1047,18 +1186,54 @@ namespace dconstruct::compilation {
 
         while (true) {
             if (match(token_type::LEFT_PAREN)) {
+                if (const auto* identifier = dynamic_cast<const ast::identifier*>(expr.get())) {
+                    m_semanticTokenCtx.insert(identifier->m_name, SEMANTIC_TOKEN_TYPE::FUNCTION);
+                } else if (const auto* sid = dynamic_cast<const ast::sid_identifier*>(expr.get())) {
+                    m_semanticTokenCtx.insert(sid->m_name, SEMANTIC_TOKEN_TYPE::FUNCTION);
+                }
+                m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
                 expr = finish_call(std::move(expr));
             } else if (match(token_type::PLUS_PLUS)) {
+                if (const auto* identifier = dynamic_cast<const ast::identifier*>(expr.get())) {
+                    m_semanticTokenCtx.insert(identifier->m_name, SEMANTIC_TOKEN_TYPE::VARIABLE);
+                } else if (const auto* sid = dynamic_cast<const ast::sid_identifier*>(expr.get())) {
+                    m_semanticTokenCtx.insert(sid->m_name, SEMANTIC_TOKEN_TYPE::CONSTANT);
+                }
+                m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
                 expr = std::make_unique<ast::post_arithmetic_expression>(previous(), std::move(expr));
             } else if (match(token_type::MINUS_MINUS)) {
+                if (const auto* identifier = dynamic_cast<const ast::identifier*>(expr.get())) {
+                    m_semanticTokenCtx.insert(identifier->m_name, SEMANTIC_TOKEN_TYPE::VARIABLE);
+                } else if (const auto* sid = dynamic_cast<const ast::sid_identifier*>(expr.get())) {
+                    m_semanticTokenCtx.insert(sid->m_name, SEMANTIC_TOKEN_TYPE::CONSTANT);
+                }
+                m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
                 expr = std::make_unique<ast::post_arithmetic_expression>(previous(), std::move(expr));
             } else if (match(token_type::LEFT_SQUARE)) {
+                if (const auto* identifier = dynamic_cast<const ast::identifier*>(expr.get())) {
+                    m_semanticTokenCtx.insert(identifier->m_name, SEMANTIC_TOKEN_TYPE::VARIABLE);
+                } else if (const auto* sid = dynamic_cast<const ast::sid_identifier*>(expr.get())) {
+                    m_semanticTokenCtx.insert(sid->m_name, SEMANTIC_TOKEN_TYPE::CONSTANT);
+                }
+                m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
                 expr = finish_subscript(std::move(expr));
             } else if (match(token_type::ARROW)) {
+                if (const auto* identifier = dynamic_cast<const ast::identifier*>(expr.get())) {
+                    m_semanticTokenCtx.insert(identifier->m_name, SEMANTIC_TOKEN_TYPE::VARIABLE);
+                } else if (const auto* sid = dynamic_cast<const ast::sid_identifier*>(expr.get())) {
+                    m_semanticTokenCtx.insert(sid->m_name, SEMANTIC_TOKEN_TYPE::CONSTANT);
+                }
+                m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
                 expr = finish_struct_access(std::move(expr));
             } else {
                 break;
             }
+        }
+
+        if (const auto* identifier = dynamic_cast<const ast::identifier*>(expr.get())) {
+            m_semanticTokenCtx.insert(identifier->m_name, SEMANTIC_TOKEN_TYPE::VARIABLE);
+        } else if (const auto* sid = dynamic_cast<const ast::sid_identifier*>(expr.get())) {
+            m_semanticTokenCtx.insert(sid->m_name, SEMANTIC_TOKEN_TYPE::CONSTANT);
         }
 
         return expr;
@@ -1070,10 +1245,16 @@ namespace dconstruct::compilation {
         if (!check(token_type::RIGHT_PAREN)) {
             do {
                 args.push_back(make_expression());
-            } while (match(token_type::COMMA));
+                if (match(token_type::COMMA)) {
+                    m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
+                } else {
+                    break;
+                }
+            } while (true);
         }
 
         if (const token* t = consume({token_type::RIGHT_PAREN}, "expcected ')' at end of function call")) {
+            m_semanticTokenCtx.insert(*t, SEMANTIC_TOKEN_TYPE::OPERATOR);
             return std::make_unique<ast::call_expr>(*t, std::move(callee), std::move(args));
         }
 
@@ -1087,6 +1268,7 @@ namespace dconstruct::compilation {
         }
 
         if (const token* t = consume({token_type::RIGHT_SQUARE}, "expected ']' at end of subscript")) {
+            m_semanticTokenCtx.insert(*t, SEMANTIC_TOKEN_TYPE::OPERATOR);
             return std::make_unique<ast::subscript_expr>(std::move(subscriptee), std::move(index));
         }
 
@@ -1098,6 +1280,7 @@ namespace dconstruct::compilation {
         if (!member_name) {
             return nullptr;
         }
+        m_semanticTokenCtx.insert(*member_name, SEMANTIC_TOKEN_TYPE::VARIABLE);
 
         return std::make_unique<ast::struct_access>(std::move(lhs), *member_name);
     }
@@ -1106,6 +1289,7 @@ namespace dconstruct::compilation {
         if (!consume(token_type::DOT, "expected '.' after enum name")) {
             return nullptr;
         }
+        const token& dot = previous();
 
         const token* member_name = consume(token_type::IDENTIFIER, "expected enum member name after '.'");
         if (!member_name) {
@@ -1127,6 +1311,10 @@ namespace dconstruct::compilation {
             return nullptr;
         }
 
+        m_semanticTokenCtx.insert(enum_name_token, SEMANTIC_TOKEN_TYPE::TYPE);
+        m_semanticTokenCtx.insert(dot, SEMANTIC_TOKEN_TYPE::OPERATOR);
+        m_semanticTokenCtx.insert(*member_name, SEMANTIC_TOKEN_TYPE::CONSTANT);
+
         return std::make_unique<ast::enum_access>(*member_name, enum_name, member_name->m_lexeme, ast::literal{member_it->second});
     }
 
@@ -1134,6 +1322,7 @@ namespace dconstruct::compilation {
         if (!consume(token_type::LEFT_PAREN, "expected '(' after match")) {
             return nullptr;
         }
+        m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
 
         std::vector<expr_uptr> conditions;
 
@@ -1142,15 +1331,18 @@ namespace dconstruct::compilation {
             if (!match(token_type::SEMICOLON)) {
                 break;
             }
+            m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
         }
 
         if (!consume(token_type::RIGHT_PAREN, "expected ')' after match conditions")) {
             return nullptr;
         }
+        m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
 
         if (!consume(token_type::LEFT_BRACE, "expected '{' after match header")) {
             return nullptr;
         }
+        m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
 
         std::vector<ast::match_expr::matches_t> matches;
         std::vector<expr_uptr> patterns;
@@ -1159,6 +1351,7 @@ namespace dconstruct::compilation {
             bool default_pattern_reached = false;
             do {
                 if (match(token_type::ELSE)) {
+                    m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::KEYWORD);
                     default_pattern_reached = true;
                 } else {
                     expr_uptr literal = make_literal();
@@ -1169,11 +1362,17 @@ namespace dconstruct::compilation {
                         patterns.push_back(std::move(literal));
                     }
                 }
-            } while (match(token_type::COMMA));
+                if (match(token_type::COMMA)) {
+                    m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
+                } else {
+                    break;
+                }
+            } while (true);
 
             if (!consume({token_type::ARROW}, "expected '->' after pattern list")) {
                 return nullptr;
             }
+            m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
 
             expr_uptr matched_expression = make_expression();
             if (!matched_expression) {
@@ -1183,6 +1382,9 @@ namespace dconstruct::compilation {
 
             if (!default_pattern_reached && !check(token_type::RIGHT_BRACE) && !consume({token_type::COMMA}, "expected ',' at end of pattern-match expression")) {
                 return nullptr;
+            }
+            if (!default_pattern_reached && previous().m_type == token_type::COMMA) {
+                m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
             }
 
             if (default_pattern_reached) {
@@ -1201,22 +1403,29 @@ namespace dconstruct::compilation {
         if (!consume(token_type::RIGHT_BRACE, "expected '}' after match patterns")) {
             return nullptr;
         }
+        m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
 
         return std::make_unique<ast::match_expr>(std::move(conditions), std::move(matches), std::move(default_pattern));
     }
 
     [[nodiscard]] expr_uptr Parser::make_literal() {
         if (match(token_type::TRUE)) {
+            m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::KEYWORD);
             return std::make_unique<ast::literal>(true);
         } else if (match(token_type::FALSE)) {
+            m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::KEYWORD);
             return std::make_unique<ast::literal>(false);
         } else if (match(token_type::_NULL)) {
+            m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::KEYWORD);
             return std::make_unique<ast::literal>(nullptr);
         } else if (match(token_type::INT)) {
+            m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::NUMBER);
             return std::make_unique<ast::literal>(previous().m_literal);
         } else if (match(token_type::DOUBLE)) {
+            m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::NUMBER);
             return std::make_unique<ast::literal>(previous().m_literal);
         } else if (match(token_type::STRING)) {
+            m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::STRING);
             const std::string str = std::get<std::string>(previous().m_literal);
             return std::make_unique<ast::literal>(str);
         }
@@ -1231,6 +1440,7 @@ namespace dconstruct::compilation {
         if (!consume(token_type::RIGHT_PAREN, "expected ')' after cast expression")) {
             return nullptr;
         }
+        m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
         expr_uptr expr = make_expression();
         if (!expr) {
             return nullptr;
@@ -1242,12 +1452,14 @@ namespace dconstruct::compilation {
         if (!consume(token_type::LEFT_PAREN, "expected '(' after 'sizeof'")) {
             return nullptr;
         }
+        m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
 
         std::optional<ast::full_type> sizeof_type = peek_type();
         if (sizeof_type) {
             if (!consume(token_type::RIGHT_PAREN, "expected ')' after type inside 'sizeof'")) {
                 return nullptr;
             }
+            m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
             return std::make_unique<ast::sizeof_expr>(std::move(*sizeof_type));
         }
 
@@ -1259,6 +1471,7 @@ namespace dconstruct::compilation {
         if (!consume(token_type::RIGHT_PAREN, "expected ')' after expression inside 'sizeof'")) {
             return nullptr;
         }
+        m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
 
         return std::make_unique<ast::sizeof_expr>(std::move(sizeof_expr));
     }
@@ -1275,10 +1488,13 @@ namespace dconstruct::compilation {
         } else if (match(token_type::SID)) {
             return std::make_unique<ast::sid_identifier>(previous());
         } else if (match(token_type::MATCH)) {
+            m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::KEYWORD);
             return make_match();
         } else if (match(token_type::SIZEOF)) {
+            m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::KEYWORD);
             return make_sizeof();
         } else if (match(token_type::LEFT_PAREN)) {
+            m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
             if (std::optional<std::unique_ptr<ast::cast_expr>> cast = make_cast()) {
                 return std::move(*cast);
             } else {
@@ -1286,6 +1502,7 @@ namespace dconstruct::compilation {
                 if (!consume(token_type::RIGHT_PAREN, "expected ')' after expression")) {
                     return nullptr;
                 }
+                m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
                 return std::make_unique<ast::grouping>(std::move(expr));
             }
         }
@@ -1298,20 +1515,24 @@ namespace dconstruct::compilation {
         if (!consume({token_type::SID, token_type::IDENTIFIER}, "expected statescript name after 'statescript'")) {
             return nullptr;
         }
+        m_semanticTokenCtx.insert(previous(), previous().m_type == token_type::SID ? SEMANTIC_TOKEN_TYPE::CONSTANT : SEMANTIC_TOKEN_TYPE::TYPE);
 
         const std::string script_name = statescript_name_from_token(previous());
 
         if (!consume(token_type::LEFT_BRACE, "expected '{' after 'statescript'")) {
             return nullptr;
         }
+        m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
 
         if (!consume(token_type::OPTIONS, "expected 'options' section in statescript definition")) {
             return nullptr;
         }
+        m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::KEYWORD);
 
         if (!consume(token_type::LEFT_BRACE, "expected '{' after 'options' in statescript definition")) {
             return nullptr;
         }
+        m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
 
         std::vector<ast::sid_identifier> options;
 
@@ -1320,18 +1541,22 @@ namespace dconstruct::compilation {
             if (!option_name) {
                 return nullptr;
             }
+            m_semanticTokenCtx.insert(*option_name, SEMANTIC_TOKEN_TYPE::CONSTANT);
             options.push_back(ast::sid_identifier(option_name->m_lexeme));
         }
 
         if (!consume(token_type::RIGHT_BRACE, "expected '}' after statescript options section")) {
             return nullptr;
         }
+        m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
 
         std::vector<ast::variable_declaration> declarations;
         if (match(token_type::DECLARATIONS)) {
+            m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::KEYWORD);
             if (!consume(token_type::LEFT_BRACE, "expected '{' after 'declarations' in statescript definition")) {
                 return nullptr;
             }
+            m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
 
             while (!check(token_type::RIGHT_BRACE) && !is_at_end()) {
                 std::unique_ptr<ast::variable_declaration> decl = make_statescript_var_declaration();
@@ -1344,6 +1569,7 @@ namespace dconstruct::compilation {
             if (!consume(token_type::RIGHT_BRACE, "expected '}' after statescript declarations section")) {
                 return nullptr;
             }
+            m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
         }
 
         std::vector<ast::state_script_state> states = make_statescript_states();
@@ -1355,6 +1581,7 @@ namespace dconstruct::compilation {
         if (!consume(token_type::RIGHT_BRACE, "expected '}' at end of statescript definition")) {
             return nullptr;
         }
+        m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
 
         return std::make_unique<ast::state_script>(std::move(script_name), std::move(options), std::move(declarations), std::move(states));
     }
@@ -1362,14 +1589,17 @@ namespace dconstruct::compilation {
     [[nodiscard]] std::vector<ast::state_script_state> Parser::make_statescript_states() {
         std::vector<ast::state_script_state> states;
         while (match(token_type::STATE) && !is_at_end()) {
+            m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::KEYWORD);
             const token* state_name = consume({token_type::SID, token_type::IDENTIFIER}, "expected state name after 'state' in statescript definition");
             if (!state_name) {
                 return {};
             }
+            m_semanticTokenCtx.insert(*state_name, state_name->m_type == token_type::SID ? SEMANTIC_TOKEN_TYPE::CONSTANT : SEMANTIC_TOKEN_TYPE::TYPE);
 
             if (!consume(token_type::LEFT_BRACE, "expected '{' after state name in statescript definition")) {
                 return {};
             }
+            m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
 
             std::vector<ast::state_script_block> blocks = make_statescript_blocks();
             if (blocks.empty()) {
@@ -1379,6 +1609,7 @@ namespace dconstruct::compilation {
             if (!consume(token_type::RIGHT_BRACE, "expected '}' after state body in statescript definition")) {
                 return {};
             }
+            m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
 
             states.emplace_back(statescript_name_from_token(*state_name), std::move(blocks));
         }
@@ -1396,14 +1627,17 @@ namespace dconstruct::compilation {
         if (!name) {
             return nullptr;
         }
+        m_semanticTokenCtx.insert(*name, SEMANTIC_TOKEN_TYPE::CONSTANT);
 
         expr_uptr init = nullptr;
         if (match(token_type::EQUAL)) {
+            m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
             init = make_expression();
         }
         if (!consume(token_type::SEMICOLON, "expected ';' after variable declaration in statescript declaration section")) {
             return nullptr;
         }
+        m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
 
         if (init) {
             return std::make_unique<ast::variable_declaration>(std::move(*type), name->m_lexeme, std::move(init));
@@ -1415,22 +1649,29 @@ namespace dconstruct::compilation {
     [[nodiscard]] std::vector<ast::state_script_block> Parser::make_statescript_blocks() {
         std::vector<ast::state_script_block> blocks;
         while (match(token_type::BLOCK) && !is_at_end()) {
+            m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::KEYWORD);
             BLOCK_TYPE block_type;
             std::string event_name = "";
             if (match(token_type::START)) {
+                m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::KEYWORD);
                 block_type = BLOCK_TYPE::START;
             } else if (match(token_type::END)) {
+                m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::KEYWORD);
                 block_type = BLOCK_TYPE::END;
             } else if (match(token_type::EVENT)) {
+                m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::KEYWORD);
                 block_type = BLOCK_TYPE::EVENT;
                 const token* block_name = consume({token_type::SID, token_type::IDENTIFIER}, "expected name after 'event'");
                 if (!block_name) {
                     return {};
                 }
+                m_semanticTokenCtx.insert(*block_name, block_name->m_type == token_type::SID ? SEMANTIC_TOKEN_TYPE::CONSTANT : SEMANTIC_TOKEN_TYPE::FUNCTION);
                 event_name = statescript_name_from_token(*block_name);
             } else if (match(token_type::UPDATE)) {
+                m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::KEYWORD);
                 block_type = BLOCK_TYPE::UPDATE;
             } else if (match(token_type::VIRTUAL)) {
+                m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::KEYWORD);
                 block_type = BLOCK_TYPE::VIRTUAL;
             } else {
                 m_errors.emplace_back(peek(), "expected one of 'start', 'end', 'event', 'update' or 'virtual' but got " + peek().m_lexeme);
@@ -1440,6 +1681,7 @@ namespace dconstruct::compilation {
             if (!consume(token_type::LEFT_BRACE, "expected '{' after block name in statescript definition")) {
                 return {};
             }
+            m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
 
             std::vector<ast::state_script_track> tracks = make_statescript_tracks();
             if (tracks.empty()) {
@@ -1449,6 +1691,7 @@ namespace dconstruct::compilation {
             if (!consume(token_type::RIGHT_BRACE, "expected '}' after block body in statescript definition")) {
                 return {};
             }
+            m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
 
             if (event_name != "") {
                 blocks.emplace_back(std::move(event_name), std::move(tracks));
@@ -1463,14 +1706,17 @@ namespace dconstruct::compilation {
     [[nodiscard]] std::vector<ast::state_script_track> Parser::make_statescript_tracks() {
         std::vector<ast::state_script_track> tracks;
         while (match(token_type::TRACK) && !is_at_end()) {
+            m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::KEYWORD);
             const token* track_name = consume({token_type::SID, token_type::IDENTIFIER}, "expected track name after 'track' in statescript definition");
             if (!track_name) {
                 return {};
             }
+            m_semanticTokenCtx.insert(*track_name, track_name->m_type == token_type::SID ? SEMANTIC_TOKEN_TYPE::CONSTANT : SEMANTIC_TOKEN_TYPE::VARIABLE);
 
             if (!consume(token_type::LEFT_BRACE, "expected '{' after track " + track_name->m_lexeme + " in statescript definition")) {
                 return {};
             }
+            m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
 
             std::vector<ast::function_definition> lambdas = make_statescript_lambdas();
             if (lambdas.empty()) {
@@ -1480,6 +1726,7 @@ namespace dconstruct::compilation {
             if (!consume(token_type::RIGHT_BRACE, "expected '}' after track body in statescript definition")) {
                 return {};
             }
+            m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
 
             tracks.emplace_back(statescript_name_from_token(*track_name), std::move(lambdas));
         }
@@ -1490,6 +1737,7 @@ namespace dconstruct::compilation {
     [[nodiscard]] std::vector<ast::function_definition> Parser::make_statescript_lambdas() {
         std::vector<ast::function_definition> lambdas;
         while (match(token_type::LAMBDA) && !is_at_end()) {
+            m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::KEYWORD);
             stmnt_uptr body = make_statement();
             if (!body) {
                 m_errors.emplace_back(peek(), "expected lambda body statement but got '" + peek().m_lexeme + "'");
@@ -1520,17 +1768,24 @@ namespace dconstruct::compilation {
         if (!consume(token_type::TYPEMAP, "expected type map keyword")) {
             return std::nullopt;
         }
+        m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::KEYWORD);
 
         if (!consume(token_type::LEFT_BRACE, "expected {")) {
             return std::nullopt;
         }
+        m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
 
         ast::function_to_mapped_vars function_scopes;
 
-        while (!match(token_type::RIGHT_BRACE)) {
+        while (true) {
+            if (match(token_type::RIGHT_BRACE)) {
+                m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
+                break;
+            }
 
             std::string function_name;
             if (match(token_type::SID)) {
+                m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::FUNCTION);
                 function_name = previous().m_lexeme.substr(1, previous().m_lexeme.size() - 1);
             } else {
                 std::unique_ptr<ast::function_definition> function_definition_header = make_function_definition_header();
@@ -1546,10 +1801,12 @@ namespace dconstruct::compilation {
             if (!consume(token_type::LEFT_BRACE, "expected {")) {
                 return std::nullopt;
             }
+            m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
 
             ast::mapped_var_scope var_scope;
 
             while (match(token_type::INT)) {
+                m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::NUMBER);
                 u64 var_index;
                 if (const auto num = ast::get_raw_number(previous().m_literal)) {
                     var_index = *num;
@@ -1563,9 +1820,11 @@ namespace dconstruct::compilation {
                 }
                 std::optional<std::string> alias{};
                 if (match(token_type::ARROW)) {
+                    m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
                     if (!consume(token_type::IDENTIFIER, "expected identifier name after ->")) {
                         return std::nullopt;
                     }
+                    m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::VARIABLE);
                     alias = previous().m_lexeme;
                 }
 
@@ -1574,10 +1833,12 @@ namespace dconstruct::compilation {
                 if (!consume(token_type::SEMICOLON, "expected ; at end of variable mapping")) {
                     return std::nullopt;
                 }
+                m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
             }
             if (!consume(token_type::RIGHT_BRACE, "expected }")) {
                 return std::nullopt;
             }
+            m_semanticTokenCtx.insert(previous(), SEMANTIC_TOKEN_TYPE::OPERATOR);
             function_scopes.emplace(SID(function_name.c_str()), std::move(var_scope));
         }
 

@@ -43,6 +43,7 @@ namespace dconstruct::dcplsp {
         std::unordered_map<std::string, lsp::TextDocumentItem> m_documents;
         std::optional<STOP_REASON> m_stopReason;
         std::optional<std::string> m_error = std::nullopt;
+        std::vector<u32> m_semanticTokens;
         mutable std::ofstream m_logfile;
 
         void on_document_did_change(lsp::notifications::TextDocument_DidChange::Params&& params);
@@ -52,11 +53,15 @@ namespace dconstruct::dcplsp {
 
         void stop_with_error(std::string_view message);
 
+
+
         template<typename ...Args>
         void log(std::format_string<Args...>,  Args&& ...args) const;
 
         friend struct server_test_access;
+
     };
 
     [[nodiscard]] u64 position_to_string_index(const std::string& text, const lsp::Position& pos);
+    [[nodiscard]] std::vector<u32> make_semantic_tokens(std::string text);
 }

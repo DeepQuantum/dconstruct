@@ -8,6 +8,7 @@ namespace {
     struct compiler_job {
         std::filesystem::path m_sourcePath;
         std::string m_source;
+        dconstruct::compilation::source_file_table m_sourceFiles;
         std::vector<dconstruct::compilation::source_location> m_lineMap;
         dconstruct::compilation::compiler_options m_options;
         dconstruct::compilation::global_state m_global;
@@ -64,7 +65,7 @@ namespace {
             job.m_source = input.str();
 
             dconstruct::resstr<dconstruct::compilation::compiler_options> options =
-                dconstruct::compilation::compiler_options::parse(opts, job.m_source, job.m_sourcePath, job.m_lineMap);
+                dconstruct::compilation::compiler_options::parse(opts, job.m_source, job.m_sourcePath, job.m_sourceFiles, job.m_lineMap);
             if (!options) {
                 return std::unexpected{options.error()};
             }

@@ -1,4 +1,5 @@
 #include "compilation/lexer.h"
+#include "compilation/tokens.h"
 #include <iostream>
 
 namespace dconstruct::compilation {
@@ -17,7 +18,7 @@ namespace dconstruct::compilation {
         return os
                << " lexeme: " << t.m_lexeme
                << " literal: " << literal_type << ' ' << literal_value
-               << " location: " << format_source_location({t.m_file, t.m_line});
+               << " location: " << format_source_location({t.m_file, t.m_line, t.m_char});
     }
 
     [[nodiscard]] std::pair<std::vector<token>, std::vector<lexing_error>> Lexer::get_results() {
@@ -31,7 +32,7 @@ namespace dconstruct::compilation {
 
     [[nodiscard]] const std::vector<token>& Lexer::scan_tokens() {
         while (!reached_eof()) {
-            m_start = m_current;
+            m_start = m_absolutePosition;
             token t = scan_token();
             if (t.m_type != token_type::EMPTY) {
                 m_tokens.push_back(std::move(t));
@@ -39,23 +40,23 @@ namespace dconstruct::compilation {
         }
 
         const source_location eof_loc = current_source_location();
-        m_tokens.emplace_back(token_type::_EOF, "", 0, eof_loc.m_line, eof_loc.m_file);
+        m_tokens.emplace_back(token_type::_EOF, "", 0, eof_loc.m_line, eof_loc.m_char, eof_loc.m_file);
 
         return m_tokens;
     }
 
     [[nodiscard]] bool Lexer::reached_eof() const noexcept {
-        return m_current >= m_source.size();
+        return m_absolutePosition >= m_source.size();
     }
 
     [[nodiscard]] token Lexer::make_current_token(const token_type type, const ast::primitive_value& literal) const {
-        const std::string text = make_current_lexeme();
+        std::string text = make_current_lexeme();
         const source_location loc = current_source_location();
-        return token(type, text, literal, loc.m_line, loc.m_file);
+        return token(type, std::move(text), literal, loc.m_line, loc.m_char, loc.m_file);
     }
 
     [[nodiscard]] std::string Lexer::make_current_lexeme() const {
-        return m_source.substr(m_start, m_current - m_start);
+        return m_source.substr(m_start, m_absolutePosition - m_start);
     }
 
     [[nodiscard]] source_location Lexer::current_source_location() const {
@@ -65,21 +66,23 @@ namespace dconstruct::compilation {
         if (m_lineMap && !m_lineMap->empty()) {
             return m_lineMap->back();
         }
-        return {{}, m_line};
+        return {{}, m_line, m_column};
     }
 
     char Lexer::advance() {
-        return m_source.at(m_current++);
+        m_column++;
+        return m_source.at(m_absolutePosition++);
     }
 
     [[nodiscard]] bool Lexer::match(const char expected) {
         if (reached_eof()) {
             return false;
         }
-        if (m_source.at(m_current) != expected) {
+        if (m_source.at(m_absolutePosition) != expected) {
             return false;
         }
-        m_current++;
+        m_absolutePosition++;
+        m_column++;
         return true;
     }
 
@@ -87,14 +90,14 @@ namespace dconstruct::compilation {
         if (reached_eof()) {
             return '\0';
         }
-        return m_source.at(m_current);
+        return m_source.at(m_absolutePosition);
     }
 
     [[nodiscard]] char Lexer::peek_next() const {
-        if (m_current + 1 >= m_source.size()) {
+        if (m_absolutePosition + 1 >= m_source.size()) {
             return '\0';
         }
-        return m_source.at(m_current + 1);
+        return m_source.at(m_absolutePosition + 1);
     }
 
     [[nodiscard]] token Lexer::make_string() {
@@ -110,10 +113,10 @@ namespace dconstruct::compilation {
             return token(token_type::EMPTY, "");
         }
         advance();
-        const std::string lexeme = make_current_lexeme();
-        const std::string literal = m_source.substr(m_start + 1, m_current - m_start - 2);
+        std::string lexeme = make_current_lexeme();
+        std::string literal = m_source.substr(m_start + 1, m_absolutePosition - m_start - 2);
         const source_location loc = current_source_location();
-        return token(token_type::STRING, lexeme, literal, loc.m_line, loc.m_file);
+        return token(token_type::STRING, std::move(lexeme), std::move(literal), loc.m_line, loc.m_char, loc.m_file);
     }
 
     [[nodiscard]] bool Lexer::is_valid_sid_char(const char c) const noexcept {
@@ -272,6 +275,7 @@ namespace dconstruct::compilation {
             }
             case '\n': {
                 m_line++;
+                m_column = 0;
                 break;
             }
             case '#':

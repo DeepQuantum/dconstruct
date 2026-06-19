@@ -233,9 +233,10 @@ namespace dconstruct::testing {
                              "@include \"include_a.dcpl\"\n"
                              "@include \"include_a.dcpl\"\n"
                              "u32 main() { return included_b(); }\n";
+        compilation::source_file_table source_files;
         std::vector<compilation::source_location> line_map;
 
-        auto options = compilation::compiler_options::parse(get_empty_options(), source, "test/fixtures/compiler/include_main.dcpl", line_map);
+        auto options = compilation::compiler_options::parse(get_empty_options(), source, "test/fixtures/compiler/include_main.dcpl", source_files, line_map);
         ASSERT_TRUE(options) << options.error();
 
         compilation::Lexer lexer{source, &line_map};
@@ -261,9 +262,10 @@ namespace dconstruct::testing {
                              "u32 main() {\n"
                              "    return 0;\n"
                              "}\n";
+        compilation::source_file_table source_files;
         std::vector<compilation::source_location> line_map;
 
-        auto options = compilation::compiler_options::parse(get_empty_options(), source, "test/fixtures/compiler/include_main.dcpl", line_map);
+        auto options = compilation::compiler_options::parse(get_empty_options(), source, "test/fixtures/compiler/include_main.dcpl", source_files, line_map);
         ASSERT_TRUE(options) << options.error();
 
         compilation::Lexer lexer{source, &line_map};
@@ -272,7 +274,7 @@ namespace dconstruct::testing {
 
         auto [program, types, parse_errors] = get_parse_results(tokens);
         ASSERT_FALSE(parse_errors.empty());
-        EXPECT_EQ(parse_errors.front().m_token.m_file.filename(), "include_error.dcpl");
+        EXPECT_EQ(parse_errors.front().m_token.m_file->filename(), "include_error.dcpl");
         EXPECT_EQ(parse_errors.front().m_token.m_line, 3);
     }
 
@@ -282,9 +284,10 @@ namespace dconstruct::testing {
                              "u32 main() {\n"
                              "    return 0\n"
                              "}\n";
+        compilation::source_file_table source_files;
         std::vector<compilation::source_location> line_map;
 
-        auto options = compilation::compiler_options::parse(get_empty_options(), source, "test/fixtures/compiler/include_main_error.dcpl", line_map);
+        auto options = compilation::compiler_options::parse(get_empty_options(), source, "test/fixtures/compiler/include_main_error.dcpl", source_files, line_map);
         ASSERT_TRUE(options) << options.error();
 
         compilation::Lexer lexer{source, &line_map};
@@ -293,7 +296,7 @@ namespace dconstruct::testing {
 
         auto [program, types, parse_errors] = get_parse_results(tokens);
         ASSERT_FALSE(parse_errors.empty());
-        EXPECT_EQ(parse_errors.front().m_token.m_file.filename(), "include_main_error.dcpl");
+        EXPECT_EQ(parse_errors.front().m_token.m_file->filename(), "include_main_error.dcpl");
         EXPECT_EQ(parse_errors.front().m_token.m_line, 6);
     }
 
@@ -318,9 +321,10 @@ namespace dconstruct::testing {
             "  actor dina\n"
             "}\n"
             "u32 main() { return 0; }\n";
+        compilation::source_file_table source_files;
         std::vector<compilation::source_location> line_map;
 
-        auto options = compilation::compiler_options::parse(get_empty_options(), source, "test/fixtures/compiler/pak68_macro_test.dcpl", line_map);
+        auto options = compilation::compiler_options::parse(get_empty_options(), source, "test/fixtures/compiler/pak68_macro_test.dcpl", source_files, line_map);
         ASSERT_TRUE(options) << options.error();
         ASSERT_TRUE(options->m_pak68);
         EXPECT_EQ(*options->m_pak68, pak_path);
@@ -353,9 +357,10 @@ namespace dconstruct::testing {
             "@mod \"pak68_unknown_type_mod\"\n"
             "@add_pak level-name sp-all { nope #gas-mask-ellie }\n"
             "u32 main() { return 0; }\n";
+        compilation::source_file_table source_files;
         std::vector<compilation::source_location> line_map;
 
-        auto options = compilation::compiler_options::parse(get_empty_options(), source, "test/fixtures/compiler/pak68_unknown_type_test.dcpl", line_map);
+        auto options = compilation::compiler_options::parse(get_empty_options(), source, "test/fixtures/compiler/pak68_unknown_type_test.dcpl", source_files, line_map);
         ASSERT_FALSE(options);
         EXPECT_NE(options.error().find("unknown pak68 type: nope"), std::string::npos);
     }
@@ -372,9 +377,10 @@ namespace dconstruct::testing {
             "@mod \"pak68_missing_level_mod\"\n"
             "@add_pak level-name missing-level { symbol #gas-mask-ellie }\n"
             "u32 main() { return 0; }\n";
+        compilation::source_file_table source_files;
         std::vector<compilation::source_location> line_map;
 
-        auto options = compilation::compiler_options::parse(get_empty_options(), source, "test/fixtures/compiler/pak68_missing_level_test.dcpl", line_map);
+        auto options = compilation::compiler_options::parse(get_empty_options(), source, "test/fixtures/compiler/pak68_missing_level_test.dcpl", source_files, line_map);
         ASSERT_TRUE(options) << options.error();
 
         auto apply_res = compilation::apply_pak68_edits(*options->m_pak68, options->m_pak68Edits);
@@ -400,9 +406,10 @@ namespace dconstruct::testing {
             "@game \"test/fixtures/compiler/derived_game\"\n"
             "@mod \"derived_mod\"\n"
             "u32 main() { return 0; }\n";
+        compilation::source_file_table source_files;
         std::vector<compilation::source_location> line_map;
 
-        auto options = compilation::compiler_options::parse(get_empty_options(), source, "test/fixtures/compiler/derived_mod_test.dcpl", line_map);
+        auto options = compilation::compiler_options::parse(get_empty_options(), source, "test/fixtures/compiler/derived_mod_test.dcpl", source_files, line_map);
         ASSERT_TRUE(options) << options.error();
         EXPECT_TRUE(options->m_standalone);
         EXPECT_TRUE(options->m_target.empty());
@@ -441,9 +448,10 @@ namespace dconstruct::testing {
             "@mod \"target_mode_mod\"\n"
             "@target \"rogue/script-callbacks\"\n"
             "u32 main() { return 0; }\n";
+        compilation::source_file_table source_files;
         std::vector<compilation::source_location> line_map;
 
-        auto options = compilation::compiler_options::parse(get_empty_options(), source, "test/fixtures/compiler/target_mode_test.dcpl", line_map);
+        auto options = compilation::compiler_options::parse(get_empty_options(), source, "test/fixtures/compiler/target_mode_test.dcpl", source_files, line_map);
         ASSERT_TRUE(options) << options.error();
         EXPECT_FALSE(options->m_standalone);
         EXPECT_EQ(options->m_target, game_dc1 / "rogue" / "script-callbacks.bin");
@@ -477,9 +485,10 @@ namespace dconstruct::testing {
             "@target \"rogue/script-callbacks\"\n"
             "@target \"rogue/script-callbacks\"\n"
             "u32 main() { return 0; }\n";
+        compilation::source_file_table source_files;
         std::vector<compilation::source_location> line_map;
 
-        auto options = compilation::compiler_options::parse(get_empty_options(), source, "test/fixtures/compiler/duplicate_target_test.dcpl", line_map);
+        auto options = compilation::compiler_options::parse(get_empty_options(), source, "test/fixtures/compiler/duplicate_target_test.dcpl", source_files, line_map);
         EXPECT_FALSE(options);
         if (!options) {
             EXPECT_NE(options.error().find("multiple @target"), std::string::npos);
@@ -493,9 +502,10 @@ namespace dconstruct::testing {
         std::string source =
             "@mod \"no_game_mod\"\n"
             "u32 main() { return 0; }\n";
+        compilation::source_file_table source_files;
         std::vector<compilation::source_location> line_map;
 
-        auto options = compilation::compiler_options::parse(get_empty_options(), source, "test/fixtures/compiler/no_game_test.dcpl", line_map);
+        auto options = compilation::compiler_options::parse(get_empty_options(), source, "test/fixtures/compiler/no_game_test.dcpl", source_files, line_map);
         ASSERT_FALSE(options);
         EXPECT_NE(options.error().find("@game"), std::string::npos);
     }
@@ -509,9 +519,10 @@ namespace dconstruct::testing {
             "@mod \"missing_target_mod\"\n"
             "@target \"rogue/does-not-exist\"\n"
             "u32 main() { return 0; }\n";
+        compilation::source_file_table source_files;
         std::vector<compilation::source_location> line_map;
 
-        auto options = compilation::compiler_options::parse(get_empty_options(), source, "test/fixtures/compiler/missing_target_test.dcpl", line_map);
+        auto options = compilation::compiler_options::parse(get_empty_options(), source, "test/fixtures/compiler/missing_target_test.dcpl", source_files, line_map);
         ASSERT_FALSE(options);
         EXPECT_NE(options.error().find("missing path"), std::string::npos);
     }
@@ -533,9 +544,10 @@ namespace dconstruct::testing {
             "@game \"test/fixtures/compiler/prepare_game\"\n"
             "@mod \"prepare_mod\"\n"
             "u32 main() { return 0; }\n";
+        compilation::source_file_table source_files;
         std::vector<compilation::source_location> line_map;
 
-        auto options = compilation::compiler_options::parse(get_empty_options(), source, "test/fixtures/compiler/prepare_test.dcpl", line_map);
+        auto options = compilation::compiler_options::parse(get_empty_options(), source, "test/fixtures/compiler/prepare_test.dcpl", source_files, line_map);
         ASSERT_TRUE(options) << options.error();
 
         const dconstruct::errmsg err = compilation::prepare_mod_workspace(*options);

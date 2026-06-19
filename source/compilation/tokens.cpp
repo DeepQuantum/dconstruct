@@ -1,6 +1,26 @@
 #include "compilation/tokens.h"
+#include <format>
+
 
 namespace dconstruct::compilation {
+
+    const std::filesystem::path* source_file_table::intern(std::filesystem::path path) {
+        const std::string key = path.string();
+        if (const auto it = m_filesByPath.find(key); it != m_filesByPath.end()) {
+            return it->second;
+        }
+
+        std::unique_ptr<std::filesystem::path> stored = std::make_unique<std::filesystem::path>(std::move(path));
+        const std::filesystem::path* stored_ptr = stored.get();
+        m_files.push_back(std::move(stored));
+        m_filesByPath.emplace(key, stored_ptr);
+        return stored_ptr;
+    }
+
+    void source_file_table::clear() noexcept {
+        m_filesByPath.clear();
+        m_files.clear();
+    }
 
     [[nodiscard]] sid64 get_identifier_sid(const std::string& identifier) {
         if (identifier.size() == 17 && identifier[0] == '#') {
@@ -18,10 +38,7 @@ namespace dconstruct::compilation {
     }
 
     [[nodiscard]] std::string format_source_location(const source_location& location) {
-        if (location.m_file.empty()) {
-            return "line " + std::to_string(location.m_line);
-        }
-        return location.m_file.string() + ":" + std::to_string(location.m_line);
+        return std::format("file: {}: line {}, column: {}", location.m_file ? location.m_file->string() : "<anonymous>", location.m_line, location.m_char);
     }
 
     [[nodiscard]] bool token::operator==(const token& rhs) const {

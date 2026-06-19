@@ -2,15 +2,29 @@
 
 #include "base.h"
 #include "ast/type.h"
+#include <memory>
 #include <filesystem>
+#include <unordered_map>
 #include <variant>
+#include <vector>
 
 namespace dconstruct::compilation {
     [[nodiscard]] sid64 get_identifier_sid(const std::string& identifier);
 
+    class source_file_table {
+    public:
+        [[nodiscard]] const std::filesystem::path* intern(std::filesystem::path path);
+        void clear() noexcept;
+
+    private:
+        std::vector<std::unique_ptr<std::filesystem::path>> m_files;
+        std::unordered_map<std::string, const std::filesystem::path*> m_filesByPath;
+    };
+
     struct source_location {
-        std::filesystem::path m_file;
+        const std::filesystem::path* m_file;
         u32 m_line = INT_MAX;
+        u32 m_char  = INT_MAX;
     };
 
     [[nodiscard]] std::string format_source_location(const source_location& location);
@@ -125,13 +139,15 @@ namespace dconstruct::compilation {
             std::string lexeme,
             ast::primitive_value literal = 0,
             u32 line = INT_MAX,
-            std::filesystem::path file = {}
+            u32 column = INT_MAX,
+            const  std::filesystem::path* file = nullptr
         ) noexcept
             : m_literal(std::move(literal)),
               m_lexeme(std::move(lexeme)),
               m_type(type),
               m_line(line),
-              m_file(std::move(file)) {}
+              m_char(column),
+              m_file(file) {}
 
         [[nodiscard]] bool operator==(const token& rhs) const;
 
@@ -139,6 +155,7 @@ namespace dconstruct::compilation {
         std::string m_lexeme;
         token_type m_type;
         u32 m_line;
-        std::filesystem::path m_file;
+        u32 m_char;
+        const std::filesystem::path* m_file;
     };
 }

@@ -15,6 +15,7 @@ namespace dconstruct::compilation {
             const cxxopts::ParseResult& args,
             std::string& source,
             const std::filesystem::path& source_path,
+            source_file_table& source_files,
             std::vector<source_location>& line_map
         ) noexcept;
         [[nodiscard]] static resstr<compiler_options> parse(const cxxopts::ParseResult& args, std::string& source) noexcept;
@@ -34,6 +35,7 @@ namespace dconstruct::compilation {
         [[nodiscard]] static resstr<compiler_options> from_dcpl(
             std::string& source,
             const std::filesystem::path& source_path,
+            source_file_table& source_files,
             std::vector<source_location>& line_map
         ) noexcept;
     };

@@ -1,12 +1,16 @@
 #include "dcplsp/server.h"
 #include "dcplsp/sidbase_lookup.h"
+#include "compilation/lexer.h"
+#include "compilation/dc_parser.h"
 #include "lsp/messages.h"
 #include "lsp/types.h"
+#include "compilation/dc_parser.h"
 #include <format>
 #include <string_view>
 #include <print>
 #include <chrono>
 #include <ostream>
+
 
 using namespace std::string_view_literals;
 
@@ -40,6 +44,12 @@ namespace dconstruct::dcplsp {
                         .completionProvider = lsp::CompletionOptions {
                             .triggerCharacters = lsp::Array<lsp::String>{ "#" },
                         },
+                        .semanticTokensProvider = lsp::SemanticTokensOptions {
+                            .legend = lsp::SemanticTokensLegend {
+                                .tokenTypes = compilation::Parser::semantic_token_ctx::TOKEN_TYPES,
+                            },
+                            .full = true,
+                        }
                     },
                     .serverInfo = lsp::InitializeResultServerInfo {
                         .name = "dcpl language server",
@@ -81,6 +91,19 @@ namespace dconstruct::dcplsp {
 
                 stop_with_error("undefined completion function"sv);
                 return {};
+            });
+        }
+
+        {
+            using req = lsp::requests::TextDocument_SemanticTokens_Full;
+            m_messageHandler.add<req>([this](req::Params&& params) -> req::Result {
+                log("started semantic token stuff");
+                const lsp::TextDocumentItem& doc = m_documents.at(params.textDocument.uri.toString());
+                std::vector<u32> new_tokens = make_semantic_tokens(doc.text);
+                if (!new_tokens.empty()) {
+                    m_semanticTokens = std::move(new_tokens);
+                }
+                return lsp::SemanticTokens { m_semanticTokens };
             });
         }
     }
@@ -198,6 +221,28 @@ namespace dconstruct::dcplsp {
         }
 
         return text.size();
+    }
+
+    [[nodiscard]] std::vector<u32> make_semantic_tokens(std::string text) {
+        if (text.empty()) {
+            return {};
+        }
+
+        compilation::Lexer lexer{std::move(text)};
+
+        const auto& [tokens, lex_errors] = lexer.get_results();
+        if (!lex_errors.empty()) {
+            return {};
+        }
+
+        compilation::Parser parser{std::move(tokens)};
+        auto program = parser.parse();
+
+        if (!parser.get_errors().empty()) {
+            return {};
+        }
+
+        return parser.get_semantic_tokens();
     }
 
 }
