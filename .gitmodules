@@ -10,3 +10,6 @@
 [submodule "source/lsp-framework"]
 	path = source/lsp-framework
 	url = https://github.com/leon-bckl/lsp-framework
+[submodule "source/llvm-cbe"]
+	path = source/llvm-cbe
+	url = https://github.com/DeepQuantum/llvm-23-cbe.git

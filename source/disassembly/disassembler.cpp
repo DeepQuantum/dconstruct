@@ -6,7 +6,6 @@
 #include <functional>
 #include <sstream>
 #include <iostream>
-#include <print>
 
 namespace dconstruct {
 
@@ -859,23 +858,24 @@ namespace dconstruct {
         tracks.reserve(block->m_trackGroup.m_numTracks);
 
         switch (block->m_blockType) {
-            case BLOCK_TYPE::START: {
+            using enum BLOCK_TYPE;
+            case START: {
                 function_name.m_event.m_name = "start";
                 break;
             }
-            case BLOCK_TYPE::END: {
+            case END: {
                 function_name.m_event.m_name = "end";
                 break;
             }
-            case BLOCK_TYPE::EVENT: {
+            case EVENT: {
                 function_name.m_event.m_name = std::string("event_").append(raw_sid_name(m_sidbase->lookup(block->m_blockEventId, m_currentFile->m_sidCache)));
                 break;
             }
-            case BLOCK_TYPE::UPDATE: {
+            case UPDATE: {
                 function_name.m_event.m_name = "update";
                 break;
             }
-            case BLOCK_TYPE::VIRTUAL: {
+            case VIRTUAL: {
                 function_name.m_event.m_name = "virtual";
                 break;
             }
@@ -1179,7 +1179,8 @@ namespace dconstruct {
 
 
         switch (opcode) {
-            case Opcode::Return: {
+            using enum Opcode;
+            case Return: {
                 std::snprintf(varying, disassembly_text_size, "r%d", dest);
                 std::snprintf(interpreted, interpreted_buffer_size, "Return %s", dst_str);
                 for (const auto& reg : fn.m_stackFrame.m_registers) {
@@ -1190,7 +1191,7 @@ namespace dconstruct {
                 fn.m_stackFrame.m_returnType = frame[dest].m_type;
                 break;
             }
-            case Opcode::IAdd: {
+            case IAdd: {
                 std::snprintf(varying, disassembly_text_size, "r%d, r%d, r%d", dest, op1, op2);
                 if (frame[op1].is_pointer()) {
                     frame[dest].m_type = frame[op1].m_type;
@@ -1201,21 +1202,21 @@ namespace dconstruct {
                 std::snprintf(interpreted, interpreted_buffer_size, "r%d = %s + %s", dest, op1_str, op2_str);
                 break;
             }
-            case Opcode::ISub:
-            case Opcode::IMul:
-            case Opcode::IDiv:
-            case Opcode::FAdd:
-            case Opcode::FSub:
-            case Opcode::FMul:
-            case Opcode::FDiv: {
+            case ISub:
+            case IMul:
+            case IDiv:
+            case FAdd:
+            case FSub:
+            case FMul:
+            case FDiv: {
                 char op = 0;
-                if (opcode == Opcode::FAdd) {
+                if (opcode == FAdd) {
                     op = '+';
-                } else if (opcode == Opcode::ISub || opcode == Opcode::FSub) {
+                } else if (opcode == ISub || opcode == FSub) {
                     op = '-';
-                } else if (opcode == Opcode::IMul || opcode == Opcode::FMul) {
+                } else if (opcode == IMul || opcode == FMul) {
                     op = '*';
-                } else if (opcode == Opcode::IDiv || opcode == Opcode::FDiv) {
+                } else if (opcode == IDiv || opcode == FDiv) {
                     op = '/';
                 }
                 std::snprintf(varying, disassembly_text_size, "r%d, r%d, r%d", dest, op1, op2);
@@ -1223,7 +1224,7 @@ namespace dconstruct {
                 std::snprintf(interpreted, interpreted_buffer_size, "%s = %s %c %s", dst_str, op1_str, op, op2_str);
                 break;
             }
-            case Opcode::LoadStaticInt: {
+            case LoadStaticInt: {
                 // const i64 table_value = frame.m_symbolTable.first.get<i64>(op1 * 8);
                 const i32 table_value = frame.m_symbolTable.get<i32>(op1);
                 table_entry = make_type_from_prim(ast::primitive_kind::I32);
@@ -1233,7 +1234,7 @@ namespace dconstruct {
                 std::snprintf(interpreted, interpreted_buffer_size, "%s = ST[%d] -> <%s>", dst_str, op1, op1_str);
                 break;
             }
-            case Opcode::LoadStaticFloat: {
+            case LoadStaticFloat: {
                 const f32 table_value = frame.m_symbolTable.get<f32>(op1 * 8);
                 table_entry = make_type_from_prim(ast::primitive_kind::F32);
                 std::snprintf(varying, disassembly_text_size, "r%d, %d", dest, op1);
@@ -1242,7 +1243,7 @@ namespace dconstruct {
                 std::snprintf(interpreted, interpreted_buffer_size, "%s = ST[%d] -> <%s>", dst_str, op1, op1_str);
                 break;
             }
-            case Opcode::LoadStaticPointer: {
+            case LoadStaticPointer: {
                 const p64 table_value = frame.m_symbolTable.get<p64>(op1);
                 table_entry = ast::ptr_type{};
                 std::snprintf(varying, disassembly_text_size, "r%d, %d", dest, op1);
@@ -1251,7 +1252,7 @@ namespace dconstruct {
                 std::snprintf(interpreted, interpreted_buffer_size, "%s = ST[%d] -> <%s>", dst_str, op1, op1_str);
                 break;
             }
-            case Opcode::LoadU16Imm: {
+            case LoadU16Imm: {
                 const u16 value = op1 | (op2 << 8);
                 std::snprintf(varying, disassembly_text_size, "r%d, %d", dest, value);
                 frame[dest].m_type = make_type_from_prim(ast::primitive_kind::U16);
@@ -1259,15 +1260,15 @@ namespace dconstruct {
                 std::snprintf(interpreted, interpreted_buffer_size, "r%d = %d", dest, value);
                 break;
             }
-            case Opcode::LoadU32: {
+            case LoadU32: {
                 load_nonstatic(ast::primitive_kind::U32, "r%d = *(u32*)%s");
                 break;
             }
-            case Opcode::LoadFloat: {
+            case LoadFloat: {
                 load_nonstatic(ast::primitive_kind::F32, "r%d = *(f32*)%s");
                 break;
             }
-            case Opcode::LoadPointer: {
+            case LoadPointer: {
                 frame[op1].set_first_type(ast::ptr_type{ast::ptr_type{}});
                 std::snprintf(varying, disassembly_text_size, "r%d, [r%d]", dest, op1);
                 frame[dest].m_type = ast::ptr_type{};
@@ -1277,30 +1278,30 @@ namespace dconstruct {
                 std::snprintf(interpreted, interpreted_buffer_size, "r%d = *(p64*)%s", dest, dst_str);
                 break;
             }
-            case Opcode::LoadI64: {
+            case LoadI64: {
                 load_nonstatic(ast::primitive_kind::I64, "r%d = *(i64*)%s");
                 break;
             }
-            case Opcode::LoadU64: {
+            case LoadU64: {
                 load_nonstatic(ast::primitive_kind::U64, "r%d = *(u64*)%s");
                 break;
             }
-            case Opcode::StoreInt: {
+            case StoreInt: {
                 store_nonstatic(ast::primitive_kind::I32, "r%d, *(i32*)%s = %s");
                 break;
             }
-            case Opcode::StoreFloat: {
+            case StoreFloat: {
                 store_nonstatic(ast::primitive_kind::F32, "r%d, *(f32*)%s = %s");
                 break;
             }
-            case Opcode::StorePointer: {
+            case StorePointer: {
                 frame[dest].set_first_type(ast::ptr_type{ast::ptr_type{}});
                 std::snprintf(varying, disassembly_text_size, "r%d, [r%d], r%d", dest, op1, op2);
                 std::snprintf(interpreted, interpreted_buffer_size, "r%d, *(p64*)%s = %s", dest, op1_str, op2_str);
                 frame[op1].m_type = ast::ptr_type{};
                 break;
             }
-            case Opcode::LookupInt: {
+            case LookupInt: {
                 std::snprintf(varying, disassembly_text_size, "r%d, %d", dest, op1);
                 if (game != game_type::UC4) {
                     const i64 value = frame.m_symbolTable.get<i64>(op1);
@@ -1315,7 +1316,7 @@ namespace dconstruct {
                 }
                 break;
             }
-            case Opcode::LookupFloat: {
+            case LookupFloat: {
                 std::snprintf(varying, disassembly_text_size, "r%d, %d", dest, op1);
                 const f32 value = frame.m_symbolTable.get<f32>(op1);
                 frame[dest].m_type = make_type_from_prim(ast::primitive_kind::F32);
@@ -1323,7 +1324,7 @@ namespace dconstruct {
                 std::snprintf(interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%s>", dest, op1, sidbase.lookup(static_cast<sid64>(value), sidcache));
                 break;
             }
-            case Opcode::LookupPointer: {
+            case LookupPointer: {
                 std::snprintf(varying, disassembly_text_size, "r%d, %d", dest, op1);
                 p64 value = 0;
                 if (game != game_type::UC4) {
@@ -1347,42 +1348,42 @@ namespace dconstruct {
                 }
                 break;
             }
-            case Opcode::MoveInt: {
+            case MoveInt: {
                 frame[op1].set_first_type(ast::primitive_kind::I64);
                 std::snprintf(varying, disassembly_text_size, "r%d, %d", dest, op1);
                 frame[dest].m_type = make_type_from_prim(ast::primitive_kind::I64);
                 std::snprintf(interpreted, interpreted_buffer_size, "r%d = r%d <%lli>", dest, op1, frame[op1].m_value);
                 break;
             }
-            case Opcode::MoveFloat: {
+            case MoveFloat: {
                 frame[op1].set_first_type(ast::primitive_kind::F32);
                 std::snprintf(varying, disassembly_text_size, "r%d, %d", dest, op1);
                 frame[dest].m_type = make_type_from_prim(ast::primitive_kind::F32);
                 std::snprintf(interpreted, interpreted_buffer_size, "r%d = r%d <%f>", dest, op1, static_cast<f32>(std::bit_cast<f64>(frame[op1].m_value)));
                 break;
             }
-            case Opcode::MovePointer: {
+            case MovePointer: {
                 frame[op1].set_first_type(ast::ptr_type{});
                 std::snprintf(varying, disassembly_text_size, "r%d, %d", dest, op1);
                 frame[dest].m_type = ast::ptr_type{};
                 std::snprintf(interpreted, interpreted_buffer_size, "r%d = r%d <%s>", dest, op1, sidbase.lookup(frame[op1].m_value, sidcache));
                 break;
             }
-            case Opcode::CastInteger: {
+            case CastInteger: {
                 std::snprintf(varying, disassembly_text_size, "r%d", dest);
                 frame[dest].m_type = make_type_from_prim(ast::primitive_kind::I32);
                 frame[dest].m_value = frame[op1].m_value;
                 std::snprintf(interpreted, interpreted_buffer_size, "r%d = int(r%d)", dest, dest);
                 break;
             }
-            case Opcode::CastFloat: {
+            case CastFloat: {
                 std::snprintf(varying, disassembly_text_size, "r%d", dest);
                 frame[dest].m_type = make_type_from_prim(ast::primitive_kind::F32);
                 std::snprintf(interpreted, interpreted_buffer_size, "r%d = float(r%d)", dest, dest);
                 break;
             }
-            case Opcode::Call:
-            case Opcode::CallFf: {
+            case Call:
+            case CallFf: {
                 std::snprintf(varying, disassembly_text_size, "r%d, r%d, %d", dest, op1, op2);
                 char comment_str[300];
                 const char* function_name = sidbase.lookup(frame[op1].m_value, sidcache);
@@ -1408,19 +1409,19 @@ namespace dconstruct {
                 std::snprintf(interpreted, interpreted_buffer_size, "%s)", comment_str);
                 break;
             }
-            case Opcode::IEqual:
-            case Opcode::IGreaterThan:
-            case Opcode::IGreaterThanEqual:
-            case Opcode::ILessThan:
-            case Opcode::ILessThanEqual:
-            case Opcode::FEqual:
-            case Opcode::FGreaterThan:
-            case Opcode::FGreaterThanEqual:
-            case Opcode::FLessThan:
-            case Opcode::FLessThanEqual:
-            case Opcode::INotEqual:
-            case Opcode::FNotEqual: {
-                if (opcode == Opcode::IEqual || opcode == Opcode::IGreaterThan || opcode == Opcode::IGreaterThanEqual || opcode == Opcode::ILessThan || opcode == Opcode::ILessThanEqual || opcode == Opcode::INotEqual) {
+            case IEqual:
+            case IGreaterThan:
+            case IGreaterThanEqual:
+            case ILessThan:
+            case ILessThanEqual:
+            case FEqual:
+            case FGreaterThan:
+            case FGreaterThanEqual:
+            case FLessThan:
+            case FLessThanEqual:
+            case INotEqual:
+            case FNotEqual: {
+                if (opcode == IEqual || opcode == IGreaterThan || opcode == IGreaterThanEqual || opcode == ILessThan || opcode == ILessThanEqual || opcode == INotEqual) {
                     set_register_types(frame[op1], frame[op2], make_type_from_prim(ast::primitive_kind::I64));
                 } else {
                     set_register_types(frame[op1], frame[op2], make_type_from_prim(ast::primitive_kind::F32));
@@ -1430,43 +1431,43 @@ namespace dconstruct {
                     frame[dest].m_type = make_type_from_prim(ast::primitive_kind::BOOL);
                 }
                 const char* op = "";
-                if (opcode == Opcode::IEqual || opcode == Opcode::FEqual) {
+                if (opcode == IEqual || opcode == FEqual) {
                     op = "==";
-                } else if (opcode == Opcode::IGreaterThan || opcode == Opcode::FGreaterThan) {
+                } else if (opcode == IGreaterThan || opcode == FGreaterThan) {
                     op = ">";
-                } else if (opcode == Opcode::IGreaterThanEqual || opcode == Opcode::FGreaterThanEqual) {
+                } else if (opcode == IGreaterThanEqual || opcode == FGreaterThanEqual) {
                     op = ">=";
-                } else if (opcode == Opcode::ILessThan || opcode == Opcode::FLessThan) {
+                } else if (opcode == ILessThan || opcode == FLessThan) {
                     op = "<";
-                } else if (opcode == Opcode::ILessThanEqual || opcode == Opcode::FLessThanEqual) {
+                } else if (opcode == ILessThanEqual || opcode == FLessThanEqual) {
                     op = "<=";
-                } else if (opcode == Opcode::INotEqual || opcode == Opcode::FNotEqual) {
+                } else if (opcode == INotEqual || opcode == FNotEqual) {
                     op = "!=";
                 }
                 std::snprintf(interpreted, interpreted_buffer_size, "r%d = r%d %s r%d", dest, op1, op, op2);
                 break;
             }
-            case Opcode::IMod:
-            case Opcode::FMod: {
-                auto type = opcode == Opcode::IMod ? ast::primitive_kind::I64 : ast::primitive_kind::F32;
+            case IMod:
+            case FMod: {
+                auto type = opcode == IMod ? ast::primitive_kind::I64 : ast::primitive_kind::F32;
                 set_register_types(frame[op1], frame[op2], make_type_from_prim(type));
                 std::snprintf(varying, disassembly_text_size, "r%d, r%d, r%d", dest, op1, op2);
                 frame[dest].m_type = make_type_from_prim(type);
                 std::snprintf(interpreted, interpreted_buffer_size, "r%d = r%d %% r%d", dest, op1, op2);
                 break;
             }
-            case Opcode::IAbs:
-            case Opcode::FAbs: {
-                auto type = opcode == Opcode::IAbs ? ast::primitive_kind::I64 : ast::primitive_kind::F32;
+            case IAbs:
+            case FAbs: {
+                auto type = opcode == IAbs ? ast::primitive_kind::I64 : ast::primitive_kind::F32;
                 frame[op1].set_first_type(type);
                 std::snprintf(varying, disassembly_text_size, "r%d, r%d", dest, op1);
                 frame[dest].m_type = make_type_from_prim(type);
                 std::snprintf(interpreted, interpreted_buffer_size, "r%d = ABS(r%d)", dest, op1);
                 break;
             }
-            case Opcode::Branch: {
+            case Branch: {
                 u32 target = dest | (op2 << 8);
-                while (fn.m_lines[target].m_instruction.opcode == Opcode::Branch) {
+                while (fn.m_lines[target].m_instruction.opcode == Branch) {
                     const u32 new_target = fn.m_lines[target].m_instruction.destination | (fn.m_lines[target].m_instruction.operand2 << 8);
                     if (new_target > target) {
                         target = new_target;
@@ -1483,8 +1484,8 @@ namespace dconstruct {
                 }
                 break;
             }
-            case Opcode::BranchIf:
-            case Opcode::BranchIfNot: {
+            case BranchIf:
+            case BranchIfNot: {
                 u32 target = dest | (op2 << 8);
                 bool is_branching_target = true;
                 while (is_branching_target) {
@@ -1492,15 +1493,15 @@ namespace dconstruct {
                     const auto& target_op = target_line.m_instruction.opcode;
                     if (target_op == istr.opcode && target_line.m_instruction.operand1 == op1) {
                         target = target_line.m_instruction.destination | (target_line.m_instruction.operand2 << 8);
-                    } else if (istr.opcode == Opcode::BranchIf && target_op == Opcode::BranchIfNot && target_line.m_instruction.operand1 == op1) {
+                    } else if (istr.opcode == BranchIf && target_op == BranchIfNot && target_line.m_instruction.operand1 == op1) {
                         target = target_line.m_location + 1;
-                    } else if (istr.opcode == Opcode::BranchIfNot && target_op == Opcode::BranchIf && target_line.m_instruction.operand1 == op1) {
+                    } else if (istr.opcode == BranchIfNot && target_op == BranchIf && target_line.m_instruction.operand1 == op1) {
                         target = target_line.m_location + 1;
-                    } else if (target_op == Opcode::OpLogNot && target_line.m_instruction.operand1 == op1) {
+                    } else if (target_op == OpLogNot && target_line.m_instruction.operand1 == op1) {
                         const auto& flipped_target_opcode = fn.m_lines[target + 1].m_instruction.opcode;
-                        if (istr.opcode == Opcode::BranchIf && flipped_target_opcode == Opcode::BranchIfNot) {
+                        if (istr.opcode == BranchIf && flipped_target_opcode == BranchIfNot) {
                             target = fn.m_lines[target + 1].m_instruction.destination | (fn.m_lines[target + 1].m_instruction.operand2 << 8);
-                        } else if (istr.opcode == Opcode::BranchIfNot && flipped_target_opcode == Opcode::BranchIfNot || istr.opcode == Opcode::BranchIf && flipped_target_opcode == Opcode::BranchIf) {
+                        } else if (istr.opcode == BranchIfNot && flipped_target_opcode == BranchIfNot || istr.opcode == BranchIf && flipped_target_opcode == BranchIf) {
                             target = target + 2;
                         } else {
                             is_branching_target = false;
@@ -1510,7 +1511,7 @@ namespace dconstruct {
                     }
                 }
                 std::snprintf(varying, disassembly_text_size, "r%d, 0x%X", op1, target);
-                const char* comment = istr.opcode == Opcode::BranchIf ? "IF r%d " : "IF NOT r%d ";
+                const char* comment = istr.opcode == BranchIf ? "IF r%d " : "IF NOT r%d ";
                 std::snprintf(interpreted, interpreted_buffer_size, comment, op1);
                 line.m_target = target;
                 frame.add_target_label(target);
@@ -1519,80 +1520,80 @@ namespace dconstruct {
                 }
                 break;
             }
-            case Opcode::OpLogNot: {
+            case OpLogNot: {
                 frame[op1].set_first_type(ast::primitive_kind::BOOL);
                 std::snprintf(varying, disassembly_text_size, "r%d, r%d", dest, op1);
                 frame[dest].m_type = make_type_from_prim(ast::primitive_kind::BOOL);
                 std::snprintf(interpreted, interpreted_buffer_size, "r%d = !%s", dest, op1_str);
                 break;
             }
-            case Opcode::OpBitAnd: {
+            case OpBitAnd: {
                 frame[op1].set_first_type(ast::primitive_kind::I64);
                 std::snprintf(varying, disassembly_text_size, "r%d, r%d, r%d", dest, op1, op2);
                 frame[dest].m_type = frame[op1].m_type;
                 std::snprintf(interpreted, interpreted_buffer_size, "r%d = r%d & r%d", dest, op1, op2);
                 break;
             }
-            case Opcode::OpBitNot: {
+            case OpBitNot: {
                 frame[op1].set_first_type(ast::primitive_kind::I64);
                 std::snprintf(varying, disassembly_text_size, "r%d, r%d", dest, op1);
                 frame[dest].m_type = frame[op1].m_type;
                 std::snprintf(interpreted, interpreted_buffer_size, "r%d = ~r%d", dest, op1);
                 break;
             }
-            case Opcode::OpBitOr: {
+            case OpBitOr: {
                 frame[op1].set_first_type(ast::primitive_kind::I64);
                 std::snprintf(varying, disassembly_text_size, "r%d, r%d, r%d", dest, op1, op2);
                 frame[dest].m_type = frame[op1].m_type;
                 std::snprintf(interpreted, interpreted_buffer_size, "r%d = r%d | r%d", dest, op1, op2);
                 break;
             }
-            case Opcode::OpBitXor: {
+            case OpBitXor: {
                 frame[op1].set_first_type(ast::primitive_kind::I64);
                 std::snprintf(varying, disassembly_text_size, "r%d, r%d, r%d", dest, op1, op2);
                 frame[dest].m_type = frame[op1].m_type;
                 std::snprintf(interpreted, interpreted_buffer_size, "r%d = r%d ^ r%d", dest, op1, op2);
                 break;
             }
-            case Opcode::OpBitNor: {
+            case OpBitNor: {
                 frame[op1].set_first_type(ast::primitive_kind::I64);
                 std::snprintf(varying, disassembly_text_size, "r%d, r%d, r%d", dest, op1, op2);
                 frame[dest].m_type = frame[op1].m_type;
                 std::snprintf(interpreted, interpreted_buffer_size, "r%d = ~(r%d | r%d) -> <%llu>", dest, op1, op2, frame[dest].m_value);
                 break;
             }
-            case Opcode::OpLogAnd: {
+            case OpLogAnd: {
                 frame[op1].set_first_type(ast::primitive_kind::BOOL);
                 std::snprintf(varying, disassembly_text_size, "r%d, r%d, r%d", dest, op1, op2);
                 frame[dest].m_type = make_type_from_prim(ast::primitive_kind::BOOL);
                 std::snprintf(interpreted, interpreted_buffer_size, "r%d = r%d && r%d", dest, op1, op2);
                 break;
             }
-            case Opcode::OpLogOr: {
+            case OpLogOr: {
                 frame[op1].set_first_type(ast::primitive_kind::BOOL);
                 std::snprintf(varying, disassembly_text_size, "r%d, r%d, r%d", dest, op1, op2);
                 frame[dest].m_type = make_type_from_prim(ast::primitive_kind::BOOL);
                 std::snprintf(interpreted, interpreted_buffer_size, "r%d = r%d || r%d", dest, op1, op2);
                 break;
             }
-            case Opcode::INeg: {
+            case INeg: {
                 frame[op1].set_first_type(ast::primitive_kind::I64);
                 std::snprintf(varying, disassembly_text_size, "r%d, r%d", dest, op1);
                 frame[dest].m_type = make_type_from_prim(ast::primitive_kind::I64);
                 std::snprintf(interpreted, interpreted_buffer_size, "r%d = -r%d", dest, op1);
                 break;
             }
-            case Opcode::FNeg: {
+            case FNeg: {
                 frame[op1].set_first_type(ast::primitive_kind::F32);
                 std::snprintf(varying, disassembly_text_size, "r%d, r%d", dest, op1);
                 frame[dest].m_type = make_type_from_prim(ast::primitive_kind::F32);
                 std::snprintf(interpreted, interpreted_buffer_size, "r%d = -r%d", dest, op1);
                 break;
             }
-            case Opcode::LoadParamCnt: {
+            case LoadParamCnt: {
                 break;
             }
-            case Opcode::IAddImm: {
+            case IAddImm: {
                 frame[op1].set_first_type(ast::primitive_kind::I64);
                 std::snprintf(varying, disassembly_text_size, "r%d, r%d, %d", dest, op1, op2);
                 const char* resolved = nullptr;
@@ -1606,26 +1607,26 @@ namespace dconstruct {
                 std::snprintf(interpreted, interpreted_buffer_size, "r%d = %s + %d -> <%s>", dest, op1_str, op2, dst_str);
                 break;
             }
-            case Opcode::ISubImm:
-            case Opcode::IMulImm:
-            case Opcode::IDivImm: {
+            case ISubImm:
+            case IMulImm:
+            case IDivImm: {
                 frame[op1].set_first_type(ast::primitive_kind::I64);
                 std::snprintf(varying, disassembly_text_size, "r%d, r%d, %d", dest, op1, op2);
                 frame[dest].m_type = make_type_from_prim(ast::primitive_kind::I64);
                 frame[dest].m_value = frame[op1].m_value;
-                const char* op = opcode == Opcode::ISubImm ? "-" : (opcode == Opcode::IMulImm ? "*" : "/");
+                const char* op = opcode == ISubImm ? "-" : (opcode == IMulImm ? "*" : "/");
                 std::snprintf(interpreted, interpreted_buffer_size, "r%d = r%d %s %d", dest, op1, op, op2);
                 break;
             }
-            case Opcode::LoadStaticI32Imm: {
+            case LoadStaticI32Imm: {
                 load_static_imm.operator()<i32, ast::primitive_kind::I32>("r%d = ST[%d] -> <%d>");
                 break;
             }
-            case Opcode::LoadStaticFloatImm: {
+            case LoadStaticFloatImm: {
                 load_static_imm.operator()<f32, ast::primitive_kind::F32>("r%d = ST[%d] -> <%f>");
                 break;
             }
-            case Opcode::LoadStaticPointerImm: {
+            case LoadStaticPointerImm: {
                 if (location{frame.m_symbolTable.get<const std::byte*>(op1)} >= string_location) [[likely]] {
                     load_static_imm.operator()<p64, ast::primitive_kind::STRING>("r%d = ST[%d] -> \"%s\"");
                 } else [[unlikely]] {
@@ -1638,11 +1639,11 @@ namespace dconstruct {
                 }
                 break;
             }
-            case Opcode::LoadStaticI64Imm: {
+            case LoadStaticI64Imm: {
                 load_static_imm.operator()<i64, ast::primitive_kind::I64>("r%d = ST[%d] -> <%lli>");
                 break;
             }
-            case Opcode::LoadStaticU64Imm: {
+            case LoadStaticU64Imm: {
                 std::snprintf(varying, disassembly_text_size, "r%d, %d", dest, op1);
                 const u64 value = frame.m_symbolTable.get<u64>(op1);
                 const char* hash_str = sidbase.lookup(value, sidcache);
@@ -1653,7 +1654,7 @@ namespace dconstruct {
                 std::snprintf(interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%s>", dest, op1, dst_str);
                 break;
             }
-            case Opcode::IntAsh: {
+            case IntAsh: {
                 frame[op1].set_first_type(ast::primitive_kind::I64);
                 frame[op2].set_first_type(ast::primitive_kind::I8);
                 std::snprintf(varying, disassembly_text_size, "r%d, r%d, r%d", dest, op1, op2);
@@ -1661,13 +1662,13 @@ namespace dconstruct {
                 std::snprintf(interpreted, interpreted_buffer_size, "r%d = %s <<>> %s", dest, op1_str, op2_str);
                 break;
             }
-            case Opcode::Move: {
+            case Move: {
                 std::snprintf(varying, disassembly_text_size, "r%d, r%d", dest, op1);
                 frame[dest] = frame[op1];
                 std::snprintf(interpreted, interpreted_buffer_size, "r%d = %s", dest, op1_str);
                 break;
             }
-            case Opcode::LoadStaticU32Imm: {
+            case LoadStaticU32Imm: {
                 if (game == game_type::UC4) {
                     std::snprintf(varying, disassembly_text_size, "r%d, %d", dest, op1);
                     const sid32 value = frame.m_symbolTable.get<sid32>(op1);
@@ -1683,82 +1684,82 @@ namespace dconstruct {
                 }
                 break;
             }
-            case Opcode::LoadStaticI8Imm: {
+            case LoadStaticI8Imm: {
                 load_static_imm.operator()<i8, ast::primitive_kind::I8>("r%d = ST[%d] -> <%d>");
                 break;
             }
-            case Opcode::LoadStaticI16Imm: {
+            case LoadStaticI16Imm: {
                 load_static_imm.operator()<i16, ast::primitive_kind::I16>("r%d = ST[%d] -> <%d>");
                 break;
             }
-            case Opcode::LoadStaticU16Imm: {
+            case LoadStaticU16Imm: {
                 load_static_imm.operator()<u16, ast::primitive_kind::U16>("r%d = ST[%d] -> <%u>");
                 break;
             }
-            case Opcode::LoadI8: {
+            case LoadI8: {
                 load_nonstatic(ast::primitive_kind::I8, "r%d = *(i8*)%s");
                 break;
             }
-            case Opcode::LoadU8: {
+            case LoadU8: {
                 load_nonstatic(ast::primitive_kind::U8, "r%d = *(u8*)%s");
                 break;
             }
-            case Opcode::LoadI16: {
+            case LoadI16: {
                 load_nonstatic(ast::primitive_kind::I16, "r%d = *(i16*)%s");
                 break;
             }
-            case Opcode::LoadU16: {
+            case LoadU16: {
                 load_nonstatic(ast::primitive_kind::U16, "r%d = *(u16*)%s");
                 break;
             }
-            case Opcode::LoadI32: {
+            case LoadI32: {
                 load_nonstatic(ast::primitive_kind::I32, "r%d = *(i32*)%s");
                 break;
             }
-            case Opcode::StoreI8: {
+            case StoreI8: {
                 store_nonstatic(ast::primitive_kind::I8, "r%d, *(i8*)%s = %s");
                 break;
             }
-            case Opcode::StoreU8: {
+            case StoreU8: {
                 store_nonstatic(ast::primitive_kind::U8, "r%d, *(u8*)%s = %s");
                 break;
             }
-            case Opcode::StoreI16: {
+            case StoreI16: {
                 store_nonstatic(ast::primitive_kind::I16, "r%d, *(i16*)%s = %s");
                 break;
             }
-            case Opcode::StoreU16: {
+            case StoreU16: {
                 store_nonstatic(ast::primitive_kind::U16, "r%d, *(u16*)%s = %s");
                 break;
             }
-            case Opcode::StoreI32: {
+            case StoreI32: {
                 store_nonstatic(ast::primitive_kind::I32, "r%d, *(i32*)%s = %s");
                 break;
             }
-            case Opcode::StoreU32: {
+            case StoreU32: {
                 store_nonstatic(ast::primitive_kind::U32, "r%d, *(u32*)%s = %s");
                 break;
             }
-            case Opcode::StoreI64: {
+            case StoreI64: {
                 store_nonstatic(ast::primitive_kind::I64, "r%d, *(i64*)%s = %s");
                 break;
             }
-            case Opcode::StoreU64: {
+            case StoreU64: {
                 store_nonstatic(ast::primitive_kind::U64, "r%d, *(u64*)%s = %s");
                 break;
             }
-            case Opcode::AssertPointer: {
+            case AssertPointer: {
                 frame[dest].set_first_type(ast::ptr_type{});
                 std::snprintf(varying, disassembly_text_size, "r%d", dest);
                 std::snprintf(interpreted, interpreted_buffer_size, "r%d != nullptr", dest);
                 break;
             }
-            case Opcode::StoreArray: {
+            case StoreArray: {
                 std::snprintf(varying, disassembly_text_size, " ");
                 std::snprintf(interpreted, interpreted_buffer_size, "DCC BREAKPOINT");
                 break;
             }
-            case Opcode::QEX_InRangeI: {
+            case QEX_InRangeI: {
                 const i64 min = frame.m_symbolTable.get<i64>(op2);
                 const i64 max = frame.m_symbolTable.get<i64>(op2 + 1);
                 frame[op1].set_first_type(ast::primitive_kind::I64);

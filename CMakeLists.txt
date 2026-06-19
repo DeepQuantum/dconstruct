@@ -361,7 +361,20 @@ set(LLVM_INCLUDE_BENCHMARKS OFF CACHE BOOL "" FORCE)
 set(LLVM_INCLUDE_DOCS OFF CACHE BOOL "" FORCE)
 set(LLVM_DISABLE_ASSEMBLY_FILES ON CACHE BOOL "" FORCE)
 
+# Build the llvm-cbe submodule in-tree against the local LLVM submodule.
+# LLVM only defines LLVM_VERSION_MAJOR for projects added through this hook, so
+# llvm-cbe's CMakeLists skips its find_package(LLVM CONFIG) path entirely and
+# never picks up a system-installed LLVM (e.g. C:/llvm).
+set(LLVM_EXTERNAL_PROJECTS "llvm-cbe" CACHE STRING "" FORCE)
+set(LLVM_EXTERNAL_LLVM_CBE_SOURCE_DIR "${SOURCE_DIR}/llvm-cbe" CACHE PATH "" FORCE)
+
 add_subdirectory(${SOURCE_DIR}/llvm/llvm EXCLUDE_FROM_ALL)
+
+# The CBackend libs declare DEPENDS intrinsics_gen but pull in MachineValueType.h,
+# which needs the tablegen'd GenVT.inc (target vt_gen). Building the CBE libs in
+# isolation skips it, so make the dependency explicit.
+add_dependencies(LLVMCBackendCodeGen vt_gen intrinsics_gen)
+add_dependencies(LLVMCBackendInfo vt_gen intrinsics_gen)
 
 add_library(llvm_transpile
     "${SOURCE_DIR}/llvm_transpile/llvm_transpile.cpp"
@@ -372,10 +385,26 @@ target_include_directories(llvm_transpile SYSTEM PUBLIC
     "${LLVM_BINARY_DIR}/include"
 )
 
+# Mirror the CBackend's own LINK_COMPONENTS so the C backend's vtables
+# (TargetLowering/TargetLoweringBase/TargetSubtargetInfo virtuals) resolve.
+llvm_map_components_to_libnames(LLVM_TRANSPILE_DEPS
+    Analysis
+    CodeGen
+    Core
+    MC
+    Passes
+    ScalarOpts
+    Support
+    Target
+    SelectionDAG
+    TransformUtils
+)
+
 target_link_libraries(llvm_transpile PUBLIC
     dconstruct_lib
-    LLVMCore
-    LLVMSupport
+    LLVMCBackendCodeGen
+    LLVMCBackendInfo
+    ${LLVM_TRANSPILE_DEPS}
 )
 
 target_compile_options(llvm_transpile PRIVATE
@@ -383,6 +412,22 @@ target_compile_options(llvm_transpile PRIVATE
 )
 
 target_link_options(llvm_transpile PRIVATE
+    $<$<CONFIG:Release>:/LTCG>
+)
+
+add_executable(llvm_transpile_demo
+    "${SOURCE_DIR}/llvm_transpile/main_cbe_demo.cpp"
+)
+
+target_link_libraries(llvm_transpile_demo PRIVATE
+    llvm_transpile
+)
+
+target_compile_options(llvm_transpile_demo PRIVATE
+    $<$<CONFIG:Release>:/GL>
+)
+
+target_link_options(llvm_transpile_demo PRIVATE
     $<$<CONFIG:Release>:/LTCG>
 )
 

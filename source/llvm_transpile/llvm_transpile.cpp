@@ -1,6 +1,5 @@
 #include "llvm_transpile/llvm_transpile.h"
 #include "base.h"
-#include "binaryfile.h"
 #include "decompilation/control_flow_graph.h"
 #include "disassembly/instructions.h"
 #include "disassembly/opcodes.h"
@@ -13,22 +12,35 @@
 #include "llvm/IR/Instruction.h"
 #include "llvm/IR/Instructions.h"
 #include "llvm/IR/LLVMContext.h"
+#include "llvm/IR/LegacyPassManager.h"
 #include "llvm/IR/Type.h"
+#include "llvm/Analysis/TargetLibraryInfo.h"
+#include "llvm/Analysis/TargetTransformInfo.h"
+#include "llvm/Passes/PassBuilder.h"
+#include "llvm/MC/TargetRegistry.h"
+#include "llvm/Support/CodeGen.h"
+#include "llvm/Support/raw_ostream.h"
+#include "llvm/Target/TargetMachine.h"
+#include "llvm/TargetParser/Host.h"
+#include "llvm/TargetParser/Triple.h"
+#include "llvm/ADT/SmallString.h"
 #include <memory>
+#include <string>
+
+extern "C" void LLVMInitializeCBackendTarget();
+extern "C" void LLVMInitializeCBackendTargetInfo();
+extern "C" void LLVMInitializeCBackendTargetMC();
 
 
 namespace dconstruct::llvm_transpile {
 
-    [[nodiscard]] std::unique_ptr<llvm::Function> transpile_function_to_llvm(
-        llvm::LLVMContext& ctx,
-        llvm::Module& module,
-        const function_disassembly& func_disassembly
-    ) {
+    llvm::Function* transpile_function_to_llvm(llvm::Module& module, const function_disassembly& func_disassembly) {
+
         ControlFlowGraph graph = ControlFlowGraph::build(func_disassembly);
+        llvm::LLVMContext& ctx = module.getContext();
 
         auto* func_type = llvm::FunctionType::get(llvm::IntegerType::get(ctx, 64), false);
         auto* func = llvm::Function::Create(func_type, llvm::GlobalValue::LinkageTypes::ExternalLinkage, 0, func_disassembly.get_id(), &module);
-
 
         std::vector<llvm::BasicBlock*> blocks;
         blocks.reserve(graph.m_nodes.size());
@@ -149,10 +161,74 @@ namespace dconstruct::llvm_transpile {
                         builder.CreateRet(builder.CreateLoad(default_int_t, register_file_frame[istr.destination]));
                         break;
                     }
+                    default:
+                        continue;
                 }
             }
         }
 
-        return nullptr;
+        return func;
+    }
+
+    [[nodiscard]] std::string emit_c_from_module(llvm::Module& module) {
+        LLVMInitializeCBackendTargetInfo();
+        LLVMInitializeCBackendTarget();
+        LLVMInitializeCBackendTargetMC();
+
+        llvm::Triple triple(llvm::sys::getDefaultTargetTriple());
+
+        std::string error;
+        const llvm::Target* target = llvm::TargetRegistry::lookupTarget("c", triple, error);
+        if (target == nullptr) {
+            return std::format("error: could not find C backend target: {}", error);
+        }
+
+        llvm::TargetOptions options;
+        std::unique_ptr<llvm::TargetMachine> machine(target->createTargetMachine(triple, "", "", options, std::optional<llvm::Reloc::Model>()));
+        if (machine == nullptr) {
+            return "error: could not create C backend target machine";
+        }
+
+        module.setTargetTriple(triple);
+        module.setDataLayout(machine->createDataLayout());
+
+        llvm::SmallString<0> buffer;
+        llvm::raw_svector_ostream out(buffer);
+
+        llvm::LoopAnalysisManager LAM;
+        llvm::FunctionAnalysisManager FAM;
+        llvm::CGSCCAnalysisManager CGAM;
+        llvm::ModuleAnalysisManager MAM;
+
+        llvm::PassBuilder PB(machine.get());
+        PB.registerModuleAnalyses(MAM);
+        PB.registerCGSCCAnalyses(CGAM);
+        PB.registerFunctionAnalyses(FAM);
+        PB.registerLoopAnalyses(LAM);
+        PB.crossRegisterProxies(LAM, FAM, CGAM, MAM);
+
+        llvm::ModulePassManager MPM = PB.buildPerModuleDefaultPipeline(llvm::OptimizationLevel::O2);
+        MPM.run(module, MAM);
+
+        module.print(out, nullptr);
+
+        llvm::SmallString<0> c_buffer;
+        llvm::raw_svector_ostream c_out(c_buffer);
+
+        llvm::legacy::PassManager pass_manager;
+        pass_manager.add(new llvm::TargetLibraryInfoWrapperPass(triple));
+        pass_manager.add(llvm::createTargetTransformInfoWrapperPass(machine->getTargetIRAnalysis()));
+
+        if (machine->addPassesToEmitFile(pass_manager, c_out, nullptr, llvm::CodeGenFileType::AssemblyFile, true)) {
+            return "error: C backend does not support emitting this module";
+        }
+        pass_manager.run(module);
+
+        std::string result;
+        result += "/* ===== LLVM IR ===== */\n";
+        result += std::string(buffer.str());
+        result += "\n/* ===== C backend ===== */\n";
+        result += std::string(c_buffer.str());
+        return result;
     }
 }

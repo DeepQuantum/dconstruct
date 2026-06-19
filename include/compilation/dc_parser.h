@@ -5,6 +5,7 @@
 #include "tokens.h"
 #include "ast/ast.h"
 
+#include <optional>
 #include <type_traits>
 #include <vector>
 #include <unordered_map>
@@ -30,16 +31,20 @@ namespace dconstruct::compilation {
         void add_mapped_types(const std::unordered_map<sid64, ast::full_type>& types);
 
         enum class SEMANTIC_TOKEN_TYPE : u32 {
-            KEYWORD = 0,
-            NUMBER = 1,
-            STRING = 2,
-            CONSTANT = 3,
-            FUNCTION = 4,
-            MACRO = 5,
-            VARIABLE = 6,
-            TYPE = 7,
-            COMMENT = 8,
-            OPERATOR = 9,
+            KEYWORD  = 0,
+            NUMBER   = 1,
+            STRING   = 2,
+            FUNCTION = 3,
+            MACRO    = 4,
+            VARIABLE = 5,
+            TYPE     = 6,
+            COMMENT  = 7,
+            OPERATOR = 8,
+        };
+
+        enum class SEMANTIC_TOKEN_MODIFIER : u32 {
+            NONE     = 0,
+            CONSTANT = 1u << 0,
         };
 
         struct semantic_token_ctx {
@@ -57,7 +62,6 @@ namespace dconstruct::compilation {
                 "keyword",
                 "number",
                 "string",
-                "constant",
                 "function",
                 "macro",
                 "variable",
@@ -66,7 +70,13 @@ namespace dconstruct::compilation {
                 "operator",
             };
 
-            void insert(const token& token, const SEMANTIC_TOKEN_TYPE type);
+            inline static const std::vector<std::string> TOKEN_MODIFIERS = {
+                "constant",
+            };
+
+            template<SEMANTIC_TOKEN_TYPE type, SEMANTIC_TOKEN_MODIFIER... modifiers>
+            void insert(const token& token);
+
             [[nodiscard]] marker mark() const noexcept;
             void restore(marker mark);
         };

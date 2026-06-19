@@ -47,6 +47,7 @@ namespace dconstruct::dcplsp {
                         .semanticTokensProvider = lsp::SemanticTokensOptions {
                             .legend = lsp::SemanticTokensLegend {
                                 .tokenTypes = compilation::Parser::semantic_token_ctx::TOKEN_TYPES,
+                                .tokenModifiers = compilation::Parser::semantic_token_ctx::TOKEN_MODIFIERS,
                             },
                             .full = true,
                         }
@@ -80,13 +81,7 @@ namespace dconstruct::dcplsp {
             m_messageHandler.add<req>([this](req::Params&& params) -> req::Result {
                 log("started completion");
                 if (params.context) {
-                    if (std::optional<lsp::String> starting_char = params.context->triggerCharacter; starting_char && (*starting_char)[0] == '#') {
-                        log("got starting char");
-                        return lsp::CompletionList{ .isIncomplete = true, .items = {}};
-                    } else {
-                        log("finishing completion");
-                        return this->finish_hash_completion(std::move(params));
-                    }
+                    return this->finish_hash_completion(std::move(params));
                 }
 
                 stop_with_error("undefined completion function"sv);
@@ -98,8 +93,9 @@ namespace dconstruct::dcplsp {
             using req = lsp::requests::TextDocument_SemanticTokens_Full;
             m_messageHandler.add<req>([this](req::Params&& params) -> req::Result {
                 log("started semantic token stuff");
-                const lsp::TextDocumentItem& doc = m_documents.at(params.textDocument.uri.toString());
+                const lsp::TextDocumentItem& doc = m_documents.at(std::string(params.textDocument.uri.data()));
                 std::vector<u32> new_tokens = make_semantic_tokens(doc.text);
+                log("got {} tokens", new_tokens.size());
                 if (!new_tokens.empty()) {
                     m_semanticTokens = std::move(new_tokens);
                 }
@@ -156,19 +152,24 @@ namespace dconstruct::dcplsp {
         const lsp::TextDocumentItem& doc = m_documents.at(std::string(params.textDocument.uri.data()));
         const u64 completion_pos = position_to_string_index(doc.text, params.position);
 
-        if (completion_pos > doc.text.size()) {
-            return {};
-        }
-        auto completion_iter = doc.text.begin() + completion_pos - 1;
-
-        if (*completion_iter == ' ' || *completion_iter == '\n') {
+        if (completion_pos == 0 || completion_pos > doc.text.size()) {
             return lsp::CompletionList { .isIncomplete = false, .items = {} };
         }
 
-        const u64 hash = doc.text.rfind('#', completion_pos);
+        u64 hash = std::string::npos;
+        for (u64 i = completion_pos; i > 0; --i) {
+            const char c = doc.text[i - 1];
+            if (c == ' ' || c == '\t' || c == '\n' || c == '\r') {
+                break;
+            }
+            if (c == '#') {
+                hash = i - 1;
+                break;
+            }
+        }
+
         if (hash == std::string::npos) {
-            stop_with_error("oopsie, so this is awkward UwU. we are never supposed to have a isIncomplete completion without a '#' before!!");
-            return {};
+            return lsp::CompletionList { .isIncomplete = false, .items = {} };
         }
 
         std::string needle = doc.text.substr(hash + 1, completion_pos - hash - 1);
@@ -224,24 +225,22 @@ namespace dconstruct::dcplsp {
     }
 
     [[nodiscard]] std::vector<u32> make_semantic_tokens(std::string text) {
+        std::println(stderr, "here-1");
         if (text.empty()) {
             return {};
         }
 
         compilation::Lexer lexer{std::move(text)};
-
+        std::println(stderr, "here0");
         const auto& [tokens, lex_errors] = lexer.get_results();
         if (!lex_errors.empty()) {
             return {};
         }
 
         compilation::Parser parser{std::move(tokens)};
+        std::println(stderr, "here1");
         auto program = parser.parse();
-
-        if (!parser.get_errors().empty()) {
-            return {};
-        }
-
+        std::println(stderr, "here2");
         return parser.get_semantic_tokens();
     }
 
