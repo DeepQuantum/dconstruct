@@ -4,8 +4,12 @@
 #include "disassembly/opcodes.h"
 #include "llvm/IR/LLVMContext.h"
 #include "llvm/IR/Module.h"
+#include "llvm/Support/raw_ostream.h"
 
 #include <array>
+#include <bit>
+#include <filesystem>
+#include <fstream>
 #include <print>
 #include <string>
 #include <vector>
@@ -13,13 +17,14 @@
 using namespace dconstruct;
 
 int main() {
-    alignas(8) std::array<u32, 2> symbols = {10u, 32u};
+    std::array<u64, 2> symbols = {std::bit_cast<u32>(1.5f), std::bit_cast<u32>(1.5f)};
 
-    std::array<Instruction, 4> code = {{
-        {Opcode::LoadStaticU32Imm, 0, 0, 0, {}},
-        {Opcode::LoadStaticU32Imm, 1, 4, 0, {}},
-        {Opcode::IAdd, 2, 0, 1, {}},
-        {Opcode::Return, 2, 0, 0, {}},
+    std::array<Instruction, 2> code = {{
+        // {Opcode::LoadStaticFloatImm, 0, 0, 0, {}},
+        // {Opcode::LoadStaticFloatImm, 1, 1, 0, {}},
+        // {Opcode::FAdd, 2, 0, 1, {}},
+        {Opcode::StoreI8, 1, 2, 3, {}},
+        {Opcode::Return, 1, 0, 0, {}},
     }};
 
     std::vector<function_disassembly_line> lines;
@@ -37,9 +42,26 @@ int main() {
 
     llvm_transpile::transpile_function_to_llvm(module, func);
 
-    const std::string c_code = llvm_transpile::emit_c_from_module(module);
+    std::string original_ir;
+    {
+        llvm::raw_string_ostream os(original_ir);
+        module.print(os, nullptr);
+    }
 
-    std::println("{}", c_code);
+    const std::string optimized_and_c = llvm_transpile::emit_c_from_module(module);
+
+    std::string output;
+    output += "/* ===== Original LLVM IR ===== */\n";
+    output += original_ir;
+    output += "\n";
+    output += optimized_and_c;
+
+    const std::filesystem::path out_path = std::filesystem::path(__FILE__).parent_path() / "output.c";
+    std::ofstream out_file(out_path);
+    out_file << output;
+    out_file.close();
+
+    std::println("wrote transpile output to {}", out_path.string());
 
     return 0;
 }
