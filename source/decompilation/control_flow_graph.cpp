@@ -1,3 +1,4 @@
+#include "base.h"
 #include "disassembly/instructions.h"
 #ifdef WIN32
 #define GVDLL
@@ -42,6 +43,15 @@ namespace dconstruct {
         for (const auto& loop : m_loops) {
             if (loop.m_headNode == node) {
                 return &loop;
+            }
+        }
+        return nullptr;
+    }
+
+    [[nodiscard]] const control_flow_node* ControlFlowGraph::get_node_with_start_line(const istr_line start_line) const {
+        for (const auto& node : m_nodes) {
+            if (node.m_startLine == start_line) {
+                return &node;
             }
         }
         return nullptr;

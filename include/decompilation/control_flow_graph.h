@@ -70,6 +70,7 @@ namespace dconstruct {
 
         [[nodiscard]] const control_flow_node& operator[](const node_id at) const;
 
+        [[nodiscard]] const control_flow_node* get_node_with_start_line(const istr_line node) const;
         [[nodiscard]] const control_flow_loop* get_loop_with_head(const node_id node) const;
 
         [[nodiscard]] reg_set get_registers_written_to(const control_flow_node& node, const node_id stop) const;
