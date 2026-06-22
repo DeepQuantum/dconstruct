@@ -1329,7 +1329,6 @@ namespace dconstruct {
                 p64 value = 0;
                 if (game != game_type::UC4) {
                     value = frame.m_symbolTable.get<p64>(op1);
-
                 } else {
                     value = frame.m_symbolTable.get<u32>(op1);
                 }
@@ -1388,21 +1387,34 @@ namespace dconstruct {
                 char comment_str[300];
                 const char* function_name = sidbase.lookup(frame[op1].m_value, sidcache);
                 u8 offset = std::snprintf(comment_str, sizeof(comment_str), "r%d = %s(", dest, function_name);
+                auto& ftype = frame.m_symbolTable.get_type(frame[op1].m_fromSymbolTable);
+                if (!std::holds_alternative<ast::function_type>(ftype)) {
+                    ftype = ast::function_type{};
+                }
+                ast::function_type &func_type = std::get<ast::function_type>(ftype);
+                if (!func_type.m_arguments.empty() && func_type.m_arguments.size() != op2) {
+                    func_type.m_isVariadic = true;
+                    if (op2 < func_type.m_arguments.size()) {
+                        func_type.m_arguments.resize(op2);
+                    }
+                }
                 for (u64 i = 0; i < op2; ++i) {
                     if (i != 0) {
                         offset += std::snprintf(comment_str + offset, sizeof(comment_str) - offset, ", ");
                     }
                     const auto arg_type = std::make_shared<ast::full_type>(frame[ARGUMENT_REGISTERS_IDX + i].m_type);
-                    auto& ftype = frame.m_symbolTable.get_type(frame[dest].m_fromSymbolTable);
-                    if (!std::holds_alternative<ast::function_type>(ftype)) {
-                        ftype = ast::function_type{};
+                    if (i < func_type.m_arguments.size()) {
+                        if (ast::is_unknown(*func_type.m_arguments[i].second)) {
+                            *func_type.m_arguments[i].second = *arg_type;
+                        }
+                    } else if (!func_type.m_isVariadic) {
+                        func_type.m_arguments.emplace_back(std::format("arg_{}", i), arg_type);
                     }
-                    std::get<ast::function_type>(ftype).m_arguments.emplace_back("", arg_type);
                     frame.to_string(dst_str, interpreted_buffer_size, ARGUMENT_REGISTERS_IDX + i, sidbase.lookup(frame[i + ARGUMENT_REGISTERS_IDX].m_value, sidcache));
                     offset += std::snprintf(comment_str + offset, sizeof(comment_str) - offset, "%s", dst_str);
                 }
                 if (auto* ft_ptr = std::get_if<ast::function_type>(&frame[dest].m_type)) {
-                    frame[dest].m_type = std::move(*ft_ptr->m_return);
+                    frame[dest].m_type = *ft_ptr->m_return;
                 }
                 frame[dest].m_isReturn = true;
                 frame[dest].m_pointerOffset = 0;

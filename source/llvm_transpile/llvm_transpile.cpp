@@ -4,6 +4,7 @@
 #include "decompilation/control_flow_graph.h"
 #include "disassembly/instructions.h"
 #include "disassembly/opcodes.h"
+#include "sidbase.h"
 #include "llvm/ADT/ArrayRef.h"
 #include "llvm/IR/BasicBlock.h"
 #include "llvm/IR/Constant.h"
@@ -21,17 +22,18 @@
 #include "llvm/Analysis/TargetLibraryInfo.h"
 #include "llvm/Analysis/TargetTransformInfo.h"
 #include "llvm/IR/Value.h"
-#include "llvm/Passes/PassBuilder.h"
 #include "llvm/MC/TargetRegistry.h"
+#include "llvm/Passes/PassBuilder.h"
 #include "llvm/Support/Alignment.h"
-#include "llvm/Support/CodeGen.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm/Support/Casting.h"
 #include "llvm/Target/TargetMachine.h"
+#include "llvm/Transforms/Utils/Cloning.h"
 #include "llvm/Transforms/Utils/ModuleUtils.h"
 #include "llvm/TargetParser/Host.h"
 #include "llvm/TargetParser/Triple.h"
-#include "llvm/ADT/SmallString.h"
+#include <algorithm>
 #include <string>
+#include <type_traits>
 #include <variant>
 
 using namespace std::literals;
@@ -42,26 +44,16 @@ extern "C" void LLVMInitializeCBackendTargetMC();
 
 namespace dconstruct::llvm_transpile {
 
-    template <std::size_t N> struct fixed_string {
-        char data[N];
-
-        constexpr fixed_string(const char (&str)[N]) { std::copy_n(str, N, data); }
-    };
-
-    struct sourced_instruction {
-        Opcode opcode;
-        u8 dest;
-        u8 op1;
-        u8 op2;
-        u32 node;
-        u32 line;
-    };
-
-    resstr<llvm::Function*> transpile_function_to_llvm(llvm::Module& module, const function_disassembly& func_disassembly) {
+    resstr<llvm::Function*> transpile_function_to_llvm(llvm::Module& module, const function_disassembly& func_disassembly, const SIDBase& sidbase) {
         ControlFlowGraph graph = ControlFlowGraph::build(func_disassembly);
         llvm::LLVMContext& ctx = module.getContext();
 
-        auto* func_type = llvm::FunctionType::get(llvm::Type::getFloatTy(ctx), false);
+        std::vector<llvm::Type*> arg_types(func_disassembly.m_stackFrame.m_registerArgs.size());
+        std::transform(func_disassembly.m_stackFrame.m_registerArgs.begin(), func_disassembly.m_stackFrame.m_registerArgs.end(), arg_types.begin(), [&](const ast::full_type& type) {
+            return ast_type_to_llvm_type(ctx, type);
+        });
+
+        auto* func_type = llvm::FunctionType::get(llvm::Type::getInt64Ty(ctx), llvm::ArrayRef(arg_types.data(), arg_types.size()), false);
         auto* func = llvm::Function::Create(func_type, llvm::GlobalValue::LinkageTypes::ExternalLinkage, 0, func_disassembly.get_id(), &module);
 
         std::map<istr_line, llvm::BasicBlock*> blocks;
@@ -103,12 +95,22 @@ namespace dconstruct::llvm_transpile {
             return builder.CreateStore(rhs, register_file_frame[index]);
         };
 
+        for (u64 i = 0; i < func->arg_size(); ++i) {
+            llvm::Argument* arg = func->getArg(i);
+            arg->setName(std::format("arg_{}", i));
+            make_store(ARGUMENT_REGISTERS_IDX + i, arg, arg->getType());
+        }
+
         auto make_symbol_table_load = [&]<typename T>(const Instruction& istr, std::string_view istr_id, llvm::Value* idx = nullptr) -> llvm::StoreInst* {
+            llvm::Type* load_type = nullptr;
             if constexpr (std::is_integral_v<T>) {
-                types[istr.destination] = llvm::IntegerType::get(ctx, sizeof(T) * 8);
+                load_type = llvm::IntegerType::get(ctx, sizeof(T) * 8);
+                types[istr.destination] = default_int_t;
             } else if constexpr (std::is_same_v<T, f32>) {
+                load_type = default_float_t;
                 types[istr.destination] = default_float_t;
             } else if constexpr (std::is_pointer_v<T>) {
+                load_type = default_pointer_t;
                 types[istr.destination] = default_pointer_t;
             } else {
                 static_assert(false, "invalid symbol table load type");
@@ -119,7 +121,11 @@ namespace dconstruct::llvm_transpile {
             }
 
             llvm::Value* st_value = builder.CreateInBoundsGEP(array_t, symbol_table_global, {builder.getInt64(0), idx}, std::format("{}_gep", istr_id));
-            llvm::Value* load = builder.CreateLoad(types[istr.destination], st_value, std::format("{}_st_load", istr_id));
+            llvm::Value* load = builder.CreateLoad(load_type, st_value, std::format("{}_st_load", istr_id));
+
+            if constexpr (std::is_integral_v<T>) {
+                load = builder.CreateIntCast(load, default_int_t, std::is_signed_v<T>, std::format("{}_ext", istr_id));
+            }
 
             return builder.CreateStore(load, register_file_frame[istr.destination]);
         };
@@ -128,17 +134,23 @@ namespace dconstruct::llvm_transpile {
             types[istr.operand1] = llvm::PointerType::get(ctx, 0);
             llvm::Value* from = load_register(istr.operand1, std::format("{}_addr", istr_id));
 
-            llvm::Type* type = nullptr;
+            llvm::Type* load_type = nullptr;
+            llvm::Type* dest_type = nullptr;
             if constexpr (std::is_integral_v<T>) {
-                type = llvm::IntegerType::get(ctx, sizeof(T) * 8);
+                load_type = llvm::IntegerType::get(ctx, sizeof(T) * 8);
+                dest_type = default_int_t;
             } else if constexpr (std::is_same_v<T, f32>) {
-                type = llvm::Type::getFloatTy(ctx);
+                load_type = llvm::Type::getFloatTy(ctx);
+                dest_type = default_float_t;
             } else {
                 static_assert(false, "unsupported type for mem load");
             }
 
-            llvm::Value* res = builder.CreateLoad(type, from, std::format("{}_load", istr_id));
-            return make_store(istr.destination, res, type);
+            llvm::Value* res = builder.CreateLoad(load_type, from, std::format("{}_load", istr_id));
+            if constexpr (std::is_integral_v<T>) {
+                res = builder.CreateIntCast(res, default_int_t, std::is_signed_v<T>, std::format("{}_ext", istr_id));
+            }
+            return make_store(istr.destination, res, dest_type);
         };
 
         auto make_mem_store = [&]<typename T>(const Instruction& istr, std::string_view istr_id) -> llvm::StoreInst* {
@@ -146,16 +158,16 @@ namespace dconstruct::llvm_transpile {
             llvm::Value* from = load_register(istr.operand2, std::format("{}_value", istr_id));
             llvm::Value* to = load_register(istr.operand1, std::format("{}_addr", istr_id));
 
-            llvm::Type* type = nullptr;
+            llvm::Value* mem_value = from;
             if constexpr (std::is_integral_v<T>) {
-                type = llvm::IntegerType::get(ctx, sizeof(T) * 8);
+                mem_value = builder.CreateIntCast(from, llvm::IntegerType::get(ctx, sizeof(T) * 8), std::is_signed_v<T>, std::format("{}_trunc", istr_id));
             } else if constexpr (std::is_same_v<T, f32>) {
-                type = llvm::Type::getFloatTy(ctx);
+                mem_value = from;
             } else {
-                static_assert(false, "unsupported type for mem load");
+                static_assert(false, "unsupported type for mem store");
             }
 
-            llvm::Value* stored = builder.CreateStore(from, to);
+            builder.CreateStore(mem_value, to);
             llvm::StoreInst* copy = make_store(istr.destination, from, types[istr.operand2]);
             return copy;
         };
@@ -163,6 +175,9 @@ namespace dconstruct::llvm_transpile {
         auto make_binary = [&](const Instruction& istr, std::function<llvm::Value*(llvm::Value*, llvm::Value*)> binary_op, llvm::Type* dest_type, std::string_view istr_id = "") -> llvm::StoreInst* {
             llvm::Value* lhs = load_register(istr.operand1, std::format("{}_load_lhs", istr_id));
             llvm::Value* rhs = load_register(istr.operand2, std::format("{}_load_rhs", istr_id));
+            if (lhs->getType() != rhs->getType()) {
+                rhs = builder.CreateZExtOrTrunc(rhs, lhs->getType());
+            }
             llvm::Value* res = binary_op(lhs, rhs);
             types[istr.destination] = dest_type;
             return make_store(istr.destination, res);
@@ -170,7 +185,8 @@ namespace dconstruct::llvm_transpile {
 
         auto make_binary_imm = [&](const Instruction& istr, std::function<llvm::Value*(llvm::Value*, llvm::Value*)> binary_op, llvm::Type* dest_type, std::string_view istr_id = "") -> llvm::StoreInst* {
             llvm::Value* lhs = load_register(istr.operand1, std::format("{}_load_lhs", istr_id));
-            llvm::Constant* imm = llvm::ConstantInt::get(bool_t, istr.operand2);
+            llvm::Type* imm_type = lhs->getType()->isPointerTy() ? builder.getInt8Ty() : lhs->getType();
+            llvm::Value* imm =  llvm::ConstantInt::get(imm_type, istr.operand2);
             llvm::Value* res = binary_op(lhs, imm);
             types[istr.destination] = dest_type;
             return make_store(istr.destination, res);
@@ -183,6 +199,18 @@ namespace dconstruct::llvm_transpile {
             return make_store(istr.destination, res);
         };
 
+        auto exchange_function_types = [&](llvm::Type* new_arg_type, const u8 type_location, const u8 arg_idx) -> llvm::FunctionType* {
+            llvm::FunctionType* old_f_type = llvm::cast<llvm::FunctionType>(types[type_location]);
+            std::vector<llvm::Type*> new_arg_types;
+            new_arg_types.reserve(old_f_type->getNumParams());
+            for (u32 i = 0; i < old_f_type->getNumParams(); ++i) {
+                new_arg_types.push_back(old_f_type->getParamType(i));
+            }
+            new_arg_types[arg_idx] = new_arg_type;
+            llvm::FunctionType* new_f_type = llvm::FunctionType::get(old_f_type->getReturnType(), llvm::ArrayRef(new_arg_types.data(), new_arg_types.size()), old_f_type->isVarArg());
+            types[type_location] = new_f_type;
+            return new_f_type;
+        };
 
         const control_flow_node* current_node = &graph.m_nodes[0];
         for (u32 l = 0; l < func_disassembly.m_lines.size(); ++l) {
@@ -190,7 +218,7 @@ namespace dconstruct::llvm_transpile {
             Instruction istr = line.m_instruction;
             std::string istr_id = std::format("__{}_{}__", istr.opcode_to_string(), l);
 
-            std::string op = std::format("{}_op", istr_id);
+            std::string op = std::format("{}op", istr_id);
             switch (line.m_instruction.opcode) {
                 using enum Opcode;
                 case IAdd: {
@@ -237,9 +265,12 @@ namespace dconstruct::llvm_transpile {
                     make_binary(istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreateXor(a, b, op); }, default_int_t, istr_id);
                     break;
                 }
-                case OpBitNot:
-                case OpLogNot: {
+                case OpBitNot: {
                     make_unary(istr, [&](llvm::Value* a) { return builder.CreateNot(a, op); }, default_int_t, istr_id);
+                    break;
+                }
+                case OpLogNot: {
+                    make_unary(istr, [&](llvm::Value* a) { return builder.CreateNot(a, op); }, bool_t, istr_id);
                     break;
                 }
                 case OpBitNor: {
@@ -268,7 +299,11 @@ namespace dconstruct::llvm_transpile {
                     break;
                 }
                 case IAddImm: {
-                    make_binary_imm(istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreateAdd(a, b, op); }, default_int_t, istr_id);
+                    if (types[istr.operand1]->isPointerTy()) {
+                        make_binary_imm(istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreatePtrAdd(a, b, op); }, types[istr.operand1], istr_id);
+                    } else {
+                        make_binary_imm(istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreateAdd(a, b, op); }, default_int_t, istr_id);
+                    }
                     break;
                 }
                 case ISubImm: {
@@ -362,9 +397,9 @@ namespace dconstruct::llvm_transpile {
                     break;
                 }
                 case LoadU16Imm: {
-                    const u16 val = istr.operand1 | (istr.operand2 << (sizeof(u16) / 2));
-                    types[istr.destination] = builder.getInt16Ty();
-                    llvm::Constant* value = llvm::ConstantInt::get(types[istr.destination], val, std::is_signed_v<u16>);
+                    const u16 val = istr.operand1 | (istr.operand2 << 8);
+                    types[istr.destination] = default_int_t;
+                    llvm::Constant* value = llvm::ConstantInt::get(default_int_t, val, false);
                     make_store(istr.destination, value);
                     break;
                 }
@@ -481,10 +516,50 @@ namespace dconstruct::llvm_transpile {
                     break;
                 }
                 case LoadStaticPointerImm: {
+                    const ast::full_type& type = func_disassembly.m_stackFrame.m_symbolTable.m_types[istr.operand1];
+                    if (const ast::primitive_type* string_value = std::get_if<ast::primitive_type>(&type)) {
+                        assert(string_value->m_type == ast::primitive_kind::STRING);
+
+                        const char* actual_string = symbol_table.get<const char*>(istr.operand1 * sizeof(u64));
+                        llvm::Constant* char_array = llvm::ConstantDataArray::getString(ctx, actual_string, true);
+
+                        llvm::GlobalVariable* string_global_var = new llvm::GlobalVariable(module, char_array->getType(), false, llvm::GlobalValue::PrivateLinkage, char_array, std::format("{}_str", istr_id));
+                        string_global_var->setUnnamedAddr(llvm::GlobalValue::UnnamedAddr::Global);
+                        string_global_var->setAlignment(llvm::Align(1));
+
+                        make_store(istr.destination, string_global_var, default_pointer_t);
+                    } else {
+                        make_symbol_table_load.operator()<const void*>(istr, istr_id);
+                    }
                     break;
                 }
                 case Move: {
-                    make_store(istr.destination, load_register(istr.operand1, std::format("{}_load_op1", istr_id)));
+                    make_store(istr.destination, load_register(istr.operand1, std::format("{}_load_op1", istr_id)), types[istr.operand1]);
+                    break;
+                }
+                case LookupPointer: {
+                    const ast::full_type& symbol_table_t = func_disassembly.m_stackFrame.m_symbolTable.m_types[istr.operand1];
+                    assert(std::holds_alternative<ast::function_type>(symbol_table_t));
+                    llvm::FunctionType* function_type = llvm::cast<llvm::FunctionType>(ast_type_to_llvm_type(ctx, symbol_table_t));
+                    const char* function_name = sidbase.lookup(symbol_table.get<sid64>(istr.operand1 * sizeof(u64)));
+                    llvm::FunctionCallee function = module.getOrInsertFunction(function_name, function_type);
+                    make_store(istr.destination, function.getCallee(), function_type);
+                    break;
+                }
+                case CallFf:
+                case Call: {
+                    llvm::FunctionType* func_type = llvm::cast<llvm::FunctionType>(types[istr.operand1]);
+                    llvm::Value* callee = builder.CreateLoad(default_pointer_t, register_file_frame[istr.operand1], std::format("{}_callee", istr_id));
+                    std::vector<llvm::Value*> arg_values;
+                    arg_values.reserve(istr.operand2);
+                    for (u64 i = 0; i < istr.operand2; ++i) {
+                        arg_values.push_back(load_register(ARGUMENT_REGISTERS_IDX + i, std::format("{}_arg{}", istr_id, i)));
+                        if (i < func_type->getNumParams() && arg_values.back()->getType() != func_type->getParamType(i)) {
+                            func_type = exchange_function_types(arg_values.back()->getType(), istr.operand1, i);
+                        }
+                    }
+                    llvm::Value* call = builder.CreateCall(func_type, callee, llvm::ArrayRef(arg_values.data(), arg_values.size()), std::format("{}_call", istr_id));
+                    make_store(istr.destination, call, func_type->getReturnType());
                     break;
                 }
                 case Return:
@@ -494,11 +569,6 @@ namespace dconstruct::llvm_transpile {
                     // explicitly handled by the last line code
                     break;
                 }
-                case LookupPointer: {;
-                    const auto& disasm_function_type = func_disassembly.m_stackFrame.m_symbolTable.m_types[istr.operand1];
-                    assert(std::holds_alternative<ast::function_type>(disasm_function_type));
-                    
-                }
                 default:
                     continue;
             }
@@ -507,7 +577,7 @@ namespace dconstruct::llvm_transpile {
                 switch (istr.opcode) {
                     using enum Opcode;
                     case Branch: {
-                        istr_line target = istr.destination | (istr.operand2 << (sizeof(u16) / 2));
+                        istr_line target = current_node->m_lines.back().m_target;
                         builder.CreateBr(blocks.at(target));
                         builder.SetInsertPoint(blocks.at(l + 1));
                         current_node = graph.get_node_with_start_line(l + 1);
@@ -515,29 +585,35 @@ namespace dconstruct::llvm_transpile {
                         break;
                     }
                     case BranchIf: {
-                        const istr_line destination = istr.destination | (istr.operand2 << (sizeof(u16) / 2));
+                        const istr_line destination = current_node->m_lines.back().m_target;
                         llvm::Value* condition_reg = load_register(istr.operand1, std::format("{}_cond", istr_id));
+                        llvm::Value* bool_condition_reg = builder.CreateZExtOrTrunc(condition_reg, bool_t);
                         llvm::BasicBlock* target_block = blocks.at(destination);
                         llvm::BasicBlock* fallthrough = blocks.at(l + 1);
-                        builder.CreateCondBr(condition_reg, target_block, fallthrough);
+                        builder.CreateCondBr(bool_condition_reg, target_block, fallthrough);
                         builder.SetInsertPoint(blocks.at(l + 1));
                         current_node = graph.get_node_with_start_line(l + 1);
                         assert(current_node != nullptr);
                         break;
                     }
                     case BranchIfNot: {
-                        const istr_line destination = istr.destination | (istr.operand2 << (sizeof(u16) / 2));
+                        const istr_line destination = current_node->m_lines.back().m_target;
                         llvm::Value* condition_reg = load_register(istr.operand1, std::format("{}_cond", istr_id));
+                        llvm::Value* bool_condition_reg = builder.CreateZExtOrTrunc(condition_reg, bool_t);
                         llvm::BasicBlock* target_block = blocks.at(destination);
                         llvm::BasicBlock* fallthrough = blocks.at(l + 1);
-                        builder.CreateCondBr(condition_reg, fallthrough, target_block);
+                        builder.CreateCondBr(bool_condition_reg, fallthrough, target_block);
                         builder.SetInsertPoint(blocks.at(l + 1));
                         current_node = graph.get_node_with_start_line(l + 1);
                         assert(current_node != nullptr);
                         break;
                     }
                     case Return: {
-                        builder.CreateRet(load_register(istr.destination, std::format("{}_retval", istr_id)));
+                        llvm::Value* ret_value = load_register(istr.destination, std::format("{}_retval", istr_id));
+                        if (ret_value->getType() != func->getReturnType() && ret_value->getType()->isIntegerTy() && func->getReturnType()->isIntegerTy()) {
+                            ret_value = builder.CreateIntCast(ret_value, func->getReturnType(), false, std::format("{}_retcast", istr_id));
+                        }
+                        builder.CreateRet(ret_value);
                         break;
                     }
                     default: {
@@ -554,65 +630,132 @@ namespace dconstruct::llvm_transpile {
         return func;
     }
 
-[[nodiscard]] std::string emit_c_from_module(llvm::Module& module) {
-    LLVMInitializeCBackendTargetInfo();
-    LLVMInitializeCBackendTarget();
-    LLVMInitializeCBackendTargetMC();
+    [[nodiscard]] llvm::Type* ast_type_to_llvm_type(llvm::LLVMContext& ctx, const ast::full_type& type) {
+        return std::visit([&ctx](auto&& arg) -> llvm::Type* {
+            using T = std::decay_t<decltype(arg)>;
 
-    llvm::Triple triple(llvm::sys::getDefaultTargetTriple());
-
-    std::string error;
-    const llvm::Target* target = llvm::TargetRegistry::lookupTarget("c", triple, error);
-    if (target == nullptr) {
-        return std::format("error: could not find C backend target: {}", error);
+            if constexpr (std::is_same_v<T, ast::primitive_type>) {
+                if (arg.m_type == ast::primitive_kind::BOOL) {
+                    return llvm::Type::getInt1Ty(ctx);
+                } else if (ast::is_integral(arg.m_type) || arg.m_type == ast::primitive_kind::SID32 || arg.m_type == ast::primitive_kind::SID) {
+                    return llvm::Type::getInt64Ty(ctx);
+                } else if (arg.m_type == ast::primitive_kind::F32) {
+                    return llvm::Type::getFloatTy(ctx);
+                } else if (arg.m_type == ast::primitive_kind::F64) {
+                    return llvm::Type::getDoubleTy(ctx);
+                } else if (arg.m_type == ast::primitive_kind::STRING || arg.m_type == ast::primitive_kind::NULLPTR) {
+                    return llvm::PointerType::getUnqual(ctx);
+                } else {
+                    assert(false);
+                    return nullptr;
+                }
+            } else if constexpr (std::is_same_v<T, ast::ptr_type>) {
+                return llvm::PointerType::getUnqual(ctx);
+            } else if constexpr (std::is_same_v<T, ast::enum_type>) {
+                return llvm::Type::getInt64Ty(ctx);
+            } else if constexpr (std::is_same_v<T, ast::struct_type>) {
+                std::vector<llvm::Type*> llvm_types(arg.m_members.size());
+                std::transform(arg.m_members.begin(), arg.m_members.end(), llvm_types.begin(), [&ctx](const std::pair<std::string, ast::ref_full_type>& member_pair) {
+                    return ast_type_to_llvm_type(ctx, *member_pair.second);
+                });
+                return llvm::StructType::create(ctx, llvm::ArrayRef(llvm_types.data(), llvm_types.size()), arg.m_name);
+            } else if constexpr (std::is_same_v<T, ast::function_type>) {
+                std::vector<llvm::Type*> llvm_arg_types(arg.m_arguments.size());
+                std::transform(arg.m_arguments.begin(), arg.m_arguments.end(), llvm_arg_types.begin(), [&ctx](const std::pair<std::string, ast::ref_full_type>& paramater_pair) {
+                    return ast_type_to_llvm_type(ctx, *paramater_pair.second);
+                });
+                llvm::Type* return_type = ast_type_to_llvm_type(ctx, *arg.m_return);
+                return llvm::FunctionType::get(return_type, llvm::ArrayRef(llvm_arg_types.data(), llvm_arg_types.size()), arg.m_isVariadic);
+            } else {
+                return llvm::IntegerType::getInt64Ty(ctx);
+            }
+        }, type);
     }
 
-    llvm::TargetOptions options;
-    std::unique_ptr<llvm::TargetMachine> machine(target->createTargetMachine(triple, "", "", options, std::optional<llvm::Reloc::Model>()));
-    if (machine == nullptr) {
-        return "error: could not create C backend target machine";
+    namespace {
+        void ensure_c_backend_initialized() {
+            static const bool initialized = [] {
+                LLVMInitializeCBackendTargetInfo();
+                LLVMInitializeCBackendTarget();
+                LLVMInitializeCBackendTargetMC();
+                return true;
+            }();
+            (void)initialized;
+        }
+
+        std::unique_ptr<llvm::TargetMachine> create_c_target_machine(std::string& error) {
+            ensure_c_backend_initialized();
+
+            llvm::Triple triple(llvm::sys::getDefaultTargetTriple());
+            const llvm::Target* target = llvm::TargetRegistry::lookupTarget("c", triple, error);
+            if (target == nullptr) {
+                error = std::format("could not find C backend target: {}", error);
+                return nullptr;
+            }
+
+            llvm::TargetOptions options;
+            std::unique_ptr<llvm::TargetMachine> machine(target->createTargetMachine(triple, "", "", options, std::optional<llvm::Reloc::Model>()));
+            if (machine == nullptr) {
+                error = "could not create C backend target machine";
+            }
+            return machine;
+        }
     }
 
-    module.setTargetTriple(triple);
-    module.setDataLayout(machine->createDataLayout());
-
-    llvm::SmallString<0> buffer;
-    llvm::raw_svector_ostream out(buffer);
-
-    llvm::LoopAnalysisManager LAM;
-    llvm::FunctionAnalysisManager FAM;
-    llvm::CGSCCAnalysisManager CGAM;
-    llvm::ModuleAnalysisManager MAM;
-
-    llvm::PassBuilder PB(machine.get());
-    PB.registerModuleAnalyses(MAM);
-    PB.registerCGSCCAnalyses(CGAM);
-    PB.registerFunctionAnalyses(FAM);
-    PB.registerLoopAnalyses(LAM);
-    PB.crossRegisterProxies(LAM, FAM, CGAM, MAM);
-
-    llvm::ModulePassManager MPM = PB.buildPerModuleDefaultPipeline(llvm::OptimizationLevel::O2);
-    MPM.run(module, MAM);
-
-    module.print(out, nullptr);
-
-    llvm::SmallString<0> c_buffer;
-    llvm::raw_svector_ostream c_out(c_buffer);
-
-    llvm::legacy::PassManager pass_manager;
-    pass_manager.add(new llvm::TargetLibraryInfoWrapperPass(triple));
-    pass_manager.add(llvm::createTargetTransformInfoWrapperPass(machine->getTargetIRAnalysis()));
-
-    if (machine->addPassesToEmitFile(pass_manager, c_out, nullptr, llvm::CodeGenFileType::AssemblyFile, true)) {
-        return "error: C backend does not support emitting this module";
+    [[nodiscard]] std::string emit_llvm_ir(const llvm::Module& module) {
+        std::string ir;
+        llvm::raw_string_ostream os(ir);
+        module.print(os, nullptr);
+        return ir;
     }
-    pass_manager.run(module);
 
-    std::string result;
-    result += "/* ===== Optimized LLVM IR ===== */\n";
-    result += std::string(buffer.str());
-    result += "\n/* ===== C backend ===== */\n";
-    result += std::string(c_buffer.str());
-    return result;
-}
+    void optimize_module(llvm::Module& module) {
+        std::string error;
+        std::unique_ptr<llvm::TargetMachine> machine = create_c_target_machine(error);
+        if (machine) {
+            module.setTargetTriple(machine->getTargetTriple());
+            module.setDataLayout(machine->createDataLayout());
+        }
+
+        llvm::LoopAnalysisManager LAM;
+        llvm::FunctionAnalysisManager FAM;
+        llvm::CGSCCAnalysisManager CGAM;
+        llvm::ModuleAnalysisManager MAM;
+
+        llvm::PassBuilder PB(machine.get());
+        PB.registerModuleAnalyses(MAM);
+        PB.registerCGSCCAnalyses(CGAM);
+        PB.registerFunctionAnalyses(FAM);
+        PB.registerLoopAnalyses(LAM);
+        PB.crossRegisterProxies(LAM, FAM, CGAM, MAM);
+
+        llvm::ModulePassManager MPM = PB.buildPerModuleDefaultPipeline(llvm::OptimizationLevel::O2);
+        MPM.run(module, MAM);
+    }
+
+    [[nodiscard]] std::string emit_c_from_module(const llvm::Module& module) {
+        std::string error;
+        std::unique_ptr<llvm::TargetMachine> machine = create_c_target_machine(error);
+        if (machine == nullptr) {
+            return std::format("error: {}", error);
+        }
+
+        std::unique_ptr<llvm::Module> clone = llvm::CloneModule(module);
+        clone->setTargetTriple(machine->getTargetTriple());
+        clone->setDataLayout(machine->createDataLayout());
+
+        llvm::SmallString<0> c_buffer;
+        llvm::raw_svector_ostream c_out(c_buffer);
+
+        llvm::legacy::PassManager pass_manager;
+        pass_manager.add(new llvm::TargetLibraryInfoWrapperPass(machine->getTargetTriple()));
+        pass_manager.add(llvm::createTargetTransformInfoWrapperPass(machine->getTargetIRAnalysis()));
+
+        if (machine->addPassesToEmitFile(pass_manager, c_out, nullptr, llvm::CodeGenFileType::AssemblyFile, true)) {
+            return "error: C backend does not support emitting this module";
+        }
+        pass_manager.run(*clone);
+
+        return std::string(c_buffer.str());
+    }
 }
