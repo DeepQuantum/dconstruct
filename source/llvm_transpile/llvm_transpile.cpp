@@ -36,6 +36,9 @@
 #include <type_traits>
 #include <variant>
 
+#include <print>
+#include <format>
+
 using namespace std::literals;
 
 extern "C" void LLVMInitializeCBackendTarget();
@@ -81,7 +84,7 @@ namespace dconstruct::llvm_transpile {
         const u64 symbol_table_size = func_disassembly.m_stackFrame.m_symbolTable.m_types.size();
         llvm::ArrayType* array_t = llvm::ArrayType::get(default_int_t, symbol_table_size);
         llvm::Constant* symbol_table_array = llvm::ConstantDataArray::get(ctx, llvm::ArrayRef(symbol_table.as<u64>(), symbol_table_size));
-        llvm::GlobalVariable* symbol_table_global = new llvm::GlobalVariable(module, array_t, true, llvm::GlobalValue::PrivateLinkage, symbol_table_array, "symbol_table");
+        llvm::GlobalVariable* symbol_table_global = new llvm::GlobalVariable(module, array_t, true, llvm::GlobalValue::PrivateLinkage, symbol_table_array, std::format("{}_symbol_table", func_disassembly.get_id()));
         symbol_table_global->setUnnamedAddr(llvm::GlobalValue::UnnamedAddr::Global);
         symbol_table_global->setAlignment(llvm::Align(sizeof(u64)));
         llvm::appendToUsed(module, {symbol_table_global});
@@ -142,6 +145,9 @@ namespace dconstruct::llvm_transpile {
             } else if constexpr (std::is_same_v<T, f32>) {
                 load_type = llvm::Type::getFloatTy(ctx);
                 dest_type = default_float_t;
+            } else if constexpr (std::is_pointer_v<T>) {
+                load_type = default_pointer_t;
+                dest_type = default_pointer_t;
             } else {
                 static_assert(false, "unsupported type for mem load");
             }
@@ -161,7 +167,7 @@ namespace dconstruct::llvm_transpile {
             llvm::Value* mem_value = from;
             if constexpr (std::is_integral_v<T>) {
                 mem_value = builder.CreateIntCast(from, llvm::IntegerType::get(ctx, sizeof(T) * 8), std::is_signed_v<T>, std::format("{}_trunc", istr_id));
-            } else if constexpr (std::is_same_v<T, f32>) {
+            } else if constexpr (std::is_same_v<T, f32> || std::is_pointer_v<T>) {
                 mem_value = from;
             } else {
                 static_assert(false, "unsupported type for mem store");
@@ -483,6 +489,9 @@ namespace dconstruct::llvm_transpile {
                     make_mem_load.operator()<i64>(istr, istr_id);
                     break;
                 }
+                case LoadPointer: {
+                    make_mem_load.operator()<const void*>(istr, istr_id);
+                }
                 case StoreI8: {
                     make_mem_store.operator()<i8>(istr, istr_id);
                     break;
@@ -514,6 +523,9 @@ namespace dconstruct::llvm_transpile {
                 case StoreU64: {
                     make_mem_store.operator()<u64>(istr, istr_id);
                     break;
+                }
+                case StorePointer: {
+                    make_mem_store.operator()<const void*>(istr, istr_id);
                 }
                 case LoadStaticPointerImm: {
                     const ast::full_type& type = func_disassembly.m_stackFrame.m_symbolTable.m_types[istr.operand1];
@@ -570,6 +582,7 @@ namespace dconstruct::llvm_transpile {
                     break;
                 }
                 default:
+                    std::println(stderr, "unhandled opcode {}", istr.opcode_to_string());
                     continue;
             }
 
@@ -587,7 +600,7 @@ namespace dconstruct::llvm_transpile {
                     case BranchIf: {
                         const istr_line destination = current_node->m_lines.back().m_target;
                         llvm::Value* condition_reg = load_register(istr.operand1, std::format("{}_cond", istr_id));
-                        llvm::Value* bool_condition_reg = builder.CreateZExtOrTrunc(condition_reg, bool_t);
+                        llvm::Value* bool_condition_reg = builder.CreateICmpNE(condition_reg, llvm::ConstantInt::get(condition_reg->getType(), 0), std::format("{}_bool", istr_id));
                         llvm::BasicBlock* target_block = blocks.at(destination);
                         llvm::BasicBlock* fallthrough = blocks.at(l + 1);
                         builder.CreateCondBr(bool_condition_reg, target_block, fallthrough);
@@ -599,7 +612,7 @@ namespace dconstruct::llvm_transpile {
                     case BranchIfNot: {
                         const istr_line destination = current_node->m_lines.back().m_target;
                         llvm::Value* condition_reg = load_register(istr.operand1, std::format("{}_cond", istr_id));
-                        llvm::Value* bool_condition_reg = builder.CreateZExtOrTrunc(condition_reg, bool_t);
+                        llvm::Value* bool_condition_reg = builder.CreateICmpNE(condition_reg, llvm::ConstantInt::get(condition_reg->getType(), 0), std::format("{}_bool", istr_id));
                         llvm::BasicBlock* target_block = blocks.at(destination);
                         llvm::BasicBlock* fallthrough = blocks.at(l + 1);
                         builder.CreateCondBr(bool_condition_reg, fallthrough, target_block);
@@ -729,7 +742,7 @@ namespace dconstruct::llvm_transpile {
         PB.registerLoopAnalyses(LAM);
         PB.crossRegisterProxies(LAM, FAM, CGAM, MAM);
 
-        llvm::ModulePassManager MPM = PB.buildPerModuleDefaultPipeline(llvm::OptimizationLevel::O2);
+        llvm::ModulePassManager MPM = PB.buildPerModuleDefaultPipeline(llvm::OptimizationLevel::O3);
         MPM.run(module, MAM);
     }
 

@@ -1,18 +1,18 @@
 ; ModuleID = 'anim-gas-mask-impl.bin'
 source_filename = "anim-gas-mask-impl.bin"
 
-@symbol_table = private unnamed_addr constant [11 x i64] [i64 -2210386714833194546, i64 7671589888336862994, i64 3684810824690217768, i64 6481843155139167450, i64 6150028017864311825, i64 -3047912596559836939, i64 4789555171397753330, i64 -3266162430027026367, i64 6078802017353408438, i64 5608585023750540989, i64 -5076200561558624898], align 8
-@symbol_table.2 = private unnamed_addr constant [26 x i64] [i64 -3047912596559836939, i64 -7658033447216601854, i64 -6573555005595409285, i64 3455792245619945009, i64 8203816822361639083, i64 7097052834867614476, i64 267125575217391726, i64 4766017279285775524, i64 6532480022340268902, i64 -429226074377614887, i64 -7252477440030364545, i64 -3854484060414110792, i64 -5971891483814290574, i64 -7746349783173232884, i64 -5676660224586178492, i64 8667864169316382944, i64 0, i64 4789555171397753330, i64 6817768622307059015, i64 3684810824690217768, i64 1050253722, i64 -9179819928081802467, i64 -7745656483000545638, i64 8534565298598421705, i64 6500315221283771953, i64 -2962780980939953026], align 8
-@symbol_table.4 = private unnamed_addr constant [19 x i64] [i64 -7658033447216601854, i64 -6573555005595409285, i64 3455792245619945009, i64 7097052834867614476, i64 267125575217391726, i64 4766017279285775524, i64 -5971891483814290574, i64 6532480022340268902, i64 4789555171397753330, i64 6817768622307059015, i64 3684810824690217768, i64 0, i64 -429226074377614887, i64 1827492438953869695, i64 -7252477440030364545, i64 -3854484060414110792, i64 -9179819928081802467, i64 -7745656483000545638, i64 8534565298598421705], align 8
-@symbol_table.5 = private unnamed_addr constant [1 x i64] [i64 -5076200561558624898], align 8
-@symbol_table.7 = private unnamed_addr constant [18 x i64] [i64 6532480022340268902, i64 -9003251364961024783, i64 6740565536053766520, i64 2237451099064635199, i64 -3047912596559836939, i64 -4831287436211302109, i64 1646463116072042322, i64 8594926419455150747, i64 -5808627241898115124, i64 4007104907368024212, i64 -3092934816467423265, i64 1065353216, i64 -626103520744544694, i64 1045220557, i64 5808793362033684947, i64 3212836864, i64 7683024912818272899, i64 8573502661920361253], align 8
-@symbol_table.8 = private unnamed_addr constant [5 x i64] [i64 4789555171397753330, i64 8119835013146602502, i64 -5356689657310757786, i64 7610916627332680768, i64 0], align 8
-@symbol_table.9 = private unnamed_addr constant [4 x i64] [i64 -5076200561558624898, i64 4789555171397753330, i64 -3264453205741318791, i64 -804116741684351865], align 8
-@symbol_table.10 = private unnamed_addr constant [6 x i64] [i64 -7658033447216601854, i64 -6573555005595409285, i64 3455792245619945009, i64 7097052834867614476, i64 267125575217391726, i64 4766017279285775524], align 8
-@symbol_table.11 = private unnamed_addr constant [8 x i64] [i64 7238593933813171071, i64 0, i64 8165897991486741957, i64 -2826777519175913837, i64 -5356689657310757786, i64 5008278420455340480, i64 7121253686161376880, i64 -1699981380503476753], align 8
-@symbol_table.12 = private unnamed_addr constant [12 x i64] [i64 -3047912596559836939, i64 -7658033447216601854, i64 -6573555005595409285, i64 3455792245619945009, i64 -5076200561558624898, i64 8203816822361639083, i64 -9179819928081802467, i64 -7745656483000545638, i64 8534565298598421705, i64 6500315221283771953, i64 -2962780980939953026, i64 -804116741684351865], align 8
-@symbol_table.13 = private unnamed_addr constant [10 x i64] [i64 -2210386714833194546, i64 7671589888336862994, i64 3684810824690217768, i64 6481843155139167450, i64 6150028017864311825, i64 -3047912596559836939, i64 4789555171397753330, i64 -3325057813225958160, i64 -8559530813269772124, i64 -6610620527767074061], align 8
-@llvm.used = appending global [11 x ptr] [ptr @symbol_table, ptr @symbol_table.2, ptr @symbol_table.4, ptr @symbol_table.5, ptr @symbol_table.7, ptr @symbol_table.8, ptr @symbol_table.9, ptr @symbol_table.10, ptr @symbol_table.11, ptr @symbol_table.12, ptr @symbol_table.13], section "llvm.metadata"
+@wait-equip-gas-mask_symbol_table = private unnamed_addr constant [11 x i64] [i64 -2210386714833194546, i64 7671589888336862994, i64 3684810824690217768, i64 6481843155139167450, i64 6150028017864311825, i64 -3047912596559836939, i64 4789555171397753330, i64 -3266162430027026367, i64 6078802017353408438, i64 5608585023750540989, i64 -5076200561558624898], align 8
+@internal-put-on-gas-mask_symbol_table = private unnamed_addr constant [26 x i64] [i64 -3047912596559836939, i64 -7658033447216601854, i64 -6573555005595409285, i64 3455792245619945009, i64 8203816822361639083, i64 7097052834867614476, i64 267125575217391726, i64 4766017279285775524, i64 6532480022340268902, i64 -429226074377614887, i64 -7252477440030364545, i64 -3854484060414110792, i64 -5971891483814290574, i64 -7746349783173232884, i64 -5676660224586178492, i64 8667864169316382944, i64 0, i64 4789555171397753330, i64 6817768622307059015, i64 3684810824690217768, i64 1050253722, i64 -9179819928081802467, i64 -7745656483000545638, i64 8534565298598421705, i64 6500315221283771953, i64 -2962780980939953026], align 8
+@internal-put-on-gas-mask-immediately_symbol_table = private unnamed_addr constant [19 x i64] [i64 -7658033447216601854, i64 -6573555005595409285, i64 3455792245619945009, i64 7097052834867614476, i64 267125575217391726, i64 4766017279285775524, i64 -5971891483814290574, i64 6532480022340268902, i64 4789555171397753330, i64 6817768622307059015, i64 3684810824690217768, i64 0, i64 -429226074377614887, i64 1827492438953869695, i64 -7252477440030364545, i64 -3854484060414110792, i64 -9179819928081802467, i64 -7745656483000545638, i64 8534565298598421705], align 8
+@get-equipped-gas-mask_symbol_table = private unnamed_addr constant [1 x i64] [i64 -5076200561558624898], align 8
+@wait-until-in-valid-gas-mask-state_symbol_table = private unnamed_addr constant [18 x i64] [i64 6532480022340268902, i64 -9003251364961024783, i64 6740565536053766520, i64 2237451099064635199, i64 -3047912596559836939, i64 -4831287436211302109, i64 1646463116072042322, i64 8594926419455150747, i64 -5808627241898115124, i64 4007104907368024212, i64 -3092934816467423265, i64 1065353216, i64 -626103520744544694, i64 1045220557, i64 5808793362033684947, i64 3212836864, i64 7683024912818272899, i64 8573502661920361253], align 8
+@"npc-gas-mask-narrative-mode/f_symbol_table" = private unnamed_addr constant [5 x i64] [i64 4789555171397753330, i64 8119835013146602502, i64 -5356689657310757786, i64 7610916627332680768, i64 0], align 8
+@internal-put-off-gas-mask-immediately_symbol_table = private unnamed_addr constant [4 x i64] [i64 -5076200561558624898, i64 4789555171397753330, i64 -3264453205741318791, i64 -804116741684351865], align 8
+@spawn-gas-mask_symbol_table = private unnamed_addr constant [6 x i64] [i64 -7658033447216601854, i64 -6573555005595409285, i64 3455792245619945009, i64 7097052834867614476, i64 267125575217391726, i64 4766017279285775524], align 8
+@"player-gas-mask-narrative-mode/f_symbol_table" = private unnamed_addr constant [8 x i64] [i64 7238593933813171071, i64 0, i64 8165897991486741957, i64 -2826777519175913837, i64 -5356689657310757786, i64 5008278420455340480, i64 7121253686161376880, i64 -1699981380503476753], align 8
+@internal-put-off-gas-mask_symbol_table = private unnamed_addr constant [12 x i64] [i64 -3047912596559836939, i64 -7658033447216601854, i64 -6573555005595409285, i64 3455792245619945009, i64 -5076200561558624898, i64 8203816822361639083, i64 -9179819928081802467, i64 -7745656483000545638, i64 8534565298598421705, i64 6500315221283771953, i64 -2962780980939953026, i64 -804116741684351865], align 8
+@wait-remove-gas-mask_symbol_table = private unnamed_addr constant [10 x i64] [i64 -2210386714833194546, i64 7671589888336862994, i64 3684810824690217768, i64 6481843155139167450, i64 6150028017864311825, i64 -3047912596559836939, i64 4789555171397753330, i64 -3325057813225958160, i64 -8559530813269772124, i64 -6610620527767074061], align 8
+@llvm.used = appending global [11 x ptr] [ptr @wait-equip-gas-mask_symbol_table, ptr @internal-put-on-gas-mask_symbol_table, ptr @internal-put-on-gas-mask-immediately_symbol_table, ptr @get-equipped-gas-mask_symbol_table, ptr @wait-until-in-valid-gas-mask-state_symbol_table, ptr @"npc-gas-mask-narrative-mode/f_symbol_table", ptr @internal-put-off-gas-mask-immediately_symbol_table, ptr @spawn-gas-mask_symbol_table, ptr @"player-gas-mask-narrative-mode/f_symbol_table", ptr @internal-put-off-gas-mask_symbol_table, ptr @wait-remove-gas-mask_symbol_table], section "llvm.metadata"
 
 define i64 @wait-equip-gas-mask(i64 %arg_0, i64 %arg_1, i64 %arg_2) {
 bb0:
@@ -126,7 +126,7 @@ bb0:
   store ptr @fact-set, ptr %r3, align 8
   %__Move_4___load_op1 = load i64, ptr %r0, align 4
   store i64 %__Move_4___load_op1, ptr %r4, align 4
-  %__LoadStaticU64Imm_5___st_load = load i64, ptr getelementptr inbounds ([11 x i64], ptr @symbol_table, i64 0, i64 1), align 4
+  %__LoadStaticU64Imm_5___st_load = load i64, ptr getelementptr inbounds ([11 x i64], ptr @wait-equip-gas-mask_symbol_table, i64 0, i64 1), align 4
   store i64 %__LoadStaticU64Imm_5___st_load, ptr %r5, align 4
   store ptr @new-boxed-value, ptr %r6, align 8
   store i64 1, ptr %r7, align 4
@@ -156,7 +156,7 @@ bb0:
 
 bb1:                                              ; preds = %bb2, %bb0
   store ptr @"is-script-running?", ptr %r3, align 8
-  %__LoadStaticU64Imm_17___st_load = load i64, ptr getelementptr inbounds ([11 x i64], ptr @symbol_table, i64 0, i64 4), align 4
+  %__LoadStaticU64Imm_17___st_load = load i64, ptr getelementptr inbounds ([11 x i64], ptr @wait-equip-gas-mask_symbol_table, i64 0, i64 4), align 4
   store i64 %__LoadStaticU64Imm_17___st_load, ptr %r4, align 4
   %__Move_18___load_op1 = load i64, ptr %r4, align 4
   store i64 %__Move_18___load_op1, ptr %r49, align 4
@@ -168,7 +168,8 @@ bb1:                                              ; preds = %bb2, %bb0
   %__OpLogNot_20__op = xor i64 %__OpLogNot_20___load_op1, -1
   store i64 %__OpLogNot_20__op, ptr %r3, align 4
   %__BranchIfNot_21___cond = load i1, ptr %r3, align 1
-  br i1 %__BranchIfNot_21___cond, label %bb2, label %bb3
+  %__BranchIfNot_21___bool = icmp ne i1 %__BranchIfNot_21___cond, false
+  br i1 %__BranchIfNot_21___bool, label %bb2, label %bb3
 
 bb2:                                              ; preds = %bb1
   store ptr @wait-one-frame, ptr %r3, align 8
@@ -179,9 +180,9 @@ bb2:                                              ; preds = %bb1
 
 bb3:                                              ; preds = %bb1
   store ptr @send-event, ptr %r3, align 8
-  %__LoadStaticU64Imm_26___st_load = load i64, ptr getelementptr inbounds ([11 x i64], ptr @symbol_table, i64 0, i64 7), align 4
+  %__LoadStaticU64Imm_26___st_load = load i64, ptr getelementptr inbounds ([11 x i64], ptr @wait-equip-gas-mask_symbol_table, i64 0, i64 7), align 4
   store i64 %__LoadStaticU64Imm_26___st_load, ptr %r4, align 4
-  %__LoadStaticU64Imm_27___st_load = load i64, ptr getelementptr inbounds ([11 x i64], ptr @symbol_table, i64 0, i64 4), align 4
+  %__LoadStaticU64Imm_27___st_load = load i64, ptr getelementptr inbounds ([11 x i64], ptr @wait-equip-gas-mask_symbol_table, i64 0, i64 4), align 4
   store i64 %__LoadStaticU64Imm_27___st_load, ptr %r5, align 4
   store ptr @new-boxed-value, ptr %r6, align 8
   store i64 7, ptr %r7, align 4
@@ -211,8 +212,8 @@ bb3:                                              ; preds = %bb1
   %__Move_38___load_op1 = load i64, ptr %r2, align 4
   store i64 %__Move_38___load_op1, ptr %r3, align 4
   %__BranchIfNot_39___cond = load i64, ptr %r3, align 4
-  %0 = trunc i64 %__BranchIfNot_39___cond to i1
-  br i1 %0, label %bb4, label %bb5
+  %__BranchIfNot_39___bool = icmp ne i64 %__BranchIfNot_39___cond, 0
+  br i1 %__BranchIfNot_39___bool, label %bb4, label %bb5
 
 bb4:                                              ; preds = %bb3
   store ptr @internal-put-on-gas-mask-immediately, ptr %r3, align 8
@@ -250,7 +251,7 @@ bb5:                                              ; preds = %bb3
 
 bb6:                                              ; preds = %bb7, %bb5, %bb4
   store ptr @"is-script-running?", ptr %r3, align 8
-  %__LoadStaticU64Imm_54___st_load = load i64, ptr getelementptr inbounds ([11 x i64], ptr @symbol_table, i64 0, i64 4), align 4
+  %__LoadStaticU64Imm_54___st_load = load i64, ptr getelementptr inbounds ([11 x i64], ptr @wait-equip-gas-mask_symbol_table, i64 0, i64 4), align 4
   store i64 %__LoadStaticU64Imm_54___st_load, ptr %r4, align 4
   %__Move_55___load_op1 = load i64, ptr %r4, align 4
   store i64 %__Move_55___load_op1, ptr %r49, align 4
@@ -262,7 +263,8 @@ bb6:                                              ; preds = %bb7, %bb5, %bb4
   %__OpLogNot_57__op = xor i64 %__OpLogNot_57___load_op1, -1
   store i64 %__OpLogNot_57__op, ptr %r3, align 4
   %__BranchIfNot_58___cond = load i1, ptr %r3, align 1
-  br i1 %__BranchIfNot_58___cond, label %bb7, label %bb8
+  %__BranchIfNot_58___bool = icmp ne i1 %__BranchIfNot_58___cond, false
+  br i1 %__BranchIfNot_58___bool, label %bb7, label %bb8
 
 bb7:                                              ; preds = %bb6
   store ptr @wait-one-frame, ptr %r3, align 8
@@ -421,7 +423,7 @@ bb0:
   %__CallFf_8___arg0 = load i64, ptr %r49, align 4
   %__CallFf_8___call = call i64 %__CallFf_8___callee(i64 %__CallFf_8___arg0)
   store i64 %__CallFf_8___call, ptr %r3, align 4
-  %__LoadStaticU64Imm_9___st_load = load i64, ptr getelementptr inbounds ([26 x i64], ptr @symbol_table.2, i64 0, i64 3), align 4
+  %__LoadStaticU64Imm_9___st_load = load i64, ptr getelementptr inbounds ([26 x i64], ptr @internal-put-on-gas-mask_symbol_table, i64 0, i64 3), align 4
   store i64 %__LoadStaticU64Imm_9___st_load, ptr %r4, align 4
   %__Move_10___load_op1 = load i64, ptr %r3, align 4
   store i64 %__Move_10___load_op1, ptr %r49, align 4
@@ -463,7 +465,8 @@ bb0:
   %__IEqual_24__op = icmp eq i64 %__IEqual_24___load_lhs, %__IEqual_24___load_rhs
   store i1 %__IEqual_24__op, ptr %r3, align 1
   %__BranchIfNot_25___cond = load i1, ptr %r3, align 1
-  br i1 %__BranchIfNot_25___cond, label %bb1, label %bb2
+  %__BranchIfNot_25___bool = icmp ne i1 %__BranchIfNot_25___cond, false
+  br i1 %__BranchIfNot_25___bool, label %bb1, label %bb2
 
 bb1:                                              ; preds = %bb0
   store ptr @spawn-object, ptr %r3, align 8
@@ -477,7 +480,7 @@ bb1:                                              ; preds = %bb0
   %__LoadU64_30___addr = load ptr, ptr %r4, align 8
   %__LoadU64_30___load = load i64, ptr %__LoadU64_30___addr, align 4
   store i64 %__LoadU64_30___load, ptr %r4, align 4
-  %__LoadStaticU64Imm_31___st_load = load i64, ptr getelementptr inbounds ([26 x i64], ptr @symbol_table.2, i64 0, i64 6), align 4
+  %__LoadStaticU64Imm_31___st_load = load i64, ptr getelementptr inbounds ([26 x i64], ptr @internal-put-on-gas-mask_symbol_table, i64 0, i64 6), align 4
   store i64 %__LoadStaticU64Imm_31___st_load, ptr %r5, align 4
   store i64 0, ptr %r6, align 4
   store i64 0, ptr %r7, align 4
@@ -550,8 +553,8 @@ bb3:                                              ; preds = %bb2, %bb1
   %__CallFf_62___call = call i64 %__CallFf_62___callee(i64 %__CallFf_62___arg0)
   store i64 %__CallFf_62___call, ptr %r3, align 4
   %__BranchIfNot_63___cond = load i64, ptr %r3, align 4
-  %0 = trunc i64 %__BranchIfNot_63___cond to i1
-  br i1 %0, label %bb4, label %bb5
+  %__BranchIfNot_63___bool = icmp ne i64 %__BranchIfNot_63___cond, 0
+  br i1 %__BranchIfNot_63___bool, label %bb4, label %bb5
 
 bb4:                                              ; preds = %bb3
   store ptr @set-instance-flag-hero, ptr %r3, align 8
@@ -639,7 +642,8 @@ bb6:                                              ; preds = %bb5, %bb4
   %__OpLogNot_99__op = xor i64 %__OpLogNot_99___load_op1, -1
   store i64 %__OpLogNot_99__op, ptr %r3, align 4
   %__BranchIfNot_100___cond = load i1, ptr %r3, align 1
-  br i1 %__BranchIfNot_100___cond, label %bb7, label %bb8
+  %__BranchIfNot_100___bool = icmp ne i1 %__BranchIfNot_100___cond, false
+  br i1 %__BranchIfNot_100___bool, label %bb7, label %bb8
 
 bb7:                                              ; preds = %bb6
   store ptr @wait-one-frame, ptr %r3, align 8
@@ -658,9 +662,9 @@ bb9:                                              ; preds = %bb8, %bb7
   store i64 %__Move_106___load_op1, ptr %r4, align 4
   %__Move_107___load_op1 = load i64, ptr %r0, align 4
   store i64 %__Move_107___load_op1, ptr %r5, align 4
-  %__LoadStaticU64Imm_108___st_load = load i64, ptr getelementptr inbounds ([26 x i64], ptr @symbol_table.2, i64 0, i64 15), align 4
+  %__LoadStaticU64Imm_108___st_load = load i64, ptr getelementptr inbounds ([26 x i64], ptr @internal-put-on-gas-mask_symbol_table, i64 0, i64 15), align 4
   store i64 %__LoadStaticU64Imm_108___st_load, ptr %r6, align 4
-  %__LoadStaticFloatImm_109___st_load = load float, ptr getelementptr inbounds ([26 x i64], ptr @symbol_table.2, i64 0, i64 16), align 4
+  %__LoadStaticFloatImm_109___st_load = load float, ptr getelementptr inbounds ([26 x i64], ptr @internal-put-on-gas-mask_symbol_table, i64 0, i64 16), align 4
   store float %__LoadStaticFloatImm_109___st_load, ptr %r7, align 4
   %__Move_110___load_op1 = load i64, ptr %r4, align 4
   store i64 %__Move_110___load_op1, ptr %r49, align 4
@@ -678,13 +682,13 @@ bb9:                                              ; preds = %bb8, %bb7
   %__CallFf_114___call = call i64 %__CallFf_114___callee(i64 %__CallFf_114___arg0, i64 %__CallFf_114___arg1, i64 %__CallFf_114___arg2, float %__CallFf_114___arg3)
   store i64 %__CallFf_114___call, ptr %r3, align 4
   store ptr @send-event, ptr %r3, align 8
-  %__LoadStaticU64Imm_116___st_load = load i64, ptr getelementptr inbounds ([26 x i64], ptr @symbol_table.2, i64 0, i64 18), align 4
+  %__LoadStaticU64Imm_116___st_load = load i64, ptr getelementptr inbounds ([26 x i64], ptr @internal-put-on-gas-mask_symbol_table, i64 0, i64 18), align 4
   store i64 %__LoadStaticU64Imm_116___st_load, ptr %r4, align 4
   %__Move_117___load_op1 = load i64, ptr %r0, align 4
   store i64 %__Move_117___load_op1, ptr %r5, align 4
   store ptr @new-boxed-value, ptr %r6, align 8
   store i64 6, ptr %r7, align 4
-  %__LoadStaticFloatImm_120___st_load = load float, ptr getelementptr inbounds ([26 x i64], ptr @symbol_table.2, i64 0, i64 20), align 4
+  %__LoadStaticFloatImm_120___st_load = load float, ptr getelementptr inbounds ([26 x i64], ptr @internal-put-on-gas-mask_symbol_table, i64 0, i64 20), align 4
   store float %__LoadStaticFloatImm_120___st_load, ptr %r8, align 4
   %__Move_121___load_op1 = load i64, ptr %r7, align 4
   store i64 %__Move_121___load_op1, ptr %r49, align 4
@@ -721,7 +725,7 @@ bb9:                                              ; preds = %bb8, %bb7
   %__LoadU64_133___load = load i64, ptr %__LoadU64_133___addr, align 4
   store i64 %__LoadU64_133___load, ptr %r5, align 4
   store ptr @"#%alloc-array", ptr %r6, align 8
-  %__LoadStaticU64Imm_135___st_load = load i64, ptr getelementptr inbounds ([26 x i64], ptr @symbol_table.2, i64 0, i64 23), align 4
+  %__LoadStaticU64Imm_135___st_load = load i64, ptr getelementptr inbounds ([26 x i64], ptr @internal-put-on-gas-mask_symbol_table, i64 0, i64 23), align 4
   store i64 %__LoadStaticU64Imm_135___st_load, ptr %r7, align 4
   store i64 16, ptr %r8, align 4
   store i64 0, ptr %r9, align 4
@@ -843,7 +847,8 @@ bb10:                                             ; preds = %bb11, %bb9
   %__OpLogNot_181__op = xor i1 %__OpLogNot_181___load_op1, true
   store i1 %__OpLogNot_181__op, ptr %r3, align 1
   %__BranchIfNot_182___cond = load i1, ptr %r3, align 1
-  br i1 %__BranchIfNot_182___cond, label %bb11, label %bb12
+  %__BranchIfNot_182___bool = icmp ne i1 %__BranchIfNot_182___cond, false
+  br i1 %__BranchIfNot_182___bool, label %bb11, label %bb12
 
 bb11:                                             ; preds = %bb10
   store ptr @wait-one-frame, ptr %r3, align 8
@@ -867,7 +872,7 @@ bb12:                                             ; preds = %bb10
   %__LoadU64_191___load = load i64, ptr %__LoadU64_191___addr, align 4
   store i64 %__LoadU64_191___load, ptr %r5, align 4
   store ptr @"#%alloc-array", ptr %r6, align 8
-  %__LoadStaticU64Imm_193___st_load = load i64, ptr getelementptr inbounds ([26 x i64], ptr @symbol_table.2, i64 0, i64 23), align 4
+  %__LoadStaticU64Imm_193___st_load = load i64, ptr getelementptr inbounds ([26 x i64], ptr @internal-put-on-gas-mask_symbol_table, i64 0, i64 23), align 4
   store i64 %__LoadStaticU64Imm_193___st_load, ptr %r7, align 4
   store i64 16, ptr %r8, align 4
   store i64 0, ptr %r9, align 4
@@ -941,7 +946,7 @@ declare i64 @gesture_(i64, i64, i64)
 
 declare i64 @alloc-gesture-play-params()
 
-define i64 @internal-put-on-gas-mask-immediately.3(i64 %arg_0, i64 %arg_1) {
+define i64 @internal-put-on-gas-mask-immediately.2(i64 %arg_0, i64 %arg_1) {
 bb0:
   %r0 = alloca i64, align 8
   %r1 = alloca i64, align 8
@@ -1057,7 +1062,7 @@ bb0:
   %__CallFf_6___arg0 = load i64, ptr %r49, align 4
   %__CallFf_6___call = call i64 %__CallFf_6___callee(i64 %__CallFf_6___arg0)
   store i64 %__CallFf_6___call, ptr %r3, align 4
-  %__LoadStaticU64Imm_7___st_load = load i64, ptr getelementptr inbounds ([19 x i64], ptr @symbol_table.4, i64 0, i64 2), align 4
+  %__LoadStaticU64Imm_7___st_load = load i64, ptr getelementptr inbounds ([19 x i64], ptr @internal-put-on-gas-mask-immediately_symbol_table, i64 0, i64 2), align 4
   store i64 %__LoadStaticU64Imm_7___st_load, ptr %r4, align 4
   %__Move_8___load_op1 = load i64, ptr %r3, align 4
   store i64 %__Move_8___load_op1, ptr %r49, align 4
@@ -1076,7 +1081,8 @@ bb0:
   %__IEqual_13__op = icmp eq i64 %__IEqual_13___load_lhs, %__IEqual_13___load_rhs
   store i1 %__IEqual_13__op, ptr %r3, align 1
   %__BranchIfNot_14___cond = load i1, ptr %r3, align 1
-  br i1 %__BranchIfNot_14___cond, label %bb1, label %bb2
+  %__BranchIfNot_14___bool = icmp ne i1 %__BranchIfNot_14___cond, false
+  br i1 %__BranchIfNot_14___bool, label %bb1, label %bb2
 
 bb1:                                              ; preds = %bb0
   store ptr @spawn-object, ptr %r3, align 8
@@ -1090,7 +1096,7 @@ bb1:                                              ; preds = %bb0
   %__LoadU64_19___addr = load ptr, ptr %r4, align 8
   %__LoadU64_19___load = load i64, ptr %__LoadU64_19___addr, align 4
   store i64 %__LoadU64_19___load, ptr %r4, align 4
-  %__LoadStaticU64Imm_20___st_load = load i64, ptr getelementptr inbounds ([19 x i64], ptr @symbol_table.4, i64 0, i64 4), align 4
+  %__LoadStaticU64Imm_20___st_load = load i64, ptr getelementptr inbounds ([19 x i64], ptr @internal-put-on-gas-mask-immediately_symbol_table, i64 0, i64 4), align 4
   store i64 %__LoadStaticU64Imm_20___st_load, ptr %r5, align 4
   store i64 0, ptr %r6, align 4
   store i64 0, ptr %r7, align 4
@@ -1177,18 +1183,18 @@ bb3:                                              ; preds = %bb2, %bb1
   %__CallFf_57___call = call i64 %__CallFf_57___callee(i64 %__CallFf_57___arg0)
   store i64 %__CallFf_57___call, ptr %r3, align 4
   %__BranchIfNot_58___cond = load i64, ptr %r3, align 4
-  %0 = trunc i64 %__BranchIfNot_58___cond to i1
-  br i1 %0, label %bb4, label %bb5
+  %__BranchIfNot_58___bool = icmp ne i64 %__BranchIfNot_58___cond, 0
+  br i1 %__BranchIfNot_58___bool, label %bb4, label %bb5
 
 bb4:                                              ; preds = %bb3
   store ptr @send-event, ptr %r3, align 8
-  %__LoadStaticU64Imm_60___st_load = load i64, ptr getelementptr inbounds ([19 x i64], ptr @symbol_table.4, i64 0, i64 9), align 4
+  %__LoadStaticU64Imm_60___st_load = load i64, ptr getelementptr inbounds ([19 x i64], ptr @internal-put-on-gas-mask-immediately_symbol_table, i64 0, i64 9), align 4
   store i64 %__LoadStaticU64Imm_60___st_load, ptr %r4, align 4
   %__Move_61___load_op1 = load i64, ptr %r0, align 4
   store i64 %__Move_61___load_op1, ptr %r5, align 4
   store ptr @new-boxed-value, ptr %r6, align 8
   store i64 6, ptr %r7, align 4
-  %__LoadStaticFloatImm_64___st_load = load float, ptr getelementptr inbounds ([19 x i64], ptr @symbol_table.4, i64 0, i64 11), align 4
+  %__LoadStaticFloatImm_64___st_load = load float, ptr getelementptr inbounds ([19 x i64], ptr @internal-put-on-gas-mask-immediately_symbol_table, i64 0, i64 11), align 4
   store float %__LoadStaticFloatImm_64___st_load, ptr %r8, align 4
   %__Move_65___load_op1 = load i64, ptr %r7, align 4
   store i64 %__Move_65___load_op1, ptr %r49, align 4
@@ -1232,7 +1238,7 @@ bb5:                                              ; preds = %bb3
 
 bb6:                                              ; preds = %bb5, %bb4
   store ptr @send-event, ptr %r3, align 8
-  %__LoadStaticU64Imm_81___st_load = load i64, ptr getelementptr inbounds ([19 x i64], ptr @symbol_table.4, i64 0, i64 13), align 4
+  %__LoadStaticU64Imm_81___st_load = load i64, ptr getelementptr inbounds ([19 x i64], ptr @internal-put-on-gas-mask-immediately_symbol_table, i64 0, i64 13), align 4
   store i64 %__LoadStaticU64Imm_81___st_load, ptr %r4, align 4
   %__Move_82___load_op1 = load i64, ptr %r0, align 4
   store i64 %__Move_82___load_op1, ptr %r5, align 4
@@ -1255,8 +1261,8 @@ bb6:                                              ; preds = %bb5, %bb4
   %__CallFf_89___call = call i64 %__CallFf_89___callee(i64 %__CallFf_89___arg0)
   store i64 %__CallFf_89___call, ptr %r3, align 4
   %__BranchIfNot_90___cond = load i64, ptr %r3, align 4
-  %1 = trunc i64 %__BranchIfNot_90___cond to i1
-  br i1 %1, label %bb7, label %bb8
+  %__BranchIfNot_90___bool = icmp ne i64 %__BranchIfNot_90___cond, 0
+  br i1 %__BranchIfNot_90___bool, label %bb7, label %bb8
 
 bb7:                                              ; preds = %bb6
   store ptr @set-show-in-flashlight-flag, ptr %r3, align 8
@@ -1305,7 +1311,7 @@ bb9:                                              ; preds = %bb8, %bb7
   %__LoadU64_109___load = load i64, ptr %__LoadU64_109___addr, align 4
   store i64 %__LoadU64_109___load, ptr %r5, align 4
   store ptr @"#%alloc-array", ptr %r6, align 8
-  %__LoadStaticU64Imm_111___st_load = load i64, ptr getelementptr inbounds ([19 x i64], ptr @symbol_table.4, i64 0, i64 18), align 4
+  %__LoadStaticU64Imm_111___st_load = load i64, ptr getelementptr inbounds ([19 x i64], ptr @internal-put-on-gas-mask-immediately_symbol_table, i64 0, i64 18), align 4
   store i64 %__LoadStaticU64Imm_111___st_load, ptr %r7, align 4
   store i64 16, ptr %r8, align 4
   store i64 1, ptr %r9, align 4
@@ -1327,6 +1333,14 @@ bb9:                                              ; preds = %bb8, %bb7
   store i64 %__CallFf_119___call, ptr %r6, align 4
   %__Move_120___load_op1 = load i64, ptr %r6, align 4
   store i64 %__Move_120___load_op1, ptr %r7, align 4
+  %__LoadPointer_121___addr = load ptr, ptr %r7, align 8
+  %__LoadPointer_121___load = load ptr, ptr %__LoadPointer_121___addr, align 8
+  store ptr %__LoadPointer_121___load, ptr %r7, align 8
+  %__LoadPointer_121___value = load i64, ptr %r0, align 4
+  %__LoadPointer_121___addr1 = load ptr, ptr %r7, align 8
+  %__LoadPointer_121___trunc = trunc i64 %__LoadPointer_121___value to i8
+  store i8 %__LoadPointer_121___trunc, ptr %__LoadPointer_121___addr1, align 1
+  store i64 %__LoadPointer_121___value, ptr %r7, align 4
   store i64 0, ptr %r8, align 4
   %__IMulImm_123___load_lhs = load i64, ptr %r8, align 4
   %__IMulImm_123__op = mul i64 %__IMulImm_123___load_lhs, 8
@@ -1335,6 +1349,14 @@ bb9:                                              ; preds = %bb8, %bb7
   %__IAdd_124___load_rhs = load i64, ptr %r8, align 4
   %__IAdd_124__op = add i64 %__IAdd_124___load_lhs, %__IAdd_124___load_rhs
   store i64 %__IAdd_124__op, ptr %r7, align 4
+  %__LoadPointer_125___addr = load ptr, ptr %r7, align 8
+  %__LoadPointer_125___load = load ptr, ptr %__LoadPointer_125___addr, align 8
+  store ptr %__LoadPointer_125___load, ptr %r7, align 8
+  %__LoadPointer_125___value = load i64, ptr %r0, align 4
+  %__LoadPointer_125___addr2 = load ptr, ptr %r7, align 8
+  %__LoadPointer_125___trunc = trunc i64 %__LoadPointer_125___value to i8
+  store i8 %__LoadPointer_125___trunc, ptr %__LoadPointer_125___addr2, align 1
+  store i64 %__LoadPointer_125___value, ptr %r7, align 4
   store i64 31, ptr %r8, align 4
   %__StoreI32_127___value = load i64, ptr %r8, align 4
   %__StoreI32_127___addr = load ptr, ptr %r7, align 8
@@ -1343,6 +1365,14 @@ bb9:                                              ; preds = %bb8, %bb7
   store i64 %__StoreI32_127___value, ptr %r7, align 4
   %__Move_128___load_op1 = load i64, ptr %r6, align 4
   store i64 %__Move_128___load_op1, ptr %r7, align 4
+  %__LoadPointer_129___addr = load ptr, ptr %r7, align 8
+  %__LoadPointer_129___load = load ptr, ptr %__LoadPointer_129___addr, align 8
+  store ptr %__LoadPointer_129___load, ptr %r7, align 8
+  %__LoadPointer_129___value = load i64, ptr %r0, align 4
+  %__LoadPointer_129___addr3 = load ptr, ptr %r7, align 8
+  %__LoadPointer_129___trunc = trunc i64 %__LoadPointer_129___value to i8
+  store i8 %__LoadPointer_129___trunc, ptr %__LoadPointer_129___addr3, align 1
+  store i64 %__LoadPointer_129___value, ptr %r7, align 4
   store i64 0, ptr %r8, align 4
   %__IMulImm_131___load_lhs = load i64, ptr %r8, align 4
   %__IMulImm_131__op = mul i64 %__IMulImm_131___load_lhs, 8
@@ -1351,12 +1381,34 @@ bb9:                                              ; preds = %bb8, %bb7
   %__IAdd_132___load_rhs = load i64, ptr %r8, align 4
   %__IAdd_132__op = add i64 %__IAdd_132___load_lhs, %__IAdd_132___load_rhs
   store i64 %__IAdd_132__op, ptr %r7, align 4
+  %__LoadPointer_133___addr = load ptr, ptr %r7, align 8
+  %__LoadPointer_133___load = load ptr, ptr %__LoadPointer_133___addr, align 8
+  store ptr %__LoadPointer_133___load, ptr %r7, align 8
+  %__LoadPointer_133___value = load i64, ptr %r0, align 4
+  %__LoadPointer_133___addr4 = load ptr, ptr %r7, align 8
+  %__LoadPointer_133___trunc = trunc i64 %__LoadPointer_133___value to i8
+  store i8 %__LoadPointer_133___trunc, ptr %__LoadPointer_133___addr4, align 1
+  store i64 %__LoadPointer_133___value, ptr %r7, align 4
   %__IAddImm_134___load_lhs = load i64, ptr %r7, align 4
   %__IAddImm_134__op = add i64 %__IAddImm_134___load_lhs, 8
   store i64 %__IAddImm_134__op, ptr %r7, align 4
   store i64 0, ptr %r8, align 4
+  %__StorePointer_136___value = load i64, ptr %r8, align 4
+  %__StorePointer_136___addr = load ptr, ptr %r7, align 8
+  store i64 %__StorePointer_136___value, ptr %__StorePointer_136___addr, align 4
+  store i64 %__StorePointer_136___value, ptr %r7, align 4
+  %__StorePointer_136___st_load = load ptr, ptr getelementptr inbounds ([19 x i64], ptr @internal-put-on-gas-mask-immediately_symbol_table, i64 0, i64 7), align 8
+  store ptr %__StorePointer_136___st_load, ptr %r7, align 8
   %__Move_137___load_op1 = load i64, ptr %r6, align 4
   store i64 %__Move_137___load_op1, ptr %r7, align 4
+  %__LoadPointer_138___addr = load ptr, ptr %r7, align 8
+  %__LoadPointer_138___load = load ptr, ptr %__LoadPointer_138___addr, align 8
+  store ptr %__LoadPointer_138___load, ptr %r7, align 8
+  %__LoadPointer_138___value = load i64, ptr %r0, align 4
+  %__LoadPointer_138___addr5 = load ptr, ptr %r7, align 8
+  %__LoadPointer_138___trunc = trunc i64 %__LoadPointer_138___value to i8
+  store i8 %__LoadPointer_138___trunc, ptr %__LoadPointer_138___addr5, align 1
+  store i64 %__LoadPointer_138___value, ptr %r7, align 4
   store i64 0, ptr %r8, align 4
   %__IMulImm_140___load_lhs = load i64, ptr %r8, align 4
   %__IMulImm_140__op = mul i64 %__IMulImm_140___load_lhs, 8
@@ -1365,6 +1417,14 @@ bb9:                                              ; preds = %bb8, %bb7
   %__IAdd_141___load_rhs = load i64, ptr %r8, align 4
   %__IAdd_141__op = add i64 %__IAdd_141___load_lhs, %__IAdd_141___load_rhs
   store i64 %__IAdd_141__op, ptr %r7, align 4
+  %__LoadPointer_142___addr = load ptr, ptr %r7, align 8
+  %__LoadPointer_142___load = load ptr, ptr %__LoadPointer_142___addr, align 8
+  store ptr %__LoadPointer_142___load, ptr %r7, align 8
+  %__LoadPointer_142___value = load i64, ptr %r0, align 4
+  %__LoadPointer_142___addr6 = load ptr, ptr %r7, align 8
+  %__LoadPointer_142___trunc = trunc i64 %__LoadPointer_142___value to i8
+  store i8 %__LoadPointer_142___trunc, ptr %__LoadPointer_142___addr6, align 1
+  store i64 %__LoadPointer_142___value, ptr %r7, align 4
   %__IAddImm_143___load_lhs = load i64, ptr %r7, align 4
   %__IAddImm_143__op = add i64 %__IAddImm_143___load_lhs, 8
   store i64 %__IAddImm_143__op, ptr %r7, align 4
@@ -1512,7 +1572,7 @@ bb0:
   ret i64 %__Return_5___retval
 }
 
-define i64 @wait-until-in-valid-gas-mask-state.6(i64 %arg_0, i64 %arg_1) {
+define i64 @wait-until-in-valid-gas-mask-state.3(i64 %arg_0, i64 %arg_1) {
 bb0:
   %r0 = alloca i64, align 8
   %r1 = alloca i64, align 8
@@ -1628,12 +1688,12 @@ bb0:
   %__CallFf_5___call = call i64 %__CallFf_5___callee(i64 %__CallFf_5___arg0)
   store i64 %__CallFf_5___call, ptr %r2, align 4
   %__BranchIfNot_6___cond = load i64, ptr %r2, align 4
-  %0 = trunc i64 %__BranchIfNot_6___cond to i1
-  br i1 %0, label %bb1, label %bb15
+  %__BranchIfNot_6___bool = icmp ne i64 %__BranchIfNot_6___cond, 0
+  br i1 %__BranchIfNot_6___bool, label %bb1, label %bb15
 
 bb1:                                              ; preds = %bb3, %bb0
   store ptr @"player-in-state?", ptr %r2, align 8
-  %__LoadStaticU64Imm_8___st_load = load i64, ptr getelementptr inbounds ([18 x i64], ptr @symbol_table.7, i64 0, i64 2), align 4
+  %__LoadStaticU64Imm_8___st_load = load i64, ptr getelementptr inbounds ([18 x i64], ptr @wait-until-in-valid-gas-mask-state_symbol_table, i64 0, i64 2), align 4
   store i64 %__LoadStaticU64Imm_8___st_load, ptr %r3, align 4
   %__Move_9___load_op1 = load i64, ptr %r3, align 4
   store i64 %__Move_9___load_op1, ptr %r49, align 4
@@ -1645,11 +1705,12 @@ bb1:                                              ; preds = %bb3, %bb0
   %__OpLogNot_11__op = xor i64 %__OpLogNot_11___load_op1, -1
   store i64 %__OpLogNot_11__op, ptr %r2, align 4
   %__BranchIfNot_12___cond = load i1, ptr %r2, align 1
-  br i1 %__BranchIfNot_12___cond, label %bb2, label %bb3
+  %__BranchIfNot_12___bool = icmp ne i1 %__BranchIfNot_12___cond, false
+  br i1 %__BranchIfNot_12___bool, label %bb2, label %bb3
 
 bb2:                                              ; preds = %bb1
   store ptr @"player-in-state?", ptr %r2, align 8
-  %__LoadStaticU64Imm_14___st_load = load i64, ptr getelementptr inbounds ([18 x i64], ptr @symbol_table.7, i64 0, i64 3), align 4
+  %__LoadStaticU64Imm_14___st_load = load i64, ptr getelementptr inbounds ([18 x i64], ptr @wait-until-in-valid-gas-mask-state_symbol_table, i64 0, i64 3), align 4
   store i64 %__LoadStaticU64Imm_14___st_load, ptr %r3, align 4
   %__Move_15___load_op1 = load i64, ptr %r3, align 4
   store i64 %__Move_15___load_op1, ptr %r49, align 4
@@ -1664,7 +1725,8 @@ bb2:                                              ; preds = %bb1
   %__OpLogNot_18__op = xor i1 %__OpLogNot_18___load_op1, true
   store i1 %__OpLogNot_18__op, ptr %r2, align 1
   %__BranchIfNot_19___cond = load i1, ptr %r2, align 1
-  br i1 %__BranchIfNot_19___cond, label %bb3, label %bb4
+  %__BranchIfNot_19___bool = icmp ne i1 %__BranchIfNot_19___cond, false
+  br i1 %__BranchIfNot_19___bool, label %bb3, label %bb4
 
 bb3:                                              ; preds = %bb2, %bb1
   store ptr @wait-one-frame, ptr %r2, align 8
@@ -1677,8 +1739,8 @@ bb4:                                              ; preds = %bb2
   %__Move_23___load_op1 = load i64, ptr %r1, align 4
   store i64 %__Move_23___load_op1, ptr %r2, align 4
   %__BranchIfNot_24___cond = load i64, ptr %r2, align 4
-  %1 = trunc i64 %__BranchIfNot_24___cond to i1
-  br i1 %1, label %bb5, label %bb9
+  %__BranchIfNot_24___bool = icmp ne i64 %__BranchIfNot_24___cond, 0
+  br i1 %__BranchIfNot_24___bool, label %bb5, label %bb9
 
 bb5:                                              ; preds = %bb4
   store ptr @player-force-crouch, ptr %r2, align 8
@@ -1696,7 +1758,8 @@ bb6:                                              ; preds = %bb7, %bb5
   %__OpLogNot_29__op = xor i64 %__OpLogNot_29___load_op1, -1
   store i64 %__OpLogNot_29__op, ptr %r2, align 4
   %__BranchIfNot_30___cond = load i1, ptr %r2, align 1
-  br i1 %__BranchIfNot_30___cond, label %bb7, label %bb8
+  %__BranchIfNot_30___bool = icmp ne i1 %__BranchIfNot_30___cond, false
+  br i1 %__BranchIfNot_30___bool, label %bb7, label %bb8
 
 bb7:                                              ; preds = %bb6
   store ptr @wait-one-frame, ptr %r2, align 8
@@ -1731,7 +1794,8 @@ bb10:                                             ; preds = %bb11, %bb9
   %__OpLogNot_42__op = xor i64 %__OpLogNot_42___load_op1, -1
   store i64 %__OpLogNot_42__op, ptr %r2, align 4
   %__BranchIfNot_43___cond = load i1, ptr %r2, align 1
-  br i1 %__BranchIfNot_43___cond, label %bb11, label %bb12
+  %__BranchIfNot_43___bool = icmp ne i1 %__BranchIfNot_43___cond, false
+  br i1 %__BranchIfNot_43___bool, label %bb11, label %bb12
 
 bb11:                                             ; preds = %bb10
   store ptr @wait-one-frame, ptr %r2, align 8
@@ -1742,7 +1806,7 @@ bb11:                                             ; preds = %bb10
 
 bb12:                                             ; preds = %bb13, %bb10, %bb8
   store ptr @"player-in-state?", ptr %r2, align 8
-  %__LoadStaticU64Imm_48___st_load = load i64, ptr getelementptr inbounds ([18 x i64], ptr @symbol_table.7, i64 0, i64 9), align 4
+  %__LoadStaticU64Imm_48___st_load = load i64, ptr getelementptr inbounds ([18 x i64], ptr @wait-until-in-valid-gas-mask-state_symbol_table, i64 0, i64 9), align 4
   store i64 %__LoadStaticU64Imm_48___st_load, ptr %r3, align 4
   %__Move_49___load_op1 = load i64, ptr %r3, align 4
   store i64 %__Move_49___load_op1, ptr %r49, align 4
@@ -1754,7 +1818,8 @@ bb12:                                             ; preds = %bb13, %bb10, %bb8
   %__OpLogNot_51__op = xor i64 %__OpLogNot_51___load_op1, -1
   store i64 %__OpLogNot_51__op, ptr %r2, align 4
   %__BranchIfNot_52___cond = load i1, ptr %r2, align 1
-  br i1 %__BranchIfNot_52___cond, label %bb13, label %bb14
+  %__BranchIfNot_52___bool = icmp ne i1 %__BranchIfNot_52___cond, false
+  br i1 %__BranchIfNot_52___bool, label %bb13, label %bb14
 
 bb13:                                             ; preds = %bb12
   store ptr @wait-one-frame, ptr %r2, align 8
@@ -1766,7 +1831,7 @@ bb13:                                             ; preds = %bb12
 bb14:                                             ; preds = %bb12
   store ptr @wait-holster-player-weapon, ptr %r2, align 8
   store i64 0, ptr %r3, align 4
-  %__LoadStaticFloatImm_58___st_load = load float, ptr getelementptr inbounds ([18 x i64], ptr @symbol_table.7, i64 0, i64 11), align 4
+  %__LoadStaticFloatImm_58___st_load = load float, ptr getelementptr inbounds ([18 x i64], ptr @wait-until-in-valid-gas-mask-state_symbol_table, i64 0, i64 11), align 4
   store float %__LoadStaticFloatImm_58___st_load, ptr %r4, align 4
   %__Move_59___load_op1 = load i64, ptr %r3, align 4
   store i64 %__Move_59___load_op1, ptr %r49, align 4
@@ -1778,7 +1843,7 @@ bb14:                                             ; preds = %bb12
   %__CallFf_61___call = call i64 %__CallFf_61___callee(i64 %__CallFf_61___arg0, float %__CallFf_61___arg1)
   store i64 %__CallFf_61___call, ptr %r2, align 4
   store ptr @holster-player-weapon-instantly, ptr %r2, align 8
-  %__LoadStaticFloatImm_63___st_load = load float, ptr getelementptr inbounds ([18 x i64], ptr @symbol_table.7, i64 0, i64 13), align 4
+  %__LoadStaticFloatImm_63___st_load = load float, ptr getelementptr inbounds ([18 x i64], ptr @wait-until-in-valid-gas-mask-state_symbol_table, i64 0, i64 13), align 4
   store float %__LoadStaticFloatImm_63___st_load, ptr %r3, align 4
   store i64 0, ptr %r4, align 4
   %__Move_65___load_op1 = load float, ptr %r3, align 4
@@ -1798,7 +1863,7 @@ bb15:                                             ; preds = %bb0
   store i64 %__Move_70___load_op1, ptr %r3, align 4
   store i64 0, ptr %r4, align 4
   store i64 1, ptr %r5, align 4
-  %__LoadStaticFloatImm_73___st_load = load float, ptr getelementptr inbounds ([18 x i64], ptr @symbol_table.7, i64 0, i64 15), align 4
+  %__LoadStaticFloatImm_73___st_load = load float, ptr getelementptr inbounds ([18 x i64], ptr @wait-until-in-valid-gas-mask-state_symbol_table, i64 0, i64 15), align 4
   store float %__LoadStaticFloatImm_73___st_load, ptr %r6, align 4
   store i64 0, ptr %r7, align 4
   %__Move_75___load_op1 = load i64, ptr %r3, align 4
@@ -1832,8 +1897,8 @@ bb16:                                             ; preds = %bb17, %bb15
   %__CallFf_84___call = call i64 %__CallFf_84___callee(i64 %__CallFf_84___arg0)
   store i64 %__CallFf_84___call, ptr %r2, align 4
   %__BranchIfNot_85___cond = load i64, ptr %r2, align 4
-  %2 = trunc i64 %__BranchIfNot_85___cond to i1
-  br i1 %2, label %bb17, label %bb18
+  %__BranchIfNot_85___bool = icmp ne i64 %__BranchIfNot_85___cond, 0
+  br i1 %__BranchIfNot_85___bool, label %bb17, label %bb18
 
 bb17:                                             ; preds = %bb16
   store ptr @wait-one-frame, ptr %r2, align 8
@@ -1846,8 +1911,8 @@ bb18:                                             ; preds = %bb16
   %__Move_89___load_op1 = load i64, ptr %r1, align 4
   store i64 %__Move_89___load_op1, ptr %r2, align 4
   %__BranchIfNot_90___cond = load i64, ptr %r2, align 4
-  %3 = trunc i64 %__BranchIfNot_90___cond to i1
-  br i1 %3, label %bb19, label %bb20
+  %__BranchIfNot_90___bool = icmp ne i64 %__BranchIfNot_90___cond, 0
+  br i1 %__BranchIfNot_90___bool, label %bb19, label %bb20
 
 bb19:                                             ; preds = %bb18
   store ptr @wait-npc-set-demeanor, ptr %r2, align 8
@@ -1998,7 +2063,7 @@ bb0:
   %__Move_0___load_op1 = load i64, ptr %r49, align 4
   store i64 %__Move_0___load_op1, ptr %r0, align 4
   store ptr @send-event, ptr %r1, align 8
-  %__LoadStaticU64Imm_2___st_load = load i64, ptr getelementptr inbounds ([5 x i64], ptr @symbol_table.8, i64 0, i64 1), align 4
+  %__LoadStaticU64Imm_2___st_load = load i64, ptr getelementptr inbounds ([5 x i64], ptr @"npc-gas-mask-narrative-mode/f_symbol_table", i64 0, i64 1), align 4
   store i64 %__LoadStaticU64Imm_2___st_load, ptr %r2, align 4
   %__Move_3___load_op1 = load i64, ptr %r0, align 4
   store i64 %__Move_3___load_op1, ptr %r3, align 4
@@ -2023,7 +2088,7 @@ bb0:
   store ptr @npc-disable-dialog-look, ptr %r1, align 8
   %__Move_12___load_op1 = load i64, ptr %r0, align 4
   store i64 %__Move_12___load_op1, ptr %r2, align 4
-  %__LoadStaticFloatImm_13___st_load = load float, ptr getelementptr inbounds ([5 x i64], ptr @symbol_table.8, i64 0, i64 4), align 4
+  %__LoadStaticFloatImm_13___st_load = load float, ptr getelementptr inbounds ([5 x i64], ptr @"npc-gas-mask-narrative-mode/f_symbol_table", i64 0, i64 4), align 4
   store float %__LoadStaticFloatImm_13___st_load, ptr %r3, align 4
   %__Move_14___load_op1 = load i64, ptr %r2, align 4
   store i64 %__Move_14___load_op1, ptr %r49, align 4
@@ -2158,7 +2223,7 @@ bb0:
   %__CallFf_5___call = call i64 %__CallFf_5___callee(i64 %__CallFf_5___arg0)
   store i64 %__CallFf_5___call, ptr %r2, align 4
   store ptr @send-event, ptr %r3, align 8
-  %__LoadStaticU64Imm_7___st_load = load i64, ptr getelementptr inbounds ([4 x i64], ptr @symbol_table.9, i64 0, i64 2), align 4
+  %__LoadStaticU64Imm_7___st_load = load i64, ptr getelementptr inbounds ([4 x i64], ptr @internal-put-off-gas-mask-immediately_symbol_table, i64 0, i64 2), align 4
   store i64 %__LoadStaticU64Imm_7___st_load, ptr %r4, align 4
   %__Move_8___load_op1 = load i64, ptr %r0, align 4
   store i64 %__Move_8___load_op1, ptr %r5, align 4
@@ -2174,8 +2239,8 @@ bb0:
   %__Move_12___load_op1 = load i64, ptr %r1, align 4
   store i64 %__Move_12___load_op1, ptr %r3, align 4
   %__BranchIfNot_13___cond = load i64, ptr %r3, align 4
-  %0 = trunc i64 %__BranchIfNot_13___cond to i1
-  br i1 %0, label %bb1, label %bb2
+  %__BranchIfNot_13___bool = icmp ne i64 %__BranchIfNot_13___cond, 0
+  br i1 %__BranchIfNot_13___bool, label %bb1, label %bb2
 
 bb1:                                              ; preds = %bb0
   store ptr @kill-entity, ptr %r3, align 8
@@ -2315,7 +2380,7 @@ bb0:
   %__CallFf_5___arg0 = load i64, ptr %r49, align 4
   %__CallFf_5___call = call i64 %__CallFf_5___callee(i64 %__CallFf_5___arg0)
   store i64 %__CallFf_5___call, ptr %r2, align 4
-  %__LoadStaticU64Imm_6___st_load = load i64, ptr getelementptr inbounds ([6 x i64], ptr @symbol_table.10, i64 0, i64 2), align 4
+  %__LoadStaticU64Imm_6___st_load = load i64, ptr getelementptr inbounds ([6 x i64], ptr @spawn-gas-mask_symbol_table, i64 0, i64 2), align 4
   store i64 %__LoadStaticU64Imm_6___st_load, ptr %r3, align 4
   %__Move_7___load_op1 = load i64, ptr %r2, align 4
   store i64 %__Move_7___load_op1, ptr %r49, align 4
@@ -2337,7 +2402,7 @@ bb0:
   %__LoadU64_14___addr = load ptr, ptr %r3, align 8
   %__LoadU64_14___load = load i64, ptr %__LoadU64_14___addr, align 4
   store i64 %__LoadU64_14___load, ptr %r3, align 4
-  %__LoadStaticU64Imm_15___st_load = load i64, ptr getelementptr inbounds ([6 x i64], ptr @symbol_table.10, i64 0, i64 4), align 4
+  %__LoadStaticU64Imm_15___st_load = load i64, ptr getelementptr inbounds ([6 x i64], ptr @spawn-gas-mask_symbol_table, i64 0, i64 4), align 4
   store i64 %__LoadStaticU64Imm_15___st_load, ptr %r4, align 4
   store i64 0, ptr %r5, align 4
   store i64 0, ptr %r6, align 4
@@ -2511,7 +2576,7 @@ bb0:
   %__Move_2___load_op1 = load i64, ptr %r51, align 4
   store i64 %__Move_2___load_op1, ptr %r2, align 4
   store ptr @player-disable-dialog-look-gestures, ptr %r3, align 8
-  %__LoadStaticFloatImm_4___st_load = load float, ptr getelementptr inbounds ([8 x i64], ptr @symbol_table.11, i64 0, i64 1), align 4
+  %__LoadStaticFloatImm_4___st_load = load float, ptr getelementptr inbounds ([8 x i64], ptr @"player-gas-mask-narrative-mode/f_symbol_table", i64 0, i64 1), align 4
   store float %__LoadStaticFloatImm_4___st_load, ptr %r4, align 4
   %__Move_5___load_op1 = load float, ptr %r4, align 4
   store float %__Move_5___load_op1, ptr %r49, align 4
@@ -2543,7 +2608,7 @@ bb0:
   %__Call_16___call = call i64 %__Call_16___callee(i64 %__Call_16___arg0, i64 %__Call_16___arg1, i64 %__Call_16___arg2)
   store i64 %__Call_16___call, ptr %r3, align 4
   store ptr @"suspend-idle-gestures/f", ptr %r3, align 8
-  %__LoadStaticU64Imm_18___st_load = load i64, ptr getelementptr inbounds ([8 x i64], ptr @symbol_table.11, i64 0, i64 5), align 4
+  %__LoadStaticU64Imm_18___st_load = load i64, ptr getelementptr inbounds ([8 x i64], ptr @"player-gas-mask-narrative-mode/f_symbol_table", i64 0, i64 5), align 4
   store i64 %__LoadStaticU64Imm_18___st_load, ptr %r4, align 4
   %__Move_19___load_op1 = load i64, ptr %r4, align 4
   store i64 %__Move_19___load_op1, ptr %r49, align 4
@@ -2552,7 +2617,7 @@ bb0:
   %__Call_20___call = call i64 %__Call_20___callee(i64 %__Call_20___arg0)
   store i64 %__Call_20___call, ptr %r3, align 4
   store ptr @joypad-disable-commands, ptr %r3, align 8
-  %__LoadStaticU64Imm_22___st_load = load i64, ptr getelementptr inbounds ([8 x i64], ptr @symbol_table.11, i64 0, i64 7), align 4
+  %__LoadStaticU64Imm_22___st_load = load i64, ptr getelementptr inbounds ([8 x i64], ptr @"player-gas-mask-narrative-mode/f_symbol_table", i64 0, i64 7), align 4
   store i64 %__LoadStaticU64Imm_22___st_load, ptr %r4, align 4
   %__Move_23___load_op1 = load i64, ptr %r4, align 4
   store i64 %__Move_23___load_op1, ptr %r49, align 4
@@ -2692,7 +2757,7 @@ bb0:
   %__CallFf_8___arg0 = load i64, ptr %r49, align 4
   %__CallFf_8___call = call i64 %__CallFf_8___callee(i64 %__CallFf_8___arg0)
   store i64 %__CallFf_8___call, ptr %r3, align 4
-  %__LoadStaticU64Imm_9___st_load = load i64, ptr getelementptr inbounds ([12 x i64], ptr @symbol_table.12, i64 0, i64 3), align 4
+  %__LoadStaticU64Imm_9___st_load = load i64, ptr getelementptr inbounds ([12 x i64], ptr @internal-put-off-gas-mask_symbol_table, i64 0, i64 3), align 4
   store i64 %__LoadStaticU64Imm_9___st_load, ptr %r4, align 4
   %__Move_10___load_op1 = load i64, ptr %r3, align 4
   store i64 %__Move_10___load_op1, ptr %r49, align 4
@@ -2749,7 +2814,7 @@ bb0:
   %__LoadU64_31___load = load i64, ptr %__LoadU64_31___addr, align 4
   store i64 %__LoadU64_31___load, ptr %r6, align 4
   store ptr @"#%alloc-array", ptr %r7, align 8
-  %__LoadStaticU64Imm_33___st_load = load i64, ptr getelementptr inbounds ([12 x i64], ptr @symbol_table.12, i64 0, i64 8), align 4
+  %__LoadStaticU64Imm_33___st_load = load i64, ptr getelementptr inbounds ([12 x i64], ptr @internal-put-off-gas-mask_symbol_table, i64 0, i64 8), align 4
   store i64 %__LoadStaticU64Imm_33___st_load, ptr %r8, align 4
   store i64 16, ptr %r9, align 4
   store i64 0, ptr %r10, align 4
@@ -2874,7 +2939,8 @@ bb1:                                              ; preds = %bb2, %bb0
   %__OpLogNot_80__op = xor i1 %__OpLogNot_80___load_op1, true
   store i1 %__OpLogNot_80__op, ptr %r4, align 1
   %__BranchIfNot_81___cond = load i1, ptr %r4, align 1
-  br i1 %__BranchIfNot_81___cond, label %bb2, label %bb3
+  %__BranchIfNot_81___bool = icmp ne i1 %__BranchIfNot_81___cond, false
+  br i1 %__BranchIfNot_81___bool, label %bb2, label %bb3
 
 bb2:                                              ; preds = %bb1
   store ptr @wait-one-frame, ptr %r4, align 8
@@ -2887,8 +2953,8 @@ bb3:                                              ; preds = %bb1
   %__Move_85___load_op1 = load i64, ptr %r1, align 4
   store i64 %__Move_85___load_op1, ptr %r4, align 4
   %__BranchIfNot_86___cond = load i64, ptr %r4, align 4
-  %0 = trunc i64 %__BranchIfNot_86___cond to i1
-  br i1 %0, label %bb4, label %bb5
+  %__BranchIfNot_86___bool = icmp ne i64 %__BranchIfNot_86___cond, 0
+  br i1 %__BranchIfNot_86___bool, label %bb4, label %bb5
 
 bb4:                                              ; preds = %bb3
   store ptr @kill-entity, ptr %r4, align 8
@@ -3025,7 +3091,7 @@ bb0:
   store ptr @fact-set, ptr %r3, align 8
   %__Move_4___load_op1 = load i64, ptr %r0, align 4
   store i64 %__Move_4___load_op1, ptr %r4, align 4
-  %__LoadStaticU64Imm_5___st_load = load i64, ptr getelementptr inbounds ([10 x i64], ptr @symbol_table.13, i64 0, i64 1), align 4
+  %__LoadStaticU64Imm_5___st_load = load i64, ptr getelementptr inbounds ([10 x i64], ptr @wait-remove-gas-mask_symbol_table, i64 0, i64 1), align 4
   store i64 %__LoadStaticU64Imm_5___st_load, ptr %r5, align 4
   store ptr @new-boxed-value, ptr %r6, align 8
   store i64 1, ptr %r7, align 4
@@ -3055,7 +3121,7 @@ bb0:
 
 bb1:                                              ; preds = %bb2, %bb0
   store ptr @"is-script-running?", ptr %r3, align 8
-  %__LoadStaticU64Imm_17___st_load = load i64, ptr getelementptr inbounds ([10 x i64], ptr @symbol_table.13, i64 0, i64 4), align 4
+  %__LoadStaticU64Imm_17___st_load = load i64, ptr getelementptr inbounds ([10 x i64], ptr @wait-remove-gas-mask_symbol_table, i64 0, i64 4), align 4
   store i64 %__LoadStaticU64Imm_17___st_load, ptr %r4, align 4
   %__Move_18___load_op1 = load i64, ptr %r4, align 4
   store i64 %__Move_18___load_op1, ptr %r49, align 4
@@ -3067,7 +3133,8 @@ bb1:                                              ; preds = %bb2, %bb0
   %__OpLogNot_20__op = xor i64 %__OpLogNot_20___load_op1, -1
   store i64 %__OpLogNot_20__op, ptr %r3, align 4
   %__BranchIfNot_21___cond = load i1, ptr %r3, align 1
-  br i1 %__BranchIfNot_21___cond, label %bb2, label %bb3
+  %__BranchIfNot_21___bool = icmp ne i1 %__BranchIfNot_21___cond, false
+  br i1 %__BranchIfNot_21___bool, label %bb2, label %bb3
 
 bb2:                                              ; preds = %bb1
   store ptr @wait-one-frame, ptr %r3, align 8
@@ -3078,9 +3145,9 @@ bb2:                                              ; preds = %bb1
 
 bb3:                                              ; preds = %bb1
   store ptr @send-event, ptr %r3, align 8
-  %__LoadStaticU64Imm_26___st_load = load i64, ptr getelementptr inbounds ([10 x i64], ptr @symbol_table.13, i64 0, i64 7), align 4
+  %__LoadStaticU64Imm_26___st_load = load i64, ptr getelementptr inbounds ([10 x i64], ptr @wait-remove-gas-mask_symbol_table, i64 0, i64 7), align 4
   store i64 %__LoadStaticU64Imm_26___st_load, ptr %r4, align 4
-  %__LoadStaticU64Imm_27___st_load = load i64, ptr getelementptr inbounds ([10 x i64], ptr @symbol_table.13, i64 0, i64 4), align 4
+  %__LoadStaticU64Imm_27___st_load = load i64, ptr getelementptr inbounds ([10 x i64], ptr @wait-remove-gas-mask_symbol_table, i64 0, i64 4), align 4
   store i64 %__LoadStaticU64Imm_27___st_load, ptr %r5, align 4
   store ptr @new-boxed-value, ptr %r6, align 8
   store i64 7, ptr %r7, align 4
@@ -3110,8 +3177,8 @@ bb3:                                              ; preds = %bb1
   %__Move_38___load_op1 = load i64, ptr %r1, align 4
   store i64 %__Move_38___load_op1, ptr %r3, align 4
   %__BranchIfNot_39___cond = load i64, ptr %r3, align 4
-  %0 = trunc i64 %__BranchIfNot_39___cond to i1
-  br i1 %0, label %bb4, label %bb5
+  %__BranchIfNot_39___bool = icmp ne i64 %__BranchIfNot_39___cond, 0
+  br i1 %__BranchIfNot_39___bool, label %bb4, label %bb5
 
 bb4:                                              ; preds = %bb3
   store ptr @internal-put-off-gas-mask-immediately, ptr %r3, align 8

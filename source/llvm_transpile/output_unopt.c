@@ -34,110 +34,110 @@ struct l_array_12_uint64_t;
 struct l_array_10_uint64_t;
 
 /* Function definitions */
-typedef uint64_t l_fptr_19(uint64_t, uint64_t);
-typedef uint64_t l_fptr_98(uint64_t, uint64_t, uint64_t);
-typedef uint64_t l_fptr_32(uint64_t, uint64_t, uint64_t);
-typedef uint64_t l_fptr_93(void);
-typedef uint64_t l_fptr_37(uint64_t, uint64_t);
-typedef uint64_t l_fptr_97(uint64_t, uint64_t);
-typedef uint64_t l_fptr_28(uint64_t, uint64_t, uint64_t);
-typedef uint64_t l_fptr_35(uint64_t, uint64_t, uint64_t);
-typedef uint64_t l_fptr_47(uint64_t, uint64_t);
-typedef uint64_t l_fptr_83(uint64_t, uint64_t, uint64_t);
-typedef uint64_t l_fptr_67(uint64_t, uint64_t, uint64_t, float, uint64_t);
-typedef uint64_t l_fptr_17(uint64_t, uint64_t);
-typedef uint64_t l_fptr_30(uint64_t, uint64_t, uint64_t);
-typedef uint64_t l_fptr_11(uint64_t);
-typedef uint64_t l_fptr_52(uint64_t);
-typedef uint64_t l_fptr_23(uint64_t, uint64_t);
-typedef uint64_t l_fptr_18(uint64_t);
-typedef uint64_t l_fptr_49(uint64_t, uint64_t, uint64_t, uint64_t);
-typedef uint64_t l_fptr_70(uint64_t, uint64_t);
-typedef uint64_t l_fptr_71(uint64_t, uint64_t);
-typedef uint64_t l_fptr_16(uint64_t, uint64_t, uint64_t, uint64_t, uint64_t, uint64_t, uint64_t, uint64_t, uint64_t);
-typedef uint64_t l_fptr_57(void);
-typedef uint64_t l_fptr_72(uint64_t);
-typedef uint64_t l_fptr_53(uint64_t);
-typedef uint64_t l_fptr_88(uint64_t, uint64_t);
-typedef uint64_t l_fptr_25(void);
-typedef uint64_t l_fptr_50(uint64_t, uint64_t, uint64_t);
-typedef uint64_t l_fptr_102(uint64_t, uint64_t, uint64_t);
-typedef uint64_t l_fptr_26(uint64_t, uint64_t, uint64_t, float);
-typedef uint64_t l_fptr_74(uint64_t);
-typedef uint64_t l_fptr_101(uint64_t, uint64_t);
-typedef uint64_t l_fptr_20(uint64_t, uint64_t);
-typedef uint64_t l_fptr_61(uint64_t);
-typedef uint64_t l_fptr_63(uint64_t);
-typedef uint64_t l_fptr_69(void);
-typedef uint64_t l_fptr_38(uint64_t, uint64_t, uint64_t, uint64_t, uint64_t, uint64_t, uint64_t, uint64_t, uint64_t);
-typedef uint64_t l_fptr_96(uint64_t);
-typedef uint64_t l_fptr_33(void);
-typedef uint64_t l_fptr_55(void);
-typedef uint64_t l_fptr_103(uint64_t, uint64_t);
-typedef uint64_t l_fptr_21(uint64_t, uint64_t);
-typedef uint64_t l_fptr_29(uint64_t, uint64_t, uint64_t, uint64_t);
-typedef uint64_t l_fptr_41(uint64_t);
-typedef uint64_t l_fptr_36(uint64_t);
-typedef uint64_t l_fptr_87(uint64_t);
-typedef uint64_t l_fptr_89(uint64_t);
-typedef uint64_t l_fptr_45(uint64_t, uint64_t, ...);
-typedef uint64_t l_fptr_42(uint64_t, float);
-typedef uint64_t l_fptr_60(void);
-typedef uint64_t l_fptr_48(uint64_t, uint64_t);
-typedef uint64_t l_fptr_27(uint64_t, float);
-typedef uint64_t l_fptr_76(uint64_t);
-typedef uint64_t l_fptr_3(uint64_t);
-typedef uint64_t l_fptr_64(void);
-typedef uint64_t l_fptr_14(uint64_t, uint64_t);
-typedef uint64_t l_fptr_86(void);
-typedef uint64_t l_fptr_99(uint64_t);
-typedef uint64_t l_fptr_39(uint64_t, uint64_t);
-typedef uint64_t l_fptr_34(uint64_t, uint64_t, uint64_t, uint64_t);
-typedef uint64_t l_fptr_85(uint64_t);
-typedef uint64_t l_fptr_68(uint64_t);
-typedef uint64_t l_fptr_2(uint64_t, uint64_t, uint64_t);
-typedef uint64_t l_fptr_22(uint64_t, uint64_t);
-typedef uint64_t l_fptr_78(uint64_t, uint64_t);
-typedef uint64_t l_fptr_1(uint64_t, uint64_t);
-typedef uint64_t l_fptr_15(uint64_t, uint64_t);
-typedef uint64_t l_fptr_79(uint64_t, uint64_t, uint64_t, uint64_t, uint64_t, uint64_t, uint64_t, uint64_t, uint64_t);
-typedef uint64_t l_fptr_81(float);
-typedef uint64_t l_fptr_56(void);
-typedef uint64_t l_fptr_7(uint64_t, uint64_t);
-typedef uint64_t l_fptr_104(uint64_t, uint64_t);
-typedef uint64_t l_fptr_73(uint64_t, float);
-typedef uint64_t l_fptr_66(float, uint64_t);
-typedef uint64_t l_fptr_8(uint64_t, uint64_t);
-typedef uint64_t l_fptr_9(uint64_t);
-typedef uint64_t l_fptr_5(uint64_t, uint64_t);
-typedef uint64_t l_fptr_54(uint64_t);
-typedef uint64_t l_fptr_100(void);
-typedef uint64_t l_fptr_31(void);
-typedef uint64_t l_fptr_44(uint64_t, uint64_t);
-typedef uint64_t l_fptr_65(uint64_t, float);
 typedef uint64_t l_fptr_94(uint64_t, uint64_t, uint64_t);
-typedef uint64_t l_fptr_40(uint64_t, uint64_t);
-typedef uint64_t l_fptr_90(uint64_t, uint64_t);
-typedef uint64_t l_fptr_80(uint64_t, uint64_t);
-typedef uint64_t l_fptr_84(uint64_t);
-typedef uint64_t l_fptr_6(uint64_t, uint64_t, uint64_t);
-typedef uint64_t l_fptr_75(uint64_t, uint64_t);
-typedef uint64_t l_fptr_12(void);
-typedef uint64_t l_fptr_10(void);
-typedef uint64_t l_fptr_13(uint64_t);
-typedef uint64_t l_fptr_82(void);
-typedef uint64_t l_fptr_92(uint64_t, uint64_t, uint64_t);
-typedef uint64_t l_fptr_51(uint64_t);
-typedef uint64_t l_fptr_62(void);
-typedef uint64_t l_fptr_43(uint64_t, uint64_t, ...);
-typedef uint64_t l_fptr_77(uint64_t);
-typedef uint64_t l_fptr_91(uint64_t, uint64_t, uint64_t, uint64_t);
+typedef uint64_t l_fptr_5(uint64_t, uint64_t);
+typedef uint64_t l_fptr_17(uint64_t, uint64_t);
+typedef uint64_t l_fptr_96(uint64_t);
+typedef uint64_t l_fptr_101(uint64_t, uint64_t);
+typedef uint64_t l_fptr_9(uint64_t);
+typedef uint64_t l_fptr_30(uint64_t, uint64_t, uint64_t);
 typedef uint64_t l_fptr_4(void);
-typedef uint64_t l_fptr_24(uint64_t);
-typedef uint64_t l_fptr_95(void);
-typedef uint64_t l_fptr_59(void);
+typedef uint64_t l_fptr_50(uint64_t, uint64_t, uint64_t);
+typedef uint64_t l_fptr_3(uint64_t);
+typedef uint64_t l_fptr_79(uint64_t, uint64_t, uint64_t, uint64_t, uint64_t, uint64_t, uint64_t, uint64_t, uint64_t);
+typedef uint64_t l_fptr_19(uint64_t, uint64_t);
+typedef uint64_t l_fptr_65(uint64_t, float);
+typedef uint64_t l_fptr_2(uint64_t, uint64_t, uint64_t);
+typedef uint64_t l_fptr_45(uint64_t, uint64_t, ...);
+typedef uint64_t l_fptr_34(uint64_t, uint64_t, uint64_t, uint64_t);
+typedef uint64_t l_fptr_11(uint64_t);
+typedef uint64_t l_fptr_54(uint64_t);
+typedef uint64_t l_fptr_36(uint64_t);
+typedef uint64_t l_fptr_40(uint64_t, uint64_t);
+typedef uint64_t l_fptr_78(uint64_t, uint64_t);
+typedef uint64_t l_fptr_42(uint64_t, float);
+typedef uint64_t l_fptr_77(uint64_t);
+typedef uint64_t l_fptr_71(uint64_t, uint64_t);
+typedef uint64_t l_fptr_28(uint64_t, uint64_t, uint64_t);
+typedef uint64_t l_fptr_25(void);
+typedef uint64_t l_fptr_90(uint64_t, uint64_t);
+typedef uint64_t l_fptr_64(void);
+typedef uint64_t l_fptr_67(uint64_t, uint64_t, uint64_t, float, uint64_t);
+typedef uint64_t l_fptr_48(uint64_t, uint64_t);
+typedef uint64_t l_fptr_20(uint64_t, uint64_t);
+typedef uint64_t l_fptr_23(uint64_t, uint64_t);
+typedef uint64_t l_fptr_102(uint64_t, uint64_t, uint64_t);
 typedef uint64_t l_fptr_58(void);
+typedef uint64_t l_fptr_38(uint64_t, uint64_t, uint64_t, uint64_t, uint64_t, uint64_t, uint64_t, uint64_t, uint64_t);
+typedef uint64_t l_fptr_63(uint64_t);
+typedef uint64_t l_fptr_68(uint64_t);
+typedef uint64_t l_fptr_95(void);
+typedef uint64_t l_fptr_86(void);
+typedef uint64_t l_fptr_97(uint64_t, uint64_t);
+typedef uint64_t l_fptr_103(uint64_t, uint64_t);
+typedef uint64_t l_fptr_100(void);
+typedef uint64_t l_fptr_60(void);
 typedef uint64_t l_fptr_46(uint64_t);
+typedef uint64_t l_fptr_14(uint64_t, uint64_t);
+typedef uint64_t l_fptr_69(void);
+typedef uint64_t l_fptr_56(void);
+typedef uint64_t l_fptr_80(uint64_t, uint64_t);
+typedef uint64_t l_fptr_44(uint64_t, uint64_t);
+typedef uint64_t l_fptr_81(float);
+typedef uint64_t l_fptr_98(uint64_t, uint64_t, uint64_t);
+typedef uint64_t l_fptr_99(uint64_t);
+typedef uint64_t l_fptr_55(void);
+typedef uint64_t l_fptr_92(uint64_t, uint64_t, uint64_t);
+typedef uint64_t l_fptr_104(uint64_t, uint64_t);
+typedef uint64_t l_fptr_26(uint64_t, uint64_t, uint64_t, float);
+typedef uint64_t l_fptr_52(uint64_t);
+typedef uint64_t l_fptr_84(uint64_t);
+typedef uint64_t l_fptr_29(uint64_t, uint64_t, uint64_t, uint64_t);
+typedef uint64_t l_fptr_72(uint64_t);
+typedef uint64_t l_fptr_33(void);
+typedef uint64_t l_fptr_6(uint64_t, uint64_t, uint64_t);
+typedef uint64_t l_fptr_21(uint64_t, uint64_t);
+typedef uint64_t l_fptr_61(uint64_t);
+typedef uint64_t l_fptr_93(void);
+typedef uint64_t l_fptr_75(uint64_t, uint64_t);
+typedef uint64_t l_fptr_51(uint64_t);
+typedef uint64_t l_fptr_88(uint64_t, uint64_t);
+typedef uint64_t l_fptr_74(uint64_t);
+typedef uint64_t l_fptr_22(uint64_t, uint64_t);
+typedef uint64_t l_fptr_59(void);
+typedef uint64_t l_fptr_1(uint64_t, uint64_t);
+typedef uint64_t l_fptr_32(uint64_t, uint64_t, uint64_t);
+typedef uint64_t l_fptr_91(uint64_t, uint64_t, uint64_t, uint64_t);
+typedef uint64_t l_fptr_41(uint64_t);
+typedef uint64_t l_fptr_43(uint64_t, uint64_t, ...);
+typedef uint64_t l_fptr_10(void);
+typedef uint64_t l_fptr_57(void);
+typedef uint64_t l_fptr_16(uint64_t, uint64_t, uint64_t, uint64_t, uint64_t, uint64_t, uint64_t, uint64_t, uint64_t);
+typedef uint64_t l_fptr_18(uint64_t);
+typedef uint64_t l_fptr_66(float, uint64_t);
+typedef uint64_t l_fptr_85(uint64_t);
+typedef uint64_t l_fptr_83(uint64_t, uint64_t, uint64_t);
+typedef uint64_t l_fptr_15(uint64_t, uint64_t);
+typedef uint64_t l_fptr_70(uint64_t, uint64_t);
+typedef uint64_t l_fptr_24(uint64_t);
+typedef uint64_t l_fptr_8(uint64_t, uint64_t);
+typedef uint64_t l_fptr_39(uint64_t, uint64_t);
+typedef uint64_t l_fptr_82(void);
+typedef uint64_t l_fptr_89(uint64_t);
+typedef uint64_t l_fptr_53(uint64_t);
+typedef uint64_t l_fptr_7(uint64_t, uint64_t);
+typedef uint64_t l_fptr_49(uint64_t, uint64_t, uint64_t, uint64_t);
+typedef uint64_t l_fptr_31(void);
+typedef uint64_t l_fptr_62(void);
+typedef uint64_t l_fptr_12(void);
+typedef uint64_t l_fptr_27(uint64_t, float);
+typedef uint64_t l_fptr_37(uint64_t, uint64_t);
+typedef uint64_t l_fptr_13(uint64_t);
+typedef uint64_t l_fptr_47(uint64_t, uint64_t);
+typedef uint64_t l_fptr_87(uint64_t);
+typedef uint64_t l_fptr_35(uint64_t, uint64_t, uint64_t);
+typedef uint64_t l_fptr_73(uint64_t, float);
+typedef uint64_t l_fptr_76(uint64_t);
 
 /* Types Definitions */
 struct l_array_11_uint64_t {
@@ -175,17 +175,17 @@ struct l_array_10_uint64_t {
 };
 
 /* Global Variable Declarations */
-const static __PREFIXALIGN__(8) struct l_array_11_uint64_t symbol_table __POSTFIXALIGN__(8);
-const static __PREFIXALIGN__(8) struct l_array_26_uint64_t symbol_table_OC_2 __POSTFIXALIGN__(8);
-const static __PREFIXALIGN__(8) struct l_array_19_uint64_t symbol_table_OC_4 __POSTFIXALIGN__(8);
-const static __PREFIXALIGN__(8) struct l_array_1_uint64_t symbol_table_OC_5 __POSTFIXALIGN__(8);
-const static __PREFIXALIGN__(8) struct l_array_18_uint64_t symbol_table_OC_7 __POSTFIXALIGN__(8);
-const static __PREFIXALIGN__(8) struct l_array_5_uint64_t symbol_table_OC_8 __POSTFIXALIGN__(8);
-const static __PREFIXALIGN__(8) struct l_array_4_uint64_t symbol_table_OC_9 __POSTFIXALIGN__(8);
-const static __PREFIXALIGN__(8) struct l_array_6_uint64_t symbol_table_OC_10 __POSTFIXALIGN__(8);
-const static __PREFIXALIGN__(8) struct l_array_8_uint64_t symbol_table_OC_11 __POSTFIXALIGN__(8);
-const static __PREFIXALIGN__(8) struct l_array_12_uint64_t symbol_table_OC_12 __POSTFIXALIGN__(8);
-const static __PREFIXALIGN__(8) struct l_array_10_uint64_t symbol_table_OC_13 __POSTFIXALIGN__(8);
+const static __PREFIXALIGN__(8) struct l_array_11_uint64_t wait_NC_equip_NC_gas_NC_mask_symbol_table __POSTFIXALIGN__(8);
+const static __PREFIXALIGN__(8) struct l_array_26_uint64_t internal_NC_put_NC_on_NC_gas_NC_mask_symbol_table __POSTFIXALIGN__(8);
+const static __PREFIXALIGN__(8) struct l_array_19_uint64_t internal_NC_put_NC_on_NC_gas_NC_mask_NC_immediately_symbol_table __POSTFIXALIGN__(8);
+const static __PREFIXALIGN__(8) struct l_array_1_uint64_t get_NC_equipped_NC_gas_NC_mask_symbol_table __POSTFIXALIGN__(8);
+const static __PREFIXALIGN__(8) struct l_array_18_uint64_t wait_NC_until_NC_in_NC_valid_NC_gas_NC_mask_NC_state_symbol_table __POSTFIXALIGN__(8);
+const static __PREFIXALIGN__(8) struct l_array_5_uint64_t npc_NC_gas_NC_mask_NC_narrative_NC_mode_PC_f_symbol_table __POSTFIXALIGN__(8);
+const static __PREFIXALIGN__(8) struct l_array_4_uint64_t internal_NC_put_NC_off_NC_gas_NC_mask_NC_immediately_symbol_table __POSTFIXALIGN__(8);
+const static __PREFIXALIGN__(8) struct l_array_6_uint64_t spawn_NC_gas_NC_mask_symbol_table __POSTFIXALIGN__(8);
+const static __PREFIXALIGN__(8) struct l_array_8_uint64_t player_NC_gas_NC_mask_NC_narrative_NC_mode_PC_f_symbol_table __POSTFIXALIGN__(8);
+const static __PREFIXALIGN__(8) struct l_array_12_uint64_t internal_NC_put_NC_off_NC_gas_NC_mask_symbol_table __POSTFIXALIGN__(8);
+const static __PREFIXALIGN__(8) struct l_array_10_uint64_t wait_NC_remove_NC_gas_NC_mask_symbol_table __POSTFIXALIGN__(8);
 
 /* Function Declarations */
 uint64_t wait_NC_equip_NC_gas_NC_mask(uint64_t llvm_cbe_arg_0, uint64_t llvm_cbe_arg_1, uint64_t llvm_cbe_arg_2);
@@ -214,9 +214,9 @@ uint64_t animate_(uint64_t _46, uint64_t _47, uint64_t _48);
 uint64_t _DC__FC_alloc_NC_array(uint64_t _49, uint64_t _50, uint64_t _51, uint64_t _52);
 uint64_t gesture_(uint64_t _53, uint64_t _54, uint64_t _55);
 uint64_t alloc_NC_gesture_NC_play_NC_params(void);
-uint64_t internal_NC_put_NC_on_NC_gas_NC_mask_NC_immediately_OC_3(uint64_t llvm_cbe_arg_0, uint64_t llvm_cbe_arg_1);
+uint64_t internal_NC_put_NC_on_NC_gas_NC_mask_NC_immediately_OC_2(uint64_t llvm_cbe_arg_0, uint64_t llvm_cbe_arg_1);
 uint64_t get_NC_equipped_NC_gas_NC_mask(uint64_t llvm_cbe_arg_0);
-uint64_t wait_NC_until_NC_in_NC_valid_NC_gas_NC_mask_NC_state_OC_6(uint64_t llvm_cbe_arg_0, uint64_t llvm_cbe_arg_1);
+uint64_t wait_NC_until_NC_in_NC_valid_NC_gas_NC_mask_NC_state_OC_3(uint64_t llvm_cbe_arg_0, uint64_t llvm_cbe_arg_1);
 uint64_t player_NC_in_NC_state_PD_(uint64_t _56);
 uint64_t player_NC_force_NC_crouch(void);
 uint64_t player_NC_is_NC_crouched_PD_(void);
@@ -243,17 +243,17 @@ uint64_t wait_NC_remove_NC_gas_NC_mask(uint64_t llvm_cbe_arg_0, uint64_t llvm_cb
 
 
 /* Global Variable Definitions and Initialization */
-static const __PREFIXALIGN__(8) struct l_array_11_uint64_t symbol_table __POSTFIXALIGN__(8) = { { INT64_C(-2210386714833194546), UINT64_C(7671589888336862994), INT64_C(3684810824690217768), UINT64_C(6481843155139167450), UINT64_C(6150028017864311825), INT64_C(-3047912596559836939), UINT64_C(4789555171397753330), INT64_C(-3266162430027026367), UINT64_C(6078802017353408438), UINT64_C(5608585023750540989), UINT64_C(13370543512150926718) } };
-static const __PREFIXALIGN__(8) struct l_array_26_uint64_t symbol_table_OC_2 __POSTFIXALIGN__(8) = { { INT64_C(-3047912596559836939), UINT64_C(10788710626492949762), UINT64_C(11873189068114142331), INT64_C(3455792245619945009), UINT64_C(8203816822361639083), UINT64_C(7097052834867614476), INT64_C(267125575217391726), UINT64_C(4766017279285775524), UINT64_C(6532480022340268902), INT64_C(-429226074377614887), UINT64_C(11194266633679187071), INT64_C(-3854484060414110792), UINT64_C(12474852589895261042), UINT64_C(10700394290536318732), UINT64_C(12770083849123373124), UINT64_C(8667864169316382944), 0, UINT64_C(4789555171397753330), UINT64_C(6817768622307059015), INT64_C(3684810824690217768), 1050253722, UINT64_C(9266924145627749149), UINT64_C(10701087590709005978), UINT64_C(8534565298598421705), UINT64_C(6500315221283771953), INT64_C(-2962780980939953026) } };
-static const __PREFIXALIGN__(8) struct l_array_19_uint64_t symbol_table_OC_4 __POSTFIXALIGN__(8) = { { UINT64_C(10788710626492949762), UINT64_C(11873189068114142331), INT64_C(3455792245619945009), UINT64_C(7097052834867614476), INT64_C(267125575217391726), UINT64_C(4766017279285775524), UINT64_C(12474852589895261042), UINT64_C(6532480022340268902), UINT64_C(4789555171397753330), UINT64_C(6817768622307059015), INT64_C(3684810824690217768), 0, INT64_C(-429226074377614887), INT64_C(1827492438953869695), UINT64_C(11194266633679187071), INT64_C(-3854484060414110792), UINT64_C(9266924145627749149), UINT64_C(10701087590709005978), UINT64_C(8534565298598421705) } };
-static const __PREFIXALIGN__(8) struct l_array_1_uint64_t symbol_table_OC_5 __POSTFIXALIGN__(8) = { { UINT64_C(13370543512150926718) } };
-static const __PREFIXALIGN__(8) struct l_array_18_uint64_t symbol_table_OC_7 __POSTFIXALIGN__(8) = { { UINT64_C(6532480022340268902), UINT64_C(9443492708748526833), UINT64_C(6740565536053766520), INT64_C(2237451099064635199), INT64_C(-3047912596559836939), UINT64_C(13615456637498249507), INT64_C(1646463116072042322), UINT64_C(8594926419455150747), UINT64_C(12638116831811436492), INT64_C(4007104907368024212), INT64_C(-3092934816467423265), 1065353216, INT64_C(-626103520744544694), 1045220557, UINT64_C(5808793362033684947), INT64_C(3212836864), UINT64_C(7683024912818272899), UINT64_C(8573502661920361253) } };
-static const __PREFIXALIGN__(8) struct l_array_5_uint64_t symbol_table_OC_8 __POSTFIXALIGN__(8) = { { UINT64_C(4789555171397753330), UINT64_C(8119835013146602502), UINT64_C(13090054416398793830), UINT64_C(7610916627332680768), 0 } };
-static const __PREFIXALIGN__(8) struct l_array_4_uint64_t symbol_table_OC_9 __POSTFIXALIGN__(8) = { { UINT64_C(13370543512150926718), UINT64_C(4789555171397753330), INT64_C(-3264453205741318791), INT64_C(-804116741684351865) } };
-static const __PREFIXALIGN__(8) struct l_array_6_uint64_t symbol_table_OC_10 __POSTFIXALIGN__(8) = { { UINT64_C(10788710626492949762), UINT64_C(11873189068114142331), INT64_C(3455792245619945009), UINT64_C(7097052834867614476), INT64_C(267125575217391726), UINT64_C(4766017279285775524) } };
-static const __PREFIXALIGN__(8) struct l_array_8_uint64_t symbol_table_OC_11 __POSTFIXALIGN__(8) = { { UINT64_C(7238593933813171071), 0, UINT64_C(8165897991486741957), INT64_C(-2826777519175913837), UINT64_C(13090054416398793830), UINT64_C(5008278420455340480), UINT64_C(7121253686161376880), INT64_C(-1699981380503476753) } };
-static const __PREFIXALIGN__(8) struct l_array_12_uint64_t symbol_table_OC_12 __POSTFIXALIGN__(8) = { { INT64_C(-3047912596559836939), UINT64_C(10788710626492949762), UINT64_C(11873189068114142331), INT64_C(3455792245619945009), UINT64_C(13370543512150926718), UINT64_C(8203816822361639083), UINT64_C(9266924145627749149), UINT64_C(10701087590709005978), UINT64_C(8534565298598421705), UINT64_C(6500315221283771953), INT64_C(-2962780980939953026), INT64_C(-804116741684351865) } };
-static const __PREFIXALIGN__(8) struct l_array_10_uint64_t symbol_table_OC_13 __POSTFIXALIGN__(8) = { { INT64_C(-2210386714833194546), UINT64_C(7671589888336862994), INT64_C(3684810824690217768), UINT64_C(6481843155139167450), UINT64_C(6150028017864311825), INT64_C(-3047912596559836939), UINT64_C(4789555171397753330), INT64_C(-3325057813225958160), UINT64_C(9887213260439779492), UINT64_C(11836123545942477555) } };
+static const __PREFIXALIGN__(8) struct l_array_11_uint64_t wait_NC_equip_NC_gas_NC_mask_symbol_table __POSTFIXALIGN__(8) = { { INT64_C(-2210386714833194546), UINT64_C(7671589888336862994), INT64_C(3684810824690217768), UINT64_C(6481843155139167450), UINT64_C(6150028017864311825), INT64_C(-3047912596559836939), UINT64_C(4789555171397753330), INT64_C(-3266162430027026367), UINT64_C(6078802017353408438), UINT64_C(5608585023750540989), UINT64_C(13370543512150926718) } };
+static const __PREFIXALIGN__(8) struct l_array_26_uint64_t internal_NC_put_NC_on_NC_gas_NC_mask_symbol_table __POSTFIXALIGN__(8) = { { INT64_C(-3047912596559836939), UINT64_C(10788710626492949762), UINT64_C(11873189068114142331), INT64_C(3455792245619945009), UINT64_C(8203816822361639083), UINT64_C(7097052834867614476), INT64_C(267125575217391726), UINT64_C(4766017279285775524), UINT64_C(6532480022340268902), INT64_C(-429226074377614887), UINT64_C(11194266633679187071), INT64_C(-3854484060414110792), UINT64_C(12474852589895261042), UINT64_C(10700394290536318732), UINT64_C(12770083849123373124), UINT64_C(8667864169316382944), 0, UINT64_C(4789555171397753330), UINT64_C(6817768622307059015), INT64_C(3684810824690217768), 1050253722, UINT64_C(9266924145627749149), UINT64_C(10701087590709005978), UINT64_C(8534565298598421705), UINT64_C(6500315221283771953), INT64_C(-2962780980939953026) } };
+static const __PREFIXALIGN__(8) struct l_array_19_uint64_t internal_NC_put_NC_on_NC_gas_NC_mask_NC_immediately_symbol_table __POSTFIXALIGN__(8) = { { UINT64_C(10788710626492949762), UINT64_C(11873189068114142331), INT64_C(3455792245619945009), UINT64_C(7097052834867614476), INT64_C(267125575217391726), UINT64_C(4766017279285775524), UINT64_C(12474852589895261042), UINT64_C(6532480022340268902), UINT64_C(4789555171397753330), UINT64_C(6817768622307059015), INT64_C(3684810824690217768), 0, INT64_C(-429226074377614887), INT64_C(1827492438953869695), UINT64_C(11194266633679187071), INT64_C(-3854484060414110792), UINT64_C(9266924145627749149), UINT64_C(10701087590709005978), UINT64_C(8534565298598421705) } };
+static const __PREFIXALIGN__(8) struct l_array_1_uint64_t get_NC_equipped_NC_gas_NC_mask_symbol_table __POSTFIXALIGN__(8) = { { UINT64_C(13370543512150926718) } };
+static const __PREFIXALIGN__(8) struct l_array_18_uint64_t wait_NC_until_NC_in_NC_valid_NC_gas_NC_mask_NC_state_symbol_table __POSTFIXALIGN__(8) = { { UINT64_C(6532480022340268902), UINT64_C(9443492708748526833), UINT64_C(6740565536053766520), INT64_C(2237451099064635199), INT64_C(-3047912596559836939), UINT64_C(13615456637498249507), INT64_C(1646463116072042322), UINT64_C(8594926419455150747), UINT64_C(12638116831811436492), INT64_C(4007104907368024212), INT64_C(-3092934816467423265), 1065353216, INT64_C(-626103520744544694), 1045220557, UINT64_C(5808793362033684947), INT64_C(3212836864), UINT64_C(7683024912818272899), UINT64_C(8573502661920361253) } };
+static const __PREFIXALIGN__(8) struct l_array_5_uint64_t npc_NC_gas_NC_mask_NC_narrative_NC_mode_PC_f_symbol_table __POSTFIXALIGN__(8) = { { UINT64_C(4789555171397753330), UINT64_C(8119835013146602502), UINT64_C(13090054416398793830), UINT64_C(7610916627332680768), 0 } };
+static const __PREFIXALIGN__(8) struct l_array_4_uint64_t internal_NC_put_NC_off_NC_gas_NC_mask_NC_immediately_symbol_table __POSTFIXALIGN__(8) = { { UINT64_C(13370543512150926718), UINT64_C(4789555171397753330), INT64_C(-3264453205741318791), INT64_C(-804116741684351865) } };
+static const __PREFIXALIGN__(8) struct l_array_6_uint64_t spawn_NC_gas_NC_mask_symbol_table __POSTFIXALIGN__(8) = { { UINT64_C(10788710626492949762), UINT64_C(11873189068114142331), INT64_C(3455792245619945009), UINT64_C(7097052834867614476), INT64_C(267125575217391726), UINT64_C(4766017279285775524) } };
+static const __PREFIXALIGN__(8) struct l_array_8_uint64_t player_NC_gas_NC_mask_NC_narrative_NC_mode_PC_f_symbol_table __POSTFIXALIGN__(8) = { { UINT64_C(7238593933813171071), 0, UINT64_C(8165897991486741957), INT64_C(-2826777519175913837), UINT64_C(13090054416398793830), UINT64_C(5008278420455340480), UINT64_C(7121253686161376880), INT64_C(-1699981380503476753) } };
+static const __PREFIXALIGN__(8) struct l_array_12_uint64_t internal_NC_put_NC_off_NC_gas_NC_mask_symbol_table __POSTFIXALIGN__(8) = { { INT64_C(-3047912596559836939), UINT64_C(10788710626492949762), UINT64_C(11873189068114142331), INT64_C(3455792245619945009), UINT64_C(13370543512150926718), UINT64_C(8203816822361639083), UINT64_C(9266924145627749149), UINT64_C(10701087590709005978), UINT64_C(8534565298598421705), UINT64_C(6500315221283771953), INT64_C(-2962780980939953026), INT64_C(-804116741684351865) } };
+static const __PREFIXALIGN__(8) struct l_array_10_uint64_t wait_NC_remove_NC_gas_NC_mask_symbol_table __POSTFIXALIGN__(8) = { { INT64_C(-2210386714833194546), UINT64_C(7671589888336862994), INT64_C(3684810824690217768), UINT64_C(6481843155139167450), UINT64_C(6150028017864311825), INT64_C(-3047912596559836939), UINT64_C(4789555171397753330), INT64_C(-3325057813225958160), UINT64_C(9887213260439779492), UINT64_C(11836123545942477555) } };
 
 
 /* LLVM Intrinsic Builtin Function Bodies */
@@ -459,7 +459,7 @@ uint64_t wait_NC_equip_NC_gas_NC_mask(uint64_t llvm_cbe_arg_0, uint64_t llvm_cbe
   *((void**)&llvm_cbe_r3) = ((void*)&fact_NC_set);
   llvm_cbe___Move_4___load_op1 = llvm_cbe_r0;
   llvm_cbe_r4 = llvm_cbe___Move_4___load_op1;
-  llvm_cbe___LoadStaticU64Imm_5___st_load = *(uint64_t*)(((&(&symbol_table)->array[((int64_t)1)])));
+  llvm_cbe___LoadStaticU64Imm_5___st_load = *(uint64_t*)(((&(&wait_NC_equip_NC_gas_NC_mask_symbol_table)->array[((int64_t)1)])));
   llvm_cbe_r5 = llvm_cbe___LoadStaticU64Imm_5___st_load;
   *((void**)&llvm_cbe_r6) = ((void*)&new_NC_boxed_NC_value);
   llvm_cbe_r7 = 1;
@@ -490,7 +490,7 @@ uint64_t wait_NC_equip_NC_gas_NC_mask(uint64_t llvm_cbe_arg_0, uint64_t llvm_cbe
   do {     /* Syntactic loop 'bb1' to make GCC happy */
 llvm_cbe_bb1:
   *((void**)&llvm_cbe_r3) = ((void*)&is_NC_script_NC_running_PD_);
-  llvm_cbe___LoadStaticU64Imm_17___st_load = *(uint64_t*)(((&(&symbol_table)->array[((int64_t)4)])));
+  llvm_cbe___LoadStaticU64Imm_17___st_load = *(uint64_t*)(((&(&wait_NC_equip_NC_gas_NC_mask_symbol_table)->array[((int64_t)4)])));
   llvm_cbe_r4 = llvm_cbe___LoadStaticU64Imm_17___st_load;
   llvm_cbe___Move_18___load_op1 = llvm_cbe_r4;
   llvm_cbe_r49 = llvm_cbe___Move_18___load_op1;
@@ -501,7 +501,7 @@ llvm_cbe_bb1:
   llvm_cbe___OpLogNot_20___load_op1 = llvm_cbe_r3;
   llvm_cbe_r3 = (llvm_cbe___OpLogNot_20___load_op1 ^ -1);
   llvm_cbe___BranchIfNot_21___cond = *((bool*)&llvm_cbe_r3);
-  if (llvm_cbe___BranchIfNot_21___cond) {
+  if ((llvm_cbe___BranchIfNot_21___cond != 0)) {
     goto llvm_cbe_bb2;
   } else {
     goto llvm_cbe_bb3;
@@ -517,9 +517,9 @@ llvm_cbe_bb2:
   } while (1); /* end of syntactic loop 'bb1' */
 llvm_cbe_bb3:
   *((void**)&llvm_cbe_r3) = ((void*)&send_NC_event);
-  llvm_cbe___LoadStaticU64Imm_26___st_load = *(uint64_t*)(((&(&symbol_table)->array[((int64_t)7)])));
+  llvm_cbe___LoadStaticU64Imm_26___st_load = *(uint64_t*)(((&(&wait_NC_equip_NC_gas_NC_mask_symbol_table)->array[((int64_t)7)])));
   llvm_cbe_r4 = llvm_cbe___LoadStaticU64Imm_26___st_load;
-  llvm_cbe___LoadStaticU64Imm_27___st_load = *(uint64_t*)(((&(&symbol_table)->array[((int64_t)4)])));
+  llvm_cbe___LoadStaticU64Imm_27___st_load = *(uint64_t*)(((&(&wait_NC_equip_NC_gas_NC_mask_symbol_table)->array[((int64_t)4)])));
   llvm_cbe_r5 = llvm_cbe___LoadStaticU64Imm_27___st_load;
   *((void**)&llvm_cbe_r6) = ((void*)&new_NC_boxed_NC_value);
   llvm_cbe_r7 = 7;
@@ -549,7 +549,7 @@ llvm_cbe_bb3:
   llvm_cbe___Move_38___load_op1 = llvm_cbe_r2;
   llvm_cbe_r3 = llvm_cbe___Move_38___load_op1;
   llvm_cbe___BranchIfNot_39___cond = llvm_cbe_r3;
-  if ((((bool)llvm_cbe___BranchIfNot_39___cond&1u))) {
+  if ((llvm_cbe___BranchIfNot_39___cond != UINT64_C(0))) {
     goto llvm_cbe_bb4;
   } else {
     goto llvm_cbe_bb5;
@@ -592,7 +592,7 @@ llvm_cbe_bb5:
   do {     /* Syntactic loop 'bb6' to make GCC happy */
 llvm_cbe_bb6:
   *((void**)&llvm_cbe_r3) = ((void*)&is_NC_script_NC_running_PD_);
-  llvm_cbe___LoadStaticU64Imm_54___st_load = *(uint64_t*)(((&(&symbol_table)->array[((int64_t)4)])));
+  llvm_cbe___LoadStaticU64Imm_54___st_load = *(uint64_t*)(((&(&wait_NC_equip_NC_gas_NC_mask_symbol_table)->array[((int64_t)4)])));
   llvm_cbe_r4 = llvm_cbe___LoadStaticU64Imm_54___st_load;
   llvm_cbe___Move_55___load_op1 = llvm_cbe_r4;
   llvm_cbe_r49 = llvm_cbe___Move_55___load_op1;
@@ -603,7 +603,7 @@ llvm_cbe_bb6:
   llvm_cbe___OpLogNot_57___load_op1 = llvm_cbe_r3;
   llvm_cbe_r3 = (llvm_cbe___OpLogNot_57___load_op1 ^ -1);
   llvm_cbe___BranchIfNot_58___cond = *((bool*)&llvm_cbe_r3);
-  if (llvm_cbe___BranchIfNot_58___cond) {
+  if ((llvm_cbe___BranchIfNot_58___cond != 0)) {
     goto llvm_cbe_bb7;
   } else {
     goto llvm_cbe_bb8;
@@ -996,7 +996,7 @@ uint64_t internal_NC_put_NC_on_NC_gas_NC_mask_OC_1(uint64_t llvm_cbe_arg_0, uint
   llvm_cbe___CallFf_8___arg0 = llvm_cbe_r49;
   llvm_cbe___CallFf_8___call = ((l_fptr_13*)(void*)llvm_cbe___CallFf_8___callee)(llvm_cbe___CallFf_8___arg0);
   llvm_cbe_r3 = llvm_cbe___CallFf_8___call;
-  llvm_cbe___LoadStaticU64Imm_9___st_load = *(uint64_t*)(((&(&symbol_table_OC_2)->array[((int64_t)3)])));
+  llvm_cbe___LoadStaticU64Imm_9___st_load = *(uint64_t*)(((&(&internal_NC_put_NC_on_NC_gas_NC_mask_symbol_table)->array[((int64_t)3)])));
   llvm_cbe_r4 = llvm_cbe___LoadStaticU64Imm_9___st_load;
   llvm_cbe___Move_10___load_op1 = llvm_cbe_r3;
   llvm_cbe_r49 = llvm_cbe___Move_10___load_op1;
@@ -1034,7 +1034,7 @@ uint64_t internal_NC_put_NC_on_NC_gas_NC_mask_OC_1(uint64_t llvm_cbe_arg_0, uint
   llvm_cbe___IEqual_24___load_rhs = llvm_cbe_r4;
   *((bool*)&llvm_cbe_r3) = (llvm_cbe___IEqual_24___load_lhs == llvm_cbe___IEqual_24___load_rhs);
   llvm_cbe___BranchIfNot_25___cond = *((bool*)&llvm_cbe_r3);
-  if (llvm_cbe___BranchIfNot_25___cond) {
+  if ((llvm_cbe___BranchIfNot_25___cond != 0)) {
     goto llvm_cbe_bb1;
   } else {
     goto llvm_cbe_bb2;
@@ -1050,7 +1050,7 @@ llvm_cbe_bb1:
   llvm_cbe___LoadU64_30___addr = *((void**)&llvm_cbe_r4);
   llvm_cbe___LoadU64_30___load = *(uint64_t*)llvm_cbe___LoadU64_30___addr;
   llvm_cbe_r4 = llvm_cbe___LoadU64_30___load;
-  llvm_cbe___LoadStaticU64Imm_31___st_load = *(uint64_t*)(((&(&symbol_table_OC_2)->array[((int64_t)6)])));
+  llvm_cbe___LoadStaticU64Imm_31___st_load = *(uint64_t*)(((&(&internal_NC_put_NC_on_NC_gas_NC_mask_symbol_table)->array[((int64_t)6)])));
   llvm_cbe_r5 = llvm_cbe___LoadStaticU64Imm_31___st_load;
   llvm_cbe_r6 = 0;
   llvm_cbe_r7 = 0;
@@ -1123,7 +1123,7 @@ llvm_cbe_bb3:
   llvm_cbe___CallFf_62___call = ((l_fptr_18*)(void*)llvm_cbe___CallFf_62___callee)(llvm_cbe___CallFf_62___arg0);
   llvm_cbe_r3 = llvm_cbe___CallFf_62___call;
   llvm_cbe___BranchIfNot_63___cond = llvm_cbe_r3;
-  if ((((bool)llvm_cbe___BranchIfNot_63___cond&1u))) {
+  if ((llvm_cbe___BranchIfNot_63___cond != UINT64_C(0))) {
     goto llvm_cbe_bb4;
   } else {
     goto llvm_cbe_bb5;
@@ -1214,7 +1214,7 @@ llvm_cbe_bb6:
   llvm_cbe___OpLogNot_99___load_op1 = llvm_cbe_r3;
   llvm_cbe_r3 = (llvm_cbe___OpLogNot_99___load_op1 ^ -1);
   llvm_cbe___BranchIfNot_100___cond = *((bool*)&llvm_cbe_r3);
-  if (llvm_cbe___BranchIfNot_100___cond) {
+  if ((llvm_cbe___BranchIfNot_100___cond != 0)) {
     goto llvm_cbe_bb7;
   } else {
     goto llvm_cbe_bb8;
@@ -1237,9 +1237,9 @@ llvm_cbe_bb9:
   llvm_cbe_r4 = llvm_cbe___Move_106___load_op1;
   llvm_cbe___Move_107___load_op1 = llvm_cbe_r0;
   llvm_cbe_r5 = llvm_cbe___Move_107___load_op1;
-  llvm_cbe___LoadStaticU64Imm_108___st_load = *(uint64_t*)(((&(&symbol_table_OC_2)->array[((int64_t)15)])));
+  llvm_cbe___LoadStaticU64Imm_108___st_load = *(uint64_t*)(((&(&internal_NC_put_NC_on_NC_gas_NC_mask_symbol_table)->array[((int64_t)15)])));
   llvm_cbe_r6 = llvm_cbe___LoadStaticU64Imm_108___st_load;
-  llvm_cbe___LoadStaticFloatImm_109___st_load = *(float*)(((&(&symbol_table_OC_2)->array[((int64_t)16)])));
+  llvm_cbe___LoadStaticFloatImm_109___st_load = *(float*)(((&(&internal_NC_put_NC_on_NC_gas_NC_mask_symbol_table)->array[((int64_t)16)])));
   *((float*)&llvm_cbe_r7) = llvm_cbe___LoadStaticFloatImm_109___st_load;
   llvm_cbe___Move_110___load_op1 = llvm_cbe_r4;
   llvm_cbe_r49 = llvm_cbe___Move_110___load_op1;
@@ -1257,13 +1257,13 @@ llvm_cbe_bb9:
   llvm_cbe___CallFf_114___call = ((l_fptr_26*)(void*)llvm_cbe___CallFf_114___callee)(llvm_cbe___CallFf_114___arg0, llvm_cbe___CallFf_114___arg1, llvm_cbe___CallFf_114___arg2, llvm_cbe___CallFf_114___arg3);
   llvm_cbe_r3 = llvm_cbe___CallFf_114___call;
   *((void**)&llvm_cbe_r3) = ((void*)&send_NC_event);
-  llvm_cbe___LoadStaticU64Imm_116___st_load = *(uint64_t*)(((&(&symbol_table_OC_2)->array[((int64_t)18)])));
+  llvm_cbe___LoadStaticU64Imm_116___st_load = *(uint64_t*)(((&(&internal_NC_put_NC_on_NC_gas_NC_mask_symbol_table)->array[((int64_t)18)])));
   llvm_cbe_r4 = llvm_cbe___LoadStaticU64Imm_116___st_load;
   llvm_cbe___Move_117___load_op1 = llvm_cbe_r0;
   llvm_cbe_r5 = llvm_cbe___Move_117___load_op1;
   *((void**)&llvm_cbe_r6) = ((void*)&new_NC_boxed_NC_value);
   llvm_cbe_r7 = 6;
-  llvm_cbe___LoadStaticFloatImm_120___st_load = *(float*)(((&(&symbol_table_OC_2)->array[((int64_t)20)])));
+  llvm_cbe___LoadStaticFloatImm_120___st_load = *(float*)(((&(&internal_NC_put_NC_on_NC_gas_NC_mask_symbol_table)->array[((int64_t)20)])));
   *((float*)&llvm_cbe_r8) = llvm_cbe___LoadStaticFloatImm_120___st_load;
   llvm_cbe___Move_121___load_op1 = llvm_cbe_r7;
   llvm_cbe_r49 = llvm_cbe___Move_121___load_op1;
@@ -1298,7 +1298,7 @@ llvm_cbe_bb9:
   llvm_cbe___LoadU64_133___load = *(uint64_t*)llvm_cbe___LoadU64_133___addr;
   llvm_cbe_r5 = llvm_cbe___LoadU64_133___load;
   *((void**)&llvm_cbe_r6) = ((void*)&_DC__FC_alloc_NC_array);
-  llvm_cbe___LoadStaticU64Imm_135___st_load = *(uint64_t*)(((&(&symbol_table_OC_2)->array[((int64_t)23)])));
+  llvm_cbe___LoadStaticU64Imm_135___st_load = *(uint64_t*)(((&(&internal_NC_put_NC_on_NC_gas_NC_mask_symbol_table)->array[((int64_t)23)])));
   llvm_cbe_r7 = llvm_cbe___LoadStaticU64Imm_135___st_load;
   llvm_cbe_r8 = 16;
   llvm_cbe_r9 = 0;
@@ -1410,7 +1410,7 @@ llvm_cbe_bb10:
   llvm_cbe___OpLogNot_181___load_op1 = *((bool*)&llvm_cbe_r3);
   *((bool*)&llvm_cbe_r3) = (llvm_cbe___OpLogNot_181___load_op1 ^ 1);
   llvm_cbe___BranchIfNot_182___cond = *((bool*)&llvm_cbe_r3);
-  if (llvm_cbe___BranchIfNot_182___cond) {
+  if ((llvm_cbe___BranchIfNot_182___cond != 0)) {
     goto llvm_cbe_bb11;
   } else {
     goto llvm_cbe_bb12;
@@ -1437,7 +1437,7 @@ llvm_cbe_bb12:
   llvm_cbe___LoadU64_191___load = *(uint64_t*)llvm_cbe___LoadU64_191___addr;
   llvm_cbe_r5 = llvm_cbe___LoadU64_191___load;
   *((void**)&llvm_cbe_r6) = ((void*)&_DC__FC_alloc_NC_array);
-  llvm_cbe___LoadStaticU64Imm_193___st_load = *(uint64_t*)(((&(&symbol_table_OC_2)->array[((int64_t)23)])));
+  llvm_cbe___LoadStaticU64Imm_193___st_load = *(uint64_t*)(((&(&internal_NC_put_NC_on_NC_gas_NC_mask_symbol_table)->array[((int64_t)23)])));
   llvm_cbe_r7 = llvm_cbe___LoadStaticU64Imm_193___st_load;
   llvm_cbe_r8 = 16;
   llvm_cbe_r9 = 0;
@@ -1480,7 +1480,7 @@ llvm_cbe_bb12:
 }
 
 
-uint64_t internal_NC_put_NC_on_NC_gas_NC_mask_NC_immediately_OC_3(uint64_t llvm_cbe_arg_0, uint64_t llvm_cbe_arg_1) {
+uint64_t internal_NC_put_NC_on_NC_gas_NC_mask_NC_immediately_OC_2(uint64_t llvm_cbe_arg_0, uint64_t llvm_cbe_arg_1) {
   __PREFIXALIGN__(8) uint64_t llvm_cbe_r0 __POSTFIXALIGN__(8);    /* Address-exposed local */
   __PREFIXALIGN__(8) uint64_t llvm_cbe_r1 __POSTFIXALIGN__(8);    /* Address-exposed local */
   __PREFIXALIGN__(8) uint64_t llvm_cbe_r2 __POSTFIXALIGN__(8);    /* Address-exposed local */
@@ -1716,20 +1716,47 @@ uint64_t internal_NC_put_NC_on_NC_gas_NC_mask_NC_immediately_OC_3(uint64_t llvm_
   uint64_t llvm_cbe___CallFf_119___arg3;
   uint64_t llvm_cbe___CallFf_119___call;
   uint64_t llvm_cbe___Move_120___load_op1;
+  void* llvm_cbe___LoadPointer_121___addr;
+  void* llvm_cbe___LoadPointer_121___load;
+  uint64_t llvm_cbe___LoadPointer_121___value;
+  void* llvm_cbe___LoadPointer_121___addr1;
   uint64_t llvm_cbe___IMulImm_123___load_lhs;
   uint64_t llvm_cbe___IAdd_124___load_lhs;
   uint64_t llvm_cbe___IAdd_124___load_rhs;
+  void* llvm_cbe___LoadPointer_125___addr;
+  void* llvm_cbe___LoadPointer_125___load;
+  uint64_t llvm_cbe___LoadPointer_125___value;
+  void* llvm_cbe___LoadPointer_125___addr2;
   uint64_t llvm_cbe___StoreI32_127___value;
   void* llvm_cbe___StoreI32_127___addr;
   uint64_t llvm_cbe___Move_128___load_op1;
+  void* llvm_cbe___LoadPointer_129___addr;
+  void* llvm_cbe___LoadPointer_129___load;
+  uint64_t llvm_cbe___LoadPointer_129___value;
+  void* llvm_cbe___LoadPointer_129___addr3;
   uint64_t llvm_cbe___IMulImm_131___load_lhs;
   uint64_t llvm_cbe___IAdd_132___load_lhs;
   uint64_t llvm_cbe___IAdd_132___load_rhs;
+  void* llvm_cbe___LoadPointer_133___addr;
+  void* llvm_cbe___LoadPointer_133___load;
+  uint64_t llvm_cbe___LoadPointer_133___value;
+  void* llvm_cbe___LoadPointer_133___addr4;
   uint64_t llvm_cbe___IAddImm_134___load_lhs;
+  uint64_t llvm_cbe___StorePointer_136___value;
+  void* llvm_cbe___StorePointer_136___addr;
+  void* llvm_cbe___StorePointer_136___st_load;
   uint64_t llvm_cbe___Move_137___load_op1;
+  void* llvm_cbe___LoadPointer_138___addr;
+  void* llvm_cbe___LoadPointer_138___load;
+  uint64_t llvm_cbe___LoadPointer_138___value;
+  void* llvm_cbe___LoadPointer_138___addr5;
   uint64_t llvm_cbe___IMulImm_140___load_lhs;
   uint64_t llvm_cbe___IAdd_141___load_lhs;
   uint64_t llvm_cbe___IAdd_141___load_rhs;
+  void* llvm_cbe___LoadPointer_142___addr;
+  void* llvm_cbe___LoadPointer_142___load;
+  uint64_t llvm_cbe___LoadPointer_142___value;
+  void* llvm_cbe___LoadPointer_142___addr6;
   uint64_t llvm_cbe___IAddImm_143___load_lhs;
   uint64_t llvm_cbe___StoreU8_145___value;
   void* llvm_cbe___StoreU8_145___addr;
@@ -1762,7 +1789,7 @@ uint64_t internal_NC_put_NC_on_NC_gas_NC_mask_NC_immediately_OC_3(uint64_t llvm_
   llvm_cbe___CallFf_6___arg0 = llvm_cbe_r49;
   llvm_cbe___CallFf_6___call = ((l_fptr_36*)(void*)llvm_cbe___CallFf_6___callee)(llvm_cbe___CallFf_6___arg0);
   llvm_cbe_r3 = llvm_cbe___CallFf_6___call;
-  llvm_cbe___LoadStaticU64Imm_7___st_load = *(uint64_t*)(((&(&symbol_table_OC_4)->array[((int64_t)2)])));
+  llvm_cbe___LoadStaticU64Imm_7___st_load = *(uint64_t*)(((&(&internal_NC_put_NC_on_NC_gas_NC_mask_NC_immediately_symbol_table)->array[((int64_t)2)])));
   llvm_cbe_r4 = llvm_cbe___LoadStaticU64Imm_7___st_load;
   llvm_cbe___Move_8___load_op1 = llvm_cbe_r3;
   llvm_cbe_r49 = llvm_cbe___Move_8___load_op1;
@@ -1780,7 +1807,7 @@ uint64_t internal_NC_put_NC_on_NC_gas_NC_mask_NC_immediately_OC_3(uint64_t llvm_
   llvm_cbe___IEqual_13___load_rhs = llvm_cbe_r4;
   *((bool*)&llvm_cbe_r3) = (llvm_cbe___IEqual_13___load_lhs == llvm_cbe___IEqual_13___load_rhs);
   llvm_cbe___BranchIfNot_14___cond = *((bool*)&llvm_cbe_r3);
-  if (llvm_cbe___BranchIfNot_14___cond) {
+  if ((llvm_cbe___BranchIfNot_14___cond != 0)) {
     goto llvm_cbe_bb1;
   } else {
     goto llvm_cbe_bb2;
@@ -1796,7 +1823,7 @@ llvm_cbe_bb1:
   llvm_cbe___LoadU64_19___addr = *((void**)&llvm_cbe_r4);
   llvm_cbe___LoadU64_19___load = *(uint64_t*)llvm_cbe___LoadU64_19___addr;
   llvm_cbe_r4 = llvm_cbe___LoadU64_19___load;
-  llvm_cbe___LoadStaticU64Imm_20___st_load = *(uint64_t*)(((&(&symbol_table_OC_4)->array[((int64_t)4)])));
+  llvm_cbe___LoadStaticU64Imm_20___st_load = *(uint64_t*)(((&(&internal_NC_put_NC_on_NC_gas_NC_mask_NC_immediately_symbol_table)->array[((int64_t)4)])));
   llvm_cbe_r5 = llvm_cbe___LoadStaticU64Imm_20___st_load;
   llvm_cbe_r6 = 0;
   llvm_cbe_r7 = 0;
@@ -1883,7 +1910,7 @@ llvm_cbe_bb3:
   llvm_cbe___CallFf_57___call = ((l_fptr_41*)(void*)llvm_cbe___CallFf_57___callee)(llvm_cbe___CallFf_57___arg0);
   llvm_cbe_r3 = llvm_cbe___CallFf_57___call;
   llvm_cbe___BranchIfNot_58___cond = llvm_cbe_r3;
-  if ((((bool)llvm_cbe___BranchIfNot_58___cond&1u))) {
+  if ((llvm_cbe___BranchIfNot_58___cond != UINT64_C(0))) {
     goto llvm_cbe_bb4;
   } else {
     goto llvm_cbe_bb5;
@@ -1891,13 +1918,13 @@ llvm_cbe_bb3:
 
 llvm_cbe_bb4:
   *((void**)&llvm_cbe_r3) = ((void*)&send_NC_event);
-  llvm_cbe___LoadStaticU64Imm_60___st_load = *(uint64_t*)(((&(&symbol_table_OC_4)->array[((int64_t)9)])));
+  llvm_cbe___LoadStaticU64Imm_60___st_load = *(uint64_t*)(((&(&internal_NC_put_NC_on_NC_gas_NC_mask_NC_immediately_symbol_table)->array[((int64_t)9)])));
   llvm_cbe_r4 = llvm_cbe___LoadStaticU64Imm_60___st_load;
   llvm_cbe___Move_61___load_op1 = llvm_cbe_r0;
   llvm_cbe_r5 = llvm_cbe___Move_61___load_op1;
   *((void**)&llvm_cbe_r6) = ((void*)&new_NC_boxed_NC_value);
   llvm_cbe_r7 = 6;
-  llvm_cbe___LoadStaticFloatImm_64___st_load = *(float*)(((&(&symbol_table_OC_4)->array[((int64_t)11)])));
+  llvm_cbe___LoadStaticFloatImm_64___st_load = *(float*)(((&(&internal_NC_put_NC_on_NC_gas_NC_mask_NC_immediately_symbol_table)->array[((int64_t)11)])));
   *((float*)&llvm_cbe_r8) = llvm_cbe___LoadStaticFloatImm_64___st_load;
   llvm_cbe___Move_65___load_op1 = llvm_cbe_r7;
   llvm_cbe_r49 = llvm_cbe___Move_65___load_op1;
@@ -1941,7 +1968,7 @@ llvm_cbe_bb5:
 
 llvm_cbe_bb6:
   *((void**)&llvm_cbe_r3) = ((void*)&send_NC_event);
-  llvm_cbe___LoadStaticU64Imm_81___st_load = *(uint64_t*)(((&(&symbol_table_OC_4)->array[((int64_t)13)])));
+  llvm_cbe___LoadStaticU64Imm_81___st_load = *(uint64_t*)(((&(&internal_NC_put_NC_on_NC_gas_NC_mask_NC_immediately_symbol_table)->array[((int64_t)13)])));
   llvm_cbe_r4 = llvm_cbe___LoadStaticU64Imm_81___st_load;
   llvm_cbe___Move_82___load_op1 = llvm_cbe_r0;
   llvm_cbe_r5 = llvm_cbe___Move_82___load_op1;
@@ -1964,7 +1991,7 @@ llvm_cbe_bb6:
   llvm_cbe___CallFf_89___call = ((l_fptr_46*)(void*)llvm_cbe___CallFf_89___callee)(llvm_cbe___CallFf_89___arg0);
   llvm_cbe_r3 = llvm_cbe___CallFf_89___call;
   llvm_cbe___BranchIfNot_90___cond = llvm_cbe_r3;
-  if ((((bool)llvm_cbe___BranchIfNot_90___cond&1u))) {
+  if ((llvm_cbe___BranchIfNot_90___cond != UINT64_C(0))) {
     goto llvm_cbe_bb7;
   } else {
     goto llvm_cbe_bb8;
@@ -2015,7 +2042,7 @@ llvm_cbe_bb9:
   llvm_cbe___LoadU64_109___load = *(uint64_t*)llvm_cbe___LoadU64_109___addr;
   llvm_cbe_r5 = llvm_cbe___LoadU64_109___load;
   *((void**)&llvm_cbe_r6) = ((void*)&_DC__FC_alloc_NC_array);
-  llvm_cbe___LoadStaticU64Imm_111___st_load = *(uint64_t*)(((&(&symbol_table_OC_4)->array[((int64_t)18)])));
+  llvm_cbe___LoadStaticU64Imm_111___st_load = *(uint64_t*)(((&(&internal_NC_put_NC_on_NC_gas_NC_mask_NC_immediately_symbol_table)->array[((int64_t)18)])));
   llvm_cbe_r7 = llvm_cbe___LoadStaticU64Imm_111___st_load;
   llvm_cbe_r8 = 16;
   llvm_cbe_r9 = 1;
@@ -2037,12 +2064,26 @@ llvm_cbe_bb9:
   llvm_cbe_r6 = llvm_cbe___CallFf_119___call;
   llvm_cbe___Move_120___load_op1 = llvm_cbe_r6;
   llvm_cbe_r7 = llvm_cbe___Move_120___load_op1;
+  llvm_cbe___LoadPointer_121___addr = *((void**)&llvm_cbe_r7);
+  llvm_cbe___LoadPointer_121___load = *(void**)llvm_cbe___LoadPointer_121___addr;
+  *((void**)&llvm_cbe_r7) = llvm_cbe___LoadPointer_121___load;
+  llvm_cbe___LoadPointer_121___value = llvm_cbe_r0;
+  llvm_cbe___LoadPointer_121___addr1 = *((void**)&llvm_cbe_r7);
+  *(uint8_t*)llvm_cbe___LoadPointer_121___addr1 = (((uint8_t)llvm_cbe___LoadPointer_121___value));
+  llvm_cbe_r7 = llvm_cbe___LoadPointer_121___value;
   llvm_cbe_r8 = 0;
   llvm_cbe___IMulImm_123___load_lhs = llvm_cbe_r8;
   llvm_cbe_r8 = (llvm_mul_u64(llvm_cbe___IMulImm_123___load_lhs, 8));
   llvm_cbe___IAdd_124___load_lhs = llvm_cbe_r7;
   llvm_cbe___IAdd_124___load_rhs = llvm_cbe_r8;
   llvm_cbe_r7 = (llvm_add_u64(llvm_cbe___IAdd_124___load_lhs, llvm_cbe___IAdd_124___load_rhs));
+  llvm_cbe___LoadPointer_125___addr = *((void**)&llvm_cbe_r7);
+  llvm_cbe___LoadPointer_125___load = *(void**)llvm_cbe___LoadPointer_125___addr;
+  *((void**)&llvm_cbe_r7) = llvm_cbe___LoadPointer_125___load;
+  llvm_cbe___LoadPointer_125___value = llvm_cbe_r0;
+  llvm_cbe___LoadPointer_125___addr2 = *((void**)&llvm_cbe_r7);
+  *(uint8_t*)llvm_cbe___LoadPointer_125___addr2 = (((uint8_t)llvm_cbe___LoadPointer_125___value));
+  llvm_cbe_r7 = llvm_cbe___LoadPointer_125___value;
   llvm_cbe_r8 = 31;
   llvm_cbe___StoreI32_127___value = llvm_cbe_r8;
   llvm_cbe___StoreI32_127___addr = *((void**)&llvm_cbe_r7);
@@ -2050,23 +2091,57 @@ llvm_cbe_bb9:
   llvm_cbe_r7 = llvm_cbe___StoreI32_127___value;
   llvm_cbe___Move_128___load_op1 = llvm_cbe_r6;
   llvm_cbe_r7 = llvm_cbe___Move_128___load_op1;
+  llvm_cbe___LoadPointer_129___addr = *((void**)&llvm_cbe_r7);
+  llvm_cbe___LoadPointer_129___load = *(void**)llvm_cbe___LoadPointer_129___addr;
+  *((void**)&llvm_cbe_r7) = llvm_cbe___LoadPointer_129___load;
+  llvm_cbe___LoadPointer_129___value = llvm_cbe_r0;
+  llvm_cbe___LoadPointer_129___addr3 = *((void**)&llvm_cbe_r7);
+  *(uint8_t*)llvm_cbe___LoadPointer_129___addr3 = (((uint8_t)llvm_cbe___LoadPointer_129___value));
+  llvm_cbe_r7 = llvm_cbe___LoadPointer_129___value;
   llvm_cbe_r8 = 0;
   llvm_cbe___IMulImm_131___load_lhs = llvm_cbe_r8;
   llvm_cbe_r8 = (llvm_mul_u64(llvm_cbe___IMulImm_131___load_lhs, 8));
   llvm_cbe___IAdd_132___load_lhs = llvm_cbe_r7;
   llvm_cbe___IAdd_132___load_rhs = llvm_cbe_r8;
   llvm_cbe_r7 = (llvm_add_u64(llvm_cbe___IAdd_132___load_lhs, llvm_cbe___IAdd_132___load_rhs));
+  llvm_cbe___LoadPointer_133___addr = *((void**)&llvm_cbe_r7);
+  llvm_cbe___LoadPointer_133___load = *(void**)llvm_cbe___LoadPointer_133___addr;
+  *((void**)&llvm_cbe_r7) = llvm_cbe___LoadPointer_133___load;
+  llvm_cbe___LoadPointer_133___value = llvm_cbe_r0;
+  llvm_cbe___LoadPointer_133___addr4 = *((void**)&llvm_cbe_r7);
+  *(uint8_t*)llvm_cbe___LoadPointer_133___addr4 = (((uint8_t)llvm_cbe___LoadPointer_133___value));
+  llvm_cbe_r7 = llvm_cbe___LoadPointer_133___value;
   llvm_cbe___IAddImm_134___load_lhs = llvm_cbe_r7;
   llvm_cbe_r7 = (llvm_add_u64(llvm_cbe___IAddImm_134___load_lhs, 8));
   llvm_cbe_r8 = 0;
+  llvm_cbe___StorePointer_136___value = llvm_cbe_r8;
+  llvm_cbe___StorePointer_136___addr = *((void**)&llvm_cbe_r7);
+  *(uint64_t*)llvm_cbe___StorePointer_136___addr = llvm_cbe___StorePointer_136___value;
+  llvm_cbe_r7 = llvm_cbe___StorePointer_136___value;
+  llvm_cbe___StorePointer_136___st_load = *(void**)(((&(&internal_NC_put_NC_on_NC_gas_NC_mask_NC_immediately_symbol_table)->array[((int64_t)7)])));
+  *((void**)&llvm_cbe_r7) = llvm_cbe___StorePointer_136___st_load;
   llvm_cbe___Move_137___load_op1 = llvm_cbe_r6;
   llvm_cbe_r7 = llvm_cbe___Move_137___load_op1;
+  llvm_cbe___LoadPointer_138___addr = *((void**)&llvm_cbe_r7);
+  llvm_cbe___LoadPointer_138___load = *(void**)llvm_cbe___LoadPointer_138___addr;
+  *((void**)&llvm_cbe_r7) = llvm_cbe___LoadPointer_138___load;
+  llvm_cbe___LoadPointer_138___value = llvm_cbe_r0;
+  llvm_cbe___LoadPointer_138___addr5 = *((void**)&llvm_cbe_r7);
+  *(uint8_t*)llvm_cbe___LoadPointer_138___addr5 = (((uint8_t)llvm_cbe___LoadPointer_138___value));
+  llvm_cbe_r7 = llvm_cbe___LoadPointer_138___value;
   llvm_cbe_r8 = 0;
   llvm_cbe___IMulImm_140___load_lhs = llvm_cbe_r8;
   llvm_cbe_r8 = (llvm_mul_u64(llvm_cbe___IMulImm_140___load_lhs, 8));
   llvm_cbe___IAdd_141___load_lhs = llvm_cbe_r7;
   llvm_cbe___IAdd_141___load_rhs = llvm_cbe_r8;
   llvm_cbe_r7 = (llvm_add_u64(llvm_cbe___IAdd_141___load_lhs, llvm_cbe___IAdd_141___load_rhs));
+  llvm_cbe___LoadPointer_142___addr = *((void**)&llvm_cbe_r7);
+  llvm_cbe___LoadPointer_142___load = *(void**)llvm_cbe___LoadPointer_142___addr;
+  *((void**)&llvm_cbe_r7) = llvm_cbe___LoadPointer_142___load;
+  llvm_cbe___LoadPointer_142___value = llvm_cbe_r0;
+  llvm_cbe___LoadPointer_142___addr6 = *((void**)&llvm_cbe_r7);
+  *(uint8_t*)llvm_cbe___LoadPointer_142___addr6 = (((uint8_t)llvm_cbe___LoadPointer_142___value));
+  llvm_cbe_r7 = llvm_cbe___LoadPointer_142___value;
   llvm_cbe___IAddImm_143___load_lhs = llvm_cbe_r7;
   llvm_cbe_r7 = (llvm_add_u64(llvm_cbe___IAddImm_143___load_lhs, 8));
   llvm_cbe_r8 = 1;
@@ -2221,7 +2296,7 @@ uint64_t get_NC_equipped_NC_gas_NC_mask(uint64_t llvm_cbe_arg_0) {
 }
 
 
-uint64_t wait_NC_until_NC_in_NC_valid_NC_gas_NC_mask_NC_state_OC_6(uint64_t llvm_cbe_arg_0, uint64_t llvm_cbe_arg_1) {
+uint64_t wait_NC_until_NC_in_NC_valid_NC_gas_NC_mask_NC_state_OC_3(uint64_t llvm_cbe_arg_0, uint64_t llvm_cbe_arg_1) {
   __PREFIXALIGN__(8) uint64_t llvm_cbe_r0 __POSTFIXALIGN__(8);    /* Address-exposed local */
   __PREFIXALIGN__(8) uint64_t llvm_cbe_r1 __POSTFIXALIGN__(8);    /* Address-exposed local */
   __PREFIXALIGN__(8) uint64_t llvm_cbe_r2 __POSTFIXALIGN__(8);    /* Address-exposed local */
@@ -2439,7 +2514,7 @@ uint64_t wait_NC_until_NC_in_NC_valid_NC_gas_NC_mask_NC_state_OC_6(uint64_t llvm
   llvm_cbe___CallFf_5___call = ((l_fptr_52*)(void*)llvm_cbe___CallFf_5___callee)(llvm_cbe___CallFf_5___arg0);
   llvm_cbe_r2 = llvm_cbe___CallFf_5___call;
   llvm_cbe___BranchIfNot_6___cond = llvm_cbe_r2;
-  if ((((bool)llvm_cbe___BranchIfNot_6___cond&1u))) {
+  if ((llvm_cbe___BranchIfNot_6___cond != UINT64_C(0))) {
     goto llvm_cbe_bb1;
   } else {
     goto llvm_cbe_bb15;
@@ -2448,7 +2523,7 @@ uint64_t wait_NC_until_NC_in_NC_valid_NC_gas_NC_mask_NC_state_OC_6(uint64_t llvm
   do {     /* Syntactic loop 'bb1' to make GCC happy */
 llvm_cbe_bb1:
   *((void**)&llvm_cbe_r2) = ((void*)&player_NC_in_NC_state_PD_);
-  llvm_cbe___LoadStaticU64Imm_8___st_load = *(uint64_t*)(((&(&symbol_table_OC_7)->array[((int64_t)2)])));
+  llvm_cbe___LoadStaticU64Imm_8___st_load = *(uint64_t*)(((&(&wait_NC_until_NC_in_NC_valid_NC_gas_NC_mask_NC_state_symbol_table)->array[((int64_t)2)])));
   llvm_cbe_r3 = llvm_cbe___LoadStaticU64Imm_8___st_load;
   llvm_cbe___Move_9___load_op1 = llvm_cbe_r3;
   llvm_cbe_r49 = llvm_cbe___Move_9___load_op1;
@@ -2459,7 +2534,7 @@ llvm_cbe_bb1:
   llvm_cbe___OpLogNot_11___load_op1 = llvm_cbe_r2;
   llvm_cbe_r2 = (llvm_cbe___OpLogNot_11___load_op1 ^ -1);
   llvm_cbe___BranchIfNot_12___cond = *((bool*)&llvm_cbe_r2);
-  if (llvm_cbe___BranchIfNot_12___cond) {
+  if ((llvm_cbe___BranchIfNot_12___cond != 0)) {
     goto llvm_cbe_bb2;
   } else {
     goto llvm_cbe_bb3;
@@ -2467,7 +2542,7 @@ llvm_cbe_bb1:
 
 llvm_cbe_bb2:
   *((void**)&llvm_cbe_r2) = ((void*)&player_NC_in_NC_state_PD_);
-  llvm_cbe___LoadStaticU64Imm_14___st_load = *(uint64_t*)(((&(&symbol_table_OC_7)->array[((int64_t)3)])));
+  llvm_cbe___LoadStaticU64Imm_14___st_load = *(uint64_t*)(((&(&wait_NC_until_NC_in_NC_valid_NC_gas_NC_mask_NC_state_symbol_table)->array[((int64_t)3)])));
   llvm_cbe_r3 = llvm_cbe___LoadStaticU64Imm_14___st_load;
   llvm_cbe___Move_15___load_op1 = llvm_cbe_r3;
   llvm_cbe_r49 = llvm_cbe___Move_15___load_op1;
@@ -2480,7 +2555,7 @@ llvm_cbe_bb2:
   llvm_cbe___OpLogNot_18___load_op1 = *((bool*)&llvm_cbe_r2);
   *((bool*)&llvm_cbe_r2) = (llvm_cbe___OpLogNot_18___load_op1 ^ 1);
   llvm_cbe___BranchIfNot_19___cond = *((bool*)&llvm_cbe_r2);
-  if (llvm_cbe___BranchIfNot_19___cond) {
+  if ((llvm_cbe___BranchIfNot_19___cond != 0)) {
     goto llvm_cbe_bb3;
   } else {
     goto llvm_cbe_bb4;
@@ -2498,7 +2573,7 @@ llvm_cbe_bb4:
   llvm_cbe___Move_23___load_op1 = llvm_cbe_r1;
   llvm_cbe_r2 = llvm_cbe___Move_23___load_op1;
   llvm_cbe___BranchIfNot_24___cond = llvm_cbe_r2;
-  if ((((bool)llvm_cbe___BranchIfNot_24___cond&1u))) {
+  if ((llvm_cbe___BranchIfNot_24___cond != UINT64_C(0))) {
     goto llvm_cbe_bb5;
   } else {
     goto llvm_cbe_bb9;
@@ -2520,7 +2595,7 @@ llvm_cbe_bb6:
   llvm_cbe___OpLogNot_29___load_op1 = llvm_cbe_r2;
   llvm_cbe_r2 = (llvm_cbe___OpLogNot_29___load_op1 ^ -1);
   llvm_cbe___BranchIfNot_30___cond = *((bool*)&llvm_cbe_r2);
-  if (llvm_cbe___BranchIfNot_30___cond) {
+  if ((llvm_cbe___BranchIfNot_30___cond != 0)) {
     goto llvm_cbe_bb7;
   } else {
     goto llvm_cbe_bb8;
@@ -2560,7 +2635,7 @@ llvm_cbe_bb10:
   llvm_cbe___OpLogNot_42___load_op1 = llvm_cbe_r2;
   llvm_cbe_r2 = (llvm_cbe___OpLogNot_42___load_op1 ^ -1);
   llvm_cbe___BranchIfNot_43___cond = *((bool*)&llvm_cbe_r2);
-  if (llvm_cbe___BranchIfNot_43___cond) {
+  if ((llvm_cbe___BranchIfNot_43___cond != 0)) {
     goto llvm_cbe_bb11;
   } else {
     goto llvm_cbe_bb12;
@@ -2577,7 +2652,7 @@ llvm_cbe_bb11:
   do {     /* Syntactic loop 'bb12' to make GCC happy */
 llvm_cbe_bb12:
   *((void**)&llvm_cbe_r2) = ((void*)&player_NC_in_NC_state_PD_);
-  llvm_cbe___LoadStaticU64Imm_48___st_load = *(uint64_t*)(((&(&symbol_table_OC_7)->array[((int64_t)9)])));
+  llvm_cbe___LoadStaticU64Imm_48___st_load = *(uint64_t*)(((&(&wait_NC_until_NC_in_NC_valid_NC_gas_NC_mask_NC_state_symbol_table)->array[((int64_t)9)])));
   llvm_cbe_r3 = llvm_cbe___LoadStaticU64Imm_48___st_load;
   llvm_cbe___Move_49___load_op1 = llvm_cbe_r3;
   llvm_cbe_r49 = llvm_cbe___Move_49___load_op1;
@@ -2588,7 +2663,7 @@ llvm_cbe_bb12:
   llvm_cbe___OpLogNot_51___load_op1 = llvm_cbe_r2;
   llvm_cbe_r2 = (llvm_cbe___OpLogNot_51___load_op1 ^ -1);
   llvm_cbe___BranchIfNot_52___cond = *((bool*)&llvm_cbe_r2);
-  if (llvm_cbe___BranchIfNot_52___cond) {
+  if ((llvm_cbe___BranchIfNot_52___cond != 0)) {
     goto llvm_cbe_bb13;
   } else {
     goto llvm_cbe_bb14;
@@ -2605,7 +2680,7 @@ llvm_cbe_bb13:
 llvm_cbe_bb14:
   *((void**)&llvm_cbe_r2) = ((void*)&wait_NC_holster_NC_player_NC_weapon);
   llvm_cbe_r3 = 0;
-  llvm_cbe___LoadStaticFloatImm_58___st_load = *(float*)(((&(&symbol_table_OC_7)->array[((int64_t)11)])));
+  llvm_cbe___LoadStaticFloatImm_58___st_load = *(float*)(((&(&wait_NC_until_NC_in_NC_valid_NC_gas_NC_mask_NC_state_symbol_table)->array[((int64_t)11)])));
   *((float*)&llvm_cbe_r4) = llvm_cbe___LoadStaticFloatImm_58___st_load;
   llvm_cbe___Move_59___load_op1 = llvm_cbe_r3;
   llvm_cbe_r49 = llvm_cbe___Move_59___load_op1;
@@ -2617,7 +2692,7 @@ llvm_cbe_bb14:
   llvm_cbe___CallFf_61___call = ((l_fptr_65*)(void*)llvm_cbe___CallFf_61___callee)(llvm_cbe___CallFf_61___arg0, llvm_cbe___CallFf_61___arg1);
   llvm_cbe_r2 = llvm_cbe___CallFf_61___call;
   *((void**)&llvm_cbe_r2) = ((void*)&holster_NC_player_NC_weapon_NC_instantly);
-  llvm_cbe___LoadStaticFloatImm_63___st_load = *(float*)(((&(&symbol_table_OC_7)->array[((int64_t)13)])));
+  llvm_cbe___LoadStaticFloatImm_63___st_load = *(float*)(((&(&wait_NC_until_NC_in_NC_valid_NC_gas_NC_mask_NC_state_symbol_table)->array[((int64_t)13)])));
   *((float*)&llvm_cbe_r3) = llvm_cbe___LoadStaticFloatImm_63___st_load;
   llvm_cbe_r4 = 0;
   llvm_cbe___Move_65___load_op1 = *((float*)&llvm_cbe_r3);
@@ -2637,7 +2712,7 @@ llvm_cbe_bb15:
   llvm_cbe_r3 = llvm_cbe___Move_70___load_op1;
   llvm_cbe_r4 = 0;
   llvm_cbe_r5 = 1;
-  llvm_cbe___LoadStaticFloatImm_73___st_load = *(float*)(((&(&symbol_table_OC_7)->array[((int64_t)15)])));
+  llvm_cbe___LoadStaticFloatImm_73___st_load = *(float*)(((&(&wait_NC_until_NC_in_NC_valid_NC_gas_NC_mask_NC_state_symbol_table)->array[((int64_t)15)])));
   *((float*)&llvm_cbe_r6) = llvm_cbe___LoadStaticFloatImm_73___st_load;
   llvm_cbe_r7 = 0;
   llvm_cbe___Move_75___load_op1 = llvm_cbe_r3;
@@ -2672,7 +2747,7 @@ llvm_cbe_bb16:
   llvm_cbe___CallFf_84___call = ((l_fptr_68*)(void*)llvm_cbe___CallFf_84___callee)(llvm_cbe___CallFf_84___arg0);
   llvm_cbe_r2 = llvm_cbe___CallFf_84___call;
   llvm_cbe___BranchIfNot_85___cond = llvm_cbe_r2;
-  if ((((bool)llvm_cbe___BranchIfNot_85___cond&1u))) {
+  if ((llvm_cbe___BranchIfNot_85___cond != UINT64_C(0))) {
     goto llvm_cbe_bb17;
   } else {
     goto llvm_cbe_bb18;
@@ -2690,7 +2765,7 @@ llvm_cbe_bb18:
   llvm_cbe___Move_89___load_op1 = llvm_cbe_r1;
   llvm_cbe_r2 = llvm_cbe___Move_89___load_op1;
   llvm_cbe___BranchIfNot_90___cond = llvm_cbe_r2;
-  if ((((bool)llvm_cbe___BranchIfNot_90___cond&1u))) {
+  if ((llvm_cbe___BranchIfNot_90___cond != UINT64_C(0))) {
     goto llvm_cbe_bb19;
   } else {
     goto llvm_cbe_bb20;
@@ -2849,7 +2924,7 @@ uint64_t npc_NC_gas_NC_mask_NC_narrative_NC_mode_PC_f(uint64_t llvm_cbe_arg_0) {
   llvm_cbe___Move_0___load_op1 = llvm_cbe_r49;
   llvm_cbe_r0 = llvm_cbe___Move_0___load_op1;
   *((void**)&llvm_cbe_r1) = ((void*)&send_NC_event);
-  llvm_cbe___LoadStaticU64Imm_2___st_load = *(uint64_t*)(((&(&symbol_table_OC_8)->array[((int64_t)1)])));
+  llvm_cbe___LoadStaticU64Imm_2___st_load = *(uint64_t*)(((&(&npc_NC_gas_NC_mask_NC_narrative_NC_mode_PC_f_symbol_table)->array[((int64_t)1)])));
   llvm_cbe_r2 = llvm_cbe___LoadStaticU64Imm_2___st_load;
   llvm_cbe___Move_3___load_op1 = llvm_cbe_r0;
   llvm_cbe_r3 = llvm_cbe___Move_3___load_op1;
@@ -2874,7 +2949,7 @@ uint64_t npc_NC_gas_NC_mask_NC_narrative_NC_mode_PC_f(uint64_t llvm_cbe_arg_0) {
   *((void**)&llvm_cbe_r1) = ((void*)&npc_NC_disable_NC_dialog_NC_look);
   llvm_cbe___Move_12___load_op1 = llvm_cbe_r0;
   llvm_cbe_r2 = llvm_cbe___Move_12___load_op1;
-  llvm_cbe___LoadStaticFloatImm_13___st_load = *(float*)(((&(&symbol_table_OC_8)->array[((int64_t)4)])));
+  llvm_cbe___LoadStaticFloatImm_13___st_load = *(float*)(((&(&npc_NC_gas_NC_mask_NC_narrative_NC_mode_PC_f_symbol_table)->array[((int64_t)4)])));
   *((float*)&llvm_cbe_r3) = llvm_cbe___LoadStaticFloatImm_13___st_load;
   llvm_cbe___Move_14___load_op1 = llvm_cbe_r2;
   llvm_cbe_r49 = llvm_cbe___Move_14___load_op1;
@@ -3030,7 +3105,7 @@ uint64_t internal_NC_put_NC_off_NC_gas_NC_mask_NC_immediately(uint64_t llvm_cbe_
   llvm_cbe___CallFf_5___call = ((l_fptr_74*)(void*)llvm_cbe___CallFf_5___callee)(llvm_cbe___CallFf_5___arg0);
   llvm_cbe_r2 = llvm_cbe___CallFf_5___call;
   *((void**)&llvm_cbe_r3) = ((void*)&send_NC_event);
-  llvm_cbe___LoadStaticU64Imm_7___st_load = *(uint64_t*)(((&(&symbol_table_OC_9)->array[((int64_t)2)])));
+  llvm_cbe___LoadStaticU64Imm_7___st_load = *(uint64_t*)(((&(&internal_NC_put_NC_off_NC_gas_NC_mask_NC_immediately_symbol_table)->array[((int64_t)2)])));
   llvm_cbe_r4 = llvm_cbe___LoadStaticU64Imm_7___st_load;
   llvm_cbe___Move_8___load_op1 = llvm_cbe_r0;
   llvm_cbe_r5 = llvm_cbe___Move_8___load_op1;
@@ -3046,7 +3121,7 @@ uint64_t internal_NC_put_NC_off_NC_gas_NC_mask_NC_immediately(uint64_t llvm_cbe_
   llvm_cbe___Move_12___load_op1 = llvm_cbe_r1;
   llvm_cbe_r3 = llvm_cbe___Move_12___load_op1;
   llvm_cbe___BranchIfNot_13___cond = llvm_cbe_r3;
-  if ((((bool)llvm_cbe___BranchIfNot_13___cond&1u))) {
+  if ((llvm_cbe___BranchIfNot_13___cond != UINT64_C(0))) {
     goto llvm_cbe_bb1;
   } else {
     goto llvm_cbe_bb2;
@@ -3240,7 +3315,7 @@ uint64_t spawn_NC_gas_NC_mask(uint64_t llvm_cbe_arg_0) {
   llvm_cbe___CallFf_5___arg0 = llvm_cbe_r49;
   llvm_cbe___CallFf_5___call = ((l_fptr_77*)(void*)llvm_cbe___CallFf_5___callee)(llvm_cbe___CallFf_5___arg0);
   llvm_cbe_r2 = llvm_cbe___CallFf_5___call;
-  llvm_cbe___LoadStaticU64Imm_6___st_load = *(uint64_t*)(((&(&symbol_table_OC_10)->array[((int64_t)2)])));
+  llvm_cbe___LoadStaticU64Imm_6___st_load = *(uint64_t*)(((&(&spawn_NC_gas_NC_mask_symbol_table)->array[((int64_t)2)])));
   llvm_cbe_r3 = llvm_cbe___LoadStaticU64Imm_6___st_load;
   llvm_cbe___Move_7___load_op1 = llvm_cbe_r2;
   llvm_cbe_r49 = llvm_cbe___Move_7___load_op1;
@@ -3260,7 +3335,7 @@ uint64_t spawn_NC_gas_NC_mask(uint64_t llvm_cbe_arg_0) {
   llvm_cbe___LoadU64_14___addr = *((void**)&llvm_cbe_r3);
   llvm_cbe___LoadU64_14___load = *(uint64_t*)llvm_cbe___LoadU64_14___addr;
   llvm_cbe_r3 = llvm_cbe___LoadU64_14___load;
-  llvm_cbe___LoadStaticU64Imm_15___st_load = *(uint64_t*)(((&(&symbol_table_OC_10)->array[((int64_t)4)])));
+  llvm_cbe___LoadStaticU64Imm_15___st_load = *(uint64_t*)(((&(&spawn_NC_gas_NC_mask_symbol_table)->array[((int64_t)4)])));
   llvm_cbe_r4 = llvm_cbe___LoadStaticU64Imm_15___st_load;
   llvm_cbe_r5 = 0;
   llvm_cbe_r6 = 0;
@@ -3467,7 +3542,7 @@ uint64_t player_NC_gas_NC_mask_NC_narrative_NC_mode_PC_f(uint64_t llvm_cbe_arg_0
   llvm_cbe___Move_2___load_op1 = llvm_cbe_r51;
   llvm_cbe_r2 = llvm_cbe___Move_2___load_op1;
   *((void**)&llvm_cbe_r3) = ((void*)&player_NC_disable_NC_dialog_NC_look_NC_gestures);
-  llvm_cbe___LoadStaticFloatImm_4___st_load = *(float*)(((&(&symbol_table_OC_11)->array[((int64_t)1)])));
+  llvm_cbe___LoadStaticFloatImm_4___st_load = *(float*)(((&(&player_NC_gas_NC_mask_NC_narrative_NC_mode_PC_f_symbol_table)->array[((int64_t)1)])));
   *((float*)&llvm_cbe_r4) = llvm_cbe___LoadStaticFloatImm_4___st_load;
   llvm_cbe___Move_5___load_op1 = *((float*)&llvm_cbe_r4);
   *((float*)&llvm_cbe_r49) = llvm_cbe___Move_5___load_op1;
@@ -3499,7 +3574,7 @@ uint64_t player_NC_gas_NC_mask_NC_narrative_NC_mode_PC_f(uint64_t llvm_cbe_arg_0
   llvm_cbe___Call_16___call = ((l_fptr_83*)(void*)llvm_cbe___Call_16___callee)(llvm_cbe___Call_16___arg0, llvm_cbe___Call_16___arg1, llvm_cbe___Call_16___arg2);
   llvm_cbe_r3 = llvm_cbe___Call_16___call;
   *((void**)&llvm_cbe_r3) = ((void*)&suspend_NC_idle_NC_gestures_PC_f);
-  llvm_cbe___LoadStaticU64Imm_18___st_load = *(uint64_t*)(((&(&symbol_table_OC_11)->array[((int64_t)5)])));
+  llvm_cbe___LoadStaticU64Imm_18___st_load = *(uint64_t*)(((&(&player_NC_gas_NC_mask_NC_narrative_NC_mode_PC_f_symbol_table)->array[((int64_t)5)])));
   llvm_cbe_r4 = llvm_cbe___LoadStaticU64Imm_18___st_load;
   llvm_cbe___Move_19___load_op1 = llvm_cbe_r4;
   llvm_cbe_r49 = llvm_cbe___Move_19___load_op1;
@@ -3508,7 +3583,7 @@ uint64_t player_NC_gas_NC_mask_NC_narrative_NC_mode_PC_f(uint64_t llvm_cbe_arg_0
   llvm_cbe___Call_20___call = ((l_fptr_84*)(void*)llvm_cbe___Call_20___callee)(llvm_cbe___Call_20___arg0);
   llvm_cbe_r3 = llvm_cbe___Call_20___call;
   *((void**)&llvm_cbe_r3) = ((void*)&joypad_NC_disable_NC_commands);
-  llvm_cbe___LoadStaticU64Imm_22___st_load = *(uint64_t*)(((&(&symbol_table_OC_11)->array[((int64_t)7)])));
+  llvm_cbe___LoadStaticU64Imm_22___st_load = *(uint64_t*)(((&(&player_NC_gas_NC_mask_NC_narrative_NC_mode_PC_f_symbol_table)->array[((int64_t)7)])));
   llvm_cbe_r4 = llvm_cbe___LoadStaticU64Imm_22___st_load;
   llvm_cbe___Move_23___load_op1 = llvm_cbe_r4;
   llvm_cbe_r49 = llvm_cbe___Move_23___load_op1;
@@ -3750,7 +3825,7 @@ uint64_t internal_NC_put_NC_off_NC_gas_NC_mask(uint64_t llvm_cbe_arg_0, uint64_t
   llvm_cbe___CallFf_8___arg0 = llvm_cbe_r49;
   llvm_cbe___CallFf_8___call = ((l_fptr_87*)(void*)llvm_cbe___CallFf_8___callee)(llvm_cbe___CallFf_8___arg0);
   llvm_cbe_r3 = llvm_cbe___CallFf_8___call;
-  llvm_cbe___LoadStaticU64Imm_9___st_load = *(uint64_t*)(((&(&symbol_table_OC_12)->array[((int64_t)3)])));
+  llvm_cbe___LoadStaticU64Imm_9___st_load = *(uint64_t*)(((&(&internal_NC_put_NC_off_NC_gas_NC_mask_symbol_table)->array[((int64_t)3)])));
   llvm_cbe_r4 = llvm_cbe___LoadStaticU64Imm_9___st_load;
   llvm_cbe___Move_10___load_op1 = llvm_cbe_r3;
   llvm_cbe_r49 = llvm_cbe___Move_10___load_op1;
@@ -3802,7 +3877,7 @@ uint64_t internal_NC_put_NC_off_NC_gas_NC_mask(uint64_t llvm_cbe_arg_0, uint64_t
   llvm_cbe___LoadU64_31___load = *(uint64_t*)llvm_cbe___LoadU64_31___addr;
   llvm_cbe_r6 = llvm_cbe___LoadU64_31___load;
   *((void**)&llvm_cbe_r7) = ((void*)&_DC__FC_alloc_NC_array);
-  llvm_cbe___LoadStaticU64Imm_33___st_load = *(uint64_t*)(((&(&symbol_table_OC_12)->array[((int64_t)8)])));
+  llvm_cbe___LoadStaticU64Imm_33___st_load = *(uint64_t*)(((&(&internal_NC_put_NC_off_NC_gas_NC_mask_symbol_table)->array[((int64_t)8)])));
   llvm_cbe_r8 = llvm_cbe___LoadStaticU64Imm_33___st_load;
   llvm_cbe_r9 = 16;
   llvm_cbe_r10 = 0;
@@ -3916,7 +3991,7 @@ llvm_cbe_bb1:
   llvm_cbe___OpLogNot_80___load_op1 = *((bool*)&llvm_cbe_r4);
   *((bool*)&llvm_cbe_r4) = (llvm_cbe___OpLogNot_80___load_op1 ^ 1);
   llvm_cbe___BranchIfNot_81___cond = *((bool*)&llvm_cbe_r4);
-  if (llvm_cbe___BranchIfNot_81___cond) {
+  if ((llvm_cbe___BranchIfNot_81___cond != 0)) {
     goto llvm_cbe_bb2;
   } else {
     goto llvm_cbe_bb3;
@@ -3934,7 +4009,7 @@ llvm_cbe_bb3:
   llvm_cbe___Move_85___load_op1 = llvm_cbe_r1;
   llvm_cbe_r4 = llvm_cbe___Move_85___load_op1;
   llvm_cbe___BranchIfNot_86___cond = llvm_cbe_r4;
-  if ((((bool)llvm_cbe___BranchIfNot_86___cond&1u))) {
+  if ((llvm_cbe___BranchIfNot_86___cond != UINT64_C(0))) {
     goto llvm_cbe_bb4;
   } else {
     goto llvm_cbe_bb5;
@@ -4140,7 +4215,7 @@ uint64_t wait_NC_remove_NC_gas_NC_mask(uint64_t llvm_cbe_arg_0, uint64_t llvm_cb
   *((void**)&llvm_cbe_r3) = ((void*)&fact_NC_set);
   llvm_cbe___Move_4___load_op1 = llvm_cbe_r0;
   llvm_cbe_r4 = llvm_cbe___Move_4___load_op1;
-  llvm_cbe___LoadStaticU64Imm_5___st_load = *(uint64_t*)(((&(&symbol_table_OC_13)->array[((int64_t)1)])));
+  llvm_cbe___LoadStaticU64Imm_5___st_load = *(uint64_t*)(((&(&wait_NC_remove_NC_gas_NC_mask_symbol_table)->array[((int64_t)1)])));
   llvm_cbe_r5 = llvm_cbe___LoadStaticU64Imm_5___st_load;
   *((void**)&llvm_cbe_r6) = ((void*)&new_NC_boxed_NC_value);
   llvm_cbe_r7 = 1;
@@ -4171,7 +4246,7 @@ uint64_t wait_NC_remove_NC_gas_NC_mask(uint64_t llvm_cbe_arg_0, uint64_t llvm_cb
   do {     /* Syntactic loop 'bb1' to make GCC happy */
 llvm_cbe_bb1:
   *((void**)&llvm_cbe_r3) = ((void*)&is_NC_script_NC_running_PD_);
-  llvm_cbe___LoadStaticU64Imm_17___st_load = *(uint64_t*)(((&(&symbol_table_OC_13)->array[((int64_t)4)])));
+  llvm_cbe___LoadStaticU64Imm_17___st_load = *(uint64_t*)(((&(&wait_NC_remove_NC_gas_NC_mask_symbol_table)->array[((int64_t)4)])));
   llvm_cbe_r4 = llvm_cbe___LoadStaticU64Imm_17___st_load;
   llvm_cbe___Move_18___load_op1 = llvm_cbe_r4;
   llvm_cbe_r49 = llvm_cbe___Move_18___load_op1;
@@ -4182,7 +4257,7 @@ llvm_cbe_bb1:
   llvm_cbe___OpLogNot_20___load_op1 = llvm_cbe_r3;
   llvm_cbe_r3 = (llvm_cbe___OpLogNot_20___load_op1 ^ -1);
   llvm_cbe___BranchIfNot_21___cond = *((bool*)&llvm_cbe_r3);
-  if (llvm_cbe___BranchIfNot_21___cond) {
+  if ((llvm_cbe___BranchIfNot_21___cond != 0)) {
     goto llvm_cbe_bb2;
   } else {
     goto llvm_cbe_bb3;
@@ -4198,9 +4273,9 @@ llvm_cbe_bb2:
   } while (1); /* end of syntactic loop 'bb1' */
 llvm_cbe_bb3:
   *((void**)&llvm_cbe_r3) = ((void*)&send_NC_event);
-  llvm_cbe___LoadStaticU64Imm_26___st_load = *(uint64_t*)(((&(&symbol_table_OC_13)->array[((int64_t)7)])));
+  llvm_cbe___LoadStaticU64Imm_26___st_load = *(uint64_t*)(((&(&wait_NC_remove_NC_gas_NC_mask_symbol_table)->array[((int64_t)7)])));
   llvm_cbe_r4 = llvm_cbe___LoadStaticU64Imm_26___st_load;
-  llvm_cbe___LoadStaticU64Imm_27___st_load = *(uint64_t*)(((&(&symbol_table_OC_13)->array[((int64_t)4)])));
+  llvm_cbe___LoadStaticU64Imm_27___st_load = *(uint64_t*)(((&(&wait_NC_remove_NC_gas_NC_mask_symbol_table)->array[((int64_t)4)])));
   llvm_cbe_r5 = llvm_cbe___LoadStaticU64Imm_27___st_load;
   *((void**)&llvm_cbe_r6) = ((void*)&new_NC_boxed_NC_value);
   llvm_cbe_r7 = 7;
@@ -4230,7 +4305,7 @@ llvm_cbe_bb3:
   llvm_cbe___Move_38___load_op1 = llvm_cbe_r1;
   llvm_cbe_r3 = llvm_cbe___Move_38___load_op1;
   llvm_cbe___BranchIfNot_39___cond = llvm_cbe_r3;
-  if ((((bool)llvm_cbe___BranchIfNot_39___cond&1u))) {
+  if ((llvm_cbe___BranchIfNot_39___cond != UINT64_C(0))) {
     goto llvm_cbe_bb4;
   } else {
     goto llvm_cbe_bb5;

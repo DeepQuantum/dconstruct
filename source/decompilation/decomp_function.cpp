@@ -1168,7 +1168,9 @@ namespace dconstruct::dcompiler {
                 load_expression_into_new_var(ARGUMENT_REGISTERS_IDX + i);
             }
             args.push_back(m_transformableExpressions[ARGUMENT_REGISTERS_IDX + i]->clone());
-            args[i]->set_type(*func_type->m_arguments[i].second);
+            if (i < func_type->m_arguments.size()) {
+                args[i]->set_type(*func_type->m_arguments[i].second);
+            }
         }
 
         auto expr = std::make_unique<ast::call_expr>(compilation::token{compilation::token_type::_EOF, ""}, std::move(callee), std::move(args));

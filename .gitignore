@@ -121,3 +121,4 @@ aire/
 /decompiled/**
 dcplsp.log
 source/dcplsp/zed-dcpl/target
+test/cfg

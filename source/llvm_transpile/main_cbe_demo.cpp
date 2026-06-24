@@ -5,7 +5,13 @@
 #include "sidbase.h"
 #include "llvm/IR/LLVMContext.h"
 #include "llvm/IR/Module.h"
+#include "llvm/Analysis/CFGPrinter.h"
+#include "llvm/Support/GraphWriter.h"
+#include "llvm/Support/raw_ostream.h"
+#include <algorithm>
 #include <array>
+#include <cstdlib>
+#include <format>
 #include <filesystem>
 #include <fstream>
 #include <print>
@@ -37,7 +43,40 @@ int main() {
 
     const auto& funcs = disassembler.get_all_functions();
 
+    const std::filesystem::path repo_root = std::filesystem::path(__FILE__).parent_path().parent_path().parent_path();
+    const std::filesystem::path dot_exe = repo_root / "source" / "Graphviz-13.1.0-win64" / "bin" / "dot.exe";
+    const std::filesystem::path cfg_dir = repo_root / "test" / "cfg";
+    std::filesystem::create_directories(cfg_dir);
 
+    const auto dump_cfgs = [&](std::string_view variant) {
+        for (llvm::Function& llvm_func : module) {
+            if (llvm_func.isDeclaration()) {
+                continue;
+            }
+            std::string safe_name = llvm_func.getName().str();
+            std::ranges::replace_if(safe_name, [](char c) { return std::string_view("/\\:*?\"<>|").contains(c); }, '_');
+            const std::filesystem::path dot_path = cfg_dir / std::format("cfg_{}_{}.dot", safe_name, variant);
+            {
+                std::error_code ec;
+                llvm::raw_fd_ostream cfg_out(dot_path.string(), ec);
+                if (ec) {
+                    std::println(stderr, "failed to open {}: {}", dot_path.string(), ec.message());
+                    continue;
+                }
+                llvm::DOTFuncInfo cfg_info(&llvm_func);
+                llvm::WriteGraph(cfg_out, &cfg_info);
+            }
+            std::println("wrote {}", dot_path.string());
+
+            const std::filesystem::path svg_path = cfg_dir / std::format("cfg_{}_{}.svg", safe_name, variant);
+            const std::string render_cmd = std::format("\"\"{}\" -Tsvg \"{}\" -o \"{}\"\"", dot_exe.string(), dot_path.string(), svg_path.string());
+            if (std::system(render_cmd.c_str()) != 0) {
+                std::println(stderr, "dot failed to render {}", svg_path.string());
+            } else {
+                std::println("wrote {}", svg_path.string());
+            }
+        }
+    };
 
     for (const auto* function : disassembler.get_all_functions()) {
         resstr<llvm::Function*> res = llvm_transpile::transpile_function_to_llvm(module, *function, sidbase);
@@ -47,11 +86,14 @@ int main() {
         }
     }
 
+   // dump_cfgs("unopt");
 
     const std::string llvm_unopt = llvm_transpile::emit_llvm_ir(module);
     const std::string c_unopt = llvm_transpile::emit_c_from_module(module);
 
     llvm_transpile::optimize_module(module);
+
+    //dump_cfgs("opt");
 
     const std::string llvm_opt = llvm_transpile::emit_llvm_ir(module);
     const std::string c_opt = llvm_transpile::emit_c_from_module(module);
