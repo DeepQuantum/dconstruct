@@ -1,6 +1,5 @@
 #include "llvm_transpile/llvm_transpile.h"
 #include "ast/type.h"
-#include "base.h"
 #include "decompilation/control_flow_graph.h"
 #include "disassembly/instructions.h"
 #include "disassembly/opcodes.h"
@@ -12,11 +11,13 @@
 #include "llvm/IR/DerivedTypes.h"
 #include "llvm/IR/Function.h"
 #include "llvm/IR/GlobalValue.h"
+#include "llvm/IR/GlobalIFunc.h"
 #include "llvm/IR/GlobalVariable.h"
 #include "llvm/IR/IRBuilder.h"
 #include "llvm/IR/Instruction.h"
 #include "llvm/IR/Instructions.h"
 #include "llvm/IR/LLVMContext.h"
+#include "llvm/IR/Metadata.h"
 #include "llvm/IR/LegacyPassManager.h"
 #include "llvm/IR/Type.h"
 #include "llvm/Analysis/TargetLibraryInfo.h"
@@ -31,10 +32,16 @@
 #include "llvm/Transforms/Utils/ModuleUtils.h"
 #include "llvm/TargetParser/Host.h"
 #include "llvm/TargetParser/Triple.h"
+#include "llvm/IR/Intrinsics.h"
+#include "llvm/IR/IntrinsicsDCVM.h"
 #include <algorithm>
+#include <array>
+#include <functional>
+#include <map>
 #include <string>
 #include <type_traits>
 #include <variant>
+#include <vector>
 
 #include <print>
 #include <format>
@@ -45,182 +52,66 @@ extern "C" void LLVMInitializeCBackendTarget();
 extern "C" void LLVMInitializeCBackendTargetInfo();
 extern "C" void LLVMInitializeCBackendTargetMC();
 
+extern "C" void LLVMInitializeDCVMTargetInfo();
+extern "C" void LLVMInitializeDCVMTarget();
+extern "C" void LLVMInitializeDCVMTargetMC();
+extern "C" void LLVMInitializeDCVMAsmPrinter();
+
 namespace dconstruct::llvm_transpile {
 
-    resstr<llvm::Function*> transpile_function_to_llvm(llvm::Module& module, const function_disassembly& func_disassembly, const SIDBase& sidbase) {
-        ControlFlowGraph graph = ControlFlowGraph::build(func_disassembly);
-        llvm::LLVMContext& ctx = module.getContext();
+    llvm_transpiler::llvm_transpiler(llvm::Module& module, const function_disassembly& func_disassembly, const SIDBase& sidbase)
+        : m_module(module),
+          m_disasm(func_disassembly),
+          m_sidbase(sidbase),
+          m_ctx(module.getContext()),
+          m_symbolTable(func_disassembly.m_stackFrame.m_symbolTable.m_location),
+          m_graph(ControlFlowGraph::build(func_disassembly)),
+          m_builder(m_ctx) {
 
-        std::vector<llvm::Type*> arg_types(func_disassembly.m_stackFrame.m_registerArgs.size());
-        std::transform(func_disassembly.m_stackFrame.m_registerArgs.begin(), func_disassembly.m_stackFrame.m_registerArgs.end(), arg_types.begin(), [&](const ast::full_type& type) {
-            return ast_type_to_llvm_type(ctx, type);
+        std::vector<llvm::Type*> arg_types(m_disasm.m_stackFrame.m_registerArgs.size());
+        std::transform(m_disasm.m_stackFrame.m_registerArgs.begin(), m_disasm.m_stackFrame.m_registerArgs.end(), arg_types.begin(), [&](const ast::full_type& type) {
+            return ast_type_to_llvm_type(m_ctx, type);
         });
 
-        auto* func_type = llvm::FunctionType::get(llvm::Type::getInt64Ty(ctx), llvm::ArrayRef(arg_types.data(), arg_types.size()), false);
-        auto* func = llvm::Function::Create(func_type, llvm::GlobalValue::LinkageTypes::ExternalLinkage, 0, func_disassembly.get_id(), &module);
+        auto* func_type = llvm::FunctionType::get(llvm::Type::getInt64Ty(m_ctx), llvm::ArrayRef(arg_types.data(), arg_types.size()), false);
+        m_function = llvm::Function::Create(func_type, llvm::GlobalValue::LinkageTypes::ExternalLinkage, 0, m_disasm.get_id(), &m_module);
 
-        std::map<istr_line, llvm::BasicBlock*> blocks;
-        for (const control_flow_node& node : graph.m_nodes) {
-            llvm::BasicBlock* block = llvm::BasicBlock::Create(ctx, std::format("bb{}", node.m_index), func);
-            blocks.emplace(node.m_startLine, block);
+        for (const control_flow_node& node : m_graph.m_nodes) {
+            llvm::BasicBlock* block = llvm::BasicBlock::Create(m_ctx, std::format("bb{}", node.m_index), m_function);
+            m_blocks.emplace(node.m_startLine, block);
         }
 
-        llvm::IRBuilder<> builder(blocks[0], blocks[0]->begin());
+        m_builder.SetInsertPoint(m_blocks[0], m_blocks[0]->begin());
 
-        llvm::IntegerType* default_int_t = builder.getInt64Ty();
-        llvm::Type* default_float_t = builder.getFloatTy();
-        llvm::Type* bool_t = builder.getInt1Ty();
-        llvm::Type* default_pointer_t = builder.getPtrTy();
+        m_defaultIntT = m_builder.getInt64Ty();
+        m_defaultFloatT = m_builder.getFloatTy();
+        m_boolT = m_builder.getInt1Ty();
+        m_defaultPointerT = m_builder.getPtrTy();
 
-        std::array<llvm::AllocaInst*, MAX_REGISTER> register_file_frame;
-        std::array<llvm::Type*, MAX_REGISTER> types;
-
-        for (u64 i = 0; i < register_file_frame.size(); ++i) {
-            register_file_frame[i] = builder.CreateAlloca(default_int_t, nullptr, std::format("r{}", i));
-            types[i] = default_int_t;
+        for (u64 i = 0; i < m_registerFrame.size(); ++i) {
+            m_registerFrame[i] = m_builder.CreateAlloca(m_defaultIntT, nullptr, std::format("r{}", i));
+            m_types[i] = m_defaultIntT;
         }
 
-        const location& symbol_table = func_disassembly.m_stackFrame.m_symbolTable.m_location;
-        const u64 symbol_table_size = func_disassembly.m_stackFrame.m_symbolTable.m_types.size();
-        llvm::ArrayType* array_t = llvm::ArrayType::get(default_int_t, symbol_table_size);
-        llvm::Constant* symbol_table_array = llvm::ConstantDataArray::get(ctx, llvm::ArrayRef(symbol_table.as<u64>(), symbol_table_size));
-        llvm::GlobalVariable* symbol_table_global = new llvm::GlobalVariable(module, array_t, true, llvm::GlobalValue::PrivateLinkage, symbol_table_array, std::format("{}_symbol_table", func_disassembly.get_id()));
-        symbol_table_global->setUnnamedAddr(llvm::GlobalValue::UnnamedAddr::Global);
-        symbol_table_global->setAlignment(llvm::Align(sizeof(u64)));
-        llvm::appendToUsed(module, {symbol_table_global});
+        const u64 symbol_table_size = m_disasm.m_stackFrame.m_symbolTable.m_types.size();
+        m_arrayT = llvm::ArrayType::get(m_defaultIntT, symbol_table_size);
+        llvm::Constant* symbol_table_array = llvm::ConstantDataArray::get(m_ctx, llvm::ArrayRef(m_symbolTable.as<u64>(), symbol_table_size));
+        m_symbolTableGlobal = new llvm::GlobalVariable(m_module, m_arrayT, true, llvm::GlobalValue::PrivateLinkage, symbol_table_array, std::format("{}_symbol_table", m_disasm.get_id()));
+        m_symbolTableGlobal->setUnnamedAddr(llvm::GlobalValue::UnnamedAddr::Global);
+        m_symbolTableGlobal->setAlignment(llvm::Align(sizeof(u64)));
+        llvm::appendToUsed(m_module, {m_symbolTableGlobal});
 
-        auto load_register = [&](const u8 index, std::string_view istr_name = "") -> llvm::LoadInst* { return builder.CreateLoad(types[index], register_file_frame[index], istr_name); };
-
-        auto make_store = [&](const u8 index, llvm::Value* rhs, llvm::Type* type = nullptr) -> llvm::StoreInst* {
-            if (type) {
-                types[index] = type;
-            }
-            return builder.CreateStore(rhs, register_file_frame[index]);
-        };
-
-        for (u64 i = 0; i < func->arg_size(); ++i) {
-            llvm::Argument* arg = func->getArg(i);
+        for (u64 i = 0; i < m_function->arg_size(); ++i) {
+            llvm::Argument* arg = m_function->getArg(i);
             arg->setName(std::format("arg_{}", i));
             make_store(ARGUMENT_REGISTERS_IDX + i, arg, arg->getType());
         }
+    }
 
-        auto make_symbol_table_load = [&]<typename T>(const Instruction& istr, std::string_view istr_id, llvm::Value* idx = nullptr) -> llvm::StoreInst* {
-            llvm::Type* load_type = nullptr;
-            if constexpr (std::is_integral_v<T>) {
-                load_type = llvm::IntegerType::get(ctx, sizeof(T) * 8);
-                types[istr.destination] = default_int_t;
-            } else if constexpr (std::is_same_v<T, f32>) {
-                load_type = default_float_t;
-                types[istr.destination] = default_float_t;
-            } else if constexpr (std::is_pointer_v<T>) {
-                load_type = default_pointer_t;
-                types[istr.destination] = default_pointer_t;
-            } else {
-                static_assert(false, "invalid symbol table load type");
-            }
-
-            if (!idx) {
-                idx = builder.getInt64(istr.operand1);
-            }
-
-            llvm::Value* st_value = builder.CreateInBoundsGEP(array_t, symbol_table_global, {builder.getInt64(0), idx}, std::format("{}_gep", istr_id));
-            llvm::Value* load = builder.CreateLoad(load_type, st_value, std::format("{}_st_load", istr_id));
-
-            if constexpr (std::is_integral_v<T>) {
-                load = builder.CreateIntCast(load, default_int_t, std::is_signed_v<T>, std::format("{}_ext", istr_id));
-            }
-
-            return builder.CreateStore(load, register_file_frame[istr.destination]);
-        };
-
-        auto make_mem_load = [&]<typename T>(const Instruction& istr, std::string_view istr_id) -> llvm::StoreInst* {
-            types[istr.operand1] = llvm::PointerType::get(ctx, 0);
-            llvm::Value* from = load_register(istr.operand1, std::format("{}_addr", istr_id));
-
-            llvm::Type* load_type = nullptr;
-            llvm::Type* dest_type = nullptr;
-            if constexpr (std::is_integral_v<T>) {
-                load_type = llvm::IntegerType::get(ctx, sizeof(T) * 8);
-                dest_type = default_int_t;
-            } else if constexpr (std::is_same_v<T, f32>) {
-                load_type = llvm::Type::getFloatTy(ctx);
-                dest_type = default_float_t;
-            } else if constexpr (std::is_pointer_v<T>) {
-                load_type = default_pointer_t;
-                dest_type = default_pointer_t;
-            } else {
-                static_assert(false, "unsupported type for mem load");
-            }
-
-            llvm::Value* res = builder.CreateLoad(load_type, from, std::format("{}_load", istr_id));
-            if constexpr (std::is_integral_v<T>) {
-                res = builder.CreateIntCast(res, default_int_t, std::is_signed_v<T>, std::format("{}_ext", istr_id));
-            }
-            return make_store(istr.destination, res, dest_type);
-        };
-
-        auto make_mem_store = [&]<typename T>(const Instruction& istr, std::string_view istr_id) -> llvm::StoreInst* {
-            types[istr.operand1] = llvm::PointerType::get(ctx, 0);
-            llvm::Value* from = load_register(istr.operand2, std::format("{}_value", istr_id));
-            llvm::Value* to = load_register(istr.operand1, std::format("{}_addr", istr_id));
-
-            llvm::Value* mem_value = from;
-            if constexpr (std::is_integral_v<T>) {
-                mem_value = builder.CreateIntCast(from, llvm::IntegerType::get(ctx, sizeof(T) * 8), std::is_signed_v<T>, std::format("{}_trunc", istr_id));
-            } else if constexpr (std::is_same_v<T, f32> || std::is_pointer_v<T>) {
-                mem_value = from;
-            } else {
-                static_assert(false, "unsupported type for mem store");
-            }
-
-            builder.CreateStore(mem_value, to);
-            llvm::StoreInst* copy = make_store(istr.destination, from, types[istr.operand2]);
-            return copy;
-        };
-
-        auto make_binary = [&](const Instruction& istr, std::function<llvm::Value*(llvm::Value*, llvm::Value*)> binary_op, llvm::Type* dest_type, std::string_view istr_id = "") -> llvm::StoreInst* {
-            llvm::Value* lhs = load_register(istr.operand1, std::format("{}_load_lhs", istr_id));
-            llvm::Value* rhs = load_register(istr.operand2, std::format("{}_load_rhs", istr_id));
-            if (lhs->getType() != rhs->getType()) {
-                rhs = builder.CreateZExtOrTrunc(rhs, lhs->getType());
-            }
-            llvm::Value* res = binary_op(lhs, rhs);
-            types[istr.destination] = dest_type;
-            return make_store(istr.destination, res);
-        };
-
-        auto make_binary_imm = [&](const Instruction& istr, std::function<llvm::Value*(llvm::Value*, llvm::Value*)> binary_op, llvm::Type* dest_type, std::string_view istr_id = "") -> llvm::StoreInst* {
-            llvm::Value* lhs = load_register(istr.operand1, std::format("{}_load_lhs", istr_id));
-            llvm::Type* imm_type = lhs->getType()->isPointerTy() ? builder.getInt8Ty() : lhs->getType();
-            llvm::Value* imm =  llvm::ConstantInt::get(imm_type, istr.operand2);
-            llvm::Value* res = binary_op(lhs, imm);
-            types[istr.destination] = dest_type;
-            return make_store(istr.destination, res);
-        };
-
-        auto make_unary = [&](const Instruction& istr, std::function<llvm::Value*(llvm::Value*)> unary_op, llvm::Type* dest_type, std::string_view istr_id = "") -> llvm::StoreInst* {
-            llvm::Value* lhs = load_register(istr.operand1, std::format("{}_load_op1", istr_id));
-            llvm::Value* res = unary_op(lhs);
-            types[istr.destination] = dest_type;
-            return make_store(istr.destination, res);
-        };
-
-        auto exchange_function_types = [&](llvm::Type* new_arg_type, const u8 type_location, const u8 arg_idx) -> llvm::FunctionType* {
-            llvm::FunctionType* old_f_type = llvm::cast<llvm::FunctionType>(types[type_location]);
-            std::vector<llvm::Type*> new_arg_types;
-            new_arg_types.reserve(old_f_type->getNumParams());
-            for (u32 i = 0; i < old_f_type->getNumParams(); ++i) {
-                new_arg_types.push_back(old_f_type->getParamType(i));
-            }
-            new_arg_types[arg_idx] = new_arg_type;
-            llvm::FunctionType* new_f_type = llvm::FunctionType::get(old_f_type->getReturnType(), llvm::ArrayRef(new_arg_types.data(), new_arg_types.size()), old_f_type->isVarArg());
-            types[type_location] = new_f_type;
-            return new_f_type;
-        };
-
-        const control_flow_node* current_node = &graph.m_nodes[0];
-        for (u32 l = 0; l < func_disassembly.m_lines.size(); ++l) {
-            const function_disassembly_line& line = func_disassembly.m_lines[l];
+    resstr<llvm::Function*> llvm_transpiler::run() {
+        const control_flow_node* current_node = &m_graph.m_nodes[0];
+        for (u32 l = 0; l < m_disasm.m_lines.size(); ++l) {
+            const function_disassembly_line& line = m_disasm.m_lines[l];
             Instruction istr = line.m_instruction;
             std::string istr_id = std::format("__{}_{}__", istr.opcode_to_string(), l);
 
@@ -228,340 +119,355 @@ namespace dconstruct::llvm_transpile {
             switch (line.m_instruction.opcode) {
                 using enum Opcode;
                 case IAdd: {
-                    make_binary(istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreateAdd(a, b, op); }, default_int_t, istr_id);
+                    make_binary(istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateAdd(a, b, op); }, m_defaultIntT, istr_id);
                     break;
                 }
                 case FAdd: {
-                    make_binary(istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreateFAdd(a, b, op); }, default_float_t, istr_id);
+                    make_binary(istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateFAdd(a, b, op); }, m_defaultFloatT, istr_id);
                     break;
                 }
                 case ISub: {
-                    make_binary(istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreateSub(a, b, op); }, default_int_t, istr_id);
+                    make_binary(istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateSub(a, b, op); }, m_defaultIntT, istr_id);
                     break;
                 }
                 case FSub: {
-                    make_binary(istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreateFSub(a, b, op); }, default_float_t, istr_id);
+                    make_binary(istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateFSub(a, b, op); }, m_defaultFloatT, istr_id);
                     break;
                 }
                 case IMul: {
-                    make_binary(istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreateMul(a, b, op); }, default_int_t, istr_id);
+                    make_binary(istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateMul(a, b, op); }, m_defaultIntT, istr_id);
                     break;
                 }
                 case FMul: {
-                    make_binary(istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreateFMul(a, b, op); }, default_float_t, istr_id);
+                    make_binary(istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateFMul(a, b, op); }, m_defaultFloatT, istr_id);
                     break;
                 }
                 case IDiv: {
-                    make_binary(istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreateSDiv(a, b, op); }, default_int_t, istr_id);
+                    make_binary(istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateSDiv(a, b, op); }, m_defaultIntT, istr_id);
                     break;
                 }
                 case FDiv: {
-                    make_binary(istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreateFDiv(a, b, op); }, default_float_t, istr_id);
+                    make_binary(istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateFDiv(a, b, op); }, m_defaultFloatT, istr_id);
                     break;
                 }
                 case OpBitAnd: {
-                    make_binary(istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreateAnd(a, b, op); }, default_int_t, istr_id);
+                    make_binary(istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateAnd(a, b, op); }, m_defaultIntT, istr_id);
                     break;
                 }
                 case OpBitOr: {
-                    make_binary(istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreateOr(a, b, op); }, default_int_t, istr_id);
+                    make_binary(istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateOr(a, b, op); }, m_defaultIntT, istr_id);
                     break;
                 }
                 case OpBitXor: {
-                    make_binary(istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreateXor(a, b, op); }, default_int_t, istr_id);
+                    make_binary(istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateXor(a, b, op); }, m_defaultIntT, istr_id);
                     break;
                 }
                 case OpBitNot: {
-                    make_unary(istr, [&](llvm::Value* a) { return builder.CreateNot(a, op); }, default_int_t, istr_id);
+                    make_unary(istr, [&](llvm::Value* a) { return m_builder.CreateNot(a, op); }, m_defaultIntT, istr_id);
                     break;
                 }
                 case OpLogNot: {
-                    make_unary(istr, [&](llvm::Value* a) { return builder.CreateNot(a, op); }, bool_t, istr_id);
+                    make_unary(istr, [&](llvm::Value* a) { return m_builder.CreateNot(a, op); }, m_boolT, istr_id);
                     break;
                 }
                 case OpBitNor: {
                     make_unary(
                         istr,
-                        [&](llvm::Value* a) { return builder.CreateNot(make_binary(istr, [&](llvm::Value* b, llvm::Value* c) { return builder.CreateOr(b, c, op); }, default_int_t, istr_id), op); },
-                        default_int_t,
+                        [&](llvm::Value* a) { return m_builder.CreateNot(make_binary(istr, [&](llvm::Value* b, llvm::Value* c) { return m_builder.CreateOr(b, c, op); }, m_defaultIntT, istr_id), op); },
+                        m_defaultIntT,
                         istr_id
                     );
                     break;
                 }
                 case OpLogAnd: {
-                    make_binary(istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreateLogicalAnd(a, b, op); }, bool_t, istr_id);
+                    make_binary(istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateLogicalAnd(a, b, op); }, m_boolT, istr_id);
                     break;
                 }
                 case OpLogOr: {
-                    make_binary(istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreateLogicalOr(a, b, op); }, bool_t, istr_id);
+                    make_binary(istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateLogicalOr(a, b, op); }, m_boolT, istr_id);
                     break;
                 }
                 case INeg: {
-                    make_unary(istr, [&](llvm::Value* a) { return builder.CreateNeg(a, op); }, default_int_t, istr_id);
+                    make_unary(istr, [&](llvm::Value* a) { return m_builder.CreateNeg(a, op); }, m_defaultIntT, istr_id);
                     break;
                 }
                 case FNeg: {
-                    make_unary(istr, [&](llvm::Value* a) { return builder.CreateFNeg(a, op); }, default_float_t, istr_id);
+                    make_unary(istr, [&](llvm::Value* a) { return m_builder.CreateFNeg(a, op); }, m_defaultFloatT, istr_id);
                     break;
                 }
                 case IAddImm: {
-                    if (types[istr.operand1]->isPointerTy()) {
-                        make_binary_imm(istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreatePtrAdd(a, b, op); }, types[istr.operand1], istr_id);
+                    if (m_types[istr.operand1]->isPointerTy()) {
+                        make_binary_imm(istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreatePtrAdd(a, b, op); }, m_types[istr.operand1], istr_id);
                     } else {
-                        make_binary_imm(istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreateAdd(a, b, op); }, default_int_t, istr_id);
+                        make_binary_imm(istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateAdd(a, b, op); }, m_defaultIntT, istr_id);
                     }
                     break;
                 }
                 case ISubImm: {
-                    make_binary_imm(istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreateSub(a, b, op); }, default_int_t, istr_id);
+                    make_binary_imm(istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateSub(a, b, op); }, m_defaultIntT, istr_id);
                     break;
                 }
                 case IMulImm: {
-                    make_binary_imm(istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreateMul(a, b, op); }, default_int_t, istr_id);
+                    make_binary_imm(istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateMul(a, b, op); }, m_defaultIntT, istr_id);
                     break;
                 }
                 case IDivImm: {
-                    make_binary_imm(istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreateSDiv(a, b, op); }, default_int_t, istr_id);
+                    make_binary_imm(istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateSDiv(a, b, op); }, m_defaultIntT, istr_id);
                     break;
                 }
                 case IntAsh: {
                     // llvm::Value* shift_amount = load_register(istr.operand2);
-                    // llvm::Constant* zero = llvm::ConstantInt::get(default_int_t, 0);
-                    // builder.CreateICmpSLT(shift_amount, zero);
+                    // llvm::Constant* zero = llvm::ConstantInt::get(m_defaultIntT, 0);
+                    // m_builder.CreateICmpSLT(shift_amount, zero);
                     break;
                 }
                 case IEqual: {
-                    make_binary(istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreateICmpEQ(a, b, op); }, bool_t, istr_id);
+                    make_binary(istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateICmpEQ(a, b, op); }, m_boolT, istr_id);
                     break;
                 }
                 case FEqual: {
-                    make_binary(istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreateFCmpUEQ(a, b, op); }, bool_t, istr_id);
+                    make_binary(istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateFCmpUEQ(a, b, op); }, m_boolT, istr_id);
                     break;
                 }
                 case INotEqual: {
-                    make_binary(istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreateICmpNE(a, b, op); }, bool_t, istr_id);
+                    make_binary(istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateICmpNE(a, b, op); }, m_boolT, istr_id);
                     break;
                 }
                 case FNotEqual: {
-                    make_binary(istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreateFCmpUNE(a, b, op); }, bool_t, istr_id);
+                    make_binary(istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateFCmpUNE(a, b, op); }, m_boolT, istr_id);
                     break;
                 }
                 case ILessThan: {
-                    make_binary(istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreateICmpSLT(a, b, op); }, bool_t, istr_id);
+                    make_binary(istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateICmpSLT(a, b, op); }, m_boolT, istr_id);
                     break;
                 }
                 case FLessThan: {
-                    make_binary(istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreateFCmpULT(a, b, op); }, bool_t, istr_id);
+                    make_binary(istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateFCmpULT(a, b, op); }, m_boolT, istr_id);
                     break;
                 }
                 case ILessThanEqual: {
-                    make_binary(istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreateICmpSLE(a, b, op); }, bool_t, istr_id);
+                    make_binary(istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateICmpSLE(a, b, op); }, m_boolT, istr_id);
                     break;
                 }
                 case FLessThanEqual: {
-                    make_binary(istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreateFCmpULE(a, b, op); }, bool_t, istr_id);
+                    make_binary(istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateFCmpULE(a, b, op); }, m_boolT, istr_id);
                     break;
                 }
                 case IGreaterThan: {
-                    make_binary(istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreateICmpSGT(a, b, op); }, bool_t, istr_id);
+                    make_binary(istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateICmpSGT(a, b, op); }, m_boolT, istr_id);
                     break;
                 }
                 case FGreaterThan: {
-                    make_binary(istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreateFCmpUGT(a, b, op); }, bool_t, istr_id);
+                    make_binary(istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateFCmpUGT(a, b, op); }, m_boolT, istr_id);
                     break;
                 }
                 case IGreaterThanEqual: {
-                    make_binary(istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreateICmpSGE(a, b, op); }, bool_t, istr_id);
+                    make_binary(istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateICmpSGE(a, b, op); }, m_boolT, istr_id);
                     break;
                 }
                 case FGreaterThanEqual: {
-                    make_binary(istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreateFCmpUGE(a, b, op); }, bool_t, istr_id);
+                    make_binary(istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateFCmpUGE(a, b, op); }, m_boolT, istr_id);
                     break;
                 }
                 case IMod: {
-                    make_binary(istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreateSRem(a, b, op); }, default_int_t, istr_id);
+                    make_binary(istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateSRem(a, b, op); }, m_defaultIntT, istr_id);
                     break;
                 }
                 case FMod: {
-                    llvm::Value* divider = load_register(istr.operand2, std::format("{}_divider", istr_id));
-                    llvm::Value* dividend = load_register(istr.operand1, std::format("{}_dividend", istr_id));
-
-                    llvm::Function* fmodf_func = module.getFunction("fmodf");
-                    if (!fmodf_func) {
-                        return std::unexpected{"couldn't find fmodf"};
-                    }
-                    llvm::CallInst* call = builder.CreateCall(fmodf_func, {dividend, divider}, op);
-
-                    make_store(istr.destination, call);
-                    types[istr.destination] = default_float_t;
+                    make_binary(istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateFRem(a, b, op); }, m_defaultFloatT, istr_id);
+                    break;
+                }
+                case IAbs: {
+                    make_unary(istr, [&](llvm::Value* a) { return m_builder.CreateIntrinsic(llvm::Intrinsic::abs, a); }, m_defaultIntT, istr_id);
+                    break;
+                }
+                case FAbs: {
+                    make_unary(istr, [&](llvm::Value* a) { return m_builder.CreateIntrinsic(llvm::Intrinsic::fabs, a); }, m_defaultFloatT, istr_id);
                     break;
                 }
                 case AssertPointer: {
-                    types[istr.destination] = default_pointer_t;
+                    m_types[istr.destination] = m_defaultPointerT;
                     llvm::Value* ptr = load_register(istr.destination, std::format("{}_ptr", istr_id));
-                    builder.CreateIsNotNull(ptr, op);
+                    m_builder.CreateIsNotNull(ptr, op);
                     break;
                 }
                 case LoadU16Imm: {
                     const u16 val = istr.operand1 | (istr.operand2 << 8);
-                    types[istr.destination] = default_int_t;
-                    llvm::Constant* value = llvm::ConstantInt::get(default_int_t, val, false);
+                    m_types[istr.destination] = m_defaultIntT;
+                    llvm::Constant* value = llvm::ConstantInt::get(m_defaultIntT, val, false);
                     make_store(istr.destination, value);
                     break;
                 }
                 case LoadStaticU8Imm: {
-                    make_symbol_table_load.operator()<u8>(istr, istr_id);
+                    make_symbol_table_load<u8>(istr, istr_id);
                     break;
                 }
                 case LoadStaticU16Imm: {
-                    make_symbol_table_load.operator()<u16>(istr, istr_id);
+                    make_symbol_table_load<u16>(istr, istr_id);
                     break;
                 }
                 case LoadStaticU32Imm: {
-                    make_symbol_table_load.operator()<u32>(istr, istr_id);
+                    make_symbol_table_load<u32>(istr, istr_id);
                     break;
                 }
                 case LoadStaticU64Imm: {
-                    make_symbol_table_load.operator()<u64>(istr, istr_id);
+                    make_symbol_table_load<u64>(istr, istr_id);
                     break;
                 }
                 case LoadStaticI8Imm: {
-                    make_symbol_table_load.operator()<i8>(istr, istr_id);
+                    make_symbol_table_load<i8>(istr, istr_id);
                     break;
                 }
                 case LoadStaticI16Imm: {
-                    make_symbol_table_load.operator()<i16>(istr, istr_id);
+                    make_symbol_table_load<i16>(istr, istr_id);
                     break;
                 }
                 case LoadStaticI32Imm: {
-                    make_symbol_table_load.operator()<i32>(istr, istr_id);
+                    make_symbol_table_load<i32>(istr, istr_id);
                     break;
                 }
                 case LoadStaticI64Imm: {
-                    make_symbol_table_load.operator()<i64>(istr, istr_id);
+                    make_symbol_table_load<i64>(istr, istr_id);
                     break;
                 }
                 case LoadStaticFloatImm: {
-                    make_symbol_table_load.operator()<f32>(istr, istr_id);
+                    make_symbol_table_load<f32>(istr, istr_id);
                     break;
                 }
                 case LoadStaticInt: {
-                    make_symbol_table_load.operator()<u64>(istr, istr_id, load_register(istr.operand1, std::format("{}_idx", istr_id)));
+                    make_symbol_table_load<u64>(istr, istr_id, load_register(istr.operand1, std::format("{}_idx", istr_id)));
                     break;
                 }
                 case LoadStaticFloat: {
-                    make_symbol_table_load.operator()<f32>(istr, istr_id, load_register(istr.operand1, std::format("{}_idx", istr_id)));
+                    make_symbol_table_load<f32>(istr, istr_id, load_register(istr.operand1, std::format("{}_idx", istr_id)));
                     break;
                 }
                 case LoadStaticPointer: {
-                    make_symbol_table_load.operator()<void*>(istr, istr_id, load_register(istr.operand1, std::format("{}_idx", istr_id)));
+                    make_symbol_table_load<void*>(istr, istr_id, load_register(istr.operand1, std::format("{}_idx", istr_id)));
                     break;
                 }
                 case LoadU8: {
-                    make_mem_load.operator()<u8>(istr, istr_id);
+                    make_mem_load<u8>(istr, istr_id);
                     break;
                 }
                 case LoadU16: {
-                    make_mem_load.operator()<u16>(istr, istr_id);
+                    make_mem_load<u16>(istr, istr_id);
                     break;
                 }
                 case LoadU32: {
-                    make_mem_load.operator()<u32>(istr, istr_id);
+                    make_mem_load<u32>(istr, istr_id);
                     break;
                 }
                 case LoadU64: {
-                    make_mem_load.operator()<u64>(istr, istr_id);
+                    make_mem_load<u64>(istr, istr_id);
                     break;
                 }
                 case LoadI8: {
-                    make_mem_load.operator()<i8>(istr, istr_id);
+                    make_mem_load<i8>(istr, istr_id);
                     break;
                 }
                 case LoadI16: {
-                    make_mem_load.operator()<i16>(istr, istr_id);
+                    make_mem_load<i16>(istr, istr_id);
                     break;
                 }
                 case LoadI32: {
-                    make_mem_load.operator()<i32>(istr, istr_id);
+                    make_mem_load<i32>(istr, istr_id);
                     break;
                 }
                 case LoadI64: {
-                    make_mem_load.operator()<i64>(istr, istr_id);
+                    make_mem_load<i64>(istr, istr_id);
                     break;
                 }
                 case LoadPointer: {
-                    make_mem_load.operator()<const void*>(istr, istr_id);
+                    make_mem_load<const void*>(istr, istr_id);
                 }
                 case StoreI8: {
-                    make_mem_store.operator()<i8>(istr, istr_id);
+                    make_mem_store<i8>(istr, istr_id);
                     break;
                 }
                 case StoreU8: {
-                    make_mem_store.operator()<u8>(istr, istr_id);
+                    make_mem_store<u8>(istr, istr_id);
                     break;
                 }
                 case StoreI16: {
-                    make_mem_store.operator()<i16>(istr, istr_id);
+                    make_mem_store<i16>(istr, istr_id);
                     break;
                 }
                 case StoreU16: {
-                    make_mem_store.operator()<u16>(istr, istr_id);
+                    make_mem_store<u16>(istr, istr_id);
                     break;
                 }
                 case StoreI32: {
-                    make_mem_store.operator()<i32>(istr, istr_id);
+                    make_mem_store<i32>(istr, istr_id);
                     break;
                 }
                 case StoreU32: {
-                    make_mem_store.operator()<u32>(istr, istr_id);
+                    make_mem_store<u32>(istr, istr_id);
                     break;
                 }
                 case StoreI64: {
-                    make_mem_store.operator()<i64>(istr, istr_id);
+                    make_mem_store<i64>(istr, istr_id);
                     break;
                 }
                 case StoreU64: {
-                    make_mem_store.operator()<u64>(istr, istr_id);
+                    make_mem_store<u64>(istr, istr_id);
                     break;
                 }
                 case StorePointer: {
-                    make_mem_store.operator()<const void*>(istr, istr_id);
+                    make_mem_store<const void*>(istr, istr_id);
                 }
                 case LoadStaticPointerImm: {
-                    const ast::full_type& type = func_disassembly.m_stackFrame.m_symbolTable.m_types[istr.operand1];
+                    const ast::full_type& type = m_disasm.m_stackFrame.m_symbolTable.m_types[istr.operand1];
                     if (const ast::primitive_type* string_value = std::get_if<ast::primitive_type>(&type)) {
                         assert(string_value->m_type == ast::primitive_kind::STRING);
 
-                        const char* actual_string = symbol_table.get<const char*>(istr.operand1 * sizeof(u64));
-                        llvm::Constant* char_array = llvm::ConstantDataArray::getString(ctx, actual_string, true);
+                        const char* actual_string = m_symbolTable.get<const char*>(istr.operand1 * sizeof(u64));
+                        llvm::Constant* char_array = llvm::ConstantDataArray::getString(m_ctx, actual_string, true);
 
-                        llvm::GlobalVariable* string_global_var = new llvm::GlobalVariable(module, char_array->getType(), false, llvm::GlobalValue::PrivateLinkage, char_array, std::format("{}_str", istr_id));
+                        llvm::GlobalVariable* string_global_var = new llvm::GlobalVariable(m_module, char_array->getType(), false, llvm::GlobalValue::PrivateLinkage, char_array, std::format("{}_str", istr_id));
                         string_global_var->setUnnamedAddr(llvm::GlobalValue::UnnamedAddr::Global);
                         string_global_var->setAlignment(llvm::Align(1));
 
-                        make_store(istr.destination, string_global_var, default_pointer_t);
+                        make_store(istr.destination, string_global_var, m_defaultPointerT);
                     } else {
-                        make_symbol_table_load.operator()<const void*>(istr, istr_id);
+                        make_symbol_table_load<const void*>(istr, istr_id);
                     }
                     break;
                 }
                 case Move: {
-                    make_store(istr.destination, load_register(istr.operand1, std::format("{}_load_op1", istr_id)), types[istr.operand1]);
+                    make_store(istr.destination, load_register(istr.operand1, std::format("{}_load_op1", istr_id)), m_types[istr.operand1]);
                     break;
                 }
                 case LookupPointer: {
-                    const ast::full_type& symbol_table_t = func_disassembly.m_stackFrame.m_symbolTable.m_types[istr.operand1];
-                    assert(std::holds_alternative<ast::function_type>(symbol_table_t));
-                    llvm::FunctionType* function_type = llvm::cast<llvm::FunctionType>(ast_type_to_llvm_type(ctx, symbol_table_t));
-                    const char* function_name = sidbase.lookup(symbol_table.get<sid64>(istr.operand1 * sizeof(u64)));
-                    llvm::FunctionCallee function = module.getOrInsertFunction(function_name, function_type);
+                    const ast::full_type& symbol_table_funtion_t = m_disasm.m_stackFrame.m_symbolTable.m_types[istr.operand1];
+                    assert(std::holds_alternative<ast::function_type>(symbol_table_funtion_t));
+                    const ast::function_type& ast_function_t = std::get<ast::function_type>(symbol_table_funtion_t);
+                    llvm::FunctionType* function_type = llvm::cast<llvm::FunctionType>(ast_type_to_llvm_type(m_ctx, symbol_table_funtion_t));
+
+                    const sid64 func_sid = m_symbolTable.get<sid64>(istr.operand1 * sizeof(u64));
+                    const char* function_name = m_sidbase.lookup(func_sid);
+                    const ast::function_type::DISTANCE distance = ast_function_t.m_distanceType;
+
+                    llvm::FunctionCallee function = m_module.getOrInsertFunction(function_name, function_type);
+                    llvm::Function* F = llvm::cast<llvm::Function>(function.getCallee());
+                    F->setMetadata("dcvm.sid_distance", llvm::MDNode::get(m_ctx, {
+                        llvm::MDString::get(m_ctx, "sid"),
+                        llvm::ConstantAsMetadata::get(m_builder.getInt64(func_sid)),
+                        llvm::MDString::get(m_ctx, "distance"),
+                        llvm::MDString::get(m_ctx, distance == ast::function_type::DISTANCE::NEAR ? "near" : "far"),
+                    }
+                    ));
+                    F->setDoesNotThrow();
+                    F->setWillReturn();
+                    F->setNoSync();
+
                     make_store(istr.destination, function.getCallee(), function_type);
                     break;
                 }
                 case CallFf:
                 case Call: {
-                    llvm::FunctionType* func_type = llvm::cast<llvm::FunctionType>(types[istr.operand1]);
-                    llvm::Value* callee = builder.CreateLoad(default_pointer_t, register_file_frame[istr.operand1], std::format("{}_callee", istr_id));
+                    llvm::FunctionType* func_type = llvm::cast<llvm::FunctionType>(m_types[istr.operand1]);
+                    llvm::Value* callee = m_builder.CreateLoad(m_defaultPointerT, m_registerFrame[istr.operand1], std::format("{}_callee", istr_id));
                     std::vector<llvm::Value*> arg_values;
                     arg_values.reserve(istr.operand2);
                     for (u64 i = 0; i < istr.operand2; ++i) {
@@ -570,7 +476,7 @@ namespace dconstruct::llvm_transpile {
                             func_type = exchange_function_types(arg_values.back()->getType(), istr.operand1, i);
                         }
                     }
-                    llvm::Value* call = builder.CreateCall(func_type, callee, llvm::ArrayRef(arg_values.data(), arg_values.size()), std::format("{}_call", istr_id));
+                    llvm::Value* call = m_builder.CreateCall(func_type, callee, llvm::ArrayRef(arg_values.data(), arg_values.size()), std::format("{}_call", istr_id));
                     make_store(istr.destination, call, func_type->getReturnType());
                     break;
                 }
@@ -591,48 +497,48 @@ namespace dconstruct::llvm_transpile {
                     using enum Opcode;
                     case Branch: {
                         istr_line target = current_node->m_lines.back().m_target;
-                        builder.CreateBr(blocks.at(target));
-                        builder.SetInsertPoint(blocks.at(l + 1));
-                        current_node = graph.get_node_with_start_line(l + 1);
+                        m_builder.CreateBr(m_blocks.at(target));
+                        m_builder.SetInsertPoint(m_blocks.at(l + 1));
+                        current_node = m_graph.get_node_with_start_line(l + 1);
                         assert(current_node != nullptr);
                         break;
                     }
                     case BranchIf: {
                         const istr_line destination = current_node->m_lines.back().m_target;
                         llvm::Value* condition_reg = load_register(istr.operand1, std::format("{}_cond", istr_id));
-                        llvm::Value* bool_condition_reg = builder.CreateICmpNE(condition_reg, llvm::ConstantInt::get(condition_reg->getType(), 0), std::format("{}_bool", istr_id));
-                        llvm::BasicBlock* target_block = blocks.at(destination);
-                        llvm::BasicBlock* fallthrough = blocks.at(l + 1);
-                        builder.CreateCondBr(bool_condition_reg, target_block, fallthrough);
-                        builder.SetInsertPoint(blocks.at(l + 1));
-                        current_node = graph.get_node_with_start_line(l + 1);
+                        llvm::Value* bool_condition_reg = m_builder.CreateICmpNE(condition_reg, llvm::ConstantInt::get(condition_reg->getType(), 0), std::format("{}_bool", istr_id));
+                        llvm::BasicBlock* target_block = m_blocks.at(destination);
+                        llvm::BasicBlock* fallthrough = m_blocks.at(l + 1);
+                        m_builder.CreateCondBr(bool_condition_reg, target_block, fallthrough);
+                        m_builder.SetInsertPoint(m_blocks.at(l + 1));
+                        current_node = m_graph.get_node_with_start_line(l + 1);
                         assert(current_node != nullptr);
                         break;
                     }
                     case BranchIfNot: {
                         const istr_line destination = current_node->m_lines.back().m_target;
                         llvm::Value* condition_reg = load_register(istr.operand1, std::format("{}_cond", istr_id));
-                        llvm::Value* bool_condition_reg = builder.CreateICmpNE(condition_reg, llvm::ConstantInt::get(condition_reg->getType(), 0), std::format("{}_bool", istr_id));
-                        llvm::BasicBlock* target_block = blocks.at(destination);
-                        llvm::BasicBlock* fallthrough = blocks.at(l + 1);
-                        builder.CreateCondBr(bool_condition_reg, fallthrough, target_block);
-                        builder.SetInsertPoint(blocks.at(l + 1));
-                        current_node = graph.get_node_with_start_line(l + 1);
+                        llvm::Value* bool_condition_reg = m_builder.CreateICmpNE(condition_reg, llvm::ConstantInt::get(condition_reg->getType(), 0), std::format("{}_bool", istr_id));
+                        llvm::BasicBlock* target_block = m_blocks.at(destination);
+                        llvm::BasicBlock* fallthrough = m_blocks.at(l + 1);
+                        m_builder.CreateCondBr(bool_condition_reg, fallthrough, target_block);
+                        m_builder.SetInsertPoint(m_blocks.at(l + 1));
+                        current_node = m_graph.get_node_with_start_line(l + 1);
                         assert(current_node != nullptr);
                         break;
                     }
                     case Return: {
                         llvm::Value* ret_value = load_register(istr.destination, std::format("{}_retval", istr_id));
-                        if (ret_value->getType() != func->getReturnType() && ret_value->getType()->isIntegerTy() && func->getReturnType()->isIntegerTy()) {
-                            ret_value = builder.CreateIntCast(ret_value, func->getReturnType(), false, std::format("{}_retcast", istr_id));
+                        if (ret_value->getType() != m_function->getReturnType() && ret_value->getType()->isIntegerTy() && m_function->getReturnType()->isIntegerTy()) {
+                            ret_value = m_builder.CreateIntCast(ret_value, m_function->getReturnType(), false, std::format("{}_retcast", istr_id));
                         }
-                        builder.CreateRet(ret_value);
+                        m_builder.CreateRet(ret_value);
                         break;
                     }
                     default: {
-                        builder.CreateBr(blocks.at(l + 1));
-                        builder.SetInsertPoint(blocks.at(l + 1));
-                        current_node = graph.get_node_with_start_line(l + 1);
+                        m_builder.CreateBr(m_blocks.at(l + 1));
+                        m_builder.SetInsertPoint(m_blocks.at(l + 1));
+                        current_node = m_graph.get_node_with_start_line(l + 1);
                         assert(current_node != nullptr);
                         break;
                     }
@@ -640,7 +546,62 @@ namespace dconstruct::llvm_transpile {
             }
         }
 
-        return func;
+        return m_function;
+    }
+
+    llvm::LoadInst* llvm_transpiler::load_register(const u8 index, std::string_view istr_name) {
+        return m_builder.CreateLoad(m_types[index], m_registerFrame[index], istr_name);
+    }
+
+    llvm::StoreInst* llvm_transpiler::make_store(const u8 index, llvm::Value* rhs, llvm::Type* type) {
+        if (type) {
+            m_types[index] = type;
+        }
+        return m_builder.CreateStore(rhs, m_registerFrame[index]);
+    }
+
+    llvm::StoreInst* llvm_transpiler::make_binary(const Instruction& istr, std::function<llvm::Value*(llvm::Value*, llvm::Value*)> binary_op, llvm::Type* dest_type, std::string_view istr_id) {
+        llvm::Value* lhs = load_register(istr.operand1, std::format("{}_load_lhs", istr_id));
+        llvm::Value* rhs = load_register(istr.operand2, std::format("{}_load_rhs", istr_id));
+        if (lhs->getType() != rhs->getType()) {
+            rhs = m_builder.CreateZExtOrTrunc(rhs, lhs->getType());
+        }
+        llvm::Value* res = binary_op(lhs, rhs);
+        m_types[istr.destination] = dest_type;
+        return make_store(istr.destination, res);
+    }
+
+    llvm::StoreInst* llvm_transpiler::make_binary_imm(const Instruction& istr, std::function<llvm::Value*(llvm::Value*, llvm::Value*)> binary_op, llvm::Type* dest_type, std::string_view istr_id) {
+        llvm::Value* lhs = load_register(istr.operand1, std::format("{}_load_lhs", istr_id));
+        llvm::Type* imm_type = lhs->getType()->isPointerTy() ? m_builder.getInt8Ty() : lhs->getType();
+        llvm::Value* imm =  llvm::ConstantInt::get(imm_type, istr.operand2);
+        llvm::Value* res = binary_op(lhs, imm);
+        m_types[istr.destination] = dest_type;
+        return make_store(istr.destination, res);
+    }
+
+    llvm::StoreInst* llvm_transpiler::make_unary(const Instruction& istr, std::function<llvm::Value*(llvm::Value*)> unary_op, llvm::Type* dest_type, std::string_view istr_id) {
+        llvm::Value* lhs = load_register(istr.operand1, std::format("{}_load_op1", istr_id));
+        llvm::Value* res = unary_op(lhs);
+        m_types[istr.destination] = dest_type;
+        return make_store(istr.destination, res);
+    }
+
+    llvm::FunctionType* llvm_transpiler::exchange_function_types(llvm::Type* new_arg_type, const u8 type_location, const u8 arg_idx) {
+        llvm::FunctionType* old_f_type = llvm::cast<llvm::FunctionType>(m_types[type_location]);
+        std::vector<llvm::Type*> new_arg_types;
+        new_arg_types.reserve(old_f_type->getNumParams());
+        for (u32 i = 0; i < old_f_type->getNumParams(); ++i) {
+            new_arg_types.push_back(old_f_type->getParamType(i));
+        }
+        new_arg_types[arg_idx] = new_arg_type;
+        llvm::FunctionType* new_f_type = llvm::FunctionType::get(old_f_type->getReturnType(), llvm::ArrayRef(new_arg_types.data(), new_arg_types.size()), old_f_type->isVarArg());
+        m_types[type_location] = new_f_type;
+        return new_f_type;
+    }
+
+    resstr<llvm::Function*> transpile_function_to_llvm(llvm::Module& module, const function_disassembly& func_disassembly, const SIDBase& sidbase) {
+        return llvm_transpiler(module, func_disassembly, sidbase).run();
     }
 
     [[nodiscard]] llvm::Type* ast_type_to_llvm_type(llvm::LLVMContext& ctx, const ast::full_type& type) {
@@ -685,34 +646,61 @@ namespace dconstruct::llvm_transpile {
         }, type);
     }
 
-    namespace {
-        void ensure_c_backend_initialized() {
-            static const bool initialized = [] {
-                LLVMInitializeCBackendTargetInfo();
-                LLVMInitializeCBackendTarget();
-                LLVMInitializeCBackendTargetMC();
-                return true;
-            }();
-            (void)initialized;
+    static void ensure_c_backend_initialized() {
+        static const bool initialized = [] {
+            LLVMInitializeCBackendTargetInfo();
+            LLVMInitializeCBackendTarget();
+            LLVMInitializeCBackendTargetMC();
+            return true;
+        }();
+        (void)initialized;
+    }
+
+    static std::unique_ptr<llvm::TargetMachine> create_c_target_machine(std::string& error) {
+        ensure_c_backend_initialized();
+
+        llvm::Triple triple(llvm::sys::getDefaultTargetTriple());
+        const llvm::Target* target = llvm::TargetRegistry::lookupTarget("c", triple, error);
+        if (target == nullptr) {
+            error = std::format("could not find C backend target: {}", error);
+            return nullptr;
         }
 
-        std::unique_ptr<llvm::TargetMachine> create_c_target_machine(std::string& error) {
-            ensure_c_backend_initialized();
-
-            llvm::Triple triple(llvm::sys::getDefaultTargetTriple());
-            const llvm::Target* target = llvm::TargetRegistry::lookupTarget("c", triple, error);
-            if (target == nullptr) {
-                error = std::format("could not find C backend target: {}", error);
-                return nullptr;
-            }
-
-            llvm::TargetOptions options;
-            std::unique_ptr<llvm::TargetMachine> machine(target->createTargetMachine(triple, "", "", options, std::optional<llvm::Reloc::Model>()));
-            if (machine == nullptr) {
-                error = "could not create C backend target machine";
-            }
-            return machine;
+        llvm::TargetOptions options;
+        std::unique_ptr<llvm::TargetMachine> machine(target->createTargetMachine(triple, "", "", options, std::optional<llvm::Reloc::Model>()));
+        if (machine == nullptr) {
+            error = "could not create C backend target machine";
         }
+        return machine;
+    }
+
+    static void ensure_dcvm_backend_initialized() {
+        static const bool initialized = [] {
+            LLVMInitializeDCVMTargetInfo();
+            LLVMInitializeDCVMTarget();
+            LLVMInitializeDCVMTargetMC();
+            LLVMInitializeDCVMAsmPrinter();
+            return true;
+        }();
+        (void)initialized;
+    }
+
+    static std::unique_ptr<llvm::TargetMachine> create_dcvm_target_machine(std::string& error) {
+        ensure_dcvm_backend_initialized();
+
+        llvm::Triple triple("dcvm-unknown-unknown");
+        const llvm::Target* target = llvm::TargetRegistry::lookupTarget("dcvm", triple, error);
+        if (target == nullptr) {
+            error = std::format("could not find DCVM target: {}", error);
+            return nullptr;
+        }
+
+        llvm::TargetOptions options;
+        std::unique_ptr<llvm::TargetMachine> machine(target->createTargetMachine(triple, "", "", options, std::optional<llvm::Reloc::Model>()));
+        if (machine == nullptr) {
+            error = "could not create DCVM target machine";
+        }
+        return machine;
     }
 
     [[nodiscard]] std::string emit_llvm_ir(const llvm::Module& module) {
@@ -746,6 +734,38 @@ namespace dconstruct::llvm_transpile {
         MPM.run(module, MAM);
     }
 
+    void lower_calls_to_lookup(llvm::Module& module) {
+        llvm::IRBuilder<> builder(module.getContext());
+
+        std::vector<llvm::CallInst*> direct_calls;
+        for (llvm::Function& func : module) {
+            for (llvm::BasicBlock& block : func) {
+                for (llvm::Instruction& inst : block) {
+                    auto* call = llvm::dyn_cast<llvm::CallInst>(&inst);
+                    if (call == nullptr) {
+                        continue;
+                    }
+                    const llvm::Function* callee = call->getCalledFunction();
+                    if (callee == nullptr || callee->isIntrinsic() || !callee->hasMetadata("dcvm.sid_distance")) {
+                        continue;
+                    }
+                    direct_calls.push_back(call);
+                }
+            }
+        }
+
+        for (llvm::CallInst* call : direct_calls) {
+            llvm::Function* callee = call->getCalledFunction();
+            const llvm::MDNode* sid_md = callee->getMetadata("dcvm.sid_distance");
+            llvm::Value* sid = llvm::cast<llvm::ConstantAsMetadata>(sid_md->getOperand(1))->getValue();
+            builder.SetInsertPoint(call);
+            llvm::CallInst* func_ptr = builder.CreateIntrinsic(llvm::Intrinsic::dcvm_lookup, {sid});
+            func_ptr->setName(std::format("__LookupPointer_{}_fptr", callee->getName().str()));
+            call->setCalledOperand(func_ptr);
+            call->setMetadata(llvm::LLVMContext::MD_callees, llvm::MDNode::get(module.getContext(), llvm::ValueAsMetadata::get(callee)));
+        }
+    }
+
     [[nodiscard]] std::string emit_c_from_module(const llvm::Module& module) {
         std::string error;
         std::unique_ptr<llvm::TargetMachine> machine = create_c_target_machine(error);
@@ -770,5 +790,31 @@ namespace dconstruct::llvm_transpile {
         pass_manager.run(*clone);
 
         return std::string(c_buffer.str());
+    }
+
+    [[nodiscard]] std::string emit_dcvm_asm(const llvm::Module& module) {
+        std::string error;
+        std::unique_ptr<llvm::TargetMachine> machine = create_dcvm_target_machine(error);
+        if (machine == nullptr) {
+            return std::format("error: {}", error);
+        }
+
+        std::unique_ptr<llvm::Module> clone = llvm::CloneModule(module);
+        clone->setTargetTriple(machine->getTargetTriple());
+        clone->setDataLayout(machine->createDataLayout());
+
+        llvm::SmallString<0> asm_buffer;
+        llvm::raw_svector_ostream asm_out(asm_buffer);
+
+        llvm::legacy::PassManager pass_manager;
+        pass_manager.add(new llvm::TargetLibraryInfoWrapperPass(machine->getTargetTriple()));
+        pass_manager.add(llvm::createTargetTransformInfoWrapperPass(machine->getTargetIRAnalysis()));
+
+        if (machine->addPassesToEmitFile(pass_manager, asm_out, nullptr, llvm::CodeGenFileType::AssemblyFile, true)) {
+            return "error: DCVM backend does not support emitting this module";
+        }
+        pass_manager.run(*clone);
+
+        return std::string(asm_buffer.str());
     }
 }

@@ -6,11 +6,25 @@ namespace llvm {
 
 class DCVMSubtarget;
 
+namespace DCVMISD {
+enum NodeType : unsigned {
+    FIRST_NUMBER = ISD::BUILTIN_OP_END,
+    RET,
+    CALL,
+    CALLFF,
+};
+} // namespace DCVMISD
+
 class DCVMTargetLowering : public TargetLowering {
     const DCVMSubtarget *Subtarget;
 
 public:
     DCVMTargetLowering(const TargetMachine &TM, const DCVMSubtarget &STI);
+
+    const char *getTargetNodeName(unsigned Opcode) const override;
+
+    EVT getSetCCResultType(const DataLayout &DL, LLVMContext &Context,
+                           EVT VT) const override;
 
     SDValue LowerOperation(SDValue Op, SelectionDAG &DAG) const override;
 
@@ -24,6 +38,9 @@ public:
                         const SmallVectorImpl<ISD::OutputArg> &Outs,
                         const SmallVectorImpl<SDValue> &OutVals, const SDLoc &DL,
                         SelectionDAG &DAG) const override;
+
+    SDValue LowerCall(CallLoweringInfo &CLI,
+                      SmallVectorImpl<SDValue> &InVals) const override;
 };
 
 } // namespace llvm

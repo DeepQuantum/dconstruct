@@ -2,12 +2,9 @@
 
 #include "llvm/CodeGen/SelectionDAGTargetInfo.h"
 
-#define GET_SDNODE_ENUM
-#include "DCVMGenSDNodeInfo.inc"
-
 namespace llvm {
 
-class DCVMSelectionDAGInfo : public SelectionDAGGenTargetInfo {
+class DCVMSelectionDAGInfo : public SelectionDAGTargetInfo {
 public:
     DCVMSelectionDAGInfo();
 

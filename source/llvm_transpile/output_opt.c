@@ -8,6 +8,16 @@ typedef unsigned char bool;
 #define __forceinline __attribute__((always_inline)) inline
 #endif
 
+#if defined(__GNUC__)
+#define  __ATTRIBUTELIST__(x) __attribute__(x)
+#else
+#define  __ATTRIBUTELIST__(x)  
+#endif
+
+#ifdef _MSC_VER  /* Can only support "linkonce" vars with GCC */
+#define __attribute__(X)
+#endif
+
 #ifdef _MSC_VER
 #define __PREFIXALIGN__(X) __declspec(align(X))
 #define __POSTFIXALIGN__(X)
@@ -34,11 +44,11 @@ struct l_array_12_uint64_t;
 struct l_array_10_uint64_t;
 
 /* Function definitions */
-typedef uint64_t l_fptr_1(uint64_t, uint64_t, uint64_t);
-typedef uint64_t l_fptr_3(uint64_t, uint64_t, uint64_t);
 typedef uint64_t l_fptr_2(uint64_t, uint64_t, uint64_t);
 typedef uint64_t l_fptr_4(uint64_t, uint64_t, uint64_t);
+typedef uint64_t l_fptr_3(uint64_t, uint64_t, uint64_t);
 typedef uint64_t l_fptr_5(uint64_t, uint64_t, uint64_t);
+typedef uint64_t l_fptr_1(uint64_t, uint64_t, uint64_t);
 
 /* Types Definitions */
 struct l_array_11_uint64_t {
@@ -89,58 +99,58 @@ const static __PREFIXALIGN__(8) struct l_array_12_uint64_t internal_NC_put_NC_of
 const static __PREFIXALIGN__(8) struct l_array_10_uint64_t wait_NC_remove_NC_gas_NC_mask_symbol_table __POSTFIXALIGN__(8);
 
 /* Function Declarations */
-uint64_t wait_NC_equip_NC_gas_NC_mask(uint64_t llvm_cbe_arg_0, uint64_t llvm_cbe_arg_1, uint64_t llvm_cbe_arg_2);
-uint64_t fact_NC_set(uint64_t _9, uint64_t _10, uint64_t _11);
-uint64_t new_NC_boxed_NC_value(uint64_t _12, uint64_t _13);
-uint64_t is_NC_script_NC_running_PD_(uint64_t _14);
-uint64_t wait_NC_one_NC_frame(void);
-uint64_t send_NC_event(uint64_t _15, uint64_t _16, uint64_t _17);
-uint64_t internal_NC_put_NC_on_NC_gas_NC_mask_NC_immediately(uint64_t _18, uint64_t _19);
-uint64_t internal_NC_put_NC_on_NC_gas_NC_mask(uint64_t _20, uint64_t _21);
-uint64_t get_NC_gas_NC_mask(uint64_t _22);
+uint64_t wait_NC_equip_NC_gas_NC_mask(uint64_t llvm_cbe_arg_0, uint64_t llvm_cbe_arg_1, uint64_t llvm_cbe_arg_2) __ATTRIBUTELIST__((nothrow));
+uint64_t fact_NC_set(uint64_t _9, uint64_t _10, uint64_t _11) __ATTRIBUTELIST__((nothrow));
+uint64_t new_NC_boxed_NC_value(uint64_t _12, uint64_t _13) __ATTRIBUTELIST__((nothrow));
+uint64_t is_NC_script_NC_running_PD_(uint64_t _14) __ATTRIBUTELIST__((nothrow));
+uint64_t wait_NC_one_NC_frame(void) __ATTRIBUTELIST__((nothrow));
+uint64_t send_NC_event(uint64_t _15, uint64_t _16, uint64_t _17) __ATTRIBUTELIST__((nothrow));
+uint64_t internal_NC_put_NC_on_NC_gas_NC_mask_NC_immediately(uint64_t _18, uint64_t _19) __ATTRIBUTELIST__((nothrow));
+uint64_t internal_NC_put_NC_on_NC_gas_NC_mask(uint64_t _20, uint64_t _21) __ATTRIBUTELIST__((nothrow));
+uint64_t get_NC_gas_NC_mask(uint64_t _22) __ATTRIBUTELIST__((nothrow));
 uint64_t internal_NC_put_NC_on_NC_gas_NC_mask_OC_1(uint64_t llvm_cbe_arg_0, uint64_t llvm_cbe_arg_1);
-uint64_t lookup_NC_symbol(uint64_t _23, uint64_t _24);
-uint64_t get_NC_gas_NC_mask_NC_setting_NC_id(uint64_t _25);
-uint64_t wait_NC_until_NC_in_NC_valid_NC_gas_NC_mask_NC_state(uint64_t _26, uint64_t _27);
-uint64_t spawn_NC_object(uint64_t _28, uint64_t _29, uint64_t _30, uint64_t _31, uint64_t _32, uint64_t _33, uint64_t _34, uint64_t _35, uint64_t _36);
-uint64_t set_NC_high_NC_contrast_NC_mode_NC_type(uint64_t _37, uint64_t _38);
-uint64_t is_NC_player_PD_(uint64_t _39);
-uint64_t set_NC_instance_NC_flag_NC_hero(uint64_t _40, uint64_t _41);
-uint64_t set_NC_show_NC_in_NC_flashlight_NC_flag(uint64_t _42, uint64_t _43);
-uint64_t set_NC_shadow_NC_casting_NC_from_NC_npc_NC_flashlight(uint64_t _44, uint64_t _45);
-uint64_t set_NC_gas_NC_mask(uint64_t _46, uint64_t _47);
-uint64_t set_NC_visible(uint64_t _48, uint64_t _49);
-uint64_t attach(uint64_t _50, uint64_t _51, uint64_t _52, float _53);
-uint64_t animate_(uint64_t _54, uint64_t _55, uint64_t _56);
-uint64_t _DC__FC_alloc_NC_array(uint64_t _57, uint64_t _58, uint64_t _59, uint64_t _60);
-uint64_t gesture_(uint64_t _61, uint64_t _62, uint64_t _63);
-uint64_t alloc_NC_gesture_NC_play_NC_params(void);
+uint64_t lookup_NC_symbol(uint64_t _23, uint64_t _24) __ATTRIBUTELIST__((nothrow));
+uint64_t get_NC_gas_NC_mask_NC_setting_NC_id(uint64_t _25) __ATTRIBUTELIST__((nothrow));
+uint64_t wait_NC_until_NC_in_NC_valid_NC_gas_NC_mask_NC_state(uint64_t _26, uint64_t _27) __ATTRIBUTELIST__((nothrow));
+uint64_t spawn_NC_object(uint64_t _28, uint64_t _29, uint64_t _30, uint64_t _31, uint64_t _32, uint64_t _33, uint64_t _34, uint64_t _35, uint64_t _36) __ATTRIBUTELIST__((nothrow));
+uint64_t set_NC_high_NC_contrast_NC_mode_NC_type(uint64_t _37, uint64_t _38) __ATTRIBUTELIST__((nothrow));
+uint64_t is_NC_player_PD_(uint64_t _39) __ATTRIBUTELIST__((nothrow));
+uint64_t set_NC_instance_NC_flag_NC_hero(uint64_t _40, uint64_t _41) __ATTRIBUTELIST__((nothrow));
+uint64_t set_NC_show_NC_in_NC_flashlight_NC_flag(uint64_t _42, uint64_t _43) __ATTRIBUTELIST__((nothrow));
+uint64_t set_NC_shadow_NC_casting_NC_from_NC_npc_NC_flashlight(uint64_t _44, uint64_t _45) __ATTRIBUTELIST__((nothrow));
+uint64_t set_NC_gas_NC_mask(uint64_t _46, uint64_t _47) __ATTRIBUTELIST__((nothrow));
+uint64_t set_NC_visible(uint64_t _48, uint64_t _49) __ATTRIBUTELIST__((nothrow));
+uint64_t attach(uint64_t _50, uint64_t _51, uint64_t _52, float _53) __ATTRIBUTELIST__((nothrow));
+uint64_t animate_(uint64_t _54, uint64_t _55, uint64_t _56) __ATTRIBUTELIST__((nothrow));
+uint64_t _DC__FC_alloc_NC_array(uint64_t _57, uint64_t _58, uint64_t _59, uint64_t _60) __ATTRIBUTELIST__((nothrow));
+uint64_t gesture_(uint64_t _61, uint64_t _62, uint64_t _63) __ATTRIBUTELIST__((nothrow));
+uint64_t alloc_NC_gesture_NC_play_NC_params(void) __ATTRIBUTELIST__((nothrow));
 uint64_t internal_NC_put_NC_on_NC_gas_NC_mask_NC_immediately_OC_2(uint64_t llvm_cbe_arg_0, uint64_t llvm_cbe_arg_1);
-uint64_t get_NC_equipped_NC_gas_NC_mask(uint64_t llvm_cbe_arg_0);
-uint64_t wait_NC_until_NC_in_NC_valid_NC_gas_NC_mask_NC_state_OC_3(uint64_t llvm_cbe_arg_0, uint64_t llvm_cbe_arg_1);
-uint64_t player_NC_in_NC_state_PD_(uint64_t _64);
-uint64_t player_NC_force_NC_crouch(void);
-uint64_t player_NC_is_NC_crouched_PD_(void);
-uint64_t player_NC_force_NC_stand(void);
-uint64_t _BC_(uint64_t _65);
-uint64_t wait_NC_holster_NC_player_NC_weapon(uint64_t _66, float _67);
-uint64_t holster_NC_player_NC_weapon_NC_instantly(float _68, uint64_t _69);
-uint64_t wait_NC_npc_NC_holster_NC_weapon(uint64_t _70, uint64_t _71, uint64_t _72, float _73, uint64_t _74);
-uint64_t npc_NC_has_NC_weapon_NC_in_NC_hand_PD_(uint64_t _75);
-uint64_t wait_NC_npc_NC_set_NC_demeanor(uint64_t _76, uint64_t _77);
-uint64_t npc_NC_gas_NC_mask_NC_narrative_NC_mode_PC_f(uint64_t llvm_cbe_arg_0);
-uint64_t suspend_NC_idle_NC_gestures_PC_f(uint64_t _78);
-uint64_t npc_NC_disable_NC_dialog_NC_look(uint64_t _79, float _80);
-uint64_t internal_NC_put_NC_off_NC_gas_NC_mask_NC_immediately(uint64_t llvm_cbe_arg_0, uint64_t llvm_cbe_arg_1);
-uint64_t kill_NC_entity(uint64_t _81);
-uint64_t spawn_NC_gas_NC_mask(uint64_t llvm_cbe_arg_0);
-uint64_t player_NC_gas_NC_mask_NC_narrative_NC_mode_PC_f(uint64_t llvm_cbe_arg_0, uint64_t llvm_cbe_arg_1, uint64_t llvm_cbe_arg_2);
-uint64_t player_NC_disable_NC_dialog_NC_look_NC_gestures(float _82);
-uint64_t player_NC_disable_NC_squeeze_NC_through_PC_f(void);
-uint64_t player_NC_set_NC_narrative_NC_mode_PC_f(uint64_t _83, uint64_t _84, uint64_t _85);
-uint64_t joypad_NC_disable_NC_commands(uint64_t _86);
-uint64_t internal_NC_put_NC_off_NC_gas_NC_mask(uint64_t llvm_cbe_arg_0, uint64_t llvm_cbe_arg_1);
-uint64_t wait_NC_remove_NC_gas_NC_mask(uint64_t llvm_cbe_arg_0, uint64_t llvm_cbe_arg_1, uint64_t llvm_cbe_arg_2);
+uint64_t get_NC_equipped_NC_gas_NC_mask(uint64_t llvm_cbe_arg_0) __ATTRIBUTELIST__((nothrow));
+uint64_t wait_NC_until_NC_in_NC_valid_NC_gas_NC_mask_NC_state_OC_3(uint64_t llvm_cbe_arg_0, uint64_t llvm_cbe_arg_1) __ATTRIBUTELIST__((nothrow));
+uint64_t player_NC_in_NC_state_PD_(uint64_t _64) __ATTRIBUTELIST__((nothrow));
+uint64_t player_NC_force_NC_crouch(void) __ATTRIBUTELIST__((nothrow));
+uint64_t player_NC_is_NC_crouched_PD_(void) __ATTRIBUTELIST__((nothrow));
+uint64_t player_NC_force_NC_stand(void) __ATTRIBUTELIST__((nothrow));
+uint64_t _BC_(uint64_t _65) __ATTRIBUTELIST__((nothrow));
+uint64_t wait_NC_holster_NC_player_NC_weapon(uint64_t _66, float _67) __ATTRIBUTELIST__((nothrow));
+uint64_t holster_NC_player_NC_weapon_NC_instantly(float _68, uint64_t _69) __ATTRIBUTELIST__((nothrow));
+uint64_t wait_NC_npc_NC_holster_NC_weapon(uint64_t _70, uint64_t _71, uint64_t _72, float _73, uint64_t _74) __ATTRIBUTELIST__((nothrow));
+uint64_t npc_NC_has_NC_weapon_NC_in_NC_hand_PD_(uint64_t _75) __ATTRIBUTELIST__((nothrow));
+uint64_t wait_NC_npc_NC_set_NC_demeanor(uint64_t _76, uint64_t _77) __ATTRIBUTELIST__((nothrow));
+uint64_t npc_NC_gas_NC_mask_NC_narrative_NC_mode_PC_f(uint64_t llvm_cbe_arg_0) __ATTRIBUTELIST__((nothrow));
+uint64_t suspend_NC_idle_NC_gestures_PC_f(uint64_t _78) __ATTRIBUTELIST__((nothrow));
+uint64_t npc_NC_disable_NC_dialog_NC_look(uint64_t _79, float _80) __ATTRIBUTELIST__((nothrow));
+uint64_t internal_NC_put_NC_off_NC_gas_NC_mask_NC_immediately(uint64_t llvm_cbe_arg_0, uint64_t llvm_cbe_arg_1) __ATTRIBUTELIST__((nothrow));
+uint64_t kill_NC_entity(uint64_t _81) __ATTRIBUTELIST__((nothrow));
+uint64_t spawn_NC_gas_NC_mask(uint64_t llvm_cbe_arg_0) __ATTRIBUTELIST__((nothrow));
+uint64_t player_NC_gas_NC_mask_NC_narrative_NC_mode_PC_f(uint64_t llvm_cbe_arg_0, uint64_t llvm_cbe_arg_1, uint64_t llvm_cbe_arg_2) __ATTRIBUTELIST__((nothrow));
+uint64_t player_NC_disable_NC_dialog_NC_look_NC_gestures(float _82) __ATTRIBUTELIST__((nothrow));
+uint64_t player_NC_disable_NC_squeeze_NC_through_PC_f(void) __ATTRIBUTELIST__((nothrow));
+uint64_t player_NC_set_NC_narrative_NC_mode_PC_f(uint64_t _83, uint64_t _84, uint64_t _85) __ATTRIBUTELIST__((nothrow));
+uint64_t joypad_NC_disable_NC_commands(uint64_t _86) __ATTRIBUTELIST__((nothrow));
+uint64_t internal_NC_put_NC_off_NC_gas_NC_mask(uint64_t llvm_cbe_arg_0, uint64_t llvm_cbe_arg_1) __ATTRIBUTELIST__((nothrow));
+uint64_t wait_NC_remove_NC_gas_NC_mask(uint64_t llvm_cbe_arg_0, uint64_t llvm_cbe_arg_1, uint64_t llvm_cbe_arg_2) __ATTRIBUTELIST__((nothrow));
 
 
 /* Global Variable Definitions and Initialization */

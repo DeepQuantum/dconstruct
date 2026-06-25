@@ -23,7 +23,7 @@ static Reloc::Model getEffectiveRelocModel(std::optional<Reloc::Model> RM) {
 }
 
 static CodeModel::Model
-getEffectiveCodeModel(std::optional<CodeModel::Model> CM) {
+getDCVMCodeModel(std::optional<CodeModel::Model> CM) {
     return CM.value_or(CodeModel::Small);
 }
 
@@ -35,7 +35,7 @@ DCVMTargetMachine::DCVMTargetMachine(const Target &T, const Triple &TT,
                                      CodeGenOptLevel OL, bool JIT)
     : CodeGenTargetMachineImpl(T, TT.computeDataLayout(), TT, CPU, FS, Options,
                                getEffectiveRelocModel(RM),
-                               getEffectiveCodeModel(CM), OL),
+                               getDCVMCodeModel(CM), OL),
       TLOF(std::make_unique<DCVMELFTargetObjectFile>()) {
     initAsmInfo();
 }

@@ -5,7 +5,9 @@
 #include "llvm/MC/MCFixup.h"
 #include "llvm/MC/MCInst.h"
 #include "llvm/MC/MCInstrInfo.h"
+#include "llvm/MC/MCRegisterInfo.h"
 #include "llvm/MC/MCSubtargetInfo.h"
+#include "llvm/Support/ErrorHandling.h"
 
 using namespace llvm;
 
@@ -39,13 +41,21 @@ unsigned DCVMMCCodeEmitter::getMachineOpValue(const MCInst &MI,
                                               const MCOperand &MO,
                                               SmallVectorImpl<MCFixup> &Fixups,
                                               const MCSubtargetInfo &STI) const {
-    return 0;
+    if (MO.isReg())
+        return Ctx.getRegisterInfo()->getEncodingValue(MO.getReg());
+    if (MO.isImm())
+        return static_cast<unsigned>(MO.getImm());
+    llvm_unreachable("unsupported operand in DCVMMCCodeEmitter");
 }
 
 void DCVMMCCodeEmitter::encodeInstruction(const MCInst &MI,
                                           SmallVectorImpl<char> &CB,
                                           SmallVectorImpl<MCFixup> &Fixups,
-                                          const MCSubtargetInfo &STI) const {}
+                                          const MCSubtargetInfo &STI) const {
+    const uint64_t Bits = getBinaryCodeForInstr(MI, Fixups, STI);
+    for (unsigned i = 0; i < 8; ++i)
+        CB.push_back(static_cast<char>((Bits >> (i * 8)) & 0xff));
+}
 
 #include "DCVMGenMCCodeEmitter.inc"
 

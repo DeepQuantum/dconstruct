@@ -1392,6 +1392,7 @@ namespace dconstruct {
                     ftype = ast::function_type{};
                 }
                 ast::function_type &func_type = std::get<ast::function_type>(ftype);
+                func_type.m_distanceType = opcode == Call ? ast::function_type::DISTANCE::NEAR : ast::function_type::DISTANCE::FAR;
                 if (!func_type.m_arguments.empty() && func_type.m_arguments.size() != op2) {
                     func_type.m_isVariadic = true;
                     if (op2 < func_type.m_arguments.size()) {

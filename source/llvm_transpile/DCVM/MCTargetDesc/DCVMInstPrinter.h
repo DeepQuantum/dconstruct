@@ -17,12 +17,10 @@ public:
 
     std::pair<const char *, uint64_t>
     getMnemonic(const MCInst &MI) const override;
-    void printInstruction(const MCInst *MI, uint64_t Address,
-                          const MCSubtargetInfo &STI, raw_ostream &O);
+    void printInstruction(const MCInst *MI, uint64_t Address, raw_ostream &O);
     static const char *getRegisterName(MCRegister Reg);
 
-    void printOperand(const MCInst *MI, int OpNum, const MCSubtargetInfo &STI,
-                      raw_ostream &OS);
+    void printOperand(const MCInst *MI, unsigned OpNo, raw_ostream &O);
 };
 
 } // namespace llvm

@@ -2,14 +2,14 @@ add_llvm_component_group(DCVM)
 
 set(LLVM_TARGET_DEFINITIONS DCVM.td)
 
-#tablegen(LLVM DCVMGenAsmWriter.inc -gen-asm-writer)
-#tablegen(LLVM DCVMGenCallingConv.inc -gen-callingconv)
-#tablegen(LLVM DCVMGenDAGISel.inc -gen-dag-isel)
-#tablegen(LLVM DCVMGenInstrInfo.inc -gen-instr-info)
-#tablegen(LLVM DCVMGenMCCodeEmitter.inc -gen-emitter)
-#tablegen(LLVM DCVMGenRegisterInfo.inc -gen-register-info)
-#tablegen(LLVM DCVMGenSDNodeInfo.inc -gen-sd-node-info)
-#tablegen(LLVM DCVMGenSubtargetInfo.inc -gen-subtarget)
+tablegen(LLVM DCVMGenAsmWriter.inc -gen-asm-writer)
+tablegen(LLVM DCVMGenCallingConv.inc -gen-callingconv)
+tablegen(LLVM DCVMGenDAGISel.inc -gen-dag-isel)
+tablegen(LLVM DCVMGenInstrInfo.inc -gen-instr-info)
+tablegen(LLVM DCVMGenMCCodeEmitter.inc -gen-emitter)
+tablegen(LLVM DCVMGenRegisterInfo.inc -gen-register-info)
+tablegen(LLVM DCVMGenSDNodeInfo.inc -gen-sd-node-info)
+tablegen(LLVM DCVMGenSubtargetInfo.inc -gen-subtarget)
 
 add_public_tablegen_target(DCVMTableGen)
 

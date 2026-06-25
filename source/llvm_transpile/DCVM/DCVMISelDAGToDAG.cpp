@@ -1,7 +1,10 @@
 #include "DCVM.h"
+#include "DCVMMachineFunctionInfo.h"
 #include "DCVMSubtarget.h"
 #include "DCVMTargetMachine.h"
 #include "llvm/CodeGen/SelectionDAGISel.h"
+#include "llvm/IR/IntrinsicsDCVM.h"
+#include "llvm/Support/MathExtras.h"
 
 using namespace llvm;
 
@@ -43,6 +46,43 @@ void DCVMDAGToDAGISel::Select(SDNode *N) {
     if (N->isMachineOpcode()) {
         N->setNodeId(-1);
         return;
+    }
+
+    const SDLoc DL(N);
+    DCVMMachineFunctionInfo *MFI = MF->getInfo<DCVMMachineFunctionInfo>();
+
+    switch (N->getOpcode()) {
+    case ISD::Constant: {
+        const uint64_t Value = cast<ConstantSDNode>(N)->getZExtValue();
+        if (isUInt<16>(Value))
+            break;
+        const SDValue Idx =
+            CurDAG->getTargetConstant(MFI->internSymbol(Value), DL, MVT::i64);
+        ReplaceNode(N, CurDAG->getMachineNode(DCVM::LOADSTATICU64IMMri, DL,
+                                              MVT::i64, Idx));
+        return;
+    }
+    case ISD::ConstantFP: {
+        const uint64_t Bits = cast<ConstantFPSDNode>(N)
+                                  ->getValueAPF()
+                                  .bitcastToAPInt()
+                                  .getZExtValue();
+        const SDValue Idx =
+            CurDAG->getTargetConstant(MFI->internSymbol(Bits), DL, MVT::i64);
+        ReplaceNode(N, CurDAG->getMachineNode(DCVM::LOADSTATICFLOATIMMri, DL,
+                                              MVT::f32, Idx));
+        return;
+    }
+    case ISD::INTRINSIC_WO_CHAIN: {
+        if (N->getConstantOperandVal(0) != Intrinsic::dcvm_lookup)
+            break;
+        const uint64_t Sid = cast<ConstantSDNode>(N->getOperand(1))->getZExtValue();
+        const SDValue Idx =
+            CurDAG->getTargetConstant(MFI->internSymbol(Sid), DL, MVT::i64);
+        ReplaceNode(N, CurDAG->getMachineNode(DCVM::LOOKUPPOINTERri, DL,
+                                              N->getValueType(0), Idx));
+        return;
+    }
     }
 
     SelectCode(N);

@@ -1,2 +1,2 @@
-defvar MAX_REGISTER = 100
-defvar ARG_REGISTER_START = 49
+defvar MAX_REGISTER = 100;
+defvar ARG_REGISTER_START = 49;

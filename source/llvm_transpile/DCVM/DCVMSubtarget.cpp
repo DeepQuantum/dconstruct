@@ -23,7 +23,7 @@ DCVMSubtarget::initializeSubtargetDependencies(StringRef CPU, StringRef TuneCPU,
 
 DCVMSubtarget::DCVMSubtarget(const Triple &TT, StringRef CPU, StringRef TuneCPU,
                              StringRef FS, const TargetMachine &TM)
-    : DCVMGenSubtargetInfo(TT, CPU, TuneCPU, FS), InstrInfo(),
+    : DCVMGenSubtargetInfo(TT, CPU, TuneCPU, FS), InstrInfo(*this),
       TLInfo(TM, *this), FrameLowering(*this) {
     initializeSubtargetDependencies(CPU, TuneCPU, FS);
     TSInfo = std::make_unique<DCVMSelectionDAGInfo>();

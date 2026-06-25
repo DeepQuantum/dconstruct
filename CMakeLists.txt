@@ -354,6 +354,7 @@ target_link_options(dconstruct_hooking PRIVATE
 
 set(LLVM_ENABLE_PROJECTS "" CACHE STRING "" FORCE)
 set(LLVM_TARGETS_TO_BUILD "X86" CACHE STRING "" FORCE)
+set(LLVM_EXPERIMENTAL_TARGETS_TO_BUILD "DCVM" CACHE STRING "" FORCE)
 set(LLVM_BUILD_TOOLS OFF CACHE BOOL "" FORCE)
 set(LLVM_INCLUDE_TESTS OFF CACHE BOOL "" FORCE)
 set(LLVM_INCLUDE_EXAMPLES OFF CACHE BOOL "" FORCE)
@@ -389,6 +390,7 @@ target_include_directories(llvm_transpile SYSTEM PUBLIC
 # (TargetLowering/TargetLoweringBase/TargetSubtargetInfo virtuals) resolve.
 llvm_map_components_to_libnames(LLVM_TRANSPILE_DEPS
     Analysis
+    AsmPrinter
     CodeGen
     Core
     MC
@@ -404,6 +406,9 @@ target_link_libraries(llvm_transpile PUBLIC
     dconstruct_lib
     LLVMCBackendCodeGen
     LLVMCBackendInfo
+    LLVMDCVMCodeGen
+    LLVMDCVMDesc
+    LLVMDCVMInfo
     ${LLVM_TRANSPILE_DEPS}
 )
 

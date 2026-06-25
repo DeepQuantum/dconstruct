@@ -287,21 +287,29 @@ bb8:                                              ; preds = %bb6
   ret i64 %__Return_66___retval
 }
 
-declare i64 @fact-set(i64, i64, i64)
+; Function Attrs: nosync nounwind willreturn
+declare !dcvm.sid_distance !0 i64 @fact-set(i64, i64, i64) #0
 
-declare i64 @new-boxed-value(i64, i64)
+; Function Attrs: nosync nounwind willreturn
+declare !dcvm.sid_distance !1 i64 @new-boxed-value(i64, i64) #0
 
-declare i64 @"is-script-running?"(i64)
+; Function Attrs: nosync nounwind willreturn
+declare !dcvm.sid_distance !2 i64 @"is-script-running?"(i64) #0
 
-declare i64 @wait-one-frame()
+; Function Attrs: nosync nounwind willreturn
+declare !dcvm.sid_distance !3 i64 @wait-one-frame() #0
 
-declare i64 @send-event(i64, i64, i64)
+; Function Attrs: nosync nounwind willreturn
+declare !dcvm.sid_distance !4 i64 @send-event(i64, i64, i64) #0
 
-declare i64 @internal-put-on-gas-mask-immediately(i64, i64)
+; Function Attrs: nosync nounwind willreturn
+declare !dcvm.sid_distance !5 i64 @internal-put-on-gas-mask-immediately(i64, i64) #0
 
-declare i64 @internal-put-on-gas-mask(i64, i64)
+; Function Attrs: nosync nounwind willreturn
+declare !dcvm.sid_distance !6 i64 @internal-put-on-gas-mask(i64, i64) #0
 
-declare i64 @get-gas-mask(i64)
+; Function Attrs: nosync nounwind willreturn
+declare !dcvm.sid_distance !7 i64 @get-gas-mask(i64) #0
 
 define i64 @internal-put-on-gas-mask.1(i64 %arg_0, i64 %arg_1) {
 bb0:
@@ -914,37 +922,53 @@ bb12:                                             ; preds = %bb10
   ret i64 %__Return_209___retval
 }
 
-declare i64 @lookup-symbol(i64, i64)
+; Function Attrs: nosync nounwind willreturn
+declare !dcvm.sid_distance !8 i64 @lookup-symbol(i64, i64) #0
 
-declare i64 @get-gas-mask-setting-id(i64)
+; Function Attrs: nosync nounwind willreturn
+declare !dcvm.sid_distance !9 i64 @get-gas-mask-setting-id(i64) #0
 
-declare i64 @wait-until-in-valid-gas-mask-state(i64, i64)
+; Function Attrs: nosync nounwind willreturn
+declare !dcvm.sid_distance !10 i64 @wait-until-in-valid-gas-mask-state(i64, i64) #0
 
-declare i64 @spawn-object(i64, i64, i64, i64, i64, i64, i64, i64, i64)
+; Function Attrs: nosync nounwind willreturn
+declare !dcvm.sid_distance !11 i64 @spawn-object(i64, i64, i64, i64, i64, i64, i64, i64, i64) #0
 
-declare i64 @set-high-contrast-mode-type(i64, i64)
+; Function Attrs: nosync nounwind willreturn
+declare !dcvm.sid_distance !12 i64 @set-high-contrast-mode-type(i64, i64) #0
 
-declare i64 @"is-player?"(i64)
+; Function Attrs: nosync nounwind willreturn
+declare !dcvm.sid_distance !13 i64 @"is-player?"(i64) #0
 
-declare i64 @set-instance-flag-hero(i64, i64)
+; Function Attrs: nosync nounwind willreturn
+declare !dcvm.sid_distance !14 i64 @set-instance-flag-hero(i64, i64) #0
 
-declare i64 @set-show-in-flashlight-flag(i64, i64)
+; Function Attrs: nosync nounwind willreturn
+declare !dcvm.sid_distance !15 i64 @set-show-in-flashlight-flag(i64, i64) #0
 
-declare i64 @set-shadow-casting-from-npc-flashlight(i64, i64)
+; Function Attrs: nosync nounwind willreturn
+declare !dcvm.sid_distance !16 i64 @set-shadow-casting-from-npc-flashlight(i64, i64) #0
 
-declare i64 @set-gas-mask(i64, i64)
+; Function Attrs: nosync nounwind willreturn
+declare !dcvm.sid_distance !17 i64 @set-gas-mask(i64, i64) #0
 
-declare i64 @set-visible(i64, i64)
+; Function Attrs: nosync nounwind willreturn
+declare !dcvm.sid_distance !18 i64 @set-visible(i64, i64) #0
 
-declare i64 @attach(i64, i64, i64, float)
+; Function Attrs: nosync nounwind willreturn
+declare !dcvm.sid_distance !19 i64 @attach(i64, i64, i64, float) #0
 
-declare i64 @animate_(i64, i64, i64)
+; Function Attrs: nosync nounwind willreturn
+declare !dcvm.sid_distance !20 i64 @animate_(i64, i64, i64) #0
 
-declare i64 @"#%alloc-array"(i64, i64, i64, i64)
+; Function Attrs: nosync nounwind willreturn
+declare !dcvm.sid_distance !21 i64 @"#%alloc-array"(i64, i64, i64, i64) #0
 
-declare i64 @gesture_(i64, i64, i64)
+; Function Attrs: nosync nounwind willreturn
+declare !dcvm.sid_distance !22 i64 @gesture_(i64, i64, i64) #0
 
-declare i64 @alloc-gesture-play-params()
+; Function Attrs: nosync nounwind willreturn
+declare !dcvm.sid_distance !23 i64 @alloc-gesture-play-params() #0
 
 define i64 @internal-put-on-gas-mask-immediately.2(i64 %arg_0, i64 %arg_1) {
 bb0:
@@ -1939,25 +1963,35 @@ bb21:                                             ; preds = %bb20, %bb19, %bb14
   ret i64 %__Return_99___retval
 }
 
-declare i64 @"player-in-state?"(i64)
+; Function Attrs: nosync nounwind willreturn
+declare !dcvm.sid_distance !24 i64 @"player-in-state?"(i64) #0
 
-declare i64 @player-force-crouch()
+; Function Attrs: nosync nounwind willreturn
+declare !dcvm.sid_distance !25 i64 @player-force-crouch() #0
 
-declare i64 @"player-is-crouched?"()
+; Function Attrs: nosync nounwind willreturn
+declare !dcvm.sid_distance !26 i64 @"player-is-crouched?"() #0
 
-declare i64 @player-force-stand()
+; Function Attrs: nosync nounwind willreturn
+declare !dcvm.sid_distance !27 i64 @player-force-stand() #0
 
-declare i64 @"!"(i64)
+; Function Attrs: nosync nounwind willreturn
+declare !dcvm.sid_distance !28 i64 @"!"(i64) #0
 
-declare i64 @wait-holster-player-weapon(i64, float)
+; Function Attrs: nosync nounwind willreturn
+declare !dcvm.sid_distance !29 i64 @wait-holster-player-weapon(i64, float) #0
 
-declare i64 @holster-player-weapon-instantly(float, i64)
+; Function Attrs: nosync nounwind willreturn
+declare !dcvm.sid_distance !30 i64 @holster-player-weapon-instantly(float, i64) #0
 
-declare i64 @wait-npc-holster-weapon(i64, i64, i64, float, i64)
+; Function Attrs: nosync nounwind willreturn
+declare !dcvm.sid_distance !31 i64 @wait-npc-holster-weapon(i64, i64, i64, float, i64) #0
 
-declare i64 @"npc-has-weapon-in-hand?"(i64)
+; Function Attrs: nosync nounwind willreturn
+declare !dcvm.sid_distance !32 i64 @"npc-has-weapon-in-hand?"(i64) #0
 
-declare i64 @wait-npc-set-demeanor(i64, i64)
+; Function Attrs: nosync nounwind willreturn
+declare !dcvm.sid_distance !33 i64 @wait-npc-set-demeanor(i64, i64) #0
 
 define i64 @"npc-gas-mask-narrative-mode/f"(i64 %arg_0) {
 bb0:
@@ -2103,11 +2137,14 @@ bb0:
   ret i64 %__Return_17___retval
 }
 
-declare i64 @"suspend-idle-gestures/f"(i64)
+; Function Attrs: nosync nounwind willreturn
+declare !dcvm.sid_distance !34 i64 @"suspend-idle-gestures/f"(i64) #0
 
-declare i64 @npc-disable-dialog-look(i64, float)
+; Function Attrs: nosync nounwind willreturn
+declare !dcvm.sid_distance !35 i64 @npc-disable-dialog-look(i64, float) #0
 
-define i64 @internal-put-off-gas-mask-immediately(i64 %arg_0, i64 %arg_1) {
+; Function Attrs: nosync nounwind willreturn
+define i64 @internal-put-off-gas-mask-immediately(i64 %arg_0, i64 %arg_1) #0 !dcvm.sid_distance !36 {
 bb0:
   %r0 = alloca i64, align 8
   %r1 = alloca i64, align 8
@@ -2265,7 +2302,8 @@ bb3:                                              ; preds = %bb2, %bb1
   ret i64 %__Return_21___retval
 }
 
-declare i64 @kill-entity(i64)
+; Function Attrs: nosync nounwind willreturn
+declare !dcvm.sid_distance !37 i64 @kill-entity(i64) #0
 
 define i64 @spawn-gas-mask(i64 %arg_0) {
 bb0:
@@ -2629,15 +2667,20 @@ bb0:
   ret i64 %__Return_25___retval
 }
 
-declare i64 @player-disable-dialog-look-gestures(float)
+; Function Attrs: nosync nounwind willreturn
+declare !dcvm.sid_distance !38 i64 @player-disable-dialog-look-gestures(float) #0
 
-declare i64 @"player-disable-squeeze-through/f"()
+; Function Attrs: nosync nounwind willreturn
+declare !dcvm.sid_distance !39 i64 @"player-disable-squeeze-through/f"() #0
 
-declare i64 @"player-set-narrative-mode/f"(i64, i64, i64)
+; Function Attrs: nosync nounwind willreturn
+declare !dcvm.sid_distance !40 i64 @"player-set-narrative-mode/f"(i64, i64, i64) #0
 
-declare i64 @joypad-disable-commands(i64)
+; Function Attrs: nosync nounwind willreturn
+declare !dcvm.sid_distance !41 i64 @joypad-disable-commands(i64) #0
 
-define i64 @internal-put-off-gas-mask(i64 %arg_0, i64 %arg_1) {
+; Function Attrs: nosync nounwind willreturn
+define i64 @internal-put-off-gas-mask(i64 %arg_0, i64 %arg_1) #0 !dcvm.sid_distance !42 {
 bb0:
   %r0 = alloca i64, align 8
   %r1 = alloca i64, align 8
@@ -3218,3 +3261,49 @@ bb6:                                              ; preds = %bb5, %bb4
   %__Return_53___retval = load i64, ptr %r3, align 4
   ret i64 %__Return_53___retval
 }
+
+attributes #0 = { nosync nounwind willreturn }
+
+!0 = !{!"sid", i64 -2210386714833194546, !"distance", !"far"}
+!1 = !{!"sid", i64 3684810824690217768, !"distance", !"far"}
+!2 = !{!"sid", i64 6481843155139167450, !"distance", !"near"}
+!3 = !{!"sid", i64 -3047912596559836939, !"distance", !"far"}
+!4 = !{!"sid", i64 4789555171397753330, !"distance", !"far"}
+!5 = !{!"sid", i64 6078802017353408438, !"distance", !"near"}
+!6 = !{!"sid", i64 5608585023750540989, !"distance", !"near"}
+!7 = !{!"sid", i64 -5076200561558624898, !"distance", !"far"}
+!8 = !{!"sid", i64 -7658033447216601854, !"distance", !"far"}
+!9 = !{!"sid", i64 -6573555005595409285, !"distance", !"far"}
+!10 = !{!"sid", i64 8203816822361639083, !"distance", !"near"}
+!11 = !{!"sid", i64 7097052834867614476, !"distance", !"far"}
+!12 = !{!"sid", i64 4766017279285775524, !"distance", !"far"}
+!13 = !{!"sid", i64 6532480022340268902, !"distance", !"far"}
+!14 = !{!"sid", i64 -429226074377614887, !"distance", !"far"}
+!15 = !{!"sid", i64 -7252477440030364545, !"distance", !"far"}
+!16 = !{!"sid", i64 -3854484060414110792, !"distance", !"far"}
+!17 = !{!"sid", i64 -5971891483814290574, !"distance", !"far"}
+!18 = !{!"sid", i64 -7746349783173232884, !"distance", !"far"}
+!19 = !{!"sid", i64 -5676660224586178492, !"distance", !"far"}
+!20 = !{!"sid", i64 -9179819928081802467, !"distance", !"far"}
+!21 = !{!"sid", i64 -7745656483000545638, !"distance", !"far"}
+!22 = !{!"sid", i64 6500315221283771953, !"distance", !"far"}
+!23 = !{!"sid", i64 -2962780980939953026, !"distance", !"far"}
+!24 = !{!"sid", i64 -9003251364961024783, !"distance", !"far"}
+!25 = !{!"sid", i64 -4831287436211302109, !"distance", !"far"}
+!26 = !{!"sid", i64 1646463116072042322, !"distance", !"far"}
+!27 = !{!"sid", i64 8594926419455150747, !"distance", !"far"}
+!28 = !{!"sid", i64 -5808627241898115124, !"distance", !"near"}
+!29 = !{!"sid", i64 -3092934816467423265, !"distance", !"far"}
+!30 = !{!"sid", i64 -626103520744544694, !"distance", !"far"}
+!31 = !{!"sid", i64 5808793362033684947, !"distance", !"far"}
+!32 = !{!"sid", i64 7683024912818272899, !"distance", !"far"}
+!33 = !{!"sid", i64 8573502661920361253, !"distance", !"far"}
+!34 = !{!"sid", i64 -5356689657310757786, !"distance", !"near"}
+!35 = !{!"sid", i64 7610916627332680768, !"distance", !"far"}
+!36 = !{!"sid", i64 -8559530813269772124, !"distance", !"near"}
+!37 = !{!"sid", i64 -804116741684351865, !"distance", !"far"}
+!38 = !{!"sid", i64 7238593933813171071, !"distance", !"far"}
+!39 = !{!"sid", i64 8165897991486741957, !"distance", !"far"}
+!40 = !{!"sid", i64 -2826777519175913837, !"distance", !"near"}
+!41 = !{!"sid", i64 7121253686161376880, !"distance", !"far"}
+!42 = !{!"sid", i64 -6610620527767074061, !"distance", !"near"}

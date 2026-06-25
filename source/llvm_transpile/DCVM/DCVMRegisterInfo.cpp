@@ -1,6 +1,9 @@
 #include "DCVMRegisterInfo.h"
+#include "DCVMFrameLowering.h"
+#include "MCTargetDesc/DCVMMCTargetDesc.h"
 #include "llvm/CodeGen/MachineFunction.h"
 #include "llvm/CodeGen/TargetFrameLowering.h"
+#include "llvm/CodeGen/TargetSubtargetInfo.h"
 
 #define GET_REGINFO_TARGET_DESC
 #include "DCVMGenRegisterInfo.inc"

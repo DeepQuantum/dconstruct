@@ -1,11 +1,18 @@
 #pragma once
 
+#include "llvm/ADT/ArrayRef.h"
 #include "llvm/CodeGen/MachineFunction.h"
+#include <cstdint>
+#include <unordered_map>
+#include <vector>
 
 namespace llvm {
 
 class DCVMMachineFunctionInfo : public MachineFunctionInfo {
     virtual void anchor();
+
+    std::vector<uint64_t> Symbols;
+    std::unordered_map<uint64_t, unsigned> SymbolIndex;
 
 public:
     DCVMMachineFunctionInfo() = default;
@@ -15,6 +22,10 @@ public:
     clone(BumpPtrAllocator &Allocator, MachineFunction &DestMF,
           const DenseMap<MachineBasicBlock *, MachineBasicBlock *> &Src2DstMBB)
         const override;
+
+    unsigned internSymbol(uint64_t Value);
+
+    ArrayRef<uint64_t> getSymbols() const { return Symbols; }
 };
 
 } // namespace llvm
