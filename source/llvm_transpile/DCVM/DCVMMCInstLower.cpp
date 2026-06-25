@@ -1,6 +1,9 @@
 #include "DCVMMCInstLower.h"
+#include "llvm/CodeGen/MachineBasicBlock.h"
 #include "llvm/CodeGen/MachineInstr.h"
 #include "llvm/CodeGen/MachineOperand.h"
+#include "llvm/MC/MCContext.h"
+#include "llvm/MC/MCExpr.h"
 #include "llvm/MC/MCInst.h"
 #include "llvm/Support/ErrorHandling.h"
 
@@ -12,6 +15,9 @@ MCOperand DCVMMCInstLower::LowerOperand(const MachineOperand &MO) const {
         return MCOperand::createReg(MO.getReg());
     case MachineOperand::MO_Immediate:
         return MCOperand::createImm(MO.getImm());
+    case MachineOperand::MO_MachineBasicBlock:
+        return MCOperand::createExpr(
+            MCSymbolRefExpr::create(MO.getMBB()->getSymbol(), Ctx));
     default:
         llvm_unreachable("unsupported operand type in DCVMMCInstLower");
     }

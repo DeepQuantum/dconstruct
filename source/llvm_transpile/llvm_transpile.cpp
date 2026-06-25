@@ -216,9 +216,7 @@ namespace dconstruct::llvm_transpile {
                     break;
                 }
                 case IntAsh: {
-                    // llvm::Value* shift_amount = load_register(istr.operand2);
-                    // llvm::Constant* zero = llvm::ConstantInt::get(m_defaultIntT, 0);
-                    // m_builder.CreateICmpSLT(shift_amount, zero);
+                    make_binary(istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateIntrinsic(llvm::Intrinsic::dcvm_intash, {a, b}); }, m_defaultIntT, istr_id);
                     break;
                 }
                 case IEqual: {
@@ -467,7 +465,7 @@ namespace dconstruct::llvm_transpile {
                 case CallFf:
                 case Call: {
                     llvm::FunctionType* func_type = llvm::cast<llvm::FunctionType>(m_types[istr.operand1]);
-                    llvm::Value* callee = m_builder.CreateLoad(m_defaultPointerT, m_registerFrame[istr.operand1], std::format("{}_callee", istr_id));
+                    llvm::Value* callee = load_register(istr.operand1, std::format("{}_callee", istr_id));
                     std::vector<llvm::Value*> arg_values;
                     arg_values.reserve(istr.operand2);
                     for (u64 i = 0; i < istr.operand2; ++i) {
@@ -549,15 +547,46 @@ namespace dconstruct::llvm_transpile {
         return m_function;
     }
 
-    llvm::LoadInst* llvm_transpiler::load_register(const u8 index, std::string_view istr_name) {
-        return m_builder.CreateLoad(m_types[index], m_registerFrame[index], istr_name);
+    llvm::Value* llvm_transpiler::coerce_to_storage(llvm::Value* value) {
+        llvm::Type* type = value->getType();
+        if (type == m_defaultIntT) {
+            return value;
+        }
+        if (type->isPointerTy()) {
+            return m_builder.CreatePtrToInt(value, m_defaultIntT);
+        }
+        if (type->isFloatingPointTy()) {
+            value = m_builder.CreateBitCast(value, llvm::IntegerType::get(m_ctx, type->getPrimitiveSizeInBits()));
+            type = value->getType();
+        }
+        return type == m_defaultIntT ? value : m_builder.CreateZExt(value, m_defaultIntT);
+    }
+
+    llvm::Value* llvm_transpiler::coerce_from_storage(llvm::Value* raw, llvm::Type* logical) {
+        if (logical == m_defaultIntT) {
+            return raw;
+        }
+        if (logical->isFloatingPointTy()) {
+            llvm::Type* int_type = llvm::IntegerType::get(m_ctx, logical->getPrimitiveSizeInBits());
+            llvm::Value* bits = int_type == m_defaultIntT ? raw : m_builder.CreateTrunc(raw, int_type);
+            return m_builder.CreateBitCast(bits, logical);
+        }
+        if (logical->isIntegerTy()) {
+            return m_builder.CreateTrunc(raw, logical);
+        }
+        return m_builder.CreateIntToPtr(raw, m_defaultPointerT);
+    }
+
+    llvm::Value* llvm_transpiler::load_register(const u8 index, std::string_view istr_name) {
+        llvm::Value* raw = m_builder.CreateLoad(m_defaultIntT, m_registerFrame[index], istr_name);
+        return coerce_from_storage(raw, m_types[index]);
     }
 
     llvm::StoreInst* llvm_transpiler::make_store(const u8 index, llvm::Value* rhs, llvm::Type* type) {
         if (type) {
             m_types[index] = type;
         }
-        return m_builder.CreateStore(rhs, m_registerFrame[index]);
+        return m_builder.CreateStore(coerce_to_storage(rhs), m_registerFrame[index]);
     }
 
     llvm::StoreInst* llvm_transpiler::make_binary(const Instruction& istr, std::function<llvm::Value*(llvm::Value*, llvm::Value*)> binary_op, llvm::Type* dest_type, std::string_view istr_id) {

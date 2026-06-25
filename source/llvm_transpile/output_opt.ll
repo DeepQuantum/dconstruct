@@ -20,8 +20,8 @@ define i64 @wait-equip-gas-mask(i64 %arg_0, i64 %arg_1, i64 %arg_2) local_unname
 bb0:
   %__CallFf_11___call = tail call i64 @new-boxed-value(i64 1, i64 1)
   %__CallFf_15___call = tail call i64 @fact-set(i64 %arg_0, i64 7671589888336862994, i64 %__CallFf_11___call)
-  %__Call_19___call71 = tail call i64 @"is-script-running?"(i64 6150028017864311825)
-  %0 = trunc i64 %__Call_19___call71 to i1
+  %__Call_19___call51 = tail call i64 @"is-script-running?"(i64 6150028017864311825)
+  %0 = trunc i64 %__Call_19___call51 to i1
   br i1 %0, label %bb3, label %bb2
 
 bb2:                                              ; preds = %bb0, %bb2
@@ -45,8 +45,8 @@ bb5:                                              ; preds = %bb3
   br label %bb6.preheader
 
 bb6.preheader:                                    ; preds = %bb4, %bb5
-  %__Call_56___call74 = tail call i64 @"is-script-running?"(i64 6150028017864311825)
-  %2 = trunc i64 %__Call_56___call74 to i1
+  %__Call_56___call52 = tail call i64 @"is-script-running?"(i64 6150028017864311825)
+  %2 = trunc i64 %__Call_56___call52 to i1
   br i1 %2, label %bb8, label %bb7
 
 bb7:                                              ; preds = %bb6.preheader, %bb7
@@ -84,7 +84,8 @@ declare !dcvm.sid_distance !6 i64 @internal-put-on-gas-mask(i64, i64) local_unna
 ; Function Attrs: mustprogress nosync nounwind willreturn
 declare !dcvm.sid_distance !7 i64 @get-gas-mask(i64) local_unnamed_addr #1
 
-define i64 @internal-put-on-gas-mask.1(i64 %arg_0, i64 %arg_1) local_unnamed_addr {
+; Function Attrs: nosync nounwind
+define i64 @internal-put-on-gas-mask.1(i64 %arg_0, i64 %arg_1) local_unnamed_addr #0 {
 bb0:
   %__CallFf_3___call = tail call i64 @wait-one-frame()
   %__CallFf_8___call = tail call i64 @get-gas-mask-setting-id(i64 %arg_0)
@@ -92,47 +93,36 @@ bb0:
   %0 = inttoptr i64 %__CallFf_12___call to ptr
   %__IAddImm_17__op = getelementptr i8, ptr %0, i64 56
   %__LoadU8_18___load = load i8, ptr %__IAddImm_17__op, align 1
-  %r50.sroa.0.0.insert.ext94 = zext i8 %__LoadU8_18___load to i64
-  %__Call_21___call = tail call i64 @wait-until-in-valid-gas-mask-state(i64 %arg_0, i64 %r50.sroa.0.0.insert.ext94)
+  %__LoadU8_18___ext = zext i8 %__LoadU8_18___load to i64
+  %__Call_21___call = tail call i64 @wait-until-in-valid-gas-mask-state(i64 %arg_0, i64 %__LoadU8_18___ext)
   %__IEqual_24__op = icmp eq i64 %arg_1, 0
-  %extract.t503 = trunc i64 %arg_1 to i32
-  %extract505 = lshr i64 %arg_1, 32
-  %extract.t506 = trunc nuw i64 %extract505 to i32
   br i1 %__IEqual_24__op, label %bb1, label %bb3
 
 bb1:                                              ; preds = %bb0
   %__IAddImm_29__op = getelementptr i8, ptr %0, i64 40
   %__LoadU64_30___load = load i64, ptr %__IAddImm_29__op, align 4
   %__CallFf_48___call = tail call i64 @spawn-object(i64 %__LoadU64_30___load, i64 267125575217391726, i64 0, i64 0, i64 1, i64 0, i64 0, i64 0, i64 0)
-  %extract.t = trunc i64 %__CallFf_48___call to i32
-  %extract = lshr i64 %__CallFf_48___call, 32
-  %extract.t504 = trunc nuw i64 %extract to i32
   br label %bb3
 
 bb3:                                              ; preds = %bb0, %bb1
-  %arg_1.sink502.off0 = phi i32 [ %extract.t, %bb1 ], [ %extract.t503, %bb0 ]
-  %arg_1.sink502.off32 = phi i32 [ %extract.t504, %bb1 ], [ %extract.t506, %bb0 ]
-  %r1.sroa.13.0.insert.ext374 = zext i32 %arg_1.sink502.off32 to i64
-  %r1.sroa.13.0.insert.shift375 = shl nuw i64 %r1.sroa.13.0.insert.ext374, 32
-  %r1.sroa.0.0.insert.ext343 = zext i32 %arg_1.sink502.off0 to i64
-  %r1.sroa.0.0.insert.insert345 = or disjoint i64 %r1.sroa.13.0.insert.shift375, %r1.sroa.0.0.insert.ext343
-  %__CallFf_58___call = tail call i64 @set-high-contrast-mode-type(i64 %r1.sroa.0.0.insert.insert345, i64 6)
+  %r1.0 = phi i64 [ %__CallFf_48___call, %bb1 ], [ %arg_1, %bb0 ]
+  %__CallFf_58___call = tail call i64 @set-high-contrast-mode-type(i64 %r1.0, i64 6)
   %__CallFf_62___call = tail call i64 @"is-player?"(i64 %arg_0)
   %__BranchIfNot_63___bool.not = icmp eq i64 %__CallFf_62___call, 0
   br i1 %__BranchIfNot_63___bool.not, label %bb5, label %bb4
 
 bb4:                                              ; preds = %bb3
-  %__CallFf_69___call = tail call i64 @set-instance-flag-hero(i64 %r1.sroa.0.0.insert.insert345, i64 1)
-  %__CallFf_75___call = tail call i64 @set-show-in-flashlight-flag(i64 %r1.sroa.0.0.insert.insert345, i64 0)
+  %__CallFf_69___call = tail call i64 @set-instance-flag-hero(i64 %r1.0, i64 1)
+  %__CallFf_75___call = tail call i64 @set-show-in-flashlight-flag(i64 %r1.0, i64 0)
   br label %bb6
 
 bb5:                                              ; preds = %bb3
-  %__CallFf_82___call = tail call i64 @set-shadow-casting-from-npc-flashlight(i64 %r1.sroa.0.0.insert.insert345, i64 0)
+  %__CallFf_82___call = tail call i64 @set-shadow-casting-from-npc-flashlight(i64 %r1.0, i64 0)
   br label %bb6
 
 bb6:                                              ; preds = %bb5, %bb4
-  %__CallFf_88___call = tail call i64 @set-gas-mask(i64 %arg_0, i64 %r1.sroa.0.0.insert.insert345)
-  %__CallFf_94___call = tail call i64 @set-visible(i64 %r1.sroa.0.0.insert.insert345, i64 0)
+  %__CallFf_88___call = tail call i64 @set-gas-mask(i64 %arg_0, i64 %r1.0)
+  %__CallFf_94___call = tail call i64 @set-visible(i64 %r1.0, i64 0)
   %__CallFf_98___call = tail call i64 @"is-player?"(i64 %arg_0)
   %1 = trunc i64 %__CallFf_98___call to i1
   br i1 %1, label %bb9, label %bb7
@@ -142,39 +132,31 @@ bb7:                                              ; preds = %bb6
   br label %bb9
 
 bb9:                                              ; preds = %bb6, %bb7
-  %__CallFf_114___call = tail call i64 @attach(i64 %r1.sroa.0.0.insert.insert345, i64 %arg_0, i64 8667864169316382944, float 0.000000e+00)
+  %__CallFf_114___call = tail call i64 @attach(i64 %r1.0, i64 %arg_0, i64 8667864169316382944, float 0.000000e+00)
   %__CallFf_123___call = tail call i64 @new-boxed-value(i64 6, float 0x3FD3333340000000)
   %__CallFf_127___call = tail call i64 @send-event(i64 6817768622307059015, i64 %arg_0, i64 %__CallFf_123___call)
-  %r3.sroa.30.0.extract.shift472 = and i64 ptrtoint (ptr @animate_ to i64), -256
   %__IAddImm_132__op = getelementptr i8, ptr %0, i64 16
   %__LoadU64_133___load = load i64, ptr %__IAddImm_132__op, align 4
   %__CallFf_143___call = tail call i64 @"#%alloc-array"(i64 8534565298598421705, i64 16, i64 0, i64 1)
-  %r3.sroa.0.0.insert.ext = zext i8 ptrtoint (ptr @animate_ to i8) to i64
-  %r3.sroa.0.0.insert.insert = or disjoint i64 %r3.sroa.30.0.extract.shift472, %r3.sroa.0.0.insert.ext
-  %2 = inttoptr i64 %r3.sroa.0.0.insert.insert to ptr
-  %__CallFf_149___call = tail call i64 %2(i64 %r1.sroa.0.0.insert.insert345, i64 %__LoadU64_133___load, i64 %__CallFf_143___call)
-  %r3.sroa.30.0.extract.shift474 = and i64 ptrtoint (ptr @gesture_ to i64), -256
-  %r3.sroa.0.0.insert.ext435 = zext i8 ptrtoint (ptr @gesture_ to i8) to i64
-  %r3.sroa.0.0.insert.insert437 = or disjoint i64 %r3.sroa.30.0.extract.shift474, %r3.sroa.0.0.insert.ext435
-  %3 = inttoptr i64 %r3.sroa.0.0.insert.insert437 to ptr
+  %__CallFf_149___call = tail call i64 @animate_(i64 %r1.0, i64 %__LoadU64_133___load, i64 %__CallFf_143___call)
   br label %bb10
 
 bb10:                                             ; preds = %bb11, %bb9
   %__LoadU64_154___load = load i64, ptr %0, align 4
   %__CallFf_156___call = tail call i64 @alloc-gesture-play-params()
   %__IAddImm_158__op = add i64 %__CallFf_156___call, 33
-  %4 = inttoptr i64 %__IAddImm_158__op to ptr
-  store i8 1, ptr %4, align 1
+  %2 = inttoptr i64 %__IAddImm_158__op to ptr
+  store i8 1, ptr %2, align 1
   %__IAddImm_162__op = add i64 %__CallFf_156___call, 36
-  %5 = inttoptr i64 %__IAddImm_162__op to ptr
-  store i32 19, ptr %5, align 4
+  %3 = inttoptr i64 %__IAddImm_162__op to ptr
+  store i32 19, ptr %3, align 4
   %__IAddImm_166__op = add i64 %__CallFf_156___call, 32
-  %6 = inttoptr i64 %__IAddImm_166__op to ptr
-  store i8 1, ptr %6, align 1
+  %4 = inttoptr i64 %__IAddImm_166__op to ptr
+  store i8 1, ptr %4, align 1
   %__IAddImm_170__op = add i64 %__CallFf_156___call, 34
-  %7 = inttoptr i64 %__IAddImm_170__op to ptr
-  store i8 1, ptr %7, align 1
-  %__CallFf_178___call = tail call i64 %3(i64 %arg_0, i64 %__LoadU64_154___load, i64 %__CallFf_156___call)
+  %5 = inttoptr i64 %__IAddImm_170__op to ptr
+  store i8 1, ptr %5, align 1
+  %__CallFf_178___call = tail call i64 @gesture_(i64 %arg_0, i64 %__LoadU64_154___load, i64 %__CallFf_156___call)
   %__IEqual_180__op.not = icmp eq i64 %__CallFf_178___call, 0
   br i1 %__IEqual_180__op.not, label %bb12, label %bb11
 
@@ -186,7 +168,7 @@ bb12:                                             ; preds = %bb10
   %__IAddImm_190__op = getelementptr i8, ptr %0, i64 24
   %__LoadU64_191___load = load i64, ptr %__IAddImm_190__op, align 4
   %__CallFf_201___call = tail call i64 @"#%alloc-array"(i64 8534565298598421705, i64 16, i64 0, i64 1)
-  %__CallFf_207___call = tail call i64 %2(i64 %r1.sroa.0.0.insert.insert345, i64 %__LoadU64_191___load, i64 %__CallFf_201___call)
+  %__CallFf_207___call = tail call i64 @animate_(i64 %r1.0, i64 %__LoadU64_191___load, i64 %__CallFf_201___call)
   ret i64 %__CallFf_207___call
 }
 
@@ -227,25 +209,23 @@ declare !dcvm.sid_distance !18 i64 @set-visible(i64, i64) local_unnamed_addr #1
 declare !dcvm.sid_distance !19 i64 @attach(i64, i64, i64, float) local_unnamed_addr #1
 
 ; Function Attrs: mustprogress nosync nounwind willreturn
-declare !dcvm.sid_distance !20 i64 @animate_(i64, i64, i64) #1
+declare !dcvm.sid_distance !20 i64 @animate_(i64, i64, i64) local_unnamed_addr #1
 
 ; Function Attrs: mustprogress nosync nounwind willreturn
 declare !dcvm.sid_distance !21 i64 @"#%alloc-array"(i64, i64, i64, i64) local_unnamed_addr #1
 
 ; Function Attrs: mustprogress nosync nounwind willreturn
-declare !dcvm.sid_distance !22 i64 @gesture_(i64, i64, i64) #1
+declare !dcvm.sid_distance !22 i64 @gesture_(i64, i64, i64) local_unnamed_addr #1
 
 ; Function Attrs: mustprogress nosync nounwind willreturn
 declare !dcvm.sid_distance !23 i64 @alloc-gesture-play-params() local_unnamed_addr #1
 
-define i64 @internal-put-on-gas-mask-immediately.2(i64 %arg_0, i64 %arg_1) local_unnamed_addr {
+; Function Attrs: mustprogress nosync nounwind willreturn
+define i64 @internal-put-on-gas-mask-immediately.2(i64 %arg_0, i64 %arg_1) local_unnamed_addr #1 {
 bb0:
   %__CallFf_6___call = tail call i64 @get-gas-mask-setting-id(i64 %arg_0)
   %__CallFf_10___call = tail call i64 @lookup-symbol(i64 %__CallFf_6___call, i64 3455792245619945009)
   %__IEqual_13__op = icmp eq i64 %arg_1, 0
-  %extract.t368 = trunc i64 %arg_1 to i32
-  %extract370 = lshr i64 %arg_1, 32
-  %extract.t371 = trunc nuw i64 %extract370 to i32
   br i1 %__IEqual_13__op, label %bb1, label %bb3
 
 bb1:                                              ; preds = %bb0
@@ -253,20 +233,12 @@ bb1:                                              ; preds = %bb0
   %__IAddImm_18__op = getelementptr i8, ptr %0, i64 40
   %__LoadU64_19___load = load i64, ptr %__IAddImm_18__op, align 4
   %__CallFf_37___call = tail call i64 @spawn-object(i64 %__LoadU64_19___load, i64 267125575217391726, i64 0, i64 0, i64 1, i64 0, i64 0, i64 0, i64 0)
-  %extract.t = trunc i64 %__CallFf_37___call to i32
-  %extract = lshr i64 %__CallFf_37___call, 32
-  %extract.t369 = trunc nuw i64 %extract to i32
   br label %bb3
 
 bb3:                                              ; preds = %bb0, %bb1
-  %arg_1.sink367.off0 = phi i32 [ %extract.t, %bb1 ], [ %extract.t368, %bb0 ]
-  %arg_1.sink367.off32 = phi i32 [ %extract.t369, %bb1 ], [ %extract.t371, %bb0 ]
-  %r1.sroa.10.0.insert.ext296 = zext i32 %arg_1.sink367.off32 to i64
-  %r1.sroa.10.0.insert.shift297 = shl nuw i64 %r1.sroa.10.0.insert.ext296, 32
-  %r1.sroa.0.0.insert.ext274 = zext i32 %arg_1.sink367.off0 to i64
-  %r1.sroa.0.0.insert.insert276 = or disjoint i64 %r1.sroa.10.0.insert.shift297, %r1.sroa.0.0.insert.ext274
-  %__CallFf_47___call = tail call i64 @set-high-contrast-mode-type(i64 %r1.sroa.0.0.insert.insert276, i64 6)
-  %__CallFf_53___call = tail call i64 @set-gas-mask(i64 %arg_0, i64 %r1.sroa.0.0.insert.insert276)
+  %r1.0 = phi i64 [ %__CallFf_37___call, %bb1 ], [ %arg_1, %bb0 ]
+  %__CallFf_47___call = tail call i64 @set-high-contrast-mode-type(i64 %r1.0, i64 6)
+  %__CallFf_53___call = tail call i64 @set-gas-mask(i64 %arg_0, i64 %r1.0)
   %__CallFf_57___call = tail call i64 @"is-player?"(i64 %arg_0)
   %__BranchIfNot_58___bool.not = icmp eq i64 %__CallFf_57___call, 0
   br i1 %__BranchIfNot_58___bool.not, label %bb6, label %bb4
@@ -274,7 +246,7 @@ bb3:                                              ; preds = %bb0, %bb1
 bb4:                                              ; preds = %bb3
   %__CallFf_67___call = tail call i64 @new-boxed-value(i64 6, float 0.000000e+00)
   %__CallFf_71___call = tail call i64 (i64, i64, ...) @send-event(i64 6817768622307059015, i64 %arg_0, i64 %__CallFf_67___call)
-  %__CallFf_77___call = tail call i64 @set-instance-flag-hero(i64 %r1.sroa.0.0.insert.insert276, i64 1)
+  %__CallFf_77___call = tail call i64 @set-instance-flag-hero(i64 %r1.0, i64 1)
   br label %bb6
 
 bb6:                                              ; preds = %bb3, %bb4
@@ -284,15 +256,14 @@ bb6:                                              ; preds = %bb3, %bb4
   br i1 %__BranchIfNot_90___bool.not, label %bb8, label %bb7
 
 bb7:                                              ; preds = %bb6
-  %__CallFf_96___call = tail call i64 @set-show-in-flashlight-flag(i64 %r1.sroa.0.0.insert.insert276, i64 0)
+  %__CallFf_96___call = tail call i64 @set-show-in-flashlight-flag(i64 %r1.0, i64 0)
   br label %bb9
 
 bb8:                                              ; preds = %bb6
-  %__CallFf_103___call = tail call i64 @set-shadow-casting-from-npc-flashlight(i64 %r1.sroa.0.0.insert.insert276, i64 0)
+  %__CallFf_103___call = tail call i64 @set-shadow-casting-from-npc-flashlight(i64 %r1.0, i64 0)
   br label %bb9
 
 bb9:                                              ; preds = %bb8, %bb7
-  %r3.sroa.19.0.extract.shift355 = and i64 ptrtoint (ptr @animate_ to i64), -256
   %1 = inttoptr i64 %__CallFf_10___call to ptr
   %__IAddImm_108__op = getelementptr i8, ptr %1, i64 24
   %__LoadU64_109___load = load i64, ptr %__IAddImm_108__op, align 4
@@ -311,18 +282,13 @@ bb9:                                              ; preds = %bb8, %bb7
   store i8 %__LoadPointer_121___trunc, ptr %__LoadPointer_133___load, align 1
   %__IAddImm_134__op = add i64 %arg_0, 8
   %4 = inttoptr i64 %__IAddImm_134__op to ptr
-  store i32 0, ptr %4, align 4
-  %__StorePointer_136___addr.sroa_idx = getelementptr inbounds nuw i8, ptr %4, i64 4
-  store i32 0, ptr %__StorePointer_136___addr.sroa_idx, align 4
+  store i64 0, ptr %4, align 4
   %__LoadPointer_138___load = load ptr, ptr %2, align 8
   store i8 %__LoadPointer_121___trunc, ptr %__LoadPointer_138___load, align 1
   %__LoadPointer_142___load = load ptr, ptr %3, align 8
   store i8 %__LoadPointer_121___trunc, ptr %__LoadPointer_142___load, align 1
   store i8 1, ptr %4, align 4
-  %r3.sroa.0.0.insert.ext = zext i8 ptrtoint (ptr @animate_ to i8) to i64
-  %r3.sroa.0.0.insert.insert = or disjoint i64 %r3.sroa.19.0.extract.shift355, %r3.sroa.0.0.insert.ext
-  %5 = inttoptr i64 %r3.sroa.0.0.insert.insert to ptr
-  %__CallFf_151___call = tail call i64 %5(i64 %r1.sroa.0.0.insert.insert276, i64 %__LoadU64_109___load, i64 %__CallFf_119___call)
+  %__CallFf_151___call = tail call i64 @animate_(i64 %r1.0, i64 %__LoadU64_109___load, i64 %__CallFf_119___call)
   ret i64 %__CallFf_151___call
 }
 
@@ -360,13 +326,13 @@ bb4:                                              ; preds = %bb2
 
 bb5:                                              ; preds = %bb4
   %__CallFf_26___call = tail call i64 @player-force-crouch()
-  %__CallFf_28___call244 = tail call i64 @"player-is-crouched?"()
-  %2 = trunc i64 %__CallFf_28___call244 to i1
+  %__CallFf_28___call66 = tail call i64 @"player-is-crouched?"()
+  %2 = trunc i64 %__CallFf_28___call66 to i1
   br i1 %2, label %bb12.preheader, label %bb7
 
 bb12.preheader:                                   ; preds = %bb7, %bb11, %bb5, %bb9
-  %__CallFf_50___call251 = tail call i64 @"player-in-state?"(i64 4007104907368024212)
-  %3 = trunc i64 %__CallFf_50___call251 to i1
+  %__CallFf_50___call69 = tail call i64 @"player-in-state?"(i64 4007104907368024212)
+  %3 = trunc i64 %__CallFf_50___call69 to i1
   br i1 %3, label %bb14, label %bb13
 
 bb7:                                              ; preds = %bb5, %bb7
@@ -377,9 +343,9 @@ bb7:                                              ; preds = %bb5, %bb7
 
 bb9:                                              ; preds = %bb4
   %__CallFf_36___call = tail call i64 @player-force-stand()
-  %__CallFf_39___call247 = tail call i64 @"player-is-crouched?"()
-  %__Call_41___call248 = tail call i64 @"!"(i64 %__CallFf_39___call247)
-  %5 = trunc i64 %__Call_41___call248 to i1
+  %__CallFf_39___call67 = tail call i64 @"player-is-crouched?"()
+  %__Call_41___call68 = tail call i64 @"!"(i64 %__CallFf_39___call67)
+  %5 = trunc i64 %__Call_41___call68 to i1
   br i1 %5, label %bb12.preheader, label %bb11
 
 bb11:                                             ; preds = %bb9, %bb11
@@ -398,16 +364,13 @@ bb13:                                             ; preds = %bb12.preheader, %bb
 bb14:                                             ; preds = %bb13, %bb12.preheader
   %__CallFf_61___call = tail call i64 @wait-holster-player-weapon(i64 0, float 1.000000e+00)
   %__CallFf_67___call = tail call i64 @holster-player-weapon-instantly(float 0x3FC99999A0000000, i64 0)
-  %r2.sroa.0.0.extract.trunc179 = trunc i64 %__CallFf_67___call to i8
-  %r2.sroa.39.0.extract.shift235 = lshr i64 %__CallFf_67___call, 8
-  %r2.sroa.39.0.extract.trunc236 = trunc nuw i64 %r2.sroa.39.0.extract.shift235 to i56
   br label %bb21
 
 bb15:                                             ; preds = %bb0
   %__CallFf_80___call = tail call i64 @wait-npc-holster-weapon(i64 %arg_0, i64 0, i64 1, float -1.000000e+00, i64 0)
-  %__CallFf_84___call254 = tail call i64 @"npc-has-weapon-in-hand?"(i64 %arg_0)
-  %__BranchIfNot_85___bool.not256 = icmp eq i64 %__CallFf_84___call254, 0
-  br i1 %__BranchIfNot_85___bool.not256, label %bb18, label %bb17
+  %__CallFf_84___call70 = tail call i64 @"npc-has-weapon-in-hand?"(i64 %arg_0)
+  %__BranchIfNot_85___bool.not71 = icmp eq i64 %__CallFf_84___call70, 0
+  br i1 %__BranchIfNot_85___bool.not71, label %bb18, label %bb17
 
 bb17:                                             ; preds = %bb15, %bb17
   %__CallFf_87___call = tail call i64 @wait-one-frame()
@@ -421,19 +384,11 @@ bb18:                                             ; preds = %bb17, %bb15
 
 bb19:                                             ; preds = %bb18
   %__CallFf_96___call = tail call i64 @wait-npc-set-demeanor(i64 %arg_0, i64 3)
-  %r2.sroa.0.0.extract.trunc182 = trunc i64 %__CallFf_96___call to i8
-  %r2.sroa.39.0.extract.shift241 = lshr i64 %__CallFf_96___call, 8
-  %r2.sroa.39.0.extract.trunc242 = trunc nuw i64 %r2.sroa.39.0.extract.shift241 to i56
   br label %bb21
 
 bb21:                                             ; preds = %bb18, %bb19, %bb14
-  %r2.sroa.0.sroa.0.0.r2.sroa.0.sroa.0.0.r2.sroa.0.sroa.0.0.r2.sroa.0.0.r2.0.__Return_99___retval = phi i8 [ %r2.sroa.0.0.extract.trunc179, %bb14 ], [ %r2.sroa.0.0.extract.trunc182, %bb19 ], [ 0, %bb18 ]
-  %r2.sroa.39.sroa.0.0 = phi i56 [ %r2.sroa.39.0.extract.trunc236, %bb14 ], [ %r2.sroa.39.0.extract.trunc242, %bb19 ], [ 0, %bb18 ]
-  %r2.sroa.39.0.insert.ext = zext i56 %r2.sroa.39.sroa.0.0 to i64
-  %r2.sroa.39.0.insert.shift = shl nuw i64 %r2.sroa.39.0.insert.ext, 8
-  %r2.sroa.0.0.insert.ext = zext i8 %r2.sroa.0.sroa.0.0.r2.sroa.0.sroa.0.0.r2.sroa.0.sroa.0.0.r2.sroa.0.0.r2.0.__Return_99___retval to i64
-  %r2.sroa.0.0.insert.insert = or disjoint i64 %r2.sroa.39.0.insert.shift, %r2.sroa.0.0.insert.ext
-  ret i64 %r2.sroa.0.0.insert.insert
+  %r2.0 = phi i64 [ %__CallFf_67___call, %bb14 ], [ %__CallFf_96___call, %bb19 ], [ 0, %bb18 ]
+  ret i64 %r2.0
 }
 
 ; Function Attrs: mustprogress nosync nounwind willreturn
@@ -553,29 +508,25 @@ bb0:
   %__LoadU64_31___load = load i64, ptr %__IAddImm_30__op, align 4
   %__CallFf_41___call = tail call i64 @"#%alloc-array"(i64 8534565298598421705, i64 16, i64 0, i64 1)
   %__CallFf_47___call = tail call i64 @animate_(i64 %__CallFf_16___call, i64 %__LoadU64_31___load, i64 %__CallFf_41___call)
-  %r4.sroa.13.0.extract.shift53 = and i64 ptrtoint (ptr @gesture_ to i64), -256
   %__IAddImm_52__op = getelementptr i8, ptr %0, i64 8
-  %r4.sroa.0.0.insert.ext = zext i8 ptrtoint (ptr @gesture_ to i8) to i64
-  %r4.sroa.0.0.insert.insert = or disjoint i64 %r4.sroa.13.0.extract.shift53, %r4.sroa.0.0.insert.ext
-  %1 = inttoptr i64 %r4.sroa.0.0.insert.insert to ptr
   br label %bb1
 
 bb1:                                              ; preds = %bb2, %bb0
   %__LoadU64_53___load = load i64, ptr %__IAddImm_52__op, align 4
   %__CallFf_55___call = tail call i64 @alloc-gesture-play-params()
   %__IAddImm_57__op = add i64 %__CallFf_55___call, 33
-  %2 = inttoptr i64 %__IAddImm_57__op to ptr
-  store i8 1, ptr %2, align 1
+  %1 = inttoptr i64 %__IAddImm_57__op to ptr
+  store i8 1, ptr %1, align 1
   %__IAddImm_61__op = add i64 %__CallFf_55___call, 36
-  %3 = inttoptr i64 %__IAddImm_61__op to ptr
-  store i32 19, ptr %3, align 4
+  %2 = inttoptr i64 %__IAddImm_61__op to ptr
+  store i32 19, ptr %2, align 4
   %__IAddImm_65__op = add i64 %__CallFf_55___call, 32
-  %4 = inttoptr i64 %__IAddImm_65__op to ptr
-  store i8 1, ptr %4, align 1
+  %3 = inttoptr i64 %__IAddImm_65__op to ptr
+  store i8 1, ptr %3, align 1
   %__IAddImm_69__op = add i64 %__CallFf_55___call, 34
-  %5 = inttoptr i64 %__IAddImm_69__op to ptr
-  store i8 1, ptr %5, align 1
-  %__CallFf_77___call = tail call i64 %1(i64 %arg_0, i64 %__LoadU64_53___load, i64 %__CallFf_55___call) #2
+  %4 = inttoptr i64 %__IAddImm_69__op to ptr
+  store i8 1, ptr %4, align 1
+  %__CallFf_77___call = tail call i64 @gesture_(i64 %arg_0, i64 %__LoadU64_53___load, i64 %__CallFf_55___call)
   %__IEqual_79__op.not = icmp eq i64 %__CallFf_77___call, 0
   br i1 %__IEqual_79__op.not, label %bb3, label %bb2
 
@@ -592,8 +543,8 @@ bb4:                                              ; preds = %bb3
   br label %bb6
 
 bb6:                                              ; preds = %bb3, %bb4
-  %storemerge = phi i64 [ %__CallFf_90___call, %bb4 ], [ 0, %bb3 ]
-  ret i64 %storemerge
+  %r4.0 = phi i64 [ %__CallFf_90___call, %bb4 ], [ 0, %bb3 ]
+  ret i64 %r4.0
 }
 
 ; Function Attrs: nosync nounwind
@@ -601,8 +552,8 @@ define i64 @wait-remove-gas-mask(i64 %arg_0, i64 %arg_1, i64 %arg_2) local_unnam
 bb0:
   %__CallFf_11___call = tail call i64 @new-boxed-value(i64 1, i64 0)
   %__CallFf_15___call = tail call i64 @fact-set(i64 %arg_0, i64 7671589888336862994, i64 %__CallFf_11___call)
-  %__Call_19___call48 = tail call i64 @"is-script-running?"(i64 6150028017864311825)
-  %0 = trunc i64 %__Call_19___call48 to i1
+  %__Call_19___call41 = tail call i64 @"is-script-running?"(i64 6150028017864311825)
+  %0 = trunc i64 %__Call_19___call41 to i1
   br i1 %0, label %bb3, label %bb2
 
 bb2:                                              ; preds = %bb0, %bb2
@@ -632,13 +583,12 @@ bb5:                                              ; preds = %bb3
   br label %bb6
 
 bb6:                                              ; preds = %bb1.i, %bb4, %bb5
-  %storemerge = phi i64 [ %__Call_52___call, %bb5 ], [ %__CallFf_17___call.i, %bb1.i ], [ 0, %bb4 ]
-  ret i64 %storemerge
+  %r3.0 = phi i64 [ %__Call_52___call, %bb5 ], [ %__CallFf_17___call.i, %bb1.i ], [ 0, %bb4 ]
+  ret i64 %r3.0
 }
 
 attributes #0 = { nosync nounwind }
 attributes #1 = { mustprogress nosync nounwind willreturn }
-attributes #2 = { nounwind }
 
 !0 = !{!"sid", i64 -2210386714833194546, !"distance", !"far"}
 !1 = !{!"sid", i64 3684810824690217768, !"distance", !"far"}

@@ -12,6 +12,7 @@ enum NodeType : unsigned {
     RET,
     CALL,
     CALLFF,
+    SELECT,
 };
 } // namespace DCVMISD
 
@@ -27,6 +28,12 @@ public:
                            EVT VT) const override;
 
     SDValue LowerOperation(SDValue Op, SelectionDAG &DAG) const override;
+
+    SDValue LowerSELECT_CC(SDValue Op, SelectionDAG &DAG) const;
+
+    MachineBasicBlock *
+    EmitInstrWithCustomInserter(MachineInstr &MI,
+                                MachineBasicBlock *MBB) const override;
 
     SDValue
     LowerFormalArguments(SDValue Chain, CallingConv::ID CallConv, bool IsVarArg,

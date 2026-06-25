@@ -1,8 +1,11 @@
 #include "DCVMISelLowering.h"
 #include "DCVMSubtarget.h"
 #include "llvm/CodeGen/CallingConvLower.h"
+#include "llvm/CodeGen/MachineBasicBlock.h"
 #include "llvm/CodeGen/MachineFunction.h"
+#include "llvm/CodeGen/MachineInstrBuilder.h"
 #include "llvm/CodeGen/SelectionDAG.h"
+#include "llvm/CodeGen/TargetInstrInfo.h"
 #include "llvm/CodeGen/TargetRegisterInfo.h"
 #include "llvm/IR/Function.h"
 #include "llvm/IR/InstrTypes.h"
@@ -28,6 +31,27 @@ DCVMTargetLowering::DCVMTargetLowering(const TargetMachine &TM,
     setOperationAction(ISD::ABS, MVT::i64, Legal);
     setOperationAction(ISD::FABS, MVT::f32, Legal);
 
+    setOperationAction(ISD::SINT_TO_FP, MVT::i64, Legal);
+    setOperationAction(ISD::SINT_TO_FP, MVT::f32, Legal);
+    setOperationAction(ISD::FP_TO_SINT, MVT::i64, Legal);
+    setOperationAction(ISD::FP_TO_SINT, MVT::f32, Legal);
+
+    setOperationAction(ISD::BRCOND, MVT::Other, Legal);
+    setOperationAction(ISD::BR_CC, MVT::i64, Expand);
+    setOperationAction(ISD::BR_CC, MVT::f32, Expand);
+
+    setOperationAction(ISD::SELECT, MVT::i64, Expand);
+    setOperationAction(ISD::SELECT, MVT::f32, Expand);
+    setOperationAction(ISD::SELECT_CC, MVT::i64, Custom);
+    setOperationAction(ISD::SELECT_CC, MVT::f32, Custom);
+
+    for (const MVT MemVT : {MVT::i8, MVT::i16, MVT::i32}) {
+        setLoadExtAction(ISD::ZEXTLOAD, MVT::i64, MemVT, Legal);
+        setLoadExtAction(ISD::SEXTLOAD, MVT::i64, MemVT, Legal);
+        setLoadExtAction(ISD::EXTLOAD, MVT::i64, MemVT, Legal);
+        setTruncStoreAction(MVT::i64, MemVT, Legal);
+    }
+
     computeRegisterProperties(Subtarget->getRegisterInfo());
 }
 
@@ -45,13 +69,68 @@ const char *DCVMTargetLowering::getTargetNodeName(unsigned Opcode) const {
         return "DCVMISD::CALL";
     case DCVMISD::CALLFF:
         return "DCVMISD::CALLFF";
+    case DCVMISD::SELECT:
+        return "DCVMISD::SELECT";
     default:
         return nullptr;
     }
 }
 
 SDValue DCVMTargetLowering::LowerOperation(SDValue Op, SelectionDAG &DAG) const {
-    llvm_unreachable("DCVMTargetLowering::LowerOperation unimplemented");
+    switch (Op.getOpcode()) {
+    case ISD::SELECT_CC:
+        return LowerSELECT_CC(Op, DAG);
+    default:
+        llvm_unreachable("DCVMTargetLowering::LowerOperation unimplemented");
+    }
+}
+
+SDValue DCVMTargetLowering::LowerSELECT_CC(SDValue Op, SelectionDAG &DAG) const {
+    const SDLoc DL(Op);
+    SDValue LHS = Op.getOperand(0);
+    SDValue RHS = Op.getOperand(1);
+    SDValue TrueV = Op.getOperand(2);
+    SDValue FalseV = Op.getOperand(3);
+    SDValue CC = Op.getOperand(4);
+
+    SDValue Cond = DAG.getNode(ISD::SETCC, DL, MVT::i64, LHS, RHS, CC);
+    return DAG.getNode(DCVMISD::SELECT, DL, Op.getValueType(), Cond, TrueV, FalseV);
+}
+
+MachineBasicBlock *
+DCVMTargetLowering::EmitInstrWithCustomInserter(MachineInstr &MI,
+                                                MachineBasicBlock *BB) const {
+    const TargetInstrInfo &TII = *Subtarget->getInstrInfo();
+    const DebugLoc DL = MI.getDebugLoc();
+    MachineFunction *MF = BB->getParent();
+    const BasicBlock *LLVMBB = BB->getBasicBlock();
+
+    MachineBasicBlock *FalseMBB = MF->CreateMachineBasicBlock(LLVMBB);
+    MachineBasicBlock *SinkMBB = MF->CreateMachineBasicBlock(LLVMBB);
+    MF->insert(++BB->getIterator(), FalseMBB);
+    MF->insert(++FalseMBB->getIterator(), SinkMBB);
+
+    SinkMBB->splice(SinkMBB->begin(), BB, std::next(MachineBasicBlock::iterator(MI)),
+                    BB->end());
+    SinkMBB->transferSuccessorsAndUpdatePHIs(BB);
+
+    BB->addSuccessor(FalseMBB);
+    BB->addSuccessor(SinkMBB);
+    FalseMBB->addSuccessor(SinkMBB);
+
+    BuildMI(BB, DL, TII.get(DCVM::BRANCHIF))
+        .addMBB(SinkMBB)
+        .addReg(MI.getOperand(1).getReg());
+
+    BuildMI(*SinkMBB, SinkMBB->begin(), DL, TII.get(TargetOpcode::PHI),
+            MI.getOperand(0).getReg())
+        .addReg(MI.getOperand(2).getReg())
+        .addMBB(BB)
+        .addReg(MI.getOperand(3).getReg())
+        .addMBB(FalseMBB);
+
+    MI.eraseFromParent();
+    return SinkMBB;
 }
 
 SDValue DCVMTargetLowering::LowerFormalArguments(

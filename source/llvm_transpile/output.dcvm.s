@@ -246,6 +246,67 @@ fabs:
 .Lfunc_end29:
 	.size	fabs, .Lfunc_end29-fabs
 
+	.globl	cast_to_float
+	.type	cast_to_float,@function
+cast_to_float:
+	castfloat	r0, r49
+	ret r0
+.Lfunc_end30:
+	.size	cast_to_float, .Lfunc_end30-cast_to_float
+
+	.globl	cast_to_int
+	.type	cast_to_int,@function
+cast_to_int:
+	castinteger	r0, r49
+	ret r0
+.Lfunc_end31:
+	.size	cast_to_int, .Lfunc_end31-cast_to_int
+
+	.globl	addimm
+	.type	addimm,@function
+addimm:
+	iaddimm r0, r49, 5
+	ret r0
+.Lfunc_end32:
+	.size	addimm, .Lfunc_end32-addimm
+
+	.globl	br_demo
+	.type	br_demo,@function
+br_demo:
+.LBB33_1:
+	branch .LBB33_1
+.Lfunc_end33:
+	.size	br_demo, .Lfunc_end33-br_demo
+
+	.globl	cond_br
+	.type	cond_br,@function
+cond_br:
+	ige	r0, r49, r50
+	branchif .LBB34_2, r0
+	move	r0, r49
+	ret r0
+.LBB34_2:
+	move	r0, r50
+	ret r0
+.Lfunc_end34:
+	.size	cond_br, .Lfunc_end34-cond_br
+
+	.globl	raw_cond
+	.type	raw_cond,@function
+raw_cond:
+	loadu16imm r0, 1
+	opbitand	r0, r49, r0
+	loadu16imm r1, 0
+	ieq	r0, r0, r1
+	branchif .LBB35_2, r0
+	move	r0, r50
+	ret r0
+.LBB35_2:
+	move	r0, r51
+	ret r0
+.Lfunc_end35:
+	.size	raw_cond, .Lfunc_end35-raw_cond
+
 	.globl	lookup_demo
 	.type	lookup_demo,@function
 lookup_demo:
@@ -253,8 +314,8 @@ lookup_demo:
 	ret r0
 lookup_demo_symbol_table:
 	.quad	-6144092013047381999
-.Lfunc_end30:
-	.size	lookup_demo, .Lfunc_end30-lookup_demo
+.Lfunc_end36:
+	.size	lookup_demo, .Lfunc_end36-lookup_demo
 
 	.globl	call_near
 	.type	call_near,@function
@@ -264,8 +325,8 @@ call_near:
 	ret r0
 call_near_symbol_table:
 	.quad	1311693406324658740
-.Lfunc_end31:
-	.size	call_near, .Lfunc_end31-call_near
+.Lfunc_end37:
+	.size	call_near, .Lfunc_end37-call_near
 
 	.globl	call_far
 	.type	call_far,@function
@@ -275,7 +336,22 @@ call_far:
 	ret r0
 call_far_symbol_table:
 	.quad	6230825159313872504
-.Lfunc_end32:
-	.size	call_far, .Lfunc_end32-call_far
+.Lfunc_end38:
+	.size	call_far, .Lfunc_end38-call_far
+
+	.globl	call_shuffle
+	.type	call_shuffle,@function
+call_shuffle:
+	move	r0, r50
+	move	r50, r49
+	lookuppointer r1, 0
+	move	r49, r51
+	move	r51, r0
+	call r0, r1, 3
+	ret r0
+call_shuffle_symbol_table:
+	.quad	-7296787161406465348
+.Lfunc_end39:
+	.size	call_shuffle, .Lfunc_end39-call_shuffle
 
 	.section	".note.GNU-stack","",@progbits

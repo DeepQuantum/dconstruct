@@ -189,6 +189,47 @@ int main() {
         emit_unop("iabs",   [&](llvm::Value* x) { return b.CreateBinaryIntrinsic(llvm::Intrinsic::abs, x, b.getFalse()); });
         emit_funop("fabs",  [&](llvm::Value* x) { return b.CreateUnaryIntrinsic(llvm::Intrinsic::fabs, x); });
 
+        llvm::Function* cast_to_float = llvm::Function::Create(llvm::FunctionType::get(f32t, {i64t}, false), llvm::GlobalValue::ExternalLinkage, "cast_to_float", &dcvm_smoke);
+        b.SetInsertPoint(llvm::BasicBlock::Create(ctx, "entry", cast_to_float));
+        b.CreateRet(b.CreateSIToFP(cast_to_float->getArg(0), f32t));
+
+        llvm::Function* cast_to_int = llvm::Function::Create(llvm::FunctionType::get(i64t, {f32t}, false), llvm::GlobalValue::ExternalLinkage, "cast_to_int", &dcvm_smoke);
+        b.SetInsertPoint(llvm::BasicBlock::Create(ctx, "entry", cast_to_int));
+        b.CreateRet(b.CreateFPToSI(cast_to_int->getArg(0), i64t));
+
+        emit_unop("addimm", [&](llvm::Value* x) { return b.CreateAdd(x, b.getInt64(5)); });
+
+        llvm::Function* br_demo = llvm::Function::Create(unop_ty, llvm::GlobalValue::ExternalLinkage, "br_demo", &dcvm_smoke);
+        llvm::BasicBlock* br_entry = llvm::BasicBlock::Create(ctx, "entry", br_demo);
+        llvm::BasicBlock* br_loop = llvm::BasicBlock::Create(ctx, "loop", br_demo);
+        b.SetInsertPoint(br_entry);
+        b.CreateBr(br_loop);
+        b.SetInsertPoint(br_loop);
+        b.CreateBr(br_loop);
+
+        llvm::Function* cond_br = llvm::Function::Create(binop_ty, llvm::GlobalValue::ExternalLinkage, "cond_br", &dcvm_smoke);
+        llvm::BasicBlock* cb_entry = llvm::BasicBlock::Create(ctx, "entry", cond_br);
+        llvm::BasicBlock* cb_then = llvm::BasicBlock::Create(ctx, "then", cond_br);
+        llvm::BasicBlock* cb_else = llvm::BasicBlock::Create(ctx, "else", cond_br);
+        b.SetInsertPoint(cb_entry);
+        b.CreateCondBr(b.CreateICmpSLT(cond_br->getArg(0), cond_br->getArg(1)), cb_then, cb_else);
+        b.SetInsertPoint(cb_then);
+        b.CreateRet(cond_br->getArg(0));
+        b.SetInsertPoint(cb_else);
+        b.CreateRet(cond_br->getArg(1));
+
+        llvm::FunctionType* tern_ty = llvm::FunctionType::get(i64t, {i64t, i64t, i64t}, false);
+        llvm::Function* raw_cond = llvm::Function::Create(tern_ty, llvm::GlobalValue::ExternalLinkage, "raw_cond", &dcvm_smoke);
+        llvm::BasicBlock* rc_entry = llvm::BasicBlock::Create(ctx, "entry", raw_cond);
+        llvm::BasicBlock* rc_then = llvm::BasicBlock::Create(ctx, "then", raw_cond);
+        llvm::BasicBlock* rc_else = llvm::BasicBlock::Create(ctx, "else", raw_cond);
+        b.SetInsertPoint(rc_entry);
+        b.CreateCondBr(b.CreateTrunc(raw_cond->getArg(0), b.getInt1Ty()), rc_then, rc_else);
+        b.SetInsertPoint(rc_then);
+        b.CreateRet(raw_cond->getArg(1));
+        b.SetInsertPoint(rc_else);
+        b.CreateRet(raw_cond->getArg(2));
+
         llvm::Function* lookup_demo = llvm::Function::Create(iconst_ty, llvm::GlobalValue::ExternalLinkage, "lookup_demo", &dcvm_smoke);
         b.SetInsertPoint(llvm::BasicBlock::Create(ctx, "entry", lookup_demo));
         llvm::Value* demo_fp = b.CreateIntrinsic(llvm::Intrinsic::dcvm_lookup, {b.getInt64(0xAABBCCDDEEFF0011ULL)});
@@ -214,6 +255,18 @@ int main() {
         };
         make_caller("call_near", near_target);
         make_caller("call_far", far_target);
+
+        llvm::FunctionType* call3_ty = llvm::FunctionType::get(i64t, {i64t, i64t, i64t}, false);
+        llvm::Function* target3 = llvm::Function::Create(call3_ty, llvm::GlobalValue::ExternalLinkage, "target3", &dcvm_smoke);
+        target3->setMetadata("dcvm.sid_distance", llvm::MDNode::get(ctx, {
+            llvm::MDString::get(ctx, "sid"),
+            llvm::ConstantAsMetadata::get(b.getInt64(0x9ABC9ABC9ABC9ABCULL)),
+            llvm::MDString::get(ctx, "distance"),
+            llvm::MDString::get(ctx, "near"),
+        }));
+        llvm::Function* call_shuffle = llvm::Function::Create(call3_ty, llvm::GlobalValue::ExternalLinkage, "call_shuffle", &dcvm_smoke);
+        b.SetInsertPoint(llvm::BasicBlock::Create(ctx, "entry", call_shuffle));
+        b.CreateRet(b.CreateCall(target3, {call_shuffle->getArg(2), call_shuffle->getArg(0), call_shuffle->getArg(1)}));
     }
 
     llvm_transpile::lower_calls_to_lookup(dcvm_smoke);

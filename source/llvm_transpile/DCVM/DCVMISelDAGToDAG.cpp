@@ -74,14 +74,23 @@ void DCVMDAGToDAGISel::Select(SDNode *N) {
         return;
     }
     case ISD::INTRINSIC_WO_CHAIN: {
-        if (N->getConstantOperandVal(0) != Intrinsic::dcvm_lookup)
-            break;
-        const uint64_t Sid = cast<ConstantSDNode>(N->getOperand(1))->getZExtValue();
-        const SDValue Idx =
-            CurDAG->getTargetConstant(MFI->internSymbol(Sid), DL, MVT::i64);
-        ReplaceNode(N, CurDAG->getMachineNode(DCVM::LOOKUPPOINTERri, DL,
-                                              N->getValueType(0), Idx));
-        return;
+        const unsigned IID = N->getConstantOperandVal(0);
+        if (IID == Intrinsic::dcvm_lookup) {
+            const uint64_t Sid =
+                cast<ConstantSDNode>(N->getOperand(1))->getZExtValue();
+            const SDValue Idx =
+                CurDAG->getTargetConstant(MFI->internSymbol(Sid), DL, MVT::i64);
+            ReplaceNode(N, CurDAG->getMachineNode(DCVM::LOOKUPPOINTERri, DL,
+                                                  N->getValueType(0), Idx));
+            return;
+        }
+        if (IID == Intrinsic::dcvm_intash) {
+            ReplaceNode(N, CurDAG->getMachineNode(DCVM::INTASHrr, DL, MVT::i64,
+                                                  N->getOperand(1),
+                                                  N->getOperand(2)));
+            return;
+        }
+        break;
     }
     }
 
