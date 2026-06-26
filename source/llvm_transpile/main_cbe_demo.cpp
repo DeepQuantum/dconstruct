@@ -19,8 +19,98 @@
 #include <print>
 #include <string>
 #include <utility>
+#include <vector>
 
 using namespace dconstruct;
+
+[[maybe_unused]] static void dump_cfgs(llvm::Module& module, std::string_view variant) {
+    const std::filesystem::path repo_root = std::filesystem::path(__FILE__).parent_path().parent_path().parent_path();
+    const std::filesystem::path dot_exe = repo_root / "source" / "Graphviz-13.1.0-win64" / "bin" / "dot.exe";
+    const std::filesystem::path cfg_dir = repo_root / "test" / "cfg";
+    std::filesystem::create_directories(cfg_dir);
+
+    for (llvm::Function& llvm_func : module) {
+        if (llvm_func.isDeclaration()) {
+            continue;
+        }
+        std::string safe_name = llvm_func.getName().str();
+        std::ranges::replace_if(safe_name, [](char c) { return std::string_view("/\\:*?\"<>|").contains(c); }, '_');
+        const std::filesystem::path dot_path = cfg_dir / std::format("cfg_{}_{}.dot", safe_name, variant);
+        {
+            std::error_code ec;
+            llvm::raw_fd_ostream cfg_out(dot_path.string(), ec);
+            if (ec) {
+                std::println(stderr, "failed to open {}: {}", dot_path.string(), ec.message());
+                continue;
+            }
+            llvm::DOTFuncInfo cfg_info(&llvm_func);
+            llvm::WriteGraph(cfg_out, &cfg_info);
+        }
+        std::println("wrote {}", dot_path.string());
+
+        const std::filesystem::path svg_path = cfg_dir / std::format("cfg_{}_{}.svg", safe_name, variant);
+        const std::string render_cmd = std::format("\"\"{}\" -Tsvg \"{}\" -o \"{}\"\"", dot_exe.string(), dot_path.string(), svg_path.string());
+        if (std::system(render_cmd.c_str()) != 0) {
+            std::println(stderr, "dot failed to render {}", svg_path.string());
+        } else {
+            std::println("wrote {}", svg_path.string());
+        }
+    }
+}
+
+struct generated_outputs {
+    std::string llvm_unopt;
+    std::string llvm_opt;
+    std::string llvm_lowered;
+    std::string llvm_deduped;
+    std::string dcvm_asm;
+    std::vector<char> dcvm_bytecode;
+};
+
+static generated_outputs generate_outputs(llvm::Module& module) {
+    generated_outputs outputs;
+
+    outputs.llvm_unopt = llvm_transpile::emit_llvm_ir(module);
+    llvm_transpile::optimize_module(module);
+    outputs.llvm_opt = llvm_transpile::emit_llvm_ir(module);
+
+    llvm_transpile::lower_calls_to_lookup(module);
+    outputs.llvm_lowered = llvm_transpile::emit_llvm_ir(module);
+
+    llvm_transpile::optimize_module(module);
+    outputs.llvm_deduped = llvm_transpile::emit_llvm_ir(module);
+
+    outputs.dcvm_asm = llvm_transpile::emit_dcvm_asm(module);
+    outputs.dcvm_bytecode = llvm_transpile::emit_dcvm_bytecode(module);
+
+    return outputs;
+}
+
+static void print_outputs(const generated_outputs& outputs) {
+    const std::filesystem::path out_dir = std::filesystem::path(__FILE__).parent_path();
+
+    const std::array<std::pair<const char*, const std::string*>, 5> text_outputs = {{
+        {"output_unopt.ll", &outputs.llvm_unopt},
+        {"output_opt.ll", &outputs.llvm_opt},
+        {"output_lowered.ll", &outputs.llvm_lowered},
+        {"output_deduped.ll", &outputs.llvm_deduped},
+        {"output.dcvm.s", &outputs.dcvm_asm},
+    }};
+
+    for (const auto& [filename, content] : text_outputs) {
+        const std::filesystem::path out_path = out_dir / filename;
+        std::ofstream out_file(out_path);
+        out_file << *content;
+        out_file.close();
+        std::println("wrote {}", out_path.string());
+    }
+
+    const std::filesystem::path bin_path = out_dir / "output.dcvm.bin";
+    std::ofstream bin_file(bin_path, std::ios::binary);
+    bin_file.write(outputs.dcvm_bytecode.data(), static_cast<std::streamsize>(outputs.dcvm_bytecode.size()));
+    bin_file.close();
+    std::println("wrote {} ({} bytes)", bin_path.string(), outputs.dcvm_bytecode.size());
+}
 
 int main() {
     auto sidbase_result = SIDBase::from_binary("sidbase.bin");
@@ -43,43 +133,6 @@ int main() {
     Disassembler disassembler(&*binfile, &sidbase);
     disassembler.disassemble();
 
-    const auto& funcs = disassembler.get_all_functions();
-
-    const std::filesystem::path repo_root = std::filesystem::path(__FILE__).parent_path().parent_path().parent_path();
-    const std::filesystem::path dot_exe = repo_root / "source" / "Graphviz-13.1.0-win64" / "bin" / "dot.exe";
-    const std::filesystem::path cfg_dir = repo_root / "test" / "cfg";
-    std::filesystem::create_directories(cfg_dir);
-
-    const auto dump_cfgs = [&](std::string_view variant) {
-        for (llvm::Function& llvm_func : module) {
-            if (llvm_func.isDeclaration()) {
-                continue;
-            }
-            std::string safe_name = llvm_func.getName().str();
-            std::ranges::replace_if(safe_name, [](char c) { return std::string_view("/\\:*?\"<>|").contains(c); }, '_');
-            const std::filesystem::path dot_path = cfg_dir / std::format("cfg_{}_{}.dot", safe_name, variant);
-            {
-                std::error_code ec;
-                llvm::raw_fd_ostream cfg_out(dot_path.string(), ec);
-                if (ec) {
-                    std::println(stderr, "failed to open {}: {}", dot_path.string(), ec.message());
-                    continue;
-                }
-                llvm::DOTFuncInfo cfg_info(&llvm_func);
-                llvm::WriteGraph(cfg_out, &cfg_info);
-            }
-            std::println("wrote {}", dot_path.string());
-
-            const std::filesystem::path svg_path = cfg_dir / std::format("cfg_{}_{}.svg", safe_name, variant);
-            const std::string render_cmd = std::format("\"\"{}\" -Tsvg \"{}\" -o \"{}\"\"", dot_exe.string(), dot_path.string(), svg_path.string());
-            if (std::system(render_cmd.c_str()) != 0) {
-                std::println(stderr, "dot failed to render {}", svg_path.string());
-            } else {
-                std::println("wrote {}", svg_path.string());
-            }
-        }
-    };
-
     for (const auto* function : disassembler.get_all_functions()) {
         resstr<llvm::Function*> res = llvm_transpile::transpile_function_to_llvm(module, *function, sidbase);
         if (!res.has_value()) {
@@ -88,254 +141,8 @@ int main() {
         }
     }
 
-   // dump_cfgs("unopt");
-
-    const std::string llvm_unopt = llvm_transpile::emit_llvm_ir(module);
-
-    llvm_transpile::optimize_module(module);
-
-    //dump_cfgs("opt");
-
-    const std::string llvm_opt = llvm_transpile::emit_llvm_ir(module);
-
-    llvm_transpile::lower_calls_to_lookup(module);
-    const std::string llvm_lowered = llvm_transpile::emit_llvm_ir(module);
-
-    llvm_transpile::optimize_module(module);
-    const std::string llvm_deduped = llvm_transpile::emit_llvm_ir(module);
-
-    llvm::Module dcvm_smoke("dcvm_smoke", ctx);
-    {
-        llvm::IRBuilder<> b(ctx);
-        llvm::Type* i64t = b.getInt64Ty();
-        llvm::Type* f32t = b.getFloatTy();
-        llvm::FunctionType* binop_ty = llvm::FunctionType::get(i64t, {i64t, i64t}, false);
-        llvm::FunctionType* unop_ty = llvm::FunctionType::get(i64t, {i64t}, false);
-        llvm::FunctionType* fcmp_ty = llvm::FunctionType::get(i64t, {f32t, f32t}, false);
-
-        const auto emit_binop = [&](const char* name, auto&& make) {
-            llvm::Function* f = llvm::Function::Create(binop_ty, llvm::GlobalValue::ExternalLinkage, name, &dcvm_smoke);
-            b.SetInsertPoint(llvm::BasicBlock::Create(ctx, "entry", f));
-            b.CreateRet(make(f->getArg(0), f->getArg(1)));
-        };
-        const auto emit_unop = [&](const char* name, auto&& make) {
-            llvm::Function* f = llvm::Function::Create(unop_ty, llvm::GlobalValue::ExternalLinkage, name, &dcvm_smoke);
-            b.SetInsertPoint(llvm::BasicBlock::Create(ctx, "entry", f));
-            b.CreateRet(make(f->getArg(0)));
-        };
-        const auto emit_icmp = [&](const char* name, auto&& make) {
-            llvm::Function* f = llvm::Function::Create(binop_ty, llvm::GlobalValue::ExternalLinkage, name, &dcvm_smoke);
-            b.SetInsertPoint(llvm::BasicBlock::Create(ctx, "entry", f));
-            b.CreateRet(b.CreateZExt(make(f->getArg(0), f->getArg(1)), i64t));
-        };
-        const auto emit_fcmp = [&](const char* name, auto&& make) {
-            llvm::Function* f = llvm::Function::Create(fcmp_ty, llvm::GlobalValue::ExternalLinkage, name, &dcvm_smoke);
-            b.SetInsertPoint(llvm::BasicBlock::Create(ctx, "entry", f));
-            b.CreateRet(b.CreateZExt(make(f->getArg(0), f->getArg(1)), i64t));
-        };
-
-        emit_binop("add",  [&](llvm::Value* x, llvm::Value* y) { return b.CreateAdd(x, y); });
-        emit_binop("sub",  [&](llvm::Value* x, llvm::Value* y) { return b.CreateSub(x, y); });
-        emit_binop("mul",  [&](llvm::Value* x, llvm::Value* y) { return b.CreateMul(x, y); });
-        emit_binop("sdiv", [&](llvm::Value* x, llvm::Value* y) { return b.CreateSDiv(x, y); });
-        emit_binop("band", [&](llvm::Value* x, llvm::Value* y) { return b.CreateAnd(x, y); });
-        emit_binop("bor",  [&](llvm::Value* x, llvm::Value* y) { return b.CreateOr(x, y); });
-        emit_binop("bxor", [&](llvm::Value* x, llvm::Value* y) { return b.CreateXor(x, y); });
-        emit_binop("bnor", [&](llvm::Value* x, llvm::Value* y) { return b.CreateNot(b.CreateOr(x, y)); });
-        emit_unop("bnot",  [&](llvm::Value* x) { return b.CreateNot(x); });
-        emit_unop("ineg",  [&](llvm::Value* x) { return b.CreateNeg(x); });
-
-        emit_icmp("ieq", [&](llvm::Value* x, llvm::Value* y) { return b.CreateICmpEQ(x, y); });
-        emit_icmp("ine", [&](llvm::Value* x, llvm::Value* y) { return b.CreateICmpNE(x, y); });
-        emit_icmp("igt", [&](llvm::Value* x, llvm::Value* y) { return b.CreateICmpSGT(x, y); });
-        emit_icmp("ige", [&](llvm::Value* x, llvm::Value* y) { return b.CreateICmpSGE(x, y); });
-        emit_icmp("ilt", [&](llvm::Value* x, llvm::Value* y) { return b.CreateICmpSLT(x, y); });
-        emit_icmp("ile", [&](llvm::Value* x, llvm::Value* y) { return b.CreateICmpSLE(x, y); });
-
-        emit_fcmp("feq", [&](llvm::Value* x, llvm::Value* y) { return b.CreateFCmpUEQ(x, y); });
-        emit_fcmp("fne", [&](llvm::Value* x, llvm::Value* y) { return b.CreateFCmpUNE(x, y); });
-        emit_fcmp("fgt", [&](llvm::Value* x, llvm::Value* y) { return b.CreateFCmpUGT(x, y); });
-        emit_fcmp("fge", [&](llvm::Value* x, llvm::Value* y) { return b.CreateFCmpUGE(x, y); });
-        emit_fcmp("flt", [&](llvm::Value* x, llvm::Value* y) { return b.CreateFCmpULT(x, y); });
-        emit_fcmp("fle", [&](llvm::Value* x, llvm::Value* y) { return b.CreateFCmpULE(x, y); });
-
-        llvm::FunctionType* iconst_ty = llvm::FunctionType::get(i64t, {}, false);
-        llvm::FunctionType* fconst_ty = llvm::FunctionType::get(f32t, {}, false);
-        const auto emit_const = [&](const char* name, llvm::FunctionType* ty, llvm::Constant* c) {
-            llvm::Function* f = llvm::Function::Create(ty, llvm::GlobalValue::ExternalLinkage, name, &dcvm_smoke);
-            b.SetInsertPoint(llvm::BasicBlock::Create(ctx, "entry", f));
-            b.CreateRet(c);
-        };
-        emit_const("small_const", iconst_ty, b.getInt64(42));
-        emit_const("big_const",   iconst_ty, b.getInt64(0x123456789ABCDEF0ULL));
-        emit_const("dup_const",   iconst_ty, b.getInt64(0x123456789ABCDEF0ULL));
-        emit_const("float_const", fconst_ty, llvm::ConstantFP::get(f32t, 3.14159));
-
-        llvm::FunctionType* fbinop_ty = llvm::FunctionType::get(f32t, {f32t, f32t}, false);
-        llvm::FunctionType* funop_ty = llvm::FunctionType::get(f32t, {f32t}, false);
-        const auto emit_fbinop = [&](const char* name, auto&& make) {
-            llvm::Function* f = llvm::Function::Create(fbinop_ty, llvm::GlobalValue::ExternalLinkage, name, &dcvm_smoke);
-            b.SetInsertPoint(llvm::BasicBlock::Create(ctx, "entry", f));
-            b.CreateRet(make(f->getArg(0), f->getArg(1)));
-        };
-        const auto emit_funop = [&](const char* name, auto&& make) {
-            llvm::Function* f = llvm::Function::Create(funop_ty, llvm::GlobalValue::ExternalLinkage, name, &dcvm_smoke);
-            b.SetInsertPoint(llvm::BasicBlock::Create(ctx, "entry", f));
-            b.CreateRet(make(f->getArg(0)));
-        };
-
-        emit_binop("imod",  [&](llvm::Value* x, llvm::Value* y) { return b.CreateSRem(x, y); });
-        emit_fbinop("fmod", [&](llvm::Value* x, llvm::Value* y) { return b.CreateFRem(x, y); });
-        emit_unop("iabs",   [&](llvm::Value* x) { return b.CreateBinaryIntrinsic(llvm::Intrinsic::abs, x, b.getFalse()); });
-        emit_funop("fabs",  [&](llvm::Value* x) { return b.CreateUnaryIntrinsic(llvm::Intrinsic::fabs, x); });
-
-        llvm::Function* cast_to_float = llvm::Function::Create(llvm::FunctionType::get(f32t, {i64t}, false), llvm::GlobalValue::ExternalLinkage, "cast_to_float", &dcvm_smoke);
-        b.SetInsertPoint(llvm::BasicBlock::Create(ctx, "entry", cast_to_float));
-        b.CreateRet(b.CreateSIToFP(cast_to_float->getArg(0), f32t));
-
-        llvm::Function* cast_to_int = llvm::Function::Create(llvm::FunctionType::get(i64t, {f32t}, false), llvm::GlobalValue::ExternalLinkage, "cast_to_int", &dcvm_smoke);
-        b.SetInsertPoint(llvm::BasicBlock::Create(ctx, "entry", cast_to_int));
-        b.CreateRet(b.CreateFPToSI(cast_to_int->getArg(0), i64t));
-
-        emit_unop("addimm", [&](llvm::Value* x) { return b.CreateAdd(x, b.getInt64(5)); });
-
-        llvm::Function* br_demo = llvm::Function::Create(unop_ty, llvm::GlobalValue::ExternalLinkage, "br_demo", &dcvm_smoke);
-        llvm::BasicBlock* br_entry = llvm::BasicBlock::Create(ctx, "entry", br_demo);
-        llvm::BasicBlock* br_loop = llvm::BasicBlock::Create(ctx, "loop", br_demo);
-        b.SetInsertPoint(br_entry);
-        b.CreateBr(br_loop);
-        b.SetInsertPoint(br_loop);
-        b.CreateBr(br_loop);
-
-        llvm::Function* cond_br = llvm::Function::Create(binop_ty, llvm::GlobalValue::ExternalLinkage, "cond_br", &dcvm_smoke);
-        llvm::BasicBlock* cb_entry = llvm::BasicBlock::Create(ctx, "entry", cond_br);
-        llvm::BasicBlock* cb_then = llvm::BasicBlock::Create(ctx, "then", cond_br);
-        llvm::BasicBlock* cb_else = llvm::BasicBlock::Create(ctx, "else", cond_br);
-        b.SetInsertPoint(cb_entry);
-        b.CreateCondBr(b.CreateICmpSLT(cond_br->getArg(0), cond_br->getArg(1)), cb_then, cb_else);
-        b.SetInsertPoint(cb_then);
-        b.CreateRet(cond_br->getArg(0));
-        b.SetInsertPoint(cb_else);
-        b.CreateRet(cond_br->getArg(1));
-
-        llvm::FunctionType* tern_ty = llvm::FunctionType::get(i64t, {i64t, i64t, i64t}, false);
-        llvm::Function* raw_cond = llvm::Function::Create(tern_ty, llvm::GlobalValue::ExternalLinkage, "raw_cond", &dcvm_smoke);
-        llvm::BasicBlock* rc_entry = llvm::BasicBlock::Create(ctx, "entry", raw_cond);
-        llvm::BasicBlock* rc_then = llvm::BasicBlock::Create(ctx, "then", raw_cond);
-        llvm::BasicBlock* rc_else = llvm::BasicBlock::Create(ctx, "else", raw_cond);
-        b.SetInsertPoint(rc_entry);
-        b.CreateCondBr(b.CreateTrunc(raw_cond->getArg(0), b.getInt1Ty()), rc_then, rc_else);
-        b.SetInsertPoint(rc_then);
-        b.CreateRet(raw_cond->getArg(1));
-        b.SetInsertPoint(rc_else);
-        b.CreateRet(raw_cond->getArg(2));
-
-        llvm::Function* lookup_demo = llvm::Function::Create(iconst_ty, llvm::GlobalValue::ExternalLinkage, "lookup_demo", &dcvm_smoke);
-        b.SetInsertPoint(llvm::BasicBlock::Create(ctx, "entry", lookup_demo));
-        llvm::Value* demo_fp = b.CreateIntrinsic(llvm::Intrinsic::dcvm_lookup, {b.getInt64(0xAABBCCDDEEFF0011ULL)});
-        b.CreateRet(b.CreatePtrToInt(demo_fp, i64t));
-
-        llvm::FunctionType* call_ty = llvm::FunctionType::get(i64t, {i64t}, false);
-        const auto make_callee = [&](const char* name, uint64_t sid, const char* dist) {
-            llvm::Function* f = llvm::Function::Create(call_ty, llvm::GlobalValue::ExternalLinkage, name, &dcvm_smoke);
-            f->setMetadata("dcvm.sid_distance", llvm::MDNode::get(ctx, {
-                llvm::MDString::get(ctx, "sid"),
-                llvm::ConstantAsMetadata::get(b.getInt64(sid)),
-                llvm::MDString::get(ctx, "distance"),
-                llvm::MDString::get(ctx, dist),
-            }));
-            return f;
-        };
-        llvm::Function* near_target = make_callee("near_target", 0x1234123412341234ULL, "near");
-        llvm::Function* far_target = make_callee("far_target", 0x5678567856785678ULL, "far");
-        const auto make_caller = [&](const char* name, llvm::Function* callee) {
-            llvm::Function* f = llvm::Function::Create(call_ty, llvm::GlobalValue::ExternalLinkage, name, &dcvm_smoke);
-            b.SetInsertPoint(llvm::BasicBlock::Create(ctx, "entry", f));
-            b.CreateRet(b.CreateCall(callee, {f->getArg(0)}));
-        };
-        make_caller("call_near", near_target);
-        make_caller("call_far", far_target);
-
-        llvm::FunctionType* call3_ty = llvm::FunctionType::get(i64t, {i64t, i64t, i64t}, false);
-        llvm::Function* target3 = llvm::Function::Create(call3_ty, llvm::GlobalValue::ExternalLinkage, "target3", &dcvm_smoke);
-        target3->setMetadata("dcvm.sid_distance", llvm::MDNode::get(ctx, {
-            llvm::MDString::get(ctx, "sid"),
-            llvm::ConstantAsMetadata::get(b.getInt64(0x9ABC9ABC9ABC9ABCULL)),
-            llvm::MDString::get(ctx, "distance"),
-            llvm::MDString::get(ctx, "near"),
-        }));
-        llvm::Function* call_shuffle = llvm::Function::Create(call3_ty, llvm::GlobalValue::ExternalLinkage, "call_shuffle", &dcvm_smoke);
-        b.SetInsertPoint(llvm::BasicBlock::Create(ctx, "entry", call_shuffle));
-        b.CreateRet(b.CreateCall(target3, {call_shuffle->getArg(2), call_shuffle->getArg(0), call_shuffle->getArg(1)}));
-    }
-
-    llvm_transpile::lower_calls_to_lookup(dcvm_smoke);
-    const std::string dcvm_asm = llvm_transpile::emit_dcvm_asm(dcvm_smoke);
-
-    llvm::Module call_smoke("call_smoke", ctx);
-    {
-        llvm::IRBuilder<> b(ctx);
-        llvm::Type* i64t = b.getInt64Ty();
-        llvm::FunctionType* fn_ty = llvm::FunctionType::get(i64t, {i64t}, false);
-
-        const auto set_sid = [&](llvm::Function* f, uint64_t sid) {
-            f->setMetadata("dcvm.sid_distance", llvm::MDNode::get(ctx, {
-                llvm::MDString::get(ctx, "sid"),
-                llvm::ConstantAsMetadata::get(b.getInt64(sid)),
-                llvm::MDString::get(ctx, "distance"),
-                llvm::MDString::get(ctx, "far"),
-            }));
-        };
-
-        llvm::Function* helper_inlined = llvm::Function::Create(fn_ty, llvm::GlobalValue::InternalLinkage, "helper_inlined", &call_smoke);
-        helper_inlined->addFnAttr(llvm::Attribute::AlwaysInline);
-        set_sid(helper_inlined, 0x1111111111111111ULL);
-        b.SetInsertPoint(llvm::BasicBlock::Create(ctx, "entry", helper_inlined));
-        b.CreateRet(b.CreateAdd(helper_inlined->getArg(0), b.getInt64(1)));
-
-        llvm::Function* helper_kept = llvm::Function::Create(fn_ty, llvm::GlobalValue::ExternalLinkage, "helper_kept", &call_smoke);
-        helper_kept->addFnAttr(llvm::Attribute::NoInline);
-        set_sid(helper_kept, 0x2222222222222222ULL);
-        b.SetInsertPoint(llvm::BasicBlock::Create(ctx, "entry", helper_kept));
-        b.CreateRet(b.CreateMul(helper_kept->getArg(0), b.getInt64(3)));
-
-        llvm::Function* caller = llvm::Function::Create(fn_ty, llvm::GlobalValue::ExternalLinkage, "caller", &call_smoke);
-        b.SetInsertPoint(llvm::BasicBlock::Create(ctx, "entry", caller));
-        llvm::Value* inlined_res = b.CreateCall(helper_inlined, {caller->getArg(0)}, "a");
-        llvm::Value* kept_res0 = b.CreateCall(helper_kept, {inlined_res}, "b");
-        llvm::Value* kept_res1 = b.CreateCall(helper_kept, {kept_res0}, "c");
-        b.CreateRet(b.CreateAdd(kept_res0, kept_res1));
-    }
-
-    const std::string calls_initial = llvm_transpile::emit_llvm_ir(call_smoke);
-    llvm_transpile::optimize_module(call_smoke);
-    const std::string calls_inlined = llvm_transpile::emit_llvm_ir(call_smoke);
-    llvm_transpile::lower_calls_to_lookup(call_smoke);
-    const std::string calls_lowered = llvm_transpile::emit_llvm_ir(call_smoke);
-    llvm_transpile::optimize_module(call_smoke);
-    const std::string calls_deduped = llvm_transpile::emit_llvm_ir(call_smoke);
-
-    const std::filesystem::path out_dir = std::filesystem::path(__FILE__).parent_path();
-
-    const std::array<std::pair<const char*, const std::string*>, 9> outputs = {{
-        {"output_unopt.ll", &llvm_unopt},
-        {"output_opt.ll", &llvm_opt},
-        {"output_lowered.ll", &llvm_lowered},
-        {"output_deduped.ll", &llvm_deduped},
-        {"output.dcvm.s", &dcvm_asm},
-        {"calls_0_initial.ll", &calls_initial},
-        {"calls_1_inlined.ll", &calls_inlined},
-        {"calls_2_lowered.ll", &calls_lowered},
-        {"calls_3_deduped.ll", &calls_deduped},
-    }};
-
-    for (const auto& [filename, content] : outputs) {
-        const std::filesystem::path out_path = out_dir / filename;
-        std::ofstream out_file(out_path);
-        out_file << *content;
-        out_file.close();
-        std::println("wrote {}", out_path.string());
-    }
+    const generated_outputs outputs = generate_outputs(module);
+    print_outputs(outputs);
 
     return 0;
 }

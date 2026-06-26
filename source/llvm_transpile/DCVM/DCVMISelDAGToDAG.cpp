@@ -67,6 +67,12 @@ void DCVMDAGToDAGISel::Select(SDNode *N) {
                                   ->getValueAPF()
                                   .bitcastToAPInt()
                                   .getZExtValue();
+        if (isUInt<16>(Bits)) {
+            const SDValue Imm = CurDAG->getTargetConstant(Bits, DL, MVT::i64);
+            ReplaceNode(N, CurDAG->getMachineNode(DCVM::LOADU16IMMri, DL,
+                                                  MVT::f32, Imm));
+            return;
+        }
         const SDValue Idx =
             CurDAG->getTargetConstant(MFI->internSymbol(Bits), DL, MVT::i64);
         ReplaceNode(N, CurDAG->getMachineNode(DCVM::LOADSTATICFLOATIMMri, DL,
@@ -88,6 +94,15 @@ void DCVMDAGToDAGISel::Select(SDNode *N) {
             ReplaceNode(N, CurDAG->getMachineNode(DCVM::INTASHrr, DL, MVT::i64,
                                                   N->getOperand(1),
                                                   N->getOperand(2)));
+            return;
+        }
+        if (IID == Intrinsic::dcvm_static_pointer) {
+            const uint64_t Index =
+                cast<ConstantSDNode>(N->getOperand(1))->getZExtValue();
+            const SDValue Idx =
+                CurDAG->getTargetConstant(MFI->internSymbol(Index), DL, MVT::i64);
+            ReplaceNode(N, CurDAG->getMachineNode(DCVM::LOADSTATICPOINTERIMMri, DL,
+                                                  N->getValueType(0), Idx));
             return;
         }
         break;

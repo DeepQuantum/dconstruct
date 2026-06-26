@@ -56,6 +56,9 @@ extern "C" void LLVMInitializeDCVMTargetInfo();
 extern "C" void LLVMInitializeDCVMTarget();
 extern "C" void LLVMInitializeDCVMTargetMC();
 extern "C" void LLVMInitializeDCVMAsmPrinter();
+extern "C" const char* DCVMBytecodeData();
+extern "C" size_t DCVMBytecodeSize();
+extern "C" void DCVMBytecodeReset();
 
 namespace dconstruct::llvm_transpile {
 
@@ -75,6 +78,12 @@ namespace dconstruct::llvm_transpile {
 
         auto* func_type = llvm::FunctionType::get(llvm::Type::getInt64Ty(m_ctx), llvm::ArrayRef(arg_types.data(), arg_types.size()), false);
         m_function = llvm::Function::Create(func_type, llvm::GlobalValue::LinkageTypes::ExternalLinkage, 0, m_disasm.get_id(), &m_module);
+
+        const sid64 self_sid = SID(m_disasm.get_id().c_str());
+        m_function->setMetadata("dcvm.sid_distance", llvm::MDNode::get(m_ctx, {
+            llvm::MDString::get(m_ctx, "sid"),
+            llvm::ConstantAsMetadata::get(m_builder.getInt64(self_sid)),
+        }));
 
         for (const control_flow_node& node : m_graph.m_nodes) {
             llvm::BasicBlock* block = llvm::BasicBlock::Create(m_ctx, std::format("bb{}", node.m_index), m_function);
@@ -96,7 +105,7 @@ namespace dconstruct::llvm_transpile {
         const u64 symbol_table_size = m_disasm.m_stackFrame.m_symbolTable.m_types.size();
         m_arrayT = llvm::ArrayType::get(m_defaultIntT, symbol_table_size);
         llvm::Constant* symbol_table_array = llvm::ConstantDataArray::get(m_ctx, llvm::ArrayRef(m_symbolTable.as<u64>(), symbol_table_size));
-        m_symbolTableGlobal = new llvm::GlobalVariable(m_module, m_arrayT, true, llvm::GlobalValue::PrivateLinkage, symbol_table_array, std::format("{}_symbol_table", m_disasm.get_id()));
+        m_symbolTableGlobal = new llvm::GlobalVariable(m_module, m_arrayT, true, llvm::GlobalValue::PrivateLinkage, symbol_table_array, std::format("{}_symbol_table_src", m_disasm.get_id()));
         m_symbolTableGlobal->setUnnamedAddr(llvm::GlobalValue::UnnamedAddr::Global);
         m_symbolTableGlobal->setAlignment(llvm::Align(sizeof(u64)));
         llvm::appendToUsed(m_module, {m_symbolTableGlobal});
@@ -167,7 +176,7 @@ namespace dconstruct::llvm_transpile {
                     break;
                 }
                 case OpLogNot: {
-                    make_unary(istr, [&](llvm::Value* a) { return m_builder.CreateNot(a, op); }, m_boolT, istr_id);
+                    make_unary(istr, [&](llvm::Value* a) { return m_builder.CreateICmpEQ(a, llvm::ConstantInt::get(a->getType(), 0), op); }, m_boolT, istr_id);
                     break;
                 }
                 case OpBitNor: {
@@ -419,14 +428,8 @@ namespace dconstruct::llvm_transpile {
                     if (const ast::primitive_type* string_value = std::get_if<ast::primitive_type>(&type)) {
                         assert(string_value->m_type == ast::primitive_kind::STRING);
 
-                        const char* actual_string = m_symbolTable.get<const char*>(istr.operand1 * sizeof(u64));
-                        llvm::Constant* char_array = llvm::ConstantDataArray::getString(m_ctx, actual_string, true);
-
-                        llvm::GlobalVariable* string_global_var = new llvm::GlobalVariable(m_module, char_array->getType(), false, llvm::GlobalValue::PrivateLinkage, char_array, std::format("{}_str", istr_id));
-                        string_global_var->setUnnamedAddr(llvm::GlobalValue::UnnamedAddr::Global);
-                        string_global_var->setAlignment(llvm::Align(1));
-
-                        make_store(istr.destination, string_global_var, m_defaultPointerT);
+                        llvm::Value* string_pointer = m_builder.CreateIntrinsic(llvm::Intrinsic::dcvm_static_pointer, {m_builder.getInt64(istr.operand1)});
+                        make_store(istr.destination, string_pointer, m_defaultPointerT);
                     } else {
                         make_symbol_table_load<const void*>(istr, istr_id);
                     }
@@ -474,7 +477,10 @@ namespace dconstruct::llvm_transpile {
                             func_type = exchange_function_types(arg_values.back()->getType(), istr.operand1, i);
                         }
                     }
-                    llvm::Value* call = m_builder.CreateCall(func_type, callee, llvm::ArrayRef(arg_values.data(), arg_values.size()), std::format("{}_call", istr_id));
+                    llvm::CallInst* call = m_builder.CreateCall(func_type, callee, llvm::ArrayRef(arg_values.data(), arg_values.size()), std::format("{}_call", istr_id));
+                    if (istr.opcode == CallFf) {
+                        call->setMetadata("dcvm.distance", llvm::MDNode::get(m_ctx, {llvm::MDString::get(m_ctx, "far")}));
+                    }
                     make_store(istr.destination, call, func_type->getReturnType());
                     break;
                 }
@@ -503,7 +509,7 @@ namespace dconstruct::llvm_transpile {
                     }
                     case BranchIf: {
                         const istr_line destination = current_node->m_lines.back().m_target;
-                        llvm::Value* condition_reg = load_register(istr.operand1, std::format("{}_cond", istr_id));
+                        llvm::Value* condition_reg = m_builder.CreateLoad(m_defaultIntT, m_registerFrame[istr.operand1], std::format("{}_cond", istr_id));
                         llvm::Value* bool_condition_reg = m_builder.CreateICmpNE(condition_reg, llvm::ConstantInt::get(condition_reg->getType(), 0), std::format("{}_bool", istr_id));
                         llvm::BasicBlock* target_block = m_blocks.at(destination);
                         llvm::BasicBlock* fallthrough = m_blocks.at(l + 1);
@@ -515,7 +521,7 @@ namespace dconstruct::llvm_transpile {
                     }
                     case BranchIfNot: {
                         const istr_line destination = current_node->m_lines.back().m_target;
-                        llvm::Value* condition_reg = load_register(istr.operand1, std::format("{}_cond", istr_id));
+                        llvm::Value* condition_reg = m_builder.CreateLoad(m_defaultIntT, m_registerFrame[istr.operand1], std::format("{}_cond", istr_id));
                         llvm::Value* bool_condition_reg = m_builder.CreateICmpNE(condition_reg, llvm::ConstantInt::get(condition_reg->getType(), 0), std::format("{}_bool", istr_id));
                         llvm::BasicBlock* target_block = m_blocks.at(destination);
                         llvm::BasicBlock* fallthrough = m_blocks.at(l + 1);
@@ -774,7 +780,7 @@ namespace dconstruct::llvm_transpile {
                     if (call == nullptr) {
                         continue;
                     }
-                    const llvm::Function* callee = call->getCalledFunction();
+                    const llvm::Function* callee = llvm::dyn_cast<llvm::Function>(call->getCalledOperand()->stripPointerCasts());
                     if (callee == nullptr || callee->isIntrinsic() || !callee->hasMetadata("dcvm.sid_distance")) {
                         continue;
                     }
@@ -784,7 +790,7 @@ namespace dconstruct::llvm_transpile {
         }
 
         for (llvm::CallInst* call : direct_calls) {
-            llvm::Function* callee = call->getCalledFunction();
+            llvm::Function* callee = llvm::cast<llvm::Function>(call->getCalledOperand()->stripPointerCasts());
             const llvm::MDNode* sid_md = callee->getMetadata("dcvm.sid_distance");
             llvm::Value* sid = llvm::cast<llvm::ConstantAsMetadata>(sid_md->getOperand(1))->getValue();
             builder.SetInsertPoint(call);
@@ -845,5 +851,35 @@ namespace dconstruct::llvm_transpile {
         pass_manager.run(*clone);
 
         return std::string(asm_buffer.str());
+    }
+
+    [[nodiscard]] std::vector<char> emit_dcvm_bytecode(const llvm::Module& module) {
+        std::string error;
+        std::unique_ptr<llvm::TargetMachine> machine = create_dcvm_target_machine(error);
+        if (machine == nullptr) {
+            return {};
+        }
+
+        std::unique_ptr<llvm::Module> clone = llvm::CloneModule(module);
+        clone->setTargetTriple(machine->getTargetTriple());
+        clone->setDataLayout(machine->createDataLayout());
+
+        llvm::SmallString<0> asm_buffer;
+        llvm::raw_svector_ostream asm_out(asm_buffer);
+
+        llvm::legacy::PassManager pass_manager;
+        pass_manager.add(new llvm::TargetLibraryInfoWrapperPass(machine->getTargetTriple()));
+        pass_manager.add(llvm::createTargetTransformInfoWrapperPass(machine->getTargetIRAnalysis()));
+
+        if (machine->addPassesToEmitFile(pass_manager, asm_out, nullptr, llvm::CodeGenFileType::AssemblyFile, true)) {
+            return {};
+        }
+
+        DCVMBytecodeReset();
+        pass_manager.run(*clone);
+
+        const char* data = DCVMBytecodeData();
+        const std::size_t size = DCVMBytecodeSize();
+        return std::vector<char>(data, data + size);
     }
 }

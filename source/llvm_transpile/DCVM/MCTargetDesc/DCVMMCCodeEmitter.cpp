@@ -45,6 +45,8 @@ unsigned DCVMMCCodeEmitter::getMachineOpValue(const MCInst &MI,
         return Ctx.getRegisterInfo()->getEncodingValue(MO.getReg());
     if (MO.isImm())
         return static_cast<unsigned>(MO.getImm());
+    if (MO.isExpr())
+        return 0;
     llvm_unreachable("unsupported operand in DCVMMCCodeEmitter");
 }
 

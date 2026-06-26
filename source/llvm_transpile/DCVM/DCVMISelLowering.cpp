@@ -184,17 +184,11 @@ SDValue DCVMTargetLowering::LowerReturn(
 static bool callIsFar(const CallBase *CB) {
     if (CB == nullptr)
         return false;
-    const MDNode *Callees = CB->getMetadata(LLVMContext::MD_callees);
-    if (Callees == nullptr || Callees->getNumOperands() == 0)
+    const MDNode *Distance = CB->getMetadata("dcvm.distance");
+    if (Distance == nullptr || Distance->getNumOperands() == 0)
         return false;
-    const auto *Callee = mdconst::dyn_extract_or_null<Function>(Callees->getOperand(0));
-    if (Callee == nullptr)
-        return false;
-    const MDNode *SidDistance = Callee->getMetadata("dcvm.sid_distance");
-    if (SidDistance == nullptr || SidDistance->getNumOperands() < 4)
-        return false;
-    const auto *Distance = dyn_cast<MDString>(SidDistance->getOperand(3));
-    return Distance != nullptr && Distance->getString() == "far";
+    const auto *DistanceStr = dyn_cast<MDString>(Distance->getOperand(0));
+    return DistanceStr != nullptr && DistanceStr->getString() == "far";
 }
 
 SDValue DCVMTargetLowering::LowerCall(CallLoweringInfo &CLI,
