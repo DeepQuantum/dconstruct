@@ -92,6 +92,8 @@ int main() {
         tp.add_module(path.filename().string(), disassemblers.back()->get_all_functions());
     }
 
+    tp.enable_runtime_module();
+
     const std::filesystem::path out_dir = std::filesystem::path(__FILE__).parent_path();
     const std::vector<llvm_transpile::generated_outputs> outputs = tp.run();
 

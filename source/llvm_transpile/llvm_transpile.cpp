@@ -1,7 +1,6 @@
 #include "llvm_transpile/llvm_transpile.h"
 #include "ast/type.h"
 #include "decompilation/control_flow_graph.h"
-#include "disassembly/disassembler.h"
 #include "disassembly/instructions.h"
 #include "disassembly/opcodes.h"
 #include "sidbase.h"
@@ -16,6 +15,7 @@
 #include "llvm/IR/GlobalVariable.h"
 #include "llvm/IR/IRBuilder.h"
 #include "llvm/IR/Instruction.h"
+#include <llvm/IR/Verifier.h>
 #include "llvm/IR/Instructions.h"
 #include "llvm/IR/LLVMContext.h"
 #include "llvm/IR/Metadata.h"
@@ -45,9 +45,8 @@
 #include <type_traits>
 #include <variant>
 #include <vector>
-
-#include <print>
 #include <format>
+
 
 using namespace std::literals;
 
@@ -77,7 +76,7 @@ namespace dconstruct::llvm_transpile {
     }
 
     void llvm_transpiler::add_module(std::string_view name, const std::vector<const function_disassembly*>& funcs) {
-        std::vector<lift_function> functions;
+        std::vector<prepared_function_ctx> functions;
         functions.reserve(funcs.size());
         for (const function_disassembly* disassembly_function : funcs) {
             functions.emplace_back(disassembly_function, &disassembly_function->m_stackFrame.m_symbolTable.m_location);
@@ -85,66 +84,76 @@ namespace dconstruct::llvm_transpile {
         m_translationUnits.emplace_back(std::make_unique<llvm::Module>(name, m_ctx), std::move(functions));
     }
 
-    void llvm_transpiler::prepare_function(llvm::Module& module, lift_function& function) {
-        const function_disassembly* m_disasm = function.m_disasm;
-        const location* m_symbolTable = function.m_symbolTable;
-        function.m_graph = ControlFlowGraph::build(*m_disasm);
-        ControlFlowGraph* m_graph = &*function.m_graph;
-        auto& m_blocks = function.m_blocks;
-        auto& m_types = function.m_types;
-        auto& m_registerFrame = function.m_registerFrame;
-        m_blocks.clear();
+    void llvm_transpiler::prepare_function(translation_unit& unit, prepared_function_ctx& to_lift) {
+        llvm::Module& module = unit.module();
+        const function_disassembly* disasm = to_lift.m_disasm;
+        const location* symbol_table = to_lift.m_symbolTable;
+        to_lift.m_graph = ControlFlowGraph::build(*disasm);
+        ControlFlowGraph* m_graph = &*to_lift.m_graph;
+        auto& blocks = to_lift.m_blocks;
+        auto& types = to_lift.m_types;
+        auto& register_frame = to_lift.m_registerFrame;
+        blocks.clear();
         m_builder.ClearInsertionPoint();
 
-        std::vector<llvm::Type*> arg_types(m_disasm->m_stackFrame.m_registerArgs.size());
-        std::transform(m_disasm->m_stackFrame.m_registerArgs.begin(), m_disasm->m_stackFrame.m_registerArgs.end(), arg_types.begin(), [&](const ast::full_type& type) {
+        std::vector<llvm::Type*> arg_types(disasm->m_stackFrame.m_registerArgs.size());
+        std::transform(disasm->m_stackFrame.m_registerArgs.begin(), disasm->m_stackFrame.m_registerArgs.end(), arg_types.begin(), [&](const ast::full_type& type) {
             return ast_type_to_llvm_type(m_ctx, type);
         });
 
         auto* func_type = llvm::FunctionType::get(llvm::Type::getInt64Ty(m_ctx), llvm::ArrayRef(arg_types.data(), arg_types.size()), false);
-        llvm::Function* m_function = llvm::Function::Create(func_type, llvm::GlobalValue::LinkageTypes::ExternalLinkage, 0, m_disasm->get_id(), &module);
-        function.m_llvmFunc = m_function;
+        llvm::Function* new_function = llvm::Function::Create(func_type, llvm::GlobalValue::LinkageTypes::ExternalLinkage, 0, disasm->get_id(), &module);
+        to_lift.m_llvmFunc = new_function;
 
-        const sid64 self_sid = SID(m_disasm->get_id().c_str());
-        m_function->setMetadata("dcvm.sid_distance", llvm::MDNode::get(m_ctx, {
+        const sid64 self_sid = SID(disasm->get_id().c_str());
+        new_function->setMetadata("dcvm.sid_distance", llvm::MDNode::get(m_ctx, {
             llvm::MDString::get(m_ctx, "sid"),
             llvm::ConstantAsMetadata::get(m_builder.getInt64(self_sid)),
         }));
 
         for (const control_flow_node& node : m_graph->m_nodes) {
-            llvm::BasicBlock* block = llvm::BasicBlock::Create(m_ctx, std::format("bb{}", node.m_index), m_function);
-            m_blocks.emplace(node.m_startLine, block);
+            llvm::BasicBlock* block = llvm::BasicBlock::Create(m_ctx, std::format("bb{}", node.m_index), new_function);
+            blocks.emplace(node.m_startLine, block);
         }
 
-        m_builder.SetInsertPoint(m_blocks[0], m_blocks[0]->begin());
+        m_builder.SetInsertPoint(blocks[0], blocks[0]->begin());
 
-        for (u64 i = 0; i < m_registerFrame.size(); ++i) {
-            m_registerFrame[i] = m_builder.CreateAlloca(m_defaultIntT, nullptr, std::format("r{}", i));
-            m_types[i] = m_defaultIntT;
+        for (u64 i = 0; i < register_frame.size(); ++i) {
+            register_frame[i] = m_builder.CreateAlloca(m_defaultIntT, nullptr, std::format("r{}", i));
+            types[i] = m_defaultIntT;
         }
 
-        const u64 symbol_table_size = m_disasm->m_stackFrame.m_symbolTable.m_types.size();
-        function.m_symbolTableArrayT = llvm::ArrayType::get(m_defaultIntT, symbol_table_size);
-        llvm::Constant* symbol_table_array = llvm::ConstantDataArray::get(m_ctx, llvm::ArrayRef(m_symbolTable->as<u64>(), symbol_table_size));
-        function.m_symbolTableGlobal = new llvm::GlobalVariable(module, function.m_symbolTableArrayT, true, llvm::GlobalValue::PrivateLinkage, symbol_table_array, std::format("{}_symbol_table_src", m_disasm->get_id()));
-        function.m_symbolTableGlobal->setUnnamedAddr(llvm::GlobalValue::UnnamedAddr::Global);
-        function.m_symbolTableGlobal->setAlignment(llvm::Align(sizeof(u64)));
-        llvm::appendToUsed(module, {function.m_symbolTableGlobal});
+        const u64 symbol_table_size = disasm->m_stackFrame.m_symbolTable.m_types.size();
+        to_lift.m_symbolTableArrayT = llvm::ArrayType::get(m_defaultIntT, symbol_table_size);
+        llvm::Constant* symbol_table_array = llvm::ConstantDataArray::get(m_ctx, llvm::ArrayRef(symbol_table->as<u64>(), symbol_table_size));
+        to_lift.m_symbolTableGlobal = new llvm::GlobalVariable(module, to_lift.m_symbolTableArrayT, true, llvm::GlobalValue::PrivateLinkage, symbol_table_array, std::format("{}_symbol_table_src", disasm->get_id()));
+        to_lift.m_symbolTableGlobal->setUnnamedAddr(llvm::GlobalValue::UnnamedAddr::Global);
+        to_lift.m_symbolTableGlobal->setAlignment(llvm::Align(sizeof(u64)));
+        llvm::appendToUsed(module, {to_lift.m_symbolTableGlobal});
 
-        for (u64 i = 0; i < m_function->arg_size(); ++i) {
-            llvm::Argument* arg = m_function->getArg(i);
+        for (u64 i = 0; i < new_function->arg_size(); ++i) {
+            llvm::Argument* arg = new_function->getArg(i);
             arg->setName(std::format("arg_{}", i));
-            make_store(function, ARGUMENT_REGISTERS_IDX + i, arg, arg->getType());
+            make_store(to_lift, ARGUMENT_REGISTERS_IDX + i, arg, arg->getType());
+        }
+
+        if (!disasm->m_isScriptFunction) {
+            m_funcLocations[disasm->get_id()] = new_function;
         }
     }
 
-    resstr<llvm::Function*> llvm_transpiler::transpile_function(llvm::Module& module, const function_disassembly& func_disassembly) {
-        lift_function function{&func_disassembly, &func_disassembly.m_stackFrame.m_symbolTable.m_location};
-        prepare_function(module, function);
-        return lift_prepared_function(module, function);
+    errmsg llvm_transpiler::transpile_function(translation_unit& unit, const function_disassembly& func_disassembly) {
+        prepared_function_ctx function{&func_disassembly, &func_disassembly.m_stackFrame.m_symbolTable.m_location};
+        prepare_function(unit, function);
+        if (errmsg error = lift_prepared_function(unit, function)) {
+            return error;
+        }
+        unit.m_liftedFunctions.push_back(function.m_llvmFunc);
+        return std::nullopt;
     }
 
-    resstr<llvm::Function*> llvm_transpiler::lift_prepared_function(llvm::Module& module, lift_function& function) {
+    errmsg llvm_transpiler::lift_prepared_function(translation_unit& unit, prepared_function_ctx& function) {
+        llvm::Module& m_module = unit.module();
         const function_disassembly* m_disasm = function.m_disasm;
         const location* m_symbolTable = function.m_symbolTable;
         ControlFlowGraph* m_graph = &*function.m_graph;
@@ -152,7 +161,8 @@ namespace dconstruct::llvm_transpile {
         auto& m_types = function.m_types;
         auto& m_registerFrame = function.m_registerFrame;
         llvm::Function* m_function = function.m_llvmFunc;
-        llvm::Module& m_module = module;
+
+        bool terminated = false;
 
         m_builder.SetInsertPoint(m_blocks.at(0));
         const control_flow_node* current_node = &m_graph->m_nodes[0];
@@ -529,6 +539,8 @@ namespace dconstruct::llvm_transpile {
                     F->setWillReturn();
                     F->setNoSync();
 
+                    unit.m_calledGlobals.emplace_back(function_name);
+
                     make_store(function, istr.destination, callee_function.getCallee(), function_type);
                     break;
                 }
@@ -551,73 +563,62 @@ namespace dconstruct::llvm_transpile {
                     make_store(function, istr.destination, call, func_type->getReturnType());
                     break;
                 }
-                case Return:
-                case Branch:
-                case BranchIf:
+                case Return: {
+                    llvm::Value* ret_value = load_register(function, istr.destination, std::format("{}_retval", istr_id));
+                    if (ret_value->getType() != m_function->getReturnType() && ret_value->getType()->isIntegerTy() && m_function->getReturnType()->isIntegerTy()) {
+                        ret_value = m_builder.CreateIntCast(ret_value, m_function->getReturnType(), false, std::format("{}_retcast", istr_id));
+                    }
+                    m_builder.CreateRet(ret_value);
+                    terminated = true;
+                    break;
+                }
+                case Branch: {
+                    istr_line target = current_node->m_lines.back().m_target;
+                    m_builder.CreateBr(m_blocks.at(target));
+                    m_builder.SetInsertPoint(m_blocks.at(l + 1));
+                    current_node = m_graph->get_node_with_start_line(l + 1);
+                    assert(current_node != nullptr);
+                    terminated = true;
+                    break;
+                }
+                case BranchIf: {
+                    const istr_line destination = current_node->m_lines.back().m_target;
+                    llvm::Value* condition_reg = m_builder.CreateLoad(m_defaultIntT, m_registerFrame[istr.operand1], std::format("{}_cond", istr_id));
+                    llvm::Value* bool_condition_reg = m_builder.CreateICmpNE(condition_reg, llvm::ConstantInt::get(condition_reg->getType(), 0), std::format("{}_bool", istr_id));
+                    llvm::BasicBlock* target_block = m_blocks.at(destination);
+                    llvm::BasicBlock* fallthrough = m_blocks.at(l + 1);
+                    m_builder.CreateCondBr(bool_condition_reg, target_block, fallthrough);
+                    m_builder.SetInsertPoint(m_blocks.at(l + 1));
+                    current_node = m_graph->get_node_with_start_line(l + 1);
+                    assert(current_node != nullptr);
+                    terminated = true;
+                }
                 case BranchIfNot: {
-                    // explicitly handled by the last line code
+                    const istr_line destination = current_node->m_lines.back().m_target;
+                    llvm::Value* condition_reg = m_builder.CreateLoad(m_defaultIntT, m_registerFrame[istr.operand1], std::format("{}_cond", istr_id));
+                    llvm::Value* bool_condition_reg = m_builder.CreateICmpNE(condition_reg, llvm::ConstantInt::get(condition_reg->getType(), 0), std::format("{}_bool", istr_id));
+                    llvm::BasicBlock* target_block = m_blocks.at(destination);
+                    llvm::BasicBlock* fallthrough = m_blocks.at(l + 1);
+                    m_builder.CreateCondBr(bool_condition_reg, fallthrough, target_block);
+                    m_builder.SetInsertPoint(m_blocks.at(l + 1));
+                    current_node = m_graph->get_node_with_start_line(l + 1);
+                    assert(current_node != nullptr);
+                    terminated = true;
                     break;
                 }
                 default:
-                    std::println(stderr, "unhandled opcode {}", istr.opcode_to_string());
-                    continue;
+                    return std::format("unhandled opcode {}", istr.opcode_to_string());
             }
 
-            if (l == current_node->m_endLine) {
-                switch (istr.opcode) {
-                    using enum Opcode;
-                    case Branch: {
-                        istr_line target = current_node->m_lines.back().m_target;
-                        m_builder.CreateBr(m_blocks.at(target));
-                        m_builder.SetInsertPoint(m_blocks.at(l + 1));
-                        current_node = m_graph->get_node_with_start_line(l + 1);
-                        assert(current_node != nullptr);
-                        break;
-                    }
-                    case BranchIf: {
-                        const istr_line destination = current_node->m_lines.back().m_target;
-                        llvm::Value* condition_reg = m_builder.CreateLoad(m_defaultIntT, m_registerFrame[istr.operand1], std::format("{}_cond", istr_id));
-                        llvm::Value* bool_condition_reg = m_builder.CreateICmpNE(condition_reg, llvm::ConstantInt::get(condition_reg->getType(), 0), std::format("{}_bool", istr_id));
-                        llvm::BasicBlock* target_block = m_blocks.at(destination);
-                        llvm::BasicBlock* fallthrough = m_blocks.at(l + 1);
-                        m_builder.CreateCondBr(bool_condition_reg, target_block, fallthrough);
-                        m_builder.SetInsertPoint(m_blocks.at(l + 1));
-                        current_node = m_graph->get_node_with_start_line(l + 1);
-                        assert(current_node != nullptr);
-                        break;
-                    }
-                    case BranchIfNot: {
-                        const istr_line destination = current_node->m_lines.back().m_target;
-                        llvm::Value* condition_reg = m_builder.CreateLoad(m_defaultIntT, m_registerFrame[istr.operand1], std::format("{}_cond", istr_id));
-                        llvm::Value* bool_condition_reg = m_builder.CreateICmpNE(condition_reg, llvm::ConstantInt::get(condition_reg->getType(), 0), std::format("{}_bool", istr_id));
-                        llvm::BasicBlock* target_block = m_blocks.at(destination);
-                        llvm::BasicBlock* fallthrough = m_blocks.at(l + 1);
-                        m_builder.CreateCondBr(bool_condition_reg, fallthrough, target_block);
-                        m_builder.SetInsertPoint(m_blocks.at(l + 1));
-                        current_node = m_graph->get_node_with_start_line(l + 1);
-                        assert(current_node != nullptr);
-                        break;
-                    }
-                    case Return: {
-                        llvm::Value* ret_value = load_register(function, istr.destination, std::format("{}_retval", istr_id));
-                        if (ret_value->getType() != m_function->getReturnType() && ret_value->getType()->isIntegerTy() && m_function->getReturnType()->isIntegerTy()) {
-                            ret_value = m_builder.CreateIntCast(ret_value, m_function->getReturnType(), false, std::format("{}_retcast", istr_id));
-                        }
-                        m_builder.CreateRet(ret_value);
-                        break;
-                    }
-                    default: {
-                        m_builder.CreateBr(m_blocks.at(l + 1));
-                        m_builder.SetInsertPoint(m_blocks.at(l + 1));
-                        current_node = m_graph->get_node_with_start_line(l + 1);
-                        assert(current_node != nullptr);
-                        break;
-                    }
-                }
+            if (!terminated && l == current_node->m_endLine) {
+                m_builder.CreateBr(m_blocks.at(l + 1));
+                m_builder.SetInsertPoint(m_blocks.at(l + 1));
+                current_node = m_graph->get_node_with_start_line(l + 1);
+                assert(current_node != nullptr);
             }
         }
 
-        return m_function;
+        return std::nullopt;
     }
 
     std::vector<generated_outputs> llvm_transpiler::run() {
@@ -625,23 +626,73 @@ namespace dconstruct::llvm_transpile {
         outputs.reserve(m_translationUnits.size());
 
         for (translation_unit& unit : m_translationUnits) {
-            llvm::Module& module = *unit.m_module;
-
-            for (lift_function& function : unit.m_functions) {
-                prepare_function(module, function);
+            for (prepared_function_ctx& function : unit.m_preparedFunctions) {
+                prepare_function(unit, function);
             }
 
-            for (lift_function& function : unit.m_functions) {
-                (void)lift_prepared_function(module, function);
+            unit.m_liftedFunctions.clear();
+            unit.m_liftedFunctions.reserve(unit.m_preparedFunctions.size());
+            for (prepared_function_ctx& function : unit.m_preparedFunctions) {
+                if (!lift_prepared_function(unit, function)) {
+                    unit.m_liftedFunctions.push_back(function.m_llvmFunc);
+                }
+            }
+        }
+
+        for (translation_unit& unit : m_translationUnits) {
+            for (const auto& global_name : unit.m_calledGlobals) {
+                llvm::Function* existing = unit.module().getFunction(global_name);
+
+                if (!existing || existing->isDeclaration()) {
+                    continue;
+                }
+
+                auto it = m_funcLocations.find(global_name);
+                if (it == m_funcLocations.end()) {
+                    continue;
+                }
+                const llvm::Function* global_function = it->second;
+
+                assert(!global_function->isDeclaration());
+                assert(global_function->getParent() != &unit.module());
+
+                llvm::Function* dst_func = unit.module().getFunction(global_name);
+                assert(dst_func);
+                dst_func->copyAttributesFrom(global_function);
+                dst_func->setCallingConv(global_function->getCallingConv());
+                dst_func->setLinkage(llvm::GlobalValue::AvailableExternallyLinkage);
+
+                llvm::ValueToValueMapTy vmap;
+
+                auto dst_arg = dst_func->arg_begin();
+                for (const llvm::Argument& src_arg : global_function->args()) {
+                    assert(dst_arg != dst_func->arg_end());
+                    dst_arg->setName(src_arg.getName());
+                    vmap[&src_arg] = &*dst_arg;
+                    ++dst_arg;
+                }
+
+                llvm::SmallVector<llvm::ReturnInst*, 8> returns;
+
+                llvm::CloneFunctionInto(
+                    dst_func,
+                    global_function,
+                    vmap,
+                    llvm::CloneFunctionChangeType::DifferentModule,
+                    returns
+                );
+
+                assert(!llvm::verifyFunction(*dst_func, &llvm::errs()));
             }
 
-            outputs.push_back(generate_outputs(module));
+            outputs.push_back(generate_outputs(unit));
         }
 
         return outputs;
     }
 
-    generated_outputs llvm_transpiler::generate_outputs(llvm::Module& module) {
+    generated_outputs llvm_transpiler::generate_outputs(translation_unit& unit) {
+        llvm::Module& module = unit.module();
         generated_outputs outputs;
         outputs.m_moduleName = module.getName().str();
         outputs.m_llvmUnopt = emit_llvm_ir(module);
@@ -725,19 +776,19 @@ namespace dconstruct::llvm_transpile {
         return m_builder.CreateIntToPtr(raw, m_defaultPointerT);
     }
 
-    llvm::Value* llvm_transpiler::load_register(lift_function& function, const u8 index, std::string_view istr_name) {
+    llvm::Value* llvm_transpiler::load_register(prepared_function_ctx& function, const u8 index, std::string_view istr_name) {
         llvm::Value* raw = m_builder.CreateLoad(m_defaultIntT, function.m_registerFrame[index], istr_name);
         return coerce_from_storage(raw, function.m_types[index]);
     }
 
-    llvm::StoreInst* llvm_transpiler::make_store(lift_function& function, const u8 index, llvm::Value* rhs, llvm::Type* type) {
+    llvm::StoreInst* llvm_transpiler::make_store(prepared_function_ctx& function, const u8 index, llvm::Value* rhs, llvm::Type* type) {
         if (type) {
             function.m_types[index] = type;
         }
         return m_builder.CreateStore(coerce_to_storage(rhs), function.m_registerFrame[index]);
     }
 
-    llvm::StoreInst* llvm_transpiler::make_binary(lift_function& function, const Instruction& istr, std::function<llvm::Value*(llvm::Value*, llvm::Value*)> binary_op, llvm::Type* dest_type, std::string_view istr_id) {
+    llvm::StoreInst* llvm_transpiler::make_binary(prepared_function_ctx& function, const Instruction& istr, std::function<llvm::Value*(llvm::Value*, llvm::Value*)> binary_op, llvm::Type* dest_type, std::string_view istr_id) {
         llvm::Value* lhs = load_register(function, istr.operand1, std::format("{}_load_lhs", istr_id));
         llvm::Value* rhs = load_register(function, istr.operand2, std::format("{}_load_rhs", istr_id));
         if (lhs->getType() != rhs->getType() && (lhs->getType() != m_defaultPointerT && rhs->getType() != m_defaultPointerT)) {
@@ -748,7 +799,7 @@ namespace dconstruct::llvm_transpile {
         return make_store(function, istr.destination, res);
     }
 
-    llvm::StoreInst* llvm_transpiler::make_binary_imm(lift_function& function, const Instruction& istr, std::function<llvm::Value*(llvm::Value*, llvm::Value*)> binary_op, llvm::Type* dest_type, std::string_view istr_id) {
+    llvm::StoreInst* llvm_transpiler::make_binary_imm(prepared_function_ctx& function, const Instruction& istr, std::function<llvm::Value*(llvm::Value*, llvm::Value*)> binary_op, llvm::Type* dest_type, std::string_view istr_id) {
         llvm::Value* lhs = load_register(function, istr.operand1, std::format("{}_load_lhs", istr_id));
         llvm::Type* imm_type = lhs->getType()->isPointerTy() ? m_builder.getInt8Ty() : lhs->getType();
         llvm::Value* imm =  llvm::ConstantInt::get(imm_type, istr.operand2);
@@ -757,14 +808,14 @@ namespace dconstruct::llvm_transpile {
         return make_store(function, istr.destination, res);
     }
 
-    llvm::StoreInst* llvm_transpiler::make_unary(lift_function& function, const Instruction& istr, std::function<llvm::Value*(llvm::Value*)> unary_op, llvm::Type* dest_type, std::string_view istr_id) {
+    llvm::StoreInst* llvm_transpiler::make_unary(prepared_function_ctx& function, const Instruction& istr, std::function<llvm::Value*(llvm::Value*)> unary_op, llvm::Type* dest_type, std::string_view istr_id) {
         llvm::Value* lhs = load_register(function, istr.operand1, std::format("{}_load_op1", istr_id));
         llvm::Value* res = unary_op(lhs);
         function.m_types[istr.destination] = dest_type;
         return make_store(function, istr.destination, res);
     }
 
-    llvm::FunctionType* llvm_transpiler::exchange_function_types(lift_function& function, llvm::Type* new_arg_type, const u8 type_location, const u8 arg_idx) {
+    llvm::FunctionType* llvm_transpiler::exchange_function_types(prepared_function_ctx& function, llvm::Type* new_arg_type, const u8 type_location, const u8 arg_idx) {
         llvm::FunctionType* old_f_type = llvm::cast<llvm::FunctionType>(function.m_types[type_location]);
         std::vector<llvm::Type*> new_arg_types;
         new_arg_types.reserve(old_f_type->getNumParams());
@@ -779,12 +830,13 @@ namespace dconstruct::llvm_transpile {
 
     errmsg transpile_functions_to_llvm(llvm::Module& module, const std::vector<const function_disassembly*>& funcs, const SIDBase& sidbase) {
         llvm_transpiler t(sidbase);
+        translation_unit unit(llvm::CloneModule(module));
         for (const function_disassembly* func : funcs) {
-            resstr<llvm::Function*> res = t.transpile_function(module, *func);
-            if (!res.has_value()) {
-                return res.error();
+            if (errmsg error = t.transpile_function(unit, *func)) {
+                return error;
             }
         }
+        module = std::move(unit.module());
         return std::nullopt;
     }
 
@@ -1032,20 +1084,22 @@ namespace dconstruct::llvm_transpile {
         return std::vector<char>(data, data + size);
     }
 
-    std::unique_ptr<llvm::Module> llvm_transpiler::create_runtime_module(llvm::LLVMContext& ctx) {
-        std::unique_ptr module = std::make_unique<llvm::Module>("__dcvm_runtime", ctx);
+    void llvm_transpiler::enable_runtime_module() {
+        std::unique_ptr module = std::make_unique<llvm::Module>("__dcvm_runtime", m_ctx);
 
-        llvm::IRBuilder<> builder(ctx);
-        { // is-final-build?()
+        {
+            constexpr auto name = "is-final-build?";
+
             constexpr bool is_final_build_val = true;
-            llvm::FunctionType* is_final_build_t = llvm::FunctionType::get(llvm::Type::getInt1Ty(ctx), {}, false);
-            llvm::Function* is_final_build_f = llvm::Function::Create(is_final_build_t, llvm::GlobalValue::LinkageTypes::ExternalLinkage, 0, "is-final-build?", module.get());
-            llvm::BasicBlock* block = llvm::BasicBlock::Create(ctx, "bb", is_final_build_f);
-            builder.SetInsertPoint(block, block->begin());
-            llvm::Value* ret_value = builder.getInt1(is_final_build_val);
-            builder.CreateRet(ret_value);
+            llvm::FunctionType* is_final_build_t = llvm::FunctionType::get(llvm::Type::getInt64Ty(m_ctx), {}, false);
+            llvm::Function* is_final_build_f = llvm::Function::Create(is_final_build_t, llvm::GlobalValue::LinkageTypes::ExternalLinkage, 0, name, module.get());
+            llvm::BasicBlock* block = llvm::BasicBlock::Create(m_ctx, "bb", is_final_build_f);
+            m_builder.SetInsertPoint(block, block->begin());
+            llvm::Value* ret_value = m_builder.getInt64(is_final_build_val);
+            m_builder.CreateRet(ret_value);
+            m_funcLocations[name] = is_final_build_f;
         }
 
-        return module;
+        m_translationUnits.emplace_back(std::move(module));
     }
 }
