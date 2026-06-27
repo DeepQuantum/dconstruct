@@ -22,7 +22,7 @@ DCVMTargetLowering::DCVMTargetLowering(const TargetMachine &TM,
     addRegisterClass(MVT::f32, &DCVM::GPRRegClass);
 
     setBooleanContents(ZeroOrOneBooleanContent);
-    setOperationAction(ISD::SETCC, MVT::i64, Legal);
+    setOperationAction(ISD::SETCC, MVT::i64, Custom);
     setOperationAction(ISD::SETCC, MVT::f32, Legal);
 
     setOperationAction(ISD::ConstantFP, MVT::f32, Legal);
@@ -80,6 +80,8 @@ SDValue DCVMTargetLowering::LowerOperation(SDValue Op, SelectionDAG &DAG) const 
     switch (Op.getOpcode()) {
     case ISD::SELECT_CC:
         return LowerSELECT_CC(Op, DAG);
+    case ISD::SETCC:
+        return LowerSETCC(Op, DAG);
     default:
         llvm_unreachable("DCVMTargetLowering::LowerOperation unimplemented");
     }
@@ -95,6 +97,34 @@ SDValue DCVMTargetLowering::LowerSELECT_CC(SDValue Op, SelectionDAG &DAG) const 
 
     SDValue Cond = DAG.getNode(ISD::SETCC, DL, MVT::i64, LHS, RHS, CC);
     return DAG.getNode(DCVMISD::SELECT, DL, Op.getValueType(), Cond, TrueV, FalseV);
+}
+
+SDValue DCVMTargetLowering::LowerSETCC(SDValue Op, SelectionDAG &DAG) const {
+    const ISD::CondCode CC = cast<CondCodeSDNode>(Op.getOperand(2))->get();
+
+    if (!ISD::isUnsignedIntSetCC(CC)) {
+        return Op;
+    }
+
+    ISD::CondCode SignedCC;
+    switch (CC) {
+    case ISD::SETUGT: SignedCC = ISD::SETGT; break;
+    case ISD::SETUGE: SignedCC = ISD::SETGE; break;
+    case ISD::SETULT: SignedCC = ISD::SETLT; break;
+    case ISD::SETULE: SignedCC = ISD::SETLE; break;
+    default: llvm_unreachable("unexpected unsigned condition code");
+    }
+
+    const SDLoc DL(Op);
+    SDValue LHS = Op.getOperand(0);
+    SDValue RHS = Op.getOperand(1);
+
+    SDValue Bias = DAG.getConstant(0x8000000000000000ULL, DL, MVT::i64);
+    SDValue BiasedLHS = DAG.getNode(ISD::XOR, DL, MVT::i64, LHS, Bias);
+    SDValue BiasedRHS = DAG.getNode(ISD::XOR, DL, MVT::i64, RHS, Bias);
+
+    return DAG.getNode(ISD::SETCC, DL, Op.getValueType(), BiasedLHS, BiasedRHS,
+                       DAG.getCondCode(SignedCC));
 }
 
 MachineBasicBlock *

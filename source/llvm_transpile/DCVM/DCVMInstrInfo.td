@@ -314,6 +314,42 @@ def LOADSTATICU64IMMri : BasicInst<
     let Inst{23-16} = idx;
 }
 
+def LOADSTATICINTrr : BasicInst<
+    (outs GPR:$dst),
+    (ins GPR:$idx),
+    "LoadStaticInt\t$dst, $idx"
+> {
+    bits<8> dst;
+    bits<8> idx;
+    let opcode = 9;
+    let Inst{15-8}  = dst;
+    let Inst{23-16} = idx;
+}
+
+def LOADSTATICFLOATrr : BasicInst<
+    (outs GPR:$dst),
+    (ins GPR:$idx),
+    "LoadStaticFloat\t$dst, $idx"
+> {
+    bits<8> dst;
+    bits<8> idx;
+    let opcode = 10;
+    let Inst{15-8}  = dst;
+    let Inst{23-16} = idx;
+}
+
+def LOADSTATICPOINTERrr : BasicInst<
+    (outs GPR:$dst),
+    (ins GPR:$idx),
+    "LoadStaticPointer\t$dst, $idx"
+> {
+    bits<8> dst;
+    bits<8> idx;
+    let opcode = 11;
+    let Inst{15-8}  = dst;
+    let Inst{23-16} = idx;
+}
+
 def LOADI8   : LoadInst<75, "LoadI8",   sextloadi8>;
 def LOADU8   : LoadInst<76, "LoadU8",   zextloadi8>;
 def LOADI16  : LoadInst<77, "LoadI16",  sextloadi16>;

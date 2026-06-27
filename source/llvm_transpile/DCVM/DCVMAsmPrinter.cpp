@@ -4,6 +4,7 @@
 #include "MCTargetDesc/DCVMInstPrinter.h"
 #include "MCTargetDesc/DCVMMCTargetDesc.h"
 #include "TargetInfo/DCVMTargetInfo.h"
+#include "llvm/ADT/ArrayRef.h"
 #include "llvm/ADT/SmallVector.h"
 #include "llvm/CodeGen/AsmPrinter.h"
 #include "llvm/CodeGen/MachineBasicBlock.h"
@@ -13,6 +14,7 @@
 #include "llvm/CodeGen/TargetSubtargetInfo.h"
 #include "llvm/IR/Constants.h"
 #include "llvm/IR/Function.h"
+#include "llvm/IR/Intrinsics.h"
 #include "llvm/IR/Metadata.h"
 #include "llvm/MC/MCCodeEmitter.h"
 #include "llvm/MC/MCContext.h"
@@ -106,12 +108,20 @@ void DCVMAsmPrinter::emitFunctionBodyEnd() {
     const ArrayRef<uint64_t> Symbols =
         MF->getInfo<DCVMMachineFunctionInfo>()->getSymbols();
 
+    const ArrayRef<std::byte> PointerMap =
+        MF->getInfo<DCVMMachineFunctionInfo>()->getPointerMap();
+
     if (!Symbols.empty()) {
         MCSymbol *TableSym =
             OutContext.getOrCreateSymbol(MF->getName() + "_symbol_table");
         OutStreamer->emitLabel(TableSym);
         for (const uint64_t Value : Symbols)
             OutStreamer->emitInt64(Value);
+        MCSymbol *PointerMapSym =
+            OutContext.getOrCreateSymbol(MF->getName() + "_pointer_map");
+        OutStreamer->emitLabel(PointerMapSym);
+        for (const std::byte Value : PointerMap)
+            OutStreamer->emitInt8(static_cast<std::uint8_t>(Value));
     }
 
     for (const auto &[WordStart, Target] : m_branchFixups) {
@@ -125,6 +135,9 @@ void DCVMAsmPrinter::emitFunctionBodyEnd() {
 
     for (const uint64_t Value : Symbols)
         appendU64LE(m_funcBytes, Value);
+    for (const std::byte Value : PointerMap)
+        m_funcBytes.push_back(static_cast<uint8_t>(Value));
+
 
     uint64_t Sid = 0;
     const Function &F = MF->getFunction();

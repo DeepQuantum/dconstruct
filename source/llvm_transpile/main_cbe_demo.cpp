@@ -1,8 +1,11 @@
+#include "DCScript.h"
 #include "binaryfile.h"
 #include "disassembly/disassembler.h"
+#include "disassembly/instructions.h"
 #include "llvm_transpile/llvm_transpile.h"
 #include "base.h"
 #include "sidbase.h"
+#include "llvm/IR/InlineAsm.h"
 #include "llvm/IR/LLVMContext.h"
 #include "llvm/IR/Intrinsics.h"
 #include "llvm/IR/IntrinsicsDCVM.h"
@@ -16,6 +19,7 @@
 #include <format>
 #include <filesystem>
 #include <fstream>
+#include <memory>
 #include <print>
 #include <string>
 #include <utility>
@@ -58,60 +62,6 @@ using namespace dconstruct;
     }
 }
 
-struct generated_outputs {
-    std::string llvm_unopt;
-    std::string llvm_opt;
-    std::string llvm_lowered;
-    std::string llvm_deduped;
-    std::string dcvm_asm;
-    std::vector<char> dcvm_bytecode;
-};
-
-static generated_outputs generate_outputs(llvm::Module& module) {
-    generated_outputs outputs;
-
-    outputs.llvm_unopt = llvm_transpile::emit_llvm_ir(module);
-    llvm_transpile::optimize_module(module);
-    outputs.llvm_opt = llvm_transpile::emit_llvm_ir(module);
-
-    llvm_transpile::lower_calls_to_lookup(module);
-    outputs.llvm_lowered = llvm_transpile::emit_llvm_ir(module);
-
-    llvm_transpile::optimize_module(module);
-    outputs.llvm_deduped = llvm_transpile::emit_llvm_ir(module);
-
-    outputs.dcvm_asm = llvm_transpile::emit_dcvm_asm(module);
-    outputs.dcvm_bytecode = llvm_transpile::emit_dcvm_bytecode(module);
-
-    return outputs;
-}
-
-static void print_outputs(const generated_outputs& outputs) {
-    const std::filesystem::path out_dir = std::filesystem::path(__FILE__).parent_path();
-
-    const std::array<std::pair<const char*, const std::string*>, 5> text_outputs = {{
-        {"output_unopt.ll", &outputs.llvm_unopt},
-        {"output_opt.ll", &outputs.llvm_opt},
-        {"output_lowered.ll", &outputs.llvm_lowered},
-        {"output_deduped.ll", &outputs.llvm_deduped},
-        {"output.dcvm.s", &outputs.dcvm_asm},
-    }};
-
-    for (const auto& [filename, content] : text_outputs) {
-        const std::filesystem::path out_path = out_dir / filename;
-        std::ofstream out_file(out_path);
-        out_file << *content;
-        out_file.close();
-        std::println("wrote {}", out_path.string());
-    }
-
-    const std::filesystem::path bin_path = out_dir / "output.dcvm.bin";
-    std::ofstream bin_file(bin_path, std::ios::binary);
-    bin_file.write(outputs.dcvm_bytecode.data(), static_cast<std::streamsize>(outputs.dcvm_bytecode.size()));
-    bin_file.close();
-    std::println("wrote {} ({} bytes)", bin_path.string(), outputs.dcvm_bytecode.size());
-}
-
 int main() {
     auto sidbase_result = SIDBase::from_binary("sidbase.bin");
     if (!sidbase_result.has_value()) {
@@ -120,29 +70,38 @@ int main() {
     }
     const SIDBase& sidbase = sidbase_result.value();
 
-    const std::filesystem::path filepath = "anim-gas-mask-impl.bin";
-    resstr<BinaryFile> binfile = BinaryFile::from_path(filepath);
-    if (!binfile) {
-        std::println(stderr, "failed to load binary file {}: {}", filepath.filename().string(), binfile.error());
-        return 1;
-    }
+    std::vector<std::filesystem::path> paths = {"wave-manager-funcs.bin", "anim-gas-mask-impl.bin"};
 
-    llvm::LLVMContext ctx;
-    llvm::Module module(filepath.string(), ctx);
+    llvm_transpile::llvm_transpiler tp(sidbase);
+    std::vector<std::unique_ptr<BinaryFile>> binfiles;
+    std::vector<std::unique_ptr<Disassembler>> disassemblers;
+    binfiles.reserve(paths.size());
+    disassemblers.reserve(paths.size());
 
-    Disassembler disassembler(&*binfile, &sidbase);
-    disassembler.disassemble();
-
-    for (const auto* function : disassembler.get_all_functions()) {
-        resstr<llvm::Function*> res = llvm_transpile::transpile_function_to_llvm(module, *function, sidbase);
-        if (!res.has_value()) {
-            std::println(stderr, "transpile failed: {}", res.error());
+    for (const auto& path: paths) {
+        resstr<BinaryFile> binfile = BinaryFile::from_path(path);
+        if (!binfile) {
+            std::println(stderr, "failed to load binary file {}: {}", path.filename().string(), binfile.error());
             return 1;
         }
+
+        binfiles.push_back(std::make_unique<BinaryFile>(std::move(*binfile)));
+        disassemblers.push_back(std::make_unique<Disassembler>(binfiles.back().get(), &sidbase));
+        disassemblers.back()->disassemble();
+
+        tp.add_module(path.filename().string(), disassemblers.back()->get_all_functions());
     }
 
-    const generated_outputs outputs = generate_outputs(module);
-    print_outputs(outputs);
+    const std::filesystem::path out_dir = std::filesystem::path(__FILE__).parent_path();
+    const std::vector<llvm_transpile::generated_outputs> outputs = tp.run();
+
+    for (const llvm_transpile::generated_outputs& output : outputs) {
+        if (errmsg error = llvm_transpile::llvm_transpiler::write_outputs(output, out_dir)) {
+            std::println(stderr, "failed to write outputs for {}: {}", output.m_moduleName, *error);
+            return 1;
+        }
+        std::println("generated {} ({} bytes)", output.m_moduleName, output.m_dcvmBytecode.size());
+    }
 
     return 0;
 }

@@ -2,6 +2,7 @@
 
 #include "DCHeader.h"
 #include "DCScript.h"
+#include "base.h"
 #include "sidbase.h"
 #include "disassembly/instructions.h"
 #include "compilation/global_state.h"
@@ -64,6 +65,11 @@ namespace dconstruct {
         [[nodiscard]] bool gets_pointed_at(const location) const noexcept;
         [[nodiscard]] bool is_string(const location) const noexcept;
         [[nodiscard]] byte_uptr get_unmapped() const;
+        void edit_reloc_table(const location loc, const bool value);
+
+
+        void insert_recompiled_functions(const std::vector<char>& bytes);
+        errmsg dump_to_file(const std::filesystem::path& path) const;
 
         std::filesystem::path m_path;
         mutable std::map<sid64, std::string> m_sidCache;

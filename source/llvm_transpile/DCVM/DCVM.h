@@ -13,6 +13,8 @@ FunctionPass* createDCVMISelDag(DCVMTargetMachine& TM);
 
 void initializeDCVMDAGToDAGISelLegacyPass(PassRegistry&);
 
+void initializeDCVMLowerSwitchPass(PassRegistry&);
+
 Target& getTheDCVMTarget();
 
 } // namespace llvm

@@ -178,6 +178,10 @@ namespace dconstruct {
             return location(m_ptr + rhs);
         }
 
+        DC_ALWAYS_INLINE void operator +=(const u64 rhs) noexcept {
+            m_ptr += rhs;
+        }
+
         [[nodiscard]] DC_ALWAYS_INLINE location operator-(const u64 rhs) const noexcept {
             return location(m_ptr - rhs);
         }

@@ -1,4 +1,5 @@
 #include "binaryfile.h"
+#include "disassembly/edit_disassembler.h"
 
 #include <iostream>
 #include <fstream>
@@ -70,6 +71,12 @@ namespace dconstruct {
         }
         offset /= 8;
         return m_relocTable.get<u8>(offset / 8) & (1 << (offset % 8));
+    }
+
+    void BinaryFile::edit_reloc_table(const location loc, const bool value) {
+         p64 offset = (loc.num() - reinterpret_cast<p64>(m_bytes.get()));
+         offset /= 8;
+         *const_cast<u8*>(m_relocTable.as<u8>(offset / 8)) |= (value << (offset % 8));
     }
 
     [[nodiscard]] bool BinaryFile::is_string(const location loc) const noexcept {
@@ -145,5 +152,18 @@ namespace dconstruct {
         }
 
         return byte_uptr(unmapped_bytes);
+    }
+
+    errmsg BinaryFile::dump_to_file(const std::filesystem::path& path) const {
+        std::ofstream of(path, std::ios::binary);
+
+        if (!of) {
+            return std::format("couldn't open file {}", path.string());
+        }
+
+        std::unique_ptr unmapped = get_unmapped();
+        of.write(reinterpret_cast<const char*>(unmapped.get()), m_size);
+
+        return std::nullopt;
     }
 }

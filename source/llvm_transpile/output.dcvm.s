@@ -1,936 +1,1526 @@
-	.file	"anim-gas-mask-impl.bin"
+	.file	"wave-manager-funcs.bin"
 	.text
-	.globl	"wait-equip-gas-mask"
-	.type	"wait-equip-gas-mask",@function
-"wait-equip-gas-mask":
-	Move	r3, r51
-	Move	r2, r50
-	Move	r1, r49
-	LoadU16Imm	r49, 1
-	LookupPointer	r4, 2
-	Move	r50, r49
-	CallFf	r0, r4, 2
-	LoadStaticU64Imm	r50, 4
-	LookupPointer	r5, 1
-	Move	r49, r1
-	Move	r51, r0
-	CallFf	r0, r5, 3
-	LoadStaticU64Imm	r49, 3
-	LookupPointer	r5, 0
-	Call	r0, r5, 1
-	BranchIf	.LBB0_3, r0
-	LookupPointer	r6, 5
-.LBB0_2:
-	CallFf	r0, r6, 0
-	Call	r0, r5, 1
-	BranchIfNot	.LBB0_2, r0
-.LBB0_3:
-	LoadU16Imm	r49, 7
-	Move	r50, r1
-	CallFf	r0, r4, 2
-	LoadStaticU64Imm	r49, 9
-	LoadStaticU64Imm	r4, 3
-	LookupPointer	r6, 8
-	Move	r50, r4
-	Move	r51, r0
-	CallFf	r0, r6, 3
-	OpLogNot	r0, r3
-	BranchIf	.LBB0_4, r0
-	LookupPointer	r0, 7
-	Branch	.LBB0_6
-.LBB0_4:
-	LookupPointer	r0, 6
-.LBB0_6:
-	Move	r49, r1
-	Move	r50, r2
-	Call	r0, r0, 2
-	Move	r49, r4
-	Call	r0, r5, 1
-	BranchIf	.LBB0_9, r0
-	LookupPointer	r2, 5
-	LoadStaticU64Imm	r49, 3
-.LBB0_8:
-	CallFf	r0, r2, 0
-	Call	r0, r5, 1
-	BranchIfNot	.LBB0_8, r0
-.LBB0_9:
-	LookupPointer	r0, 10
-	Move	r49, r1
+	.globl	"is-final-build?"
+	.type	"is-final-build?",@function
+"is-final-build?":
+	LoadU16Imm	r0, 1
+	Return	r0
+.Lfunc_end0:
+	.size	"is-final-build?", .Lfunc_end0-"is-final-build?"
+
+	.globl	"wave-manager-get-npc-alive-count-by-faction"
+	.type	"wave-manager-get-npc-alive-count-by-faction",@function
+"wave-manager-get-npc-alive-count-by-faction":
+	Move	r1, r50
+	LookupPointer	r0, 2
+	Call	r0, r0, 1
+	Move	r3, r0
+	LookupPointer	r4, 1
+	Move	r49, r3
+	CallFf	r0, r4, 1
+	Move	r2, r0
+	CallFf	r0, r4, 1
+	Move	r4, r0
+	LookupPointer	r0, 0
+	CallFf	r0, r0, 0
+	LoadU16Imm	r0, 1
+	ILessThan	r0, r4, r0
+	BranchIf	.LBB1_6, r0
+	LoadU16Imm	r5, 0
+	LookupPointer	r7, 3
+	LookupPointer	r8, 4
+	LoadU16Imm	r9, 7
+	LoadU16Imm	r10, 5
+	LoadU16Imm	r11, 4
+	Move	r6, r5
+	Branch	.LBB1_2
+.LBB1_4:
+	LoadU64	r49, r0
+.LBB1_5:
+	Move	r50, r5
+	Call	r0, r7, 2
+	INotEqual	r0, r1, r0
+	ISub	r2, r2, r0
+	IAddImm	r6, r6, 1
+	ILessThan	r0, r6, r4
+	BranchIfNot	.LBB1_6, r0
+.LBB1_2:
+	Move	r49, r3
+	Move	r50, r6
+	CallFf	r0, r8, 2
+	Move	r49, r5
+	BranchIfNot	.LBB1_5, r0
+	IAddImm	r12, r0, 12
+	LoadU16	r12, r12
+	INotEqual	r13, r12, r9
+	BranchIfNot	.LBB1_4, r13
+	IEqual	r13, r12, r10
+	BranchIf	.LBB1_4, r13
+	IEqual	r12, r12, r11
+	Move	r49, r5
+	BranchIf	.LBB1_4, r12
+	Branch	.LBB1_5
+.LBB1_6:
+	LookupPointer	r0, 5
+	CallFf	r0, r0, 0
+	Move	r0, r2
+	Return	r0
+"wave-manager-get-npc-alive-count-by-faction_symbol_table":
+	.quad	3423406688794319677
+	.quad	4013010305452811590
+	.quad	6237759117678430531
+	.quad	6230461421097945948
+	.quad	-2664920944689591574
+	.quad	-5673227674328399655
+"wave-manager-get-npc-alive-count-by-faction_pointer_map":
+	.byte	0
+	.byte	0
+	.byte	0
+	.byte	0
+	.byte	0
+	.byte	0
+.Lfunc_end1:
+	.size	"wave-manager-get-npc-alive-count-by-faction", .Lfunc_end1-"wave-manager-get-npc-alive-count-by-faction"
+
+	.globl	"wave-manager-get-total-npc-in-wave-count"
+	.type	"wave-manager-get-total-npc-in-wave-count",@function
+"wave-manager-get-total-npc-in-wave-count":
+	LookupPointer	r0, 0
+	Call	r0, r0, 1
+	BranchIf	.LBB2_2, r0
+	LookupPointer	r0, 3
+	CallFf	r0, r0, 1
+	LoadStaticPointerImm	r49, 4
+	LookupPointer	r1, 2
+	Move	r50, r0
+	CallFf	r0, r1, 2
+	LookupPointer	r1, 1
+	Move	r49, r0
+	CallFf	r0, r1, 1
+.LBB2_2:
+	LoadStaticU64Imm	r49, 6
+	LookupPointer	r0, 5
 	CallFf	r0, r0, 1
 	Return	r0
-"wait-equip-gas-mask_symbol_table":
-	.quad	6481843155139167450
-	.quad	-2210386714833194546
-	.quad	3684810824690217768
-	.quad	6150028017864311825
-	.quad	7671589888336862994
-	.quad	-3047912596559836939
-	.quad	5608585023750540989
-	.quad	6078802017353408438
-	.quad	4789555171397753330
-	.quad	-3266162430027026367
-	.quad	-5076200561558624898
-.Lfunc_end0:
-	.size	"wait-equip-gas-mask", .Lfunc_end0-"wait-equip-gas-mask"
+"wave-manager-get-total-npc-in-wave-count_symbol_table":
+	.quad	998391088342721072
+	.quad	2997365522926602638
+	.quad	6072285182812319085
+	.quad	-3311351115081502130
+	.quad	3
+	.quad	4013010305452811590
+	.quad	-7194759694070631083
+"wave-manager-get-total-npc-in-wave-count_pointer_map":
+	.byte	0
+	.byte	0
+	.byte	0
+	.byte	0
+	.byte	1
+	.byte	0
+	.byte	0
+.Lfunc_end2:
+	.size	"wave-manager-get-total-npc-in-wave-count", .Lfunc_end2-"wave-manager-get-total-npc-in-wave-count"
 
-	.globl	"internal-put-on-gas-mask.1"
-	.type	"internal-put-on-gas-mask.1",@function
-"internal-put-on-gas-mask.1":
-	Move	r2, r50
+	.globl	"wave-manager-is-ready?.1"
+	.type	"wave-manager-is-ready?.1",@function
+"wave-manager-is-ready?.1":
 	Move	r1, r49
-	LookupPointer	r6, 3
-	CallFf	r0, r6, 0
-	LookupPointer	r0, 2
+	LookupPointer	r0, 0
 	CallFf	r0, r0, 1
-	LoadStaticU64Imm	r50, 4
-	LookupPointer	r3, 1
+	BranchIf	.LBB3_2, r0
+	LookupPointer	r0, 3
+	Move	r49, r1
+	CallFf	r0, r0, 1
+	LoadStaticPointerImm	r49, 4
+	LookupPointer	r2, 2
+	Move	r50, r0
+	CallFf	r0, r2, 2
+	LookupPointer	r2, 1
+	Move	r49, r0
+	CallFf	r0, r2, 1
+.LBB3_2:
+	LoadStaticU64Imm	r49, 6
+	LookupPointer	r0, 5
+	Move	r50, r1
+	CallFf	r0, r0, 2
+	Return	r0
+"wave-manager-is-ready?.1_symbol_table":
+	.quad	-6870362608876642110
+	.quad	2997365522926602638
+	.quad	6072285182812319085
+	.quad	-3311351115081502130
+	.quad	3
+	.quad	54185015286451590
+	.quad	-4142738284031958410
+"wave-manager-is-ready?.1_pointer_map":
+	.byte	0
+	.byte	0
+	.byte	0
+	.byte	0
+	.byte	1
+	.byte	0
+	.byte	0
+.Lfunc_end3:
+	.size	"wave-manager-is-ready?.1", .Lfunc_end3-"wave-manager-is-ready?.1"
+
+	.globl	"wave-manager-get-encounter-intensity"
+	.type	"wave-manager-get-encounter-intensity",@function
+"wave-manager-get-encounter-intensity":
+	Move	r1, r49
+	LookupPointer	r0, 0
+	Call	r0, r0, 1
+	BranchIf	.LBB4_2, r0
+	LookupPointer	r0, 3
+	Move	r49, r1
+	CallFf	r0, r0, 1
+	LoadStaticPointerImm	r49, 4
+	LookupPointer	r2, 2
+	Move	r50, r0
+	CallFf	r0, r2, 2
+	LookupPointer	r2, 1
+	Move	r49, r0
+	CallFf	r0, r2, 1
+.LBB4_2:
+	LoadStaticU64Imm	r49, 6
+	LookupPointer	r0, 5
+	Move	r50, r1
+	CallFf	r0, r0, 2
+	Return	r0
+"wave-manager-get-encounter-intensity_symbol_table":
+	.quad	998391088342721072
+	.quad	2997365522926602638
+	.quad	6072285182812319085
+	.quad	-3311351115081502130
+	.quad	3
+	.quad	-8623127435633610462
+	.quad	-3532724295824964118
+"wave-manager-get-encounter-intensity_pointer_map":
+	.byte	0
+	.byte	0
+	.byte	0
+	.byte	0
+	.byte	1
+	.byte	0
+	.byte	0
+.Lfunc_end4:
+	.size	"wave-manager-get-encounter-intensity", .Lfunc_end4-"wave-manager-get-encounter-intensity"
+
+	.globl	"wave-manager-get-next-spawning-wave-npc-schemas-group"
+	.type	"wave-manager-get-next-spawning-wave-npc-schemas-group",@function
+"wave-manager-get-next-spawning-wave-npc-schemas-group":
+	Move	r4, r49
+	LookupPointer	r0, 1
+	Call	r0, r0, 1
+	Move	r1, r0
+	LookupPointer	r0, 0
+	CallFf	r0, r0, 0
+	Move	r2, r0
+	BranchIfNot	.LBB5_1, r2
+	BranchIfNot	.LBB5_26, r1
+.LBB5_3:
+	IAddImm	r0, r1, 32
+	LoadU64	r5, r0
+	IAddImm	r0, r5, 8
+	LoadI32	r6, r0
+	LoadStaticU64Imm	r49, 9
+	LookupPointer	r0, 6
+	Move	r50, r4
+	CallFf	r0, r0, 2
+	Move	r3, r0
+	LoadStaticU64Imm	r49, 8
+	LoadStaticU64Imm	r50, 7
+	LoadU16Imm	r51, 0
+	LookupPointer	r7, 5
+	CallFf	r0, r7, 3
+	Move	r1, r0
+	ILessThan	r0, r3, r51
+	BranchIf	.LBB5_27, r0
+	IGreaterThanEqual	r0, r3, r6
+	BranchIf	.LBB5_27, r0
+	IMulImm	r0, r3, 24
+	LoadU64	r3, r5
+	IAdd	r0, r3, r0
+	IAddImm	r0, r0, 8
+	LoadU64	r9, r0
+	LoadU16Imm	r3, 0
+	Move	r51, r3
+	CallFf	r0, r7, 3
+	Move	r5, r0
+	CallFf	r0, r7, 3
+	Move	r6, r0
+	CallFf	r0, r7, 3
+	Move	r7, r0
+	LoadStaticU64Imm	r49, 15
+	LookupPointer	r10, 12
+	Move	r50, r4
+	CallFf	r0, r10, 2
+	LookupPointer	r8, 11
+	Move	r49, r5
+	Move	r50, r0
+	CallFf	r0, r8, 3
+	LoadStaticU64Imm	r49, 14
+	Move	r50, r4
+	CallFf	r0, r10, 2
+	Move	r49, r6
+	Move	r50, r0
+	CallFf	r0, r8, 3
+	LoadStaticU64Imm	r49, 13
+	Move	r50, r4
+	CallFf	r0, r10, 2
+	Move	r49, r7
+	Move	r50, r0
+	CallFf	r0, r8, 3
+	LookupPointer	r10, 10
+	Move	r49, r5
+	CallFf	r0, r10, 1
+	BranchIfNot	.LBB5_27, r0
+	Move	r49, r6
+	CallFf	r0, r10, 1
+	BranchIf	.LBB5_8, r0
+	LoadU16Imm	r51, 0
+	Move	r49, r6
+	Move	r50, r5
+	CallFf	r0, r8, 3
+.LBB5_8:
+	LoadStaticU64Imm	r49, 19
+	LoadU16Imm	r5, 1
+	LookupPointer	r0, 17
+	Move	r50, r5
+	CallFf	r0, r0, 2
+	Move	r7, r0
+	Move	r49, r6
+	CallFf	r0, r10, 1
+	Move	r8, r0
+	LoadStaticU64Imm	r49, 18
+	LookupPointer	r0, 16
+	Move	r50, r4
+	CallFf	r0, r0, 2
+	Move	r50, r3
+	BranchIfNot	.LBB5_10, r0
+	IMod	r50, r7, r8
+.LBB5_10:
+	LookupPointer	r0, 20
+	Move	r49, r6
+	CallFf	r0, r0, 2
+	BranchIfNot	.LBB5_16, r0
+	IAddImm	r4, r0, 12
+	LoadU16	r4, r4
+	INotEqual	r6, r4, r5
+	BranchIf	.LBB5_28, r6
+	LoadU8	r3, r0
+	Branch	.LBB5_16
+.LBB5_1:
+	LoadStaticPointerImm	r49, 4
+	LookupPointer	r0, 3
+	CallFf	r0, r0, 1
+	LoadU16Imm	r50, 19
+	LookupPointer	r3, 2
 	Move	r49, r0
 	CallFf	r0, r3, 2
-	Move	r3, r0
-	IAddImm	r0, r3, 56
-	LoadU8	r50, r0
-	LookupPointer	r0, 0
-	Move	r49, r1
-	Call	r0, r0, 2
-	BranchIf	.LBB1_2, r2
-	IAddImm	r0, r3, 40
-	LoadU64	r49, r0
-	LoadStaticU64Imm	r50, 6
-	LoadU16Imm	r53, 1
+	BranchIf	.LBB5_3, r1
+.LBB5_26:
+	LoadStaticU64Imm	r49, 8
+	LoadStaticU64Imm	r50, 7
 	LoadU16Imm	r51, 0
 	LookupPointer	r0, 5
-	Move	r52, r51
-	Move	r54, r51
-	Move	r55, r51
-	Move	r56, r51
-	Move	r57, r51
-	CallFf	r0, r0, 9
-	Move	r2, r0
-.LBB1_2:
-	LoadU16Imm	r50, 6
-	LookupPointer	r0, 8
-	Move	r49, r2
-	CallFf	r0, r0, 2
-	LookupPointer	r7, 7
-	Move	r49, r1
-	CallFf	r0, r7, 1
-	BranchIfNot	.LBB1_4, r0
-	LoadU16Imm	r50, 1
-	LookupPointer	r0, 10
-	Move	r49, r2
-	CallFf	r0, r0, 2
-	LookupPointer	r0, 9
-	Branch	.LBB1_5
-.LBB1_4:
-	LookupPointer	r0, 11
-.LBB1_5:
-	LoadU16Imm	r4, 1
-	LoadU16Imm	r5, 0
-	Move	r49, r2
-	Move	r50, r5
-	Call	r0, r0, 2
-	LookupPointer	r0, 13
-	Move	r49, r1
-	Move	r50, r2
-	CallFf	r0, r0, 2
-	LookupPointer	r0, 12
-	Move	r49, r2
-	Move	r50, r5
-	CallFf	r0, r0, 2
-	Move	r49, r1
-	CallFf	r0, r7, 1
-	BranchIf	.LBB1_7, r0
-	CallFf	r0, r6, 0
-.LBB1_7:
-	LoadStaticU64Imm	r51, 24
-	LoadU16Imm	r52, 0
-	LookupPointer	r0, 20
-	Move	r49, r2
-	Move	r50, r1
-	CallFf	r0, r0, 4
-	LoadU16Imm	r49, 6
-	LoadStaticFloatImm	r50, 23
-	LookupPointer	r0, 19
-	CallFf	r0, r0, 2
-	LoadStaticU64Imm	r49, 22
-	LookupPointer	r5, 18
-	Move	r50, r1
-	Move	r51, r0
-	CallFf	r0, r5, 3
-	IAddImm	r0, r3, 16
-	LoadU64	r5, r0
-	LoadStaticU64Imm	r49, 21
-	LoadU16Imm	r50, 16
-	LoadU16Imm	r51, 0
-	LookupPointer	r7, 17
-	Move	r52, r4
-	CallFf	r0, r7, 4
-	LookupPointer	r8, 16
-	Move	r49, r2
-	Move	r50, r5
-	Move	r51, r0
-	CallFf	r0, r8, 3
-	LookupPointer	r5, 14
-	LookupPointer	r9, 15
-	LoadU16Imm	r10, 19
-.LBB1_8:
-	LoadU64	r50, r3
-	CallFf	r0, r9, 0
-	IAddImm	r11, r0, 36
-	StoreU32	r10, [r11], r10
-	IAddImm	r11, r0, 33
-	StoreU8	r4, [r11], r4
-	IAddImm	r11, r0, 34
-	StoreU8	r4, [r11], r4
-	IAddImm	r11, r0, 32
-	StoreU8	r4, [r11], r4
-	Move	r49, r1
-	Move	r51, r0
-	CallFf	r0, r5, 3
-	BranchIfNot	.LBB1_10, r0
-	CallFf	r0, r6, 0
-	Branch	.LBB1_8
-.LBB1_10:
-	IAddImm	r0, r3, 24
-	LoadU64	r1, r0
-	LoadStaticU64Imm	r49, 21
-	LoadU16Imm	r50, 16
-	LoadU16Imm	r51, 0
-	LoadU16Imm	r52, 1
-	CallFf	r0, r7, 4
-	Move	r49, r2
-	Move	r50, r1
-	Move	r51, r0
-	CallFf	r0, r8, 3
+	CallFf	r0, r0, 3
+	Move	r1, r0
+.LBB5_27:
+	Move	r0, r1
 	Return	r0
-"internal-put-on-gas-mask.1_symbol_table":
-	.quad	8203816822361639083
-	.quad	-7658033447216601854
-	.quad	-6573555005595409285
-	.quad	-3047912596559836939
-	.quad	3455792245619945009
-	.quad	7097052834867614476
-	.quad	267125575217391726
-	.quad	6532480022340268902
-	.quad	4766017279285775524
-	.quad	-7252477440030364545
-	.quad	-429226074377614887
-	.quad	-3854484060414110792
-	.quad	-7746349783173232884
-	.quad	-5971891483814290574
-	.quad	6500315221283771953
-	.quad	-2962780980939953026
-	.quad	-9179819928081802467
-	.quad	-7745656483000545638
-	.quad	4789555171397753330
-	.quad	3684810824690217768
-	.quad	-5676660224586178492
-	.quad	8534565298598421705
-	.quad	6817768622307059015
-	.quad	1050253722
-	.quad	8667864169316382944
-.Lfunc_end1:
-	.size	"internal-put-on-gas-mask.1", .Lfunc_end1-"internal-put-on-gas-mask.1"
-
-	.globl	"internal-put-on-gas-mask-immediately.2"
-	.type	"internal-put-on-gas-mask-immediately.2",@function
-"internal-put-on-gas-mask-immediately.2":
-	Move	r2, r50
-	Move	r1, r49
-	LookupPointer	r0, 1
-	CallFf	r0, r0, 1
-	LoadStaticU64Imm	r50, 2
-	LookupPointer	r3, 0
-	Move	r49, r0
-	CallFf	r0, r3, 2
-	Move	r3, r0
-	BranchIf	.LBB2_2, r2
-	IAddImm	r0, r3, 40
-	LoadU64	r49, r0
-	LoadStaticU64Imm	r50, 4
-	LoadU16Imm	r53, 1
-	LoadU16Imm	r51, 0
-	LookupPointer	r0, 3
-	Move	r52, r51
-	Move	r54, r51
-	Move	r55, r51
-	Move	r56, r51
-	Move	r57, r51
-	CallFf	r0, r0, 9
-	Move	r2, r0
-.LBB2_2:
-	LoadU16Imm	r50, 6
-	LookupPointer	r0, 7
-	Move	r49, r2
-	CallFf	r0, r0, 2
-	LookupPointer	r0, 6
-	Move	r49, r1
-	Move	r50, r2
-	CallFf	r0, r0, 2
-	LookupPointer	r5, 5
-	CallFf	r0, r5, 1
-	BranchIfNot	.LBB2_3, r0
-	LoadU16Imm	r49, 6
-	LoadU16Imm	r50, 0
-	LookupPointer	r0, 10
-	CallFf	r0, r0, 2
-	LoadStaticU64Imm	r49, 11
-	LookupPointer	r6, 9
-	Move	r50, r1
-	Move	r51, r0
-	CallFf	r0, r6, 3
-	LoadU16Imm	r50, 1
-	LookupPointer	r0, 8
-	Move	r49, r2
-	CallFf	r0, r0, 2
-	Branch	.LBB2_5
-.LBB2_3:
-	LookupPointer	r6, 9
-.LBB2_5:
-	LoadU16Imm	r4, 0
-	LoadU16Imm	r51, 1
-	LoadStaticU64Imm	r49, 17
-	Move	r50, r1
-	CallFf	r0, r6, 2
-	Move	r49, r1
-	CallFf	r0, r5, 1
-	OpLogNot	r0, r0
-	BranchIf	.LBB2_6, r0
-	LookupPointer	r0, 14
-	Branch	.LBB2_8
-.LBB2_6:
-	LookupPointer	r0, 15
-.LBB2_8:
-	Move	r49, r2
-	Move	r50, r4
-	Call	r0, r0, 2
-	IAddImm	r0, r3, 24
+.LBB5_28:
+	LoadU16Imm	r6, 2
+	IEqual	r6, r4, r6
+	BranchIfNot	.LBB5_29, r6
+	LoadI32	r3, r0
+	Branch	.LBB5_16
+.LBB5_29:
+	LoadU16Imm	r6, 3
+	IEqual	r6, r4, r6
+	BranchIfNot	.LBB5_30, r6
+.LBB5_15:
+	LoadU32	r3, r0
+	Branch	.LBB5_16
+.LBB5_30:
+	LoadU16Imm	r6, 4
+	IEqual	r6, r4, r6
+	BranchIf	.LBB5_14, r6
+	LoadU16Imm	r6, 5
+	IEqual	r6, r4, r6
+	BranchIfNot	.LBB5_32, r6
+.LBB5_14:
 	LoadU64	r3, r0
-	LoadStaticU64Imm	r49, 16
-	LoadU16Imm	r50, 16
-	LookupPointer	r0, 13
-	Move	r52, r51
-	CallFf	r0, r0, 4
-	LoadU64	r5, r0
-	StoreU8	r1, [r5], r1
-	LoadU64	r5, r1
-	StoreU8	r1, [r5], r1
-	LoadU16Imm	r5, 31
-	StoreU32	r5, [r1], r5
-	LoadU64	r5, r0
-	StoreU8	r1, [r5], r1
-	LoadU64	r5, r1
-	StoreU8	r1, [r5], r1
-	IAddImm	r5, r1, 8
-	StoreU64	r4, [r5], r4
-	LoadU64	r4, r0
-	StoreU8	r1, [r4], r1
-	LoadU64	r4, r1
-	StoreU8	r1, [r4], r1
-	StoreU8	r51, [r5], r51
-	LookupPointer	r1, 12
+.LBB5_16:
+	IMulImm	r0, r3, 8
+	LoadU64	r3, r9
+	IAdd	r0, r3, r0
+	LoadU64	r6, r0
+	IAddImm	r7, r6, 8
+	LoadI32	r0, r7
+	ILessThan	r0, r0, r5
+	BranchIf	.LBB5_27, r0
+	OpLogNot	r0, r2
+	LookupPointer	r8, 21
+	LookupPointer	r9, 22
+	LookupPointer	r10, 23
+	BranchIf	.LBB5_22, r0
+	LoadU16Imm	r51, 0
+	LoadU16Imm	r2, 7
+	Move	r3, r51
+	Branch	.LBB5_19
+.LBB5_21:
+	IAddImm	r3, r3, 1
+	LoadI32	r0, r7
+	ILessThan	r0, r3, r0
+	BranchIfNot	.LBB5_27, r0
+.LBB5_19:
+	IMulImm	r0, r3, 16
+	LoadU64	r4, r6
+	IAdd	r49, r4, r0
+	LoadU64	r50, r49
+	Call	r0, r10, 1
+	BranchIfNot	.LBB5_21, r0
 	Move	r49, r2
-	Move	r50, r3
-	Move	r51, r0
-	CallFf	r0, r1, 3
-	Return	r0
-"internal-put-on-gas-mask-immediately.2_symbol_table":
-	.quad	-7658033447216601854
-	.quad	-6573555005595409285
-	.quad	3455792245619945009
-	.quad	7097052834867614476
-	.quad	267125575217391726
-	.quad	6532480022340268902
-	.quad	-5971891483814290574
-	.quad	4766017279285775524
-	.quad	-429226074377614887
-	.quad	4789555171397753330
-	.quad	3684810824690217768
-	.quad	6817768622307059015
-	.quad	-9179819928081802467
-	.quad	-7745656483000545638
-	.quad	-7252477440030364545
-	.quad	-3854484060414110792
-	.quad	8534565298598421705
-	.quad	1827492438953869695
-.Lfunc_end2:
-	.size	"internal-put-on-gas-mask-immediately.2", .Lfunc_end2-"internal-put-on-gas-mask-immediately.2"
-
-	.globl	"get-equipped-gas-mask"
-	.type	"get-equipped-gas-mask",@function
-"get-equipped-gas-mask":
-	LookupPointer	r0, 0
-	CallFf	r0, r0, 1
-	Return	r0
-"get-equipped-gas-mask_symbol_table":
-	.quad	-5076200561558624898
-.Lfunc_end3:
-	.size	"get-equipped-gas-mask", .Lfunc_end3-"get-equipped-gas-mask"
-
-	.globl	"wait-until-in-valid-gas-mask-state.3"
-	.type	"wait-until-in-valid-gas-mask-state.3",@function
-"wait-until-in-valid-gas-mask-state.3":
-	Move	r1, r50
-	LookupPointer	r0, 0
-	CallFf	r0, r0, 1
-	BranchIfNot	.LBB4_16, r0
-	LookupPointer	r4, 1
-	LookupPointer	r5, 2
-	LoadStaticU64Imm	r2, 3
-	LoadStaticU64Imm	r3, 4
-	Branch	.LBB4_2
-.LBB4_4:
-	CallFf	r0, r4, 0
-.LBB4_2:
-	Move	r49, r2
-	CallFf	r0, r5, 1
-	BranchIf	.LBB4_4, r0
-	Move	r49, r3
-	CallFf	r0, r5, 1
-	BranchIf	.LBB4_4, r0
-	LookupPointer	r2, 5
-	BranchIfNot	.LBB4_13, r1
-	LookupPointer	r0, 6
-	CallFf	r0, r0, 0
-	CallFf	r0, r2, 0
-	BranchIf	.LBB4_8, r0
-.LBB4_12:
-	CallFf	r0, r4, 0
-	CallFf	r0, r2, 0
-	BranchIfNot	.LBB4_12, r0
-.LBB4_8:
-	LoadStaticU64Imm	r49, 9
-	CallFf	r0, r5, 1
-	BranchIf	.LBB4_11, r0
-.LBB4_9:
-	CallFf	r0, r4, 0
-	CallFf	r0, r5, 1
-	BranchIfNot	.LBB4_9, r0
-.LBB4_11:
-	LoadU16Imm	r1, 0
-	LoadStaticFloatImm	r50, 13
-	LookupPointer	r0, 11
+	CallFf	r0, r9, 2
 	Move	r49, r1
-	CallFf	r0, r0, 2
-	LoadStaticFloatImm	r49, 12
-	LookupPointer	r0, 10
-	Move	r50, r1
-	Branch	.LBB4_21
-.LBB4_16:
-	LoadU16Imm	r51, 1
-	LoadStaticFloatImm	r52, 16
-	LoadU16Imm	r50, 0
-	LookupPointer	r0, 15
-	Move	r53, r50
-	CallFf	r0, r0, 5
-	LookupPointer	r2, 14
-	CallFf	r0, r2, 1
-	BranchIfNot	.LBB4_19, r0
-	LookupPointer	r3, 1
-.LBB4_18:
-	CallFf	r0, r3, 0
-	CallFf	r0, r2, 1
-	BranchIf	.LBB4_18, r0
-.LBB4_19:
-	BranchIfNot	.LBB4_22, r1
-	LoadU16Imm	r50, 3
-	LookupPointer	r0, 17
-.LBB4_21:
-	CallFf	r0, r0, 2
 	Move	r50, r0
-.LBB4_22:
-	Move	r0, r50
-	Return	r0
-.LBB4_13:
-	LookupPointer	r0, 8
-	CallFf	r0, r0, 0
-	CallFf	r0, r2, 0
-	LookupPointer	r1, 7
-.LBB4_15:
+	CallFf	r0, r8, 3
+	Branch	.LBB5_21
+.LBB5_22:
+	LoadStaticPointerImm	r11, 24
+	LoadStaticPointerImm	r12, 25
+	LoadU16Imm	r51, 0
+	LookupPointer	r13, 2
+	LookupPointer	r14, 3
+	LookupPointer	r15, 26
+	LoadU16Imm	r2, 19
+	LoadU16Imm	r3, 7
+	Move	r16, r51
+	Branch	.LBB5_23
+.LBB5_25:
+	Move	r49, r4
+	Call	r0, r15, 1
+	Move	r49, r5
+	Move	r50, r0
+	Call	r0, r14, 2
 	Move	r49, r0
-	Call	r0, r1, 1
-	BranchIf	.LBB4_8, r0
-	CallFf	r0, r4, 0
-	CallFf	r0, r2, 0
-	Branch	.LBB4_15
-"wait-until-in-valid-gas-mask-state.3_symbol_table":
-	.quad	6532480022340268902
-	.quad	-3047912596559836939
-	.quad	-9003251364961024783
-	.quad	6740565536053766520
-	.quad	2237451099064635199
-	.quad	1646463116072042322
-	.quad	-4831287436211302109
-	.quad	-5808627241898115124
-	.quad	8594926419455150747
-	.quad	4007104907368024212
-	.quad	-626103520744544694
-	.quad	-3092934816467423265
-	.quad	1045220557
-	.quad	1065353216
-	.quad	7683024912818272899
-	.quad	5808793362033684947
-	.quad	3212836864
-	.quad	8573502661920361253
-.Lfunc_end4:
-	.size	"wait-until-in-valid-gas-mask-state.3", .Lfunc_end4-"wait-until-in-valid-gas-mask-state.3"
+	Move	r50, r2
+	Call	r0, r13, 2
+	IAddImm	r16, r16, 1
+	LoadI32	r0, r7
+	ILessThan	r0, r16, r0
+	BranchIfNot	.LBB5_27, r0
+.LBB5_23:
+	IMulImm	r0, r16, 16
+	LoadU64	r4, r6
+	IAdd	r49, r4, r0
+	LoadU64	r4, r49
+	Call	r0, r10, 1
+	Move	r5, r11
+	BranchIfNot	.LBB5_25, r0
+	Move	r49, r3
+	Move	r50, r4
+	CallFf	r0, r9, 2
+	Move	r49, r1
+	Move	r50, r0
+	CallFf	r0, r8, 3
+	Move	r5, r12
+	Branch	.LBB5_25
+.LBB5_32:
+	LoadU16Imm	r6, 6
+	IEqual	r4, r4, r6
+	BranchIf	.LBB5_15, r4
+	Branch	.LBB5_16
+"wave-manager-get-next-spawning-wave-npc-schemas-group_symbol_table":
+	.quad	-7966019873906053962
+	.quad	-4561343946152313276
+	.quad	-1851807429122828651
+	.quad	6072285182812319085
+	.quad	4
+	.quad	-3193965096093911673
+	.quad	-8623127435633610462
+	.quad	-1
+	.quad	8534565298598421705
+	.quad	-6711785430563033859
+	.quad	4013010305452811590
+	.quad	7920520547792940799
+	.quad	-1136051897790519866
+	.quad	-7660363871649534493
+	.quad	-160782944825580444
+	.quad	4382432297032017585
+	.quad	54185015286451590
+	.quad	-1358566869505889023
+	.quad	6884240918683042611
+	.quad	9066152901236616051
+	.quad	-2664920944689591574
+	.quad	3321216610294482167
+	.quad	3684810824690217768
+	.quad	2009214271962714043
+	.quad	26
+	.quad	24
+	.quad	-3311351115081502130
+"wave-manager-get-next-spawning-wave-npc-schemas-group_pointer_map":
+	.byte	0
+	.byte	0
+	.byte	0
+	.byte	0
+	.byte	1
+	.byte	0
+	.byte	0
+	.byte	0
+	.byte	0
+	.byte	0
+	.byte	0
+	.byte	0
+	.byte	0
+	.byte	0
+	.byte	0
+	.byte	0
+	.byte	0
+	.byte	0
+	.byte	0
+	.byte	0
+	.byte	0
+	.byte	0
+	.byte	0
+	.byte	0
+	.byte	1
+	.byte	1
+	.byte	0
+.Lfunc_end5:
+	.size	"wave-manager-get-next-spawning-wave-npc-schemas-group", .Lfunc_end5-"wave-manager-get-next-spawning-wave-npc-schemas-group"
 
-	.globl	"npc-gas-mask-narrative-mode/f"
-	.type	"npc-gas-mask-narrative-mode/f",@function
-"npc-gas-mask-narrative-mode/f":
+	.globl	"wave-manager-get-total-wave-count"
+	.type	"wave-manager-get-total-wave-count",@function
+"wave-manager-get-total-wave-count":
 	Move	r1, r49
-	LoadStaticU64Imm	r49, 3
-	LookupPointer	r0, 2
+	LookupPointer	r0, 0
+	Call	r0, r0, 1
+	BranchIf	.LBB6_2, r0
+	LookupPointer	r0, 3
+	Move	r49, r1
+	CallFf	r0, r0, 1
+	LoadStaticPointerImm	r49, 4
+	LookupPointer	r2, 2
+	Move	r50, r0
+	CallFf	r0, r2, 2
+	LookupPointer	r2, 1
+	Move	r49, r0
+	CallFf	r0, r2, 1
+.LBB6_2:
+	LoadStaticU64Imm	r49, 6
+	LookupPointer	r0, 5
 	Move	r50, r1
 	CallFf	r0, r0, 2
-	LookupPointer	r0, 1
-	Move	r49, r1
-	Call	r0, r0, 1
-	LoadU16Imm	r50, 0
-	LookupPointer	r0, 0
-	CallFf	r0, r0, 2
 	Return	r0
-"npc-gas-mask-narrative-mode/f_symbol_table":
-	.quad	7610916627332680768
-	.quad	-5356689657310757786
-	.quad	4789555171397753330
-	.quad	8119835013146602502
-.Lfunc_end5:
-	.size	"npc-gas-mask-narrative-mode/f", .Lfunc_end5-"npc-gas-mask-narrative-mode/f"
+"wave-manager-get-total-wave-count_symbol_table":
+	.quad	998391088342721072
+	.quad	2997365522926602638
+	.quad	6072285182812319085
+	.quad	-3311351115081502130
+	.quad	3
+	.quad	-8623127435633610462
+	.quad	126389912060929688
+"wave-manager-get-total-wave-count_pointer_map":
+	.byte	0
+	.byte	0
+	.byte	0
+	.byte	0
+	.byte	1
+	.byte	0
+	.byte	0
+.Lfunc_end6:
+	.size	"wave-manager-get-total-wave-count", .Lfunc_end6-"wave-manager-get-total-wave-count"
 
-	.globl	"internal-put-off-gas-mask-immediately"
-	.type	"internal-put-off-gas-mask-immediately",@function
-"internal-put-off-gas-mask-immediately":
-	Move	r2, r50
+	.globl	"wave-manager-get-num-waves-spawned"
+	.type	"wave-manager-get-num-waves-spawned",@function
+"wave-manager-get-num-waves-spawned":
+	Move	r50, r49
+	LoadStaticU64Imm	r49, 2
+	LookupPointer	r0, 1
+	CallFf	r0, r0, 2
+	LookupPointer	r1, 0
+	Move	r49, r0
+	CallFf	r0, r1, 1
+	Return	r0
+"wave-manager-get-num-waves-spawned_symbol_table":
+	.quad	4013010305452811590
+	.quad	-1136051897790519866
+	.quad	-7660363871649534493
+"wave-manager-get-num-waves-spawned_pointer_map":
+	.byte	0
+	.byte	0
+	.byte	0
+.Lfunc_end7:
+	.size	"wave-manager-get-num-waves-spawned", .Lfunc_end7-"wave-manager-get-num-waves-spawned"
+
+	.globl	"wave-manager-get-next-spawning-wave-spawn-configs"
+	.type	"wave-manager-get-next-spawning-wave-spawn-configs",@function
+"wave-manager-get-next-spawning-wave-spawn-configs":
 	Move	r50, r49
 	LookupPointer	r0, 1
-	CallFf	r0, r0, 1
+	Call	r0, r0, 1
 	Move	r1, r0
 	LoadStaticU64Imm	r49, 2
 	LookupPointer	r0, 0
 	CallFf	r0, r0, 2
-	BranchIfNot	.LBB6_1, r2
-	LookupPointer	r0, 3
-	Move	r49, r1
-	CallFf	r0, r0, 1
+	BranchIfNot	.LBB8_2, r0
+	IAddImm	r0, r0, 24
+	LoadU64	r0, r0
+	BranchIfNot	.LBB8_2, r0
 	Return	r0
-.LBB6_1:
+.LBB8_2:
+	BranchIfNot	.LBB8_3, r1
+	IAddImm	r0, r1, 16
+	LoadU64	r0, r0
+	Return	r0
+.LBB8_3:
 	LoadU16Imm	r0, 0
 	Return	r0
-"internal-put-off-gas-mask-immediately_symbol_table":
-	.quad	4789555171397753330
-	.quad	-5076200561558624898
-	.quad	-3264453205741318791
-	.quad	-804116741684351865
-.Lfunc_end6:
-	.size	"internal-put-off-gas-mask-immediately", .Lfunc_end6-"internal-put-off-gas-mask-immediately"
+"wave-manager-get-next-spawning-wave-spawn-configs_symbol_table":
+	.quad	-1136051897790519866
+	.quad	-4561343946152313276
+	.quad	-3630726564894351738
+"wave-manager-get-next-spawning-wave-spawn-configs_pointer_map":
+	.byte	0
+	.byte	0
+	.byte	0
+.Lfunc_end8:
+	.size	"wave-manager-get-next-spawning-wave-spawn-configs", .Lfunc_end8-"wave-manager-get-next-spawning-wave-spawn-configs"
 
-	.globl	"spawn-gas-mask"
-	.type	"spawn-gas-mask",@function
-"spawn-gas-mask":
-	LookupPointer	r0, 3
-	CallFf	r0, r0, 1
-	LoadStaticU64Imm	r50, 5
-	LookupPointer	r1, 2
-	Move	r49, r0
-	CallFf	r0, r1, 2
-	IAddImm	r0, r0, 40
-	LoadU64	r49, r0
-	LoadStaticU64Imm	r50, 4
-	LoadU16Imm	r53, 1
-	LoadU16Imm	r51, 0
-	LookupPointer	r0, 1
-	Move	r52, r51
-	Move	r54, r51
-	Move	r55, r51
-	Move	r56, r51
-	Move	r57, r51
-	CallFf	r0, r0, 9
-	Move	r49, r0
-	LoadU16Imm	r50, 6
-	LookupPointer	r0, 0
-	CallFf	r0, r0, 2
-	Move	r0, r49
-	Return	r0
-"spawn-gas-mask_symbol_table":
-	.quad	4766017279285775524
-	.quad	7097052834867614476
-	.quad	-7658033447216601854
-	.quad	-6573555005595409285
-	.quad	267125575217391726
-	.quad	3455792245619945009
-.Lfunc_end7:
-	.size	"spawn-gas-mask", .Lfunc_end7-"spawn-gas-mask"
-
-	.globl	"player-gas-mask-narrative-mode/f"
-	.type	"player-gas-mask-narrative-mode/f",@function
-"player-gas-mask-narrative-mode/f":
-	Move	r1, r49
-	LoadU16Imm	r49, 0
-	LookupPointer	r0, 4
-	CallFf	r0, r0, 1
-	LookupPointer	r0, 3
-	CallFf	r0, r0, 0
-	LookupPointer	r0, 2
-	Move	r49, r1
-	Call	r0, r0, 3
-	LoadStaticU64Imm	r49, 6
+	.globl	"wave-manager-get-next-spawning-wave-npc-count"
+	.type	"wave-manager-get-next-spawning-wave-npc-count",@function
+"wave-manager-get-next-spawning-wave-npc-count":
 	LookupPointer	r0, 1
 	Call	r0, r0, 1
-	LoadStaticU64Imm	r49, 5
-	LookupPointer	r0, 0
-	CallFf	r0, r0, 1
-	Return	r0
-"player-gas-mask-narrative-mode/f_symbol_table":
-	.quad	7121253686161376880
-	.quad	-5356689657310757786
-	.quad	-2826777519175913837
-	.quad	8165897991486741957
-	.quad	7238593933813171071
-	.quad	-1699981380503476753
-	.quad	5008278420455340480
-.Lfunc_end8:
-	.size	"player-gas-mask-narrative-mode/f", .Lfunc_end8-"player-gas-mask-narrative-mode/f"
-
-	.globl	"internal-put-off-gas-mask"
-	.type	"internal-put-off-gas-mask",@function
-"internal-put-off-gas-mask":
-	Move	r1, r50
-	Move	r2, r49
-	LookupPointer	r7, 8
-	CallFf	r0, r7, 0
-	LookupPointer	r0, 7
-	CallFf	r0, r0, 1
-	LoadStaticU64Imm	r50, 10
-	LookupPointer	r3, 6
+	LookupPointer	r1, 0
 	Move	r49, r0
-	CallFf	r0, r3, 2
-	Move	r5, r0
+	CallFf	r0, r1, 1
+	Return	r0
+"wave-manager-get-next-spawning-wave-npc-count_symbol_table":
+	.quad	4013010305452811590
+	.quad	1399776995102310962
+"wave-manager-get-next-spawning-wave-npc-count_pointer_map":
+	.byte	0
+	.byte	0
+.Lfunc_end9:
+	.size	"wave-manager-get-next-spawning-wave-npc-count", .Lfunc_end9-"wave-manager-get-next-spawning-wave-npc-count"
+
+	.globl	"wave-manager-spawn-next-wave!"
+	.type	"wave-manager-spawn-next-wave!",@function
+"wave-manager-spawn-next-wave!":
+	Move	r50, r49
+	LookupPointer	r0, 0
+	Call	r0, r0, 1
+	BranchIfNot	.LBB10_2, r0
+	LoadStaticU64Imm	r49, 2
+	LookupPointer	r0, 1
+	CallFf	r0, r0, 2
+	Return	r0
+.LBB10_2:
 	LookupPointer	r0, 5
+	Move	r49, r50
+	CallFf	r0, r0, 1
+	LoadStaticPointerImm	r49, 6
+	LookupPointer	r1, 4
+	Move	r50, r0
+	CallFf	r0, r1, 2
+	LookupPointer	r1, 3
+	Move	r49, r0
+	CallFf	r0, r1, 1
+	Return	r0
+"wave-manager-spawn-next-wave!_symbol_table":
+	.quad	998391088342721072
+	.quad	4789555171397753330
+	.quad	5189346610966935392
+	.quad	2997365522926602638
+	.quad	6072285182812319085
+	.quad	-3311351115081502130
+	.quad	5
+"wave-manager-spawn-next-wave!_pointer_map":
+	.byte	0
+	.byte	0
+	.byte	0
+	.byte	0
+	.byte	0
+	.byte	0
+	.byte	1
+.Lfunc_end10:
+	.size	"wave-manager-spawn-next-wave!", .Lfunc_end10-"wave-manager-spawn-next-wave!"
+
+	.globl	"wave-manager-get-npc-alive-group.2"
+	.type	"wave-manager-get-npc-alive-group.2",@function
+"wave-manager-get-npc-alive-group.2":
+	LoadStaticU64Imm	r49, 5
+	LoadStaticU64Imm	r50, 4
+	LoadU16Imm	r1, 0
+	LookupPointer	r0, 2
+	Move	r51, r1
+	CallFf	r0, r0, 3
+	Move	r2, r0
+	LoadStaticU64Imm	r49, 3
+	LookupPointer	r0, 1
+	CallFf	r0, r0, 1
+	Move	r3, r0
+	LookupPointer	r0, 0
+	CallFf	r0, r0, 0
+	LoadU16Imm	r0, 1
+	ILessThan	r0, r3, r0
+	BranchIf	.LBB11_8, r0
+	LookupPointer	r7, 6
+	LookupPointer	r8, 7
+	LookupPointer	r9, 8
+	LookupPointer	r10, 9
+	LoadStaticU64Imm	r4, 3
+	LoadU16Imm	r5, 7
+	LoadU16Imm	r51, 1
+	LoadU16Imm	r11, 5
+	LoadU16Imm	r12, 4
+	Move	r6, r1
+	Branch	.LBB11_2
+.LBB11_7:
+	IAddImm	r6, r6, 1
+	ILessThan	r0, r6, r3
+	BranchIfNot	.LBB11_8, r0
+.LBB11_2:
+	Move	r49, r4
+	Move	r50, r6
+	CallFf	r0, r10, 2
+	Move	r50, r1
+	BranchIfNot	.LBB11_5, r0
+	IAddImm	r13, r0, 12
+	LoadU16	r13, r13
+	INotEqual	r14, r13, r5
+	BranchIfNot	.LBB11_4, r14
+	IEqual	r14, r13, r11
+	BranchIf	.LBB11_4, r14
+	IEqual	r13, r13, r12
+	Move	r50, r1
+	BranchIfNot	.LBB11_5, r13
+.LBB11_4:
+	LoadU64	r50, r0
+.LBB11_5:
+	Move	r49, r50
+	CallFf	r0, r9, 1
+	BranchIfNot	.LBB11_7, r0
+	Move	r49, r5
+	CallFf	r0, r8, 2
+	Move	r49, r2
+	Move	r50, r0
+	CallFf	r0, r7, 3
+	Branch	.LBB11_7
+.LBB11_8:
+	LookupPointer	r0, 10
+	CallFf	r0, r0, 0
+	Move	r0, r2
+	Return	r0
+"wave-manager-get-npc-alive-group.2_symbol_table":
+	.quad	3423406688794319677
+	.quad	4013010305452811590
+	.quad	-3193965096093911673
+	.quad	-8578220443451849366
+	.quad	-1
+	.quad	8534565298598421705
+	.quad	3321216610294482167
+	.quad	3684810824690217768
+	.quad	-4433807632111512251
+	.quad	-2664920944689591574
+	.quad	-5673227674328399655
+"wave-manager-get-npc-alive-group.2_pointer_map":
+	.byte	0
+	.byte	0
+	.byte	0
+	.byte	0
+	.byte	0
+	.byte	0
+	.byte	0
+	.byte	0
+	.byte	0
+	.byte	0
+	.byte	0
+.Lfunc_end11:
+	.size	"wave-manager-get-npc-alive-group.2", .Lfunc_end11-"wave-manager-get-npc-alive-group.2"
+
+	.globl	"wave-manager-kill-all-npcs"
+	.type	"wave-manager-kill-all-npcs",@function
+"wave-manager-kill-all-npcs":
+	Move	r1, r49
+	LookupPointer	r0, 0
+	Call	r0, r0, 1
+	BranchIfNot	.LBB12_1, r0
+	LookupPointer	r6, 3
+	Move	r49, r1
+	Call	r0, r6, 1
+	Move	r2, r0
+	LookupPointer	r0, 2
 	Move	r49, r2
 	CallFf	r0, r0, 1
 	Move	r3, r0
-	IAddImm	r0, r5, 57
-	LoadU8	r50, r0
-	LookupPointer	r0, 4
-	Call	r0, r0, 2
-	IAddImm	r0, r5, 32
-	LoadU64	r6, r0
-	LoadStaticU64Imm	r49, 9
-	LoadU16Imm	r50, 16
-	LoadU16Imm	r4, 0
-	LoadU16Imm	r52, 1
-	LookupPointer	r0, 3
-	Move	r51, r4
-	CallFf	r0, r0, 4
-	LookupPointer	r8, 2
-	Move	r49, r3
-	Move	r50, r6
-	Move	r51, r0
-	CallFf	r0, r8, 3
-	LookupPointer	r6, 0
-	LookupPointer	r8, 1
-	IAddImm	r5, r5, 8
-	LoadU16Imm	r9, 19
-.LBB9_1:
-	LoadU64	r50, r5
-	CallFf	r0, r8, 0
-	IAddImm	r10, r0, 36
-	StoreU32	r9, [r10], r9
-	IAddImm	r10, r0, 33
-	StoreU8	r52, [r10], r52
-	IAddImm	r10, r0, 34
-	StoreU8	r52, [r10], r52
-	IAddImm	r10, r0, 32
-	StoreU8	r52, [r10], r52
+	LookupPointer	r0, 1
+	CallFf	r0, r0, 0
+	LoadU16Imm	r0, 1
+	ILessThan	r0, r3, r0
+	BranchIf	.LBB12_8, r0
+	LoadU16Imm	r51, 0
+	LookupPointer	r7, 4
+	LookupPointer	r8, 5
+	LoadU16Imm	r4, 2
+	LoadU16Imm	r9, 7
+	LoadU16Imm	r10, 5
+	LoadU16Imm	r11, 4
+	Move	r5, r51
+	Branch	.LBB12_4
+.LBB12_6:
+	LoadU64	r49, r0
+.LBB12_7:
+	Move	r50, r4
+	Move	r52, r51
+	Move	r53, r51
+	CallFf	r0, r7, 5
+	IAddImm	r5, r5, 1
+	ILessThan	r0, r5, r3
+	BranchIfNot	.LBB12_8, r0
+.LBB12_4:
 	Move	r49, r2
-	Move	r51, r0
-	CallFf	r0, r6, 3
-	BranchIfNot	.LBB9_3, r0
-	CallFf	r0, r7, 0
-	Branch	.LBB9_1
-.LBB9_3:
-	BranchIfNot	.LBB9_5, r1
-	LookupPointer	r0, 11
-	Move	r49, r3
-	CallFf	r0, r0, 1
-	Move	r4, r0
-.LBB9_5:
-	Move	r0, r4
+	Move	r50, r5
+	CallFf	r0, r8, 2
+	Move	r49, r51
+	BranchIfNot	.LBB12_7, r0
+	IAddImm	r12, r0, 12
+	LoadU16	r12, r12
+	INotEqual	r13, r12, r9
+	BranchIfNot	.LBB12_6, r13
+	IEqual	r13, r12, r10
+	BranchIf	.LBB12_6, r13
+	IEqual	r12, r12, r11
+	Move	r49, r51
+	BranchIf	.LBB12_6, r12
+	Branch	.LBB12_7
+.LBB12_8:
+	LookupPointer	r0, 7
+	CallFf	r0, r0, 0
+	Move	r49, r1
+	Call	r0, r6, 1
+	LoadU16Imm	r50, 0
+	LookupPointer	r1, 6
+	Move	r49, r0
+	Call	r0, r1, 2
 	Return	r0
-"internal-put-off-gas-mask_symbol_table":
-	.quad	6500315221283771953
-	.quad	-2962780980939953026
-	.quad	-9179819928081802467
-	.quad	-7745656483000545638
-	.quad	8203816822361639083
-	.quad	-5076200561558624898
-	.quad	-7658033447216601854
-	.quad	-6573555005595409285
-	.quad	-3047912596559836939
-	.quad	8534565298598421705
-	.quad	3455792245619945009
-	.quad	-804116741684351865
-.Lfunc_end9:
-	.size	"internal-put-off-gas-mask", .Lfunc_end9-"internal-put-off-gas-mask"
+.LBB12_1:
+	LoadU16Imm	r0, 0
+	Return	r0
+"wave-manager-kill-all-npcs_symbol_table":
+	.quad	-8385702754139928849
+	.quad	3423406688794319677
+	.quad	4013010305452811590
+	.quad	6237759117678430531
+	.quad	-7738336759357028456
+	.quad	-2664920944689591574
+	.quad	-3835701475675913431
+	.quad	-5673227674328399655
+"wave-manager-kill-all-npcs_pointer_map":
+	.byte	0
+	.byte	0
+	.byte	0
+	.byte	0
+	.byte	0
+	.byte	0
+	.byte	0
+	.byte	0
+.Lfunc_end12:
+	.size	"wave-manager-kill-all-npcs", .Lfunc_end12-"wave-manager-kill-all-npcs"
 
-	.globl	"wait-remove-gas-mask"
-	.type	"wait-remove-gas-mask",@function
-"wait-remove-gas-mask":
-	Move	r2, r51
-	Move	r4, r50
-	Move	r3, r49
-	LoadU16Imm	r49, 1
-	LoadU16Imm	r1, 0
-	LookupPointer	r5, 2
-	Move	r50, r1
-	CallFf	r0, r5, 2
+	.globl	"wave-manager-get-lost-player-npc-group"
+	.type	"wave-manager-get-lost-player-npc-group",@function
+"wave-manager-get-lost-player-npc-group":
+	LookupPointer	r0, 3
+	Call	r0, r0, 1
+	Move	r1, r0
+	LoadStaticU64Imm	r49, 5
 	LoadStaticU64Imm	r50, 4
-	LookupPointer	r6, 1
-	Move	r49, r3
-	Move	r51, r0
-	CallFf	r0, r6, 3
-	LoadStaticU64Imm	r49, 3
-	LookupPointer	r6, 0
-	Call	r0, r6, 1
-	BranchIf	.LBB10_3, r0
-	LookupPointer	r7, 5
-.LBB10_2:
-	CallFf	r0, r7, 0
-	Call	r0, r6, 1
-	BranchIfNot	.LBB10_2, r0
-.LBB10_3:
-	LoadU16Imm	r49, 7
-	Move	r50, r3
-	CallFf	r0, r5, 2
-	LoadStaticU64Imm	r49, 7
-	LoadStaticU64Imm	r50, 3
-	LookupPointer	r5, 6
-	Move	r51, r0
-	CallFf	r0, r5, 3
-	BranchIfNot	.LBB10_6, r4
-	LookupPointer	r0, 8
-	Move	r49, r3
+	LoadU16Imm	r2, 0
+	LookupPointer	r0, 2
+	Move	r51, r2
+	CallFf	r0, r0, 3
+	Move	r3, r0
+	LookupPointer	r0, 1
+	Move	r49, r1
 	CallFf	r0, r0, 1
 	Move	r4, r0
-	LoadStaticU64Imm	r49, 9
-	Move	r50, r3
-	CallFf	r0, r5, 2
-	BranchIfNot	.LBB10_8, r2
-	LookupPointer	r0, 10
-	Move	r49, r4
-	CallFf	r0, r0, 1
-	Branch	.LBB10_7
-.LBB10_6:
-	LookupPointer	r0, 11
-	Move	r49, r3
+	LookupPointer	r0, 0
+	CallFf	r0, r0, 0
+	LoadU16Imm	r0, 1
+	ILessThan	r0, r4, r0
+	BranchIf	.LBB13_8, r0
+	LookupPointer	r7, 6
+	LookupPointer	r8, 7
+	LookupPointer	r9, 8
+	LookupPointer	r10, 9
+	LoadU16Imm	r5, 7
+	LoadU16Imm	r51, 1
+	LoadU16Imm	r11, 5
+	LoadU16Imm	r12, 4
+	Move	r6, r2
+	Branch	.LBB13_2
+.LBB13_7:
+	IAddImm	r6, r6, 1
+	ILessThan	r0, r6, r4
+	BranchIfNot	.LBB13_8, r0
+.LBB13_2:
+	Move	r49, r1
+	Move	r50, r6
+	CallFf	r0, r10, 2
 	Move	r50, r2
-	Call	r0, r0, 2
-.LBB10_7:
+	BranchIfNot	.LBB13_5, r0
+	IAddImm	r13, r0, 12
+	LoadU16	r13, r13
+	INotEqual	r14, r13, r5
+	BranchIfNot	.LBB13_4, r14
+	IEqual	r14, r13, r11
+	BranchIf	.LBB13_4, r14
+	IEqual	r13, r13, r12
+	Move	r50, r2
+	BranchIfNot	.LBB13_5, r13
+.LBB13_4:
+	LoadU64	r50, r0
+.LBB13_5:
+	Move	r49, r50
+	Call	r0, r9, 1
+	BranchIfNot	.LBB13_7, r0
+	Move	r49, r5
+	CallFf	r0, r8, 2
+	Move	r49, r3
+	Move	r50, r0
+	CallFf	r0, r7, 3
+	Branch	.LBB13_7
+.LBB13_8:
+	LookupPointer	r0, 10
+	CallFf	r0, r0, 0
+	Move	r0, r3
+	Return	r0
+"wave-manager-get-lost-player-npc-group_symbol_table":
+	.quad	3423406688794319677
+	.quad	4013010305452811590
+	.quad	-3193965096093911673
+	.quad	6237759117678430531
+	.quad	-1
+	.quad	8534565298598421705
+	.quad	3321216610294482167
+	.quad	3684810824690217768
+	.quad	-1345322216029872946
+	.quad	-2664920944689591574
+	.quad	-5673227674328399655
+"wave-manager-get-lost-player-npc-group_pointer_map":
+	.byte	0
+	.byte	0
+	.byte	0
+	.byte	0
+	.byte	0
+	.byte	0
+	.byte	0
+	.byte	0
+	.byte	0
+	.byte	0
+	.byte	0
+.Lfunc_end13:
+	.size	"wave-manager-get-lost-player-npc-group", .Lfunc_end13-"wave-manager-get-lost-player-npc-group"
+
+	.globl	"wave-manager-stop!"
+	.type	"wave-manager-stop!",@function
+"wave-manager-stop!":
+	Move	r50, r49
+	LookupPointer	r0, 0
+	Call	r0, r0, 1
+	BranchIfNot	.LBB14_2, r0
+	LoadStaticU64Imm	r49, 2
+	LookupPointer	r0, 1
+	CallFf	r0, r0, 2
+	Return	r0
+.LBB14_2:
+	LookupPointer	r0, 5
+	Move	r49, r50
+	CallFf	r0, r0, 1
+	LoadStaticPointerImm	r49, 6
+	LookupPointer	r1, 4
+	Move	r50, r0
+	CallFf	r0, r1, 2
+	LookupPointer	r1, 3
+	Move	r49, r0
+	CallFf	r0, r1, 1
+	Return	r0
+"wave-manager-stop!_symbol_table":
+	.quad	998391088342721072
+	.quad	4789555171397753330
+	.quad	4737644804400110462
+	.quad	2997365522926602638
+	.quad	6072285182812319085
+	.quad	-3311351115081502130
+	.quad	5
+"wave-manager-stop!_pointer_map":
+	.byte	0
+	.byte	0
+	.byte	0
+	.byte	0
+	.byte	0
+	.byte	0
+	.byte	1
+.Lfunc_end14:
+	.size	"wave-manager-stop!", .Lfunc_end14-"wave-manager-stop!"
+
+	.globl	"wave-manager-get-npc-alive-count.3"
+	.type	"wave-manager-get-npc-alive-count.3",@function
+"wave-manager-get-npc-alive-count.3":
+	LookupPointer	r0, 0
+	Call	r0, r0, 1
+	BranchIf	.LBB15_2, r0
+	LookupPointer	r0, 3
+	CallFf	r0, r0, 1
+	LoadStaticPointerImm	r49, 4
+	LookupPointer	r1, 2
+	Move	r50, r0
+	CallFf	r0, r1, 2
+	LookupPointer	r1, 1
+	Move	r49, r0
+	CallFf	r0, r1, 1
+.LBB15_2:
+	LoadStaticU64Imm	r49, 6
+	LookupPointer	r0, 5
+	CallFf	r0, r0, 1
+	Return	r0
+"wave-manager-get-npc-alive-count.3_symbol_table":
+	.quad	998391088342721072
+	.quad	2997365522926602638
+	.quad	6072285182812319085
+	.quad	-3311351115081502130
+	.quad	3
+	.quad	1564617029140756692
+	.quad	-8578220443451849366
+"wave-manager-get-npc-alive-count.3_pointer_map":
+	.byte	0
+	.byte	0
+	.byte	0
+	.byte	0
+	.byte	1
+	.byte	0
+	.byte	0
+.Lfunc_end15:
+	.size	"wave-manager-get-npc-alive-count.3", .Lfunc_end15-"wave-manager-get-npc-alive-count.3"
+
+	.globl	"wave-manager-get-next-wave-faction"
+	.type	"wave-manager-get-next-wave-faction",@function
+"wave-manager-get-next-wave-faction":
+	Move	r50, r49
+	LoadStaticU64Imm	r49, 6
+	LookupPointer	r0, 1
+	CallFf	r0, r0, 2
 	Move	r1, r0
-.LBB10_8:
+	LoadStaticU64Imm	r0, 3
+	OpBitXor	r0, r1, r0
+	LoadStaticU64Imm	r2, 2
+	ILessThan	r0, r0, r2
+	LoadStaticU64Imm	r2, 4
+	BranchIf	.LBB16_2, r0
+	Move	r1, r2
+.LBB16_2:
+	LoadStaticU64Imm	r49, 5
+	LookupPointer	r0, 0
+	CallFf	r0, r0, 2
+	LoadU16Imm	r3, 0
+	INotEqual	r0, r0, r3
+	BranchIf	.LBB16_4, r0
+	Move	r1, r2
+.LBB16_4:
 	Move	r0, r1
 	Return	r0
-"wait-remove-gas-mask_symbol_table":
-	.quad	6481843155139167450
-	.quad	-2210386714833194546
-	.quad	3684810824690217768
-	.quad	6150028017864311825
-	.quad	7671589888336862994
-	.quad	-3047912596559836939
+"wave-manager-get-next-wave-faction_symbol_table":
+	.quad	54185015286451590
+	.quad	-8623127435633610462
+	.quad	-9223372036854775804
+	.quad	-9223372036854775808
+	.quad	-1
+	.quad	-4142738284031958410
+	.quad	3512716474478954862
+"wave-manager-get-next-wave-faction_pointer_map":
+	.byte	0
+	.byte	0
+	.byte	0
+	.byte	0
+	.byte	0
+	.byte	0
+	.byte	0
+.Lfunc_end16:
+	.size	"wave-manager-get-next-wave-faction", .Lfunc_end16-"wave-manager-get-next-wave-faction"
+
+	.globl	"wave-manager-get-lost-player-npc-group-count"
+	.type	"wave-manager-get-lost-player-npc-group-count",@function
+"wave-manager-get-lost-player-npc-group-count":
+	LookupPointer	r0, 1
+	Call	r0, r0, 1
+	LookupPointer	r1, 0
+	Move	r49, r0
+	CallFf	r0, r1, 1
+	Return	r0
+"wave-manager-get-lost-player-npc-group-count_symbol_table":
+	.quad	4013010305452811590
+	.quad	7267865752999468798
+"wave-manager-get-lost-player-npc-group-count_pointer_map":
+	.byte	0
+	.byte	0
+.Lfunc_end17:
+	.size	"wave-manager-get-lost-player-npc-group-count", .Lfunc_end17-"wave-manager-get-lost-player-npc-group-count"
+
+	.globl	"wave-manager-spawn-next-special-wave!"
+	.type	"wave-manager-spawn-next-special-wave!",@function
+"wave-manager-spawn-next-special-wave!":
+	Move	r50, r49
+	LookupPointer	r0, 0
+	Call	r0, r0, 1
+	BranchIfNot	.LBB18_2, r0
+	LoadStaticU64Imm	r49, 2
+	LookupPointer	r0, 1
+	CallFf	r0, r0, 2
+	Return	r0
+.LBB18_2:
+	LookupPointer	r0, 5
+	Move	r49, r50
+	CallFf	r0, r0, 1
+	LoadStaticPointerImm	r49, 6
+	LookupPointer	r1, 4
+	Move	r50, r0
+	CallFf	r0, r1, 2
+	LookupPointer	r1, 3
+	Move	r49, r0
+	CallFf	r0, r1, 1
+	Return	r0
+"wave-manager-spawn-next-special-wave!_symbol_table":
+	.quad	998391088342721072
 	.quad	4789555171397753330
-	.quad	-3325057813225958160
-	.quad	-5076200561558624898
-	.quad	-3264453205741318791
-	.quad	-804116741684351865
-	.quad	-6610620527767074061
-.Lfunc_end10:
-	.size	"wait-remove-gas-mask", .Lfunc_end10-"wait-remove-gas-mask"
+	.quad	1354182575228257266
+	.quad	2997365522926602638
+	.quad	6072285182812319085
+	.quad	-3311351115081502130
+	.quad	5
+"wave-manager-spawn-next-special-wave!_pointer_map":
+	.byte	0
+	.byte	0
+	.byte	0
+	.byte	0
+	.byte	0
+	.byte	0
+	.byte	1
+.Lfunc_end18:
+	.size	"wave-manager-spawn-next-special-wave!", .Lfunc_end18-"wave-manager-spawn-next-special-wave!"
 
-	.type	"wait-equip-gas-mask_symbol_table_src",@object
-	.section	".rodata.wait-equip-gas-mask_symbol_table_src","aR",@progbits
-	.p2align	3, 0x0
-"wait-equip-gas-mask_symbol_table_src":
-	.quad	-2210386714833194546
-	.quad	7671589888336862994
-	.quad	3684810824690217768
-	.quad	6481843155139167450
-	.quad	6150028017864311825
-	.quad	-3047912596559836939
-	.quad	4789555171397753330
-	.quad	-3266162430027026367
-	.quad	6078802017353408438
-	.quad	5608585023750540989
-	.quad	-5076200561558624898
-	.size	"wait-equip-gas-mask_symbol_table_src", 88
+	.globl	"wave-manager-current-task-in-run?"
+	.type	"wave-manager-current-task-in-run?",@function
+"wave-manager-current-task-in-run?":
+	LoadStaticU64Imm	r49, 2
+	LoadStaticU64Imm	r50, 1
+	LookupPointer	r0, 0
+	CallFf	r0, r0, 2
+	Return	r0
+"wave-manager-current-task-in-run?_symbol_table":
+	.quad	54185015286451590
+	.quad	3766070110510549571
+	.quad	-5700187185490357332
+"wave-manager-current-task-in-run?_pointer_map":
+	.byte	0
+	.byte	0
+	.byte	0
+.Lfunc_end19:
+	.size	"wave-manager-current-task-in-run?", .Lfunc_end19-"wave-manager-current-task-in-run?"
 
-	.type	"internal-put-on-gas-mask_symbol_table_src",@object
-	.section	".rodata.internal-put-on-gas-mask_symbol_table_src","aR",@progbits
-	.p2align	3, 0x0
-"internal-put-on-gas-mask_symbol_table_src":
-	.quad	-3047912596559836939
-	.quad	-7658033447216601854
-	.quad	-6573555005595409285
-	.quad	3455792245619945009
-	.quad	8203816822361639083
-	.quad	7097052834867614476
-	.quad	267125575217391726
-	.quad	4766017279285775524
-	.quad	6532480022340268902
-	.quad	-429226074377614887
-	.quad	-7252477440030364545
-	.quad	-3854484060414110792
-	.quad	-5971891483814290574
-	.quad	-7746349783173232884
-	.quad	-5676660224586178492
-	.quad	8667864169316382944
-	.quad	0
-	.quad	4789555171397753330
-	.quad	6817768622307059015
-	.quad	3684810824690217768
-	.quad	1050253722
-	.quad	-9179819928081802467
-	.quad	-7745656483000545638
-	.quad	8534565298598421705
-	.quad	6500315221283771953
-	.quad	-2962780980939953026
-	.size	"internal-put-on-gas-mask_symbol_table_src", 208
+	.globl	"wave-manager-get-next-spawning-wave-composition.4"
+	.type	"wave-manager-get-next-spawning-wave-composition.4",@function
+"wave-manager-get-next-spawning-wave-composition.4":
+	Move	r50, r49
+	LoadStaticU64Imm	r49, 1
+	LookupPointer	r0, 0
+	CallFf	r0, r0, 2
+	Return	r0
+"wave-manager-get-next-spawning-wave-composition.4_symbol_table":
+	.quad	-1136051897790519866
+	.quad	-8364948414460296332
+"wave-manager-get-next-spawning-wave-composition.4_pointer_map":
+	.byte	0
+	.byte	0
+.Lfunc_end20:
+	.size	"wave-manager-get-next-spawning-wave-composition.4", .Lfunc_end20-"wave-manager-get-next-spawning-wave-composition.4"
 
-	.type	"internal-put-on-gas-mask-immediately_symbol_table_src",@object
-	.section	".rodata.internal-put-on-gas-mask-immediately_symbol_table_src","aR",@progbits
-	.p2align	3, 0x0
-"internal-put-on-gas-mask-immediately_symbol_table_src":
-	.quad	-7658033447216601854
-	.quad	-6573555005595409285
-	.quad	3455792245619945009
-	.quad	7097052834867614476
-	.quad	267125575217391726
-	.quad	4766017279285775524
-	.quad	-5971891483814290574
-	.quad	6532480022340268902
-	.quad	4789555171397753330
-	.quad	6817768622307059015
-	.quad	3684810824690217768
-	.quad	0
-	.quad	-429226074377614887
-	.quad	1827492438953869695
-	.quad	-7252477440030364545
-	.quad	-3854484060414110792
-	.quad	-9179819928081802467
-	.quad	-7745656483000545638
-	.quad	8534565298598421705
-	.size	"internal-put-on-gas-mask-immediately_symbol_table_src", 152
+	.globl	"wave-manager-has-requested-wave-spawned?"
+	.type	"wave-manager-has-requested-wave-spawned?",@function
+"wave-manager-has-requested-wave-spawned?":
+	Move	r1, r49
+	LookupPointer	r0, 0
+	Call	r0, r0, 1
+	BranchIf	.LBB21_2, r0
+	LookupPointer	r0, 3
+	Move	r49, r1
+	CallFf	r0, r0, 1
+	LoadStaticPointerImm	r49, 4
+	LookupPointer	r2, 2
+	Move	r50, r0
+	CallFf	r0, r2, 2
+	LookupPointer	r2, 1
+	Move	r49, r0
+	CallFf	r0, r2, 1
+.LBB21_2:
+	LoadStaticU64Imm	r49, 6
+	LookupPointer	r2, 5
+	Move	r50, r1
+	CallFf	r0, r2, 2
+	BranchIfNot	.LBB21_3, r0
+	LoadStaticU64Imm	r49, 7
+	Move	r50, r1
+	CallFf	r0, r2, 2
+	Return	r0
+.LBB21_3:
+	LoadU16Imm	r0, 0
+	Return	r0
+"wave-manager-has-requested-wave-spawned?_symbol_table":
+	.quad	998391088342721072
+	.quad	2997365522926602638
+	.quad	6072285182812319085
+	.quad	-3311351115081502130
+	.quad	3
+	.quad	54185015286451590
+	.quad	-4748032580888550375
+	.quad	224422539916484139
+"wave-manager-has-requested-wave-spawned?_pointer_map":
+	.byte	0
+	.byte	0
+	.byte	0
+	.byte	0
+	.byte	1
+	.byte	0
+	.byte	0
+	.byte	0
+.Lfunc_end21:
+	.size	"wave-manager-has-requested-wave-spawned?", .Lfunc_end21-"wave-manager-has-requested-wave-spawned?"
 
-	.type	"get-equipped-gas-mask_symbol_table_src",@object
-	.section	".rodata.cst8.get-equipped-gas-mask_symbol_table_src","aMR",@progbits,8
-	.p2align	3, 0x0
-"get-equipped-gas-mask_symbol_table_src":
-	.quad	-5076200561558624898
-	.size	"get-equipped-gas-mask_symbol_table_src", 8
-
-	.type	"wait-until-in-valid-gas-mask-state_symbol_table_src",@object
-	.section	".rodata.wait-until-in-valid-gas-mask-state_symbol_table_src","aR",@progbits
-	.p2align	3, 0x0
-"wait-until-in-valid-gas-mask-state_symbol_table_src":
-	.quad	6532480022340268902
-	.quad	-9003251364961024783
-	.quad	6740565536053766520
-	.quad	2237451099064635199
-	.quad	-3047912596559836939
-	.quad	-4831287436211302109
-	.quad	1646463116072042322
-	.quad	8594926419455150747
-	.quad	-5808627241898115124
-	.quad	4007104907368024212
-	.quad	-3092934816467423265
-	.quad	1065353216
-	.quad	-626103520744544694
-	.quad	1045220557
-	.quad	5808793362033684947
-	.quad	3212836864
-	.quad	7683024912818272899
-	.quad	8573502661920361253
-	.size	"wait-until-in-valid-gas-mask-state_symbol_table_src", 144
-
-	.type	"npc-gas-mask-narrative-mode/f_symbol_table_src",@object
-	.section	".rodata.npc-gas-mask-narrative-mode/f_symbol_table_src","aR",@progbits
-	.p2align	3, 0x0
-"npc-gas-mask-narrative-mode/f_symbol_table_src":
-	.quad	4789555171397753330
-	.quad	8119835013146602502
-	.quad	-5356689657310757786
-	.quad	7610916627332680768
-	.quad	0
-	.size	"npc-gas-mask-narrative-mode/f_symbol_table_src", 40
-
-	.type	"internal-put-off-gas-mask-immediately_symbol_table_src",@object
-	.section	".rodata.cst32.internal-put-off-gas-mask-immediately_symbol_table_src","aMR",@progbits,32
-	.p2align	3, 0x0
-"internal-put-off-gas-mask-immediately_symbol_table_src":
-	.quad	-5076200561558624898
-	.quad	4789555171397753330
-	.quad	-3264453205741318791
-	.quad	-804116741684351865
-	.size	"internal-put-off-gas-mask-immediately_symbol_table_src", 32
-
-	.type	"spawn-gas-mask_symbol_table_src",@object
-	.section	".rodata.spawn-gas-mask_symbol_table_src","aR",@progbits
-	.p2align	3, 0x0
-"spawn-gas-mask_symbol_table_src":
-	.quad	-7658033447216601854
-	.quad	-6573555005595409285
-	.quad	3455792245619945009
-	.quad	7097052834867614476
-	.quad	267125575217391726
-	.quad	4766017279285775524
-	.size	"spawn-gas-mask_symbol_table_src", 48
-
-	.type	"player-gas-mask-narrative-mode/f_symbol_table_src",@object
-	.section	".rodata.player-gas-mask-narrative-mode/f_symbol_table_src","aR",@progbits
-	.p2align	3, 0x0
-"player-gas-mask-narrative-mode/f_symbol_table_src":
-	.quad	7238593933813171071
-	.quad	0
-	.quad	8165897991486741957
-	.quad	-2826777519175913837
-	.quad	-5356689657310757786
+	.globl	"wave-manager-npc-lost-player?.5"
+	.type	"wave-manager-npc-lost-player?.5",@function
+"wave-manager-npc-lost-player?.5":
+	LoadStaticU64Imm	r50, 2
+	LookupPointer	r0, 1
+	CallFf	r0, r0, 2
+	Move	r1, r0
+	LookupPointer	r0, 0
+	CallFf	r0, r0, 1
+	LoadU16Imm	r2, 0
+	BranchIfNot	.LBB22_3, r0
+	LookupPointer	r0, 3
+	Call	r0, r0, 1
+	BranchIfNot	.LBB22_2, r0
+.LBB22_3:
+	Move	r0, r2
+	Return	r0
+.LBB22_2:
+	LoadStaticU64Imm	r0, 4
+	IAdd	r0, r1, r0
+	LoadStaticU64Imm	r1, 5
+	ILessThan	r2, r0, r1
+	Move	r0, r2
+	Return	r0
+"wave-manager-npc-lost-player?.5_symbol_table":
+	.quad	-4433807632111512251
+	.quad	-5833053787651694927
 	.quad	5008278420455340480
-	.quad	7121253686161376880
-	.quad	-1699981380503476753
-	.size	"player-gas-mask-narrative-mode/f_symbol_table_src", 64
+	.quad	-7707884455580369866
+	.quad	9223372036854775804
+	.quad	9223372036854775806
+"wave-manager-npc-lost-player?.5_pointer_map":
+	.byte	0
+	.byte	0
+	.byte	0
+	.byte	0
+	.byte	0
+	.byte	0
+.Lfunc_end22:
+	.size	"wave-manager-npc-lost-player?.5", .Lfunc_end22-"wave-manager-npc-lost-player?.5"
 
-	.type	"internal-put-off-gas-mask_symbol_table_src",@object
-	.section	".rodata.internal-put-off-gas-mask_symbol_table_src","aR",@progbits
+	.type	"wave-manager-get-npc-alive-count-by-faction_symbol_table_src",@object
+	.section	".rodata.wave-manager-get-npc-alive-count-by-faction_symbol_table_src","aR",@progbits
 	.p2align	3, 0x0
-"internal-put-off-gas-mask_symbol_table_src":
-	.quad	-3047912596559836939
-	.quad	-7658033447216601854
-	.quad	-6573555005595409285
-	.quad	3455792245619945009
-	.quad	-5076200561558624898
-	.quad	8203816822361639083
-	.quad	-9179819928081802467
-	.quad	-7745656483000545638
+"wave-manager-get-npc-alive-count-by-faction_symbol_table_src":
+	.quad	6237759117678430531
+	.quad	4013010305452811590
+	.quad	3423406688794319677
+	.quad	-2664920944689591574
+	.quad	6230461421097945948
+	.quad	-5673227674328399655
+	.size	"wave-manager-get-npc-alive-count-by-faction_symbol_table_src", 48
+
+	.type	"wave-manager-get-total-npc-in-wave-count_symbol_table_src",@object
+	.section	".rodata.wave-manager-get-total-npc-in-wave-count_symbol_table_src","aR",@progbits
+	.p2align	3, 0x0
+"wave-manager-get-total-npc-in-wave-count_symbol_table_src":
+	.quad	998391088342721072
+	.quad	2997365522926602638
+	.quad	6072285182812319085
+	.quad	1303844840429
+	.quad	-3311351115081502130
+	.quad	4013010305452811590
+	.quad	-7194759694070631083
+	.size	"wave-manager-get-total-npc-in-wave-count_symbol_table_src", 56
+
+	.type	"wave-manager-is-ready?_symbol_table_src",@object
+	.section	".rodata.wave-manager-is-ready?_symbol_table_src","aR",@progbits
+	.p2align	3, 0x0
+"wave-manager-is-ready?_symbol_table_src":
+	.quad	-6870362608876642110
+	.quad	2997365522926602638
+	.quad	6072285182812319085
+	.quad	1303844840768
+	.quad	-3311351115081502130
+	.quad	54185015286451590
+	.quad	-4142738284031958410
+	.size	"wave-manager-is-ready?_symbol_table_src", 56
+
+	.type	"wave-manager-get-encounter-intensity_symbol_table_src",@object
+	.section	".rodata.wave-manager-get-encounter-intensity_symbol_table_src","aR",@progbits
+	.p2align	3, 0x0
+"wave-manager-get-encounter-intensity_symbol_table_src":
+	.quad	998391088342721072
+	.quad	2997365522926602638
+	.quad	6072285182812319085
+	.quad	1303844840368
+	.quad	-3311351115081502130
+	.quad	-8623127435633610462
+	.quad	-3532724295824964118
+	.size	"wave-manager-get-encounter-intensity_symbol_table_src", 56
+
+	.type	"wave-manager-get-next-spawning-wave-npc-schemas-group_symbol_table_src",@object
+	.section	".rodata.wave-manager-get-next-spawning-wave-npc-schemas-group_symbol_table_src","aR",@progbits
+	.p2align	3, 0x0
+"wave-manager-get-next-spawning-wave-npc-schemas-group_symbol_table_src":
+	.quad	-4561343946152313276
+	.quad	-7966019873906053962
+	.quad	-1851807429122828651
+	.quad	6072285182812319085
+	.quad	1303844840893
+	.quad	-8623127435633610462
+	.quad	-6711785430563033859
+	.quad	-3193965096093911673
 	.quad	8534565298598421705
-	.quad	6500315221283771953
-	.quad	-2962780980939953026
-	.quad	-804116741684351865
-	.size	"internal-put-off-gas-mask_symbol_table_src", 96
-
-	.type	"wait-remove-gas-mask_symbol_table_src",@object
-	.section	".rodata.wait-remove-gas-mask_symbol_table_src","aR",@progbits
-	.p2align	3, 0x0
-"wait-remove-gas-mask_symbol_table_src":
-	.quad	-2210386714833194546
-	.quad	7671589888336862994
+	.quad	4294967295
+	.quad	7920520547792940799
+	.quad	-1136051897790519866
+	.quad	4382432297032017585
+	.quad	-160782944825580444
+	.quad	-7660363871649534493
+	.quad	4013010305452811590
+	.quad	-1358566869505889023
+	.quad	9066152901236616051
+	.quad	54185015286451590
+	.quad	6884240918683042611
+	.quad	-2664920944689591574
+	.quad	2009214271962714043
+	.quad	3321216610294482167
 	.quad	3684810824690217768
-	.quad	6481843155139167450
-	.quad	6150028017864311825
-	.quad	-3047912596559836939
+	.quad	1303844840822
+	.quad	-3311351115081502130
+	.quad	1303844840843
+	.size	"wave-manager-get-next-spawning-wave-npc-schemas-group_symbol_table_src", 216
+
+	.type	"wave-manager-get-total-wave-count_symbol_table_src",@object
+	.section	".rodata.wave-manager-get-total-wave-count_symbol_table_src","aR",@progbits
+	.p2align	3, 0x0
+"wave-manager-get-total-wave-count_symbol_table_src":
+	.quad	998391088342721072
+	.quad	2997365522926602638
+	.quad	6072285182812319085
+	.quad	1303844840486
+	.quad	-3311351115081502130
+	.quad	-8623127435633610462
+	.quad	126389912060929688
+	.size	"wave-manager-get-total-wave-count_symbol_table_src", 56
+
+	.type	"wave-manager-get-num-waves-spawned_symbol_table_src",@object
+	.section	".rodata.wave-manager-get-num-waves-spawned_symbol_table_src","aR",@progbits
+	.p2align	3, 0x0
+"wave-manager-get-num-waves-spawned_symbol_table_src":
+	.quad	4013010305452811590
+	.quad	-1136051897790519866
+	.quad	-7660363871649534493
+	.size	"wave-manager-get-num-waves-spawned_symbol_table_src", 24
+
+	.type	"wave-manager-get-next-spawning-wave-spawn-configs_symbol_table_src",@object
+	.section	".rodata.wave-manager-get-next-spawning-wave-spawn-configs_symbol_table_src","aR",@progbits
+	.p2align	3, 0x0
+"wave-manager-get-next-spawning-wave-spawn-configs_symbol_table_src":
+	.quad	-4561343946152313276
+	.quad	-1136051897790519866
+	.quad	-3630726564894351738
+	.size	"wave-manager-get-next-spawning-wave-spawn-configs_symbol_table_src", 24
+
+	.type	"wave-manager-get-next-spawning-wave-npc-count_symbol_table_src",@object
+	.section	".rodata.cst16.wave-manager-get-next-spawning-wave-npc-count_symbol_table_src","aMR",@progbits,16
+	.p2align	3, 0x0
+"wave-manager-get-next-spawning-wave-npc-count_symbol_table_src":
+	.quad	1399776995102310962
+	.quad	4013010305452811590
+	.size	"wave-manager-get-next-spawning-wave-npc-count_symbol_table_src", 16
+
+	.type	"wave-manager-spawn-next-wave!_symbol_table_src",@object
+	.section	".rodata.wave-manager-spawn-next-wave!_symbol_table_src","aR",@progbits
+	.p2align	3, 0x0
+"wave-manager-spawn-next-wave!_symbol_table_src":
+	.quad	998391088342721072
 	.quad	4789555171397753330
-	.quad	-3325057813225958160
-	.quad	-8559530813269772124
-	.quad	-6610620527767074061
-	.size	"wait-remove-gas-mask_symbol_table_src", 80
+	.quad	5189346610966935392
+	.quad	2997365522926602638
+	.quad	6072285182812319085
+	.quad	1303844840671
+	.quad	-3311351115081502130
+	.size	"wave-manager-spawn-next-wave!_symbol_table_src", 56
+
+	.type	"wave-manager-get-npc-alive-group_symbol_table_src",@object
+	.section	".rodata.wave-manager-get-npc-alive-group_symbol_table_src","aR",@progbits
+	.p2align	3, 0x0
+"wave-manager-get-npc-alive-group_symbol_table_src":
+	.quad	-3193965096093911673
+	.quad	8534565298598421705
+	.quad	4294967295
+	.quad	4013010305452811590
+	.quad	-8578220443451849366
+	.quad	3423406688794319677
+	.quad	-2664920944689591574
+	.quad	-4433807632111512251
+	.quad	3321216610294482167
+	.quad	3684810824690217768
+	.quad	-5673227674328399655
+	.size	"wave-manager-get-npc-alive-group_symbol_table_src", 88
+
+	.type	"wave-manager-kill-all-npcs_symbol_table_src",@object
+	.section	".rodata.wave-manager-kill-all-npcs_symbol_table_src","aR",@progbits
+	.p2align	3, 0x0
+"wave-manager-kill-all-npcs_symbol_table_src":
+	.quad	-8385702754139928849
+	.quad	6237759117678430531
+	.quad	4013010305452811590
+	.quad	3423406688794319677
+	.quad	-2664920944689591574
+	.quad	-7738336759357028456
+	.quad	0
+	.quad	-5673227674328399655
+	.quad	-3835701475675913431
+	.size	"wave-manager-kill-all-npcs_symbol_table_src", 72
+
+	.type	"wave-manager-get-lost-player-npc-group_symbol_table_src",@object
+	.section	".rodata.wave-manager-get-lost-player-npc-group_symbol_table_src","aR",@progbits
+	.p2align	3, 0x0
+"wave-manager-get-lost-player-npc-group_symbol_table_src":
+	.quad	6237759117678430531
+	.quad	-3193965096093911673
+	.quad	8534565298598421705
+	.quad	4294967295
+	.quad	4013010305452811590
+	.quad	3423406688794319677
+	.quad	-2664920944689591574
+	.quad	-1345322216029872946
+	.quad	3321216610294482167
+	.quad	3684810824690217768
+	.quad	-5673227674328399655
+	.size	"wave-manager-get-lost-player-npc-group_symbol_table_src", 88
+
+	.type	"wave-manager-stop!_symbol_table_src",@object
+	.section	".rodata.wave-manager-stop!_symbol_table_src","aR",@progbits
+	.p2align	3, 0x0
+"wave-manager-stop!_symbol_table_src":
+	.quad	998391088342721072
+	.quad	4789555171397753330
+	.quad	4737644804400110462
+	.quad	2997365522926602638
+	.quad	6072285182812319085
+	.quad	1303844840725
+	.quad	-3311351115081502130
+	.size	"wave-manager-stop!_symbol_table_src", 56
+
+	.type	"wave-manager-get-npc-alive-count_symbol_table_src",@object
+	.section	".rodata.wave-manager-get-npc-alive-count_symbol_table_src","aR",@progbits
+	.p2align	3, 0x0
+"wave-manager-get-npc-alive-count_symbol_table_src":
+	.quad	998391088342721072
+	.quad	2997365522926602638
+	.quad	6072285182812319085
+	.quad	1303844840429
+	.quad	-3311351115081502130
+	.quad	1564617029140756692
+	.quad	-8578220443451849366
+	.size	"wave-manager-get-npc-alive-count_symbol_table_src", 56
+
+	.type	"wave-manager-get-next-wave-faction_symbol_table_src",@object
+	.section	".rodata.wave-manager-get-next-wave-faction_symbol_table_src","aR",@progbits
+	.p2align	3, 0x0
+"wave-manager-get-next-wave-faction_symbol_table_src":
+	.quad	-8623127435633610462
+	.quad	3512716474478954862
+	.quad	54185015286451590
+	.quad	-4142738284031958410
+	.quad	4294967295
+	.size	"wave-manager-get-next-wave-faction_symbol_table_src", 40
+
+	.type	"wave-manager-get-lost-player-npc-group-count_symbol_table_src",@object
+	.section	".rodata.cst16.wave-manager-get-lost-player-npc-group-count_symbol_table_src","aMR",@progbits,16
+	.p2align	3, 0x0
+"wave-manager-get-lost-player-npc-group-count_symbol_table_src":
+	.quad	4013010305452811590
+	.quad	7267865752999468798
+	.size	"wave-manager-get-lost-player-npc-group-count_symbol_table_src", 16
+
+	.type	"wave-manager-spawn-next-special-wave!_symbol_table_src",@object
+	.section	".rodata.wave-manager-spawn-next-special-wave!_symbol_table_src","aR",@progbits
+	.p2align	3, 0x0
+"wave-manager-spawn-next-special-wave!_symbol_table_src":
+	.quad	998391088342721072
+	.quad	4789555171397753330
+	.quad	1354182575228257266
+	.quad	2997365522926602638
+	.quad	6072285182812319085
+	.quad	1303844840609
+	.quad	-3311351115081502130
+	.size	"wave-manager-spawn-next-special-wave!_symbol_table_src", 56
+
+	.type	"wave-manager-current-task-in-run?_symbol_table_src",@object
+	.section	".rodata.wave-manager-current-task-in-run?_symbol_table_src","aR",@progbits
+	.p2align	3, 0x0
+"wave-manager-current-task-in-run?_symbol_table_src":
+	.quad	54185015286451590
+	.quad	-5700187185490357332
+	.quad	3766070110510549571
+	.size	"wave-manager-current-task-in-run?_symbol_table_src", 24
+
+	.type	"wave-manager-get-next-spawning-wave-composition_symbol_table_src",@object
+	.section	".rodata.cst16.wave-manager-get-next-spawning-wave-composition_symbol_table_src","aMR",@progbits,16
+	.p2align	3, 0x0
+"wave-manager-get-next-spawning-wave-composition_symbol_table_src":
+	.quad	-1136051897790519866
+	.quad	-8364948414460296332
+	.size	"wave-manager-get-next-spawning-wave-composition_symbol_table_src", 16
+
+	.type	"wave-manager-has-requested-wave-spawned?_symbol_table_src",@object
+	.section	".rodata.wave-manager-has-requested-wave-spawned?_symbol_table_src","aR",@progbits
+	.p2align	3, 0x0
+"wave-manager-has-requested-wave-spawned?_symbol_table_src":
+	.quad	998391088342721072
+	.quad	2997365522926602638
+	.quad	6072285182812319085
+	.quad	1303844840544
+	.quad	-3311351115081502130
+	.quad	54185015286451590
+	.quad	-4748032580888550375
+	.quad	224422539916484139
+	.size	"wave-manager-has-requested-wave-spawned?_symbol_table_src", 64
+
+	.type	"wave-manager-npc-lost-player?_symbol_table_src",@object
+	.section	".rodata.cst32.wave-manager-npc-lost-player?_symbol_table_src","aMR",@progbits,32
+	.p2align	3, 0x0
+"wave-manager-npc-lost-player?_symbol_table_src":
+	.quad	-5833053787651694927
+	.quad	5008278420455340480
+	.quad	-4433807632111512251
+	.quad	-7707884455580369866
+	.size	"wave-manager-npc-lost-player?_symbol_table_src", 32
 
 	.section	".note.GNU-stack","",@progbits

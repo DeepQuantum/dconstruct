@@ -113,7 +113,7 @@ namespace dconstruct {
             }
 
             const u64 struct_location = std::stoi(edit_str.substr(0, left_sqbr_offset), nullptr, 0);
-            const u32 right_sqbr_offset = edit_str.find(']', left_sqbr_offset);
+            const auto right_sqbr_offset = edit_str.find(']', left_sqbr_offset);
             if (right_sqbr_offset == std::string::npos) {
                 return std::format("error: malformed input in edit {}, not applying\n", edit_index);
             }

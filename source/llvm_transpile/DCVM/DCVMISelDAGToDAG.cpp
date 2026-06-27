@@ -100,12 +100,47 @@ void DCVMDAGToDAGISel::Select(SDNode *N) {
             const uint64_t Index =
                 cast<ConstantSDNode>(N->getOperand(1))->getZExtValue();
             const SDValue Idx =
-                CurDAG->getTargetConstant(MFI->internSymbol(Index), DL, MVT::i64);
+                CurDAG->getTargetConstant(MFI->internSymbol(Index, true), DL, MVT::i64);
             ReplaceNode(N, CurDAG->getMachineNode(DCVM::LOADSTATICPOINTERIMMri, DL,
                                                   N->getValueType(0), Idx));
             return;
         }
+        if (IID == Intrinsic::dcvm_load_static_int) {
+            ReplaceNode(N, CurDAG->getMachineNode(DCVM::LOADSTATICINTrr, DL,
+                                                  MVT::i64, N->getOperand(1)));
+            return;
+        }
+        if (IID == Intrinsic::dcvm_load_static_float) {
+            ReplaceNode(N, CurDAG->getMachineNode(DCVM::LOADSTATICFLOATrr, DL,
+                                                  MVT::f32, N->getOperand(1)));
+            return;
+        }
+        if (IID == Intrinsic::dcvm_load_static_pointer) {
+            ReplaceNode(N, CurDAG->getMachineNode(DCVM::LOADSTATICPOINTERrr, DL,
+                                                  N->getValueType(0), N->getOperand(1)));
+            return;
+        }
         break;
+    }
+    case ISD::SHL: {
+        const ConstantSDNode *ShAmt = dyn_cast<ConstantSDNode>(N->getOperand(1));
+        if (!ShAmt)
+            break;
+        const uint64_t Factor = 1ULL << ShAmt->getZExtValue();
+        if (isUInt<8>(Factor)) {
+            const SDValue Imm = CurDAG->getTargetConstant(Factor, DL, MVT::i64);
+            ReplaceNode(N, CurDAG->getMachineNode(DCVM::IMULIMMri, DL, MVT::i64,
+                                                  N->getOperand(0), Imm));
+            return;
+        }
+        const SDValue Idx =
+            CurDAG->getTargetConstant(MFI->internSymbol(Factor), DL, MVT::i64);
+        SDNode *FactorReg =
+            CurDAG->getMachineNode(DCVM::LOADSTATICU64IMMri, DL, MVT::i64, Idx);
+        ReplaceNode(N, CurDAG->getMachineNode(DCVM::IMULrr, DL, MVT::i64,
+                                              N->getOperand(0),
+                                              SDValue(FactorReg, 0)));
+        return;
     }
     }
 
