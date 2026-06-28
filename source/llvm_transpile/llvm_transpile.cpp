@@ -1,5 +1,7 @@
 #include "llvm_transpile/llvm_transpile.h"
+#include "DCScript.h"
 #include "ast/type.h"
+#include "binaryfile.h"
 #include "decompilation/control_flow_graph.h"
 #include "disassembly/instructions.h"
 #include "disassembly/opcodes.h"
@@ -15,6 +17,7 @@
 #include "llvm/IR/GlobalVariable.h"
 #include "llvm/IR/IRBuilder.h"
 #include "llvm/IR/Instruction.h"
+#include <cstdint>
 #include <llvm/IR/Verifier.h>
 #include "llvm/IR/Instructions.h"
 #include "llvm/IR/LLVMContext.h"
@@ -37,10 +40,13 @@
 #include "llvm/IR/IntrinsicsDCVM.h"
 #include <algorithm>
 #include <array>
+#include <cstring>
 #include <filesystem>
 #include <fstream>
 #include <functional>
+#include <limits>
 #include <map>
+#include <memory>
 #include <string>
 #include <type_traits>
 #include <variant>
@@ -64,6 +70,392 @@ extern "C" void DCVMBytecodeReset();
 
 namespace dconstruct::llvm_transpile {
 
+    namespace {
+        struct recompiled_function_info {
+            sid64 m_sid = 0;
+            std::vector<Instruction> m_instructions;
+            std::vector<u64> m_symbols;
+            std::vector<bool> m_pointerMap;
+        };
+
+        struct recompiled_function_header {
+            sid64 m_sid = 0;
+            u32 m_sizeInstructions = 0;
+            u32 m_sizeSymbols = 0;
+        };
+
+        static_assert(sizeof(Instruction) == sizeof(u64));
+        static_assert(sizeof(recompiled_function_header) == sizeof(u64) * 2);
+
+        bool range_inside_file(const BinaryFile& binfile, const void* ptr, const u64 size) {
+            const p64 begin = reinterpret_cast<p64>(binfile.m_bytes.get());
+            const p64 end = begin + binfile.m_size;
+            const p64 range_begin = reinterpret_cast<p64>(ptr);
+            const p64 range_end = range_begin + size;
+            return range_begin >= begin && range_begin <= end && range_end >= range_begin && range_end <= end;
+        }
+
+        void edit_unmapped_reloc_table(std::byte* bytes, const u64 text_size, const u64 file_offset, const bool value) {
+            u8* reloc_table = reinterpret_cast<u8*>(bytes + text_size + sizeof(u32));
+            const u64 offset = file_offset / sizeof(u64);
+            u8& reloc_byte = reloc_table[offset / 8];
+            const u8 mask = static_cast<u8>(1 << (offset % 8));
+            if (value) {
+                reloc_byte |= mask;
+            } else {
+                reloc_byte &= static_cast<u8>(~mask);
+            }
+        }
+
+        struct function_patch {
+            const function_disassembly* m_oldFunc = nullptr;
+            const recompiled_function_info* m_newFunc = nullptr;
+        };
+
+        template <typename T>
+        bool read_bytecode_value(const std::vector<char>& bytes, std::size_t& offset, T& out) {
+            if (bytes.size() - offset < sizeof(T)) {
+                return false;
+            }
+            std::memcpy(&out, bytes.data() + offset, sizeof(T));
+            offset += sizeof(T);
+            return true;
+        }
+
+        errmsg validate_recompiled_symbol_map(const recompiled_function_info& function, const std::string& module_name) {
+            if (function.m_symbols.size() != function.m_pointerMap.size()) {
+                return std::format(
+                    "symbol pointer map for sid {:x} in {} has {} entries for {} symbols",
+                    function.m_sid,
+                    module_name,
+                    function.m_pointerMap.size(),
+                    function.m_symbols.size()
+                );
+            }
+
+            return std::nullopt;
+        }
+
+        errmsg copy_recompiled_symbols_to_mapped_file(BinaryFile& binfile, u64* destination, const recompiled_function_info& new_func) {
+            if (errmsg error = validate_recompiled_symbol_map(new_func, binfile.m_path.string())) {
+                return error;
+            }
+
+            const u64 text_size = binfile.m_dcheader->m_textSize;
+            const p64 mapped_base = reinterpret_cast<p64>(binfile.m_bytes.get());
+            for (u64 i = 0; i < new_func.m_symbols.size(); ++i) {
+                u64 value = new_func.m_symbols[i];
+                const bool is_pointer = new_func.m_pointerMap[i] && value != 0;
+                if (is_pointer) {
+                    if (value >= text_size) {
+                        return std::format(
+                            "recompiled symbol {} for sid {:x} points outside the text segment of {}",
+                            i,
+                            new_func.m_sid,
+                            binfile.m_path.string()
+                        );
+                    }
+                    value += mapped_base;
+                }
+
+                destination[i] = value;
+                binfile.edit_reloc_table(location(destination + i), is_pointer);
+            }
+
+            return std::nullopt;
+        }
+
+        errmsg copy_recompiled_symbols_to_unmapped_file(
+            std::byte* bytes,
+            const u64 new_text_size,
+            const u64 symbol_offset,
+            const recompiled_function_info& new_func,
+            const u64 old_strings_start,
+            const u64 old_text_size,
+            const u64 inserted_size,
+            const std::filesystem::path& file_path
+        ) {
+            if (errmsg error = validate_recompiled_symbol_map(new_func, file_path.string())) {
+                return error;
+            }
+
+            for (u64 i = 0; i < new_func.m_symbols.size(); ++i) {
+                u64 value = new_func.m_symbols[i];
+                const bool is_pointer = new_func.m_pointerMap[i] && value != 0;
+                if (is_pointer) {
+                    if (value >= old_text_size) {
+                        return std::format(
+                            "recompiled symbol {} for sid {:x} points outside the original text segment of {}",
+                            i,
+                            new_func.m_sid,
+                            file_path.string()
+                        );
+                    }
+                    if (value >= old_strings_start) {
+                        value += inserted_size;
+                    }
+                }
+
+                const u64 entry_offset = symbol_offset + i * sizeof(u64);
+                std::memcpy(bytes + entry_offset, &value, sizeof(value));
+                edit_unmapped_reloc_table(bytes, new_text_size, entry_offset, is_pointer);
+            }
+
+            return std::nullopt;
+        }
+
+        resstr<std::vector<recompiled_function_info>> parse_recompiled_functions(const generated_outputs& outputs) {
+            const std::vector<char>& bytes = outputs.m_dcvmBytecode;
+            std::vector<recompiled_function_info> functions;
+            std::size_t offset = 0;
+
+            while (offset < bytes.size()) {
+                recompiled_function_header header;
+                if (!read_bytecode_value(bytes, offset, header)) {
+                    return std::unexpected(std::format("truncated bytecode function header in {}", outputs.m_moduleName));
+                }
+
+                if (header.m_sizeInstructions % sizeof(Instruction) != 0) {
+                    return std::unexpected(std::format("invalid instruction byte count for sid {:x} in {}", header.m_sid, outputs.m_moduleName));
+                }
+                if (header.m_sizeSymbols % sizeof(u64) != 0) {
+                    return std::unexpected(std::format("invalid symbol byte count for sid {:x} in {}", header.m_sid, outputs.m_moduleName));
+                }
+
+                const std::size_t instruction_count = header.m_sizeInstructions / sizeof(Instruction);
+                const std::size_t symbol_count = header.m_sizeSymbols / sizeof(u64);
+                const std::size_t payload_size = static_cast<std::size_t>(header.m_sizeInstructions) + header.m_sizeSymbols + symbol_count;
+                if (bytes.size() - offset < payload_size) {
+                    return std::unexpected(std::format("truncated bytecode payload for sid {:x} in {}", header.m_sid, outputs.m_moduleName));
+                }
+
+                recompiled_function_info function;
+                function.m_sid = header.m_sid;
+                function.m_instructions.resize(instruction_count);
+                function.m_symbols.resize(symbol_count);
+                function.m_pointerMap.reserve(symbol_count);
+
+                const std::size_t instruction_bytes = instruction_count * sizeof(Instruction);
+                if (instruction_bytes != 0) {
+                    std::memcpy(function.m_instructions.data(), bytes.data() + offset, instruction_bytes);
+                    offset += instruction_bytes;
+                }
+
+                const std::size_t symbol_bytes = symbol_count * sizeof(u64);
+                if (symbol_bytes != 0) {
+                    std::memcpy(function.m_symbols.data(), bytes.data() + offset, symbol_bytes);
+                    offset += symbol_bytes;
+                }
+
+                for (std::size_t i = 0; i < symbol_count; ++i) {
+                    function.m_pointerMap.push_back(bytes[offset] != 0);
+                    ++offset;
+                }
+
+                if (errmsg error = validate_recompiled_symbol_map(function, outputs.m_moduleName)) {
+                    return std::unexpected(std::move(*error));
+                }
+
+                functions.push_back(std::move(function));
+            }
+
+            return functions;
+        }
+
+        const generated_outputs* find_outputs_for_module(const std::vector<generated_outputs>& outputs, const std::string& module_name) {
+            for (const generated_outputs& output : outputs) {
+                if (output.m_moduleName == module_name) {
+                    return &output;
+                }
+            }
+            return nullptr;
+        }
+
+        errmsg patch_recompiled_function(BinaryFile& binfile, const function_disassembly& old_func, const recompiled_function_info& new_func) {
+            const u64 old_symbol_count = old_func.m_stackFrame.m_symbolTable.m_types.size();
+
+            if (old_func.m_originalOffset + sizeof(ScriptLambda) > binfile.m_size) {
+                return std::format("original lambda header for {} is outside {}", old_func.get_id(), binfile.m_path.string());
+            }
+
+            ScriptLambda& original_function = *reinterpret_cast<ScriptLambda*>(binfile.m_bytes.get() + old_func.m_originalOffset);
+
+            const u64 instruction_bytes = new_func.m_instructions.size() * sizeof(Instruction);
+            const u64 symbol_bytes = new_func.m_symbols.size() * sizeof(u64);
+            if (!range_inside_file(binfile, original_function.m_pInstruction, instruction_bytes)) {
+                return std::format("instruction storage for {} is outside {}", old_func.get_id(), binfile.m_path.string());
+            }
+
+            original_function.m_pSymbols = original_function.m_pInstruction + new_func.m_instructions.size();
+            if (!range_inside_file(binfile, original_function.m_pSymbols, symbol_bytes)) {
+                return std::format("symbol storage for {} is outside {}", old_func.get_id(), binfile.m_path.string());
+            }
+
+            const location old_symbols = old_func.m_stackFrame.m_symbolTable.m_location;
+            if (!range_inside_file(binfile, old_symbols.as<std::byte>(), old_symbol_count * sizeof(u64))) {
+                return std::format("old symbol table for {} is outside {}", old_func.get_id(), binfile.m_path.string());
+            }
+
+            original_function.m_numInstructions = static_cast<u32>(new_func.m_instructions.size());
+            original_function.m_sum = 12 + 4 * (new_func.m_instructions.size() + new_func.m_symbols.size());
+
+            location old_symbols_reloc = old_symbols;
+            for (u64 i = 0; i < old_symbol_count; ++i) {
+                binfile.edit_reloc_table(old_symbols_reloc, false);
+                old_symbols_reloc += sizeof(u64);
+            }
+
+            if (instruction_bytes != 0) {
+                std::memcpy(original_function.m_pInstruction, new_func.m_instructions.data(), instruction_bytes);
+            }
+            if (symbol_bytes != 0) {
+                if (errmsg error = copy_recompiled_symbols_to_mapped_file(binfile, original_function.m_pSymbols, new_func)) {
+                    return error;
+                }
+            }
+
+            return std::nullopt;
+        }
+
+        errmsg patch_large_recompiled_functions(BinaryFile& binfile, const std::vector<function_patch>& large_patches) {
+            if (large_patches.empty()) {
+                return std::nullopt;
+            }
+
+            struct scheduled_patch {
+                const function_disassembly* m_oldFunc = nullptr;
+                const recompiled_function_info* m_newFunc = nullptr;
+                u64 m_instructionOffset = 0;
+                u64 m_symbolOffset = 0;
+            };
+
+            const u64 old_text_size = binfile.m_dcheader->m_textSize;
+            const u32 old_reloc_size = *reinterpret_cast<const u32*>(binfile.m_bytes.get() + old_text_size);
+            const u64 old_reloc_end = old_text_size + sizeof(u32) + old_reloc_size;
+            if (old_reloc_end > binfile.m_size) {
+                return std::format("reloc table for {} is outside the file", binfile.m_path.string());
+            }
+
+            const u64 old_strings_start = binfile.m_dcheader->m_stringsOffset;
+            if (old_strings_start < sizeof(DC_Header) || old_strings_start > old_text_size) {
+                return std::format("string table for {} is outside the text segment", binfile.m_path.string());
+            }
+
+            const u64 old_slot_count = u64{old_reloc_size} * 8;
+            for (u64 slot = old_strings_start / sizeof(u64); slot < old_slot_count; ++slot) {
+                if (slot * sizeof(u64) >= old_strings_start && binfile.m_relocTable.get<u8>(slot / 8) & (1 << (slot % 8))) {
+                    return std::format("string table region for {} contains a relocated pointer at {:#x}", binfile.m_path.string(), slot * sizeof(u64));
+                }
+            }
+
+            u64 payload_cursor = old_strings_start;
+            std::vector<scheduled_patch> scheduled;
+            scheduled.reserve(large_patches.size());
+
+            for (const function_patch& patch : large_patches) {
+                const u64 instruction_size = patch.m_newFunc->m_instructions.size() * sizeof(Instruction);
+                const u64 symbol_size = patch.m_newFunc->m_symbols.size() * sizeof(u64);
+                scheduled.push_back({
+                    patch.m_oldFunc,
+                    patch.m_newFunc,
+                    payload_cursor,
+                    payload_cursor + instruction_size,
+                });
+                payload_cursor += instruction_size + symbol_size;
+            }
+
+            const u64 inserted_size = payload_cursor - old_strings_start;
+            const u64 new_strings_start = old_strings_start + inserted_size;
+            const u64 old_strings_size = old_text_size - old_strings_start;
+            const u64 new_text_size = new_strings_start + old_strings_size;
+            if (new_text_size > std::numeric_limits<u32>::max()) {
+                return std::format("expanded text section for {} is too large", binfile.m_path.string());
+            }
+            const u32 new_reloc_size = static_cast<u32>((new_text_size + 63) / 64);
+            const u64 tail_size = binfile.m_size - old_reloc_end;
+            const u64 new_file_size = new_text_size + sizeof(u32) + new_reloc_size + tail_size;
+
+            BinaryFile::byte_uptr old_unmapped = binfile.get_unmapped();
+            std::byte* new_bytes_raw = static_cast<std::byte*>(::operator new[](new_file_size, std::align_val_t(64)));
+            BinaryFile::byte_uptr new_unmapped(new_bytes_raw);
+            std::memset(new_unmapped.get(), 0, new_file_size);
+
+            std::memcpy(new_unmapped.get(), old_unmapped.get(), old_strings_start);
+            std::memcpy(new_unmapped.get() + new_strings_start, old_unmapped.get() + old_strings_start, old_strings_size);
+            std::memcpy(new_unmapped.get() + new_text_size + sizeof(u32), old_unmapped.get() + old_text_size + sizeof(u32), old_reloc_size);
+            if (tail_size != 0) {
+                std::memcpy(
+                    new_unmapped.get() + new_text_size + sizeof(u32) + new_reloc_size,
+                    old_unmapped.get() + old_reloc_end,
+                    tail_size
+                );
+            }
+
+            DC_Header* header = reinterpret_cast<DC_Header*>(new_unmapped.get());
+            header->m_textSize = static_cast<u32>(new_text_size);
+            header->m_stringsOffset = static_cast<u32>(new_strings_start);
+            *reinterpret_cast<u32*>(new_unmapped.get() + new_text_size) = new_reloc_size;
+
+            const u8* old_reloc = reinterpret_cast<const u8*>(old_unmapped.get() + old_text_size + sizeof(u32));
+            for (u64 slot = 0; slot < old_strings_start / sizeof(u64); ++slot) {
+                if (!(old_reloc[slot / 8] & (1 << (slot % 8)))) {
+                    continue;
+                }
+
+                u64 value = 0;
+                std::memcpy(&value, new_unmapped.get() + slot * sizeof(u64), sizeof(value));
+                if (value >= old_strings_start && value < old_text_size) {
+                    value += inserted_size;
+                    std::memcpy(new_unmapped.get() + slot * sizeof(u64), &value, sizeof(value));
+                }
+            }
+
+            for (const scheduled_patch& patch : scheduled) {
+                const function_disassembly& old_func = *patch.m_oldFunc;
+                const recompiled_function_info& new_func = *patch.m_newFunc;
+                const u64 instruction_size = new_func.m_instructions.size() * sizeof(Instruction);
+                const u64 symbol_size = new_func.m_symbols.size() * sizeof(u64);
+
+                if (instruction_size != 0) {
+                    std::memcpy(new_unmapped.get() + patch.m_instructionOffset, new_func.m_instructions.data(), instruction_size);
+                }
+                if (symbol_size != 0) {
+                    if (errmsg error = copy_recompiled_symbols_to_unmapped_file(
+                        new_unmapped.get(),
+                        new_text_size,
+                        patch.m_symbolOffset,
+                        new_func,
+                        old_strings_start,
+                        old_text_size,
+                        inserted_size,
+                        binfile.m_path
+                    )) {
+                        return error;
+                    }
+                }
+
+                ScriptLambda& lambda = *reinterpret_cast<ScriptLambda*>(new_unmapped.get() + old_func.m_originalOffset);
+                lambda.m_pInstruction = reinterpret_cast<u64*>(patch.m_instructionOffset);
+                lambda.m_pSymbols = reinterpret_cast<u64*>(patch.m_symbolOffset);
+                lambda.m_numInstructions = static_cast<u32>(new_func.m_instructions.size());
+                lambda.m_sum = 12 + 4 * (new_func.m_instructions.size() + new_func.m_symbols.size());
+
+                edit_unmapped_reloc_table(new_unmapped.get(), new_text_size, old_func.m_originalOffset, true);
+                edit_unmapped_reloc_table(new_unmapped.get(), new_text_size, old_func.m_originalOffset + sizeof(u64), true);
+
+                const u64 old_symbol_offset = reinterpret_cast<p64>(old_func.m_stackFrame.m_symbolTable.m_location.as<std::byte>()) - reinterpret_cast<p64>(binfile.m_bytes.get());
+                const u64 old_symbol_count = old_func.m_stackFrame.m_symbolTable.m_types.size();
+                for (u64 i = 0; i < old_symbol_count; ++i) {
+                    edit_unmapped_reloc_table(new_unmapped.get(), new_text_size, old_symbol_offset + i * sizeof(u64), false);
+                }
+
+            }
+
+            binfile.replace_with_unmapped(new_file_size, std::move(new_unmapped));
+            return std::nullopt;
+        }
+    }
+
     llvm_transpiler::llvm_transpiler(const SIDBase& sidbase)
         :   m_sidbase(sidbase),
             m_ctx(llvm::LLVMContext()),
@@ -75,13 +467,13 @@ namespace dconstruct::llvm_transpile {
         m_defaultPointerT = m_builder.getPtrTy();
     }
 
-    void llvm_transpiler::add_module(std::string_view name, const std::vector<const function_disassembly*>& funcs) {
+    void llvm_transpiler::add_module(std::string_view name, const BinaryFile* binary_file, const std::vector<const function_disassembly*>& funcs) {
         std::vector<prepared_function_ctx> functions;
         functions.reserve(funcs.size());
         for (const function_disassembly* disassembly_function : funcs) {
             functions.emplace_back(disassembly_function, &disassembly_function->m_stackFrame.m_symbolTable.m_location);
         }
-        m_translationUnits.emplace_back(std::make_unique<llvm::Module>(name, m_ctx), std::move(functions));
+        m_translationUnits.emplace_back(std::make_unique<llvm::Module>(name, m_ctx), binary_file, std::move(functions));
     }
 
     void llvm_transpiler::prepare_function(translation_unit& unit, prepared_function_ctx& to_lift) {
@@ -162,7 +554,6 @@ namespace dconstruct::llvm_transpile {
         auto& m_registerFrame = function.m_registerFrame;
         llvm::Function* m_function = function.m_llvmFunc;
 
-        bool terminated = false;
 
         m_builder.SetInsertPoint(m_blocks.at(0));
         const control_flow_node* current_node = &m_graph->m_nodes[0];
@@ -170,7 +561,7 @@ namespace dconstruct::llvm_transpile {
             const function_disassembly_line& line = m_disasm->m_lines[l];
             Instruction istr = line.m_instruction;
             std::string istr_id = std::format("__{}_{}__", istr.opcode_to_string(), l);
-
+            bool terminated = false;
             std::string op = std::format("{}op", istr_id);
             switch (line.m_instruction.opcode) {
                 using enum Opcode;
@@ -444,7 +835,7 @@ namespace dconstruct::llvm_transpile {
                     break;
                 }
                 case LoadPointer: {
-                    make_mem_load<const void*>(function, istr, istr_id);
+                    make_mem_load<void*>(function, istr, istr_id);
                     break;
                 }
                 case StoreI8: {
@@ -505,8 +896,11 @@ namespace dconstruct::llvm_transpile {
                     const ast::full_type& type = m_disasm->m_stackFrame.m_symbolTable.m_types[istr.operand1];
                     if (const ast::primitive_type* string_value = std::get_if<ast::primitive_type>(&type)) {
                         assert(string_value->m_type == ast::primitive_kind::STRING);
-
-                        llvm::Value* string_pointer = m_builder.CreateIntrinsic(llvm::Intrinsic::dcvm_static_pointer, {m_builder.getInt64(istr.operand1)});
+                        assert(unit.m_binaryFile);
+                        const p64 mapped_string_offset = function.m_symbolTable->get<p64>(istr.operand1 * sizeof(u64));
+                        const p64 binary_file_byte_start = p64(unit.m_binaryFile->m_bytes.get());
+                        const p64 string_file_offset = mapped_string_offset - binary_file_byte_start;
+                        llvm::Value* string_pointer = m_builder.CreateIntrinsic(llvm::Intrinsic::dcvm_static_pointer, {m_builder.getInt64(string_file_offset)});
                         make_store(function, istr.destination, string_pointer, m_defaultPointerT);
                     } else {
                         make_symbol_table_load<const void*>(function, istr, istr_id);
@@ -592,6 +986,7 @@ namespace dconstruct::llvm_transpile {
                     current_node = m_graph->get_node_with_start_line(l + 1);
                     assert(current_node != nullptr);
                     terminated = true;
+                    break;
                 }
                 case BranchIfNot: {
                     const istr_line destination = current_node->m_lines.back().m_target;
@@ -643,7 +1038,7 @@ namespace dconstruct::llvm_transpile {
             for (const auto& global_name : unit.m_calledGlobals) {
                 llvm::Function* existing = unit.module().getFunction(global_name);
 
-                if (!existing || existing->isDeclaration()) {
+                if (!existing || !existing->isDeclaration()) {
                     continue;
                 }
 
@@ -703,6 +1098,7 @@ namespace dconstruct::llvm_transpile {
 
         outputs.m_llvmOpt = emit_llvm_ir(module);
         outputs.m_dcvmAsm = emit_dcvm_asm(module);
+        outputs.m_dcvmBytecode = emit_dcvm_bytecode(module);
         return outputs;
     }
 
@@ -742,6 +1138,69 @@ namespace dconstruct::llvm_transpile {
             return "couldn't open output file " + bytecode_path.string();
         }
         bytecode_file.write(outputs.m_dcvmBytecode.data(), static_cast<std::streamsize>(outputs.m_dcvmBytecode.size()));
+
+        return std::nullopt;
+    }
+
+    errmsg llvm_transpiler::patch_original_binfiles(const std::vector<generated_outputs>& outputs, const std::vector<original_binfile>& originals) {
+        for (const original_binfile& original : originals) {
+            if (original.m_binfile == nullptr) {
+                return std::format("original binfile for {} is null", original.m_moduleName);
+            }
+
+            const generated_outputs* module_outputs = find_outputs_for_module(outputs, original.m_moduleName);
+            if (module_outputs == nullptr) {
+                return std::format("missing generated outputs for {}", original.m_moduleName);
+            }
+            if (module_outputs->m_dcvmBytecode.empty()) {
+                continue;
+            }
+
+            resstr<std::vector<recompiled_function_info>> recompiled_functions = parse_recompiled_functions(*module_outputs);
+            if (!recompiled_functions) {
+                return recompiled_functions.error();
+            }
+
+            std::unordered_map<sid64, const recompiled_function_info*> functions_by_sid;
+            functions_by_sid.reserve(recompiled_functions->size());
+            for (const recompiled_function_info& function : *recompiled_functions) {
+                functions_by_sid[function.m_sid] = &function;
+            }
+
+            std::vector<function_patch> small_patches;
+            std::vector<function_patch> large_patches;
+
+            for (const function_disassembly* old_func : original.m_functions) {
+                if (old_func == nullptr) {
+                    continue;
+                }
+
+                const sid64 func_sid = SID(old_func->get_id().c_str());
+                const auto recompiled_it = functions_by_sid.find(func_sid);
+                if (recompiled_it == functions_by_sid.end()) {
+                    continue;
+                }
+
+                const recompiled_function_info& new_func = *recompiled_it->second;
+                const u64 new_func_size = new_func.m_instructions.size() * sizeof(Instruction) + new_func.m_symbols.size() * sizeof(u64);
+                const u64 old_func_size = old_func->m_lines.size() * sizeof(Instruction) + old_func->m_stackFrame.m_symbolTable.m_types.size() * sizeof(u64);
+                if (new_func_size > old_func_size) {
+                    large_patches.push_back({old_func, &new_func});
+                } else {
+                    small_patches.push_back({old_func, &new_func});
+                }
+            }
+
+            for (const function_patch& patch : small_patches) {
+                if (errmsg error = patch_recompiled_function(*original.m_binfile, *patch.m_oldFunc, *patch.m_newFunc)) {
+                    return error;
+                }
+            }
+
+            if (errmsg error = patch_large_recompiled_functions(*original.m_binfile, large_patches)) {
+                return error;
+            }
+        }
 
         return std::nullopt;
     }
@@ -826,18 +1285,6 @@ namespace dconstruct::llvm_transpile {
         llvm::FunctionType* new_f_type = llvm::FunctionType::get(old_f_type->getReturnType(), llvm::ArrayRef(new_arg_types.data(), new_arg_types.size()), old_f_type->isVarArg());
         function.m_types[type_location] = new_f_type;
         return new_f_type;
-    }
-
-    errmsg transpile_functions_to_llvm(llvm::Module& module, const std::vector<const function_disassembly*>& funcs, const SIDBase& sidbase) {
-        llvm_transpiler t(sidbase);
-        translation_unit unit(llvm::CloneModule(module));
-        for (const function_disassembly* func : funcs) {
-            if (errmsg error = t.transpile_function(unit, *func)) {
-                return error;
-            }
-        }
-        module = std::move(unit.module());
-        return std::nullopt;
     }
 
     [[nodiscard]] llvm::Type* ast_type_to_llvm_type(llvm::LLVMContext& ctx, const ast::full_type& type) {
@@ -1100,6 +1547,6 @@ namespace dconstruct::llvm_transpile {
             m_funcLocations[name] = is_final_build_f;
         }
 
-        m_translationUnits.emplace_back(std::move(module));
+        m_translationUnits.emplace_back(std::move(module), nullptr);
     }
 }

@@ -436,6 +436,19 @@ target_link_options(llvm_transpile_demo PRIVATE
     $<$<CONFIG:Release>:/LTCG>
 )
 
+add_executable(llvm_transpile_test
+    "${CMAKE_CURRENT_TEST_DIR}/cpp/llvm_transpile_test.cpp"
+)
+
+target_link_libraries(llvm_transpile_test PRIVATE
+    llvm_transpile
+    GTest::gtest_main
+)
+
+target_compile_definitions(llvm_transpile_test PRIVATE DCONSTRUCT_TEST_ROOT="${CMAKE_CURRENT_TEST_DIR}")
+stage_sidbase_next_to(llvm_transpile_test)
+gtest_discover_tests(llvm_transpile_test WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
+
 set(LSP_INSTALL OFF CACHE BOOL "" FORCE)
 add_subdirectory(${SOURCE_DIR}/lsp-framework EXCLUDE_FROM_ALL)
 

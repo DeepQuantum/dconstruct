@@ -76,7 +76,13 @@ namespace dconstruct {
     void BinaryFile::edit_reloc_table(const location loc, const bool value) {
          p64 offset = (loc.num() - reinterpret_cast<p64>(m_bytes.get()));
          offset /= 8;
-         *const_cast<u8*>(m_relocTable.as<u8>(offset / 8)) |= (value << (offset % 8));
+         u8* reloc_byte = const_cast<u8*>(m_relocTable.as<u8>(offset / 8));
+         const u8 mask = static_cast<u8>(1 << (offset % 8));
+         if (value) {
+             *reloc_byte |= mask;
+         } else {
+             *reloc_byte &= static_cast<u8>(~mask);
+         }
     }
 
     [[nodiscard]] bool BinaryFile::is_string(const location loc) const noexcept {
@@ -152,6 +158,14 @@ namespace dconstruct {
         }
 
         return byte_uptr(unmapped_bytes);
+    }
+
+    void BinaryFile::replace_with_unmapped(const u64 size, byte_uptr&& bytes) noexcept {
+        m_size = size;
+        m_bytes = std::move(bytes);
+        m_dcheader = reinterpret_cast<DC_Header*>(m_bytes.get());
+        read_reloc_table();
+        replace_newlines_in_stringtable();
     }
 
     errmsg BinaryFile::dump_to_file(const std::filesystem::path& path) const {

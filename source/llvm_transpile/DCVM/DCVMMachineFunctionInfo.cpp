@@ -12,6 +12,8 @@ unsigned DCVMMachineFunctionInfo::internSymbol(uint64_t Value, bool IsPointer) {
             report_fatal_error("DCVM symbol table exceeds 256 entries");
         Symbols.push_back(Value);
         PointerMap.push_back(std::byte{IsPointer});
+    } else if (IsPointer) {
+        PointerMap[It->second] = std::byte{true};
     }
     return It->second;
 }

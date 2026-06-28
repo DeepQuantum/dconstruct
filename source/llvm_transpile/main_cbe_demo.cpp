@@ -1,5 +1,6 @@
 #include "DCScript.h"
 #include "binaryfile.h"
+#include "compilation/compiler_funcs.h"
 #include "disassembly/disassembler.h"
 #include "disassembly/instructions.h"
 #include "llvm_transpile/llvm_transpile.h"
@@ -16,6 +17,7 @@
 #include <algorithm>
 #include <array>
 #include <cstdlib>
+#include <expected>
 #include <format>
 #include <filesystem>
 #include <fstream>
@@ -26,6 +28,60 @@
 #include <vector>
 
 using namespace dconstruct;
+
+namespace {
+    const std::filesystem::path SIDBASE_PATH = "sidbase.bin";
+    const std::filesystem::path GAME_ROOT = "C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II";
+    const std::filesystem::path GAME_DC1_DIR = GAME_ROOT / "build" / "pc" / "main" / "bin_unpacked" / "dc1";
+    const std::filesystem::path GAME_MODS_DIR = GAME_ROOT / "mods";
+    const std::filesystem::path RECOMPILED_MOD_DIR = GAME_MODS_DIR / "recompiled";
+    const std::filesystem::path RECOMPILED_DC1_DIR = RECOMPILED_MOD_DIR / "bin" / "dc1";
+    const std::filesystem::path SOURCE_MODULES = GAME_DC1_DIR / "modules.bin";
+    const std::filesystem::path STAGED_MODULES = RECOMPILED_DC1_DIR / "modules.bin";
+
+    const std::array RECOMPILE_INPUTS = {
+        GAME_DC1_DIR / "ss-rogue" / "wave-manager-funcs.bin",
+        GAME_DC1_DIR / "anim-gas-mask-impl.bin",
+    };
+
+    resstr<std::filesystem::path> staged_output_path(const std::filesystem::path& source_path) {
+        std::filesystem::path relative = source_path.lexically_relative(GAME_DC1_DIR);
+        if (relative.empty() || *relative.begin() == "..") {
+            return std::unexpected{"input file is not under GAME_DC1_DIR: " + source_path.string()};
+        }
+        return RECOMPILED_DC1_DIR / relative;
+    }
+
+    errmsg prepare_recompiled_workspace() {
+        std::error_code ec;
+        std::filesystem::remove_all(RECOMPILED_MOD_DIR, ec);
+        if (ec) {
+            return "couldn't remove old recompiled staging directory " + RECOMPILED_MOD_DIR.string() + ": " + ec.message();
+        }
+
+        std::filesystem::create_directories(RECOMPILED_DC1_DIR, ec);
+        if (ec) {
+            return "couldn't create recompiled dc1 directory " + RECOMPILED_DC1_DIR.string() + ": " + ec.message();
+        }
+
+        if (!std::filesystem::exists(SOURCE_MODULES)) {
+            return "missing source modules.bin: " + SOURCE_MODULES.string();
+        }
+
+        std::filesystem::copy_file(SOURCE_MODULES, STAGED_MODULES, std::filesystem::copy_options::overwrite_existing, ec);
+        if (ec) {
+            return "couldn't copy fresh modules.bin from " + SOURCE_MODULES.string() + " to " + STAGED_MODULES.string() + ": " + ec.message();
+        }
+
+        const std::filesystem::path psarc_path = compilation::repackage_psarc_path(RECOMPILED_MOD_DIR);
+        std::filesystem::remove(psarc_path, ec);
+        if (ec) {
+            return "couldn't remove old psarc " + psarc_path.string() + ": " + ec.message();
+        }
+
+        return std::nullopt;
+    }
+}
 
 [[maybe_unused]] static void dump_cfgs(llvm::Module& module, std::string_view variant) {
     const std::filesystem::path repo_root = std::filesystem::path(__FILE__).parent_path().parent_path().parent_path();
@@ -63,25 +119,38 @@ using namespace dconstruct;
 }
 
 int main() {
-    auto sidbase_result = SIDBase::from_binary("sidbase.bin");
+    auto sidbase_result = SIDBase::from_binary(SIDBASE_PATH);
     if (!sidbase_result.has_value()) {
-        std::println(stderr, "failed to load sidbase.bin: {}", sidbase_result.error());
+        std::println(stderr, "failed to load {}: {}", SIDBASE_PATH.string(), sidbase_result.error());
         return 1;
     }
     const SIDBase& sidbase = sidbase_result.value();
 
-    std::vector<std::filesystem::path> paths = {"wave-manager-funcs.bin", "anim-gas-mask-impl.bin"};
+    if (errmsg error = prepare_recompiled_workspace()) {
+        std::println(stderr, "failed to prepare recompiled mod workspace: {}", *error);
+        return 1;
+    }
 
     llvm_transpile::llvm_transpiler tp(sidbase);
     std::vector<std::unique_ptr<BinaryFile>> binfiles;
     std::vector<std::unique_ptr<Disassembler>> disassemblers;
-    binfiles.reserve(paths.size());
-    disassemblers.reserve(paths.size());
+    std::vector<llvm_transpile::original_binfile> original_binfiles;
+    std::vector<std::filesystem::path> staged_outputs;
+    binfiles.reserve(RECOMPILE_INPUTS.size());
+    disassemblers.reserve(RECOMPILE_INPUTS.size());
+    original_binfiles.reserve(RECOMPILE_INPUTS.size());
+    staged_outputs.reserve(RECOMPILE_INPUTS.size());
 
-    for (const auto& path: paths) {
+    for (const auto& path: RECOMPILE_INPUTS) {
         resstr<BinaryFile> binfile = BinaryFile::from_path(path);
         if (!binfile) {
             std::println(stderr, "failed to load binary file {}: {}", path.filename().string(), binfile.error());
+            return 1;
+        }
+
+        resstr<std::filesystem::path> output_path = staged_output_path(path);
+        if (!output_path) {
+            std::println(stderr, "failed to stage {}: {}", path.string(), output_path.error());
             return 1;
         }
 
@@ -89,21 +158,54 @@ int main() {
         disassemblers.push_back(std::make_unique<Disassembler>(binfiles.back().get(), &sidbase));
         disassemblers.back()->disassemble();
 
-        tp.add_module(path.filename().string(), disassemblers.back()->get_all_functions());
+        std::vector<const function_disassembly*> functions = disassemblers.back()->get_all_functions();
+        original_binfiles.push_back({path.filename().string(), binfiles.back().get(), functions});
+        staged_outputs.push_back(std::move(*output_path));
+        tp.add_module(path.filename().string(), binfiles.back().get(), functions);
     }
 
     tp.enable_runtime_module();
 
-    const std::filesystem::path out_dir = std::filesystem::path(__FILE__).parent_path();
     const std::vector<llvm_transpile::generated_outputs> outputs = tp.run();
 
-    for (const llvm_transpile::generated_outputs& output : outputs) {
-        if (errmsg error = llvm_transpile::llvm_transpiler::write_outputs(output, out_dir)) {
-            std::println(stderr, "failed to write outputs for {}: {}", output.m_moduleName, *error);
+    if (errmsg error = llvm_transpile::llvm_transpiler::patch_original_binfiles(outputs, original_binfiles)) {
+        std::println(stderr, "failed to patch original binfiles: {}", *error);
+        return 1;
+    }
+
+    std::vector<compilation::modules_patch_request> module_patches;
+    module_patches.reserve(original_binfiles.size());
+
+    for (u64 i = 0; i < original_binfiles.size(); ++i) {
+        const llvm_transpile::original_binfile& original = original_binfiles[i];
+        const std::filesystem::path& patched_path = staged_outputs[i];
+        std::filesystem::create_directories(patched_path.parent_path());
+        if (errmsg error = original.m_binfile->dump_to_file(patched_path)) {
+            std::println(stderr, "failed to write patched binary {}: {}", patched_path.string(), *error);
             return 1;
         }
-        std::println("generated {} ({} bytes)", output.m_moduleName, output.m_dcvmBytecode.size());
+
+        const u64 patched_size = std::filesystem::file_size(patched_path);
+        module_patches.push_back(compilation::modules_patch_request{patched_path, patched_size, {}});
+        std::println("staged {} ({} bytes)", patched_path.string(), patched_size);
     }
+
+    resstr<std::vector<compilation::modules_patch_summary>> modules_result = compilation::patch_modules_sizes(STAGED_MODULES, module_patches);
+    if (!modules_result) {
+        std::println(stderr, "failed to patch modules.bin: {}", modules_result.error());
+        return 1;
+    }
+    for (const compilation::modules_patch_summary& summary : *modules_result) {
+        std::println("modules.bin: {} size {} -> {}", summary.m_targetName, summary.m_oldSize, summary.m_newSize);
+    }
+
+    resstr<std::filesystem::path> psarc_result = compilation::repackage_psarc(RECOMPILED_MOD_DIR);
+    if (!psarc_result) {
+        std::println(stderr, "failed to create recompiled psarc: {}", psarc_result.error());
+        return 1;
+    }
+
+    std::println("created {}", psarc_result->string());
 
     return 0;
 }

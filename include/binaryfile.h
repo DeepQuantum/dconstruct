@@ -65,6 +65,7 @@ namespace dconstruct {
         [[nodiscard]] bool gets_pointed_at(const location) const noexcept;
         [[nodiscard]] bool is_string(const location) const noexcept;
         [[nodiscard]] byte_uptr get_unmapped() const;
+        void replace_with_unmapped(const u64 size, byte_uptr&& bytes) noexcept;
         void edit_reloc_table(const location loc, const bool value);
 
 
