@@ -4,13 +4,13 @@
 
 namespace llvm {
 
-class Triple;
+    class Triple;
 
-class DCVMELFMCAsmInfo : public MCAsmInfoELF {
-    void anchor() override;
+    class DCVMELFMCAsmInfo : public MCAsmInfoELF {
+        void anchor() override;
 
-public:
-    explicit DCVMELFMCAsmInfo(const Triple &TheTriple);
-};
+    public:
+        explicit DCVMELFMCAsmInfo(const Triple& TheTriple);
+    };
 
 } // namespace llvm

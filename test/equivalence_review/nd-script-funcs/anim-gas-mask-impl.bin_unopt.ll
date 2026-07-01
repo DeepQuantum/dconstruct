@@ -3447,46 +3447,158 @@ declare !dcvm.sid_distance !35 i64 @"player-is-crouched?"() #0
 ; Function Attrs: nosync nounwind willreturn
 declare !dcvm.sid_distance !36 i64 @player-force-stand() #0
 
-; Function Attrs: nosync nounwind willreturn
-declare !dcvm.sid_distance !37 i64 @"!"(i64) #0
+define available_externally i64 @"!"(i64 %arg_0) !dcvm.sid_distance !37 !dcvm.sid_distance !38 {
+bb0:
+  %r0 = alloca i64, align 8
+  %r1 = alloca i64, align 8
+  %r2 = alloca i64, align 8
+  %r3 = alloca i64, align 8
+  %r4 = alloca i64, align 8
+  %r5 = alloca i64, align 8
+  %r6 = alloca i64, align 8
+  %r7 = alloca i64, align 8
+  %r8 = alloca i64, align 8
+  %r9 = alloca i64, align 8
+  %r10 = alloca i64, align 8
+  %r11 = alloca i64, align 8
+  %r12 = alloca i64, align 8
+  %r13 = alloca i64, align 8
+  %r14 = alloca i64, align 8
+  %r15 = alloca i64, align 8
+  %r16 = alloca i64, align 8
+  %r17 = alloca i64, align 8
+  %r18 = alloca i64, align 8
+  %r19 = alloca i64, align 8
+  %r20 = alloca i64, align 8
+  %r21 = alloca i64, align 8
+  %r22 = alloca i64, align 8
+  %r23 = alloca i64, align 8
+  %r24 = alloca i64, align 8
+  %r25 = alloca i64, align 8
+  %r26 = alloca i64, align 8
+  %r27 = alloca i64, align 8
+  %r28 = alloca i64, align 8
+  %r29 = alloca i64, align 8
+  %r30 = alloca i64, align 8
+  %r31 = alloca i64, align 8
+  %r32 = alloca i64, align 8
+  %r33 = alloca i64, align 8
+  %r34 = alloca i64, align 8
+  %r35 = alloca i64, align 8
+  %r36 = alloca i64, align 8
+  %r37 = alloca i64, align 8
+  %r38 = alloca i64, align 8
+  %r39 = alloca i64, align 8
+  %r40 = alloca i64, align 8
+  %r41 = alloca i64, align 8
+  %r42 = alloca i64, align 8
+  %r43 = alloca i64, align 8
+  %r44 = alloca i64, align 8
+  %r45 = alloca i64, align 8
+  %r46 = alloca i64, align 8
+  %r47 = alloca i64, align 8
+  %r48 = alloca i64, align 8
+  %r49 = alloca i64, align 8
+  %r50 = alloca i64, align 8
+  %r51 = alloca i64, align 8
+  %r52 = alloca i64, align 8
+  %r53 = alloca i64, align 8
+  %r54 = alloca i64, align 8
+  %r55 = alloca i64, align 8
+  %r56 = alloca i64, align 8
+  %r57 = alloca i64, align 8
+  %r58 = alloca i64, align 8
+  %r59 = alloca i64, align 8
+  %r60 = alloca i64, align 8
+  %r61 = alloca i64, align 8
+  %r62 = alloca i64, align 8
+  %r63 = alloca i64, align 8
+  %r64 = alloca i64, align 8
+  %r65 = alloca i64, align 8
+  %r66 = alloca i64, align 8
+  %r67 = alloca i64, align 8
+  %r68 = alloca i64, align 8
+  %r69 = alloca i64, align 8
+  %r70 = alloca i64, align 8
+  %r71 = alloca i64, align 8
+  %r72 = alloca i64, align 8
+  %r73 = alloca i64, align 8
+  %r74 = alloca i64, align 8
+  %r75 = alloca i64, align 8
+  %r76 = alloca i64, align 8
+  %r77 = alloca i64, align 8
+  %r78 = alloca i64, align 8
+  %r79 = alloca i64, align 8
+  %r80 = alloca i64, align 8
+  %r81 = alloca i64, align 8
+  %r82 = alloca i64, align 8
+  %r83 = alloca i64, align 8
+  %r84 = alloca i64, align 8
+  %r85 = alloca i64, align 8
+  %r86 = alloca i64, align 8
+  %r87 = alloca i64, align 8
+  %r88 = alloca i64, align 8
+  %r89 = alloca i64, align 8
+  %r90 = alloca i64, align 8
+  %r91 = alloca i64, align 8
+  %r92 = alloca i64, align 8
+  %r93 = alloca i64, align 8
+  %r94 = alloca i64, align 8
+  %r95 = alloca i64, align 8
+  %r96 = alloca i64, align 8
+  %r97 = alloca i64, align 8
+  store i64 %arg_0, ptr %r49, align 4
+  %__Move_0___load_op1 = load i64, ptr %r49, align 4
+  store i64 %__Move_0___load_op1, ptr %r0, align 4
+  %__Move_1___load_op1 = load i64, ptr %r0, align 4
+  store i64 %__Move_1___load_op1, ptr %r1, align 4
+  %__OpLogNot_2___load_op1 = load i64, ptr %r1, align 4
+  %__OpLogNot_2__op = icmp eq i64 %__OpLogNot_2___load_op1, 0
+  %0 = zext i1 %__OpLogNot_2__op to i64
+  store i64 %0, ptr %r1, align 4
+  %__Return_3___retval = load i64, ptr %r1, align 4
+  ret i64 %__Return_3___retval
+}
 
 ; Function Attrs: nosync nounwind willreturn
-declare !dcvm.sid_distance !38 i64 @wait-holster-player-weapon(i64, float) #0
+declare !dcvm.sid_distance !39 i64 @wait-holster-player-weapon(i64, float) #0
 
 ; Function Attrs: nosync nounwind willreturn
-declare !dcvm.sid_distance !39 i64 @holster-player-weapon-instantly(float, i64) #0
+declare !dcvm.sid_distance !40 i64 @holster-player-weapon-instantly(float, i64) #0
 
 ; Function Attrs: nosync nounwind willreturn
-declare !dcvm.sid_distance !40 i64 @wait-npc-holster-weapon(i64, i64, i64, float, i64) #0
+declare !dcvm.sid_distance !41 i64 @wait-npc-holster-weapon(i64, i64, i64, float, i64) #0
 
 ; Function Attrs: nosync nounwind willreturn
-declare !dcvm.sid_distance !41 i64 @"npc-has-weapon-in-hand?"(i64) #0
+declare !dcvm.sid_distance !42 i64 @"npc-has-weapon-in-hand?"(i64) #0
 
 ; Function Attrs: nosync nounwind willreturn
-declare !dcvm.sid_distance !42 i64 @wait-npc-set-demeanor(i64, i64) #0
+declare !dcvm.sid_distance !43 i64 @wait-npc-set-demeanor(i64, i64) #0
 
 ; Function Attrs: nosync nounwind willreturn
-declare !dcvm.sid_distance !43 i64 @"suspend-idle-gestures/f"(i64) #0
+declare !dcvm.sid_distance !44 i64 @"suspend-idle-gestures/f"(i64) #0
 
 ; Function Attrs: nosync nounwind willreturn
-declare !dcvm.sid_distance !44 i64 @npc-disable-dialog-look(i64, float) #0
+declare !dcvm.sid_distance !45 i64 @npc-disable-dialog-look(i64, float) #0
 
 ; Function Attrs: nosync nounwind willreturn
-declare !dcvm.sid_distance !45 i64 @kill-entity(i64) #0
+declare !dcvm.sid_distance !46 i64 @kill-entity(i64) #0
 
 ; Function Attrs: nosync nounwind willreturn
-declare !dcvm.sid_distance !46 i64 @player-disable-dialog-look-gestures(float) #0
+declare !dcvm.sid_distance !47 i64 @player-disable-dialog-look-gestures(float) #0
 
 ; Function Attrs: nosync nounwind willreturn
-declare !dcvm.sid_distance !47 i64 @"player-disable-squeeze-through/f"() #0
+declare !dcvm.sid_distance !48 i64 @"player-disable-squeeze-through/f"() #0
 
 ; Function Attrs: nosync nounwind willreturn
-declare !dcvm.sid_distance !48 i64 @"player-set-narrative-mode/f"(i64, i64, i64) #0
+declare !dcvm.sid_distance !49 i64 @"player-set-narrative-mode/f"(i64, i64, i64) #0
 
 ; Function Attrs: nosync nounwind willreturn
-declare !dcvm.sid_distance !49 i64 @joypad-disable-commands(i64) #0
+declare !dcvm.sid_distance !50 i64 @joypad-disable-commands(i64) #0
 
 attributes #0 = { nosync nounwind willreturn }
+
+!llvm.dbg.cu = !{}
 
 !0 = !{!"sid", i64 4147362863116273348}
 !1 = !{!"far"}
@@ -3526,15 +3638,16 @@ attributes #0 = { nosync nounwind willreturn }
 !35 = !{!"sid", i64 1646463116072042322, !"distance", !"far"}
 !36 = !{!"sid", i64 8594926419455150747, !"distance", !"far"}
 !37 = !{!"sid", i64 -5808627241898115124, !"distance", !"near"}
-!38 = !{!"sid", i64 -3092934816467423265, !"distance", !"far"}
-!39 = !{!"sid", i64 -626103520744544694, !"distance", !"far"}
-!40 = !{!"sid", i64 5808793362033684947, !"distance", !"far"}
-!41 = !{!"sid", i64 7683024912818272899, !"distance", !"far"}
-!42 = !{!"sid", i64 8573502661920361253, !"distance", !"far"}
-!43 = !{!"sid", i64 -5356689657310757786, !"distance", !"near"}
-!44 = !{!"sid", i64 7610916627332680768, !"distance", !"far"}
-!45 = !{!"sid", i64 -804116741684351865, !"distance", !"far"}
-!46 = !{!"sid", i64 7238593933813171071, !"distance", !"far"}
-!47 = !{!"sid", i64 8165897991486741957, !"distance", !"far"}
-!48 = !{!"sid", i64 -2826777519175913837, !"distance", !"near"}
-!49 = !{!"sid", i64 7121253686161376880, !"distance", !"far"}
+!38 = !{!"sid", i64 -5808627241898115124}
+!39 = !{!"sid", i64 -3092934816467423265, !"distance", !"far"}
+!40 = !{!"sid", i64 -626103520744544694, !"distance", !"far"}
+!41 = !{!"sid", i64 5808793362033684947, !"distance", !"far"}
+!42 = !{!"sid", i64 7683024912818272899, !"distance", !"far"}
+!43 = !{!"sid", i64 8573502661920361253, !"distance", !"far"}
+!44 = !{!"sid", i64 -5356689657310757786, !"distance", !"near"}
+!45 = !{!"sid", i64 7610916627332680768, !"distance", !"far"}
+!46 = !{!"sid", i64 -804116741684351865, !"distance", !"far"}
+!47 = !{!"sid", i64 7238593933813171071, !"distance", !"far"}
+!48 = !{!"sid", i64 8165897991486741957, !"distance", !"far"}
+!49 = !{!"sid", i64 -2826777519175913837, !"distance", !"near"}
+!50 = !{!"sid", i64 7121253686161376880, !"distance", !"far"}

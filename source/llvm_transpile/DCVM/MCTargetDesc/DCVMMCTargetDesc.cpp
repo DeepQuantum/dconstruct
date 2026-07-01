@@ -20,39 +20,32 @@ using namespace llvm;
 #define GET_REGINFO_MC_DESC
 #include "DCVMGenRegisterInfo.inc"
 
-static MCAsmInfo *createDCVMMCAsmInfo(const MCRegisterInfo &MRI,
-                                      const Triple &TT,
-                                      const MCTargetOptions &Options) {
+static MCAsmInfo* createDCVMMCAsmInfo(const MCRegisterInfo& MRI, const Triple& TT, const MCTargetOptions& Options) {
     return new DCVMELFMCAsmInfo(TT);
 }
 
-static MCInstrInfo *createDCVMMCInstrInfo() {
-    MCInstrInfo *X = new MCInstrInfo();
+static MCInstrInfo* createDCVMMCInstrInfo() {
+    MCInstrInfo* X = new MCInstrInfo();
     InitDCVMMCInstrInfo(X);
     return X;
 }
 
-static MCRegisterInfo *createDCVMMCRegisterInfo(const Triple &TT) {
-    MCRegisterInfo *X = new MCRegisterInfo();
+static MCRegisterInfo* createDCVMMCRegisterInfo(const Triple& TT) {
+    MCRegisterInfo* X = new MCRegisterInfo();
     InitDCVMMCRegisterInfo(X, 0);
     return X;
 }
 
-static MCSubtargetInfo *
-createDCVMMCSubtargetInfo(const Triple &TT, StringRef CPU, StringRef FS) {
+static MCSubtargetInfo* createDCVMMCSubtargetInfo(const Triple& TT, StringRef CPU, StringRef FS) {
     return createDCVMMCSubtargetInfoImpl(TT, CPU, /*TuneCPU=*/CPU, FS);
 }
 
-static MCInstPrinter *createDCVMMCInstPrinter(const Triple &T,
-                                              unsigned SyntaxVariant,
-                                              const MCAsmInfo &MAI,
-                                              const MCInstrInfo &MII,
-                                              const MCRegisterInfo &MRI) {
+static MCInstPrinter* createDCVMMCInstPrinter(const Triple& T, unsigned SyntaxVariant, const MCAsmInfo& MAI, const MCInstrInfo& MII, const MCRegisterInfo& MRI) {
     return new DCVMInstPrinter(MAI, MII, MRI);
 }
 
 extern "C" LLVM_ABI LLVM_EXTERNAL_VISIBILITY void LLVMInitializeDCVMTargetMC() {
-    Target &T = getTheDCVMTarget();
+    Target& T = getTheDCVMTarget();
 
     RegisterMCAsmInfoFn X(T, createDCVMMCAsmInfo);
     TargetRegistry::RegisterMCInstrInfo(T, createDCVMMCInstrInfo);

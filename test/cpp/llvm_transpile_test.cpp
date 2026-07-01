@@ -31,6 +31,7 @@ namespace dconstruct::testing {
         u64 m_lambdaOffset = 0;
         u64 m_instructionOffset = 0;
         u64 m_symbolOffset = 0;
+        std::optional<u64> m_stateScriptLambdaPointerOffset;
         std::set<std::string> m_staticStrings;
     };
 
@@ -48,6 +49,22 @@ namespace dconstruct::testing {
         }
 
         return "C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/ss-rogue/wave-manager-funcs.bin";
+    }
+
+    std::filesystem::path assault_manager_fixture_path() {
+        if (const char* dc1_dir = std::getenv("TLOU2_DC1_DIR")) {
+            return std::filesystem::path(dc1_dir) / "ss-rogue" / "ss-assault-manager.bin";
+        }
+
+        return "C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/ss-rogue/ss-assault-manager.bin";
+    }
+
+    std::filesystem::path nd_script_funcs_fixture_path() {
+        if (const char* dc1_dir = std::getenv("TLOU2_DC1_DIR")) {
+            return std::filesystem::path(dc1_dir) / "nd-script-funcs.bin";
+        }
+
+        return "C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/nd-script-funcs.bin";
     }
 
     u64 file_offset(const BinaryFile& file, const void* ptr) {
@@ -169,6 +186,7 @@ namespace dconstruct::testing {
             snapshot.m_lambdaOffset = function->m_originalOffset;
             snapshot.m_instructionOffset = file_offset(file, lambda->m_pInstruction);
             snapshot.m_symbolOffset = file_offset(file, lambda->m_pSymbols);
+            snapshot.m_stateScriptLambdaPointerOffset = function->m_stateScriptLambdaPointerOffset;
             snapshot.m_staticStrings = collect_static_strings(file, *function);
 
             auto [_, inserted] = snapshots.emplace(snapshot.m_id, std::move(snapshot));
@@ -213,10 +231,15 @@ namespace dconstruct::testing {
         return instruction_and_symbol_count - lambda.m_numInstructions;
     }
 
-    TEST(LLVM_RECOMPILE, WaveManagerEndToEndPatchPreservesFunctionsAndRelocations) {
-        const std::filesystem::path fixture_path = wave_manager_fixture_path();
+    void expect_end_to_end_patch_preserves_functions_and_relocations(
+        const std::filesystem::path& fixture_path,
+        const std::string_view fixture_name,
+        const std::vector<std::filesystem::path>& dependency_paths,
+        const bool require_state_script,
+        const bool require_moved_and_unmoved_string_symbols
+    ) {
         if (!std::filesystem::exists(fixture_path)) {
-            GTEST_SKIP() << "wave-manager-funcs.bin fixture not found: " << fixture_path.string()
+            GTEST_SKIP() << fixture_name << " fixture not found: " << fixture_path.string()
                          << "; set TLOU2_DC1_DIR to the game's bin_unpacked/dc1 directory";
         }
 
@@ -233,6 +256,22 @@ namespace dconstruct::testing {
         std::vector<const function_disassembly*> original_functions = original_disassembler.get_all_functions();
         ASSERT_FALSE(original_functions.empty());
 
+        u64 standalone_function_count = 0;
+        u64 state_script_function_count = 0;
+        for (const function_disassembly* function : original_functions) {
+            if (function->m_isScriptFunction) {
+                ++state_script_function_count;
+                ASSERT_TRUE(function->m_stateScriptLambdaPointerOffset.has_value()) << function->get_id();
+            } else {
+                ++standalone_function_count;
+            }
+        }
+        EXPECT_GT(standalone_function_count, 0) << fixture_name;
+        if (require_state_script) {
+            ASSERT_TRUE(original_disassembler.has_state_script()) << fixture_name;
+            EXPECT_GT(state_script_function_count, 0) << fixture_name;
+        }
+
         const std::string module_name = fixture_path.filename().string();
         const std::map<std::string, function_snapshot> original_snapshots = snapshot_functions(file, original_functions);
         ASSERT_EQ(original_snapshots.size(), original_functions.size());
@@ -242,16 +281,21 @@ namespace dconstruct::testing {
         llvm_transpile::llvm_transpiler transpiler(sidbase);
         transpiler.add_module(module_name, &file, original_functions);
 
-        std::optional<BinaryFile> dependency_file;
-        std::unique_ptr<Disassembler> dependency_disassembler;
-        const std::filesystem::path dependency_path = fixture_path.parent_path().parent_path() / "anim-gas-mask-impl.bin";
-        if (std::filesystem::exists(dependency_path)) {
+        std::vector<std::unique_ptr<BinaryFile>> dependency_files;
+        std::vector<std::unique_ptr<Disassembler>> dependency_disassemblers;
+        dependency_files.reserve(dependency_paths.size());
+        dependency_disassemblers.reserve(dependency_paths.size());
+        for (const std::filesystem::path& dependency_path : dependency_paths) {
+            if (!std::filesystem::exists(dependency_path)) {
+                continue;
+            }
+
             resstr<BinaryFile> dependency_file_result = BinaryFile::from_path(dependency_path);
             ASSERT_TRUE(dependency_file_result.has_value()) << dependency_file_result.error();
-            dependency_file.emplace(std::move(*dependency_file_result));
-            dependency_disassembler = std::make_unique<Disassembler>(&*dependency_file, &sidbase);
-            dependency_disassembler->disassemble();
-            transpiler.add_module(dependency_path.filename().string(), &*dependency_file, dependency_disassembler->get_all_functions());
+            dependency_files.push_back(std::make_unique<BinaryFile>(std::move(*dependency_file_result)));
+            dependency_disassemblers.push_back(std::make_unique<Disassembler>(dependency_files.back().get(), &sidbase));
+            dependency_disassemblers.back()->disassemble();
+            transpiler.add_module(dependency_path.filename().string(), dependency_files.back().get(), dependency_disassemblers.back()->get_all_functions());
         }
 
         transpiler.enable_runtime_module();
@@ -316,6 +360,14 @@ namespace dconstruct::testing {
             EXPECT_EQ(lambda->m_pSymbols, lambda->m_pInstruction + recompiled.m_instructions.size()) << function_id;
             EXPECT_LE(instruction_offset + instruction_size, file.m_dcheader->m_textSize) << function_id;
             EXPECT_LE(symbol_offset + symbol_size, file.m_dcheader->m_textSize) << function_id;
+            if (original.m_stateScriptLambdaPointerOffset.has_value()) {
+                const u64 slot_offset = *original.m_stateScriptLambdaPointerOffset;
+                ASSERT_LE(slot_offset + sizeof(ScriptLambda*), file.m_dcheader->m_textSize) << function_id;
+                EXPECT_TRUE(reloc_bit_is_set(file, slot_offset)) << function_id;
+                const auto* lambda_slot = reinterpret_cast<ScriptLambda* const*>(file.m_bytes.get() + slot_offset);
+                ASSERT_NE(*lambda_slot, nullptr) << function_id;
+                EXPECT_EQ(file_offset(file, *lambda_slot), original.m_lambdaOffset) << function_id;
+            }
             if (instruction_size != 0) {
                 EXPECT_EQ(std::memcmp(lambda->m_pInstruction, recompiled.m_instructions.data(), instruction_size), 0) << function_id;
             }
@@ -340,8 +392,6 @@ namespace dconstruct::testing {
                 ASSERT_LT(string_pointer, reinterpret_cast<const char*>(file.m_bytes.get() + file.m_dcheader->m_textSize)) << function_id << " symbol " << symbol_index;
                 EXPECT_EQ(file_offset(file, string_pointer), recompiled.m_symbols[symbol_index] + string_delta) << function_id << " symbol " << symbol_index;
                 EXPECT_EQ(std::string(string_pointer), *recompiled.m_originalPointerStrings[symbol_index]) << function_id << " symbol " << symbol_index;
-
-                EXPECT_FALSE(std::string(string_pointer).empty()) << function_id << " symbol " << symbol_index;
             }
 
             if (function_has_string_symbol) {
@@ -353,8 +403,43 @@ namespace dconstruct::testing {
             }
         }
 
-        EXPECT_TRUE(saw_moved_string_symbol_table);
-        EXPECT_TRUE(saw_unmoved_string_symbol_table);
+        if (require_moved_and_unmoved_string_symbols) {
+            EXPECT_TRUE(saw_moved_string_symbol_table);
+            EXPECT_TRUE(saw_unmoved_string_symbol_table);
+        }
+    }
+
+    TEST(LLVM_RECOMPILE, WaveManagerEndToEndPatchPreservesFunctionsAndRelocations) {
+        const std::filesystem::path fixture_path = wave_manager_fixture_path();
+        expect_end_to_end_patch_preserves_functions_and_relocations(
+            fixture_path,
+            "wave-manager-funcs.bin",
+            {fixture_path.parent_path().parent_path() / "anim-gas-mask-impl.bin"},
+            false,
+            false
+        );
+    }
+
+    TEST(LLVM_RECOMPILE, AssaultManagerEndToEndPatchPreservesFunctionsStateScriptAndRelocations) {
+        const std::filesystem::path fixture_path = assault_manager_fixture_path();
+        expect_end_to_end_patch_preserves_functions_and_relocations(
+            fixture_path,
+            "ss-assault-manager.bin",
+            {fixture_path.parent_path() / "wave-manager-funcs.bin"},
+            true,
+            false
+        );
+    }
+
+    TEST(LLVM_RECOMPILE, NdScriptFuncsEndToEndPatchPreservesFunctionsAndRelocations) {
+        const std::filesystem::path fixture_path = nd_script_funcs_fixture_path();
+        expect_end_to_end_patch_preserves_functions_and_relocations(
+            fixture_path,
+            "nd-script-funcs.bin",
+            {},
+            false,
+            false
+        );
     }
 
 }

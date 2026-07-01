@@ -7,3 +7,4 @@ foreach i = 0...MAX_REGISTER in
     def R#i : DCVMReg<i, "r"#i>;
 
 def GPR : RegisterClass<"DCVM", [i64, f32], 64, (sequence "R%u", 0, MAX_REGISTER)>;
+def GPR32 : RegisterClass<"DCVM", [i32], 32, (sequence "R%u", 0, MAX_REGISTER)>;

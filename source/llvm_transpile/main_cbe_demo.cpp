@@ -40,8 +40,11 @@ namespace {
     const std::filesystem::path STAGED_MODULES = RECOMPILED_DC1_DIR / "modules.bin";
 
     const std::array RECOMPILE_INPUTS = {
-        GAME_DC1_DIR / "ss-rogue" / "wave-manager-funcs.bin",
-        GAME_DC1_DIR / "anim-gas-mask-impl.bin",
+        //GAME_DC1_DIR / "nd-script-funcs.bin",
+        //GAME_DC1_DIR / "script-funcs.bin",
+        //GAME_DC1_DIR / "ss-rogue" / "ss-assault-manager.bin",
+        // GAME_DC1_DIR / "ss-rogue" / "wave-manager-funcs.bin",
+        GAME_DC1_DIR / "script-user-funcs-impl.bin"
     };
 
     resstr<std::filesystem::path> staged_output_path(const std::filesystem::path& source_path) {
@@ -118,7 +121,27 @@ namespace {
     }
 }
 
-int main() {
+int main(int argc, char* argv[]) {
+    std::optional<std::filesystem::path> generated_output_dir;
+    for (int i = 1; i < argc; ++i) {
+        const std::string_view arg = argv[i];
+        if (arg != "-p") {
+            std::println(stderr, "unknown argument: {}", arg);
+            std::println(stderr, "usage: llvm_transpile_demo [-p <generated-output-dir>]");
+            return 1;
+        }
+        if (i + 1 >= argc) {
+            std::println(stderr, "-p requires a target directory");
+            std::println(stderr, "usage: llvm_transpile_demo [-p <generated-output-dir>]");
+            return 1;
+        }
+        if (generated_output_dir.has_value()) {
+            std::println(stderr, "-p was specified more than once");
+            return 1;
+        }
+        generated_output_dir = std::filesystem::path(argv[++i]);
+    }
+
     auto sidbase_result = SIDBase::from_binary(SIDBASE_PATH);
     if (!sidbase_result.has_value()) {
         std::println(stderr, "failed to load {}: {}", SIDBASE_PATH.string(), sidbase_result.error());
@@ -164,9 +187,18 @@ int main() {
         tp.add_module(path.filename().string(), binfiles.back().get(), functions);
     }
 
-    tp.enable_runtime_module();
+    tp.init_runtime_module();
 
     const std::vector<llvm_transpile::generated_outputs> outputs = tp.run();
+    if (generated_output_dir.has_value()) {
+        for (const llvm_transpile::generated_outputs& output : outputs) {
+            if (errmsg error = llvm_transpile::llvm_transpiler::write_outputs(output, *generated_output_dir)) {
+                std::println(stderr, "failed to write generated outputs for {}: {}", output.m_moduleName, *error);
+                return 1;
+            }
+        }
+        std::println("wrote generated outputs to {}", generated_output_dir->string());
+    }
 
     if (errmsg error = llvm_transpile::llvm_transpiler::patch_original_binfiles(outputs, original_binfiles)) {
         std::println(stderr, "failed to patch original binfiles: {}", *error);

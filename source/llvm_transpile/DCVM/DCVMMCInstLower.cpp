@@ -9,23 +9,22 @@
 
 using namespace llvm;
 
-MCOperand DCVMMCInstLower::LowerOperand(const MachineOperand &MO) const {
+MCOperand DCVMMCInstLower::LowerOperand(const MachineOperand& MO) const {
     switch (MO.getType()) {
-    case MachineOperand::MO_Register:
-        return MCOperand::createReg(MO.getReg());
-    case MachineOperand::MO_Immediate:
-        return MCOperand::createImm(MO.getImm());
-    case MachineOperand::MO_MachineBasicBlock:
-        return MCOperand::createExpr(
-            MCSymbolRefExpr::create(MO.getMBB()->getSymbol(), Ctx));
-    default:
-        llvm_unreachable("unsupported operand type in DCVMMCInstLower");
+        case MachineOperand::MO_Register:
+            return MCOperand::createReg(MO.getReg());
+        case MachineOperand::MO_Immediate:
+            return MCOperand::createImm(MO.getImm());
+        case MachineOperand::MO_MachineBasicBlock:
+            return MCOperand::createExpr(MCSymbolRefExpr::create(MO.getMBB()->getSymbol(), Ctx));
+        default:
+            llvm_unreachable("unsupported operand type in DCVMMCInstLower");
     }
 }
 
-void DCVMMCInstLower::Lower(const MachineInstr *MI, MCInst &OutMI) const {
+void DCVMMCInstLower::Lower(const MachineInstr* MI, MCInst& OutMI) const {
     OutMI.setOpcode(MI->getOpcode());
-    for (const MachineOperand &MO : MI->operands()) {
+    for (const MachineOperand& MO : MI->operands()) {
         if (MO.isReg() && MO.isImplicit())
             continue;
         OutMI.addOperand(LowerOperand(MO));

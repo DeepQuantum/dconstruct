@@ -12,15 +12,10 @@ unsigned DCVMMachineFunctionInfo::internSymbol(uint64_t Value, bool IsPointer) {
             report_fatal_error("DCVM symbol table exceeds 256 entries");
         Symbols.push_back(Value);
         PointerMap.push_back(std::byte{IsPointer});
-    } else if (IsPointer) {
-        PointerMap[It->second] = std::byte{true};
     }
     return It->second;
 }
 
-MachineFunctionInfo *DCVMMachineFunctionInfo::clone(
-    BumpPtrAllocator &Allocator, MachineFunction &DestMF,
-    const DenseMap<MachineBasicBlock *, MachineBasicBlock *> &Src2DstMBB)
-    const {
+MachineFunctionInfo* DCVMMachineFunctionInfo::clone(BumpPtrAllocator& Allocator, MachineFunction& DestMF, const DenseMap<MachineBasicBlock*, MachineBasicBlock*>& Src2DstMBB) const {
     return DestMF.cloneInfo<DCVMMachineFunctionInfo>(*this);
 }

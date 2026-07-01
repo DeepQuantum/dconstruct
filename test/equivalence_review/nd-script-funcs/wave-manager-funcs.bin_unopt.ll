@@ -2,26 +2,26 @@
 source_filename = "wave-manager-funcs.bin"
 
 @wave-manager-get-npc-alive-count-by-faction_symbol_table_src = private unnamed_addr constant [6 x i64] [i64 6237759117678430531, i64 4013010305452811590, i64 3423406688794319677, i64 -2664920944689591574, i64 6230461421097945948, i64 -5673227674328399655], align 8
-@wave-manager-get-total-npc-in-wave-count_symbol_table_src = private unnamed_addr constant [7 x i64] [i64 998391088342721072, i64 2997365522926602638, i64 6072285182812319085, i64 1826546524845, i64 -3311351115081502130, i64 4013010305452811590, i64 -7194759694070631083], align 8
-@"wave-manager-is-ready?_symbol_table_src" = private unnamed_addr constant [7 x i64] [i64 -6870362608876642110, i64 2997365522926602638, i64 6072285182812319085, i64 1826546525184, i64 -3311351115081502130, i64 54185015286451590, i64 -4142738284031958410], align 8
-@wave-manager-get-encounter-intensity_symbol_table_src = private unnamed_addr constant [7 x i64] [i64 998391088342721072, i64 2997365522926602638, i64 6072285182812319085, i64 1826546524784, i64 -3311351115081502130, i64 -8623127435633610462, i64 -3532724295824964118], align 8
-@wave-manager-get-next-spawning-wave-npc-schemas-group_symbol_table_src = private unnamed_addr constant [27 x i64] [i64 -4561343946152313276, i64 -7966019873906053962, i64 -1851807429122828651, i64 6072285182812319085, i64 1826546525309, i64 -8623127435633610462, i64 -6711785430563033859, i64 -3193965096093911673, i64 8534565298598421705, i64 4294967295, i64 7920520547792940799, i64 -1136051897790519866, i64 4382432297032017585, i64 -160782944825580444, i64 -7660363871649534493, i64 4013010305452811590, i64 -1358566869505889023, i64 9066152901236616051, i64 54185015286451590, i64 6884240918683042611, i64 -2664920944689591574, i64 2009214271962714043, i64 3321216610294482167, i64 3684810824690217768, i64 1826546525238, i64 -3311351115081502130, i64 1826546525259], align 8
-@wave-manager-get-total-wave-count_symbol_table_src = private unnamed_addr constant [7 x i64] [i64 998391088342721072, i64 2997365522926602638, i64 6072285182812319085, i64 1826546524902, i64 -3311351115081502130, i64 -8623127435633610462, i64 126389912060929688], align 8
+@wave-manager-get-total-npc-in-wave-count_symbol_table_src = private unnamed_addr constant [7 x i64] [i64 998391088342721072, i64 2997365522926602638, i64 6072285182812319085, i64 2492262392813, i64 -3311351115081502130, i64 4013010305452811590, i64 -7194759694070631083], align 8
+@"wave-manager-is-ready?_symbol_table_src" = private unnamed_addr constant [7 x i64] [i64 -6870362608876642110, i64 2997365522926602638, i64 6072285182812319085, i64 2492262393152, i64 -3311351115081502130, i64 54185015286451590, i64 -4142738284031958410], align 8
+@wave-manager-get-encounter-intensity_symbol_table_src = private unnamed_addr constant [7 x i64] [i64 998391088342721072, i64 2997365522926602638, i64 6072285182812319085, i64 2492262392752, i64 -3311351115081502130, i64 -8623127435633610462, i64 -3532724295824964118], align 8
+@wave-manager-get-next-spawning-wave-npc-schemas-group_symbol_table_src = private unnamed_addr constant [27 x i64] [i64 -4561343946152313276, i64 -7966019873906053962, i64 -1851807429122828651, i64 6072285182812319085, i64 2492262393277, i64 -8623127435633610462, i64 -6711785430563033859, i64 -3193965096093911673, i64 8534565298598421705, i64 4294967295, i64 7920520547792940799, i64 -1136051897790519866, i64 4382432297032017585, i64 -160782944825580444, i64 -7660363871649534493, i64 4013010305452811590, i64 -1358566869505889023, i64 9066152901236616051, i64 54185015286451590, i64 6884240918683042611, i64 -2664920944689591574, i64 2009214271962714043, i64 3321216610294482167, i64 3684810824690217768, i64 2492262393206, i64 -3311351115081502130, i64 2492262393227], align 8
+@wave-manager-get-total-wave-count_symbol_table_src = private unnamed_addr constant [7 x i64] [i64 998391088342721072, i64 2997365522926602638, i64 6072285182812319085, i64 2492262392870, i64 -3311351115081502130, i64 -8623127435633610462, i64 126389912060929688], align 8
 @wave-manager-get-num-waves-spawned_symbol_table_src = private unnamed_addr constant [3 x i64] [i64 4013010305452811590, i64 -1136051897790519866, i64 -7660363871649534493], align 8
 @wave-manager-get-next-spawning-wave-spawn-configs_symbol_table_src = private unnamed_addr constant [3 x i64] [i64 -4561343946152313276, i64 -1136051897790519866, i64 -3630726564894351738], align 8
 @wave-manager-get-next-spawning-wave-npc-count_symbol_table_src = private unnamed_addr constant [2 x i64] [i64 1399776995102310962, i64 4013010305452811590], align 8
-@"wave-manager-spawn-next-wave!_symbol_table_src" = private unnamed_addr constant [7 x i64] [i64 998391088342721072, i64 4789555171397753330, i64 5189346610966935392, i64 2997365522926602638, i64 6072285182812319085, i64 1826546525087, i64 -3311351115081502130], align 8
+@"wave-manager-spawn-next-wave!_symbol_table_src" = private unnamed_addr constant [7 x i64] [i64 998391088342721072, i64 4789555171397753330, i64 5189346610966935392, i64 2997365522926602638, i64 6072285182812319085, i64 2492262393055, i64 -3311351115081502130], align 8
 @wave-manager-get-npc-alive-group_symbol_table_src = private unnamed_addr constant [11 x i64] [i64 -3193965096093911673, i64 8534565298598421705, i64 4294967295, i64 4013010305452811590, i64 -8578220443451849366, i64 3423406688794319677, i64 -2664920944689591574, i64 -4433807632111512251, i64 3321216610294482167, i64 3684810824690217768, i64 -5673227674328399655], align 8
 @wave-manager-kill-all-npcs_symbol_table_src = private unnamed_addr constant [9 x i64] [i64 -8385702754139928849, i64 6237759117678430531, i64 4013010305452811590, i64 3423406688794319677, i64 -2664920944689591574, i64 -7738336759357028456, i64 0, i64 -5673227674328399655, i64 -3835701475675913431], align 8
 @wave-manager-get-lost-player-npc-group_symbol_table_src = private unnamed_addr constant [11 x i64] [i64 6237759117678430531, i64 -3193965096093911673, i64 8534565298598421705, i64 4294967295, i64 4013010305452811590, i64 3423406688794319677, i64 -2664920944689591574, i64 -1345322216029872946, i64 3321216610294482167, i64 3684810824690217768, i64 -5673227674328399655], align 8
-@"wave-manager-stop!_symbol_table_src" = private unnamed_addr constant [7 x i64] [i64 998391088342721072, i64 4789555171397753330, i64 4737644804400110462, i64 2997365522926602638, i64 6072285182812319085, i64 1826546525141, i64 -3311351115081502130], align 8
-@wave-manager-get-npc-alive-count_symbol_table_src = private unnamed_addr constant [7 x i64] [i64 998391088342721072, i64 2997365522926602638, i64 6072285182812319085, i64 1826546524845, i64 -3311351115081502130, i64 1564617029140756692, i64 -8578220443451849366], align 8
+@"wave-manager-stop!_symbol_table_src" = private unnamed_addr constant [7 x i64] [i64 998391088342721072, i64 4789555171397753330, i64 4737644804400110462, i64 2997365522926602638, i64 6072285182812319085, i64 2492262393109, i64 -3311351115081502130], align 8
+@wave-manager-get-npc-alive-count_symbol_table_src = private unnamed_addr constant [7 x i64] [i64 998391088342721072, i64 2997365522926602638, i64 6072285182812319085, i64 2492262392813, i64 -3311351115081502130, i64 1564617029140756692, i64 -8578220443451849366], align 8
 @wave-manager-get-next-wave-faction_symbol_table_src = private unnamed_addr constant [5 x i64] [i64 -8623127435633610462, i64 3512716474478954862, i64 54185015286451590, i64 -4142738284031958410, i64 4294967295], align 8
 @wave-manager-get-lost-player-npc-group-count_symbol_table_src = private unnamed_addr constant [2 x i64] [i64 4013010305452811590, i64 7267865752999468798], align 8
-@"wave-manager-spawn-next-special-wave!_symbol_table_src" = private unnamed_addr constant [7 x i64] [i64 998391088342721072, i64 4789555171397753330, i64 1354182575228257266, i64 2997365522926602638, i64 6072285182812319085, i64 1826546525025, i64 -3311351115081502130], align 8
+@"wave-manager-spawn-next-special-wave!_symbol_table_src" = private unnamed_addr constant [7 x i64] [i64 998391088342721072, i64 4789555171397753330, i64 1354182575228257266, i64 2997365522926602638, i64 6072285182812319085, i64 2492262392993, i64 -3311351115081502130], align 8
 @"wave-manager-current-task-in-run?_symbol_table_src" = private unnamed_addr constant [3 x i64] [i64 54185015286451590, i64 -5700187185490357332, i64 3766070110510549571], align 8
 @wave-manager-get-next-spawning-wave-composition_symbol_table_src = private unnamed_addr constant [2 x i64] [i64 -1136051897790519866, i64 -8364948414460296332], align 8
-@"wave-manager-has-requested-wave-spawned?_symbol_table_src" = private unnamed_addr constant [8 x i64] [i64 998391088342721072, i64 2997365522926602638, i64 6072285182812319085, i64 1826546524960, i64 -3311351115081502130, i64 54185015286451590, i64 -4748032580888550375, i64 224422539916484139], align 8
+@"wave-manager-has-requested-wave-spawned?_symbol_table_src" = private unnamed_addr constant [8 x i64] [i64 998391088342721072, i64 2997365522926602638, i64 6072285182812319085, i64 2492262392928, i64 -3311351115081502130, i64 54185015286451590, i64 -4748032580888550375, i64 224422539916484139], align 8
 @"wave-manager-npc-lost-player?_symbol_table_src" = private unnamed_addr constant [4 x i64] [i64 -5833053787651694927, i64 5008278420455340480, i64 -4433807632111512251, i64 -7707884455580369866], align 8
 @llvm.used = appending global [22 x ptr] [ptr @wave-manager-get-npc-alive-count-by-faction_symbol_table_src, ptr @wave-manager-get-total-npc-in-wave-count_symbol_table_src, ptr @"wave-manager-is-ready?_symbol_table_src", ptr @wave-manager-get-encounter-intensity_symbol_table_src, ptr @wave-manager-get-next-spawning-wave-npc-schemas-group_symbol_table_src, ptr @wave-manager-get-total-wave-count_symbol_table_src, ptr @wave-manager-get-num-waves-spawned_symbol_table_src, ptr @wave-manager-get-next-spawning-wave-spawn-configs_symbol_table_src, ptr @wave-manager-get-next-spawning-wave-npc-count_symbol_table_src, ptr @"wave-manager-spawn-next-wave!_symbol_table_src", ptr @wave-manager-get-npc-alive-group_symbol_table_src, ptr @wave-manager-kill-all-npcs_symbol_table_src, ptr @wave-manager-get-lost-player-npc-group_symbol_table_src, ptr @"wave-manager-stop!_symbol_table_src", ptr @wave-manager-get-npc-alive-count_symbol_table_src, ptr @wave-manager-get-next-wave-faction_symbol_table_src, ptr @wave-manager-get-lost-player-npc-group-count_symbol_table_src, ptr @"wave-manager-spawn-next-special-wave!_symbol_table_src", ptr @"wave-manager-current-task-in-run?_symbol_table_src", ptr @wave-manager-get-next-spawning-wave-composition_symbol_table_src, ptr @"wave-manager-has-requested-wave-spawned?_symbol_table_src", ptr @"wave-manager-npc-lost-player?_symbol_table_src"], section "llvm.metadata"
 
@@ -1853,10 +1853,10 @@ bb30:                                             ; preds = %bb29
   %104 = bitcast float %__LoadFloat_257___load to i32
   %105 = zext i32 %104 to i64
   store i64 %105, ptr %r16, align 4
-  %106 = load i64, ptr %r16, align 4
-  %107 = trunc i64 %106 to i32
-  %108 = bitcast i32 %107 to float
-  %109 = fptoui float %108 to i64
+  %cast_load = load i64, ptr %r16, align 4
+  %106 = trunc i64 %cast_load to i32
+  %107 = bitcast i32 %106 to float
+  %108 = fptoui float %107 to i64
   br label %bb32
 
 bb31:                                             ; preds = %bb29, %bb28
@@ -1867,37 +1867,37 @@ bb32:                                             ; preds = %bb31, %bb30, %bb27,
   %__Move_261___load_op1 = load i64, ptr %r16, align 4
   store i64 %__Move_261___load_op1, ptr %r15, align 4
   %__Move_262___load_op1 = load i64, ptr %r7, align 4
-  %110 = inttoptr i64 %__Move_262___load_op1 to ptr
-  %111 = ptrtoint ptr %110 to i64
-  store i64 %111, ptr %r16, align 4
+  %109 = inttoptr i64 %__Move_262___load_op1 to ptr
+  %110 = ptrtoint ptr %109 to i64
+  store i64 %110, ptr %r16, align 4
   %__LoadPointer_263___addr = load i64, ptr %r16, align 4
-  %112 = inttoptr i64 %__LoadPointer_263___addr to ptr
-  %__LoadPointer_263___load = load ptr, ptr %112, align 8
-  %113 = ptrtoint ptr %__LoadPointer_263___load to i64
-  store i64 %113, ptr %r16, align 4
+  %111 = inttoptr i64 %__LoadPointer_263___addr to ptr
+  %__LoadPointer_263___load = load ptr, ptr %111, align 8
+  %112 = ptrtoint ptr %__LoadPointer_263___load to i64
+  store i64 %112, ptr %r16, align 4
   %__Move_264___load_op1 = load i64, ptr %r15, align 4
   store i64 %__Move_264___load_op1, ptr %r17, align 4
   %__IMulImm_265___load_lhs = load i64, ptr %r17, align 4
   %__IMulImm_265__op = mul i64 %__IMulImm_265___load_lhs, 8
   store i64 %__IMulImm_265__op, ptr %r17, align 4
   %__IAdd_266___load_lhs = load i64, ptr %r16, align 4
-  %114 = inttoptr i64 %__IAdd_266___load_lhs to ptr
+  %113 = inttoptr i64 %__IAdd_266___load_lhs to ptr
   %__IAdd_266___load_rhs = load i64, ptr %r17, align 4
-  %__IAdd_266__op = getelementptr i8, ptr %114, i64 %__IAdd_266___load_rhs
-  %115 = ptrtoint ptr %__IAdd_266__op to i64
-  store i64 %115, ptr %r16, align 4
+  %__IAdd_266__op = getelementptr i8, ptr %113, i64 %__IAdd_266___load_rhs
+  %114 = ptrtoint ptr %__IAdd_266__op to i64
+  store i64 %114, ptr %r16, align 4
   %__Move_267___load_op1 = load i64, ptr %r16, align 4
-  %116 = inttoptr i64 %__Move_267___load_op1 to ptr
-  %117 = ptrtoint ptr %116 to i64
-  store i64 %117, ptr %r17, align 4
+  %115 = inttoptr i64 %__Move_267___load_op1 to ptr
+  %116 = ptrtoint ptr %115 to i64
+  store i64 %116, ptr %r17, align 4
   %__AssertPointer_268___ptr = load i64, ptr %r17, align 4
-  %118 = inttoptr i64 %__AssertPointer_268___ptr to ptr
-  %__AssertPointer_268__op = icmp ne ptr %118, null
+  %117 = inttoptr i64 %__AssertPointer_268___ptr to ptr
+  %__AssertPointer_268__op = icmp ne ptr %117, null
   %__LoadPointer_269___addr = load i64, ptr %r17, align 4
-  %119 = inttoptr i64 %__LoadPointer_269___addr to ptr
-  %__LoadPointer_269___load = load ptr, ptr %119, align 8
-  %120 = ptrtoint ptr %__LoadPointer_269___load to i64
-  store i64 %120, ptr %r17, align 4
+  %118 = inttoptr i64 %__LoadPointer_269___addr to ptr
+  %__LoadPointer_269___load = load ptr, ptr %118, align 8
+  %119 = ptrtoint ptr %__LoadPointer_269___load to i64
+  store i64 %119, ptr %r17, align 4
   store i64 0, ptr %r18, align 4
   br label %bb33
 
@@ -1905,76 +1905,76 @@ bb33:                                             ; preds = %bb41, %bb32
   %__Move_271___load_op1 = load i64, ptr %r18, align 4
   store i64 %__Move_271___load_op1, ptr %r19, align 4
   %__Move_272___load_op1 = load i64, ptr %r17, align 4
-  %121 = inttoptr i64 %__Move_272___load_op1 to ptr
-  %122 = ptrtoint ptr %121 to i64
-  store i64 %122, ptr %r20, align 4
+  %120 = inttoptr i64 %__Move_272___load_op1 to ptr
+  %121 = ptrtoint ptr %120 to i64
+  store i64 %121, ptr %r20, align 4
   store i64 8, ptr %r21, align 4
   %__IAdd_274___load_lhs = load i64, ptr %r20, align 4
-  %123 = inttoptr i64 %__IAdd_274___load_lhs to ptr
+  %122 = inttoptr i64 %__IAdd_274___load_lhs to ptr
   %__IAdd_274___load_rhs = load i64, ptr %r21, align 4
-  %__IAdd_274__op = getelementptr i8, ptr %123, i64 %__IAdd_274___load_rhs
-  %124 = ptrtoint ptr %__IAdd_274__op to i64
-  store i64 %124, ptr %r20, align 4
+  %__IAdd_274__op = getelementptr i8, ptr %122, i64 %__IAdd_274___load_rhs
+  %123 = ptrtoint ptr %__IAdd_274__op to i64
+  store i64 %123, ptr %r20, align 4
   %__LoadI32_275___addr = load i64, ptr %r20, align 4
-  %125 = inttoptr i64 %__LoadI32_275___addr to ptr
-  %__LoadI32_275___load = load i32, ptr %125, align 4
+  %124 = inttoptr i64 %__LoadI32_275___addr to ptr
+  %__LoadI32_275___load = load i32, ptr %124, align 4
   %__LoadI32_275___ext = sext i32 %__LoadI32_275___load to i64
   store i64 %__LoadI32_275___ext, ptr %r20, align 4
   %__ILessThan_276___load_lhs = load i64, ptr %r19, align 4
   %__ILessThan_276___load_rhs = load i64, ptr %r20, align 4
   %__ILessThan_276__op = icmp slt i64 %__ILessThan_276___load_lhs, %__ILessThan_276___load_rhs
-  %126 = zext i1 %__ILessThan_276__op to i64
-  store i64 %126, ptr %r19, align 4
+  %125 = zext i1 %__ILessThan_276__op to i64
+  store i64 %125, ptr %r19, align 4
   %__BranchIfNot_277___cond = load i64, ptr %r19, align 4
   %__BranchIfNot_277___bool = icmp ne i64 %__BranchIfNot_277___cond, 0
   br i1 %__BranchIfNot_277___bool, label %bb34, label %bb42
 
 bb34:                                             ; preds = %bb33
   %__Move_278___load_op1 = load i64, ptr %r17, align 4
-  %127 = inttoptr i64 %__Move_278___load_op1 to ptr
-  %128 = ptrtoint ptr %127 to i64
-  store i64 %128, ptr %r19, align 4
+  %126 = inttoptr i64 %__Move_278___load_op1 to ptr
+  %127 = ptrtoint ptr %126 to i64
+  store i64 %127, ptr %r19, align 4
   %__LoadPointer_279___addr = load i64, ptr %r19, align 4
-  %129 = inttoptr i64 %__LoadPointer_279___addr to ptr
-  %__LoadPointer_279___load = load ptr, ptr %129, align 8
-  %130 = ptrtoint ptr %__LoadPointer_279___load to i64
-  store i64 %130, ptr %r19, align 4
+  %128 = inttoptr i64 %__LoadPointer_279___addr to ptr
+  %__LoadPointer_279___load = load ptr, ptr %128, align 8
+  %129 = ptrtoint ptr %__LoadPointer_279___load to i64
+  store i64 %129, ptr %r19, align 4
   %__Move_280___load_op1 = load i64, ptr %r18, align 4
   store i64 %__Move_280___load_op1, ptr %r20, align 4
   %__IMulImm_281___load_lhs = load i64, ptr %r20, align 4
   %__IMulImm_281__op = mul i64 %__IMulImm_281___load_lhs, 16
   store i64 %__IMulImm_281__op, ptr %r20, align 4
   %__IAdd_282___load_lhs = load i64, ptr %r19, align 4
-  %131 = inttoptr i64 %__IAdd_282___load_lhs to ptr
+  %130 = inttoptr i64 %__IAdd_282___load_lhs to ptr
   %__IAdd_282___load_rhs = load i64, ptr %r20, align 4
-  %__IAdd_282__op = getelementptr i8, ptr %131, i64 %__IAdd_282___load_rhs
-  %132 = ptrtoint ptr %__IAdd_282__op to i64
-  store i64 %132, ptr %r19, align 4
+  %__IAdd_282__op = getelementptr i8, ptr %130, i64 %__IAdd_282___load_rhs
+  %131 = ptrtoint ptr %__IAdd_282__op to i64
+  store i64 %131, ptr %r19, align 4
   %__Move_283___load_op1 = load i64, ptr %r19, align 4
-  %133 = inttoptr i64 %__Move_283___load_op1 to ptr
-  %134 = ptrtoint ptr %133 to i64
-  store i64 %134, ptr %r20, align 4
+  %132 = inttoptr i64 %__Move_283___load_op1 to ptr
+  %133 = ptrtoint ptr %132 to i64
+  store i64 %133, ptr %r20, align 4
   %__AssertPointer_284___ptr = load i64, ptr %r20, align 4
-  %135 = inttoptr i64 %__AssertPointer_284___ptr to ptr
-  %__AssertPointer_284__op = icmp ne ptr %135, null
+  %134 = inttoptr i64 %__AssertPointer_284___ptr to ptr
+  %__AssertPointer_284__op = icmp ne ptr %134, null
   %__LoadU64_285___addr = load i64, ptr %r20, align 4
-  %136 = inttoptr i64 %__LoadU64_285___addr to ptr
-  %__LoadU64_285___load = load i64, ptr %136, align 4
+  %135 = inttoptr i64 %__LoadU64_285___addr to ptr
+  %__LoadU64_285___load = load i64, ptr %135, align 4
   store i64 %__LoadU64_285___load, ptr %r20, align 4
   store i64 ptrtoint (ptr @"wave-manager-npc-safe-to-spawn?" to i64), ptr %r21, align 4
   %__Move_287___load_op1 = load i64, ptr %r19, align 4
-  %137 = inttoptr i64 %__Move_287___load_op1 to ptr
-  %138 = ptrtoint ptr %137 to i64
-  store i64 %138, ptr %r22, align 4
+  %136 = inttoptr i64 %__Move_287___load_op1 to ptr
+  %137 = ptrtoint ptr %136 to i64
+  store i64 %137, ptr %r22, align 4
   %__Move_288___load_op1 = load i64, ptr %r22, align 4
-  %139 = inttoptr i64 %__Move_288___load_op1 to ptr
-  %140 = ptrtoint ptr %139 to i64
-  store i64 %140, ptr %r49, align 4
+  %138 = inttoptr i64 %__Move_288___load_op1 to ptr
+  %139 = ptrtoint ptr %138 to i64
+  store i64 %139, ptr %r49, align 4
   %__Call_289___callee = load i64, ptr %r21, align 4
-  %141 = inttoptr i64 %__Call_289___callee to ptr
+  %140 = inttoptr i64 %__Call_289___callee to ptr
   %__Call_289___arg0 = load i64, ptr %r49, align 4
-  %142 = inttoptr i64 %__Call_289___arg0 to ptr
-  %__Call_289___call = call i64 %141(ptr %142)
+  %141 = inttoptr i64 %__Call_289___arg0 to ptr
+  %__Call_289___call = call i64 %140(ptr %141)
   store i64 %__Call_289___call, ptr %r21, align 4
   %__Move_290___load_op1 = load i64, ptr %r21, align 4
   store i64 %__Move_290___load_op1, ptr %r22, align 4
@@ -1995,10 +1995,10 @@ bb35:                                             ; preds = %bb34
   %__Move_298___load_op1 = load i64, ptr %r26, align 4
   store i64 %__Move_298___load_op1, ptr %r50, align 4
   %__CallFf_299___callee = load i64, ptr %r24, align 4
-  %143 = inttoptr i64 %__CallFf_299___callee to ptr
+  %142 = inttoptr i64 %__CallFf_299___callee to ptr
   %__CallFf_299___arg0 = load i64, ptr %r49, align 4
   %__CallFf_299___arg1 = load i64, ptr %r50, align 4
-  %__CallFf_299___call = call i64 %143(i64 %__CallFf_299___arg0, i64 %__CallFf_299___arg1), !dcvm.distance !1
+  %__CallFf_299___call = call i64 %142(i64 %__CallFf_299___arg0, i64 %__CallFf_299___arg1), !dcvm.distance !1
   store i64 %__CallFf_299___call, ptr %r24, align 4
   store i64 0, ptr %r25, align 4
   %__Move_301___load_op1 = load i64, ptr %r23, align 4
@@ -2008,21 +2008,21 @@ bb35:                                             ; preds = %bb34
   %__Move_303___load_op1 = load i64, ptr %r25, align 4
   store i64 %__Move_303___load_op1, ptr %r51, align 4
   %__CallFf_304___callee = load i64, ptr %r22, align 4
-  %144 = inttoptr i64 %__CallFf_304___callee to ptr
+  %143 = inttoptr i64 %__CallFf_304___callee to ptr
   %__CallFf_304___arg0 = load i64, ptr %r49, align 4
   %__CallFf_304___arg1 = load i64, ptr %r50, align 4
   %__CallFf_304___arg2 = load i64, ptr %r51, align 4
-  %__CallFf_304___call = call i64 %144(i64 %__CallFf_304___arg0, i64 %__CallFf_304___arg1, i64 %__CallFf_304___arg2), !dcvm.distance !1
+  %__CallFf_304___call = call i64 %143(i64 %__CallFf_304___arg0, i64 %__CallFf_304___arg1, i64 %__CallFf_304___arg2), !dcvm.distance !1
   store i64 %__CallFf_304___call, ptr %r22, align 4
   store i64 ptrtoint (ptr @"is-final-build?" to i64), ptr %r22, align 4
   %__CallFf_306___callee = load i64, ptr %r22, align 4
-  %145 = inttoptr i64 %__CallFf_306___callee to ptr
-  %__CallFf_306___call = call i64 %145(), !dcvm.distance !1
+  %144 = inttoptr i64 %__CallFf_306___callee to ptr
+  %__CallFf_306___call = call i64 %144(), !dcvm.distance !1
   store i64 %__CallFf_306___call, ptr %r22, align 4
   %__OpLogNot_307___load_op1 = load i64, ptr %r22, align 4
   %__OpLogNot_307__op = icmp eq i64 %__OpLogNot_307___load_op1, 0
-  %146 = zext i1 %__OpLogNot_307__op to i64
-  store i64 %146, ptr %r22, align 4
+  %145 = zext i1 %__OpLogNot_307__op to i64
+  store i64 %145, ptr %r22, align 4
   %__BranchIfNot_308___cond = load i64, ptr %r22, align 4
   %__BranchIfNot_308___bool = icmp ne i64 %__BranchIfNot_308___cond, 0
   br i1 %__BranchIfNot_308___bool, label %bb36, label %bb37
@@ -2030,31 +2030,31 @@ bb35:                                             ; preds = %bb34
 bb36:                                             ; preds = %bb35
   store i64 ptrtoint (ptr @display to i64), ptr %r22, align 4
   store i64 ptrtoint (ptr @"dc:format" to i64), ptr %r23, align 4
-  %147 = call ptr @llvm.dcvm.static.pointer(i64 13686)
-  %148 = ptrtoint ptr %147 to i64
-  store i64 %148, ptr %r24, align 4
+  %146 = call ptr @llvm.dcvm.static.pointer(i64 13686)
+  %147 = ptrtoint ptr %146 to i64
+  store i64 %147, ptr %r24, align 4
   store i64 ptrtoint (ptr @string-debug to i64), ptr %r25, align 4
   %__Move_313___load_op1 = load i64, ptr %r20, align 4
   store i64 %__Move_313___load_op1, ptr %r26, align 4
   %__Move_314___load_op1 = load i64, ptr %r26, align 4
   store i64 %__Move_314___load_op1, ptr %r49, align 4
   %__CallFf_315___callee = load i64, ptr %r25, align 4
-  %149 = inttoptr i64 %__CallFf_315___callee to ptr
+  %148 = inttoptr i64 %__CallFf_315___callee to ptr
   %__CallFf_315___arg0 = load i64, ptr %r49, align 4
-  %__CallFf_315___call = call i64 %149(i64 %__CallFf_315___arg0), !dcvm.distance !1
+  %__CallFf_315___call = call i64 %148(i64 %__CallFf_315___arg0), !dcvm.distance !1
   store i64 %__CallFf_315___call, ptr %r25, align 4
   %__Move_316___load_op1 = load i64, ptr %r24, align 4
-  %150 = inttoptr i64 %__Move_316___load_op1 to ptr
-  %151 = ptrtoint ptr %150 to i64
-  store i64 %151, ptr %r49, align 4
+  %149 = inttoptr i64 %__Move_316___load_op1 to ptr
+  %150 = ptrtoint ptr %149 to i64
+  store i64 %150, ptr %r49, align 4
   %__Move_317___load_op1 = load i64, ptr %r25, align 4
   store i64 %__Move_317___load_op1, ptr %r50, align 4
   %__CallFf_318___callee = load i64, ptr %r23, align 4
-  %152 = inttoptr i64 %__CallFf_318___callee to ptr
+  %151 = inttoptr i64 %__CallFf_318___callee to ptr
   %__CallFf_318___arg0 = load i64, ptr %r49, align 4
-  %153 = inttoptr i64 %__CallFf_318___arg0 to ptr
+  %152 = inttoptr i64 %__CallFf_318___arg0 to ptr
   %__CallFf_318___arg1 = load i64, ptr %r50, align 4
-  %__CallFf_318___call = call i64 (ptr, ...) %152(ptr %153, i64 %__CallFf_318___arg1), !dcvm.distance !1
+  %__CallFf_318___call = call i64 (ptr, ...) %151(ptr %152, i64 %__CallFf_318___arg1), !dcvm.distance !1
   store i64 %__CallFf_318___call, ptr %r23, align 4
   store i64 19, ptr %r24, align 4
   %__Move_320___load_op1 = load i64, ptr %r23, align 4
@@ -2062,10 +2062,10 @@ bb36:                                             ; preds = %bb35
   %__Move_321___load_op1 = load i64, ptr %r24, align 4
   store i64 %__Move_321___load_op1, ptr %r50, align 4
   %__CallFf_322___callee = load i64, ptr %r22, align 4
-  %154 = inttoptr i64 %__CallFf_322___callee to ptr
+  %153 = inttoptr i64 %__CallFf_322___callee to ptr
   %__CallFf_322___arg0 = load i64, ptr %r49, align 4
   %__CallFf_322___arg1 = load i64, ptr %r50, align 4
-  %__CallFf_322___call = call i64 %154(i64 %__CallFf_322___arg0, i64 %__CallFf_322___arg1), !dcvm.distance !1
+  %__CallFf_322___call = call i64 %153(i64 %__CallFf_322___arg0, i64 %__CallFf_322___arg1), !dcvm.distance !1
   store i64 %__CallFf_322___call, ptr %r22, align 4
   br label %bb41
 
@@ -2076,13 +2076,13 @@ bb37:                                             ; preds = %bb35
 bb38:                                             ; preds = %bb34
   store i64 ptrtoint (ptr @"is-final-build?" to i64), ptr %r22, align 4
   %__CallFf_327___callee = load i64, ptr %r22, align 4
-  %155 = inttoptr i64 %__CallFf_327___callee to ptr
-  %__CallFf_327___call = call i64 %155(), !dcvm.distance !1
+  %154 = inttoptr i64 %__CallFf_327___callee to ptr
+  %__CallFf_327___call = call i64 %154(), !dcvm.distance !1
   store i64 %__CallFf_327___call, ptr %r22, align 4
   %__OpLogNot_328___load_op1 = load i64, ptr %r22, align 4
   %__OpLogNot_328__op = icmp eq i64 %__OpLogNot_328___load_op1, 0
-  %156 = zext i1 %__OpLogNot_328__op to i64
-  store i64 %156, ptr %r22, align 4
+  %155 = zext i1 %__OpLogNot_328__op to i64
+  store i64 %155, ptr %r22, align 4
   %__BranchIfNot_329___cond = load i64, ptr %r22, align 4
   %__BranchIfNot_329___bool = icmp ne i64 %__BranchIfNot_329___cond, 0
   br i1 %__BranchIfNot_329___bool, label %bb39, label %bb40
@@ -2090,31 +2090,31 @@ bb38:                                             ; preds = %bb34
 bb39:                                             ; preds = %bb38
   store i64 ptrtoint (ptr @display to i64), ptr %r22, align 4
   store i64 ptrtoint (ptr @"dc:format" to i64), ptr %r23, align 4
-  %157 = call ptr @llvm.dcvm.static.pointer(i64 13707)
-  %158 = ptrtoint ptr %157 to i64
-  store i64 %158, ptr %r24, align 4
+  %156 = call ptr @llvm.dcvm.static.pointer(i64 13707)
+  %157 = ptrtoint ptr %156 to i64
+  store i64 %157, ptr %r24, align 4
   store i64 ptrtoint (ptr @string-debug to i64), ptr %r25, align 4
   %__Move_334___load_op1 = load i64, ptr %r20, align 4
   store i64 %__Move_334___load_op1, ptr %r26, align 4
   %__Move_335___load_op1 = load i64, ptr %r26, align 4
   store i64 %__Move_335___load_op1, ptr %r49, align 4
   %__CallFf_336___callee = load i64, ptr %r25, align 4
-  %159 = inttoptr i64 %__CallFf_336___callee to ptr
+  %158 = inttoptr i64 %__CallFf_336___callee to ptr
   %__CallFf_336___arg0 = load i64, ptr %r49, align 4
-  %__CallFf_336___call = call i64 %159(i64 %__CallFf_336___arg0), !dcvm.distance !1
+  %__CallFf_336___call = call i64 %158(i64 %__CallFf_336___arg0), !dcvm.distance !1
   store i64 %__CallFf_336___call, ptr %r25, align 4
   %__Move_337___load_op1 = load i64, ptr %r24, align 4
-  %160 = inttoptr i64 %__Move_337___load_op1 to ptr
-  %161 = ptrtoint ptr %160 to i64
-  store i64 %161, ptr %r49, align 4
+  %159 = inttoptr i64 %__Move_337___load_op1 to ptr
+  %160 = ptrtoint ptr %159 to i64
+  store i64 %160, ptr %r49, align 4
   %__Move_338___load_op1 = load i64, ptr %r25, align 4
   store i64 %__Move_338___load_op1, ptr %r50, align 4
   %__CallFf_339___callee = load i64, ptr %r23, align 4
-  %162 = inttoptr i64 %__CallFf_339___callee to ptr
+  %161 = inttoptr i64 %__CallFf_339___callee to ptr
   %__CallFf_339___arg0 = load i64, ptr %r49, align 4
-  %163 = inttoptr i64 %__CallFf_339___arg0 to ptr
+  %162 = inttoptr i64 %__CallFf_339___arg0 to ptr
   %__CallFf_339___arg1 = load i64, ptr %r50, align 4
-  %__CallFf_339___call = call i64 (ptr, ...) %162(ptr %163, i64 %__CallFf_339___arg1), !dcvm.distance !1
+  %__CallFf_339___call = call i64 (ptr, ...) %161(ptr %162, i64 %__CallFf_339___arg1), !dcvm.distance !1
   store i64 %__CallFf_339___call, ptr %r23, align 4
   store i64 19, ptr %r24, align 4
   %__Move_341___load_op1 = load i64, ptr %r23, align 4
@@ -2122,10 +2122,10 @@ bb39:                                             ; preds = %bb38
   %__Move_342___load_op1 = load i64, ptr %r24, align 4
   store i64 %__Move_342___load_op1, ptr %r50, align 4
   %__CallFf_343___callee = load i64, ptr %r22, align 4
-  %164 = inttoptr i64 %__CallFf_343___callee to ptr
+  %163 = inttoptr i64 %__CallFf_343___callee to ptr
   %__CallFf_343___arg0 = load i64, ptr %r49, align 4
   %__CallFf_343___arg1 = load i64, ptr %r50, align 4
-  %__CallFf_343___call = call i64 %164(i64 %__CallFf_343___arg0, i64 %__CallFf_343___arg1), !dcvm.distance !1
+  %__CallFf_343___call = call i64 %163(i64 %__CallFf_343___arg0, i64 %__CallFf_343___arg1), !dcvm.distance !1
   store i64 %__CallFf_343___call, ptr %r22, align 4
   br label %bb41
 
@@ -2229,11 +2229,11 @@ bb47:                                             ; preds = %bb3
   %__Move_388___load_op1 = load i64, ptr %r5, align 4
   store i64 %__Move_388___load_op1, ptr %r51, align 4
   %__CallFf_389___callee = load i64, ptr %r2, align 4
-  %165 = inttoptr i64 %__CallFf_389___callee to ptr
+  %164 = inttoptr i64 %__CallFf_389___callee to ptr
   %__CallFf_389___arg0 = load i64, ptr %r49, align 4
   %__CallFf_389___arg1 = load i64, ptr %r50, align 4
   %__CallFf_389___arg2 = load i64, ptr %r51, align 4
-  %__CallFf_389___call = call i64 %165(i64 %__CallFf_389___arg0, i64 %__CallFf_389___arg1, i64 %__CallFf_389___arg2), !dcvm.distance !1
+  %__CallFf_389___call = call i64 %164(i64 %__CallFf_389___arg0, i64 %__CallFf_389___arg1, i64 %__CallFf_389___arg2), !dcvm.distance !1
   store i64 %__CallFf_389___call, ptr %r2, align 4
   br label %bb48
 
@@ -5785,9 +5785,7 @@ bb4:                                              ; preds = %bb3, %bb2, %bb1, %b
   %7 = zext i1 %6 to i64
   store i64 %7, ptr %r1, align 4
   %__Return_26___retval = load i64, ptr %r1, align 4
-  %8 = trunc i64 %__Return_26___retval to i1
-  %__Return_26___retcast = zext i1 %8 to i64
-  ret i64 %__Return_26___retcast
+  ret i64 %__Return_26___retval
 }
 
 ; Function Attrs: nosync nounwind willreturn

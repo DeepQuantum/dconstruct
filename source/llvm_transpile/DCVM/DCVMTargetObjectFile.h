@@ -4,9 +4,9 @@
 
 namespace llvm {
 
-class DCVMELFTargetObjectFile : public TargetLoweringObjectFileELF {
-public:
-    DCVMELFTargetObjectFile() = default;
-};
+    class DCVMELFTargetObjectFile : public TargetLoweringObjectFileELF {
+    public:
+        DCVMELFTargetObjectFile() = default;
+    };
 
 } // namespace llvm

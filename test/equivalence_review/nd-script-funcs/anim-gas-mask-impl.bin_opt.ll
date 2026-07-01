@@ -283,42 +283,39 @@ bb3:                                              ; preds = %bb2, %bb1
 
 bb4:                                              ; preds = %bb2
   %__BranchIfNot_24___bool.not = icmp eq i64 %arg_1, 0
-  %"__LookupPointer_player-is-crouched?_fptr83" = tail call ptr @llvm.dcvm.lookup(i64 1646463116072042322)
+  %"__LookupPointer_player-is-crouched?_fptr82" = tail call ptr @llvm.dcvm.lookup(i64 1646463116072042322)
   br i1 %__BranchIfNot_24___bool.not, label %bb9, label %bb5
 
 bb5:                                              ; preds = %bb4
   %__LookupPointer_player-force-crouch_fptr = tail call ptr @llvm.dcvm.lookup(i64 -4831287436211302109)
   %__CallFf_26___call = tail call i64 %__LookupPointer_player-force-crouch_fptr() #3, !callees !27, !dcvm.distance !2
-  %__CallFf_28___call66 = tail call i64 %"__LookupPointer_player-is-crouched?_fptr83"() #3, !callees !28, !dcvm.distance !2
+  %__CallFf_28___call66 = tail call i64 %"__LookupPointer_player-is-crouched?_fptr82"() #3, !callees !28, !dcvm.distance !2
   %__OpLogNot_29__op67 = icmp eq i64 %__CallFf_28___call66, 0
   br i1 %__OpLogNot_29__op67, label %bb7, label %bb12.preheader
 
 bb12.preheader:                                   ; preds = %bb7, %bb11, %bb5, %bb9
-  %__CallFf_50___call71 = tail call i64 %"__LookupPointer_player-in-state?_fptr"(i64 4007104907368024212) #3, !callees !26, !dcvm.distance !2
-  %__OpLogNot_51__op72 = icmp eq i64 %__CallFf_50___call71, 0
-  br i1 %__OpLogNot_51__op72, label %bb13, label %bb14
+  %__CallFf_50___call70 = tail call i64 %"__LookupPointer_player-in-state?_fptr"(i64 4007104907368024212) #3, !callees !26, !dcvm.distance !2
+  %__OpLogNot_51__op71 = icmp eq i64 %__CallFf_50___call70, 0
+  br i1 %__OpLogNot_51__op71, label %bb13, label %bb14
 
 bb7:                                              ; preds = %bb5, %bb7
   %__CallFf_32___call = tail call i64 %__LookupPointer_wait-one-frame_fptr() #3, !callees !5, !dcvm.distance !2
-  %__CallFf_28___call = tail call i64 %"__LookupPointer_player-is-crouched?_fptr83"() #3, !callees !28, !dcvm.distance !2
+  %__CallFf_28___call = tail call i64 %"__LookupPointer_player-is-crouched?_fptr82"() #3, !callees !28, !dcvm.distance !2
   %__OpLogNot_29__op = icmp eq i64 %__CallFf_28___call, 0
   br i1 %__OpLogNot_29__op, label %bb7, label %bb12.preheader
 
 bb9:                                              ; preds = %bb4
   %__LookupPointer_player-force-stand_fptr = tail call ptr @llvm.dcvm.lookup(i64 8594926419455150747)
   %__CallFf_36___call = tail call i64 %__LookupPointer_player-force-stand_fptr() #3, !callees !29, !dcvm.distance !2
-  %__CallFf_39___call68 = tail call i64 %"__LookupPointer_player-is-crouched?_fptr83"() #3, !callees !28, !dcvm.distance !2
-  %"__LookupPointer_!_fptr" = tail call ptr @llvm.dcvm.lookup(i64 -5808627241898115124)
-  %__Call_41___call69 = tail call i64 %"__LookupPointer_!_fptr"(i64 %__CallFf_39___call68) #3, !callees !30
-  %__OpLogNot_42__op70 = icmp eq i64 %__Call_41___call69, 0
-  br i1 %__OpLogNot_42__op70, label %bb11, label %bb12.preheader
+  %__CallFf_39___call68 = tail call i64 %"__LookupPointer_player-is-crouched?_fptr82"() #3, !callees !28, !dcvm.distance !2
+  %__OpLogNot_2__op.i.not69 = icmp eq i64 %__CallFf_39___call68, 0
+  br i1 %__OpLogNot_2__op.i.not69, label %bb12.preheader, label %bb11
 
 bb11:                                             ; preds = %bb9, %bb11
   %__CallFf_45___call = tail call i64 %__LookupPointer_wait-one-frame_fptr() #3, !callees !5, !dcvm.distance !2
-  %__CallFf_39___call = tail call i64 %"__LookupPointer_player-is-crouched?_fptr83"() #3, !callees !28, !dcvm.distance !2
-  %__Call_41___call = tail call i64 %"__LookupPointer_!_fptr"(i64 %__CallFf_39___call) #3, !callees !30
-  %__OpLogNot_42__op = icmp eq i64 %__Call_41___call, 0
-  br i1 %__OpLogNot_42__op, label %bb11, label %bb12.preheader
+  %__CallFf_39___call = tail call i64 %"__LookupPointer_player-is-crouched?_fptr82"() #3, !callees !28, !dcvm.distance !2
+  %__OpLogNot_2__op.i.not = icmp eq i64 %__CallFf_39___call, 0
+  br i1 %__OpLogNot_2__op.i.not, label %bb12.preheader, label %bb11
 
 bb13:                                             ; preds = %bb12.preheader, %bb13
   %__CallFf_54___call = tail call i64 %__LookupPointer_wait-one-frame_fptr() #3, !callees !5, !dcvm.distance !2
@@ -328,26 +325,26 @@ bb13:                                             ; preds = %bb12.preheader, %bb
 
 bb14:                                             ; preds = %bb13, %bb12.preheader
   %__LookupPointer_wait-holster-player-weapon_fptr = tail call ptr @llvm.dcvm.lookup(i64 -3092934816467423265)
-  %__CallFf_61___call = tail call i64 %__LookupPointer_wait-holster-player-weapon_fptr(i64 0, float 1.000000e+00) #3, !callees !31, !dcvm.distance !2
+  %__CallFf_61___call = tail call i64 %__LookupPointer_wait-holster-player-weapon_fptr(i64 0, float 1.000000e+00) #3, !callees !30, !dcvm.distance !2
   %__LookupPointer_holster-player-weapon-instantly_fptr = tail call ptr @llvm.dcvm.lookup(i64 -626103520744544694)
-  %__CallFf_67___call = tail call i64 %__LookupPointer_holster-player-weapon-instantly_fptr(float 0x3FC99999A0000000, i64 0) #3, !callees !32, !dcvm.distance !2
+  %__CallFf_67___call = tail call i64 %__LookupPointer_holster-player-weapon-instantly_fptr(float 0x3FC99999A0000000, i64 0) #3, !callees !31, !dcvm.distance !2
   br label %bb21
 
 bb15:                                             ; preds = %bb0
   %__LookupPointer_wait-npc-holster-weapon_fptr = tail call ptr @llvm.dcvm.lookup(i64 5808793362033684947)
-  %__CallFf_80___call = tail call i64 %__LookupPointer_wait-npc-holster-weapon_fptr(i64 %arg_0, i64 0, i64 1, float -1.000000e+00, i64 0) #3, !callees !33, !dcvm.distance !2
+  %__CallFf_80___call = tail call i64 %__LookupPointer_wait-npc-holster-weapon_fptr(i64 %arg_0, i64 0, i64 1, float -1.000000e+00, i64 0) #3, !callees !32, !dcvm.distance !2
   %"__LookupPointer_npc-has-weapon-in-hand?_fptr" = tail call ptr @llvm.dcvm.lookup(i64 7683024912818272899)
-  %__CallFf_84___call73 = tail call i64 %"__LookupPointer_npc-has-weapon-in-hand?_fptr"(i64 %arg_0) #3, !callees !34, !dcvm.distance !2
-  %__BranchIfNot_85___bool.not74 = icmp eq i64 %__CallFf_84___call73, 0
-  br i1 %__BranchIfNot_85___bool.not74, label %bb18, label %bb17.preheader
+  %__CallFf_84___call72 = tail call i64 %"__LookupPointer_npc-has-weapon-in-hand?_fptr"(i64 %arg_0) #3, !callees !33, !dcvm.distance !2
+  %__BranchIfNot_85___bool.not73 = icmp eq i64 %__CallFf_84___call72, 0
+  br i1 %__BranchIfNot_85___bool.not73, label %bb18, label %bb17.preheader
 
 bb17.preheader:                                   ; preds = %bb15
-  %__LookupPointer_wait-one-frame_fptr89 = tail call ptr @llvm.dcvm.lookup(i64 -3047912596559836939)
+  %__LookupPointer_wait-one-frame_fptr87 = tail call ptr @llvm.dcvm.lookup(i64 -3047912596559836939)
   br label %bb17
 
 bb17:                                             ; preds = %bb17.preheader, %bb17
-  %__CallFf_87___call = tail call i64 %__LookupPointer_wait-one-frame_fptr89() #3, !callees !5, !dcvm.distance !2
-  %__CallFf_84___call = tail call i64 %"__LookupPointer_npc-has-weapon-in-hand?_fptr"(i64 %arg_0) #3, !callees !34, !dcvm.distance !2
+  %__CallFf_87___call = tail call i64 %__LookupPointer_wait-one-frame_fptr87() #3, !callees !5, !dcvm.distance !2
+  %__CallFf_84___call = tail call i64 %"__LookupPointer_npc-has-weapon-in-hand?_fptr"(i64 %arg_0) #3, !callees !33, !dcvm.distance !2
   %__BranchIfNot_85___bool.not = icmp eq i64 %__CallFf_84___call, 0
   br i1 %__BranchIfNot_85___bool.not, label %bb18, label %bb17
 
@@ -357,7 +354,7 @@ bb18:                                             ; preds = %bb17, %bb15
 
 bb19:                                             ; preds = %bb18
   %__LookupPointer_wait-npc-set-demeanor_fptr = tail call ptr @llvm.dcvm.lookup(i64 8573502661920361253)
-  %__CallFf_96___call = tail call i64 %__LookupPointer_wait-npc-set-demeanor_fptr(i64 %arg_0, i64 3) #3, !callees !35, !dcvm.distance !2
+  %__CallFf_96___call = tail call i64 %__LookupPointer_wait-npc-set-demeanor_fptr(i64 %arg_0, i64 3) #3, !callees !34, !dcvm.distance !2
   br label %bb21
 
 bb21:                                             ; preds = %bb18, %bb19, %bb14
@@ -366,19 +363,19 @@ bb21:                                             ; preds = %bb18, %bb19, %bb14
 }
 
 ; Function Attrs: mustprogress nosync nounwind willreturn
-define i64 @"npc-gas-mask-narrative-mode/f"(i64 %arg_0) local_unnamed_addr #1 !dcvm.sid_distance !36 {
+define i64 @"npc-gas-mask-narrative-mode/f"(i64 %arg_0) local_unnamed_addr #1 !dcvm.sid_distance !35 {
 bb0:
   %__LookupPointer_send-event_fptr = tail call ptr @llvm.dcvm.lookup(i64 4789555171397753330)
   %__CallFf_6___call = tail call i64 %__LookupPointer_send-event_fptr(i64 8119835013146602502, i64 %arg_0) #3, !callees !6, !dcvm.distance !2
   %"__LookupPointer_suspend-idle-gestures/f_fptr" = tail call ptr @llvm.dcvm.lookup(i64 -5356689657310757786)
-  %__Call_10___call = tail call i64 %"__LookupPointer_suspend-idle-gestures/f_fptr"(i64 %arg_0) #3, !callees !37
+  %__Call_10___call = tail call i64 %"__LookupPointer_suspend-idle-gestures/f_fptr"(i64 %arg_0) #3, !callees !36
   %__LookupPointer_npc-disable-dialog-look_fptr = tail call ptr @llvm.dcvm.lookup(i64 7610916627332680768)
-  %__CallFf_16___call = tail call i64 %__LookupPointer_npc-disable-dialog-look_fptr(i64 %arg_0, float 0.000000e+00) #3, !callees !38, !dcvm.distance !2
+  %__CallFf_16___call = tail call i64 %__LookupPointer_npc-disable-dialog-look_fptr(i64 %arg_0, float 0.000000e+00) #3, !callees !37, !dcvm.distance !2
   ret i64 %__CallFf_16___call
 }
 
 ; Function Attrs: mustprogress nosync nounwind willreturn
-define i64 @internal-put-off-gas-mask-immediately(i64 %arg_0, i64 %arg_1) local_unnamed_addr #1 !dcvm.sid_distance !39 {
+define i64 @internal-put-off-gas-mask-immediately(i64 %arg_0, i64 %arg_1) local_unnamed_addr #1 !dcvm.sid_distance !38 {
 bb0:
   %__LookupPointer_get-gas-mask_fptr = tail call ptr @llvm.dcvm.lookup(i64 -5076200561558624898)
   %__CallFf_5___call = tail call i64 %__LookupPointer_get-gas-mask_fptr(i64 %arg_0) #3, !callees !7, !dcvm.distance !2
@@ -389,7 +386,7 @@ bb0:
 
 bb1:                                              ; preds = %bb0
   %__LookupPointer_kill-entity_fptr = tail call ptr @llvm.dcvm.lookup(i64 -804116741684351865)
-  %__CallFf_17___call = tail call i64 %__LookupPointer_kill-entity_fptr(i64 %__CallFf_5___call) #3, !callees !40, !dcvm.distance !2
+  %__CallFf_17___call = tail call i64 %__LookupPointer_kill-entity_fptr(i64 %__CallFf_5___call) #3, !callees !39, !dcvm.distance !2
   br label %bb3
 
 bb3:                                              ; preds = %bb0, %bb1
@@ -398,7 +395,7 @@ bb3:                                              ; preds = %bb0, %bb1
 }
 
 ; Function Attrs: mustprogress nosync nounwind willreturn
-define i64 @spawn-gas-mask(i64 %arg_0) local_unnamed_addr #1 !dcvm.sid_distance !41 {
+define i64 @spawn-gas-mask(i64 %arg_0) local_unnamed_addr #1 !dcvm.sid_distance !40 {
 bb0:
   %__LookupPointer_get-gas-mask-setting-id_fptr = tail call ptr @llvm.dcvm.lookup(i64 -6573555005595409285)
   %__CallFf_5___call = tail call i64 %__LookupPointer_get-gas-mask-setting-id_fptr(i64 %arg_0) #3, !callees !9, !dcvm.distance !2
@@ -415,23 +412,23 @@ bb0:
 }
 
 ; Function Attrs: mustprogress nosync nounwind willreturn
-define i64 @"player-gas-mask-narrative-mode/f"(i64 %arg_0, i64 %arg_1, i64 %arg_2) local_unnamed_addr #1 !dcvm.sid_distance !42 {
+define i64 @"player-gas-mask-narrative-mode/f"(i64 %arg_0, i64 %arg_1, i64 %arg_2) local_unnamed_addr #1 !dcvm.sid_distance !41 {
 bb0:
   %__LookupPointer_player-disable-dialog-look-gestures_fptr = tail call ptr @llvm.dcvm.lookup(i64 7238593933813171071)
-  %__CallFf_6___call = tail call i64 %__LookupPointer_player-disable-dialog-look-gestures_fptr(float 0.000000e+00) #3, !callees !43, !dcvm.distance !2
+  %__CallFf_6___call = tail call i64 %__LookupPointer_player-disable-dialog-look-gestures_fptr(float 0.000000e+00) #3, !callees !42, !dcvm.distance !2
   %"__LookupPointer_player-disable-squeeze-through/f_fptr" = tail call ptr @llvm.dcvm.lookup(i64 8165897991486741957)
-  %__CallFf_8___call = tail call i64 %"__LookupPointer_player-disable-squeeze-through/f_fptr"() #3, !callees !44, !dcvm.distance !2
+  %__CallFf_8___call = tail call i64 %"__LookupPointer_player-disable-squeeze-through/f_fptr"() #3, !callees !43, !dcvm.distance !2
   %"__LookupPointer_player-set-narrative-mode/f_fptr" = tail call ptr @llvm.dcvm.lookup(i64 -2826777519175913837)
-  %__Call_16___call = tail call i64 %"__LookupPointer_player-set-narrative-mode/f_fptr"(i64 %arg_0, i64 %arg_1, i64 %arg_2) #3, !callees !45
+  %__Call_16___call = tail call i64 %"__LookupPointer_player-set-narrative-mode/f_fptr"(i64 %arg_0, i64 %arg_1, i64 %arg_2) #3, !callees !44
   %"__LookupPointer_suspend-idle-gestures/f_fptr" = tail call ptr @llvm.dcvm.lookup(i64 -5356689657310757786)
-  %__Call_20___call = tail call i64 %"__LookupPointer_suspend-idle-gestures/f_fptr"(i64 5008278420455340480) #3, !callees !37
+  %__Call_20___call = tail call i64 %"__LookupPointer_suspend-idle-gestures/f_fptr"(i64 5008278420455340480) #3, !callees !36
   %__LookupPointer_joypad-disable-commands_fptr = tail call ptr @llvm.dcvm.lookup(i64 7121253686161376880)
-  %__CallFf_24___call = tail call i64 %__LookupPointer_joypad-disable-commands_fptr(i64 -1699981380503476753) #3, !callees !46, !dcvm.distance !2
+  %__CallFf_24___call = tail call i64 %__LookupPointer_joypad-disable-commands_fptr(i64 -1699981380503476753) #3, !callees !45, !dcvm.distance !2
   ret i64 %__CallFf_24___call
 }
 
 ; Function Attrs: mustprogress nosync nounwind willreturn
-define i64 @internal-put-off-gas-mask(i64 %arg_0, i64 %arg_1) local_unnamed_addr #1 !dcvm.sid_distance !47 {
+define i64 @internal-put-off-gas-mask(i64 %arg_0, i64 %arg_1) local_unnamed_addr #1 !dcvm.sid_distance !46 {
 bb0:
   %__LookupPointer_wait-one-frame_fptr = tail call ptr @llvm.dcvm.lookup(i64 -3047912596559836939)
   %__CallFf_3___call = tail call i64 %__LookupPointer_wait-one-frame_fptr() #3, !callees !5, !dcvm.distance !2
@@ -487,7 +484,7 @@ bb3:                                              ; preds = %bb1
 
 bb4:                                              ; preds = %bb3
   %__LookupPointer_kill-entity_fptr = tail call ptr @llvm.dcvm.lookup(i64 -804116741684351865)
-  %__CallFf_90___call = tail call i64 %__LookupPointer_kill-entity_fptr(i64 %__CallFf_16___call) #3, !callees !40, !dcvm.distance !2
+  %__CallFf_90___call = tail call i64 %__LookupPointer_kill-entity_fptr(i64 %__CallFf_16___call) #3, !callees !39, !dcvm.distance !2
   br label %bb6
 
 bb6:                                              ; preds = %bb3, %bb4
@@ -496,7 +493,7 @@ bb6:                                              ; preds = %bb3, %bb4
 }
 
 ; Function Attrs: nosync nounwind
-define i64 @wait-remove-gas-mask(i64 %arg_0, i64 %arg_1, i64 %arg_2) local_unnamed_addr #0 !dcvm.sid_distance !48 {
+define i64 @wait-remove-gas-mask(i64 %arg_0, i64 %arg_1, i64 %arg_2) local_unnamed_addr #0 !dcvm.sid_distance !47 {
 bb0:
   %__LookupPointer_new-boxed-value_fptr = tail call ptr @llvm.dcvm.lookup(i64 3684810824690217768)
   %__CallFf_11___call = tail call i64 %__LookupPointer_new-boxed-value_fptr(i64 1, i64 0) #3, !callees !1, !dcvm.distance !2
@@ -533,12 +530,12 @@ bb4:                                              ; preds = %bb3
 
 bb1.i:                                            ; preds = %bb4
   %__LookupPointer_kill-entity_fptr = tail call ptr @llvm.dcvm.lookup(i64 -804116741684351865)
-  %__CallFf_17___call.i = tail call i64 %__LookupPointer_kill-entity_fptr(i64 %__CallFf_5___call.i) #3, !callees !40, !dcvm.distance !2
+  %__CallFf_17___call.i = tail call i64 %__LookupPointer_kill-entity_fptr(i64 %__CallFf_5___call.i) #3, !callees !39, !dcvm.distance !2
   br label %bb6
 
 bb5:                                              ; preds = %bb3
   %__LookupPointer_internal-put-off-gas-mask_fptr = tail call ptr @llvm.dcvm.lookup(i64 -6610620527767074061)
-  %__Call_52___call = tail call i64 %__LookupPointer_internal-put-off-gas-mask_fptr(i64 %arg_0, i64 %arg_2) #3, !callees !49
+  %__Call_52___call = tail call i64 %__LookupPointer_internal-put-off-gas-mask_fptr(i64 %arg_0, i64 %arg_2) #3, !callees !48
   br label %bb6
 
 bb6:                                              ; preds = %bb1.i, %bb4, %bb5
@@ -553,6 +550,8 @@ attributes #0 = { nosync nounwind }
 attributes #1 = { mustprogress nosync nounwind willreturn }
 attributes #2 = { mustprogress nofree nosync nounwind speculatable willreturn memory(none) }
 attributes #3 = { nounwind }
+
+!llvm.dbg.cu = !{}
 
 !0 = !{!"sid", i64 4147362863116273348}
 !1 = distinct !{null}
@@ -589,18 +588,17 @@ attributes #3 = { nounwind }
 !32 = distinct !{null}
 !33 = distinct !{null}
 !34 = distinct !{null}
-!35 = distinct !{null}
-!36 = !{!"sid", i64 9135517996633164385}
+!35 = !{!"sid", i64 9135517996633164385}
+!36 = distinct !{null}
 !37 = distinct !{null}
-!38 = distinct !{null}
-!39 = !{!"sid", i64 -8559530813269772124, !"distance", !"near"}
-!40 = distinct !{null}
-!41 = !{!"sid", i64 -8188029138696281045}
-!42 = !{!"sid", i64 -7406256944386539599}
+!38 = !{!"sid", i64 -8559530813269772124, !"distance", !"near"}
+!39 = distinct !{null}
+!40 = !{!"sid", i64 -8188029138696281045}
+!41 = !{!"sid", i64 -7406256944386539599}
+!42 = distinct !{null}
 !43 = distinct !{null}
 !44 = distinct !{null}
 !45 = distinct !{null}
-!46 = distinct !{null}
-!47 = !{!"sid", i64 -6610620527767074061, !"distance", !"near"}
-!48 = !{!"sid", i64 -1351166648529978758}
-!49 = !{ptr @internal-put-off-gas-mask}
+!46 = !{!"sid", i64 -6610620527767074061, !"distance", !"near"}
+!47 = !{!"sid", i64 -1351166648529978758}
+!48 = !{ptr @internal-put-off-gas-mask}

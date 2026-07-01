@@ -6,12 +6,12 @@
 #include <memory>
 
 namespace llvm {
-class MCCodeEmitter;
-class MCContext;
-class MCInstrInfo;
-class Target;
+    class MCCodeEmitter;
+    class MCContext;
+    class MCInstrInfo;
+    class Target;
 
-MCCodeEmitter *createDCVMMCCodeEmitter(const MCInstrInfo &MCII, MCContext &Ctx);
+    MCCodeEmitter* createDCVMMCCodeEmitter(const MCInstrInfo& MCII, MCContext& Ctx);
 } // namespace llvm
 
 #define GET_REGINFO_ENUM

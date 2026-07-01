@@ -7,6 +7,7 @@
 #include "disassembly/opcodes.h"
 #include "sidbase.h"
 #include "llvm/ADT/ArrayRef.h"
+#include "llvm/IR/Attributes.h"
 #include "llvm/IR/BasicBlock.h"
 #include "llvm/IR/Constant.h"
 #include "llvm/IR/Constants.h"
@@ -18,6 +19,7 @@
 #include "llvm/IR/IRBuilder.h"
 #include "llvm/IR/Instruction.h"
 #include <cstdint>
+#include <initializer_list>
 #include <llvm/IR/Verifier.h>
 #include "llvm/IR/Instructions.h"
 #include "llvm/IR/LLVMContext.h"
@@ -31,6 +33,7 @@
 #include "llvm/Passes/PassBuilder.h"
 #include "llvm/Support/Alignment.h"
 #include "llvm/Support/Casting.h"
+#include "llvm/Support/raw_ostream.h"
 #include "llvm/Target/TargetMachine.h"
 #include "llvm/Transforms/Utils/Cloning.h"
 #include "llvm/Transforms/Utils/ModuleUtils.h"
@@ -43,6 +46,7 @@
 #include <cstring>
 #include <filesystem>
 #include <fstream>
+#include <unordered_map>
 #include <functional>
 #include <limits>
 #include <map>
@@ -467,6 +471,61 @@ namespace dconstruct::llvm_transpile {
         m_defaultPointerT = m_builder.getPtrTy();
     }
 
+    void map_referenced_globals_for_clone(llvm::Module& dst_module, const llvm::Function& src_function, llvm::ValueToValueMapTy& vmap) {
+        const auto map_value = [&](const auto& self, const llvm::Value* value) -> void {
+            if (const auto* function = llvm::dyn_cast<llvm::Function>(value)) {
+                if (!vmap.lookup(function)) {
+                    llvm::FunctionCallee callee = dst_module.getOrInsertFunction(function->getName(), function->getFunctionType());
+                    auto* dst_function = llvm::cast<llvm::Function>(callee.getCallee()->stripPointerCasts());
+                    vmap[function] = dst_function;
+                    dst_function->copyAttributesFrom(function);
+                    dst_function->setCallingConv(function->getCallingConv());
+                }
+                return;
+            }
+
+            if (const auto* global = llvm::dyn_cast<llvm::GlobalVariable>(value)) {
+                if (!vmap.lookup(global)) {
+                    llvm::GlobalVariable* dst_global = dst_module.getNamedGlobal(global->getName());
+                    if (!dst_global) {
+                        dst_global = new llvm::GlobalVariable(
+                            dst_module,
+                            global->getValueType(),
+                            global->isConstant(),
+                            global->getLinkage(),
+                            nullptr,
+                            global->getName()
+                        );
+                        if (global->hasInitializer()) {
+                            dst_global->setInitializer(const_cast<llvm::Constant*>(global->getInitializer()));
+                        }
+                        dst_global->setUnnamedAddr(global->getUnnamedAddr());
+                        dst_global->setAlignment(global->getAlign());
+                    }
+                    vmap[global] = dst_global;
+                }
+                return;
+            }
+
+            const auto* constant = llvm::dyn_cast<llvm::Constant>(value);
+            if (!constant) {
+                return;
+            }
+
+            for (const llvm::Use& operand : constant->operands()) {
+                self(self, operand.get());
+            }
+        };
+
+        for (const llvm::BasicBlock& block : src_function) {
+            for (const llvm::Instruction& instruction : block) {
+                for (const llvm::Use& operand : instruction.operands()) {
+                    map_value(map_value, operand.get());
+                }
+            }
+        }
+    }
+
     void llvm_transpiler::add_module(std::string_view name, const BinaryFile* binary_file, const std::vector<const function_disassembly*>& funcs) {
         std::vector<prepared_function_ctx> functions;
         functions.reserve(funcs.size());
@@ -488,27 +547,22 @@ namespace dconstruct::llvm_transpile {
         blocks.clear();
         m_builder.ClearInsertionPoint();
 
-        std::vector<llvm::Type*> arg_types(disasm->m_stackFrame.m_registerArgs.size());
-        std::transform(disasm->m_stackFrame.m_registerArgs.begin(), disasm->m_stackFrame.m_registerArgs.end(), arg_types.begin(), [&](const ast::full_type& type) {
-            return ast_type_to_llvm_type(m_ctx, type);
-        });
+        std::vector<llvm::Type*> arg_types(disasm->m_stackFrame.m_registerArgs.size(), m_defaultIntT);
+
 
         auto* func_type = llvm::FunctionType::get(llvm::Type::getInt64Ty(m_ctx), llvm::ArrayRef(arg_types.data(), arg_types.size()), false);
         llvm::Function* new_function = llvm::Function::Create(func_type, llvm::GlobalValue::LinkageTypes::ExternalLinkage, 0, disasm->get_id(), &module);
         to_lift.m_llvmFunc = new_function;
 
-        const sid64 self_sid = SID(disasm->get_id().c_str());
-        new_function->setMetadata("dcvm.sid_distance", llvm::MDNode::get(m_ctx, {
-            llvm::MDString::get(m_ctx, "sid"),
-            llvm::ConstantAsMetadata::get(m_builder.getInt64(self_sid)),
-        }));
+        m_lookupCallDistances[SID(disasm->get_id().c_str())] = ast::function_type::DISTANCE::NEAR;
 
+        llvm::BasicBlock* entry_block = llvm::BasicBlock::Create(m_ctx, "entry", new_function);
         for (const control_flow_node& node : m_graph->m_nodes) {
             llvm::BasicBlock* block = llvm::BasicBlock::Create(m_ctx, std::format("bb{}", node.m_index), new_function);
             blocks.emplace(node.m_startLine, block);
         }
 
-        m_builder.SetInsertPoint(blocks[0], blocks[0]->begin());
+        m_builder.SetInsertPoint(entry_block);
 
         for (u64 i = 0; i < register_frame.size(); ++i) {
             register_frame[i] = m_builder.CreateAlloca(m_defaultIntT, nullptr, std::format("r{}", i));
@@ -528,6 +582,8 @@ namespace dconstruct::llvm_transpile {
             arg->setName(std::format("arg_{}", i));
             make_store(to_lift, ARGUMENT_REGISTERS_IDX + i, arg, arg->getType());
         }
+
+        m_builder.CreateBr(blocks.at(0));
 
         if (!disasm->m_isScriptFunction) {
             m_funcLocations[disasm->get_id()] = new_function;
@@ -554,7 +610,6 @@ namespace dconstruct::llvm_transpile {
         auto& m_registerFrame = function.m_registerFrame;
         llvm::Function* m_function = function.m_llvmFunc;
 
-
         m_builder.SetInsertPoint(m_blocks.at(0));
         const control_flow_node* current_node = &m_graph->m_nodes[0];
         for (u32 l = 0; l < m_disasm->m_lines.size(); ++l) {
@@ -563,6 +618,7 @@ namespace dconstruct::llvm_transpile {
             std::string istr_id = std::format("__{}_{}__", istr.opcode_to_string(), l);
             bool terminated = false;
             std::string op = std::format("{}op", istr_id);
+
             switch (line.m_instruction.opcode) {
                 using enum Opcode;
                 case IAdd: {
@@ -576,7 +632,7 @@ namespace dconstruct::llvm_transpile {
                     break;
                 }
                 case FAdd: {
-                    make_binary(function, istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateFAdd(a, b, op); }, m_defaultFloatT, istr_id);
+                    make_binary(function, istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateFAdd(a, b, op); }, m_defaultFloatT, istr_id, m_defaultFloatT);
                     break;
                 }
                 case ISub: {
@@ -584,7 +640,7 @@ namespace dconstruct::llvm_transpile {
                     break;
                 }
                 case FSub: {
-                    make_binary(function, istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateFSub(a, b, op); }, m_defaultFloatT, istr_id);
+                    make_binary(function, istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateFSub(a, b, op); }, m_defaultFloatT, istr_id, m_defaultFloatT);
                     break;
                 }
                 case IMul: {
@@ -592,7 +648,7 @@ namespace dconstruct::llvm_transpile {
                     break;
                 }
                 case FMul: {
-                    make_binary(function, istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateFMul(a, b, op); }, m_defaultFloatT, istr_id);
+                    make_binary(function, istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateFMul(a, b, op); }, m_defaultFloatT, istr_id, m_defaultFloatT);
                     break;
                 }
                 case IDiv: {
@@ -600,7 +656,7 @@ namespace dconstruct::llvm_transpile {
                     break;
                 }
                 case FDiv: {
-                    make_binary(function, istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateFDiv(a, b, op); }, m_defaultFloatT, istr_id);
+                    make_binary(function, istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateFDiv(a, b, op); }, m_defaultFloatT, istr_id, m_defaultFloatT);
                     break;
                 }
                 case OpBitAnd: {
@@ -640,7 +696,7 @@ namespace dconstruct::llvm_transpile {
                     break;
                 }
                 case FNeg: {
-                    make_unary(function, istr, [&](llvm::Value* a) { return m_builder.CreateFNeg(a, op); }, m_defaultFloatT, istr_id);
+                    make_unary(function, istr, [&](llvm::Value* a) { return m_builder.CreateFNeg(a, op); }, m_defaultFloatT, istr_id, m_defaultFloatT);
                     break;
                 }
                 case IAddImm: {
@@ -668,11 +724,11 @@ namespace dconstruct::llvm_transpile {
                     break;
                 }
                 case IEqual: {
-                    make_binary(function, istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateICmpEQ(a, b, op); }, m_boolT, istr_id);
+                    make_binary(function, istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateICmpEQ(a, b, op); },m_defaultIntT, istr_id, m_defaultIntT);
                     break;
                 }
                 case FEqual: {
-                    make_binary(function, istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateFCmpUEQ(a, b, op); }, m_boolT, istr_id);
+                    make_binary(function, istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateFCmpUEQ(a, b, op); }, m_boolT, istr_id, m_defaultFloatT);
                     break;
                 }
                 case INotEqual: {
@@ -680,7 +736,7 @@ namespace dconstruct::llvm_transpile {
                     break;
                 }
                 case FNotEqual: {
-                    make_binary(function, istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateFCmpUNE(a, b, op); }, m_boolT, istr_id);
+                    make_binary(function, istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateFCmpUNE(a, b, op); }, m_boolT, istr_id, m_defaultFloatT);
                     break;
                 }
                 case ILessThan: {
@@ -688,7 +744,7 @@ namespace dconstruct::llvm_transpile {
                     break;
                 }
                 case FLessThan: {
-                    make_binary(function, istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateFCmpULT(a, b, op); }, m_boolT, istr_id);
+                    make_binary(function, istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateFCmpULT(a, b, op); }, m_boolT, istr_id, m_defaultFloatT);
                     break;
                 }
                 case ILessThanEqual: {
@@ -696,7 +752,7 @@ namespace dconstruct::llvm_transpile {
                     break;
                 }
                 case FLessThanEqual: {
-                    make_binary(function, istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateFCmpULE(a, b, op); }, m_boolT, istr_id);
+                    make_binary(function, istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateFCmpULE(a, b, op); }, m_boolT, istr_id, m_defaultFloatT);
                     break;
                 }
                 case IGreaterThan: {
@@ -704,7 +760,7 @@ namespace dconstruct::llvm_transpile {
                     break;
                 }
                 case FGreaterThan: {
-                    make_binary(function, istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateFCmpUGT(a, b, op); }, m_boolT, istr_id);
+                    make_binary(function, istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateFCmpUGT(a, b, op); }, m_boolT, istr_id, m_defaultFloatT);
                     break;
                 }
                 case IGreaterThanEqual: {
@@ -712,7 +768,7 @@ namespace dconstruct::llvm_transpile {
                     break;
                 }
                 case FGreaterThanEqual: {
-                    make_binary(function, istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateFCmpUGE(a, b, op); }, m_boolT, istr_id);
+                    make_binary(function, istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateFCmpUGE(a, b, op); }, m_boolT, istr_id, m_defaultFloatT);
                     break;
                 }
                 case IMod: {
@@ -720,15 +776,17 @@ namespace dconstruct::llvm_transpile {
                     break;
                 }
                 case FMod: {
-                    make_binary(function, istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateFRem(a, b, op); }, m_defaultFloatT, istr_id);
+                    make_binary(function, istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateFRem(a, b, op); }, m_defaultFloatT, istr_id, m_defaultFloatT);
                     break;
                 }
                 case IAbs: {
-                    make_unary(function, istr, [&](llvm::Value* a) { return m_builder.CreateIntrinsic(llvm::Intrinsic::abs, a); }, m_defaultIntT, istr_id);
+                    make_unary(function, istr, [&](llvm::Value* a) {
+                        return m_builder.CreateIntrinsic(llvm::Intrinsic::abs, {a->getType()}, {a, m_builder.getFalse()});
+                    }, m_defaultIntT, istr_id);
                     break;
                 }
                 case FAbs: {
-                    make_unary(function, istr, [&](llvm::Value* a) { return m_builder.CreateIntrinsic(llvm::Intrinsic::fabs, a); }, m_defaultFloatT, istr_id);
+                    make_unary(function, istr, [&](llvm::Value* a) { return m_builder.CreateUnaryIntrinsic(llvm::Intrinsic::fabs, a); }, m_defaultFloatT, istr_id, m_defaultFloatT);
                     break;
                 }
                 case AssertPointer: {
@@ -870,17 +928,20 @@ namespace dconstruct::llvm_transpile {
                     make_mem_store<u64>(function, istr, istr_id);
                     break;
                 }
+                case StoreFloat: {
+                    make_mem_store<f32>(function, istr, istr_id);
+                    break;
+                }
                 case StorePointer: {
                     make_mem_store<const void*>(function, istr, istr_id);
                     break;
                 }
                 case CastInteger: {
-                    llvm::Value* current_float = load_register(function, istr.operand1);
-
-                    assert(m_types[istr.operand1] == m_defaultFloatT);
+                    llvm::Value* current_float = load_register(function, istr.operand1, "cast_load", m_defaultFloatT);
 
                     llvm::Value* cast = m_builder.CreateFPToUI(current_float, m_defaultIntT);
                     m_types[istr.destination] = m_defaultIntT;
+                    make_store(function, istr.destination, cast, m_defaultIntT);
                     break;
                 }
                 case CastFloat: {
@@ -890,6 +951,8 @@ namespace dconstruct::llvm_transpile {
 
                     llvm::Value* cast = m_builder.CreateUIToFP(current_int, m_defaultFloatT);
                     m_types[istr.destination] = m_defaultFloatT;
+
+                    make_store(function, istr.destination, cast, m_defaultIntT);
                     break;
                 }
                 case LoadStaticPointerImm: {
@@ -912,30 +975,35 @@ namespace dconstruct::llvm_transpile {
                     break;
                 }
                 case LookupPointer: {
-                    const ast::full_type& symbol_table_funtion_t = m_disasm->m_stackFrame.m_symbolTable.m_types[istr.operand1];
-                    assert(std::holds_alternative<ast::function_type>(symbol_table_funtion_t));
-                    const ast::function_type& ast_function_t = std::get<ast::function_type>(symbol_table_funtion_t);
-                    llvm::FunctionType* function_type = llvm::cast<llvm::FunctionType>(ast_type_to_llvm_type(m_ctx, symbol_table_funtion_t));
+                    const ast::full_type& symbol_table_t = m_disasm->m_stackFrame.m_symbolTable.m_types[istr.operand1];
+                    if (const ast::function_type* ast_function_t = std::get_if<ast::function_type>(&symbol_table_t)) {
+                        std::vector<llvm::Type*> arg_types(ast_function_t->m_arguments.size(), m_defaultIntT);
+                        llvm::FunctionType* function_type = llvm::FunctionType::get(m_defaultIntT, arg_types, ast_function_t->m_isVariadic);
 
-                    const sid64 func_sid = m_symbolTable->get<sid64>(istr.operand1 * sizeof(u64));
-                    const char* function_name = m_sidbase.lookup(func_sid);
-                    const ast::function_type::DISTANCE distance = ast_function_t.m_distanceType;
+                        const sid64 func_sid = m_symbolTable->get<sid64>(istr.operand1 * sizeof(u64));
+                        const char* function_name = m_sidbase.lookup(func_sid);
+                        m_lookupCallDistances[func_sid] = ast_function_t->m_distanceType;
 
-                    llvm::FunctionCallee callee_function = m_module.getOrInsertFunction(function_name, function_type);
-                    llvm::Function* F = llvm::cast<llvm::Function>(callee_function.getCallee());
-                    F->setMetadata("dcvm.sid_distance", llvm::MDNode::get(m_ctx, {
-                        llvm::MDString::get(m_ctx, "sid"),
-                        llvm::ConstantAsMetadata::get(m_builder.getInt64(func_sid)),
-                        llvm::MDString::get(m_ctx, "distance"),
-                        llvm::MDString::get(m_ctx, distance == ast::function_type::DISTANCE::NEAR ? "near" : "far"),
-                    }));
-                    F->setDoesNotThrow();
-                    F->setWillReturn();
-                    F->setNoSync();
+                        llvm::FunctionCallee callee_function = m_module.getOrInsertFunction(function_name, function_type);
+                        llvm::Function* F = llvm::cast<llvm::Function>(callee_function.getCallee());
+                        F->setDoesNotThrow();
+                        F->setWillReturn();
+                        F->setNoSync();
 
-                    unit.m_calledGlobals.emplace_back(function_name);
+                        unit.m_calledGlobals.emplace_back(function_name);
 
-                    make_store(function, istr.destination, callee_function.getCallee(), function_type);
+                        make_store(function, istr.destination, callee_function.getCallee(), function_type);
+                    } else {
+                        assert(std::holds_alternative<ast::primitive_type>(symbol_table_t));
+                        const ast::primitive_type ast_sid_t = std::get<ast::primitive_type>(symbol_table_t);
+                        assert(ast_sid_t.m_type == ast::primitive_kind::SID);
+                        const sid64 sid_id = m_symbolTable->get<sid64>(istr.operand1 * sizeof(u64));
+                        make_symbol_table_load<sid64>(function, istr, istr_id);
+                        llvm::Value* sid = load_register(function, istr.destination, "", m_defaultIntT);
+                        llvm::CallInst* func_ptr = m_builder.CreateIntrinsic(llvm::Intrinsic::dcvm_lookup, {sid}, {}, std::format("{}_{}_lookup", istr_id, sid_id));
+
+                        make_store(function, istr.destination, func_ptr, m_defaultPointerT);
+                    }
                     break;
                 }
                 case CallFf:
@@ -945,23 +1013,17 @@ namespace dconstruct::llvm_transpile {
                     std::vector<llvm::Value*> arg_values;
                     arg_values.reserve(istr.operand2);
                     for (u64 i = 0; i < istr.operand2; ++i) {
-                        arg_values.push_back(load_register(function, ARGUMENT_REGISTERS_IDX + i, std::format("{}_arg{}", istr_id, i)));
+                        arg_values.push_back(load_register(function, ARGUMENT_REGISTERS_IDX + i, std::format("{}_arg{}", istr_id, i), m_defaultIntT));
                         if (i < func_type->getNumParams() && arg_values.back()->getType() != func_type->getParamType(i)) {
                             func_type = exchange_function_types(function, arg_values.back()->getType(), istr.operand1, i);
                         }
                     }
                     llvm::CallInst* call = m_builder.CreateCall(func_type, callee, llvm::ArrayRef(arg_values.data(), arg_values.size()), std::format("{}_call", istr_id));
-                    if (istr.opcode == CallFf) {
-                        call->setMetadata("dcvm.distance", llvm::MDNode::get(m_ctx, {llvm::MDString::get(m_ctx, "far")}));
-                    }
                     make_store(function, istr.destination, call, func_type->getReturnType());
                     break;
                 }
                 case Return: {
-                    llvm::Value* ret_value = load_register(function, istr.destination, std::format("{}_retval", istr_id));
-                    if (ret_value->getType() != m_function->getReturnType() && ret_value->getType()->isIntegerTy() && m_function->getReturnType()->isIntegerTy()) {
-                        ret_value = m_builder.CreateIntCast(ret_value, m_function->getReturnType(), false, std::format("{}_retcast", istr_id));
-                    }
+                    llvm::Value* ret_value = m_builder.CreateLoad(m_defaultIntT, m_registerFrame[istr.destination], std::format("{}_retval", istr_id));
                     m_builder.CreateRet(ret_value);
                     terminated = true;
                     break;
@@ -1058,6 +1120,8 @@ namespace dconstruct::llvm_transpile {
                 dst_func->setLinkage(llvm::GlobalValue::AvailableExternallyLinkage);
 
                 llvm::ValueToValueMapTy vmap;
+                vmap[global_function] = dst_func;
+                map_referenced_globals_for_clone(unit.module(), *global_function, vmap);
 
                 auto dst_arg = dst_func->arg_begin();
                 for (const llvm::Argument& src_arg : global_function->args()) {
@@ -1095,6 +1159,7 @@ namespace dconstruct::llvm_transpile {
         optimize_module(module);
         lower_calls_to_lookup(module);
         optimize_module(module);
+        annotate_lookup_call_distances(module);
 
         outputs.m_llvmOpt = emit_llvm_ir(module);
         outputs.m_dcvmAsm = emit_dcvm_asm(module);
@@ -1125,11 +1190,18 @@ namespace dconstruct::llvm_transpile {
         }};
 
         for (const auto& [path, content] : text_outputs) {
+            if (content->empty()) {
+                continue;
+            }
             std::ofstream file(path);
             if (!file) {
                 return "couldn't open output file " + path.string();
             }
             file << *content;
+        }
+
+        if (outputs.m_dcvmBytecode.empty()) {
+            return std::nullopt;
         }
 
         const std::filesystem::path bytecode_path = output_dir / std::format("{}.dcvm.bin", module_name);
@@ -1235,9 +1307,9 @@ namespace dconstruct::llvm_transpile {
         return m_builder.CreateIntToPtr(raw, m_defaultPointerT);
     }
 
-    llvm::Value* llvm_transpiler::load_register(prepared_function_ctx& function, const u8 index, std::string_view istr_name) {
+    llvm::Value* llvm_transpiler::load_register(prepared_function_ctx& function, const u8 index, std::string_view istr_name, llvm::Type* as_type) {
         llvm::Value* raw = m_builder.CreateLoad(m_defaultIntT, function.m_registerFrame[index], istr_name);
-        return coerce_from_storage(raw, function.m_types[index]);
+        return coerce_from_storage(raw, as_type ? as_type : function.m_types[index]);
     }
 
     llvm::StoreInst* llvm_transpiler::make_store(prepared_function_ctx& function, const u8 index, llvm::Value* rhs, llvm::Type* type) {
@@ -1247,12 +1319,19 @@ namespace dconstruct::llvm_transpile {
         return m_builder.CreateStore(coerce_to_storage(rhs), function.m_registerFrame[index]);
     }
 
-    llvm::StoreInst* llvm_transpiler::make_binary(prepared_function_ctx& function, const Instruction& istr, std::function<llvm::Value*(llvm::Value*, llvm::Value*)> binary_op, llvm::Type* dest_type, std::string_view istr_id) {
-        llvm::Value* lhs = load_register(function, istr.operand1, std::format("{}_load_lhs", istr_id));
-        llvm::Value* rhs = load_register(function, istr.operand2, std::format("{}_load_rhs", istr_id));
+    llvm::StoreInst* llvm_transpiler::make_binary(
+        prepared_function_ctx& function,
+        const Instruction& istr, std::function<llvm::Value*(llvm::Value*, llvm::Value*)> binary_op,
+        llvm::Type* dest_type,
+        std::string_view istr_id,
+        llvm::Type* coerced_type
+    ) {
+        llvm::Value* lhs = load_register(function, istr.operand1, std::format("{}_load_lhs", istr_id), coerced_type);
+        llvm::Value* rhs = load_register(function, istr.operand2, std::format("{}_load_rhs", istr_id), coerced_type);
         if (lhs->getType() != rhs->getType() && (lhs->getType() != m_defaultPointerT && rhs->getType() != m_defaultPointerT)) {
             rhs = m_builder.CreateZExtOrTrunc(rhs, lhs->getType());
         }
+
         llvm::Value* res = binary_op(lhs, rhs);
         function.m_types[istr.destination] = dest_type;
         return make_store(function, istr.destination, res);
@@ -1267,8 +1346,8 @@ namespace dconstruct::llvm_transpile {
         return make_store(function, istr.destination, res);
     }
 
-    llvm::StoreInst* llvm_transpiler::make_unary(prepared_function_ctx& function, const Instruction& istr, std::function<llvm::Value*(llvm::Value*)> unary_op, llvm::Type* dest_type, std::string_view istr_id) {
-        llvm::Value* lhs = load_register(function, istr.operand1, std::format("{}_load_op1", istr_id));
+    llvm::StoreInst* llvm_transpiler::make_unary(prepared_function_ctx& function, const Instruction& istr, std::function<llvm::Value*(llvm::Value*)> unary_op, llvm::Type* dest_type, std::string_view istr_id, llvm::Type* coerced_type) {
+        llvm::Value* lhs = load_register(function, istr.operand1, std::format("{}_load_op1", istr_id), coerced_type);
         llvm::Value* res = unary_op(lhs);
         function.m_types[istr.destination] = dest_type;
         return make_store(function, istr.destination, res);
@@ -1417,7 +1496,48 @@ namespace dconstruct::llvm_transpile {
         MPM.run(module, MAM);
     }
 
-    void lower_calls_to_lookup(llvm::Module& module) {
+    const char* distance_metadata_name(const ast::function_type::DISTANCE distance) {
+        switch (distance) {
+            case ast::function_type::DISTANCE::NEAR:
+                return "near";
+            case ast::function_type::DISTANCE::FAR:
+                return "far";
+        }
+        assert(false);
+        return "near";
+    }
+
+    std::optional<sid64> lookup_sid_from_value(llvm::Value* value) {
+        value = value->stripPointerCasts();
+
+        if (auto* lookup = llvm::dyn_cast<llvm::CallInst>(value)) {
+            if (lookup->getIntrinsicID() != llvm::Intrinsic::dcvm_lookup) {
+                return std::nullopt;
+            }
+
+            auto* sid = llvm::dyn_cast<llvm::ConstantInt>(lookup->getArgOperand(0));
+            if (sid == nullptr) {
+                return std::nullopt;
+            }
+
+            return sid->getZExtValue();
+        }
+
+        if (auto* phi = llvm::dyn_cast<llvm::PHINode>(value)) {
+            if (phi->getNumIncomingValues() == 0) {
+                return std::nullopt;
+            }
+            return lookup_sid_from_value(phi->getIncomingValue(0));
+        }
+
+        if (auto* select = llvm::dyn_cast<llvm::SelectInst>(value)) {
+            return lookup_sid_from_value(select->getTrueValue());
+        }
+
+        return std::nullopt;
+    }
+
+    void llvm_transpiler::lower_calls_to_lookup(llvm::Module& module) {
         llvm::IRBuilder<> builder(module.getContext());
 
         std::vector<llvm::CallInst*> direct_calls;
@@ -1429,7 +1549,7 @@ namespace dconstruct::llvm_transpile {
                         continue;
                     }
                     const llvm::Function* callee = llvm::dyn_cast<llvm::Function>(call->getCalledOperand()->stripPointerCasts());
-                    if (callee == nullptr || callee->isIntrinsic() || !callee->hasMetadata("dcvm.sid_distance")) {
+                    if (callee == nullptr || callee->isIntrinsic()) {
                         continue;
                     }
                     direct_calls.push_back(call);
@@ -1439,13 +1559,43 @@ namespace dconstruct::llvm_transpile {
 
         for (llvm::CallInst* call : direct_calls) {
             llvm::Function* callee = llvm::cast<llvm::Function>(call->getCalledOperand()->stripPointerCasts());
-            const llvm::MDNode* sid_md = callee->getMetadata("dcvm.sid_distance");
-            llvm::Value* sid = llvm::cast<llvm::ConstantAsMetadata>(sid_md->getOperand(1))->getValue();
+            const std::string name = callee->getName().str();
+            llvm::Value* sid = builder.getInt64(SID(name.c_str()));
             builder.SetInsertPoint(call);
             llvm::CallInst* func_ptr = builder.CreateIntrinsic(llvm::Intrinsic::dcvm_lookup, {sid});
-            func_ptr->setName(std::format("__LookupPointer_{}_fptr", callee->getName().str()));
+            func_ptr->setName(std::format("__LookupPointer_{}_fptr", name));
             call->setCalledOperand(func_ptr);
             call->setMetadata(llvm::LLVMContext::MD_callees, llvm::MDNode::get(module.getContext(), llvm::ValueAsMetadata::get(callee)));
+        }
+    }
+
+    void llvm_transpiler::annotate_lookup_call_distances(llvm::Module& module) {
+        llvm::LLVMContext& ctx = module.getContext();
+
+        for (llvm::Function& func : module) {
+            for (llvm::BasicBlock& block : func) {
+                for (llvm::Instruction& inst : block) {
+                    auto* call = llvm::dyn_cast<llvm::CallInst>(&inst);
+                    if (call == nullptr) {
+                        continue;
+                    }
+
+                    const std::optional<sid64> sid = lookup_sid_from_value(call->getCalledOperand());
+                    if (!sid) {
+                        continue;
+                    }
+
+                    const auto distance = m_lookupCallDistances.find(*sid);
+                    if (distance == m_lookupCallDistances.end()) {
+                        continue;
+                    }
+
+                    call->setMetadata(
+                        "dcvm.distance",
+                        llvm::MDNode::get(ctx, {llvm::MDString::get(ctx, distance_metadata_name(distance->second))})
+                    );
+                }
+            }
         }
     }
 
@@ -1531,21 +1681,46 @@ namespace dconstruct::llvm_transpile {
         return std::vector<char>(data, data + size);
     }
 
-    void llvm_transpiler::enable_runtime_module() {
+    void llvm_transpiler::init_runtime_module() {
         std::unique_ptr module = std::make_unique<llvm::Module>("__dcvm_runtime", m_ctx);
 
-        {
-            constexpr auto name = "is-final-build?";
-
-            constexpr bool is_final_build_val = true;
-            llvm::FunctionType* is_final_build_t = llvm::FunctionType::get(llvm::Type::getInt64Ty(m_ctx), {}, false);
-            llvm::Function* is_final_build_f = llvm::Function::Create(is_final_build_t, llvm::GlobalValue::LinkageTypes::ExternalLinkage, 0, name, module.get());
-            llvm::BasicBlock* block = llvm::BasicBlock::Create(m_ctx, "bb", is_final_build_f);
+        auto add_runtime_function_overwrite = [&] (std::string_view name, u64 num_args, u64 custom_return_val = 0) {
+            std::vector<llvm::Type*> arg_types(num_args, m_defaultIntT);
+            llvm::FunctionType* func_t = llvm::FunctionType::get(m_defaultIntT, arg_types, false);
+            llvm::Function* func = llvm::Function::Create(func_t, llvm::GlobalValue::LinkageTypes::ExternalLinkage, 0, name, module.get());
+            func->addFnAttr(llvm::Attribute::AlwaysInline);
+            llvm::BasicBlock* block = llvm::BasicBlock::Create(m_ctx, "bb", func);
             m_builder.SetInsertPoint(block, block->begin());
-            llvm::Value* ret_value = m_builder.getInt64(is_final_build_val);
+            llvm::Value* ret_value = m_builder.getInt64(custom_return_val);
             m_builder.CreateRet(ret_value);
-            m_funcLocations[name] = is_final_build_f;
-        }
+            m_funcLocations[name.data()] = func;
+        };
+
+        // auto add_runtime_function_declaration = [&] (std::string_view name, u64 num_args, std::initializer_list<llvm::Attribute> attrs) {
+        //    std::vector<llvm::Type*> arg_types(num_args, m_defaultIntT);
+        //    llvm::FunctionType* func_t = llvm::FunctionType::get(m_defaultIntT, arg_types, false);
+
+        // };
+
+
+        constexpr bool is_final_build_val = true;
+        add_runtime_function_overwrite("is-final-build?", 0, is_final_build_val);
+
+        add_runtime_function_overwrite("dc-assert-enabled?", false);
+
+        add_runtime_function_overwrite("debug-draw-line", 10);
+        add_runtime_function_overwrite("debug-draw-locator", 6);
+        add_runtime_function_overwrite("debug-draw-line-2d", 9);
+        add_runtime_function_overwrite("debug-draw-string", 8);
+        add_runtime_function_overwrite("debug-draw-string-2d", 9);
+        add_runtime_function_overwrite("debug-draw-sphere", 6);
+        add_runtime_function_overwrite("debug-joypad-command-active?", 2);
+        add_runtime_function_overwrite("debug-draw-cross", 7);
+        add_runtime_function_overwrite("debug-draw-box-2d", 8);
+        add_runtime_function_overwrite("debug-draw-ngon-2d", 10);
+
+
+        assert(!llvm::verifyModule(*module, &llvm::errs()));
 
         m_translationUnits.emplace_back(std::move(module), nullptr);
     }

@@ -90,8 +90,8 @@
 "internal-put-on-gas-mask":
 	Move	r2, r50
 	Move	r1, r49
-	LookupPointer	r6, 3
-	CallFf	r0, r6, 0
+	LookupPointer	r5, 3
+	CallFf	r0, r5, 0
 	LookupPointer	r0, 2
 	CallFf	r0, r0, 1
 	LoadStaticU64Imm	r50, 4
@@ -123,9 +123,9 @@
 	LookupPointer	r0, 8
 	Move	r49, r2
 	CallFf	r0, r0, 2
-	LookupPointer	r7, 7
+	LookupPointer	r6, 7
 	Move	r49, r1
-	CallFf	r0, r7, 1
+	CallFf	r0, r6, 1
 	BranchIfNot	.LBB1_4, r0
 	LoadU16Imm	r50, 1
 	LookupPointer	r0, 10
@@ -136,10 +136,9 @@
 .LBB1_4:
 	LookupPointer	r0, 11
 .LBB1_5:
-	LoadU16Imm	r4, 1
-	LoadU16Imm	r5, 0
+	LoadU16Imm	r4, 0
 	Move	r49, r2
-	Move	r50, r5
+	Move	r50, r4
 	Call	r0, r0, 2
 	LookupPointer	r0, 13
 	Move	r49, r1
@@ -147,12 +146,12 @@
 	CallFf	r0, r0, 2
 	LookupPointer	r0, 12
 	Move	r49, r2
-	Move	r50, r5
+	Move	r50, r4
 	CallFf	r0, r0, 2
 	Move	r49, r1
-	CallFf	r0, r7, 1
+	CallFf	r0, r6, 1
 	BranchIf	.LBB1_7, r0
-	CallFf	r0, r6, 0
+	CallFf	r0, r5, 0
 .LBB1_7:
 	LoadStaticU64Imm	r51, 24
 	LoadU16Imm	r52, 0
@@ -165,42 +164,42 @@
 	LookupPointer	r0, 19
 	CallFf	r0, r0, 2
 	LoadStaticU64Imm	r49, 22
-	LookupPointer	r5, 18
+	LookupPointer	r4, 18
 	Move	r50, r1
 	Move	r51, r0
-	CallFf	r0, r5, 3
+	CallFf	r0, r4, 3
 	IAddImm	r0, r3, 16
-	LoadU64	r5, r0
+	LoadU64	r4, r0
 	LoadStaticU64Imm	r49, 21
 	LoadU16Imm	r50, 16
 	LoadU16Imm	r51, 0
-	LookupPointer	r7, 17
-	Move	r52, r4
-	CallFf	r0, r7, 4
-	LookupPointer	r8, 16
+	LoadU16Imm	r52, 1
+	LookupPointer	r6, 17
+	CallFf	r0, r6, 4
+	LookupPointer	r7, 16
 	Move	r49, r2
-	Move	r50, r5
+	Move	r50, r4
 	Move	r51, r0
-	CallFf	r0, r8, 3
-	LookupPointer	r5, 14
-	LookupPointer	r9, 15
-	LoadU16Imm	r10, 19
+	CallFf	r0, r7, 3
+	LookupPointer	r4, 14
+	LookupPointer	r8, 15
+	LoadU16Imm	r9, 19
 .LBB1_8:
 	LoadU64	r50, r3
-	CallFf	r0, r9, 0
-	IAddImm	r11, r0, 36
-	StoreU32	r10, [r11], r10
-	IAddImm	r11, r0, 33
-	StoreU8	r4, [r11], r4
-	IAddImm	r11, r0, 34
-	StoreU8	r4, [r11], r4
-	IAddImm	r11, r0, 32
-	StoreU8	r4, [r11], r4
+	CallFf	r0, r8, 0
+	IAddImm	r10, r0, 36
+	StoreU32	r9, [r10], r9
+	IAddImm	r10, r0, 33
+	StoreU8	r52, [r10], r52
+	IAddImm	r10, r0, 34
+	StoreU8	r52, [r10], r52
+	IAddImm	r10, r0, 32
+	StoreU8	r52, [r10], r52
 	Move	r49, r1
 	Move	r51, r0
-	CallFf	r0, r5, 3
+	CallFf	r0, r4, 3
 	BranchIfNot	.LBB1_10, r0
-	CallFf	r0, r6, 0
+	CallFf	r0, r5, 0
 	Branch	.LBB1_8
 .LBB1_10:
 	IAddImm	r0, r3, 24
@@ -209,11 +208,11 @@
 	LoadU16Imm	r50, 16
 	LoadU16Imm	r51, 0
 	LoadU16Imm	r52, 1
-	CallFf	r0, r7, 4
+	CallFf	r0, r6, 4
 	Move	r49, r2
 	Move	r50, r1
 	Move	r51, r0
-	CallFf	r0, r8, 3
+	CallFf	r0, r7, 3
 	Return	r0
 "internal-put-on-gas-mask_symbol_table":
 	.quad	8203816822361639083
@@ -326,7 +325,6 @@
 	LookupPointer	r6, 9
 .LBB2_5:
 	LoadU16Imm	r4, 0
-	LoadU16Imm	r51, 1
 	LoadStaticU64Imm	r49, 17
 	Move	r50, r3
 	CallFf	r0, r6, 2
@@ -346,13 +344,14 @@
 	LoadU64	r2, r0
 	LoadStaticU64Imm	r49, 16
 	LoadU16Imm	r50, 16
+	LoadU16Imm	r51, 1
 	LookupPointer	r0, 13
 	Move	r52, r51
 	CallFf	r0, r0, 4
-	LoadU64	r3, r0
-	LoadU64	r3, r3
-	LoadU16Imm	r5, 31
-	StoreU32	r5, [r3], r5
+	LoadU16Imm	r3, 31
+	LoadU64	r5, r0
+	LoadU64	r5, r5
+	StoreU32	r3, [r5], r3
 	LoadU64	r3, r0
 	LoadU64	r3, r3
 	IAddImm	r3, r3, 8
@@ -453,7 +452,7 @@
 	CallFf	r0, r2, 0
 	BranchIfNot	.LBB4_12, r0
 .LBB4_8:
-	LoadStaticU64Imm	r49, 9
+	LoadStaticU64Imm	r49, 8
 	CallFf	r0, r5, 1
 	BranchIf	.LBB4_11, r0
 .LBB4_9:
@@ -462,22 +461,22 @@
 	BranchIfNot	.LBB4_9, r0
 .LBB4_11:
 	LoadU16Imm	r1, 0
-	LoadStaticFloatImm	r50, 13
-	LookupPointer	r0, 11
+	LoadStaticFloatImm	r50, 12
+	LookupPointer	r0, 10
 	Move	r49, r1
 	CallFf	r0, r0, 2
-	LoadStaticFloatImm	r49, 12
-	LookupPointer	r0, 10
+	LoadStaticFloatImm	r49, 11
+	LookupPointer	r0, 9
 	Move	r50, r1
 	Branch	.LBB4_21
 .LBB4_16:
 	LoadU16Imm	r51, 1
-	LoadStaticFloatImm	r52, 16
+	LoadStaticFloatImm	r52, 15
 	LoadU16Imm	r50, 0
-	LookupPointer	r0, 15
+	LookupPointer	r0, 14
 	Move	r53, r50
 	CallFf	r0, r0, 5
-	LookupPointer	r2, 14
+	LookupPointer	r2, 13
 	CallFf	r0, r2, 1
 	BranchIfNot	.LBB4_19, r0
 	LookupPointer	r3, 1
@@ -488,7 +487,7 @@
 .LBB4_19:
 	BranchIfNot	.LBB4_22, r1
 	LoadU16Imm	r50, 3
-	LookupPointer	r0, 17
+	LookupPointer	r0, 16
 .LBB4_21:
 	CallFf	r0, r0, 2
 	Move	r50, r0
@@ -496,16 +495,12 @@
 	Move	r0, r50
 	Return	r0
 .LBB4_13:
-	LookupPointer	r0, 8
+	LookupPointer	r0, 7
 	CallFf	r0, r0, 0
-	CallFf	r0, r2, 0
-	LookupPointer	r1, 7
 .LBB4_15:
-	Move	r49, r0
-	Call	r0, r1, 1
-	BranchIf	.LBB4_8, r0
-	CallFf	r0, r4, 0
 	CallFf	r0, r2, 0
+	BranchIfNot	.LBB4_8, r0
+	CallFf	r0, r4, 0
 	Branch	.LBB4_15
 "wait-until-in-valid-gas-mask-state_symbol_table":
 	.quad	6532480022340268902
@@ -515,7 +510,6 @@
 	.quad	2237451099064635199
 	.quad	1646463116072042322
 	.quad	-4831287436211302109
-	.quad	-5808627241898115124
 	.quad	8594926419455150747
 	.quad	4007104907368024212
 	.quad	-626103520744544694
@@ -527,7 +521,6 @@
 	.quad	3212836864
 	.quad	8573502661920361253
 "wait-until-in-valid-gas-mask-state_pointer_map":
-	.byte	0
 	.byte	0
 	.byte	0
 	.byte	0

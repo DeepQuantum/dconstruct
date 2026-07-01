@@ -12,35 +12,25 @@
 using namespace llvm;
 
 namespace {
-class DCVMMCCodeEmitter : public MCCodeEmitter {
-    const MCInstrInfo &MCII;
-    MCContext &Ctx;
+    class DCVMMCCodeEmitter : public MCCodeEmitter {
+        const MCInstrInfo& MCII;
+        MCContext& Ctx;
 
-public:
-    DCVMMCCodeEmitter(const MCInstrInfo &MCII, MCContext &Ctx)
-        : MCII(MCII), Ctx(Ctx) {}
-    DCVMMCCodeEmitter(const DCVMMCCodeEmitter &) = delete;
-    void operator=(const DCVMMCCodeEmitter &) = delete;
-    ~DCVMMCCodeEmitter() override = default;
+    public:
+        DCVMMCCodeEmitter(const MCInstrInfo& MCII, MCContext& Ctx) : MCII(MCII), Ctx(Ctx) {}
+        DCVMMCCodeEmitter(const DCVMMCCodeEmitter&) = delete;
+        void operator=(const DCVMMCCodeEmitter&) = delete;
+        ~DCVMMCCodeEmitter() override = default;
 
-    uint64_t getBinaryCodeForInstr(const MCInst &MI,
-                                   SmallVectorImpl<MCFixup> &Fixups,
-                                   const MCSubtargetInfo &STI) const;
+        uint64_t getBinaryCodeForInstr(const MCInst& MI, SmallVectorImpl<MCFixup>& Fixups, const MCSubtargetInfo& STI) const;
 
-    unsigned getMachineOpValue(const MCInst &MI, const MCOperand &MO,
-                               SmallVectorImpl<MCFixup> &Fixups,
-                               const MCSubtargetInfo &STI) const;
+        unsigned getMachineOpValue(const MCInst& MI, const MCOperand& MO, SmallVectorImpl<MCFixup>& Fixups, const MCSubtargetInfo& STI) const;
 
-    void encodeInstruction(const MCInst &MI, SmallVectorImpl<char> &CB,
-                           SmallVectorImpl<MCFixup> &Fixups,
-                           const MCSubtargetInfo &STI) const override;
-};
+        void encodeInstruction(const MCInst& MI, SmallVectorImpl<char>& CB, SmallVectorImpl<MCFixup>& Fixups, const MCSubtargetInfo& STI) const override;
+    };
 } // namespace
 
-unsigned DCVMMCCodeEmitter::getMachineOpValue(const MCInst &MI,
-                                              const MCOperand &MO,
-                                              SmallVectorImpl<MCFixup> &Fixups,
-                                              const MCSubtargetInfo &STI) const {
+unsigned DCVMMCCodeEmitter::getMachineOpValue(const MCInst& MI, const MCOperand& MO, SmallVectorImpl<MCFixup>& Fixups, const MCSubtargetInfo& STI) const {
     if (MO.isReg())
         return Ctx.getRegisterInfo()->getEncodingValue(MO.getReg());
     if (MO.isImm())
@@ -50,10 +40,7 @@ unsigned DCVMMCCodeEmitter::getMachineOpValue(const MCInst &MI,
     llvm_unreachable("unsupported operand in DCVMMCCodeEmitter");
 }
 
-void DCVMMCCodeEmitter::encodeInstruction(const MCInst &MI,
-                                          SmallVectorImpl<char> &CB,
-                                          SmallVectorImpl<MCFixup> &Fixups,
-                                          const MCSubtargetInfo &STI) const {
+void DCVMMCCodeEmitter::encodeInstruction(const MCInst& MI, SmallVectorImpl<char>& CB, SmallVectorImpl<MCFixup>& Fixups, const MCSubtargetInfo& STI) const {
     const uint64_t Bits = getBinaryCodeForInstr(MI, Fixups, STI);
     for (unsigned i = 0; i < 8; ++i)
         CB.push_back(static_cast<char>((Bits >> (i * 8)) & 0xff));
@@ -61,7 +48,6 @@ void DCVMMCCodeEmitter::encodeInstruction(const MCInst &MI,
 
 #include "DCVMGenMCCodeEmitter.inc"
 
-MCCodeEmitter *llvm::createDCVMMCCodeEmitter(const MCInstrInfo &MCII,
-                                             MCContext &Ctx) {
+MCCodeEmitter* llvm::createDCVMMCCodeEmitter(const MCInstrInfo& MCII, MCContext& Ctx) {
     return new DCVMMCCodeEmitter(MCII, Ctx);
 }

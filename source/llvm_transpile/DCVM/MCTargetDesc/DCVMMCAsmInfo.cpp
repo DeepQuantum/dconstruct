@@ -5,4 +5,4 @@ using namespace llvm;
 
 void DCVMELFMCAsmInfo::anchor() {}
 
-DCVMELFMCAsmInfo::DCVMELFMCAsmInfo(const Triple &TheTriple) {}
+DCVMELFMCAsmInfo::DCVMELFMCAsmInfo(const Triple& TheTriple) {}

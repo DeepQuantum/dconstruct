@@ -12,23 +12,20 @@ using namespace llvm;
 
 DCVMRegisterInfo::DCVMRegisterInfo() : DCVMGenRegisterInfo(0) {}
 
-const MCPhysReg *
-DCVMRegisterInfo::getCalleeSavedRegs(const MachineFunction *MF) const {
+const MCPhysReg* DCVMRegisterInfo::getCalleeSavedRegs(const MachineFunction* MF) const {
     static const MCPhysReg CalleeSavedRegs[] = {0};
     return CalleeSavedRegs;
 }
 
-BitVector DCVMRegisterInfo::getReservedRegs(const MachineFunction &MF) const {
+BitVector DCVMRegisterInfo::getReservedRegs(const MachineFunction& MF) const {
     BitVector Reserved(getNumRegs());
     return Reserved;
 }
 
-bool DCVMRegisterInfo::eliminateFrameIndex(MachineBasicBlock::iterator II,
-                                           int SPAdj, unsigned FIOperandNum,
-                                           RegScavenger *RS) const {
+bool DCVMRegisterInfo::eliminateFrameIndex(MachineBasicBlock::iterator II, int SPAdj, unsigned FIOperandNum, RegScavenger* RS) const {
     return false;
 }
 
-Register DCVMRegisterInfo::getFrameRegister(const MachineFunction &MF) const {
+Register DCVMRegisterInfo::getFrameRegister(const MachineFunction& MF) const {
     return Register();
 }
