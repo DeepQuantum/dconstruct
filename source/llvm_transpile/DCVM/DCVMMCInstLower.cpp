@@ -25,7 +25,7 @@ MCOperand DCVMMCInstLower::LowerOperand(const MachineOperand& MO) const {
 void DCVMMCInstLower::Lower(const MachineInstr* MI, MCInst& OutMI) const {
     OutMI.setOpcode(MI->getOpcode());
     for (const MachineOperand& MO : MI->operands()) {
-        if (MO.isReg() && MO.isImplicit())
+        if (MO.isRegMask() || (MO.isReg() && MO.isImplicit()))
             continue;
         OutMI.addOperand(LowerOperand(MO));
     }

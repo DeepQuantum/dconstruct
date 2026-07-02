@@ -298,7 +298,7 @@ namespace dconstruct::testing {
             transpiler.add_module(dependency_path.filename().string(), dependency_files.back().get(), dependency_disassemblers.back()->get_all_functions());
         }
 
-        transpiler.enable_runtime_module();
+        transpiler.init_runtime_module();
 
         std::vector<llvm_transpile::generated_outputs> outputs = transpiler.run();
         const llvm_transpile::generated_outputs* module_output = find_output(outputs, module_name);

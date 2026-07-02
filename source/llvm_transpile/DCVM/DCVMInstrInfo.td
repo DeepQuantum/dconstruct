@@ -50,6 +50,10 @@ def div10magic : ImmLeaf<i64, [{
     return Imm == 7378697629483820647LL;
 }]>;
 
+def udiv5magic : ImmLeaf<i64, [{
+    return Imm == -3689348814741910323LL;
+}]>;
+
 def shift2imm : ImmLeaf<i64, [{
     return Imm == 2;
 }]>;
@@ -68,7 +72,7 @@ class ArithmeticImmInst<bits<8> op, string mnemonic, SDPatternOperator node> : B
     (outs GPR:$dst),
     (ins GPR:$src0, i64imm:$imm),
     mnemonic # "\t$dst, $src0, $imm",
-    [(set GPR:$dst, (node (i64 GPR:$src0), u8imm:$imm))]
+    [(set (i64 GPR:$dst), (node (i64 GPR:$src0), u8imm:$imm))]
 > {
     bits<8> dst;
     bits<8> src0;
@@ -98,6 +102,21 @@ class DstIdxInst<bits<8> op, string mnemonic> : BasicInst<
     let isAsCheapAsAMove = 1;
 }
 
+class DstIdxNoRematInst<bits<8> op, string mnemonic> : BasicInst<
+    (outs GPR:$dst),
+    (ins i64imm:$idx),
+    mnemonic # "\t$dst, $idx"
+> {
+    bits<8> dst;
+    bits<8> idx;
+    let opcode = op;
+    let Inst{15-8}  = dst;
+    let Inst{23-16} = idx;
+
+    let isReMaterializable = 0;
+    let isAsCheapAsAMove = 0;
+}
+
 class DstRegIdxInst<bits<8> op, string mnemonic> : BasicInst<
     (outs GPR:$dst),
     (ins GPR:$idx),
@@ -114,7 +133,7 @@ class LoadInst<bits<8> op, string mnemonic, PatFrag loadop> : BasicInst<
     (outs GPR:$dst),
     (ins GPR:$addr),
     mnemonic # "\t$dst, $addr",
-    [(set GPR:$dst, (i64 (loadop (i64 GPR:$addr))))]
+    [(set (i64 GPR:$dst), (i64 (loadop (i64 GPR:$addr))))]
 > {
     bits<8> dst;
     bits<8> addr;
@@ -128,7 +147,7 @@ class FloatLoadInst<bits<8> op, string mnemonic> : BasicInst<
     (outs GPR:$dst),
     (ins GPR:$addr),
     mnemonic # "\t$dst, $addr",
-    [(set GPR:$dst, (f32 (load (i64 GPR:$addr))))]
+    [(set (f32 GPR:$dst), (f32 (load (i64 GPR:$addr))))]
 > {
     bits<8> dst;
     bits<8> addr;
@@ -177,7 +196,7 @@ class SelectInst<ValueType vt> : DCVMInst<
     (outs GPR:$dst),
     (ins GPR:$cond, GPR:$t, GPR:$f),
     "# select $dst, $cond, $t, $f",
-    [(set GPR:$dst, (vt (dcvm_select (i64 GPR:$cond), (vt GPR:$t), (vt GPR:$f))))]
+    [(set (vt GPR:$dst), (vt (dcvm_select (i64 GPR:$cond), (vt GPR:$t), (vt GPR:$f))))]
 > {
     let usesCustomInserter = 1;
     let isPseudo = 1;
@@ -194,7 +213,7 @@ def RET : DCVMInst<
     (outs),
     (ins GPR:$value),
     "Return\t$value",
-    [(dcvm_ret GPR:$value)]
+    [(dcvm_ret (i64 GPR:$value))]
 > {
     bits<8> value;
     let opcode = 0;
@@ -202,21 +221,21 @@ def RET : DCVMInst<
     let Inst{23-16} = value;
 }
 
-def IADDrr : RegInst<1, "IAdd", 3, [(set GPR:$dst, ( add GPR:$src0, GPR:$src1))]>;
-def ISUBrr : RegInst<2, "ISub", 3, [(set GPR:$dst, ( sub GPR:$src0, GPR:$src1))]>;
-def IMULrr : RegInst<3, "IMul", 3, [(set GPR:$dst, ( mul GPR:$src0, GPR:$src1))]>;
-def IDIVrr : RegInst<4, "IDiv", 3, [(set GPR:$dst, (sdiv GPR:$src0, GPR:$src1))]>;
-def FADDrr : RegInst<5, "FAdd", 3, [(set GPR:$dst, (fadd GPR:$src0, GPR:$src1))]>;
-def FSUBrr : RegInst<6, "FSub", 3, [(set GPR:$dst, (fsub GPR:$src0, GPR:$src1))]>;
-def FMULrr : RegInst<7, "FMul", 3, [(set GPR:$dst, (fmul GPR:$src0, GPR:$src1))]>;
-def FDIVrr : RegInst<8, "FDiv", 3, [(set GPR:$dst, (fdiv GPR:$src0, GPR:$src1))]>;
+def IADDrr : RegInst<1, "IAdd", 3, [(set (i64 GPR:$dst), ( add (i64 GPR:$src0), (i64 GPR:$src1)))]>;
+def ISUBrr : RegInst<2, "ISub", 3, [(set (i64 GPR:$dst), ( sub (i64 GPR:$src0), (i64 GPR:$src1)))]>;
+def IMULrr : RegInst<3, "IMul", 3, [(set (i64 GPR:$dst), ( mul (i64 GPR:$src0), (i64 GPR:$src1)))]>;
+def IDIVrr : RegInst<4, "IDiv", 3, [(set (i64 GPR:$dst), (sdiv (i64 GPR:$src0), (i64 GPR:$src1)))]>;
+def FADDrr : RegInst<5, "FAdd", 3, [(set (f32 GPR:$dst), (fadd (f32 GPR:$src0), (f32 GPR:$src1)))]>;
+def FSUBrr : RegInst<6, "FSub", 3, [(set (f32 GPR:$dst), (fsub (f32 GPR:$src0), (f32 GPR:$src1)))]>;
+def FMULrr : RegInst<7, "FMul", 3, [(set (f32 GPR:$dst), (fmul (f32 GPR:$src0), (f32 GPR:$src1)))]>;
+def FDIVrr : RegInst<8, "FDiv", 3, [(set (f32 GPR:$dst), (fdiv (f32 GPR:$src0), (f32 GPR:$src1)))]>;
 
 
 def LOADU16IMMri : BasicInst<
     (outs GPR:$dst),
     (ins i64imm:$imm),
     "LoadU16Imm\t$dst, $imm",
-    [(set GPR:$dst, (i64 u16imm:$imm))]
+    [(set (i64 GPR:$dst), (i64 u16imm:$imm))]
 > {
     bits<8> dst;
     bits<16> imm;
@@ -231,18 +250,21 @@ def LOADU16IMMri : BasicInst<
 def LOADU32  : LoadInst<13, "LoadU32",  zextloadi32>;
 def LOADFLOAT : FloatLoadInst<14, "LoadFloat">;
 
+// remat is the pressure escape hatch on a target that cannot spill: the
+// allocator only re-emits a lookup next to a use when keeping the original
+// live would run out of registers.
 def LOOKUPPOINTERri : DstIdxInst<21, "LookupPointer">;
 
-def CASTINTEGERr : RegInst<25, "CastInteger", 2, [(set GPR:$dst, (i64 (fp_to_sint (f32 GPR:$src0))))]>;
-def CASTFLOATr   : RegInst<26, "CastFloat",   2, [(set GPR:$dst, (f32 (sint_to_fp (i64 GPR:$src0))))]>;
+def CASTINTEGERr : RegInst<25, "CastInteger", 2, [(set (i64 GPR:$dst), (i64 (fp_to_sint (f32 GPR:$src0))))]>;
+def CASTFLOATr   : RegInst<26, "CastFloat",   2, [(set (f32 GPR:$dst), (f32 (sint_to_fp (i64 GPR:$src0))))]>;
 // llvm can keep signedness and i32 width on casts after optimization.
 // dcvm only has one cast opcode per direction, so select those forms explicitly.
 def : Pat<(i64 (fp_to_uint (f32 GPR:$src0))), (CASTINTEGERr GPR:$src0)>;
 def : Pat<(f32 (uint_to_fp (i64 GPR:$src0))), (CASTFLOATr GPR:$src0)>;
-def : Pat<(i32 (fp_to_sint (f32 GPR:$src0))), (COPY_TO_REGCLASS (CASTINTEGERr GPR:$src0), GPR32)>;
-def : Pat<(i32 (fp_to_uint (f32 GPR:$src0))), (COPY_TO_REGCLASS (CASTINTEGERr GPR:$src0), GPR32)>;
-def : Pat<(f32 (sint_to_fp (i32 GPR32:$src0))), (CASTFLOATr (COPY_TO_REGCLASS GPR32:$src0, GPR))>;
-def : Pat<(f32 (uint_to_fp (i32 GPR32:$src0))), (CASTFLOATr (COPY_TO_REGCLASS GPR32:$src0, GPR))>;
+def : Pat<(i32 (fp_to_sint (f32 GPR:$src0))), (i32 (CASTINTEGERr GPR:$src0))>;
+def : Pat<(i32 (fp_to_uint (f32 GPR:$src0))), (i32 (CASTINTEGERr GPR:$src0))>;
+def : Pat<(f32 (sint_to_fp (i32 GPR:$src0))), (CASTFLOATr GPR:$src0)>;
+def : Pat<(f32 (uint_to_fp (i32 GPR:$src0))), (CASTFLOATr GPR:$src0)>;
 
 let isCall = 1, Defs = [R0] in {
     def CALL : BasicInst<
@@ -274,37 +296,37 @@ let isCall = 1, Defs = [R0] in {
     }
 }
 
-def IEQrr : RegInst<29, "IEqual",            3, [(set GPR:$dst, (seteq (i64 GPR:$src0), (i64 GPR:$src1)))]>;
-def IGTrr : RegInst<30, "IGreaterThan",      3, [(set GPR:$dst, (setgt (i64 GPR:$src0), (i64 GPR:$src1)))]>;
-def IGErr : RegInst<31, "IGreaterThanEqual", 3, [(set GPR:$dst, (setge (i64 GPR:$src0), (i64 GPR:$src1)))]>;
-def ILTrr : RegInst<32, "ILessThan",         3, [(set GPR:$dst, (setlt (i64 GPR:$src0), (i64 GPR:$src1)))]>;
-def ILErr : RegInst<33, "ILessThanEqual",    3, [(set GPR:$dst, (setle (i64 GPR:$src0), (i64 GPR:$src1)))]>;
+def IEQrr : RegInst<29, "IEqual",            3, [(set (i64 GPR:$dst), (seteq (i64 GPR:$src0), (i64 GPR:$src1)))]>;
+def IGTrr : RegInst<30, "IGreaterThan",      3, [(set (i64 GPR:$dst), (setgt (i64 GPR:$src0), (i64 GPR:$src1)))]>;
+def IGErr : RegInst<31, "IGreaterThanEqual", 3, [(set (i64 GPR:$dst), (setge (i64 GPR:$src0), (i64 GPR:$src1)))]>;
+def ILTrr : RegInst<32, "ILessThan",         3, [(set (i64 GPR:$dst), (setlt (i64 GPR:$src0), (i64 GPR:$src1)))]>;
+def ILErr : RegInst<33, "ILessThanEqual",    3, [(set (i64 GPR:$dst), (setle (i64 GPR:$src0), (i64 GPR:$src1)))]>;
 
-def FEQrr : RegInst<34, "FEqual",            3, [(set GPR:$dst, (setueq (f32 GPR:$src0), (f32 GPR:$src1)))]>;
-def FGTrr : RegInst<35, "FGreaterThan",      3, [(set GPR:$dst, (setugt (f32 GPR:$src0), (f32 GPR:$src1)))]>;
-def FGErr : RegInst<36, "FGreaterThanEqual", 3, [(set GPR:$dst, (setuge (f32 GPR:$src0), (f32 GPR:$src1)))]>;
-def FLTrr : RegInst<37, "FLessThan",         3, [(set GPR:$dst, (setult (f32 GPR:$src0), (f32 GPR:$src1)))]>;
-def FLErr : RegInst<38, "FLessThanEqual",    3, [(set GPR:$dst, (setule (f32 GPR:$src0), (f32 GPR:$src1)))]>;
+def FEQrr : RegInst<34, "FEqual",            3, [(set (i64 GPR:$dst), (setueq (f32 GPR:$src0), (f32 GPR:$src1)))]>;
+def FGTrr : RegInst<35, "FGreaterThan",      3, [(set (i64 GPR:$dst), (setugt (f32 GPR:$src0), (f32 GPR:$src1)))]>;
+def FGErr : RegInst<36, "FGreaterThanEqual", 3, [(set (i64 GPR:$dst), (setuge (f32 GPR:$src0), (f32 GPR:$src1)))]>;
+def FLTrr : RegInst<37, "FLessThan",         3, [(set (i64 GPR:$dst), (setult (f32 GPR:$src0), (f32 GPR:$src1)))]>;
+def FLErr : RegInst<38, "FLessThanEqual",    3, [(set (i64 GPR:$dst), (setule (f32 GPR:$src0), (f32 GPR:$src1)))]>;
 
 // ordered float compares can survive from optimized llvm ir.
 // the vm compare opcodes are the same instruction choice for these cases.
-def : Pat<(setoeq (f32 GPR:$src0), (f32 GPR:$src1)), (FEQrr GPR:$src0, GPR:$src1)>;
-def : Pat<(setogt (f32 GPR:$src0), (f32 GPR:$src1)), (FGTrr GPR:$src0, GPR:$src1)>;
-def : Pat<(setoge (f32 GPR:$src0), (f32 GPR:$src1)), (FGErr GPR:$src0, GPR:$src1)>;
-def : Pat<(setolt (f32 GPR:$src0), (f32 GPR:$src1)), (FLTrr GPR:$src0, GPR:$src1)>;
-def : Pat<(setole (f32 GPR:$src0), (f32 GPR:$src1)), (FLErr GPR:$src0, GPR:$src1)>;
+def : Pat<(i64 (setoeq (f32 GPR:$src0), (f32 GPR:$src1))), (i64 (FEQrr GPR:$src0, GPR:$src1))>;
+def : Pat<(i64 (setogt (f32 GPR:$src0), (f32 GPR:$src1))), (i64 (FGTrr GPR:$src0, GPR:$src1))>;
+def : Pat<(i64 (setoge (f32 GPR:$src0), (f32 GPR:$src1))), (i64 (FGErr GPR:$src0, GPR:$src1))>;
+def : Pat<(i64 (setolt (f32 GPR:$src0), (f32 GPR:$src1))), (i64 (FLTrr GPR:$src0, GPR:$src1))>;
+def : Pat<(i64 (setole (f32 GPR:$src0), (f32 GPR:$src1))), (i64 (FLErr GPR:$src0, GPR:$src1))>;
 
-def IMODrr : RegInst<39, "IMod", 3, [(set GPR:$dst, (srem (i64 GPR:$src0), (i64 GPR:$src1)))]>;
+def IMODrr : RegInst<39, "IMod", 3, [(set (i64 GPR:$dst), (srem (i64 GPR:$src0), (i64 GPR:$src1)))]>;
 // unsigned modulo shows up after masking random values into the positive int range.
 def : Pat<(i64 (urem GPR:$src0, GPR:$src1)), (IMODrr GPR:$src0, GPR:$src1)>;
-def FMODrr : RegInst<40, "FMod", 3, [(set GPR:$dst, (frem (f32 GPR:$src0), (f32 GPR:$src1)))]>;
+def FMODrr : RegInst<40, "FMod", 3, [(set (f32 GPR:$dst), (frem (f32 GPR:$src0), (f32 GPR:$src1)))]>;
 
-def IABSr : RegInst<41, "IAbs", 2, [(set GPR:$dst, (abs (i64 GPR:$src0)))]>;
-def FABSr : RegInst<42, "FAbs", 2, [(set GPR:$dst, (fabs (f32 GPR:$src0)))]>;
+def IABSr : RegInst<41, "IAbs", 2, [(set (i64 GPR:$dst), (abs (i64 GPR:$src0)))]>;
+def FABSr : RegInst<42, "FAbs", 2, [(set (f32 GPR:$dst), (fabs (f32 GPR:$src0)))]>;
 // llvm may canonicalize fabs as clearing the f32 sign bit.
 // select the vm fabs opcode instead of emitting an integer bitwise op.
-def : Pat<(i32 (and (i32 (bitconvert (f32 GPR:$src0))), 2147483647)), (COPY_TO_REGCLASS (FABSr GPR:$src0), GPR32)>;
-def : Pat<(i32 (and GPR32:$src0, 2147483647)), (COPY_TO_REGCLASS (FABSr (COPY_TO_REGCLASS GPR32:$src0, GPR)), GPR32)>;
+def : Pat<(i32 (and (i32 (bitconvert (f32 GPR:$src0))), 2147483647)), (i32 (FABSr GPR:$src0))>;
+def : Pat<(i32 (and (i32 GPR:$src0), 2147483647)), (i32 (FABSr GPR:$src0))>;
 
 let isBranch = 1, isTerminator = 1, isBarrier = 1, hasSideEffects = 0, mayLoad = 0, mayStore = 0 in
 def BR : DCVMInst<
@@ -353,15 +375,15 @@ def : Pat<(brcond (i64 (setne (i64 GPR:$cond), (i64 0))), bb:$target),
 def : Pat<(brcond (i64 (seteq (i64 GPR:$cond), (i64 0))), bb:$target),
           (BRANCHIFNOT bb:$target, GPR:$cond)>;
 
-def OPLOGNOTr  : RegInst<48, "OpLogNot", 2, [(set GPR:$dst, (seteq (i64 GPR:$src0), (i64 0)))]>;
-def OPBITANDrr : RegInst<49, "OpBitAnd", 3, [(set GPR:$dst, (and GPR:$src0, GPR:$src1))]>;
-def OPBITNOTr  : RegInst<50, "OpBitNot", 2, [(set GPR:$dst, (not GPR:$src0))]>;
-def OPBITORrr  : RegInst<51, "OpBitOr",  3, [(set GPR:$dst, (or GPR:$src0, GPR:$src1))]>;
-def OPBITXORrr : RegInst<52, "OpBitXor", 3, [(set GPR:$dst, (xor GPR:$src0, GPR:$src1))]>;
-def OPBITNORrr : RegInst<53, "OpBitNor", 3, [(set GPR:$dst, (not (or GPR:$src0, GPR:$src1)))]>;
+def OPLOGNOTr  : RegInst<48, "OpLogNot", 2, [(set (i64 GPR:$dst), (seteq (i64 GPR:$src0), (i64 0)))]>;
+def OPBITANDrr : RegInst<49, "OpBitAnd", 3, [(set (i64 GPR:$dst), (and (i64 GPR:$src0), (i64 GPR:$src1)))]>;
+def OPBITNOTr  : RegInst<50, "OpBitNot", 2, [(set (i64 GPR:$dst), (not (i64 GPR:$src0)))]>;
+def OPBITORrr  : RegInst<51, "OpBitOr",  3, [(set (i64 GPR:$dst), (or (i64 GPR:$src0), (i64 GPR:$src1)))]>;
+def OPBITXORrr : RegInst<52, "OpBitXor", 3, [(set (i64 GPR:$dst), (xor (i64 GPR:$src0), (i64 GPR:$src1)))]>;
+def OPBITNORrr : RegInst<53, "OpBitNor", 3, [(set (i64 GPR:$dst), (not (or (i64 GPR:$src0), (i64 GPR:$src1))))]>;
 
-def INEGr : RegInst<56, "INeg", 2, [(set GPR:$dst, (ineg GPR:$src0))]>;
-def FNEGr : RegInst<57, "FNeg", 2, [(set GPR:$dst, (fneg (f32 GPR:$src0)))]>;
+def INEGr : RegInst<56, "INeg", 2, [(set (i64 GPR:$dst), (ineg (i64 GPR:$src0)))]>;
+def FNEGr : RegInst<57, "FNeg", 2, [(set (f32 GPR:$dst), (fneg (f32 GPR:$src0)))]>;
 
 def IADDIMMri : ArithmeticImmInst<59, "IAddImm", add>;
 def ISUBIMMri : ArithmeticImmInst<60, "ISubImm", sub>;
@@ -394,54 +416,59 @@ def STOREU32 : StoreInst<87, "StoreU32", truncstorei32>;
 def STOREU64 : StoreInst<89, "StoreU64", store>;
 def STOREFLOAT : FloatStoreInst<17, "StoreFloat">;
 
-def INErr : RegInst<90, "INotEqual", 3, [(set GPR:$dst, (setne (i64 GPR:$src0), (i64 GPR:$src1)))]>;
-def FNErr : RegInst<91, "FNotEqual", 3, [(set GPR:$dst, (setune (f32 GPR:$src0), (f32 GPR:$src1)))]>;
+def INErr : RegInst<90, "INotEqual", 3, [(set (i64 GPR:$dst), (setne (i64 GPR:$src0), (i64 GPR:$src1)))]>;
+def FNErr : RegInst<91, "FNotEqual", 3, [(set (i64 GPR:$dst), (setune (f32 GPR:$src0), (f32 GPR:$src1)))]>;
 
 // ordered float not-equal has the same vm instruction as the unordered form.
-def : Pat<(setone (f32 GPR:$src0), (f32 GPR:$src1)), (FNErr GPR:$src0, GPR:$src1)>;
+def : Pat<(i64 (setone (f32 GPR:$src0), (f32 GPR:$src1))), (i64 (FNErr GPR:$src0, GPR:$src1))>;
 
 def : Pat<(i64 (extloadi8  (i64 GPR:$addr))), (LOADU8  GPR:$addr)>;
 def : Pat<(i64 (extloadi16 (i64 GPR:$addr))), (LOADU16 GPR:$addr)>;
 def : Pat<(i64 (extloadi32 (i64 GPR:$addr))), (LOADU32 GPR:$addr)>;
-// optimized ir often narrows load users to i32
-// select the same load opcodes and copy into the 32-bit register class
-def : Pat<(i32 (zextloadi8  (i64 GPR:$addr))), (COPY_TO_REGCLASS (LOADU8  GPR:$addr), GPR32)>;
-def : Pat<(i32 (zextloadi16 (i64 GPR:$addr))), (COPY_TO_REGCLASS (LOADU16 GPR:$addr), GPR32)>;
+// optimized ir often narrows load users to i32; select the same VM load opcodes.
+def : Pat<(i32 (zextloadi8  (i64 GPR:$addr))), (i32 (LOADU8  GPR:$addr))>;
+def : Pat<(i32 (zextloadi16 (i64 GPR:$addr))), (i32 (LOADU16 GPR:$addr))>;
 // any-ext loads appear when optimized users only care about the low bits.
-def : Pat<(i32 (extloadi8  (i64 GPR:$addr))), (COPY_TO_REGCLASS (LOADU8  GPR:$addr), GPR32)>;
-def : Pat<(i32 (load (i64 GPR:$addr))), (COPY_TO_REGCLASS (LOADU32 GPR:$addr), GPR32)>;
-def : Pat<(i32 (sextloadi8  (i64 GPR:$addr))), (COPY_TO_REGCLASS (LOADI8  GPR:$addr), GPR32)>;
-def : Pat<(i32 (sextloadi16 (i64 GPR:$addr))), (COPY_TO_REGCLASS (LOADI16 GPR:$addr), GPR32)>;
-// legalization introduces register-class moves for 32-bit values.
-def : Pat<(i32 (trunc (i64 GPR:$src))), (COPY_TO_REGCLASS GPR:$src, GPR32)>;
-def : Pat<(i64 (zext (i32 GPR32:$src))), (COPY_TO_REGCLASS GPR32:$src, GPR)>;
+def : Pat<(i32 (extloadi8  (i64 GPR:$addr))), (i32 (LOADU8  GPR:$addr))>;
+def : Pat<(i32 (load (i64 GPR:$addr))), (i32 (LOADU32 GPR:$addr))>;
+def : Pat<(i32 (sextloadi8  (i64 GPR:$addr))), (i32 (LOADI8  GPR:$addr))>;
+def : Pat<(i32 (sextloadi16 (i64 GPR:$addr))), (i32 (LOADI16 GPR:$addr))>;
+// legalization introduces type-only moves for 32-bit values. registers are
+// uniform 64-bit, so these are pure register copies: select them as COPY so
+// the register coalescer can eliminate them instead of keeping a real MOVEr
+// (and its extra live interval) alive.
+def : Pat<(i32 (trunc (i64 GPR:$src))), (i32 (COPY_TO_REGCLASS GPR:$src, GPR))>;
+def : Pat<(i64 (zext (i32 GPR:$src))), (i64 (COPY_TO_REGCLASS GPR:$src, GPR))>;
 // anyext can appear when the high bits are unused after legalization.
-def : Pat<(i64 (anyext GPR32:$src)), (COPY_TO_REGCLASS GPR32:$src, GPR)>;
+def : Pat<(i64 (anyext (i32 GPR:$src))), (i64 (COPY_TO_REGCLASS GPR:$src, GPR))>;
 // optimized ir can keep narrow integer adds when only the low 32 bits are observed.
-def : Pat<(i32 (add GPR32:$src0, GPR32:$src1)), (COPY_TO_REGCLASS (IADDrr (COPY_TO_REGCLASS GPR32:$src0, GPR), (COPY_TO_REGCLASS GPR32:$src1, GPR)), GPR32)>;
+def : Pat<(i32 (add (i32 GPR:$src0), (i32 GPR:$src1))), (i32 (IADDrr GPR:$src0, GPR:$src1))>;
 // boolean combines can stay narrowed to i32 after optimization.
-def : Pat<(i32 (and GPR32:$src0, GPR32:$src1)), (COPY_TO_REGCLASS (OPBITANDrr (COPY_TO_REGCLASS GPR32:$src0, GPR), (COPY_TO_REGCLASS GPR32:$src1, GPR)), GPR32)>;
-def : Pat<(i32 (or GPR32:$src0, GPR32:$src1)), (COPY_TO_REGCLASS (OPBITORrr (COPY_TO_REGCLASS GPR32:$src0, GPR), (COPY_TO_REGCLASS GPR32:$src1, GPR)), GPR32)>;
-def : Pat<(i32 (xor GPR32:$src0, GPR32:$src1)), (COPY_TO_REGCLASS (OPBITXORrr (COPY_TO_REGCLASS GPR32:$src0, GPR), (COPY_TO_REGCLASS GPR32:$src1, GPR)), GPR32)>;
+def : Pat<(i32 (and (i32 GPR:$src0), (i32 GPR:$src1))), (i32 (OPBITANDrr GPR:$src0, GPR:$src1))>;
+def : Pat<(i32 (or (i32 GPR:$src0), (i32 GPR:$src1))), (i32 (OPBITORrr GPR:$src0, GPR:$src1))>;
+def : Pat<(i32 (xor (i32 GPR:$src0), (i32 GPR:$src1))), (i32 (OPBITXORrr GPR:$src0, GPR:$src1))>;
 // division by 10 can be strength-reduced into this magic multiply and shift.
 // fold it back to the vm divide opcode instead of selecting the expanded form.
 def : Pat<(i64 (add (sra (mulhs GPR:$src, div10magic), shift2imm), (srl (mulhs GPR:$src, div10magic), shift63imm))), (IDIVIMMri GPR:$src, 10)>;
 def : Pat<(i64 (sra (mulhs GPR:$src, div10magic), shift2imm)), (IDIVIMMri GPR:$src, 10)>;
+// unsigned division by five can be reduced into this magic multiply and shift.
+def : Pat<(i64 (srl (mulhu GPR:$src, udiv5magic), shift2imm)), (IDIVIMMri GPR:$src, 5)>;
 // signed division by two can be canonicalized with sign-bit bias before the shift.
 def : Pat<(i64 (sra (add GPR:$src, (srl GPR:$src, shift63imm)), shift1imm)), (IDIVIMMri GPR:$src, 2)>;
 // unsigned division by two can be canonicalized as a logical right shift.
 def : Pat<(i64 (srl GPR:$src, shift1imm)), (IDIVIMMri GPR:$src, 2)>;
 // llvm may canonicalize fneg as toggling the f32 sign bit.
 // select the vm fneg opcode so the bytecode matches the original float op.
-def : Pat<(i32 (xor GPR32:$src, -2147483648)), (COPY_TO_REGCLASS (FNEGr (COPY_TO_REGCLASS GPR32:$src, GPR)), GPR32)>;
+def : Pat<(i32 (xor (i32 GPR:$src), -2147483648)), (i32 (FNEGr GPR:$src))>;
 // f32 values sometimes move through i32 payloads after optimization.
-def : Pat<(i32 (bitconvert (f32 GPR:$src))), (COPY_TO_REGCLASS GPR:$src, GPR32)>;
-def : Pat<(f32 (bitconvert (i32 GPR32:$src))), (COPY_TO_REGCLASS GPR32:$src, GPR)>;
+def : Pat<(i32 (bitconvert (f32 GPR:$src))), (i32 (COPY_TO_REGCLASS GPR:$src, GPR))>;
+def : Pat<(f32 (bitconvert (i32 GPR:$src))), (f32 (COPY_TO_REGCLASS GPR:$src, GPR))>;
 // optimized ir can store narrowed integer values directly.
-def : Pat<(truncstorei8  (i32 GPR32:$value), (i64 GPR:$addr)), (STOREU8  GPR:$addr, (COPY_TO_REGCLASS GPR32:$value, GPR))>;
-def : Pat<(truncstorei16 (i32 GPR32:$value), (i64 GPR:$addr)), (STOREU16 GPR:$addr, (COPY_TO_REGCLASS GPR32:$value, GPR))>;
-def : Pat<(truncstorei32 (i32 GPR32:$value), (i64 GPR:$addr)), (STOREU32 GPR:$addr, (COPY_TO_REGCLASS GPR32:$value, GPR))>;
-def : Pat<(store (i32 GPR32:$value), (i64 GPR:$addr)), (STOREU32 GPR:$addr, (COPY_TO_REGCLASS GPR32:$value, GPR))>;
+def : Pat<(truncstorei8  (i32 GPR:$value), (i64 GPR:$addr)), (STOREU8  GPR:$addr, GPR:$value)>;
+def : Pat<(truncstorei16 (i32 GPR:$value), (i64 GPR:$addr)), (STOREU16 GPR:$addr, GPR:$value)>;
+def : Pat<(truncstorei32 (i32 GPR:$value), (i64 GPR:$addr)), (STOREU32 GPR:$addr, GPR:$value)>;
+def : Pat<(store (i32 GPR:$value), (i64 GPR:$addr)), (STOREU32 GPR:$addr, GPR:$value)>;
 
 def SELECT_I64 : SelectInst<i64>;
+def SELECT_I32 : SelectInst<i32>;
 def SELECT_F32 : SelectInst<f32>;

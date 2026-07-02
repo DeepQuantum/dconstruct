@@ -1,3 +1,4 @@
+
 #include "DCScript.h"
 #include "binaryfile.h"
 #include "compilation/compiler_funcs.h"
@@ -27,6 +28,14 @@
 #include <utility>
 #include <vector>
 
+#ifdef _WIN32
+#include <crtdbg.h>
+#include <cstdlib>
+extern "C" __declspec(dllimport) unsigned int __stdcall SetErrorMode(unsigned int uMode);
+static constexpr unsigned int SEM_FAILCRITICALERRORS = 0x0001;
+static constexpr unsigned int SEM_NOGPFAULTERRORBOX = 0x0002;
+#endif
+
 using namespace dconstruct;
 
 namespace {
@@ -39,13 +48,20 @@ namespace {
     const std::filesystem::path SOURCE_MODULES = GAME_DC1_DIR / "modules.bin";
     const std::filesystem::path STAGED_MODULES = RECOMPILED_DC1_DIR / "modules.bin";
 
-    const std::array RECOMPILE_INPUTS = {
-        //GAME_DC1_DIR / "nd-script-funcs.bin",
-        //GAME_DC1_DIR / "script-funcs.bin",
-        //GAME_DC1_DIR / "ss-rogue" / "ss-assault-manager.bin",
-        // GAME_DC1_DIR / "ss-rogue" / "wave-manager-funcs.bin",
+    const std::array DEFAULT_RECOMPILE_INPUTS = {
+        GAME_DC1_DIR / "nd-script-funcs.bin",
+        GAME_DC1_DIR / "script-funcs.bin",
+        GAME_DC1_DIR / "ss-rogue" / "ss-assault-manager.bin",
+        GAME_DC1_DIR / "ss-rogue" / "wave-manager-funcs.bin",
         GAME_DC1_DIR / "script-user-funcs-impl.bin"
     };
+
+    std::filesystem::path resolve_recompile_input(const std::filesystem::path& input) {
+        if (input.is_absolute()) {
+            return input;
+        }
+        return GAME_DC1_DIR / input;
+    }
 
     resstr<std::filesystem::path> staged_output_path(const std::filesystem::path& source_path) {
         std::filesystem::path relative = source_path.lexically_relative(GAME_DC1_DIR);
@@ -122,24 +138,43 @@ namespace {
 }
 
 int main(int argc, char* argv[]) {
+    _set_abort_behavior(0, _WRITE_ABORT_MSG | _CALL_REPORTFAULT);
+    SetErrorMode(SEM_NOGPFAULTERRORBOX | SEM_FAILCRITICALERRORS);
+    for (int kind : {_CRT_WARN, _CRT_ERROR, _CRT_ASSERT})
+    {
+        _CrtSetReportMode(kind, _CRTDBG_MODE_FILE | _CRTDBG_MODE_DEBUG);
+        _CrtSetReportFile(kind, _CRTDBG_FILE_STDERR);
+    }
+    constexpr std::string_view usage = "usage: llvm_transpile_demo [-p <generated-output-dir>] [input.bin ...]\n"
+                                       "  inputs are resolved relative to the game's dc1 directory unless absolute;\n"
+                                       "  omitting inputs recompiles the default module set";
     std::optional<std::filesystem::path> generated_output_dir;
+    std::vector<std::filesystem::path> recompile_inputs;
     for (int i = 1; i < argc; ++i) {
         const std::string_view arg = argv[i];
-        if (arg != "-p") {
+        if (arg == "-p") {
+            if (i + 1 >= argc) {
+                std::println(stderr, "-p requires a target directory");
+                std::println(stderr, "{}", usage);
+                return 1;
+            }
+            if (generated_output_dir.has_value()) {
+                std::println(stderr, "-p was specified more than once");
+                return 1;
+            }
+            generated_output_dir = std::filesystem::path(argv[++i]);
+            continue;
+        }
+        if (arg.starts_with("-")) {
             std::println(stderr, "unknown argument: {}", arg);
-            std::println(stderr, "usage: llvm_transpile_demo [-p <generated-output-dir>]");
+            std::println(stderr, "{}", usage);
             return 1;
         }
-        if (i + 1 >= argc) {
-            std::println(stderr, "-p requires a target directory");
-            std::println(stderr, "usage: llvm_transpile_demo [-p <generated-output-dir>]");
-            return 1;
-        }
-        if (generated_output_dir.has_value()) {
-            std::println(stderr, "-p was specified more than once");
-            return 1;
-        }
-        generated_output_dir = std::filesystem::path(argv[++i]);
+        recompile_inputs.push_back(resolve_recompile_input(std::filesystem::path(arg)));
+    }
+
+    if (recompile_inputs.empty()) {
+        recompile_inputs.assign(DEFAULT_RECOMPILE_INPUTS.begin(), DEFAULT_RECOMPILE_INPUTS.end());
     }
 
     auto sidbase_result = SIDBase::from_binary(SIDBASE_PATH);
@@ -159,12 +194,12 @@ int main(int argc, char* argv[]) {
     std::vector<std::unique_ptr<Disassembler>> disassemblers;
     std::vector<llvm_transpile::original_binfile> original_binfiles;
     std::vector<std::filesystem::path> staged_outputs;
-    binfiles.reserve(RECOMPILE_INPUTS.size());
-    disassemblers.reserve(RECOMPILE_INPUTS.size());
-    original_binfiles.reserve(RECOMPILE_INPUTS.size());
-    staged_outputs.reserve(RECOMPILE_INPUTS.size());
+    binfiles.reserve(recompile_inputs.size());
+    disassemblers.reserve(recompile_inputs.size());
+    original_binfiles.reserve(recompile_inputs.size());
+    staged_outputs.reserve(recompile_inputs.size());
 
-    for (const auto& path: RECOMPILE_INPUTS) {
+    for (const auto& path: recompile_inputs) {
         resstr<BinaryFile> binfile = BinaryFile::from_path(path);
         if (!binfile) {
             std::println(stderr, "failed to load binary file {}: {}", path.filename().string(), binfile.error());
@@ -197,8 +232,8 @@ int main(int argc, char* argv[]) {
                 return 1;
             }
         }
-        std::println("wrote generated outputs to {}", generated_output_dir->string());
     }
+
 
     if (errmsg error = llvm_transpile::llvm_transpiler::patch_original_binfiles(outputs, original_binfiles)) {
         std::println(stderr, "failed to patch original binfiles: {}", *error);

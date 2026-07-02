@@ -17,10 +17,11 @@ using namespace llvm;
 
 DCVMTargetLowering::DCVMTargetLowering(const TargetMachine& TM, const DCVMSubtarget& STI) : TargetLowering(TM, STI), Subtarget(&STI) {
     addRegisterClass(MVT::i64, &DCVM::GPRRegClass);
-    addRegisterClass(MVT::i32, &DCVM::GPR32RegClass);
+    addRegisterClass(MVT::i32, &DCVM::GPRRegClass);
     addRegisterClass(MVT::f32, &DCVM::GPRRegClass);
 
     setBooleanContents(ZeroOrOneBooleanContent);
+    setSchedulingPreference(Sched::RegPressure);
     setOperationAction(ISD::SETCC, MVT::i32, Custom);
     setOperationAction(ISD::SETCC, MVT::i64, Custom);
     setOperationAction(ISD::SETCC, MVT::f32, Legal);
@@ -93,13 +94,6 @@ SDValue DCVMTargetLowering::LowerOperation(SDValue Op, SelectionDAG& DAG) const 
 static SDValue lowerSelectValues(SelectionDAG& DAG, const SDLoc& DL, EVT VT, SDValue Cond, SDValue TrueV, SDValue FalseV) {
     if (Cond.getValueType() != MVT::i64) {
         Cond = DAG.getZExtOrTrunc(Cond, DL, MVT::i64);
-    }
-
-    if (VT == MVT::i32) {
-        SDValue True64 = DAG.getNode(ISD::ZERO_EXTEND, DL, MVT::i64, TrueV);
-        SDValue False64 = DAG.getNode(ISD::ZERO_EXTEND, DL, MVT::i64, FalseV);
-        SDValue Select64 = DAG.getNode(DCVMISD::SELECT, DL, MVT::i64, Cond, True64, False64);
-        return DAG.getNode(ISD::TRUNCATE, DL, MVT::i32, Select64);
     }
 
     return DAG.getNode(DCVMISD::SELECT, DL, VT, Cond, TrueV, FalseV);
@@ -188,6 +182,38 @@ MachineBasicBlock* DCVMTargetLowering::EmitInstrWithCustomInserter(MachineInstr&
     return SinkMBB;
 }
 
+static SDValue convertValVTToLocVT(SelectionDAG& DAG, const SDLoc& DL, const CCValAssign& VA, SDValue Value) {
+    switch (VA.getLocInfo()) {
+        case CCValAssign::Full:
+            return Value;
+        case CCValAssign::BCvt:
+            return DAG.getNode(ISD::BITCAST, DL, VA.getLocVT(), Value);
+        case CCValAssign::SExt:
+            return DAG.getNode(ISD::SIGN_EXTEND, DL, VA.getLocVT(), Value);
+        case CCValAssign::ZExt:
+            return DAG.getNode(ISD::ZERO_EXTEND, DL, VA.getLocVT(), Value);
+        case CCValAssign::AExt:
+            return DAG.getNode(ISD::ANY_EXTEND, DL, VA.getLocVT(), Value);
+        default:
+            llvm_unreachable("unhandled CCValAssign::LocInfo");
+    }
+}
+
+static SDValue convertLocVTToValVT(SelectionDAG& DAG, const SDLoc& DL, const CCValAssign& VA, SDValue Value) {
+    switch (VA.getLocInfo()) {
+        case CCValAssign::Full:
+            return Value;
+        case CCValAssign::BCvt:
+            return DAG.getNode(ISD::BITCAST, DL, VA.getValVT(), Value);
+        case CCValAssign::SExt:
+        case CCValAssign::ZExt:
+        case CCValAssign::AExt:
+            return DAG.getNode(ISD::TRUNCATE, DL, VA.getValVT(), Value);
+        default:
+            llvm_unreachable("unhandled CCValAssign::LocInfo");
+    }
+}
+
 SDValue DCVMTargetLowering::LowerFormalArguments(
     SDValue Chain, CallingConv::ID CallConv, bool IsVarArg, const SmallVectorImpl<ISD::InputArg>& Ins, const SDLoc& DL, SelectionDAG& DAG, SmallVectorImpl<SDValue>& InVals
 ) const {
@@ -200,7 +226,8 @@ SDValue DCVMTargetLowering::LowerFormalArguments(
     for (const CCValAssign& VA : ArgLocs) {
         assert(VA.isRegLoc() && "DCVM only supports register arguments");
         const Register VReg = MF.addLiveIn(VA.getLocReg(), &DCVM::GPRRegClass);
-        InVals.push_back(DAG.getCopyFromReg(Chain, DL, VReg, VA.getLocVT()));
+        const SDValue Value = DAG.getCopyFromReg(Chain, DL, VReg, VA.getLocVT());
+        InVals.push_back(convertLocVTToValVT(DAG, DL, VA, Value));
     }
 
     return Chain;
@@ -221,7 +248,7 @@ SDValue DCVMTargetLowering::LowerReturn(
     for (unsigned i = 0; i < RVLocs.size(); ++i) {
         const CCValAssign& VA = RVLocs[i];
         assert(VA.isRegLoc() && "DCVM only supports register returns");
-        Chain = DAG.getCopyToReg(Chain, DL, VA.getLocReg(), OutVals[i], Glue);
+        Chain = DAG.getCopyToReg(Chain, DL, VA.getLocReg(), convertValVTToLocVT(DAG, DL, VA, OutVals[i]), Glue);
         Glue = Chain.getValue(1);
         RetOps.push_back(DAG.getRegister(VA.getLocReg(), VA.getLocVT()));
     }
@@ -258,7 +285,7 @@ SDValue DCVMTargetLowering::LowerCall(CallLoweringInfo& CLI, SmallVectorImpl<SDV
     for (unsigned i = 0; i < ArgLocs.size(); ++i) {
         const CCValAssign& VA = ArgLocs[i];
         assert(VA.isRegLoc() && "DCVM only supports register arguments");
-        RegsToPass.emplace_back(VA.getLocReg(), CLI.OutVals[i]);
+        RegsToPass.emplace_back(VA.getLocReg(), convertValVTToLocVT(DAG, DL, VA, CLI.OutVals[i]));
     }
 
     SDValue Glue;
@@ -273,6 +300,12 @@ SDValue DCVMTargetLowering::LowerCall(CallLoweringInfo& CLI, SmallVectorImpl<SDV
     Ops.push_back(DAG.getTargetConstant(RegsToPass.size(), DL, MVT::i64));
     for (const auto& Reg : RegsToPass)
         Ops.push_back(DAG.getRegister(Reg.first, Reg.second.getValueType()));
+
+    const TargetRegisterInfo* TRI = Subtarget->getRegisterInfo();
+    const uint32_t* Mask = TRI->getCallPreservedMask(MF, CLI.CallConv);
+    assert(Mask && "missing call preserved mask");
+    Ops.push_back(DAG.getRegisterMask(Mask));
+
     if (Glue.getNode())
         Ops.push_back(Glue);
 
@@ -289,7 +322,7 @@ SDValue DCVMTargetLowering::LowerCall(CallLoweringInfo& CLI, SmallVectorImpl<SDV
         const SDValue Value = DAG.getCopyFromReg(Chain, DL, VA.getLocReg(), VA.getLocVT(), Glue);
         Chain = Value.getValue(1);
         Glue = Value.getValue(2);
-        InVals.push_back(Value);
+        InVals.push_back(convertLocVTToValVT(DAG, DL, VA, Value));
     }
 
     return Chain;

@@ -1,2 +1,4 @@
 defvar MAX_REGISTER = 100;
+defvar GP_REGISTER_END = 48;
 defvar ARG_REGISTER_START = 49;
+defvar ARG_REGISTER_END = 65;

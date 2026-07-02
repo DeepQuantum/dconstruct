@@ -13,7 +13,8 @@ namespace llvm {
 
         std::vector<uint64_t> Symbols;
         std::vector<std::byte> PointerMap;
-        std::unordered_map<uint64_t, unsigned> SymbolIndex;
+        std::unordered_map<uint64_t, unsigned> ValueIndex;
+        std::unordered_map<uint64_t, unsigned> PointerIndex;
 
     public:
         DCVMMachineFunctionInfo() = default;

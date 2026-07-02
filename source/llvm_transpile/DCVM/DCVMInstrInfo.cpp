@@ -1,8 +1,12 @@
 #include "DCVMInstrInfo.h"
 #include "DCVMSubtarget.h"
 #include "MCTargetDesc/DCVMMCTargetDesc.h"
+#include "llvm/CodeGen/MachineFunction.h"
 #include "llvm/CodeGen/MachineInstrBuilder.h"
+#include "llvm/CodeGen/MachineRegisterInfo.h"
 #include "llvm/Support/ErrorHandling.h"
+#include "llvm/Support/Signals.h"
+#include "llvm/Support/raw_ostream.h"
 
 #define GET_INSTRINFO_CTOR_DTOR
 #include "DCVMGenInstrInfo.inc"
@@ -14,6 +18,12 @@ namespace llvm {
         MachineBasicBlock& MBB, MachineBasicBlock::iterator MI, const DebugLoc& DL, Register DestReg, Register SrcReg, bool KillSrc, bool RenamableDest, bool RenamableSrc
     ) const {
         BuildMI(MBB, MI, DL, get(DCVM::MOVEr), DestReg).addReg(SrcReg, getKillRegState(KillSrc));
+    }
+
+    std::optional<DestSourcePair> DCVMInstrInfo::isCopyInstrImpl(const MachineInstr& MI) const {
+        if (MI.getOpcode() == DCVM::MOVEr)
+            return DestSourcePair{MI.getOperand(0), MI.getOperand(1)};
+        return std::nullopt;
     }
 
     static bool isCondBranch(unsigned Opcode) {
@@ -103,6 +113,56 @@ namespace llvm {
         Register VReg,
         MachineInstr::MIFlag Flags
     ) const {
+        MachineFunction* MF = MBB.getParent();
+        MachineRegisterInfo& MRI = MF->getRegInfo();
+
+        errs() << "\n=== DCVM spill trace ===\n";
+        errs() << "function: " << MF->getName() << "\n";
+        errs() << "frame index: " << FrameIndex << "\n";
+        errs() << "source register: " << SrcReg << " id=" << SrcReg.id() << "\n";
+        errs() << "virtual register argument: " << VReg << " id=" << VReg.id() << "\n";
+        errs() << "isKill: " << isKill << ", flags: " << Flags << "\n";
+        if (RC != nullptr) {
+            errs() << "register class: " << TRI.getRegClassName(RC) << "\n";
+        }
+
+        errs() << "\nspill insertion point:\n";
+        if (MI == MBB.end()) {
+            errs() << "  <end of basic block>\n";
+        } else {
+            MI->print(errs());
+        }
+
+        if (SrcReg.isVirtual()) {
+            if (MachineInstr* DefMI = MRI.getVRegDef(SrcReg)) {
+                errs() << "\nsource register def:\n";
+                DefMI->print(errs());
+            } else {
+                errs() << "\nsource register def: <none>\n";
+            }
+
+            errs() << "\nsource register operands:\n";
+            for (MachineOperand& MO : MRI.reg_nodbg_operands(SrcReg)) {
+                errs() << "  " << (MO.isDef() ? "def" : "use") << ": ";
+                MO.getParent()->print(errs());
+            }
+        }
+
+        if (VReg.isVirtual() && VReg != SrcReg) {
+            if (MachineInstr* DefMI = MRI.getVRegDef(VReg)) {
+                errs() << "\nvirtual register argument def:\n";
+                DefMI->print(errs());
+            } else {
+                errs() << "\nvirtual register argument def: <none>\n";
+            }
+        }
+
+        errs() << "\ncurrent machine basic block:\n";
+        MBB.print(errs());
+        errs() << "\nstack trace:\n";
+        sys::PrintStackTrace(errs());
+        errs() << "=== end DCVM spill trace ===\n\n";
+
         report_fatal_error(
             "DCVM register spill requested in " + MBB.getParent()->getName() +
             ", frame index " + Twine(FrameIndex) +
@@ -121,6 +181,38 @@ namespace llvm {
         unsigned SubReg,
         MachineInstr::MIFlag Flags
     ) const {
+        MachineFunction* MF = MBB.getParent();
+        MachineRegisterInfo& MRI = MF->getRegInfo();
+
+        errs() << "\n=== DCVM reload trace ===\n";
+        errs() << "function: " << MF->getName() << "\n";
+        errs() << "frame index: " << FrameIndex << "\n";
+        errs() << "destination register: " << DestReg << " id=" << DestReg.id() << "\n";
+        errs() << "virtual register argument: " << VReg << " id=" << VReg.id() << "\n";
+        errs() << "subreg: " << SubReg << ", flags: " << Flags << "\n";
+        if (RC != nullptr) {
+            errs() << "register class: " << TRI.getRegClassName(RC) << "\n";
+        }
+
+        errs() << "\nreload insertion point:\n";
+        if (MI == MBB.end()) {
+            errs() << "  <end of basic block>\n";
+        } else {
+            MI->print(errs());
+        }
+
+        if (DestReg.isVirtual()) {
+            errs() << "\ndestination register operands:\n";
+            for (MachineOperand& MO : MRI.reg_nodbg_operands(DestReg)) {
+                errs() << "  " << (MO.isDef() ? "def" : "use") << ": ";
+                MO.getParent()->print(errs());
+            }
+        }
+
+        errs() << "\ncurrent machine basic block:\n";
+        MBB.print(errs());
+        errs() << "=== end DCVM reload trace ===\n\n";
+
         report_fatal_error(
             "DCVM register reload requested in " + MBB.getParent()->getName() +
             ", frame index " + Twine(FrameIndex) +

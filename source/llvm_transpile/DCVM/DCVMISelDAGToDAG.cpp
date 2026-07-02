@@ -55,16 +55,13 @@ void DCVMDAGToDAGISel::Select(SDNode* N) {
         case ISD::Constant: {
             const uint64_t Value = cast<ConstantSDNode>(N)->getZExtValue();
             if (N->getValueType(0) == MVT::i32) {
-                SDNode* Wide = nullptr;
                 if (isUInt<16>(Value)) {
                     const SDValue Imm = CurDAG->getTargetConstant(Value, DL, MVT::i64);
-                    Wide = CurDAG->getMachineNode(DCVM::LOADU16IMMri, DL, MVT::i64, Imm);
+                    ReplaceNode(N, CurDAG->getMachineNode(DCVM::LOADU16IMMri, DL, MVT::i32, Imm));
                 } else {
                     const SDValue Idx = CurDAG->getTargetConstant(MFI->internSymbol(Value), DL, MVT::i64);
-                    Wide = CurDAG->getMachineNode(DCVM::LOADSTATICU64IMMri, DL, MVT::i64, Idx);
+                    ReplaceNode(N, CurDAG->getMachineNode(DCVM::LOADSTATICU64IMMri, DL, MVT::i32, Idx));
                 }
-                const SDValue RC = CurDAG->getTargetConstant(DCVM::GPR32RegClassID, DL, MVT::i64);
-                ReplaceNode(N, CurDAG->getMachineNode(TargetOpcode::COPY_TO_REGCLASS, DL, MVT::i32, SDValue(Wide, 0), RC));
                 return;
             }
             if (isUInt<16>(Value))
@@ -118,17 +115,18 @@ void DCVMDAGToDAGISel::Select(SDNode* N) {
         }
         case ISD::SHL: {
             const ConstantSDNode* ShAmt = dyn_cast<ConstantSDNode>(N->getOperand(1));
-            if (!ShAmt)
+            if (!ShAmt || ShAmt->getZExtValue() > 63)
                 break;
+            const MVT VT = N->getSimpleValueType(0);
             const uint64_t Factor = 1ULL << ShAmt->getZExtValue();
             if (isUInt<8>(Factor)) {
                 const SDValue Imm = CurDAG->getTargetConstant(Factor, DL, MVT::i64);
-                ReplaceNode(N, CurDAG->getMachineNode(DCVM::IMULIMMri, DL, MVT::i64, N->getOperand(0), Imm));
+                ReplaceNode(N, CurDAG->getMachineNode(DCVM::IMULIMMri, DL, VT, N->getOperand(0), Imm));
                 return;
             }
             const SDValue Idx = CurDAG->getTargetConstant(MFI->internSymbol(Factor), DL, MVT::i64);
             SDNode* FactorReg = CurDAG->getMachineNode(DCVM::LOADSTATICU64IMMri, DL, MVT::i64, Idx);
-            ReplaceNode(N, CurDAG->getMachineNode(DCVM::IMULrr, DL, MVT::i64, N->getOperand(0), SDValue(FactorReg, 0)));
+            ReplaceNode(N, CurDAG->getMachineNode(DCVM::IMULrr, DL, VT, N->getOperand(0), SDValue(FactorReg, 0)));
             return;
         }
         case ISD::SUB: {
@@ -166,19 +164,15 @@ void DCVMDAGToDAGISel::Select(SDNode* N) {
             // llvm expands urem by constants into mulhi/shift/sub during legalization.
             // fold that expansion back to the vm modulo opcode.
             const uint64_t DivisorValue = Divisor->getZExtValue();
-            const SDValue GPR = CurDAG->getTargetConstant(DCVM::GPRRegClassID, DL, MVT::i64);
-            const SDValue GPR32 = CurDAG->getTargetConstant(DCVM::GPR32RegClassID, DL, MVT::i64);
-            SDNode* Dividend64 = CurDAG->getMachineNode(TargetOpcode::COPY_TO_REGCLASS, DL, MVT::i64, LHS, GPR);
             SDNode* Divisor64 = nullptr;
             if (isUInt<16>(DivisorValue)) {
                 const SDValue Imm = CurDAG->getTargetConstant(DivisorValue, DL, MVT::i64);
-                Divisor64 = CurDAG->getMachineNode(DCVM::LOADU16IMMri, DL, MVT::i64, Imm);
+                Divisor64 = CurDAG->getMachineNode(DCVM::LOADU16IMMri, DL, MVT::i32, Imm);
             } else {
                 const SDValue Idx = CurDAG->getTargetConstant(MFI->internSymbol(DivisorValue), DL, MVT::i64);
-                Divisor64 = CurDAG->getMachineNode(DCVM::LOADSTATICU64IMMri, DL, MVT::i64, Idx);
+                Divisor64 = CurDAG->getMachineNode(DCVM::LOADSTATICU64IMMri, DL, MVT::i32, Idx);
             }
-            SDNode* Mod = CurDAG->getMachineNode(DCVM::IMODrr, DL, MVT::i64, SDValue(Dividend64, 0), SDValue(Divisor64, 0));
-            ReplaceNode(N, CurDAG->getMachineNode(TargetOpcode::COPY_TO_REGCLASS, DL, MVT::i32, SDValue(Mod, 0), GPR32));
+            ReplaceNode(N, CurDAG->getMachineNode(DCVM::IMODrr, DL, MVT::i32, LHS, SDValue(Divisor64, 0)));
             return;
         }
     }

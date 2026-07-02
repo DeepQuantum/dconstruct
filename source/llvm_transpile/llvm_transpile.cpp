@@ -33,8 +33,12 @@
 #include "llvm/Passes/PassBuilder.h"
 #include "llvm/Support/Alignment.h"
 #include "llvm/Support/Casting.h"
+#include "llvm/Support/CommandLine.h"
+#include "llvm/Support/ModRef.h"
 #include "llvm/Support/raw_ostream.h"
 #include "llvm/Target/TargetMachine.h"
+#include "llvm/Transforms/Scalar/GVN.h"
+#include "llvm/Transforms/Scalar/SimplifyCFG.h"
 #include "llvm/Transforms/Utils/Cloning.h"
 #include "llvm/Transforms/Utils/ModuleUtils.h"
 #include "llvm/TargetParser/Host.h"
@@ -56,6 +60,7 @@
 #include <variant>
 #include <vector>
 #include <format>
+#include <print>
 
 
 using namespace std::literals;
@@ -956,18 +961,14 @@ namespace dconstruct::llvm_transpile {
                     break;
                 }
                 case LoadStaticPointerImm: {
+                    // temporary until i implment cross-module string insertion.
+                    function.m_llvmFunc->setMetadata("NonInlineableAcrossModules", llvm::MDNode::get(m_ctx, {}));
                     const ast::full_type& type = m_disasm->m_stackFrame.m_symbolTable.m_types[istr.operand1];
-                    if (const ast::primitive_type* string_value = std::get_if<ast::primitive_type>(&type)) {
-                        assert(string_value->m_type == ast::primitive_kind::STRING);
-                        assert(unit.m_binaryFile);
-                        const p64 mapped_string_offset = function.m_symbolTable->get<p64>(istr.operand1 * sizeof(u64));
-                        const p64 binary_file_byte_start = p64(unit.m_binaryFile->m_bytes.get());
-                        const p64 string_file_offset = mapped_string_offset - binary_file_byte_start;
-                        llvm::Value* string_pointer = m_builder.CreateIntrinsic(llvm::Intrinsic::dcvm_static_pointer, {m_builder.getInt64(string_file_offset)});
-                        make_store(function, istr.destination, string_pointer, m_defaultPointerT);
-                    } else {
-                        make_symbol_table_load<const void*>(function, istr, istr_id);
-                    }
+                    const p64 mapped_string_offset = function.m_symbolTable->get<p64>(istr.operand1 * sizeof(u64));
+                    const p64 binary_file_byte_start = p64(unit.m_binaryFile->m_bytes.get());
+                    const p64 string_file_offset = mapped_string_offset - binary_file_byte_start;
+                    llvm::Value* string_pointer = m_builder.CreateIntrinsic(llvm::Intrinsic::dcvm_static_pointer, {m_builder.getInt64(string_file_offset)});
+                    make_store(function, istr.destination, string_pointer, m_defaultPointerT);
                     break;
                 }
                 case Move: {
@@ -1082,7 +1083,34 @@ namespace dconstruct::llvm_transpile {
         std::vector<generated_outputs> outputs;
         outputs.reserve(m_translationUnits.size());
 
+        prepare_functions();
+        link_module_optimization();
+
         for (translation_unit& unit : m_translationUnits) {
+            llvm::Module& module = unit.module();
+            generated_outputs unit_outputs;
+            unit_outputs.m_moduleName = module.getName().str();
+            unit_outputs.m_llvmUnopt = emit_llvm_ir(module);
+
+            std::println("running first pass optimization for module {}", module.getName().str());
+            optimize_module(module);
+            lower_calls_to_lookup(module);
+            std::println("running second pass optimization for module {}", module.getName().str());
+            optimize_module(module, true);
+            annotate_lookup_call_distances(module);
+
+            unit_outputs.m_llvmOpt = emit_llvm_ir(module);
+            unit_outputs.m_dcvmAsm = emit_dcvm_asm(module);
+            unit_outputs.m_dcvmBytecode = emit_dcvm_bytecode(module);
+            outputs.push_back(std::move(unit_outputs));
+        }
+
+        return outputs;
+    }
+
+    void llvm_transpiler::prepare_functions() {
+        for (translation_unit& unit : m_translationUnits) {
+            std::println("preparing {} functions inside module {}", unit.m_preparedFunctions.size(), unit.m_module->getName().str());
             for (prepared_function_ctx& function : unit.m_preparedFunctions) {
                 prepare_function(unit, function);
             }
@@ -1095,8 +1123,11 @@ namespace dconstruct::llvm_transpile {
                 }
             }
         }
+    }
 
+    void llvm_transpiler::link_module_optimization() {
         for (translation_unit& unit : m_translationUnits) {
+            std::println("linking module {}", unit.m_module->getName().str());
             for (const auto& global_name : unit.m_calledGlobals) {
                 llvm::Function* existing = unit.module().getFunction(global_name);
 
@@ -1108,64 +1139,46 @@ namespace dconstruct::llvm_transpile {
                 if (it == m_funcLocations.end()) {
                     continue;
                 }
-                const llvm::Function* global_function = it->second;
+                const llvm::Function* runtime_function = it->second;
 
-                assert(!global_function->isDeclaration());
-                assert(global_function->getParent() != &unit.module());
-
-                llvm::Function* dst_func = unit.module().getFunction(global_name);
-                assert(dst_func);
-                dst_func->copyAttributesFrom(global_function);
-                dst_func->setCallingConv(global_function->getCallingConv());
-                dst_func->setLinkage(llvm::GlobalValue::AvailableExternallyLinkage);
-
-                llvm::ValueToValueMapTy vmap;
-                vmap[global_function] = dst_func;
-                map_referenced_globals_for_clone(unit.module(), *global_function, vmap);
-
-                auto dst_arg = dst_func->arg_begin();
-                for (const llvm::Argument& src_arg : global_function->args()) {
-                    assert(dst_arg != dst_func->arg_end());
-                    dst_arg->setName(src_arg.getName());
-                    vmap[&src_arg] = &*dst_arg;
-                    ++dst_arg;
+                assert(runtime_function->getParent() != &unit.module());
+                if (runtime_function->isDeclaration() || runtime_function->hasMetadata("NonInlineableAcrossModules")) {
+                    existing->setAttributes(runtime_function->getAttributes());
                 }
+                else {
+                    llvm::Function* dst_func = unit.module().getFunction(global_name);
+                    assert(dst_func);
+                    dst_func->copyAttributesFrom(runtime_function);
+                    dst_func->setCallingConv(runtime_function->getCallingConv());
+                    dst_func->setLinkage(llvm::GlobalValue::AvailableExternallyLinkage);
 
-                llvm::SmallVector<llvm::ReturnInst*, 8> returns;
+                    llvm::ValueToValueMapTy vmap;
+                    vmap[runtime_function] = dst_func;
+                    map_referenced_globals_for_clone(unit.module(), *runtime_function, vmap);
 
-                llvm::CloneFunctionInto(
-                    dst_func,
-                    global_function,
-                    vmap,
-                    llvm::CloneFunctionChangeType::DifferentModule,
-                    returns
-                );
+                    auto dst_arg = dst_func->arg_begin();
+                    for (const llvm::Argument& src_arg : runtime_function->args()) {
+                        assert(dst_arg != dst_func->arg_end());
+                        dst_arg->setName(src_arg.getName());
+                        vmap[&src_arg] = &*dst_arg;
+                        ++dst_arg;
+                    }
 
-                assert(!llvm::verifyFunction(*dst_func, &llvm::errs()));
+                    llvm::SmallVector<llvm::ReturnInst*, 8> returns;
+
+                    llvm::CloneFunctionInto(
+                        dst_func,
+                        runtime_function,
+                        vmap,
+                        llvm::CloneFunctionChangeType::DifferentModule,
+                        returns
+                    );
+                    assert(!llvm::verifyFunction(*dst_func, &llvm::errs()));
+                }
             }
-
-            outputs.push_back(generate_outputs(unit));
         }
-
-        return outputs;
     }
 
-    generated_outputs llvm_transpiler::generate_outputs(translation_unit& unit) {
-        llvm::Module& module = unit.module();
-        generated_outputs outputs;
-        outputs.m_moduleName = module.getName().str();
-        outputs.m_llvmUnopt = emit_llvm_ir(module);
-
-        optimize_module(module);
-        lower_calls_to_lookup(module);
-        optimize_module(module);
-        annotate_lookup_call_distances(module);
-
-        outputs.m_llvmOpt = emit_llvm_ir(module);
-        outputs.m_dcvmAsm = emit_dcvm_asm(module);
-        outputs.m_dcvmBytecode = emit_dcvm_bytecode(module);
-        return outputs;
-    }
 
     static std::string safe_output_name(std::string name) {
         if (name.empty()) {
@@ -1442,6 +1455,13 @@ namespace dconstruct::llvm_transpile {
             LLVMInitializeDCVMTarget();
             LLVMInitializeDCVMTargetMC();
             LLVMInitializeDCVMAsmPrinter();
+
+            // the greedy allocator's last-chance recoloring gives up at fixed
+            // depth/interference cutoffs and aborts compilation. on a target
+            // that cannot spill, recoloring is the last resort before failure,
+            // so let it search exhaustively instead of stopping at heuristics.
+            const char* args[] = {"llvm_transpile", "-exhaustive-register-search"};
+            llvm::cl::ParseCommandLineOptions(2, args, "", nullptr, nullptr);
             return true;
         }();
         (void)initialized;
@@ -1466,13 +1486,14 @@ namespace dconstruct::llvm_transpile {
     }
 
     [[nodiscard]] std::string emit_llvm_ir(const llvm::Module& module) {
+        std::println("emitting llvm ir for module {}", module.getName().str());
         std::string ir;
         llvm::raw_string_ostream os(ir);
         module.print(os, nullptr);
         return ir;
     }
 
-    void optimize_module(llvm::Module& module) {
+    void optimize_module(llvm::Module& module, bool hoist_redundant_calls) {
         std::string error;
         std::unique_ptr<llvm::TargetMachine> machine = create_c_target_machine(error);
         if (machine) {
@@ -1493,6 +1514,17 @@ namespace dconstruct::llvm_transpile {
         PB.crossRegisterProxies(LAM, FAM, CGAM, MAM);
 
         llvm::ModulePassManager MPM = PB.buildPerModuleDefaultPipeline(llvm::OptimizationLevel::O3);
+        if (hoist_redundant_calls) {
+            // O3 only removes dominated duplicates of readnone calls (EarlyCSE/GVN).
+            // dcvm.lookup duplicates that sit in sibling branches are partial
+            // redundancies, which no default pass merges for calls. GVNHoist moves
+            // identical computations to the nearest common dominator, so lookups
+            // combine without extending their live range to the function entry.
+            llvm::FunctionPassManager FPM;
+            FPM.addPass(llvm::GVNHoistPass());
+            FPM.addPass(llvm::SimplifyCFGPass());
+            MPM.addPass(llvm::createModuleToFunctionPassAdaptor(std::move(FPM)));
+        }
         MPM.run(module, MAM);
     }
 
@@ -1540,6 +1572,7 @@ namespace dconstruct::llvm_transpile {
     void llvm_transpiler::lower_calls_to_lookup(llvm::Module& module) {
         llvm::IRBuilder<> builder(module.getContext());
 
+        std::println("lowering calls to lookup for module {}", module.getName().str());
         std::vector<llvm::CallInst*> direct_calls;
         for (llvm::Function& func : module) {
             for (llvm::BasicBlock& block : func) {
@@ -1569,9 +1602,70 @@ namespace dconstruct::llvm_transpile {
         }
     }
 
+    void llvm_transpiler::canonicalize_lookup_calls(llvm::Module& module) {
+        llvm::IRBuilder<> builder(module.getContext());
+        u64 functions_changed = 0;
+        u64 lookups_removed = 0;
+
+        for (llvm::Function& func : module) {
+            if (func.isDeclaration() || func.empty()) {
+                continue;
+            }
+
+            std::unordered_map<sid64, std::vector<llvm::CallInst*>> lookups_by_sid;
+            for (llvm::BasicBlock& block : func) {
+                for (llvm::Instruction& inst : block) {
+                    llvm::CallInst* lookup = llvm::dyn_cast<llvm::CallInst>(&inst);
+                    if (lookup == nullptr || lookup->getIntrinsicID() != llvm::Intrinsic::dcvm_lookup) {
+                        continue;
+                    }
+
+                    llvm::ConstantInt* sid = llvm::dyn_cast<llvm::ConstantInt>(lookup->getArgOperand(0));
+                    if (sid == nullptr) {
+                        continue;
+                    }
+
+                    lookups_by_sid[sid->getSExtValue()].push_back(lookup);
+                }
+            }
+
+            bool changed_func = false;
+            llvm::BasicBlock& entry = func.getEntryBlock();
+            auto insert_pos = entry.getFirstInsertionPt();
+            for (auto& [sid, lookups] : lookups_by_sid) {
+                if (lookups.size() < 2) {
+                    continue;
+                }
+
+                builder.SetInsertPoint(&entry, insert_pos);
+                llvm::CallInst* canonical = builder.CreateIntrinsic(llvm::Intrinsic::dcvm_lookup, {builder.getInt64(static_cast<u64>(sid))});
+                canonical->setName(std::format("__LookupPointer_{}_canonical", sid));
+
+                for (llvm::CallInst* lookup : lookups) {
+                    lookup->replaceAllUsesWith(canonical);
+                }
+                for (llvm::CallInst* lookup : lookups) {
+                    lookup->eraseFromParent();
+                }
+
+                changed_func = true;
+                lookups_removed += static_cast<u64>(lookups.size() - 1);
+            }
+
+            if (changed_func) {
+                ++functions_changed;
+            }
+        }
+
+        if (functions_changed != 0) {
+            std::println("canonicalized lookup calls in {} functions, removed {} duplicate lookups", functions_changed, lookups_removed);
+        }
+    }
+
     void llvm_transpiler::annotate_lookup_call_distances(llvm::Module& module) {
         llvm::LLVMContext& ctx = module.getContext();
 
+        std::println("adding lookup distances to functions inside module {}", module.getName().str());
         for (llvm::Function& func : module) {
             for (llvm::BasicBlock& block : func) {
                 for (llvm::Instruction& inst : block) {
@@ -1626,6 +1720,7 @@ namespace dconstruct::llvm_transpile {
     }
 
     [[nodiscard]] std::string emit_dcvm_asm(const llvm::Module& module) {
+        std::println("emitting dcvm asm for module {}", module.getName().str());
         std::string error;
         std::unique_ptr<llvm::TargetMachine> machine = create_dcvm_target_machine(error);
         if (machine == nullptr) {
@@ -1652,6 +1747,7 @@ namespace dconstruct::llvm_transpile {
     }
 
     [[nodiscard]] std::vector<char> emit_dcvm_bytecode(const llvm::Module& module) {
+        std::println("emitting dcvm byte code for module {}", module.getName().str());
         std::string error;
         std::unique_ptr<llvm::TargetMachine> machine = create_dcvm_target_machine(error);
         if (machine == nullptr) {
@@ -1696,17 +1792,22 @@ namespace dconstruct::llvm_transpile {
             m_funcLocations[name.data()] = func;
         };
 
-        // auto add_runtime_function_declaration = [&] (std::string_view name, u64 num_args, std::initializer_list<llvm::Attribute> attrs) {
-        //    std::vector<llvm::Type*> arg_types(num_args, m_defaultIntT);
-        //    llvm::FunctionType* func_t = llvm::FunctionType::get(m_defaultIntT, arg_types, false);
-
-        // };
+        auto add_runtime_function_declaration = [&] (std::string_view name, u64 num_args, std::initializer_list<llvm::Attribute::AttrKind> attrs) {
+           std::vector<llvm::Type*> arg_types(num_args, m_defaultIntT);
+           llvm::FunctionType* func_t = llvm::FunctionType::get(m_defaultIntT, arg_types, false);
+           llvm::Function* func = llvm::Function::Create(func_t, llvm::GlobalValue::LinkageTypes::ExternalLinkage, 0, name, module.get());
+           for (const auto& attr : attrs) {
+               func->addFnAttr(attr);
+           }
+           func->setMemoryEffects(llvm::MemoryEffects::none());
+           m_funcLocations[name.data()] = func;
+        };
 
 
         constexpr bool is_final_build_val = true;
         add_runtime_function_overwrite("is-final-build?", 0, is_final_build_val);
 
-        add_runtime_function_overwrite("dc-assert-enabled?", false);
+        add_runtime_function_overwrite("dc-assert-enabled?", 0, false);
 
         add_runtime_function_overwrite("debug-draw-line", 10);
         add_runtime_function_overwrite("debug-draw-locator", 6);
@@ -1714,10 +1815,18 @@ namespace dconstruct::llvm_transpile {
         add_runtime_function_overwrite("debug-draw-string", 8);
         add_runtime_function_overwrite("debug-draw-string-2d", 9);
         add_runtime_function_overwrite("debug-draw-sphere", 6);
-        add_runtime_function_overwrite("debug-joypad-command-active?", 2);
         add_runtime_function_overwrite("debug-draw-cross", 7);
         add_runtime_function_overwrite("debug-draw-box-2d", 8);
-        add_runtime_function_overwrite("debug-draw-ngon-2d", 10);
+
+
+        const std::initializer_list optmized_attrs = {
+            llvm::Attribute::Speculatable,
+            llvm::Attribute::NoUnwind,
+            llvm::Attribute::WillReturn,
+            llvm::Attribute::NoFree,
+        };
+
+        //add_runtime_function_declaration("vector-dot", 2, optmized_attrs);
 
 
         assert(!llvm::verifyModule(*module, &llvm::errs()));

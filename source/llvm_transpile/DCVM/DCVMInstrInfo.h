@@ -30,6 +30,10 @@ namespace llvm {
 
         bool reverseBranchCondition(SmallVectorImpl<MachineOperand>& Cond) const override;
 
+        bool targetCannotSpillToStack() const override { return true; }
+
+        std::optional<DestSourcePair> isCopyInstrImpl(const MachineInstr& MI) const override;
+
         void storeRegToStackSlot(
             MachineBasicBlock& MBB,
             MachineBasicBlock::iterator MI,
