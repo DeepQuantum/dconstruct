@@ -55,6 +55,10 @@ MachineFunctionInfo* DCVMTargetMachine::createMachineFunctionInfo(BumpPtrAllocat
     return DCVMMachineFunctionInfo::create<DCVMMachineFunctionInfo>(Allocator, F, STI);
 }
 
+extern "C" void DCVMSetBytecodeSink(TargetMachine* Machine, std::vector<char>* Sink) {
+    static_cast<DCVMTargetMachine*>(Machine)->BytecodeSink = Sink;
+}
+
 static void lowerSwitchToEqualityChain(SwitchInst* SI) {
     BasicBlock* OrigBB = SI->getParent();
     Function* F = OrigBB->getParent();

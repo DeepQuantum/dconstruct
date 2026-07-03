@@ -8,6 +8,8 @@
 
 #include "DCVMSubtarget.h"
 
+#include <vector>
+
 namespace llvm {
 
 class Function;
@@ -44,5 +46,7 @@ public:
     TargetLoweringObjectFile *getObjFileLowering() const override {
         return TLOF.get();
     }
+
+    std::vector<char> *BytecodeSink = nullptr;
 };
 } // namespace llvm

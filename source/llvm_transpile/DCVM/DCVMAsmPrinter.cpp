@@ -2,6 +2,7 @@
 #include "DCVM.h"
 #include "DCVMMCInstLower.h"
 #include "DCVMMachineFunctionInfo.h"
+#include "DCVMTargetMachine.h"
 #include "MCTargetDesc/DCVMInstPrinter.h"
 #include "MCTargetDesc/DCVMMCTargetDesc.h"
 #include "TargetInfo/DCVMTargetInfo.h"
@@ -38,8 +39,6 @@
 using namespace llvm;
 
 #define DEBUG_TYPE "asm-printer"
-
-static std::vector<char> g_byteCode;
 
 static void appendU64LE(std::vector<char>& Out, uint64_t Value) {
     for (unsigned i = 0; i < 8; ++i)
@@ -135,24 +134,14 @@ void DCVMAsmPrinter::emitFunctionBodyEnd() {
     const std::string Name = F.getName().str();
     const uint64_t Sid = SID(Name.c_str());
 
-    appendU64LE(g_byteCode, Sid);
-    appendU64LE(g_byteCode, static_cast<uint64_t>(InstrBytes) | (static_cast<uint64_t>(SymbolBytes) << 32));
-    g_byteCode.insert(g_byteCode.end(), m_funcBytes.begin(), m_funcBytes.end());
+    if (std::vector<char>* Out = static_cast<DCVMTargetMachine&>(TM).BytecodeSink) {
+        appendU64LE(*Out, Sid);
+        appendU64LE(*Out, static_cast<uint64_t>(InstrBytes) | (static_cast<uint64_t>(SymbolBytes) << 32));
+        Out->insert(Out->end(), m_funcBytes.begin(), m_funcBytes.end());
+    }
     m_funcBytes.clear();
     m_blockIndex.clear();
     m_branchFixups.clear();
-}
-
-extern "C" const char* DCVMBytecodeData() {
-    return g_byteCode.data();
-}
-
-extern "C" size_t DCVMBytecodeSize() {
-    return g_byteCode.size();
-}
-
-extern "C" void DCVMBytecodeReset() {
-    g_byteCode.clear();
 }
 
 extern "C" LLVM_ABI LLVM_EXTERNAL_VISIBILITY void LLVMInitializeDCVMAsmPrinter() {

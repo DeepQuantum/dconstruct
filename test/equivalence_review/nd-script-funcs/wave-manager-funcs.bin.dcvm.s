@@ -3,54 +3,58 @@
 	.globl	"wave-manager-get-npc-alive-count-by-faction"
 	.type	"wave-manager-get-npc-alive-count-by-faction",@function
 "wave-manager-get-npc-alive-count-by-faction":
-	Move	r2, r50
+	Move	r4, r50
 	LookupPointer	r0, 2
 	Call	r0, r0, 1
-	Move	r3, r0
-	LookupPointer	r4, 1
-	Move	r49, r3
-	CallFf	r0, r4, 1
+	Move	r2, r0
+	LookupPointer	r3, 1
+	Move	r49, r2
+	CallFf	r0, r3, 1
 	Move	r1, r0
-	CallFf	r0, r4, 1
-	Move	r4, r0
+	CallFf	r0, r3, 1
+	Move	r3, r0
 	LookupPointer	r0, 0
 	CallFf	r0, r0, 0
 	LoadU16Imm	r0, 1
-	ILessThan	r0, r4, r0
+	ILessThan	r0, r3, r0
 	BranchIf	.LBB0_6, r0
 	LoadU16Imm	r5, 0
 	LookupPointer	r6, 3
 	LookupPointer	r7, 4
-	LoadU16Imm	r8, 7
-	LoadU16Imm	r9, 5
-	LoadU16Imm	r10, 4
-	LoadU16Imm	r51, 0
-	LoadU16Imm	r52, 0
+	LoadStaticU64Imm	r8, 5
+	LoadU16Imm	r9, 7
+	LoadU16Imm	r10, 5
+	LoadU16Imm	r11, 4
+	LoadU16Imm	r12, 0
 	Branch	.LBB0_2
 .LBB0_4:
-	LoadU64	r49, r0
+	LoadU64	r13, r0
 .LBB0_5:
-	LoadStaticU64Imm	r50, 5
+	Move	r49, r13
+	Move	r50, r8
+	Move	r51, r5
+	Move	r52, r5
 	CallFf	r0, r6, 4
-	INotEqual	r0, r2, r0
+	INotEqual	r0, r4, r0
 	ISub	r1, r1, r0
-	IAddImm	r5, r5, 1
-	ILessThan	r0, r5, r4
+	IAddImm	r12, r12, 1
+	ILessThan	r0, r12, r3
 	BranchIfNot	.LBB0_6, r0
 .LBB0_2:
-	Move	r49, r3
-	Move	r50, r5
+	Move	r49, r2
+	Move	r50, r12
 	CallFf	r0, r7, 2
-	LoadU16Imm	r49, 0
+	LoadU16Imm	r13, 0
 	BranchIfNot	.LBB0_5, r0
-	IAddImm	r11, r0, 12
-	LoadU16	r11, r11
-	INotEqual	r12, r11, r8
-	BranchIfNot	.LBB0_4, r12
-	IEqual	r12, r11, r9
-	BranchIf	.LBB0_4, r12
-	IEqual	r11, r11, r10
-	BranchIf	.LBB0_4, r11
+	IAddImm	r13, r0, 12
+	LoadU16	r13, r13
+	INotEqual	r14, r13, r9
+	BranchIfNot	.LBB0_4, r14
+	IEqual	r14, r13, r10
+	BranchIf	.LBB0_4, r14
+	IEqual	r14, r13, r11
+	LoadU16Imm	r13, 0
+	BranchIf	.LBB0_4, r14
 	Branch	.LBB0_5
 .LBB0_6:
 	LookupPointer	r0, 6
@@ -82,34 +86,41 @@
 	Move	r1, r49
 	LookupPointer	r0, 0
 	CallFf	r0, r0, 1
-	LookupPointer	r2, 1
-	LookupPointer	r3, 2
-	LookupPointer	r4, 3
 	BranchIf	.LBB1_2, r0
+	LookupPointer	r0, 3
 	Move	r49, r1
-	CallFf	r0, r4, 1
-	LoadStaticPointerImm	r49, 4
+	CallFf	r0, r0, 1
+	LoadStaticPointerImm	r2, 4
+	LookupPointer	r3, 2
+	Move	r49, r2
 	Move	r50, r0
 	CallFf	r0, r3, 2
+	LookupPointer	r2, 1
 	Move	r49, r0
 	CallFf	r0, r2, 1
 .LBB1_2:
-	LookupPointer	r0, 5
-	LoadStaticU64Imm	r49, 6
-	Move	r50, r1
-	CallFf	r0, r0, 2
-	BranchIf	.LBB1_4, r0
-	Move	r49, r1
-	CallFf	r0, r4, 1
-	LoadStaticPointerImm	r49, 7
-	Move	r50, r0
-	CallFf	r0, r3, 2
+	LoadStaticU64Imm	r0, 6
+	LookupPointer	r2, 5
 	Move	r49, r0
-	CallFf	r0, r2, 1
-.LBB1_4:
-	LookupPointer	r0, 8
-	LoadStaticU64Imm	r49, 9
+	Move	r50, r1
+	CallFf	r0, r2, 2
+	BranchIf	.LBB1_4, r0
+	LookupPointer	r0, 3
+	Move	r49, r1
 	CallFf	r0, r0, 1
+	LoadStaticPointerImm	r1, 7
+	LookupPointer	r2, 2
+	Move	r49, r1
+	Move	r50, r0
+	CallFf	r0, r2, 2
+	LookupPointer	r1, 1
+	Move	r49, r0
+	CallFf	r0, r1, 1
+.LBB1_4:
+	LoadStaticU64Imm	r0, 9
+	LookupPointer	r1, 8
+	Move	r49, r0
+	CallFf	r0, r1, 1
 	Return	r0
 "wave-manager-get-total-npc-in-wave-count_symbol_table":
 	.quad	-6870362608876642110
@@ -146,18 +157,20 @@
 	LookupPointer	r0, 3
 	Move	r49, r1
 	CallFf	r0, r0, 1
-	LookupPointer	r2, 2
-	LoadStaticPointerImm	r49, 4
+	LoadStaticPointerImm	r2, 4
+	LookupPointer	r3, 2
+	Move	r49, r2
 	Move	r50, r0
-	CallFf	r0, r2, 2
+	CallFf	r0, r3, 2
 	LookupPointer	r2, 1
 	Move	r49, r0
 	CallFf	r0, r2, 1
 .LBB2_2:
-	LookupPointer	r0, 5
-	LoadStaticU64Imm	r49, 6
+	LoadStaticU64Imm	r0, 6
+	LookupPointer	r2, 5
+	Move	r49, r0
 	Move	r50, r1
-	CallFf	r0, r0, 2
+	CallFf	r0, r2, 2
 	Return	r0
 "wave-manager-is-ready?_symbol_table":
 	.quad	-6870362608876642110
@@ -184,35 +197,42 @@
 	Move	r1, r49
 	LookupPointer	r0, 0
 	CallFf	r0, r0, 1
-	LookupPointer	r2, 1
-	LookupPointer	r3, 2
-	LookupPointer	r4, 3
 	BranchIf	.LBB3_2, r0
+	LookupPointer	r0, 3
 	Move	r49, r1
-	CallFf	r0, r4, 1
-	LoadStaticPointerImm	r49, 4
+	CallFf	r0, r0, 1
+	LoadStaticPointerImm	r2, 4
+	LookupPointer	r3, 2
+	Move	r49, r2
 	Move	r50, r0
 	CallFf	r0, r3, 2
+	LookupPointer	r2, 1
 	Move	r49, r0
 	CallFf	r0, r2, 1
 .LBB3_2:
-	LookupPointer	r0, 5
-	LoadStaticU64Imm	r49, 6
+	LoadStaticU64Imm	r0, 6
+	LookupPointer	r2, 5
+	Move	r49, r0
 	Move	r50, r1
-	CallFf	r0, r0, 2
+	CallFf	r0, r2, 2
 	BranchIf	.LBB3_4, r0
+	LookupPointer	r0, 3
 	Move	r49, r1
-	CallFf	r0, r4, 1
-	LoadStaticPointerImm	r49, 7
+	CallFf	r0, r0, 1
+	LoadStaticPointerImm	r2, 7
+	LookupPointer	r3, 2
+	Move	r49, r2
 	Move	r50, r0
 	CallFf	r0, r3, 2
+	LookupPointer	r2, 1
 	Move	r49, r0
 	CallFf	r0, r2, 1
 .LBB3_4:
-	LookupPointer	r0, 8
-	LoadStaticU64Imm	r49, 9
+	LoadStaticU64Imm	r0, 9
+	LookupPointer	r2, 8
+	Move	r49, r0
 	Move	r50, r1
-	CallFf	r0, r0, 2
+	CallFf	r0, r2, 2
 	Return	r0
 "wave-manager-get-encounter-intensity_symbol_table":
 	.quad	-6870362608876642110
@@ -242,134 +262,157 @@
 	.globl	"wave-manager-get-next-spawning-wave-npc-schemas-group"
 	.type	"wave-manager-get-next-spawning-wave-npc-schemas-group",@function
 "wave-manager-get-next-spawning-wave-npc-schemas-group":
-	Move	r2, r49
+	Move	r6, r49
+	LoadStaticU64Imm	r0, 1
 	LookupPointer	r7, 0
-	LoadStaticU64Imm	r49, 2
-	Move	r50, r2
+	Move	r49, r0
+	Move	r50, r6
 	CallFf	r0, r7, 2
-	LookupPointer	r5, 1
 	BranchIfNot	.LBB4_20, r0
 	IAddImm	r0, r0, 32
-	LoadU64	r4, r0
-	IAddImm	r0, r4, 8
-	LoadI32	r6, r0
-	LookupPointer	r0, 3
-	LoadStaticU64Imm	r49, 6
-	Move	r50, r2
-	CallFf	r0, r0, 2
-	Move	r3, r0
+	LoadU64	r3, r0
+	IAddImm	r0, r3, 8
+	LoadI32	r5, r0
+	LoadStaticU64Imm	r0, 6
+	LookupPointer	r1, 3
+	Move	r49, r0
+	Move	r50, r6
+	CallFf	r0, r1, 2
+	Move	r2, r0
+	LoadStaticU64Imm	r0, 5
+	LoadStaticU64Imm	r1, 4
 	LoadU16Imm	r8, 0
-	LoadStaticU64Imm	r49, 5
-	LoadStaticU64Imm	r50, 4
-	LoadU16Imm	r51, 0
-	CallFf	r0, r5, 3
+	LookupPointer	r4, 2
+	Move	r49, r0
+	Move	r50, r1
+	Move	r51, r8
+	CallFf	r0, r4, 3
 	Move	r1, r0
-	ILessThan	r0, r3, r8
+	ILessThan	r0, r2, r8
 	BranchIf	.LBB4_21, r0
-	IGreaterThanEqual	r0, r3, r6
+	IGreaterThanEqual	r0, r2, r5
 	BranchIf	.LBB4_21, r0
-	IMulImm	r0, r3, 24
-	LoadU64	r3, r4
-	IAdd	r0, r3, r0
+	IMulImm	r0, r2, 24
+	LoadU64	r2, r3
+	IAdd	r0, r2, r0
 	IAddImm	r0, r0, 8
-	LoadU64	r6, r0
-	CallFf	r0, r5, 3
-	Move	r4, r0
-	CallFf	r0, r5, 3
+	LoadU64	r5, r0
+	LoadStaticU64Imm	r8, 5
+	LoadStaticU64Imm	r9, 4
+	LoadU16Imm	r10, 0
+	Move	r49, r8
+	Move	r50, r9
+	Move	r51, r10
+	CallFf	r0, r4, 3
 	Move	r3, r0
-	CallFf	r0, r5, 3
-	Move	r5, r0
-	LoadStaticU64Imm	r49, 11
-	Move	r50, r2
+	CallFf	r0, r4, 3
+	Move	r2, r0
+	CallFf	r0, r4, 3
+	Move	r4, r0
+	LoadStaticU64Imm	r0, 11
+	Move	r49, r0
+	Move	r50, r6
 	CallFf	r0, r7, 2
 	LookupPointer	r8, 8
-	Move	r49, r4
-	Move	r50, r0
-	CallFf	r0, r8, 3
-	LoadStaticU64Imm	r49, 10
-	Move	r50, r2
-	CallFf	r0, r7, 2
 	Move	r49, r3
 	Move	r50, r0
 	CallFf	r0, r8, 3
-	LoadStaticU64Imm	r49, 9
-	Move	r50, r2
+	LoadStaticU64Imm	r0, 10
+	Move	r49, r0
+	Move	r50, r6
 	CallFf	r0, r7, 2
-	Move	r49, r5
+	Move	r49, r2
 	Move	r50, r0
 	CallFf	r0, r8, 3
-	LookupPointer	r5, 7
+	LoadStaticU64Imm	r0, 9
+	Move	r49, r0
+	Move	r50, r6
+	CallFf	r0, r7, 2
 	Move	r49, r4
-	CallFf	r0, r5, 1
+	Move	r50, r0
+	CallFf	r0, r8, 3
+	LookupPointer	r4, 7
+	Move	r49, r3
+	CallFf	r0, r4, 1
 	BranchIfNot	.LBB4_21, r0
-	Move	r49, r3
-	CallFf	r0, r5, 1
+	Move	r49, r2
+	CallFf	r0, r4, 1
 	BranchIf	.LBB4_6, r0
-	Move	r49, r3
-	Move	r50, r4
+	LoadU16Imm	r0, 0
+	Move	r49, r2
+	Move	r50, r3
+	Move	r51, r0
 	CallFf	r0, r8, 3
 .LBB4_6:
-	LookupPointer	r0, 13
-	LoadStaticU64Imm	r49, 15
-	LoadU16Imm	r50, 1
-	CallFf	r0, r0, 2
+	LoadStaticU64Imm	r0, 15
+	LoadU16Imm	r3, 1
+	LookupPointer	r7, 13
+	Move	r49, r0
+	Move	r50, r3
+	CallFf	r0, r7, 2
+	Move	r3, r0
+	Move	r49, r2
+	CallFf	r0, r4, 1
 	Move	r4, r0
-	Move	r49, r3
-	CallFf	r0, r5, 1
-	Move	r5, r0
-	LookupPointer	r0, 12
-	LoadStaticU64Imm	r49, 14
-	Move	r50, r2
-	CallFf	r0, r0, 2
-	LoadU16Imm	r2, 0
-	LoadU16Imm	r50, 0
+	LoadStaticU64Imm	r0, 14
+	LookupPointer	r7, 12
+	Move	r49, r0
+	Move	r50, r6
+	CallFf	r0, r7, 2
+	LoadU16Imm	r6, 0
+	LoadU16Imm	r7, 0
 	BranchIfNot	.LBB4_8, r0
-	IMod	r50, r4, r5
+	IMod	r7, r3, r4
 .LBB4_8:
 	LookupPointer	r0, 16
-	Move	r49, r3
+	Move	r49, r2
+	Move	r50, r7
 	CallFf	r0, r0, 2
 	BranchIfNot	.LBB4_15, r0
-	IAddImm	r3, r0, 12
-	LoadU16	r3, r3
-	LoadU16Imm	r4, 1
-	INotEqual	r4, r3, r4
-	BranchIf	.LBB4_22, r4
-	LoadU8	r2, r0
+	IAddImm	r2, r0, 12
+	LoadU16	r2, r2
+	LoadU16Imm	r3, 1
+	INotEqual	r3, r2, r3
+	BranchIf	.LBB4_22, r3
+	LoadU8	r6, r0
 	Branch	.LBB4_15
 .LBB4_20:
-	LoadStaticU64Imm	r49, 5
-	LoadStaticU64Imm	r50, 4
-	LoadU16Imm	r51, 0
-	CallFf	r0, r5, 3
+	LoadStaticU64Imm	r0, 5
+	LoadStaticU64Imm	r1, 4
+	LoadU16Imm	r2, 0
+	LookupPointer	r3, 2
+	Move	r49, r0
+	Move	r50, r1
+	Move	r51, r2
+	CallFf	r0, r3, 3
 	Move	r1, r0
 .LBB4_21:
 	Move	r0, r1
 	Return	r0
 .LBB4_22:
-	LoadU16Imm	r4, 2
-	IEqual	r4, r3, r4
-	BranchIfNot	.LBB4_23, r4
-	LoadI32	r2, r0
+	LoadU16Imm	r3, 2
+	IEqual	r3, r2, r3
+	BranchIfNot	.LBB4_23, r3
+	LoadI32	r6, r0
 	Branch	.LBB4_15
 .LBB4_23:
-	LoadU16Imm	r4, 3
-	IEqual	r4, r3, r4
-	BranchIfNot	.LBB4_24, r4
-	LoadU32	r2, r0
+	LoadU16Imm	r3, 3
+	IEqual	r3, r2, r3
+	BranchIfNot	.LBB4_24, r3
+	LoadU32	r6, r0
 	Branch	.LBB4_15
 .LBB4_24:
-	LoadU16Imm	r4, 4
-	IEqual	r4, r3, r4
-	BranchIf	.LBB4_13, r4
-	LoadU16Imm	r4, 5
-	IEqual	r4, r3, r4
-	BranchIfNot	.LBB4_26, r4
+	LoadU16Imm	r3, 4
+	IEqual	r3, r2, r3
+	BranchIf	.LBB4_13, r3
+	LoadU16Imm	r3, 5
+	IEqual	r3, r2, r3
+	BranchIfNot	.LBB4_26, r3
 .LBB4_13:
-	LoadU64	r2, r0
+	LoadU64	r6, r0
 .LBB4_15:
-	IMulImm	r0, r2, 8
-	LoadU64	r2, r6
+	IMulImm	r0, r6, 8
+	LoadU64	r2, r5
 	IAdd	r0, r2, r0
 	LoadU64	r2, r0
 	IAddImm	r3, r2, 8
@@ -381,36 +424,41 @@
 	LookupPointer	r5, 17
 	LookupPointer	r6, 18
 	LookupPointer	r7, 19
+	LoadU16Imm	r8, 7
+	LoadU16Imm	r9, 0
 	Branch	.LBB4_17
 .LBB4_19:
-	IAddImm	r4, r4, 1
+	IAddImm	r9, r9, 1
 	LoadI32	r0, r3
-	ILessThan	r0, r4, r0
+	ILessThan	r0, r9, r0
 	BranchIfNot	.LBB4_21, r0
 .LBB4_17:
-	IMulImm	r0, r4, 16
-	LoadU64	r8, r2
-	IAdd	r49, r8, r0
-	LoadU64	r50, r49
+	IMulImm	r0, r9, 16
+	LoadU64	r10, r2
+	IAdd	r0, r10, r0
+	LoadU64	r10, r0
+	Move	r49, r0
 	Call	r0, r7, 1
 	BranchIfNot	.LBB4_19, r0
-	LoadU16Imm	r49, 7
+	Move	r49, r8
+	Move	r50, r10
 	CallFf	r0, r6, 2
 	Move	r49, r1
 	Move	r50, r0
+	Move	r51, r4
 	CallFf	r0, r5, 3
 	Branch	.LBB4_19
 .LBB4_26:
-	LoadU16Imm	r4, 6
-	IEqual	r3, r3, r4
-	BranchIfNot	.LBB4_15, r3
+	LoadU16Imm	r3, 6
+	IEqual	r2, r2, r3
+	BranchIfNot	.LBB4_15, r2
 	LoadFloat	r0, r0
-	CastInteger	r2, r0
+	CastInteger	r6, r0
 	Branch	.LBB4_15
 "wave-manager-get-next-spawning-wave-npc-schemas-group_symbol_table":
 	.quad	-1136051897790519866
-	.quad	-3193965096093911673
 	.quad	-8364948414460296332
+	.quad	-3193965096093911673
 	.quad	-8623127435633610462
 	.quad	-1
 	.quad	8534565298598421705
@@ -458,35 +506,42 @@
 	Move	r1, r49
 	LookupPointer	r0, 0
 	CallFf	r0, r0, 1
-	LookupPointer	r2, 1
-	LookupPointer	r3, 2
-	LookupPointer	r4, 3
 	BranchIf	.LBB5_2, r0
+	LookupPointer	r0, 3
 	Move	r49, r1
-	CallFf	r0, r4, 1
-	LoadStaticPointerImm	r49, 4
+	CallFf	r0, r0, 1
+	LoadStaticPointerImm	r2, 4
+	LookupPointer	r3, 2
+	Move	r49, r2
 	Move	r50, r0
 	CallFf	r0, r3, 2
+	LookupPointer	r2, 1
 	Move	r49, r0
 	CallFf	r0, r2, 1
 .LBB5_2:
-	LookupPointer	r0, 5
-	LoadStaticU64Imm	r49, 6
+	LoadStaticU64Imm	r0, 6
+	LookupPointer	r2, 5
+	Move	r49, r0
 	Move	r50, r1
-	CallFf	r0, r0, 2
+	CallFf	r0, r2, 2
 	BranchIf	.LBB5_4, r0
+	LookupPointer	r0, 3
 	Move	r49, r1
-	CallFf	r0, r4, 1
-	LoadStaticPointerImm	r49, 7
+	CallFf	r0, r0, 1
+	LoadStaticPointerImm	r2, 7
+	LookupPointer	r3, 2
+	Move	r49, r2
 	Move	r50, r0
 	CallFf	r0, r3, 2
+	LookupPointer	r2, 1
 	Move	r49, r0
 	CallFf	r0, r2, 1
 .LBB5_4:
-	LookupPointer	r0, 8
-	LoadStaticU64Imm	r49, 9
+	LoadStaticU64Imm	r0, 9
+	LookupPointer	r2, 8
+	Move	r49, r0
 	Move	r50, r1
-	CallFf	r0, r0, 2
+	CallFf	r0, r2, 2
 	Return	r0
 "wave-manager-get-total-wave-count_symbol_table":
 	.quad	-6870362608876642110
@@ -516,10 +571,12 @@
 	.globl	"wave-manager-get-num-waves-spawned"
 	.type	"wave-manager-get-num-waves-spawned",@function
 "wave-manager-get-num-waves-spawned":
-	Move	r50, r49
-	LookupPointer	r0, 1
-	LoadStaticU64Imm	r49, 2
-	CallFf	r0, r0, 2
+	Move	r0, r49
+	LoadStaticU64Imm	r1, 2
+	LookupPointer	r2, 1
+	Move	r49, r1
+	Move	r50, r0
+	CallFf	r0, r2, 2
 	LookupPointer	r1, 0
 	Move	r49, r0
 	CallFf	r0, r1, 1
@@ -538,13 +595,16 @@
 	.globl	"wave-manager-get-next-spawning-wave-spawn-configs"
 	.type	"wave-manager-get-next-spawning-wave-spawn-configs",@function
 "wave-manager-get-next-spawning-wave-spawn-configs":
-	Move	r50, r49
-	LookupPointer	r2, 0
-	LoadStaticU64Imm	r49, 2
-	CallFf	r0, r2, 2
+	Move	r2, r49
+	LoadStaticU64Imm	r0, 2
+	LookupPointer	r3, 0
+	Move	r49, r0
+	Move	r50, r2
+	CallFf	r0, r3, 2
 	Move	r1, r0
-	LoadStaticU64Imm	r49, 1
-	CallFf	r0, r2, 2
+	LoadStaticU64Imm	r0, 1
+	Move	r49, r0
+	CallFf	r0, r3, 2
 	BranchIfNot	.LBB7_2, r0
 	IAddImm	r0, r0, 24
 	LoadU64	r0, r0
@@ -572,8 +632,8 @@
 	.globl	"wave-manager-get-next-spawning-wave-npc-count"
 	.type	"wave-manager-get-next-spawning-wave-npc-count",@function
 "wave-manager-get-next-spawning-wave-npc-count":
-	LookupPointer	r0, 1
-	Call	r0, r0, 1
+	LookupPointer	r1, 1
+	Call	r0, r1, 1
 	LookupPointer	r1, 0
 	Move	r49, r0
 	CallFf	r0, r1, 1
@@ -593,36 +653,43 @@
 	Move	r1, r49
 	LookupPointer	r0, 0
 	CallFf	r0, r0, 1
-	LookupPointer	r2, 1
-	LookupPointer	r3, 2
-	LookupPointer	r4, 3
 	BranchIf	.LBB9_2, r0
+	LookupPointer	r0, 3
 	Move	r49, r1
-	CallFf	r0, r4, 1
-	LoadStaticPointerImm	r49, 4
+	CallFf	r0, r0, 1
+	LoadStaticPointerImm	r2, 4
+	LookupPointer	r3, 2
+	Move	r49, r2
 	Move	r50, r0
 	CallFf	r0, r3, 2
+	LookupPointer	r2, 1
 	Move	r49, r0
 	CallFf	r0, r2, 1
 .LBB9_2:
-	LookupPointer	r0, 5
-	LoadStaticU64Imm	r49, 6
+	LoadStaticU64Imm	r0, 6
+	LookupPointer	r2, 5
+	Move	r49, r0
 	Move	r50, r1
-	CallFf	r0, r0, 2
+	CallFf	r0, r2, 2
 	BranchIfNot	.LBB9_4, r0
-	LookupPointer	r0, 7
-	LoadStaticU64Imm	r49, 8
+	LoadStaticU64Imm	r0, 8
+	LookupPointer	r2, 7
+	Move	r49, r0
 	Move	r50, r1
-	CallFf	r0, r0, 2
+	CallFf	r0, r2, 2
 	Return	r0
 .LBB9_4:
+	LookupPointer	r0, 3
 	Move	r49, r1
-	CallFf	r0, r4, 1
-	LoadStaticPointerImm	r49, 9
+	CallFf	r0, r0, 1
+	LoadStaticPointerImm	r1, 9
+	LookupPointer	r2, 2
+	Move	r49, r1
 	Move	r50, r0
-	CallFf	r0, r3, 2
+	CallFf	r0, r2, 2
+	LookupPointer	r1, 1
 	Move	r49, r0
-	CallFf	r0, r2, 1
+	CallFf	r0, r1, 1
 	Return	r0
 "wave-manager-spawn-next-wave!_symbol_table":
 	.quad	-6870362608876642110
@@ -652,65 +719,71 @@
 	.globl	"wave-manager-get-npc-alive-group"
 	.type	"wave-manager-get-npc-alive-group",@function
 "wave-manager-get-npc-alive-group":
-	LoadU16Imm	r1, 0
-	LookupPointer	r0, 2
-	LoadStaticU64Imm	r49, 5
-	LoadStaticU64Imm	r50, 4
-	LoadU16Imm	r51, 0
-	CallFf	r0, r0, 3
+	LoadStaticU64Imm	r0, 5
+	LoadStaticU64Imm	r1, 4
+	LoadU16Imm	r3, 0
+	LookupPointer	r2, 2
+	Move	r49, r0
+	Move	r50, r1
+	Move	r51, r3
+	CallFf	r0, r2, 3
+	Move	r1, r0
+	LoadStaticU64Imm	r0, 3
+	LookupPointer	r2, 1
+	Move	r49, r0
+	CallFf	r0, r2, 1
 	Move	r2, r0
-	LookupPointer	r0, 1
-	LoadStaticU64Imm	r49, 3
-	CallFf	r0, r0, 1
-	Move	r3, r0
 	LookupPointer	r0, 0
 	CallFf	r0, r0, 0
 	LoadU16Imm	r0, 1
-	ILessThan	r0, r3, r0
+	ILessThan	r0, r2, r0
 	BranchIf	.LBB10_8, r0
 	LookupPointer	r4, 6
 	LookupPointer	r5, 7
 	LookupPointer	r6, 8
 	LookupPointer	r7, 9
-	LoadU16Imm	r8, 7
-	LoadU16Imm	r9, 5
-	LoadU16Imm	r10, 4
-	LoadU16Imm	r51, 1
+	LoadStaticU64Imm	r8, 3
+	LoadU16Imm	r9, 7
+	LoadU16Imm	r10, 1
+	LoadU16Imm	r11, 5
+	LoadU16Imm	r12, 4
 	Branch	.LBB10_2
 .LBB10_7:
-	IAddImm	r1, r1, 1
-	ILessThan	r0, r1, r3
+	IAddImm	r3, r3, 1
+	ILessThan	r0, r3, r2
 	BranchIfNot	.LBB10_8, r0
 .LBB10_2:
-	LoadStaticU64Imm	r49, 3
-	Move	r50, r1
+	Move	r49, r8
+	Move	r50, r3
 	CallFf	r0, r7, 2
-	LoadU16Imm	r50, 0
+	LoadU16Imm	r13, 0
 	BranchIfNot	.LBB10_5, r0
-	IAddImm	r11, r0, 12
-	LoadU16	r11, r11
-	INotEqual	r12, r11, r8
-	BranchIfNot	.LBB10_4, r12
-	IEqual	r12, r11, r9
-	BranchIf	.LBB10_4, r12
-	IEqual	r11, r11, r10
-	BranchIfNot	.LBB10_5, r11
+	IAddImm	r14, r0, 12
+	LoadU16	r14, r14
+	INotEqual	r15, r14, r9
+	BranchIfNot	.LBB10_4, r15
+	IEqual	r15, r14, r11
+	BranchIf	.LBB10_4, r15
+	IEqual	r14, r14, r12
+	BranchIfNot	.LBB10_5, r14
 .LBB10_4:
-	LoadU64	r50, r0
+	LoadU64	r13, r0
 .LBB10_5:
-	Move	r49, r50
+	Move	r49, r13
 	CallFf	r0, r6, 1
 	BranchIfNot	.LBB10_7, r0
-	LoadU16Imm	r49, 7
+	Move	r49, r9
+	Move	r50, r13
 	CallFf	r0, r5, 2
-	Move	r49, r2
+	Move	r49, r1
 	Move	r50, r0
+	Move	r51, r10
 	CallFf	r0, r4, 3
 	Branch	.LBB10_7
 .LBB10_8:
 	LookupPointer	r0, 10
 	CallFf	r0, r0, 0
-	Move	r0, r2
+	Move	r0, r1
 	Return	r0
 "wave-manager-get-npc-alive-group_symbol_table":
 	.quad	3423406688794319677
@@ -742,11 +815,11 @@
 	.globl	"wave-manager-kill-all-npcs"
 	.type	"wave-manager-kill-all-npcs",@function
 "wave-manager-kill-all-npcs":
-	LookupPointer	r0, 0
-	Call	r0, r0, 1
+	LookupPointer	r1, 0
+	Call	r0, r1, 1
 	BranchIfNot	.LBB11_1, r0
-	LookupPointer	r4, 3
-	Call	r0, r4, 1
+	LookupPointer	r3, 3
+	Call	r0, r3, 1
 	Move	r1, r0
 	LookupPointer	r0, 2
 	Move	r49, r1
@@ -757,47 +830,52 @@
 	LoadU16Imm	r0, 1
 	ILessThan	r0, r2, r0
 	BranchIf	.LBB11_8, r0
-	LoadU16Imm	r3, 0
+	LoadU16Imm	r4, 0
 	LookupPointer	r5, 4
 	LookupPointer	r6, 5
-	LoadU16Imm	r7, 7
-	LoadU16Imm	r8, 5
-	LoadU16Imm	r9, 4
-	LoadU16Imm	r51, 0
-	LoadU16Imm	r52, 0
-	LoadU16Imm	r53, 0
+	LoadU16Imm	r7, 2
+	LoadU16Imm	r8, 7
+	LoadU16Imm	r9, 5
+	LoadU16Imm	r10, 4
+	LoadU16Imm	r11, 0
 	Branch	.LBB11_4
 .LBB11_6:
-	LoadU64	r49, r0
+	LoadU64	r12, r0
 .LBB11_7:
-	LoadU16Imm	r50, 2
+	Move	r49, r12
+	Move	r50, r7
+	Move	r51, r4
+	Move	r52, r4
+	Move	r53, r4
 	CallFf	r0, r5, 5
-	IAddImm	r3, r3, 1
-	ILessThan	r0, r3, r2
+	IAddImm	r11, r11, 1
+	ILessThan	r0, r11, r2
 	BranchIfNot	.LBB11_8, r0
 .LBB11_4:
 	Move	r49, r1
-	Move	r50, r3
+	Move	r50, r11
 	CallFf	r0, r6, 2
-	LoadU16Imm	r49, 0
+	LoadU16Imm	r12, 0
 	BranchIfNot	.LBB11_7, r0
-	IAddImm	r10, r0, 12
-	LoadU16	r10, r10
-	INotEqual	r11, r10, r7
-	BranchIfNot	.LBB11_6, r11
-	IEqual	r11, r10, r8
-	BranchIf	.LBB11_6, r11
-	IEqual	r10, r10, r9
-	BranchIf	.LBB11_6, r10
+	IAddImm	r12, r0, 12
+	LoadU16	r12, r12
+	INotEqual	r13, r12, r8
+	BranchIfNot	.LBB11_6, r13
+	IEqual	r13, r12, r9
+	BranchIf	.LBB11_6, r13
+	IEqual	r13, r12, r10
+	LoadU16Imm	r12, 0
+	BranchIf	.LBB11_6, r13
 	Branch	.LBB11_7
 .LBB11_8:
 	LookupPointer	r0, 7
 	CallFf	r0, r0, 0
-	Call	r0, r4, 1
-	LookupPointer	r1, 6
+	Call	r0, r3, 1
+	LoadU16Imm	r1, 0
+	LookupPointer	r2, 6
 	Move	r49, r0
-	LoadU16Imm	r50, 0
-	Call	r0, r1, 2
+	Move	r50, r1
+	Call	r0, r2, 2
 	Return	r0
 .LBB11_1:
 	LoadU16Imm	r0, 0
@@ -829,79 +907,83 @@
 	LookupPointer	r0, 3
 	Call	r0, r0, 1
 	Move	r1, r0
-	LoadU16Imm	r2, 0
-	LookupPointer	r0, 2
-	LoadStaticU64Imm	r49, 5
-	LoadStaticU64Imm	r50, 4
-	LoadU16Imm	r51, 0
-	CallFf	r0, r0, 3
-	Move	r3, r0
+	LoadStaticU64Imm	r0, 5
+	LoadStaticU64Imm	r2, 4
+	LoadU16Imm	r5, 0
+	LookupPointer	r3, 2
+	Move	r49, r0
+	Move	r50, r2
+	Move	r51, r5
+	CallFf	r0, r3, 3
+	Move	r2, r0
 	LookupPointer	r0, 1
 	Move	r49, r1
 	CallFf	r0, r0, 1
-	Move	r4, r0
+	Move	r3, r0
 	LookupPointer	r0, 0
 	CallFf	r0, r0, 0
 	LoadU16Imm	r0, 1
-	ILessThan	r0, r4, r0
+	ILessThan	r0, r3, r0
 	BranchIf	.LBB12_10, r0
-	LookupPointer	r7, 6
-	LookupPointer	r8, 7
-	LookupPointer	r9, 8
-	LookupPointer	r10, 9
-	LookupPointer	r11, 10
-	LookupPointer	r12, 11
+	LookupPointer	r6, 6
+	LookupPointer	r7, 7
+	LookupPointer	r8, 8
+	LookupPointer	r9, 9
+	LookupPointer	r10, 10
+	LookupPointer	r11, 11
+	LoadStaticU64Imm	r12, 12
 	LoadStaticU64Imm	r13, 13
 	LoadU16Imm	r14, 2
 	LoadU16Imm	r15, 7
-	LoadU16Imm	r16, 5
-	LoadU16Imm	r17, 4
-	LoadU16Imm	r51, 1
+	LoadU16Imm	r16, 1
+	LoadU16Imm	r17, 5
+	LoadU16Imm	r18, 4
 	Branch	.LBB12_2
 .LBB12_9:
-	IAddImm	r2, r2, 1
-	ILessThan	r0, r2, r4
+	IAddImm	r5, r5, 1
+	ILessThan	r0, r5, r3
 	BranchIfNot	.LBB12_10, r0
 .LBB12_2:
 	Move	r49, r1
-	Move	r50, r2
-	CallFf	r0, r12, 2
-	LoadU16Imm	r5, 0
-	BranchIfNot	.LBB12_5, r0
-	IAddImm	r6, r0, 12
-	LoadU16	r6, r6
-	INotEqual	r18, r6, r15
-	BranchIfNot	.LBB12_4, r18
-	IEqual	r18, r6, r16
-	BranchIf	.LBB12_4, r18
-	IEqual	r6, r6, r17
-	BranchIfNot	.LBB12_5, r6
-.LBB12_4:
-	LoadU64	r5, r0
-.LBB12_5:
-	Move	r49, r5
-	LoadStaticU64Imm	r50, 12
+	Move	r50, r5
 	CallFf	r0, r11, 2
-	Move	r6, r0
-	CallFf	r0, r10, 1
+	LoadU16Imm	r19, 0
+	BranchIfNot	.LBB12_5, r0
+	IAddImm	r4, r0, 12
+	LoadU16	r4, r4
+	INotEqual	r20, r4, r15
+	BranchIfNot	.LBB12_4, r20
+	IEqual	r20, r4, r17
+	BranchIf	.LBB12_4, r20
+	IEqual	r4, r4, r18
+	BranchIfNot	.LBB12_5, r4
+.LBB12_4:
+	LoadU64	r19, r0
+.LBB12_5:
+	Move	r49, r19
+	Move	r50, r12
+	CallFf	r0, r10, 2
+	Move	r4, r0
+	CallFf	r0, r9, 1
 	BranchIfNot	.LBB12_9, r0
-	Move	r49, r5
-	Call	r0, r9, 1
+	Move	r49, r19
+	Call	r0, r8, 1
 	BranchIf	.LBB12_9, r0
-	OpBitAnd	r0, r6, r13
+	OpBitAnd	r0, r4, r13
 	IEqual	r0, r0, r14
 	BranchIf	.LBB12_9, r0
-	LoadU16Imm	r49, 7
-	Move	r50, r5
-	CallFf	r0, r8, 2
-	Move	r49, r3
+	Move	r49, r15
+	Move	r50, r19
+	CallFf	r0, r7, 2
+	Move	r49, r2
 	Move	r50, r0
-	CallFf	r0, r7, 3
+	Move	r51, r16
+	CallFf	r0, r6, 3
 	Branch	.LBB12_9
 .LBB12_10:
 	LookupPointer	r0, 14
 	CallFf	r0, r0, 0
-	Move	r0, r3
+	Move	r0, r2
 	Return	r0
 "wave-manager-get-lost-player-npc-group_symbol_table":
 	.quad	3423406688794319677
@@ -944,36 +1026,43 @@
 	Move	r1, r49
 	LookupPointer	r0, 0
 	CallFf	r0, r0, 1
-	LookupPointer	r2, 1
-	LookupPointer	r3, 2
-	LookupPointer	r4, 3
 	BranchIf	.LBB13_2, r0
+	LookupPointer	r0, 3
 	Move	r49, r1
-	CallFf	r0, r4, 1
-	LoadStaticPointerImm	r49, 4
+	CallFf	r0, r0, 1
+	LoadStaticPointerImm	r2, 4
+	LookupPointer	r3, 2
+	Move	r49, r2
 	Move	r50, r0
 	CallFf	r0, r3, 2
+	LookupPointer	r2, 1
 	Move	r49, r0
 	CallFf	r0, r2, 1
 .LBB13_2:
-	LookupPointer	r0, 5
-	LoadStaticU64Imm	r49, 6
+	LoadStaticU64Imm	r0, 6
+	LookupPointer	r2, 5
+	Move	r49, r0
 	Move	r50, r1
-	CallFf	r0, r0, 2
+	CallFf	r0, r2, 2
 	BranchIfNot	.LBB13_4, r0
-	LookupPointer	r0, 7
-	LoadStaticU64Imm	r49, 8
+	LoadStaticU64Imm	r0, 8
+	LookupPointer	r2, 7
+	Move	r49, r0
 	Move	r50, r1
-	CallFf	r0, r0, 2
+	CallFf	r0, r2, 2
 	Return	r0
 .LBB13_4:
+	LookupPointer	r0, 3
 	Move	r49, r1
-	CallFf	r0, r4, 1
-	LoadStaticPointerImm	r49, 9
+	CallFf	r0, r0, 1
+	LoadStaticPointerImm	r1, 9
+	LookupPointer	r2, 2
+	Move	r49, r1
 	Move	r50, r0
-	CallFf	r0, r3, 2
+	CallFf	r0, r2, 2
+	LookupPointer	r1, 1
 	Move	r49, r0
-	CallFf	r0, r2, 1
+	CallFf	r0, r1, 1
 	Return	r0
 "wave-manager-stop!_symbol_table":
 	.quad	-6870362608876642110
@@ -1006,34 +1095,41 @@
 	Move	r1, r49
 	LookupPointer	r0, 0
 	CallFf	r0, r0, 1
-	LookupPointer	r2, 1
-	LookupPointer	r3, 2
-	LookupPointer	r4, 3
 	BranchIf	.LBB14_2, r0
+	LookupPointer	r0, 3
 	Move	r49, r1
-	CallFf	r0, r4, 1
-	LoadStaticPointerImm	r49, 4
+	CallFf	r0, r0, 1
+	LoadStaticPointerImm	r2, 4
+	LookupPointer	r3, 2
+	Move	r49, r2
 	Move	r50, r0
 	CallFf	r0, r3, 2
+	LookupPointer	r2, 1
 	Move	r49, r0
 	CallFf	r0, r2, 1
 .LBB14_2:
-	LookupPointer	r0, 5
-	LoadStaticU64Imm	r49, 6
-	Move	r50, r1
-	CallFf	r0, r0, 2
-	BranchIf	.LBB14_4, r0
-	Move	r49, r1
-	CallFf	r0, r4, 1
-	LoadStaticPointerImm	r49, 7
-	Move	r50, r0
-	CallFf	r0, r3, 2
+	LoadStaticU64Imm	r0, 6
+	LookupPointer	r2, 5
 	Move	r49, r0
-	CallFf	r0, r2, 1
-.LBB14_4:
-	LookupPointer	r0, 8
-	LoadStaticU64Imm	r49, 9
+	Move	r50, r1
+	CallFf	r0, r2, 2
+	BranchIf	.LBB14_4, r0
+	LookupPointer	r0, 3
+	Move	r49, r1
 	CallFf	r0, r0, 1
+	LoadStaticPointerImm	r1, 7
+	LookupPointer	r2, 2
+	Move	r49, r1
+	Move	r50, r0
+	CallFf	r0, r2, 2
+	LookupPointer	r1, 1
+	Move	r49, r0
+	CallFf	r0, r1, 1
+.LBB14_4:
+	LoadStaticU64Imm	r0, 9
+	LookupPointer	r1, 8
+	Move	r49, r0
+	CallFf	r0, r1, 1
 	Return	r0
 "wave-manager-get-npc-alive-count_symbol_table":
 	.quad	-6870362608876642110
@@ -1063,21 +1159,25 @@
 	.globl	"wave-manager-get-next-wave-faction"
 	.type	"wave-manager-get-next-wave-faction",@function
 "wave-manager-get-next-wave-faction":
-	Move	r50, r49
-	LookupPointer	r0, 1
-	LoadStaticU64Imm	r49, 6
-	CallFf	r0, r0, 2
+	Move	r2, r49
+	LoadStaticU64Imm	r0, 6
+	LookupPointer	r1, 1
+	Move	r49, r0
+	Move	r50, r2
+	CallFf	r0, r1, 2
 	Move	r1, r0
 	LoadStaticU64Imm	r0, 3
 	OpBitXor	r0, r1, r0
-	LoadStaticU64Imm	r2, 2
-	ILessThan	r0, r0, r2
+	LoadStaticU64Imm	r3, 2
+	ILessThan	r0, r0, r3
 	BranchIf	.LBB15_2, r0
 	LoadStaticU64Imm	r1, 4
 .LBB15_2:
-	LookupPointer	r0, 0
-	LoadStaticU64Imm	r49, 5
-	CallFf	r0, r0, 2
+	LoadStaticU64Imm	r0, 5
+	LookupPointer	r3, 0
+	Move	r49, r0
+	Move	r50, r2
+	CallFf	r0, r3, 2
 	LoadU16Imm	r2, 0
 	INotEqual	r0, r0, r2
 	BranchIf	.LBB15_4, r0
@@ -1128,36 +1228,43 @@
 	Move	r1, r49
 	LookupPointer	r0, 0
 	CallFf	r0, r0, 1
-	LookupPointer	r2, 1
-	LookupPointer	r3, 2
-	LookupPointer	r4, 3
 	BranchIf	.LBB17_2, r0
+	LookupPointer	r0, 3
 	Move	r49, r1
-	CallFf	r0, r4, 1
-	LoadStaticPointerImm	r49, 4
+	CallFf	r0, r0, 1
+	LoadStaticPointerImm	r2, 4
+	LookupPointer	r3, 2
+	Move	r49, r2
 	Move	r50, r0
 	CallFf	r0, r3, 2
+	LookupPointer	r2, 1
 	Move	r49, r0
 	CallFf	r0, r2, 1
 .LBB17_2:
-	LookupPointer	r0, 5
-	LoadStaticU64Imm	r49, 6
+	LoadStaticU64Imm	r0, 6
+	LookupPointer	r2, 5
+	Move	r49, r0
 	Move	r50, r1
-	CallFf	r0, r0, 2
+	CallFf	r0, r2, 2
 	BranchIfNot	.LBB17_4, r0
-	LookupPointer	r0, 7
-	LoadStaticU64Imm	r49, 8
+	LoadStaticU64Imm	r0, 8
+	LookupPointer	r2, 7
+	Move	r49, r0
 	Move	r50, r1
-	CallFf	r0, r0, 2
+	CallFf	r0, r2, 2
 	Return	r0
 .LBB17_4:
+	LookupPointer	r0, 3
 	Move	r49, r1
-	CallFf	r0, r4, 1
-	LoadStaticPointerImm	r49, 9
+	CallFf	r0, r0, 1
+	LoadStaticPointerImm	r1, 9
+	LookupPointer	r2, 2
+	Move	r49, r1
 	Move	r50, r0
-	CallFf	r0, r3, 2
+	CallFf	r0, r2, 2
+	LookupPointer	r1, 1
 	Move	r49, r0
-	CallFf	r0, r2, 1
+	CallFf	r0, r1, 1
 	Return	r0
 "wave-manager-spawn-next-special-wave!_symbol_table":
 	.quad	-6870362608876642110
@@ -1187,10 +1294,12 @@
 	.globl	"wave-manager-current-task-in-run?"
 	.type	"wave-manager-current-task-in-run?",@function
 "wave-manager-current-task-in-run?":
-	LookupPointer	r0, 0
-	LoadStaticU64Imm	r49, 2
-	LoadStaticU64Imm	r50, 1
-	CallFf	r0, r0, 2
+	LoadStaticU64Imm	r0, 2
+	LoadStaticU64Imm	r1, 1
+	LookupPointer	r2, 0
+	Move	r49, r0
+	Move	r50, r1
+	CallFf	r0, r2, 2
 	Return	r0
 "wave-manager-current-task-in-run?_symbol_table":
 	.quad	54185015286451590
@@ -1206,10 +1315,12 @@
 	.globl	"wave-manager-get-next-spawning-wave-composition"
 	.type	"wave-manager-get-next-spawning-wave-composition",@function
 "wave-manager-get-next-spawning-wave-composition":
-	Move	r50, r49
-	LookupPointer	r0, 0
-	LoadStaticU64Imm	r49, 1
-	CallFf	r0, r0, 2
+	Move	r0, r49
+	LoadStaticU64Imm	r1, 1
+	LookupPointer	r2, 0
+	Move	r49, r1
+	Move	r50, r0
+	CallFf	r0, r2, 2
 	Return	r0
 "wave-manager-get-next-spawning-wave-composition_symbol_table":
 	.quad	-1136051897790519866
@@ -1226,38 +1337,46 @@
 	Move	r1, r49
 	LookupPointer	r0, 0
 	CallFf	r0, r0, 1
-	LookupPointer	r2, 1
-	LookupPointer	r3, 2
-	LookupPointer	r5, 3
 	BranchIf	.LBB20_2, r0
+	LookupPointer	r0, 3
 	Move	r49, r1
-	CallFf	r0, r5, 1
-	LoadStaticPointerImm	r49, 4
+	CallFf	r0, r0, 1
+	LoadStaticPointerImm	r2, 4
+	LookupPointer	r3, 2
+	Move	r49, r2
 	Move	r50, r0
 	CallFf	r0, r3, 2
+	LookupPointer	r2, 1
 	Move	r49, r0
 	CallFf	r0, r2, 1
 .LBB20_2:
-	LookupPointer	r4, 5
-	LoadStaticU64Imm	r49, 6
-	Move	r50, r1
-	CallFf	r0, r4, 2
-	BranchIf	.LBB20_4, r0
-	Move	r49, r1
-	CallFf	r0, r5, 1
-	LoadStaticPointerImm	r49, 7
-	Move	r50, r0
-	CallFf	r0, r3, 2
+	LoadStaticU64Imm	r0, 6
+	LookupPointer	r2, 5
 	Move	r49, r0
-	CallFf	r0, r2, 1
+	Move	r50, r1
+	CallFf	r0, r2, 2
+	BranchIf	.LBB20_4, r0
+	LookupPointer	r0, 3
+	Move	r49, r1
+	CallFf	r0, r0, 1
+	LoadStaticPointerImm	r3, 7
+	LookupPointer	r4, 2
+	Move	r49, r3
+	Move	r50, r0
+	CallFf	r0, r4, 2
+	LookupPointer	r3, 1
+	Move	r49, r0
+	CallFf	r0, r3, 1
 .LBB20_4:
-	LoadStaticU64Imm	r49, 8
+	LoadStaticU64Imm	r0, 8
+	Move	r49, r0
 	Move	r50, r1
-	CallFf	r0, r4, 2
+	CallFf	r0, r2, 2
 	BranchIfNot	.LBB20_5, r0
-	LoadStaticU64Imm	r49, 9
+	LoadStaticU64Imm	r0, 9
+	Move	r49, r0
 	Move	r50, r1
-	CallFf	r0, r4, 2
+	CallFf	r0, r2, 2
 	Return	r0
 .LBB20_5:
 	LoadU16Imm	r0, 0
@@ -1290,15 +1409,18 @@
 	.globl	"wave-manager-npc-lost-player?"
 	.type	"wave-manager-npc-lost-player?",@function
 "wave-manager-npc-lost-player?":
-	LookupPointer	r0, 1
-	LoadStaticU64Imm	r50, 2
-	CallFf	r0, r0, 2
+	Move	r3, r49
+	LoadStaticU64Imm	r0, 2
+	LookupPointer	r1, 1
+	Move	r50, r0
+	CallFf	r0, r1, 2
 	Move	r2, r0
 	LookupPointer	r0, 0
 	CallFf	r0, r0, 1
 	LoadU16Imm	r1, 0
 	BranchIfNot	.LBB21_3, r0
 	LookupPointer	r0, 3
+	Move	r49, r3
 	Call	r0, r0, 1
 	BranchIfNot	.LBB21_2, r0
 .LBB21_3:
@@ -1347,7 +1469,7 @@
 	.quad	998391088342721072
 	.quad	2997365522926602638
 	.quad	6072285182812319085
-	.quad	1538777247405
+	.quad	2138302561965
 	.quad	-3311351115081502130
 	.quad	4013010305452811590
 	.quad	-7194759694070631083
@@ -1360,7 +1482,7 @@
 	.quad	-6870362608876642110
 	.quad	2997365522926602638
 	.quad	6072285182812319085
-	.quad	1538777247744
+	.quad	2138302562304
 	.quad	-3311351115081502130
 	.quad	54185015286451590
 	.quad	-4142738284031958410
@@ -1373,7 +1495,7 @@
 	.quad	998391088342721072
 	.quad	2997365522926602638
 	.quad	6072285182812319085
-	.quad	1538777247344
+	.quad	2138302561904
 	.quad	-3311351115081502130
 	.quad	-8623127435633610462
 	.quad	-3532724295824964118
@@ -1387,7 +1509,7 @@
 	.quad	-7966019873906053962
 	.quad	-1851807429122828651
 	.quad	6072285182812319085
-	.quad	1538777247869
+	.quad	2138302562429
 	.quad	-8623127435633610462
 	.quad	-6711785430563033859
 	.quad	-3193965096093911673
@@ -1407,9 +1529,9 @@
 	.quad	2009214271962714043
 	.quad	3321216610294482167
 	.quad	3684810824690217768
-	.quad	1538777247798
+	.quad	2138302562358
 	.quad	-3311351115081502130
-	.quad	1538777247819
+	.quad	2138302562379
 	.size	"wave-manager-get-next-spawning-wave-npc-schemas-group_symbol_table_src", 216
 
 	.type	"wave-manager-get-total-wave-count_symbol_table_src",@object
@@ -1419,7 +1541,7 @@
 	.quad	998391088342721072
 	.quad	2997365522926602638
 	.quad	6072285182812319085
-	.quad	1538777247462
+	.quad	2138302562022
 	.quad	-3311351115081502130
 	.quad	-8623127435633610462
 	.quad	126389912060929688
@@ -1460,7 +1582,7 @@
 	.quad	5189346610966935392
 	.quad	2997365522926602638
 	.quad	6072285182812319085
-	.quad	1538777247647
+	.quad	2138302562207
 	.quad	-3311351115081502130
 	.size	"wave-manager-spawn-next-wave!_symbol_table_src", 56
 
@@ -1522,7 +1644,7 @@
 	.quad	4737644804400110462
 	.quad	2997365522926602638
 	.quad	6072285182812319085
-	.quad	1538777247701
+	.quad	2138302562261
 	.quad	-3311351115081502130
 	.size	"wave-manager-stop!_symbol_table_src", 56
 
@@ -1533,7 +1655,7 @@
 	.quad	998391088342721072
 	.quad	2997365522926602638
 	.quad	6072285182812319085
-	.quad	1538777247405
+	.quad	2138302561965
 	.quad	-3311351115081502130
 	.quad	1564617029140756692
 	.quad	-8578220443451849366
@@ -1567,7 +1689,7 @@
 	.quad	1354182575228257266
 	.quad	2997365522926602638
 	.quad	6072285182812319085
-	.quad	1538777247585
+	.quad	2138302562145
 	.quad	-3311351115081502130
 	.size	"wave-manager-spawn-next-special-wave!_symbol_table_src", 56
 
@@ -1595,7 +1717,7 @@
 	.quad	998391088342721072
 	.quad	2997365522926602638
 	.quad	6072285182812319085
-	.quad	1538777247520
+	.quad	2138302562080
 	.quad	-3311351115081502130
 	.quad	54185015286451590
 	.quad	-4748032580888550375

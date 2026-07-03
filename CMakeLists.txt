@@ -391,6 +391,8 @@ target_include_directories(llvm_transpile SYSTEM PUBLIC
 llvm_map_components_to_libnames(LLVM_TRANSPILE_DEPS
     Analysis
     AsmPrinter
+    BitReader
+    BitWriter
     CodeGen
     Core
     MC

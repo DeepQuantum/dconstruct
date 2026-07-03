@@ -40,6 +40,7 @@ using namespace dconstruct;
 
 namespace {
     const std::filesystem::path SIDBASE_PATH = "sidbase.bin";
+    const std::filesystem::path EXCLUDED_FUNCTIONS_PATH = "excluded.txt";
     const std::filesystem::path GAME_ROOT = "C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II";
     const std::filesystem::path GAME_DC1_DIR = GAME_ROOT / "build" / "pc" / "main" / "bin_unpacked" / "dc1";
     const std::filesystem::path GAME_MODS_DIR = GAME_ROOT / "mods";
@@ -189,7 +190,11 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    llvm_transpile::llvm_transpiler tp(sidbase);
+    const bool has_excluded_functions = std::filesystem::exists(EXCLUDED_FUNCTIONS_PATH);
+    if (has_excluded_functions) {
+        std::println("using excluded functions from {}", std::filesystem::absolute(EXCLUDED_FUNCTIONS_PATH).string());
+    }
+    llvm_transpile::llvm_transpiler tp(sidbase, has_excluded_functions ? &EXCLUDED_FUNCTIONS_PATH : nullptr);
     std::vector<std::unique_ptr<BinaryFile>> binfiles;
     std::vector<std::unique_ptr<Disassembler>> disassemblers;
     std::vector<llvm_transpile::original_binfile> original_binfiles;

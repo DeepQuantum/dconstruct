@@ -15,9 +15,8 @@ def RetCC_DCVM : CallingConv<[
 
 // SaveList intentionally stays empty: the VM gives every invocation its own
 // register frame, so a callee never has to save anything (and there is no
-// stack to save to). The preserved mask below is caller-side knowledge only:
-// r1-r48 survive a call, r0 receives the return value, and the argument
-// window r49-r65 must be treated as clobbered so no value is ever kept there
-// across a call and every call site rewrites its full argument list.
+// stack to save to). Calls clobber only r0 (the return value, an explicit
+// def on the call instructions); everything else, including the argument
+// window r49-r65, survives a call, so a call site may reuse an argument
+// value that is already in place from an earlier call.
 def CSR_DCVM : CalleeSavedRegs<(add)>;
-def CSR_DCVM_Preserved : CalleeSavedRegs<(add (sequence "R%u", 1, 48))>;

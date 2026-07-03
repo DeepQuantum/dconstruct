@@ -301,11 +301,6 @@ SDValue DCVMTargetLowering::LowerCall(CallLoweringInfo& CLI, SmallVectorImpl<SDV
     for (const auto& Reg : RegsToPass)
         Ops.push_back(DAG.getRegister(Reg.first, Reg.second.getValueType()));
 
-    const TargetRegisterInfo* TRI = Subtarget->getRegisterInfo();
-    const uint32_t* Mask = TRI->getCallPreservedMask(MF, CLI.CallConv);
-    assert(Mask && "missing call preserved mask");
-    Ops.push_back(DAG.getRegisterMask(Mask));
-
     if (Glue.getNode())
         Ops.push_back(Glue);
 

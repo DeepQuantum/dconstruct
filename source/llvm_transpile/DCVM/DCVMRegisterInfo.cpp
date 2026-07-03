@@ -17,15 +17,11 @@ const MCPhysReg* DCVMRegisterInfo::getCalleeSavedRegs(const MachineFunction* MF)
     return CSR_DCVM_SaveList;
 }
 
-const uint32_t* DCVMRegisterInfo::getCallPreservedMask(const MachineFunction& MF, CallingConv::ID CC) const {
-    return CSR_DCVM_Preserved_RegMask;
-}
-
 BitVector DCVMRegisterInfo::getReservedRegs(const MachineFunction& MF) const {
-    // General evaluation lives exclusively in the allocatable GPR class
-    // (r0-r48). The argument window r49-r65 is not allocatable and is treated
-    // as clobbered by every call via CSR_DCVM_Preserved_RegMask, so args are
-    // fully rewritten at each call site, matching the original compiler.
+    // General evaluation lives exclusively in the GPR class (r0-r48); the
+    // argument window r49-r65 only ever holds call arguments. Calls preserve
+    // every register except r0, so an argument value already in place may be
+    // reused by a later call.
     return BitVector(getNumRegs());
 }
 

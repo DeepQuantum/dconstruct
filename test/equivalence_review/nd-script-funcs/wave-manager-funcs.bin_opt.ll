@@ -3,26 +3,26 @@ source_filename = "wave-manager-funcs.bin"
 target triple = "x86_64-pc-windows-msvc"
 
 @wave-manager-get-npc-alive-count-by-faction_symbol_table_src = private unnamed_addr constant [6 x i64] [i64 6237759117678430531, i64 4013010305452811590, i64 3423406688794319677, i64 -2664920944689591574, i64 6230461421097945948, i64 -5673227674328399655], align 8
-@wave-manager-get-total-npc-in-wave-count_symbol_table_src = private unnamed_addr constant [7 x i64] [i64 998391088342721072, i64 2997365522926602638, i64 6072285182812319085, i64 1538777247405, i64 -3311351115081502130, i64 4013010305452811590, i64 -7194759694070631083], align 8
-@"wave-manager-is-ready?_symbol_table_src" = private unnamed_addr constant [7 x i64] [i64 -6870362608876642110, i64 2997365522926602638, i64 6072285182812319085, i64 1538777247744, i64 -3311351115081502130, i64 54185015286451590, i64 -4142738284031958410], align 8
-@wave-manager-get-encounter-intensity_symbol_table_src = private unnamed_addr constant [7 x i64] [i64 998391088342721072, i64 2997365522926602638, i64 6072285182812319085, i64 1538777247344, i64 -3311351115081502130, i64 -8623127435633610462, i64 -3532724295824964118], align 8
-@wave-manager-get-next-spawning-wave-npc-schemas-group_symbol_table_src = private unnamed_addr constant [27 x i64] [i64 -4561343946152313276, i64 -7966019873906053962, i64 -1851807429122828651, i64 6072285182812319085, i64 1538777247869, i64 -8623127435633610462, i64 -6711785430563033859, i64 -3193965096093911673, i64 8534565298598421705, i64 4294967295, i64 7920520547792940799, i64 -1136051897790519866, i64 4382432297032017585, i64 -160782944825580444, i64 -7660363871649534493, i64 4013010305452811590, i64 -1358566869505889023, i64 9066152901236616051, i64 54185015286451590, i64 6884240918683042611, i64 -2664920944689591574, i64 2009214271962714043, i64 3321216610294482167, i64 3684810824690217768, i64 1538777247798, i64 -3311351115081502130, i64 1538777247819], align 8
-@wave-manager-get-total-wave-count_symbol_table_src = private unnamed_addr constant [7 x i64] [i64 998391088342721072, i64 2997365522926602638, i64 6072285182812319085, i64 1538777247462, i64 -3311351115081502130, i64 -8623127435633610462, i64 126389912060929688], align 8
+@wave-manager-get-total-npc-in-wave-count_symbol_table_src = private unnamed_addr constant [7 x i64] [i64 998391088342721072, i64 2997365522926602638, i64 6072285182812319085, i64 2138302561965, i64 -3311351115081502130, i64 4013010305452811590, i64 -7194759694070631083], align 8
+@"wave-manager-is-ready?_symbol_table_src" = private unnamed_addr constant [7 x i64] [i64 -6870362608876642110, i64 2997365522926602638, i64 6072285182812319085, i64 2138302562304, i64 -3311351115081502130, i64 54185015286451590, i64 -4142738284031958410], align 8
+@wave-manager-get-encounter-intensity_symbol_table_src = private unnamed_addr constant [7 x i64] [i64 998391088342721072, i64 2997365522926602638, i64 6072285182812319085, i64 2138302561904, i64 -3311351115081502130, i64 -8623127435633610462, i64 -3532724295824964118], align 8
+@wave-manager-get-next-spawning-wave-npc-schemas-group_symbol_table_src = private unnamed_addr constant [27 x i64] [i64 -4561343946152313276, i64 -7966019873906053962, i64 -1851807429122828651, i64 6072285182812319085, i64 2138302562429, i64 -8623127435633610462, i64 -6711785430563033859, i64 -3193965096093911673, i64 8534565298598421705, i64 4294967295, i64 7920520547792940799, i64 -1136051897790519866, i64 4382432297032017585, i64 -160782944825580444, i64 -7660363871649534493, i64 4013010305452811590, i64 -1358566869505889023, i64 9066152901236616051, i64 54185015286451590, i64 6884240918683042611, i64 -2664920944689591574, i64 2009214271962714043, i64 3321216610294482167, i64 3684810824690217768, i64 2138302562358, i64 -3311351115081502130, i64 2138302562379], align 8
+@wave-manager-get-total-wave-count_symbol_table_src = private unnamed_addr constant [7 x i64] [i64 998391088342721072, i64 2997365522926602638, i64 6072285182812319085, i64 2138302562022, i64 -3311351115081502130, i64 -8623127435633610462, i64 126389912060929688], align 8
 @wave-manager-get-num-waves-spawned_symbol_table_src = private unnamed_addr constant [3 x i64] [i64 4013010305452811590, i64 -1136051897790519866, i64 -7660363871649534493], align 8
 @wave-manager-get-next-spawning-wave-spawn-configs_symbol_table_src = private unnamed_addr constant [3 x i64] [i64 -4561343946152313276, i64 -1136051897790519866, i64 -3630726564894351738], align 8
 @wave-manager-get-next-spawning-wave-npc-count_symbol_table_src = private unnamed_addr constant [2 x i64] [i64 1399776995102310962, i64 4013010305452811590], align 8
-@"wave-manager-spawn-next-wave!_symbol_table_src" = private unnamed_addr constant [7 x i64] [i64 998391088342721072, i64 4789555171397753330, i64 5189346610966935392, i64 2997365522926602638, i64 6072285182812319085, i64 1538777247647, i64 -3311351115081502130], align 8
+@"wave-manager-spawn-next-wave!_symbol_table_src" = private unnamed_addr constant [7 x i64] [i64 998391088342721072, i64 4789555171397753330, i64 5189346610966935392, i64 2997365522926602638, i64 6072285182812319085, i64 2138302562207, i64 -3311351115081502130], align 8
 @wave-manager-get-npc-alive-group_symbol_table_src = private unnamed_addr constant [11 x i64] [i64 -3193965096093911673, i64 8534565298598421705, i64 4294967295, i64 4013010305452811590, i64 -8578220443451849366, i64 3423406688794319677, i64 -2664920944689591574, i64 -4433807632111512251, i64 3321216610294482167, i64 3684810824690217768, i64 -5673227674328399655], align 8
 @wave-manager-kill-all-npcs_symbol_table_src = private unnamed_addr constant [9 x i64] [i64 -8385702754139928849, i64 6237759117678430531, i64 4013010305452811590, i64 3423406688794319677, i64 -2664920944689591574, i64 -7738336759357028456, i64 0, i64 -5673227674328399655, i64 -3835701475675913431], align 8
 @wave-manager-get-lost-player-npc-group_symbol_table_src = private unnamed_addr constant [11 x i64] [i64 6237759117678430531, i64 -3193965096093911673, i64 8534565298598421705, i64 4294967295, i64 4013010305452811590, i64 3423406688794319677, i64 -2664920944689591574, i64 -1345322216029872946, i64 3321216610294482167, i64 3684810824690217768, i64 -5673227674328399655], align 8
-@"wave-manager-stop!_symbol_table_src" = private unnamed_addr constant [7 x i64] [i64 998391088342721072, i64 4789555171397753330, i64 4737644804400110462, i64 2997365522926602638, i64 6072285182812319085, i64 1538777247701, i64 -3311351115081502130], align 8
-@wave-manager-get-npc-alive-count_symbol_table_src = private unnamed_addr constant [7 x i64] [i64 998391088342721072, i64 2997365522926602638, i64 6072285182812319085, i64 1538777247405, i64 -3311351115081502130, i64 1564617029140756692, i64 -8578220443451849366], align 8
+@"wave-manager-stop!_symbol_table_src" = private unnamed_addr constant [7 x i64] [i64 998391088342721072, i64 4789555171397753330, i64 4737644804400110462, i64 2997365522926602638, i64 6072285182812319085, i64 2138302562261, i64 -3311351115081502130], align 8
+@wave-manager-get-npc-alive-count_symbol_table_src = private unnamed_addr constant [7 x i64] [i64 998391088342721072, i64 2997365522926602638, i64 6072285182812319085, i64 2138302561965, i64 -3311351115081502130, i64 1564617029140756692, i64 -8578220443451849366], align 8
 @wave-manager-get-next-wave-faction_symbol_table_src = private unnamed_addr constant [5 x i64] [i64 -8623127435633610462, i64 3512716474478954862, i64 54185015286451590, i64 -4142738284031958410, i64 4294967295], align 8
 @wave-manager-get-lost-player-npc-group-count_symbol_table_src = private unnamed_addr constant [2 x i64] [i64 4013010305452811590, i64 7267865752999468798], align 8
-@"wave-manager-spawn-next-special-wave!_symbol_table_src" = private unnamed_addr constant [7 x i64] [i64 998391088342721072, i64 4789555171397753330, i64 1354182575228257266, i64 2997365522926602638, i64 6072285182812319085, i64 1538777247585, i64 -3311351115081502130], align 8
+@"wave-manager-spawn-next-special-wave!_symbol_table_src" = private unnamed_addr constant [7 x i64] [i64 998391088342721072, i64 4789555171397753330, i64 1354182575228257266, i64 2997365522926602638, i64 6072285182812319085, i64 2138302562145, i64 -3311351115081502130], align 8
 @"wave-manager-current-task-in-run?_symbol_table_src" = private unnamed_addr constant [3 x i64] [i64 54185015286451590, i64 -5700187185490357332, i64 3766070110510549571], align 8
 @wave-manager-get-next-spawning-wave-composition_symbol_table_src = private unnamed_addr constant [2 x i64] [i64 -1136051897790519866, i64 -8364948414460296332], align 8
-@"wave-manager-has-requested-wave-spawned?_symbol_table_src" = private unnamed_addr constant [8 x i64] [i64 998391088342721072, i64 2997365522926602638, i64 6072285182812319085, i64 1538777247520, i64 -3311351115081502130, i64 54185015286451590, i64 -4748032580888550375, i64 224422539916484139], align 8
+@"wave-manager-has-requested-wave-spawned?_symbol_table_src" = private unnamed_addr constant [8 x i64] [i64 998391088342721072, i64 2997365522926602638, i64 6072285182812319085, i64 2138302562080, i64 -3311351115081502130, i64 54185015286451590, i64 -4748032580888550375, i64 224422539916484139], align 8
 @"wave-manager-npc-lost-player?_symbol_table_src" = private unnamed_addr constant [4 x i64] [i64 -5833053787651694927, i64 5008278420455340480, i64 -4433807632111512251, i64 -7707884455580369866], align 8
 @llvm.used = appending global [22 x ptr] [ptr @"wave-manager-current-task-in-run?_symbol_table_src", ptr @wave-manager-get-encounter-intensity_symbol_table_src, ptr @wave-manager-get-lost-player-npc-group-count_symbol_table_src, ptr @wave-manager-get-lost-player-npc-group_symbol_table_src, ptr @wave-manager-get-next-spawning-wave-composition_symbol_table_src, ptr @wave-manager-get-next-spawning-wave-npc-count_symbol_table_src, ptr @wave-manager-get-next-spawning-wave-npc-schemas-group_symbol_table_src, ptr @wave-manager-get-next-spawning-wave-spawn-configs_symbol_table_src, ptr @wave-manager-get-next-wave-faction_symbol_table_src, ptr @wave-manager-get-npc-alive-count-by-faction_symbol_table_src, ptr @wave-manager-get-npc-alive-count_symbol_table_src, ptr @wave-manager-get-npc-alive-group_symbol_table_src, ptr @wave-manager-get-num-waves-spawned_symbol_table_src, ptr @wave-manager-get-total-npc-in-wave-count_symbol_table_src, ptr @wave-manager-get-total-wave-count_symbol_table_src, ptr @"wave-manager-has-requested-wave-spawned?_symbol_table_src", ptr @"wave-manager-is-ready?_symbol_table_src", ptr @wave-manager-kill-all-npcs_symbol_table_src, ptr @"wave-manager-npc-lost-player?_symbol_table_src", ptr @"wave-manager-spawn-next-special-wave!_symbol_table_src", ptr @"wave-manager-spawn-next-wave!_symbol_table_src", ptr @"wave-manager-stop!_symbol_table_src"], section "llvm.metadata"
 
@@ -85,9 +85,6 @@ bb16:                                             ; preds = %bb12, %entry
 ; Function Attrs: mustprogress nosync nounwind willreturn
 define i64 @wave-manager-get-total-npc-in-wave-count(i64 %arg_0) local_unnamed_addr #1 !NonInlineableAcrossModules !8 {
 entry:
-  %__LookupPointer_15135392958628049486_canonical = call ptr @llvm.dcvm.lookup(i64 -3311351115081502130)
-  %__LookupPointer_6072285182812319085_canonical = call ptr @llvm.dcvm.lookup(i64 6072285182812319085)
-  %__LookupPointer_2997365522926602638_canonical = call ptr @llvm.dcvm.lookup(i64 2997365522926602638)
   %"__LookupPointer_object-spawned?_fptr" = tail call ptr @llvm.dcvm.lookup(i64 -6870362608876642110)
   %__CallFf_4___call.i = tail call i64 %"__LookupPointer_object-spawned?_fptr"(i64 %arg_0) #3, !callees !9, !dcvm.distance !3
   %__OpLogNot_5__op.i = icmp eq i64 %__CallFf_4___call.i, 0
@@ -96,9 +93,12 @@ entry:
 bb1.i:                                            ; preds = %entry
   %0 = tail call ptr @llvm.dcvm.static.pointer(i64 13632)
   %1 = ptrtoint ptr %0 to i64
-  %__CallFf_13___call.i = tail call i64 %__LookupPointer_15135392958628049486_canonical(i64 %arg_0) #3, !callees !10, !dcvm.distance !3
-  %__CallFf_16___call.i = tail call i64 %__LookupPointer_6072285182812319085_canonical(i64 %1, i64 %__CallFf_13___call.i) #3, !callees !11, !dcvm.distance !3
-  %__CallFf_18___call.i = tail call i64 %__LookupPointer_2997365522926602638_canonical(i64 %__CallFf_16___call.i) #3, !callees !12, !dcvm.distance !3
+  %__LookupPointer_string-debug_fptr = tail call ptr @llvm.dcvm.lookup(i64 -3311351115081502130)
+  %__CallFf_13___call.i = tail call i64 %__LookupPointer_string-debug_fptr(i64 %arg_0) #3, !callees !10, !dcvm.distance !3
+  %"__LookupPointer_dc:format_fptr" = tail call ptr @llvm.dcvm.lookup(i64 6072285182812319085)
+  %__CallFf_16___call.i = tail call i64 %"__LookupPointer_dc:format_fptr"(i64 %1, i64 %__CallFf_13___call.i) #3, !callees !11, !dcvm.distance !3
+  %__LookupPointer_display-error_fptr = tail call ptr @llvm.dcvm.lookup(i64 2997365522926602638)
+  %__CallFf_18___call.i = tail call i64 %__LookupPointer_display-error_fptr(i64 %__CallFf_16___call.i) #3, !callees !12, !dcvm.distance !3
   br label %"wave-manager-is-ready?.exit"
 
 "wave-manager-is-ready?.exit":                    ; preds = %entry, %bb1.i
@@ -110,9 +110,12 @@ bb1.i:                                            ; preds = %entry
 bb1:                                              ; preds = %"wave-manager-is-ready?.exit"
   %2 = tail call ptr @llvm.dcvm.static.pointer(i64 13293)
   %3 = ptrtoint ptr %2 to i64
-  %__CallFf_13___call = tail call i64 %__LookupPointer_15135392958628049486_canonical(i64 %arg_0) #3, !callees !10, !dcvm.distance !3
-  %__CallFf_16___call = tail call i64 %__LookupPointer_6072285182812319085_canonical(i64 %3, i64 %__CallFf_13___call) #3, !callees !11, !dcvm.distance !3
-  %__CallFf_18___call = tail call i64 %__LookupPointer_2997365522926602638_canonical(i64 %__CallFf_16___call) #3, !callees !12, !dcvm.distance !3
+  %__LookupPointer_string-debug_fptr16 = tail call ptr @llvm.dcvm.lookup(i64 -3311351115081502130)
+  %__CallFf_13___call = tail call i64 %__LookupPointer_string-debug_fptr16(i64 %arg_0) #3, !callees !10, !dcvm.distance !3
+  %"__LookupPointer_dc:format_fptr17" = tail call ptr @llvm.dcvm.lookup(i64 6072285182812319085)
+  %__CallFf_16___call = tail call i64 %"__LookupPointer_dc:format_fptr17"(i64 %3, i64 %__CallFf_13___call) #3, !callees !11, !dcvm.distance !3
+  %__LookupPointer_display-error_fptr18 = tail call ptr @llvm.dcvm.lookup(i64 2997365522926602638)
+  %__CallFf_18___call = tail call i64 %__LookupPointer_display-error_fptr18(i64 %__CallFf_16___call) #3, !callees !12, !dcvm.distance !3
   br label %bb3
 
 bb3:                                              ; preds = %"wave-manager-is-ready?.exit", %bb1
@@ -149,9 +152,6 @@ bb3:                                              ; preds = %entry, %bb1
 ; Function Attrs: mustprogress nosync nounwind willreturn
 define i64 @wave-manager-get-encounter-intensity(i64 %arg_0) local_unnamed_addr #1 !NonInlineableAcrossModules !8 {
 entry:
-  %__LookupPointer_15135392958628049486_canonical = call ptr @llvm.dcvm.lookup(i64 -3311351115081502130)
-  %__LookupPointer_6072285182812319085_canonical = call ptr @llvm.dcvm.lookup(i64 6072285182812319085)
-  %__LookupPointer_2997365522926602638_canonical = call ptr @llvm.dcvm.lookup(i64 2997365522926602638)
   %"__LookupPointer_object-spawned?_fptr" = tail call ptr @llvm.dcvm.lookup(i64 -6870362608876642110)
   %__CallFf_4___call.i = tail call i64 %"__LookupPointer_object-spawned?_fptr"(i64 %arg_0) #3, !callees !9, !dcvm.distance !3
   %__OpLogNot_5__op.i = icmp eq i64 %__CallFf_4___call.i, 0
@@ -160,9 +160,12 @@ entry:
 bb1.i:                                            ; preds = %entry
   %0 = tail call ptr @llvm.dcvm.static.pointer(i64 13632)
   %1 = ptrtoint ptr %0 to i64
-  %__CallFf_13___call.i = tail call i64 %__LookupPointer_15135392958628049486_canonical(i64 %arg_0) #3, !callees !10, !dcvm.distance !3
-  %__CallFf_16___call.i = tail call i64 %__LookupPointer_6072285182812319085_canonical(i64 %1, i64 %__CallFf_13___call.i) #3, !callees !11, !dcvm.distance !3
-  %__CallFf_18___call.i = tail call i64 %__LookupPointer_2997365522926602638_canonical(i64 %__CallFf_16___call.i) #3, !callees !12, !dcvm.distance !3
+  %__LookupPointer_string-debug_fptr = tail call ptr @llvm.dcvm.lookup(i64 -3311351115081502130)
+  %__CallFf_13___call.i = tail call i64 %__LookupPointer_string-debug_fptr(i64 %arg_0) #3, !callees !10, !dcvm.distance !3
+  %"__LookupPointer_dc:format_fptr" = tail call ptr @llvm.dcvm.lookup(i64 6072285182812319085)
+  %__CallFf_16___call.i = tail call i64 %"__LookupPointer_dc:format_fptr"(i64 %1, i64 %__CallFf_13___call.i) #3, !callees !11, !dcvm.distance !3
+  %__LookupPointer_display-error_fptr = tail call ptr @llvm.dcvm.lookup(i64 2997365522926602638)
+  %__CallFf_18___call.i = tail call i64 %__LookupPointer_display-error_fptr(i64 %__CallFf_16___call.i) #3, !callees !12, !dcvm.distance !3
   br label %"wave-manager-is-ready?.exit"
 
 "wave-manager-is-ready?.exit":                    ; preds = %entry, %bb1.i
@@ -174,9 +177,12 @@ bb1.i:                                            ; preds = %entry
 bb1:                                              ; preds = %"wave-manager-is-ready?.exit"
   %2 = tail call ptr @llvm.dcvm.static.pointer(i64 13232)
   %3 = ptrtoint ptr %2 to i64
-  %__CallFf_13___call = tail call i64 %__LookupPointer_15135392958628049486_canonical(i64 %arg_0) #3, !callees !10, !dcvm.distance !3
-  %__CallFf_16___call = tail call i64 %__LookupPointer_6072285182812319085_canonical(i64 %3, i64 %__CallFf_13___call) #3, !callees !11, !dcvm.distance !3
-  %__CallFf_18___call = tail call i64 %__LookupPointer_2997365522926602638_canonical(i64 %__CallFf_16___call) #3, !callees !12, !dcvm.distance !3
+  %__LookupPointer_string-debug_fptr19 = tail call ptr @llvm.dcvm.lookup(i64 -3311351115081502130)
+  %__CallFf_13___call = tail call i64 %__LookupPointer_string-debug_fptr19(i64 %arg_0) #3, !callees !10, !dcvm.distance !3
+  %"__LookupPointer_dc:format_fptr20" = tail call ptr @llvm.dcvm.lookup(i64 6072285182812319085)
+  %__CallFf_16___call = tail call i64 %"__LookupPointer_dc:format_fptr20"(i64 %3, i64 %__CallFf_13___call) #3, !callees !11, !dcvm.distance !3
+  %__LookupPointer_display-error_fptr21 = tail call ptr @llvm.dcvm.lookup(i64 2997365522926602638)
+  %__CallFf_18___call = tail call i64 %__LookupPointer_display-error_fptr21(i64 %__CallFf_16___call) #3, !callees !12, !dcvm.distance !3
   br label %bb3
 
 bb3:                                              ; preds = %"wave-manager-is-ready?.exit", %bb1
@@ -188,7 +194,6 @@ bb3:                                              ; preds = %"wave-manager-is-re
 ; Function Attrs: mustprogress nosync nounwind willreturn
 define i64 @wave-manager-get-next-spawning-wave-npc-schemas-group(i64 %arg_0) local_unnamed_addr #1 !NonInlineableAcrossModules !8 {
 bb3:
-  %__LookupPointer_15252778977615639943_canonical = call ptr @llvm.dcvm.lookup(i64 -3193965096093911673)
   %__LookupPointer_get-symbol_fptr = tail call ptr @llvm.dcvm.lookup(i64 -1136051897790519866)
   %__CallFf_6___call.i = tail call i64 %__LookupPointer_get-symbol_fptr(i64 -8364948414460296332, i64 %arg_0) #3, !callees !15, !dcvm.distance !3
   %__BranchIfNot_21___bool.not = icmp eq i64 %__CallFf_6___call.i, 0
@@ -202,7 +207,8 @@ bb4:                                              ; preds = %bb3
   %__LoadI32_29___load = load i32, ptr %__IAdd_28__op, align 4
   %__LookupPointer_get-int32_fptr = tail call ptr @llvm.dcvm.lookup(i64 -8623127435633610462)
   %__CallFf_35___call = tail call i64 %__LookupPointer_get-int32_fptr(i64 -6711785430563033859, i64 %arg_0) #3, !callees !14, !dcvm.distance !3
-  %__CallFf_43___call = tail call i64 %__LookupPointer_15252778977615639943_canonical(i64 8534565298598421705, i64 -1, i64 0) #3, !callees !16, !dcvm.distance !3
+  %__LookupPointer_darray-create_fptr = tail call ptr @llvm.dcvm.lookup(i64 -3193965096093911673)
+  %__CallFf_43___call = tail call i64 %__LookupPointer_darray-create_fptr(i64 8534565298598421705, i64 -1, i64 0) #3, !callees !16, !dcvm.distance !3
   %__IGreaterThanEqual_46__op = icmp sgt i64 %__CallFf_35___call, -1
   %__LoadI32_29___ext = sext i32 %__LoadI32_29___load to i64
   %__ILessThan_50__op = icmp slt i64 %__CallFf_35___call, %__LoadI32_29___ext
@@ -215,9 +221,9 @@ bb6:                                              ; preds = %bb4
   %__IAdd_56__op = getelementptr i8, ptr %__LoadPointer_53___load, i64 %__IMulImm_55__op
   %__IAddImm_59__op = getelementptr i8, ptr %__IAdd_56__op, i64 8
   %__LoadPointer_60___load = load ptr, ptr %__IAddImm_59__op, align 8
-  %__CallFf_68___call = tail call i64 %__LookupPointer_15252778977615639943_canonical(i64 8534565298598421705, i64 -1, i64 0) #3, !callees !16, !dcvm.distance !3
-  %__CallFf_76___call = tail call i64 %__LookupPointer_15252778977615639943_canonical(i64 8534565298598421705, i64 -1, i64 0) #3, !callees !16, !dcvm.distance !3
-  %__CallFf_84___call = tail call i64 %__LookupPointer_15252778977615639943_canonical(i64 8534565298598421705, i64 -1, i64 0) #3, !callees !16, !dcvm.distance !3
+  %__CallFf_68___call = tail call i64 %__LookupPointer_darray-create_fptr(i64 8534565298598421705, i64 -1, i64 0) #3, !callees !16, !dcvm.distance !3
+  %__CallFf_76___call = tail call i64 %__LookupPointer_darray-create_fptr(i64 8534565298598421705, i64 -1, i64 0) #3, !callees !16, !dcvm.distance !3
+  %__CallFf_84___call = tail call i64 %__LookupPointer_darray-create_fptr(i64 8534565298598421705, i64 -1, i64 0) #3, !callees !16, !dcvm.distance !3
   %__CallFf_92___call = tail call i64 %__LookupPointer_get-symbol_fptr(i64 4382432297032017585, i64 %arg_0) #3, !callees !15, !dcvm.distance !3
   %__LookupPointer_darray-copy-into_fptr = tail call ptr @llvm.dcvm.lookup(i64 7920520547792940799)
   %__CallFf_97___call = tail call i64 %__LookupPointer_darray-copy-into_fptr(i64 %__CallFf_68___call, i64 %__CallFf_92___call, i64 0) #3, !callees !17, !dcvm.distance !3
@@ -341,7 +347,8 @@ bb41:                                             ; preds = %bb34, %bb35
   br i1 %__ILessThan_276__op, label %bb34, label %bb48
 
 bb47:                                             ; preds = %bb3
-  %__CallFf_389___call = tail call i64 %__LookupPointer_15252778977615639943_canonical(i64 8534565298598421705, i64 -1, i64 0) #3, !callees !16, !dcvm.distance !3
+  %__LookupPointer_darray-create_fptr355 = tail call ptr @llvm.dcvm.lookup(i64 -3193965096093911673)
+  %__CallFf_389___call = tail call i64 %__LookupPointer_darray-create_fptr355(i64 8534565298598421705, i64 -1, i64 0) #3, !callees !16, !dcvm.distance !3
   br label %bb48
 
 bb48:                                             ; preds = %bb41, %bb32, %bb6, %bb4, %bb47
@@ -352,9 +359,6 @@ bb48:                                             ; preds = %bb41, %bb32, %bb6, 
 ; Function Attrs: mustprogress nosync nounwind willreturn
 define i64 @wave-manager-get-total-wave-count(i64 %arg_0) local_unnamed_addr #1 !NonInlineableAcrossModules !8 {
 entry:
-  %__LookupPointer_15135392958628049486_canonical = call ptr @llvm.dcvm.lookup(i64 -3311351115081502130)
-  %__LookupPointer_6072285182812319085_canonical = call ptr @llvm.dcvm.lookup(i64 6072285182812319085)
-  %__LookupPointer_2997365522926602638_canonical = call ptr @llvm.dcvm.lookup(i64 2997365522926602638)
   %"__LookupPointer_object-spawned?_fptr" = tail call ptr @llvm.dcvm.lookup(i64 -6870362608876642110)
   %__CallFf_4___call.i = tail call i64 %"__LookupPointer_object-spawned?_fptr"(i64 %arg_0) #3, !callees !9, !dcvm.distance !3
   %__OpLogNot_5__op.i = icmp eq i64 %__CallFf_4___call.i, 0
@@ -363,9 +367,12 @@ entry:
 bb1.i:                                            ; preds = %entry
   %0 = tail call ptr @llvm.dcvm.static.pointer(i64 13632)
   %1 = ptrtoint ptr %0 to i64
-  %__CallFf_13___call.i = tail call i64 %__LookupPointer_15135392958628049486_canonical(i64 %arg_0) #3, !callees !10, !dcvm.distance !3
-  %__CallFf_16___call.i = tail call i64 %__LookupPointer_6072285182812319085_canonical(i64 %1, i64 %__CallFf_13___call.i) #3, !callees !11, !dcvm.distance !3
-  %__CallFf_18___call.i = tail call i64 %__LookupPointer_2997365522926602638_canonical(i64 %__CallFf_16___call.i) #3, !callees !12, !dcvm.distance !3
+  %__LookupPointer_string-debug_fptr = tail call ptr @llvm.dcvm.lookup(i64 -3311351115081502130)
+  %__CallFf_13___call.i = tail call i64 %__LookupPointer_string-debug_fptr(i64 %arg_0) #3, !callees !10, !dcvm.distance !3
+  %"__LookupPointer_dc:format_fptr" = tail call ptr @llvm.dcvm.lookup(i64 6072285182812319085)
+  %__CallFf_16___call.i = tail call i64 %"__LookupPointer_dc:format_fptr"(i64 %1, i64 %__CallFf_13___call.i) #3, !callees !11, !dcvm.distance !3
+  %__LookupPointer_display-error_fptr = tail call ptr @llvm.dcvm.lookup(i64 2997365522926602638)
+  %__CallFf_18___call.i = tail call i64 %__LookupPointer_display-error_fptr(i64 %__CallFf_16___call.i) #3, !callees !12, !dcvm.distance !3
   br label %"wave-manager-is-ready?.exit"
 
 "wave-manager-is-ready?.exit":                    ; preds = %entry, %bb1.i
@@ -377,9 +384,12 @@ bb1.i:                                            ; preds = %entry
 bb1:                                              ; preds = %"wave-manager-is-ready?.exit"
   %2 = tail call ptr @llvm.dcvm.static.pointer(i64 13350)
   %3 = ptrtoint ptr %2 to i64
-  %__CallFf_13___call = tail call i64 %__LookupPointer_15135392958628049486_canonical(i64 %arg_0) #3, !callees !10, !dcvm.distance !3
-  %__CallFf_16___call = tail call i64 %__LookupPointer_6072285182812319085_canonical(i64 %3, i64 %__CallFf_13___call) #3, !callees !11, !dcvm.distance !3
-  %__CallFf_18___call = tail call i64 %__LookupPointer_2997365522926602638_canonical(i64 %__CallFf_16___call) #3, !callees !12, !dcvm.distance !3
+  %__LookupPointer_string-debug_fptr19 = tail call ptr @llvm.dcvm.lookup(i64 -3311351115081502130)
+  %__CallFf_13___call = tail call i64 %__LookupPointer_string-debug_fptr19(i64 %arg_0) #3, !callees !10, !dcvm.distance !3
+  %"__LookupPointer_dc:format_fptr20" = tail call ptr @llvm.dcvm.lookup(i64 6072285182812319085)
+  %__CallFf_16___call = tail call i64 %"__LookupPointer_dc:format_fptr20"(i64 %3, i64 %__CallFf_13___call) #3, !callees !11, !dcvm.distance !3
+  %__LookupPointer_display-error_fptr21 = tail call ptr @llvm.dcvm.lookup(i64 2997365522926602638)
+  %__CallFf_18___call = tail call i64 %__LookupPointer_display-error_fptr21(i64 %__CallFf_16___call) #3, !callees !12, !dcvm.distance !3
   br label %bb3
 
 bb3:                                              ; preds = %"wave-manager-is-ready?.exit", %bb1
@@ -447,9 +457,6 @@ entry:
 ; Function Attrs: mustprogress nosync nounwind willreturn
 define i64 @"wave-manager-spawn-next-wave!"(i64 %arg_0) local_unnamed_addr #1 !NonInlineableAcrossModules !8 {
 entry:
-  %__LookupPointer_15135392958628049486_canonical = call ptr @llvm.dcvm.lookup(i64 -3311351115081502130)
-  %__LookupPointer_6072285182812319085_canonical = call ptr @llvm.dcvm.lookup(i64 6072285182812319085)
-  %__LookupPointer_2997365522926602638_canonical = call ptr @llvm.dcvm.lookup(i64 2997365522926602638)
   %"__LookupPointer_object-spawned?_fptr" = tail call ptr @llvm.dcvm.lookup(i64 -6870362608876642110)
   %__CallFf_4___call.i = tail call i64 %"__LookupPointer_object-spawned?_fptr"(i64 %arg_0) #3, !callees !9, !dcvm.distance !3
   %__OpLogNot_5__op.i = icmp eq i64 %__CallFf_4___call.i, 0
@@ -458,9 +465,12 @@ entry:
 bb1.i:                                            ; preds = %entry
   %0 = tail call ptr @llvm.dcvm.static.pointer(i64 13632)
   %1 = ptrtoint ptr %0 to i64
-  %__CallFf_13___call.i = tail call i64 %__LookupPointer_15135392958628049486_canonical(i64 %arg_0) #3, !callees !10, !dcvm.distance !3
-  %__CallFf_16___call.i = tail call i64 %__LookupPointer_6072285182812319085_canonical(i64 %1, i64 %__CallFf_13___call.i) #3, !callees !11, !dcvm.distance !3
-  %__CallFf_18___call.i = tail call i64 %__LookupPointer_2997365522926602638_canonical(i64 %__CallFf_16___call.i) #3, !callees !12, !dcvm.distance !3
+  %__LookupPointer_string-debug_fptr = tail call ptr @llvm.dcvm.lookup(i64 -3311351115081502130)
+  %__CallFf_13___call.i = tail call i64 %__LookupPointer_string-debug_fptr(i64 %arg_0) #3, !callees !10, !dcvm.distance !3
+  %"__LookupPointer_dc:format_fptr" = tail call ptr @llvm.dcvm.lookup(i64 6072285182812319085)
+  %__CallFf_16___call.i = tail call i64 %"__LookupPointer_dc:format_fptr"(i64 %1, i64 %__CallFf_13___call.i) #3, !callees !11, !dcvm.distance !3
+  %__LookupPointer_display-error_fptr = tail call ptr @llvm.dcvm.lookup(i64 2997365522926602638)
+  %__CallFf_18___call.i = tail call i64 %__LookupPointer_display-error_fptr(i64 %__CallFf_16___call.i) #3, !callees !12, !dcvm.distance !3
   br label %"wave-manager-is-ready?.exit"
 
 "wave-manager-is-ready?.exit":                    ; preds = %entry, %bb1.i
@@ -477,9 +487,12 @@ bb1:                                              ; preds = %"wave-manager-is-re
 bb2:                                              ; preds = %"wave-manager-is-ready?.exit"
   %2 = tail call ptr @llvm.dcvm.static.pointer(i64 13535)
   %3 = ptrtoint ptr %2 to i64
-  %__CallFf_19___call = tail call i64 %__LookupPointer_15135392958628049486_canonical(i64 %arg_0) #3, !callees !10, !dcvm.distance !3
-  %__CallFf_22___call = tail call i64 %__LookupPointer_6072285182812319085_canonical(i64 %3, i64 %__CallFf_19___call) #3, !callees !11, !dcvm.distance !3
-  %__CallFf_24___call = tail call i64 %__LookupPointer_2997365522926602638_canonical(i64 %__CallFf_22___call) #3, !callees !12, !dcvm.distance !3
+  %__LookupPointer_string-debug_fptr18 = tail call ptr @llvm.dcvm.lookup(i64 -3311351115081502130)
+  %__CallFf_19___call = tail call i64 %__LookupPointer_string-debug_fptr18(i64 %arg_0) #3, !callees !10, !dcvm.distance !3
+  %"__LookupPointer_dc:format_fptr19" = tail call ptr @llvm.dcvm.lookup(i64 6072285182812319085)
+  %__CallFf_22___call = tail call i64 %"__LookupPointer_dc:format_fptr19"(i64 %3, i64 %__CallFf_19___call) #3, !callees !11, !dcvm.distance !3
+  %__LookupPointer_display-error_fptr20 = tail call ptr @llvm.dcvm.lookup(i64 2997365522926602638)
+  %__CallFf_24___call = tail call i64 %__LookupPointer_display-error_fptr20(i64 %__CallFf_22___call) #3, !callees !12, !dcvm.distance !3
   br label %bb3
 
 bb3:                                              ; preds = %bb2, %bb1
@@ -687,9 +700,6 @@ bb16:                                             ; preds = %bb15, %entry
 ; Function Attrs: mustprogress nosync nounwind willreturn
 define i64 @"wave-manager-stop!"(i64 %arg_0) local_unnamed_addr #1 !NonInlineableAcrossModules !8 {
 entry:
-  %__LookupPointer_15135392958628049486_canonical = call ptr @llvm.dcvm.lookup(i64 -3311351115081502130)
-  %__LookupPointer_6072285182812319085_canonical = call ptr @llvm.dcvm.lookup(i64 6072285182812319085)
-  %__LookupPointer_2997365522926602638_canonical = call ptr @llvm.dcvm.lookup(i64 2997365522926602638)
   %"__LookupPointer_object-spawned?_fptr" = tail call ptr @llvm.dcvm.lookup(i64 -6870362608876642110)
   %__CallFf_4___call.i = tail call i64 %"__LookupPointer_object-spawned?_fptr"(i64 %arg_0) #3, !callees !9, !dcvm.distance !3
   %__OpLogNot_5__op.i = icmp eq i64 %__CallFf_4___call.i, 0
@@ -698,9 +708,12 @@ entry:
 bb1.i:                                            ; preds = %entry
   %0 = tail call ptr @llvm.dcvm.static.pointer(i64 13632)
   %1 = ptrtoint ptr %0 to i64
-  %__CallFf_13___call.i = tail call i64 %__LookupPointer_15135392958628049486_canonical(i64 %arg_0) #3, !callees !10, !dcvm.distance !3
-  %__CallFf_16___call.i = tail call i64 %__LookupPointer_6072285182812319085_canonical(i64 %1, i64 %__CallFf_13___call.i) #3, !callees !11, !dcvm.distance !3
-  %__CallFf_18___call.i = tail call i64 %__LookupPointer_2997365522926602638_canonical(i64 %__CallFf_16___call.i) #3, !callees !12, !dcvm.distance !3
+  %__LookupPointer_string-debug_fptr = tail call ptr @llvm.dcvm.lookup(i64 -3311351115081502130)
+  %__CallFf_13___call.i = tail call i64 %__LookupPointer_string-debug_fptr(i64 %arg_0) #3, !callees !10, !dcvm.distance !3
+  %"__LookupPointer_dc:format_fptr" = tail call ptr @llvm.dcvm.lookup(i64 6072285182812319085)
+  %__CallFf_16___call.i = tail call i64 %"__LookupPointer_dc:format_fptr"(i64 %1, i64 %__CallFf_13___call.i) #3, !callees !11, !dcvm.distance !3
+  %__LookupPointer_display-error_fptr = tail call ptr @llvm.dcvm.lookup(i64 2997365522926602638)
+  %__CallFf_18___call.i = tail call i64 %__LookupPointer_display-error_fptr(i64 %__CallFf_16___call.i) #3, !callees !12, !dcvm.distance !3
   br label %"wave-manager-is-ready?.exit"
 
 "wave-manager-is-ready?.exit":                    ; preds = %entry, %bb1.i
@@ -717,9 +730,12 @@ bb1:                                              ; preds = %"wave-manager-is-re
 bb2:                                              ; preds = %"wave-manager-is-ready?.exit"
   %2 = tail call ptr @llvm.dcvm.static.pointer(i64 13589)
   %3 = ptrtoint ptr %2 to i64
-  %__CallFf_19___call = tail call i64 %__LookupPointer_15135392958628049486_canonical(i64 %arg_0) #3, !callees !10, !dcvm.distance !3
-  %__CallFf_22___call = tail call i64 %__LookupPointer_6072285182812319085_canonical(i64 %3, i64 %__CallFf_19___call) #3, !callees !11, !dcvm.distance !3
-  %__CallFf_24___call = tail call i64 %__LookupPointer_2997365522926602638_canonical(i64 %__CallFf_22___call) #3, !callees !12, !dcvm.distance !3
+  %__LookupPointer_string-debug_fptr18 = tail call ptr @llvm.dcvm.lookup(i64 -3311351115081502130)
+  %__CallFf_19___call = tail call i64 %__LookupPointer_string-debug_fptr18(i64 %arg_0) #3, !callees !10, !dcvm.distance !3
+  %"__LookupPointer_dc:format_fptr19" = tail call ptr @llvm.dcvm.lookup(i64 6072285182812319085)
+  %__CallFf_22___call = tail call i64 %"__LookupPointer_dc:format_fptr19"(i64 %3, i64 %__CallFf_19___call) #3, !callees !11, !dcvm.distance !3
+  %__LookupPointer_display-error_fptr20 = tail call ptr @llvm.dcvm.lookup(i64 2997365522926602638)
+  %__CallFf_24___call = tail call i64 %__LookupPointer_display-error_fptr20(i64 %__CallFf_22___call) #3, !callees !12, !dcvm.distance !3
   br label %bb3
 
 bb3:                                              ; preds = %bb2, %bb1
@@ -730,9 +746,6 @@ bb3:                                              ; preds = %bb2, %bb1
 ; Function Attrs: mustprogress nosync nounwind willreturn
 define i64 @wave-manager-get-npc-alive-count(i64 %arg_0) local_unnamed_addr #1 !NonInlineableAcrossModules !8 {
 entry:
-  %__LookupPointer_15135392958628049486_canonical = call ptr @llvm.dcvm.lookup(i64 -3311351115081502130)
-  %__LookupPointer_6072285182812319085_canonical = call ptr @llvm.dcvm.lookup(i64 6072285182812319085)
-  %__LookupPointer_2997365522926602638_canonical = call ptr @llvm.dcvm.lookup(i64 2997365522926602638)
   %"__LookupPointer_object-spawned?_fptr" = tail call ptr @llvm.dcvm.lookup(i64 -6870362608876642110)
   %__CallFf_4___call.i = tail call i64 %"__LookupPointer_object-spawned?_fptr"(i64 %arg_0) #3, !callees !9, !dcvm.distance !3
   %__OpLogNot_5__op.i = icmp eq i64 %__CallFf_4___call.i, 0
@@ -741,9 +754,12 @@ entry:
 bb1.i:                                            ; preds = %entry
   %0 = tail call ptr @llvm.dcvm.static.pointer(i64 13632)
   %1 = ptrtoint ptr %0 to i64
-  %__CallFf_13___call.i = tail call i64 %__LookupPointer_15135392958628049486_canonical(i64 %arg_0) #3, !callees !10, !dcvm.distance !3
-  %__CallFf_16___call.i = tail call i64 %__LookupPointer_6072285182812319085_canonical(i64 %1, i64 %__CallFf_13___call.i) #3, !callees !11, !dcvm.distance !3
-  %__CallFf_18___call.i = tail call i64 %__LookupPointer_2997365522926602638_canonical(i64 %__CallFf_16___call.i) #3, !callees !12, !dcvm.distance !3
+  %__LookupPointer_string-debug_fptr = tail call ptr @llvm.dcvm.lookup(i64 -3311351115081502130)
+  %__CallFf_13___call.i = tail call i64 %__LookupPointer_string-debug_fptr(i64 %arg_0) #3, !callees !10, !dcvm.distance !3
+  %"__LookupPointer_dc:format_fptr" = tail call ptr @llvm.dcvm.lookup(i64 6072285182812319085)
+  %__CallFf_16___call.i = tail call i64 %"__LookupPointer_dc:format_fptr"(i64 %1, i64 %__CallFf_13___call.i) #3, !callees !11, !dcvm.distance !3
+  %__LookupPointer_display-error_fptr = tail call ptr @llvm.dcvm.lookup(i64 2997365522926602638)
+  %__CallFf_18___call.i = tail call i64 %__LookupPointer_display-error_fptr(i64 %__CallFf_16___call.i) #3, !callees !12, !dcvm.distance !3
   br label %"wave-manager-is-ready?.exit"
 
 "wave-manager-is-ready?.exit":                    ; preds = %entry, %bb1.i
@@ -755,9 +771,12 @@ bb1.i:                                            ; preds = %entry
 bb1:                                              ; preds = %"wave-manager-is-ready?.exit"
   %2 = tail call ptr @llvm.dcvm.static.pointer(i64 13293)
   %3 = ptrtoint ptr %2 to i64
-  %__CallFf_13___call = tail call i64 %__LookupPointer_15135392958628049486_canonical(i64 %arg_0) #3, !callees !10, !dcvm.distance !3
-  %__CallFf_16___call = tail call i64 %__LookupPointer_6072285182812319085_canonical(i64 %3, i64 %__CallFf_13___call) #3, !callees !11, !dcvm.distance !3
-  %__CallFf_18___call = tail call i64 %__LookupPointer_2997365522926602638_canonical(i64 %__CallFf_16___call) #3, !callees !12, !dcvm.distance !3
+  %__LookupPointer_string-debug_fptr16 = tail call ptr @llvm.dcvm.lookup(i64 -3311351115081502130)
+  %__CallFf_13___call = tail call i64 %__LookupPointer_string-debug_fptr16(i64 %arg_0) #3, !callees !10, !dcvm.distance !3
+  %"__LookupPointer_dc:format_fptr17" = tail call ptr @llvm.dcvm.lookup(i64 6072285182812319085)
+  %__CallFf_16___call = tail call i64 %"__LookupPointer_dc:format_fptr17"(i64 %3, i64 %__CallFf_13___call) #3, !callees !11, !dcvm.distance !3
+  %__LookupPointer_display-error_fptr18 = tail call ptr @llvm.dcvm.lookup(i64 2997365522926602638)
+  %__CallFf_18___call = tail call i64 %__LookupPointer_display-error_fptr18(i64 %__CallFf_16___call) #3, !callees !12, !dcvm.distance !3
   br label %bb3
 
 bb3:                                              ; preds = %"wave-manager-is-ready?.exit", %bb1
@@ -793,9 +812,6 @@ entry:
 ; Function Attrs: mustprogress nosync nounwind willreturn
 define i64 @"wave-manager-spawn-next-special-wave!"(i64 %arg_0) local_unnamed_addr #1 !NonInlineableAcrossModules !8 {
 entry:
-  %__LookupPointer_15135392958628049486_canonical = call ptr @llvm.dcvm.lookup(i64 -3311351115081502130)
-  %__LookupPointer_6072285182812319085_canonical = call ptr @llvm.dcvm.lookup(i64 6072285182812319085)
-  %__LookupPointer_2997365522926602638_canonical = call ptr @llvm.dcvm.lookup(i64 2997365522926602638)
   %"__LookupPointer_object-spawned?_fptr" = tail call ptr @llvm.dcvm.lookup(i64 -6870362608876642110)
   %__CallFf_4___call.i = tail call i64 %"__LookupPointer_object-spawned?_fptr"(i64 %arg_0) #3, !callees !9, !dcvm.distance !3
   %__OpLogNot_5__op.i = icmp eq i64 %__CallFf_4___call.i, 0
@@ -804,9 +820,12 @@ entry:
 bb1.i:                                            ; preds = %entry
   %0 = tail call ptr @llvm.dcvm.static.pointer(i64 13632)
   %1 = ptrtoint ptr %0 to i64
-  %__CallFf_13___call.i = tail call i64 %__LookupPointer_15135392958628049486_canonical(i64 %arg_0) #3, !callees !10, !dcvm.distance !3
-  %__CallFf_16___call.i = tail call i64 %__LookupPointer_6072285182812319085_canonical(i64 %1, i64 %__CallFf_13___call.i) #3, !callees !11, !dcvm.distance !3
-  %__CallFf_18___call.i = tail call i64 %__LookupPointer_2997365522926602638_canonical(i64 %__CallFf_16___call.i) #3, !callees !12, !dcvm.distance !3
+  %__LookupPointer_string-debug_fptr = tail call ptr @llvm.dcvm.lookup(i64 -3311351115081502130)
+  %__CallFf_13___call.i = tail call i64 %__LookupPointer_string-debug_fptr(i64 %arg_0) #3, !callees !10, !dcvm.distance !3
+  %"__LookupPointer_dc:format_fptr" = tail call ptr @llvm.dcvm.lookup(i64 6072285182812319085)
+  %__CallFf_16___call.i = tail call i64 %"__LookupPointer_dc:format_fptr"(i64 %1, i64 %__CallFf_13___call.i) #3, !callees !11, !dcvm.distance !3
+  %__LookupPointer_display-error_fptr = tail call ptr @llvm.dcvm.lookup(i64 2997365522926602638)
+  %__CallFf_18___call.i = tail call i64 %__LookupPointer_display-error_fptr(i64 %__CallFf_16___call.i) #3, !callees !12, !dcvm.distance !3
   br label %"wave-manager-is-ready?.exit"
 
 "wave-manager-is-ready?.exit":                    ; preds = %entry, %bb1.i
@@ -823,9 +842,12 @@ bb1:                                              ; preds = %"wave-manager-is-re
 bb2:                                              ; preds = %"wave-manager-is-ready?.exit"
   %2 = tail call ptr @llvm.dcvm.static.pointer(i64 13473)
   %3 = ptrtoint ptr %2 to i64
-  %__CallFf_19___call = tail call i64 %__LookupPointer_15135392958628049486_canonical(i64 %arg_0) #3, !callees !10, !dcvm.distance !3
-  %__CallFf_22___call = tail call i64 %__LookupPointer_6072285182812319085_canonical(i64 %3, i64 %__CallFf_19___call) #3, !callees !11, !dcvm.distance !3
-  %__CallFf_24___call = tail call i64 %__LookupPointer_2997365522926602638_canonical(i64 %__CallFf_22___call) #3, !callees !12, !dcvm.distance !3
+  %__LookupPointer_string-debug_fptr18 = tail call ptr @llvm.dcvm.lookup(i64 -3311351115081502130)
+  %__CallFf_19___call = tail call i64 %__LookupPointer_string-debug_fptr18(i64 %arg_0) #3, !callees !10, !dcvm.distance !3
+  %"__LookupPointer_dc:format_fptr19" = tail call ptr @llvm.dcvm.lookup(i64 6072285182812319085)
+  %__CallFf_22___call = tail call i64 %"__LookupPointer_dc:format_fptr19"(i64 %3, i64 %__CallFf_19___call) #3, !callees !11, !dcvm.distance !3
+  %__LookupPointer_display-error_fptr20 = tail call ptr @llvm.dcvm.lookup(i64 2997365522926602638)
+  %__CallFf_24___call = tail call i64 %__LookupPointer_display-error_fptr20(i64 %__CallFf_22___call) #3, !callees !12, !dcvm.distance !3
   br label %bb3
 
 bb3:                                              ; preds = %bb2, %bb1
@@ -852,9 +874,6 @@ entry:
 ; Function Attrs: mustprogress nosync nounwind willreturn
 define i64 @"wave-manager-has-requested-wave-spawned?"(i64 %arg_0) local_unnamed_addr #1 !NonInlineableAcrossModules !8 {
 entry:
-  %__LookupPointer_15135392958628049486_canonical = call ptr @llvm.dcvm.lookup(i64 -3311351115081502130)
-  %__LookupPointer_6072285182812319085_canonical = call ptr @llvm.dcvm.lookup(i64 6072285182812319085)
-  %__LookupPointer_2997365522926602638_canonical = call ptr @llvm.dcvm.lookup(i64 2997365522926602638)
   %"__LookupPointer_object-spawned?_fptr" = tail call ptr @llvm.dcvm.lookup(i64 -6870362608876642110)
   %__CallFf_4___call.i = tail call i64 %"__LookupPointer_object-spawned?_fptr"(i64 %arg_0) #3, !callees !9, !dcvm.distance !3
   %__OpLogNot_5__op.i = icmp eq i64 %__CallFf_4___call.i, 0
@@ -863,9 +882,12 @@ entry:
 bb1.i:                                            ; preds = %entry
   %0 = tail call ptr @llvm.dcvm.static.pointer(i64 13632)
   %1 = ptrtoint ptr %0 to i64
-  %__CallFf_13___call.i = tail call i64 %__LookupPointer_15135392958628049486_canonical(i64 %arg_0) #3, !callees !10, !dcvm.distance !3
-  %__CallFf_16___call.i = tail call i64 %__LookupPointer_6072285182812319085_canonical(i64 %1, i64 %__CallFf_13___call.i) #3, !callees !11, !dcvm.distance !3
-  %__CallFf_18___call.i = tail call i64 %__LookupPointer_2997365522926602638_canonical(i64 %__CallFf_16___call.i) #3, !callees !12, !dcvm.distance !3
+  %__LookupPointer_string-debug_fptr = tail call ptr @llvm.dcvm.lookup(i64 -3311351115081502130)
+  %__CallFf_13___call.i = tail call i64 %__LookupPointer_string-debug_fptr(i64 %arg_0) #3, !callees !10, !dcvm.distance !3
+  %"__LookupPointer_dc:format_fptr" = tail call ptr @llvm.dcvm.lookup(i64 6072285182812319085)
+  %__CallFf_16___call.i = tail call i64 %"__LookupPointer_dc:format_fptr"(i64 %1, i64 %__CallFf_13___call.i) #3, !callees !11, !dcvm.distance !3
+  %__LookupPointer_display-error_fptr = tail call ptr @llvm.dcvm.lookup(i64 2997365522926602638)
+  %__CallFf_18___call.i = tail call i64 %__LookupPointer_display-error_fptr(i64 %__CallFf_16___call.i) #3, !callees !12, !dcvm.distance !3
   br label %"wave-manager-is-ready?.exit"
 
 "wave-manager-is-ready?.exit":                    ; preds = %entry, %bb1.i
@@ -877,9 +899,12 @@ bb1.i:                                            ; preds = %entry
 bb1:                                              ; preds = %"wave-manager-is-ready?.exit"
   %2 = tail call ptr @llvm.dcvm.static.pointer(i64 13408)
   %3 = ptrtoint ptr %2 to i64
-  %__CallFf_13___call = tail call i64 %__LookupPointer_15135392958628049486_canonical(i64 %arg_0) #3, !callees !10, !dcvm.distance !3
-  %__CallFf_16___call = tail call i64 %__LookupPointer_6072285182812319085_canonical(i64 %3, i64 %__CallFf_13___call) #3, !callees !11, !dcvm.distance !3
-  %__CallFf_18___call = tail call i64 %__LookupPointer_2997365522926602638_canonical(i64 %__CallFf_16___call) #3, !callees !12, !dcvm.distance !3
+  %__LookupPointer_string-debug_fptr26 = tail call ptr @llvm.dcvm.lookup(i64 -3311351115081502130)
+  %__CallFf_13___call = tail call i64 %__LookupPointer_string-debug_fptr26(i64 %arg_0) #3, !callees !10, !dcvm.distance !3
+  %"__LookupPointer_dc:format_fptr27" = tail call ptr @llvm.dcvm.lookup(i64 6072285182812319085)
+  %__CallFf_16___call = tail call i64 %"__LookupPointer_dc:format_fptr27"(i64 %3, i64 %__CallFf_13___call) #3, !callees !11, !dcvm.distance !3
+  %__LookupPointer_display-error_fptr28 = tail call ptr @llvm.dcvm.lookup(i64 2997365522926602638)
+  %__CallFf_18___call = tail call i64 %__LookupPointer_display-error_fptr28(i64 %__CallFf_16___call) #3, !callees !12, !dcvm.distance !3
   br label %bb3
 
 bb3:                                              ; preds = %"wave-manager-is-ready?.exit", %bb1
