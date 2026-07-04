@@ -32,6 +32,7 @@
 #include <crtdbg.h>
 #include <cstdlib>
 extern "C" __declspec(dllimport) unsigned int __stdcall SetErrorMode(unsigned int uMode);
+extern "C" __declspec(dllimport) int __stdcall IsDebuggerPresent(void);
 static constexpr unsigned int SEM_FAILCRITICALERRORS = 0x0001;
 static constexpr unsigned int SEM_NOGPFAULTERRORBOX = 0x0002;
 #endif
@@ -49,19 +50,52 @@ namespace {
     const std::filesystem::path SOURCE_MODULES = GAME_DC1_DIR / "modules.bin";
     const std::filesystem::path STAGED_MODULES = RECOMPILED_DC1_DIR / "modules.bin";
 
-    const std::array DEFAULT_RECOMPILE_INPUTS = {
-        GAME_DC1_DIR / "nd-script-funcs.bin",
-        GAME_DC1_DIR / "script-funcs.bin",
-        GAME_DC1_DIR / "ss-rogue" / "ss-assault-manager.bin",
-        GAME_DC1_DIR / "ss-rogue" / "wave-manager-funcs.bin",
-        GAME_DC1_DIR / "script-user-funcs-impl.bin"
-    };
-
     std::filesystem::path resolve_recompile_input(const std::filesystem::path& input) {
         if (input.is_absolute()) {
             return input;
         }
         return GAME_DC1_DIR / input;
+    }
+
+    resstr<std::vector<std::filesystem::path>> read_recompile_list(const std::filesystem::path& path) {
+        std::ifstream fs(path);
+        if (!fs) {
+            return std::unexpected(std::format("couldn't open recompile list {}", path.string()));
+        }
+
+        std::vector<std::filesystem::path> inputs;
+        std::string line;
+        while (std::getline(fs, line)) {
+            const u64 first = line.find_first_not_of(" \t\r\n");
+            if (first == std::string::npos) {
+                continue;
+            }
+            if (line.compare(first, 2, "//") == 0) {
+                continue;
+            }
+            const u64 last = line.find_last_not_of(" \t\r\n");
+            const std::filesystem::path resolved = resolve_recompile_input(std::filesystem::path(line.substr(first, last - first + 1)));
+
+            std::error_code ec;
+            if (std::filesystem::is_directory(resolved, ec)) {
+                std::vector<std::filesystem::path> folder_inputs;
+                for (const std::filesystem::directory_entry& entry : std::filesystem::recursive_directory_iterator(resolved, ec)) {
+                    if (entry.is_regular_file() && entry.path().extension() == ".bin") {
+                        folder_inputs.push_back(entry.path());
+                    }
+                }
+                if (ec) {
+                    return std::unexpected(std::format("couldn't enumerate recompile folder {}: {}", resolved.string(), ec.message()));
+                }
+                std::ranges::sort(folder_inputs);
+                inputs.insert(inputs.end(), std::make_move_iterator(folder_inputs.begin()), std::make_move_iterator(folder_inputs.end()));
+                continue;
+            }
+
+            inputs.push_back(resolved);
+        }
+
+        return inputs;
     }
 
     resstr<std::filesystem::path> staged_output_path(const std::filesystem::path& source_path) {
@@ -139,18 +173,20 @@ namespace {
 }
 
 int main(int argc, char* argv[]) {
-    _set_abort_behavior(0, _WRITE_ABORT_MSG | _CALL_REPORTFAULT);
-    SetErrorMode(SEM_NOGPFAULTERRORBOX | SEM_FAILCRITICALERRORS);
-    for (int kind : {_CRT_WARN, _CRT_ERROR, _CRT_ASSERT})
-    {
-        _CrtSetReportMode(kind, _CRTDBG_MODE_FILE | _CRTDBG_MODE_DEBUG);
-        _CrtSetReportFile(kind, _CRTDBG_FILE_STDERR);
+    if (!IsDebuggerPresent()) {
+        _set_abort_behavior(0, _WRITE_ABORT_MSG | _CALL_REPORTFAULT);
+        SetErrorMode(SEM_NOGPFAULTERRORBOX | SEM_FAILCRITICALERRORS);
+        for (int kind : {_CRT_WARN, _CRT_ERROR, _CRT_ASSERT})
+        {
+            _CrtSetReportMode(kind, _CRTDBG_MODE_FILE | _CRTDBG_MODE_DEBUG);
+            _CrtSetReportFile(kind, _CRTDBG_FILE_STDERR);
+        }
     }
-    constexpr std::string_view usage = "usage: llvm_transpile_demo [-p <generated-output-dir>] [input.bin ...]\n"
-                                       "  inputs are resolved relative to the game's dc1 directory unless absolute;\n"
-                                       "  omitting inputs recompiles the default module set";
+    constexpr std::string_view usage = "usage: llvm_transpile_demo [-p <generated-output-dir>]\n"
+                                       "  inputs are read from recompile.txt next to the executable, one file or folder per line;\n"
+                                       "  a folder expands to every .bin file beneath it (recursively);\n"
+                                       "  each input is resolved relative to the game's dc1 directory unless absolute";
     std::optional<std::filesystem::path> generated_output_dir;
-    std::vector<std::filesystem::path> recompile_inputs;
     for (int i = 1; i < argc; ++i) {
         const std::string_view arg = argv[i];
         if (arg == "-p") {
@@ -166,16 +202,22 @@ int main(int argc, char* argv[]) {
             generated_output_dir = std::filesystem::path(argv[++i]);
             continue;
         }
-        if (arg.starts_with("-")) {
-            std::println(stderr, "unknown argument: {}", arg);
-            std::println(stderr, "{}", usage);
-            return 1;
-        }
-        recompile_inputs.push_back(resolve_recompile_input(std::filesystem::path(arg)));
+        std::println(stderr, "unknown argument: {}", arg);
+        std::println(stderr, "{}", usage);
+        return 1;
     }
 
+    const std::filesystem::path recompile_list_path = executable_path().parent_path() / "recompile.txt";
+    resstr<std::vector<std::filesystem::path>> recompile_inputs_result = read_recompile_list(recompile_list_path);
+    if (!recompile_inputs_result) {
+        std::println(stderr, "failed to read recompile list: {}", recompile_inputs_result.error());
+        return 1;
+    }
+    const std::vector<std::filesystem::path> recompile_inputs = std::move(*recompile_inputs_result);
+
     if (recompile_inputs.empty()) {
-        recompile_inputs.assign(DEFAULT_RECOMPILE_INPUTS.begin(), DEFAULT_RECOMPILE_INPUTS.end());
+        std::println(stderr, "no inputs listed in {}", recompile_list_path.string());
+        return -1;
     }
 
     auto sidbase_result = SIDBase::from_binary(SIDBASE_PATH);

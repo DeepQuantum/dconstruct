@@ -13,10 +13,4 @@ def RetCC_DCVM : CallingConv<[
     CCIfType<[i64, f32], CCAssignToReg<[R0]>>
 ]>;
 
-// SaveList intentionally stays empty: the VM gives every invocation its own
-// register frame, so a callee never has to save anything (and there is no
-// stack to save to). Calls clobber only r0 (the return value, an explicit
-// def on the call instructions); everything else, including the argument
-// window r49-r65, survives a call, so a call site may reuse an argument
-// value that is already in place from an earlier call.
 def CSR_DCVM : CalleeSavedRegs<(add)>;

@@ -94,11 +94,7 @@ class DstIdxInst<bits<8> op, string mnemonic> : BasicInst<
     let Inst{15-8}  = dst;
     let Inst{23-16} = idx;
 
-    // this means when we spill registers, we can instead re-materialize the instruction to reduce register pressure (beacuse we can't actually spill)
-
     let isReMaterializable = 1;
-
-    // not technically true but we have to leave it for now as otherwise we run out.
     let isAsCheapAsAMove = 1;
 }
 
@@ -250,15 +246,12 @@ def LOADU16IMMri : BasicInst<
 def LOADU32  : LoadInst<13, "LoadU32",  zextloadi32>;
 def LOADFLOAT : FloatLoadInst<14, "LoadFloat">;
 
-// remat is the pressure escape hatch on a target that cannot spill: the
-// allocator only re-emits a lookup next to a use when keeping the original
-// live would run out of registers.
 def LOOKUPPOINTERri : DstIdxInst<21, "LookupPointer">;
 
+let Constraints = "$dst = $src0" in {
 def CASTINTEGERr : RegInst<25, "CastInteger", 2, [(set (i64 GPR:$dst), (i64 (fp_to_sint (f32 GPR:$src0))))]>;
 def CASTFLOATr   : RegInst<26, "CastFloat",   2, [(set (f32 GPR:$dst), (f32 (sint_to_fp (i64 GPR:$src0))))]>;
-// llvm can keep signedness and i32 width on casts after optimization.
-// dcvm only has one cast opcode per direction, so select those forms explicitly.
+}
 def : Pat<(i64 (fp_to_uint (f32 GPR:$src0))), (CASTINTEGERr GPR:$src0)>;
 def : Pat<(f32 (uint_to_fp (i64 GPR:$src0))), (CASTFLOATr GPR:$src0)>;
 def : Pat<(i32 (fp_to_sint (f32 GPR:$src0))), (i32 (CASTINTEGERr GPR:$src0))>;
@@ -308,8 +301,6 @@ def FGErr : RegInst<36, "FGreaterThanEqual", 3, [(set (i64 GPR:$dst), (setuge (f
 def FLTrr : RegInst<37, "FLessThan",         3, [(set (i64 GPR:$dst), (setult (f32 GPR:$src0), (f32 GPR:$src1)))]>;
 def FLErr : RegInst<38, "FLessThanEqual",    3, [(set (i64 GPR:$dst), (setule (f32 GPR:$src0), (f32 GPR:$src1)))]>;
 
-// ordered float compares can survive from optimized llvm ir.
-// the vm compare opcodes are the same instruction choice for these cases.
 def : Pat<(i64 (setoeq (f32 GPR:$src0), (f32 GPR:$src1))), (i64 (FEQrr GPR:$src0, GPR:$src1))>;
 def : Pat<(i64 (setogt (f32 GPR:$src0), (f32 GPR:$src1))), (i64 (FGTrr GPR:$src0, GPR:$src1))>;
 def : Pat<(i64 (setoge (f32 GPR:$src0), (f32 GPR:$src1))), (i64 (FGErr GPR:$src0, GPR:$src1))>;
@@ -317,14 +308,11 @@ def : Pat<(i64 (setolt (f32 GPR:$src0), (f32 GPR:$src1))), (i64 (FLTrr GPR:$src0
 def : Pat<(i64 (setole (f32 GPR:$src0), (f32 GPR:$src1))), (i64 (FLErr GPR:$src0, GPR:$src1))>;
 
 def IMODrr : RegInst<39, "IMod", 3, [(set (i64 GPR:$dst), (srem (i64 GPR:$src0), (i64 GPR:$src1)))]>;
-// unsigned modulo shows up after masking random values into the positive int range.
 def : Pat<(i64 (urem GPR:$src0, GPR:$src1)), (IMODrr GPR:$src0, GPR:$src1)>;
 def FMODrr : RegInst<40, "FMod", 3, [(set (f32 GPR:$dst), (frem (f32 GPR:$src0), (f32 GPR:$src1)))]>;
 
 def IABSr : RegInst<41, "IAbs", 2, [(set (i64 GPR:$dst), (abs (i64 GPR:$src0)))]>;
 def FABSr : RegInst<42, "FAbs", 2, [(set (f32 GPR:$dst), (fabs (f32 GPR:$src0)))]>;
-// llvm may canonicalize fabs as clearing the f32 sign bit.
-// select the vm fabs opcode instead of emitting an integer bitwise op.
 def : Pat<(i32 (and (i32 (bitconvert (f32 GPR:$src0))), 2147483647)), (i32 (FABSr GPR:$src0))>;
 def : Pat<(i32 (and (i32 GPR:$src0), 2147483647)), (i32 (FABSr GPR:$src0))>;
 
@@ -419,51 +407,33 @@ def STOREFLOAT : FloatStoreInst<17, "StoreFloat">;
 def INErr : RegInst<90, "INotEqual", 3, [(set (i64 GPR:$dst), (setne (i64 GPR:$src0), (i64 GPR:$src1)))]>;
 def FNErr : RegInst<91, "FNotEqual", 3, [(set (i64 GPR:$dst), (setune (f32 GPR:$src0), (f32 GPR:$src1)))]>;
 
-// ordered float not-equal has the same vm instruction as the unordered form.
 def : Pat<(i64 (setone (f32 GPR:$src0), (f32 GPR:$src1))), (i64 (FNErr GPR:$src0, GPR:$src1))>;
 
 def : Pat<(i64 (extloadi8  (i64 GPR:$addr))), (LOADU8  GPR:$addr)>;
 def : Pat<(i64 (extloadi16 (i64 GPR:$addr))), (LOADU16 GPR:$addr)>;
 def : Pat<(i64 (extloadi32 (i64 GPR:$addr))), (LOADU32 GPR:$addr)>;
-// optimized ir often narrows load users to i32; select the same VM load opcodes.
 def : Pat<(i32 (zextloadi8  (i64 GPR:$addr))), (i32 (LOADU8  GPR:$addr))>;
 def : Pat<(i32 (zextloadi16 (i64 GPR:$addr))), (i32 (LOADU16 GPR:$addr))>;
-// any-ext loads appear when optimized users only care about the low bits.
 def : Pat<(i32 (extloadi8  (i64 GPR:$addr))), (i32 (LOADU8  GPR:$addr))>;
+def : Pat<(i32 (extloadi16 (i64 GPR:$addr))), (i32 (LOADU16 GPR:$addr))>;
 def : Pat<(i32 (load (i64 GPR:$addr))), (i32 (LOADU32 GPR:$addr))>;
 def : Pat<(i32 (sextloadi8  (i64 GPR:$addr))), (i32 (LOADI8  GPR:$addr))>;
 def : Pat<(i32 (sextloadi16 (i64 GPR:$addr))), (i32 (LOADI16 GPR:$addr))>;
-// legalization introduces type-only moves for 32-bit values. registers are
-// uniform 64-bit, so these are pure register copies: select them as COPY so
-// the register coalescer can eliminate them instead of keeping a real MOVEr
-// (and its extra live interval) alive.
 def : Pat<(i32 (trunc (i64 GPR:$src))), (i32 (COPY_TO_REGCLASS GPR:$src, GPR))>;
 def : Pat<(i64 (zext (i32 GPR:$src))), (i64 (COPY_TO_REGCLASS GPR:$src, GPR))>;
-// anyext can appear when the high bits are unused after legalization.
 def : Pat<(i64 (anyext (i32 GPR:$src))), (i64 (COPY_TO_REGCLASS GPR:$src, GPR))>;
-// optimized ir can keep narrow integer adds when only the low 32 bits are observed.
 def : Pat<(i32 (add (i32 GPR:$src0), (i32 GPR:$src1))), (i32 (IADDrr GPR:$src0, GPR:$src1))>;
-// boolean combines can stay narrowed to i32 after optimization.
 def : Pat<(i32 (and (i32 GPR:$src0), (i32 GPR:$src1))), (i32 (OPBITANDrr GPR:$src0, GPR:$src1))>;
 def : Pat<(i32 (or (i32 GPR:$src0), (i32 GPR:$src1))), (i32 (OPBITORrr GPR:$src0, GPR:$src1))>;
 def : Pat<(i32 (xor (i32 GPR:$src0), (i32 GPR:$src1))), (i32 (OPBITXORrr GPR:$src0, GPR:$src1))>;
-// division by 10 can be strength-reduced into this magic multiply and shift.
-// fold it back to the vm divide opcode instead of selecting the expanded form.
 def : Pat<(i64 (add (sra (mulhs GPR:$src, div10magic), shift2imm), (srl (mulhs GPR:$src, div10magic), shift63imm))), (IDIVIMMri GPR:$src, 10)>;
 def : Pat<(i64 (sra (mulhs GPR:$src, div10magic), shift2imm)), (IDIVIMMri GPR:$src, 10)>;
-// unsigned division by five can be reduced into this magic multiply and shift.
 def : Pat<(i64 (srl (mulhu GPR:$src, udiv5magic), shift2imm)), (IDIVIMMri GPR:$src, 5)>;
-// signed division by two can be canonicalized with sign-bit bias before the shift.
 def : Pat<(i64 (sra (add GPR:$src, (srl GPR:$src, shift63imm)), shift1imm)), (IDIVIMMri GPR:$src, 2)>;
-// unsigned division by two can be canonicalized as a logical right shift.
 def : Pat<(i64 (srl GPR:$src, shift1imm)), (IDIVIMMri GPR:$src, 2)>;
-// llvm may canonicalize fneg as toggling the f32 sign bit.
-// select the vm fneg opcode so the bytecode matches the original float op.
 def : Pat<(i32 (xor (i32 GPR:$src), -2147483648)), (i32 (FNEGr GPR:$src))>;
-// f32 values sometimes move through i32 payloads after optimization.
 def : Pat<(i32 (bitconvert (f32 GPR:$src))), (i32 (COPY_TO_REGCLASS GPR:$src, GPR))>;
 def : Pat<(f32 (bitconvert (i32 GPR:$src))), (f32 (COPY_TO_REGCLASS GPR:$src, GPR))>;
-// optimized ir can store narrowed integer values directly.
 def : Pat<(truncstorei8  (i32 GPR:$value), (i64 GPR:$addr)), (STOREU8  GPR:$addr, GPR:$value)>;
 def : Pat<(truncstorei16 (i32 GPR:$value), (i64 GPR:$addr)), (STOREU16 GPR:$addr, GPR:$value)>;
 def : Pat<(truncstorei32 (i32 GPR:$value), (i64 GPR:$addr)), (STOREU32 GPR:$addr, GPR:$value)>;

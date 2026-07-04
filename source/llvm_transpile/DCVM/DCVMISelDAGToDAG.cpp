@@ -129,6 +129,14 @@ void DCVMDAGToDAGISel::Select(SDNode* N) {
             ReplaceNode(N, CurDAG->getMachineNode(DCVM::IMULrr, DL, VT, N->getOperand(0), SDValue(FactorReg, 0)));
             return;
         }
+        case ISD::SRL: {
+            const ConstantSDNode* ShAmt = dyn_cast<ConstantSDNode>(N->getOperand(1));
+            if (!ShAmt || ShAmt->getZExtValue() != 63 || N->getValueType(0) != MVT::i64)
+                break;
+            SDNode* Zero = CurDAG->getMachineNode(DCVM::LOADU16IMMri, DL, MVT::i64, CurDAG->getTargetConstant(0, DL, MVT::i64));
+            ReplaceNode(N, CurDAG->getMachineNode(DCVM::ILTrr, DL, MVT::i64, N->getOperand(0), SDValue(Zero, 0)));
+            return;
+        }
         case ISD::SUB: {
             if (N->getValueType(0) != MVT::i32)
                 break;
@@ -161,8 +169,6 @@ void DCVMDAGToDAGISel::Select(SDNode* N) {
             if (!Magic || Dividend != LHS)
                 break;
 
-            // llvm expands urem by constants into mulhi/shift/sub during legalization.
-            // fold that expansion back to the vm modulo opcode.
             const uint64_t DivisorValue = Divisor->getZExtValue();
             SDNode* Divisor64 = nullptr;
             if (isUInt<16>(DivisorValue)) {

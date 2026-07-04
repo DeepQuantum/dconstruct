@@ -436,11 +436,11 @@ namespace dconstruct::llvm_transpile {
         return std::nullopt;
     }
 
-    llvm_transpiler::llvm_transpiler(const SIDBase& sidbase, const std::filesystem::path* excluded) : m_sidbase(sidbase), m_ctx(llvm::LLVMContext()), m_builder(m_ctx), m_excludedPath(excluded) {
-        m_defaultIntT = m_builder.getInt64Ty();
-        m_defaultFloatT = m_builder.getFloatTy();
-        m_boolT = m_builder.getInt1Ty();
-        m_defaultPointerT = m_builder.getPtrTy();
+    llvm_transpiler::llvm_transpiler(const SIDBase& sidbase, const std::filesystem::path* excluded) : m_sidbase(sidbase), m_ctx(llvm::LLVMContext()), m_excludedPath(excluded) {
+        m_defaultIntT = llvm::Type::getInt64Ty(m_ctx);
+        m_defaultFloatT = llvm::Type::getFloatTy(m_ctx);
+        m_boolT = llvm::Type::getInt1Ty(m_ctx);
+        m_defaultPointerT = llvm::PointerType::get(m_ctx, 0);
     }
 
     void map_referenced_globals_for_clone(llvm::Module& dst_module, const llvm::Function& src_function, llvm::ValueToValueMapTy& vmap) {
@@ -510,7 +510,7 @@ namespace dconstruct::llvm_transpile {
         auto& types = to_lift.m_types;
         auto& register_frame = to_lift.m_registerFrame;
         blocks.clear();
-        m_builder.ClearInsertionPoint();
+        llvm::IRBuilder<> builder(m_ctx);
 
         std::vector<llvm::Type*> arg_types(disasm->m_stackFrame.m_registerArgs.size(), m_defaultIntT);
 
@@ -526,10 +526,10 @@ namespace dconstruct::llvm_transpile {
             blocks.emplace(node.m_startLine, block);
         }
 
-        m_builder.SetInsertPoint(entry_block);
+        builder.SetInsertPoint(entry_block);
 
         for (u64 i = 0; i < register_frame.size(); ++i) {
-            register_frame[i] = m_builder.CreateAlloca(m_defaultIntT, nullptr, std::format("r{}", i));
+            register_frame[i] = builder.CreateAlloca(m_defaultIntT, nullptr, std::format("r{}", i));
             types[i] = m_defaultIntT;
         }
 
@@ -545,10 +545,10 @@ namespace dconstruct::llvm_transpile {
         for (u64 i = 0; i < new_function->arg_size(); ++i) {
             llvm::Argument* arg = new_function->getArg(i);
             arg->setName(std::format("arg_{}", i));
-            make_store(to_lift, ARGUMENT_REGISTERS_IDX + i, arg, arg->getType());
+            make_store(builder, to_lift, ARGUMENT_REGISTERS_IDX + i, arg, arg->getType());
         }
 
-        m_builder.CreateBr(blocks.at(0));
+        builder.CreateBr(blocks.at(0));
 
         if (!disasm->m_isScriptFunction) {
             m_funcLocations[disasm->get_id()] = new_function;
@@ -575,7 +575,8 @@ namespace dconstruct::llvm_transpile {
         auto& m_registerFrame = function.m_registerFrame;
         llvm::Function* m_function = function.m_llvmFunc;
 
-        m_builder.SetInsertPoint(m_blocks.at(0));
+        llvm::IRBuilder<> builder(m_ctx);
+        builder.SetInsertPoint(m_blocks.at(0));
         const control_flow_node* current_node = &m_graph->m_nodes[0];
         for (u32 l = 0; l < m_disasm->m_lines.size(); ++l) {
             const function_disassembly_line& line = m_disasm->m_lines[l];
@@ -588,334 +589,334 @@ namespace dconstruct::llvm_transpile {
                 using enum Opcode;
                 case IAdd: {
                     if (m_types[istr.operand1]->isPointerTy()) {
-                        make_binary(function, istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreatePtrAdd(a, b, op); }, m_types[istr.operand1], istr_id);
+                        make_binary(builder, function, istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreatePtrAdd(a, b, op); }, m_types[istr.operand1], istr_id);
                     } else if (m_types[istr.operand2]->isPointerTy()) {
-                        make_binary(function, istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreatePtrAdd(b, a, op); }, m_types[istr.operand1], istr_id);
+                        make_binary(builder, function, istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreatePtrAdd(b, a, op); }, m_types[istr.operand1], istr_id);
                     } else {
-                        make_binary(function, istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateAdd(a, b, op); }, m_defaultIntT, istr_id);
+                        make_binary(builder, function, istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreateAdd(a, b, op); }, m_defaultIntT, istr_id);
                     }
                     break;
                 }
                 case FAdd: {
-                    make_binary(function, istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateFAdd(a, b, op); }, m_defaultFloatT, istr_id, m_defaultFloatT);
+                    make_binary(builder, function, istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreateFAdd(a, b, op); }, m_defaultFloatT, istr_id, m_defaultFloatT);
                     break;
                 }
                 case ISub: {
-                    make_binary(function, istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateSub(a, b, op); }, m_defaultIntT, istr_id);
+                    make_binary(builder, function, istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreateSub(a, b, op); }, m_defaultIntT, istr_id);
                     break;
                 }
                 case FSub: {
-                    make_binary(function, istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateFSub(a, b, op); }, m_defaultFloatT, istr_id, m_defaultFloatT);
+                    make_binary(builder, function, istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreateFSub(a, b, op); }, m_defaultFloatT, istr_id, m_defaultFloatT);
                     break;
                 }
                 case IMul: {
-                    make_binary(function, istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateMul(a, b, op); }, m_defaultIntT, istr_id);
+                    make_binary(builder, function, istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreateMul(a, b, op); }, m_defaultIntT, istr_id);
                     break;
                 }
                 case FMul: {
-                    make_binary(function, istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateFMul(a, b, op); }, m_defaultFloatT, istr_id, m_defaultFloatT);
+                    make_binary(builder, function, istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreateFMul(a, b, op); }, m_defaultFloatT, istr_id, m_defaultFloatT);
                     break;
                 }
                 case IDiv: {
-                    make_binary(function, istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateSDiv(a, b, op); }, m_defaultIntT, istr_id);
+                    make_binary(builder, function, istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreateSDiv(a, b, op); }, m_defaultIntT, istr_id);
                     break;
                 }
                 case FDiv: {
-                    make_binary(function, istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateFDiv(a, b, op); }, m_defaultFloatT, istr_id, m_defaultFloatT);
+                    make_binary(builder, function, istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreateFDiv(a, b, op); }, m_defaultFloatT, istr_id, m_defaultFloatT);
                     break;
                 }
                 case OpBitAnd: {
-                    make_binary(function, istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateAnd(a, b, op); }, m_defaultIntT, istr_id);
+                    make_binary(builder, function, istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreateAnd(a, b, op); }, m_defaultIntT, istr_id);
                     break;
                 }
                 case OpBitOr: {
-                    make_binary(function, istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateOr(a, b, op); }, m_defaultIntT, istr_id);
+                    make_binary(builder, function, istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreateOr(a, b, op); }, m_defaultIntT, istr_id);
                     break;
                 }
                 case OpBitXor: {
-                    make_binary(function, istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateXor(a, b, op); }, m_defaultIntT, istr_id);
+                    make_binary(builder, function, istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreateXor(a, b, op); }, m_defaultIntT, istr_id);
                     break;
                 }
                 case OpBitNot: {
-                    make_unary(function, istr, [&](llvm::Value* a) { return m_builder.CreateNot(a, op); }, m_defaultIntT, istr_id);
+                    make_unary(builder, function, istr, [&](llvm::Value* a) { return builder.CreateNot(a, op); }, m_defaultIntT, istr_id);
                     break;
                 }
                 case OpLogNot: {
-                    make_unary(function, istr, [&](llvm::Value* a) { return m_builder.CreateICmpEQ(a, llvm::ConstantInt::get(a->getType(), 0), op); }, m_boolT, istr_id);
+                    make_unary(builder, function, istr, [&](llvm::Value* a) { return builder.CreateICmpEQ(a, llvm::ConstantInt::get(a->getType(), 0), op); }, m_boolT, istr_id, m_defaultIntT);
                     break;
                 }
                 case OpBitNor: {
-                    make_binary(function, istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateNot(m_builder.CreateOr(a, b, op)); }, m_defaultIntT, istr_id);
+                    make_binary(builder, function, istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreateNot(builder.CreateOr(a, b, op)); }, m_defaultIntT, istr_id);
                     break;
                 }
                 case OpLogAnd: {
-                    make_binary(function, istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateLogicalAnd(a, b, op); }, m_boolT, istr_id);
+                    make_binary(builder, function, istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreateLogicalAnd(a, b, op); }, m_boolT, istr_id);
                     break;
                 }
                 case OpLogOr: {
-                    make_binary(function, istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateLogicalOr(a, b, op); }, m_boolT, istr_id);
+                    make_binary(builder, function, istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreateLogicalOr(a, b, op); }, m_boolT, istr_id);
                     break;
                 }
                 case INeg: {
-                    make_unary(function, istr, [&](llvm::Value* a) { return m_builder.CreateNeg(a, op); }, m_defaultIntT, istr_id);
+                    make_unary(builder, function, istr, [&](llvm::Value* a) { return builder.CreateNeg(a, op); }, m_defaultIntT, istr_id);
                     break;
                 }
                 case FNeg: {
-                    make_unary(function, istr, [&](llvm::Value* a) { return m_builder.CreateFNeg(a, op); }, m_defaultFloatT, istr_id, m_defaultFloatT);
+                    make_unary(builder, function, istr, [&](llvm::Value* a) { return builder.CreateFNeg(a, op); }, m_defaultFloatT, istr_id, m_defaultFloatT);
                     break;
                 }
                 case IAddImm: {
                     if (m_types[istr.operand1]->isPointerTy()) {
-                        make_binary_imm(function, istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreatePtrAdd(a, b, op); }, m_types[istr.operand1], istr_id);
+                        make_binary_imm(builder, function, istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreatePtrAdd(a, b, op); }, m_types[istr.operand1], istr_id);
                     } else {
-                        make_binary_imm(function, istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateAdd(a, b, op); }, m_defaultIntT, istr_id);
+                        make_binary_imm(builder, function, istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreateAdd(a, b, op); }, m_defaultIntT, istr_id);
                     }
                     break;
                 }
                 case ISubImm: {
-                    make_binary_imm(function, istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateSub(a, b, op); }, m_defaultIntT, istr_id);
+                    make_binary_imm(builder, function, istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreateSub(a, b, op); }, m_defaultIntT, istr_id);
                     break;
                 }
                 case IMulImm: {
-                    make_binary_imm(function, istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateMul(a, b, op); }, m_defaultIntT, istr_id);
+                    make_binary_imm(builder, function, istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreateMul(a, b, op); }, m_defaultIntT, istr_id);
                     break;
                 }
                 case IDivImm: {
-                    make_binary_imm(function, istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateSDiv(a, b, op); }, m_defaultIntT, istr_id);
+                    make_binary_imm(builder, function, istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreateSDiv(a, b, op); }, m_defaultIntT, istr_id);
                     break;
                 }
                 case IntAsh: {
-                    make_binary(function, istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateIntrinsic(llvm::Intrinsic::dcvm_intash, {a, b}); }, m_defaultIntT, istr_id);
+                    make_binary(builder, function, istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreateIntrinsic(llvm::Intrinsic::dcvm_intash, {a, b}); }, m_defaultIntT, istr_id);
                     break;
                 }
                 case IEqual: {
-                    make_binary(function, istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateICmpEQ(a, b, op); }, m_defaultIntT, istr_id, m_defaultIntT);
+                    make_binary(builder, function, istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreateICmpEQ(a, b, op); }, m_defaultIntT, istr_id, m_defaultIntT);
                     break;
                 }
                 case FEqual: {
-                    make_binary(function, istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateFCmpUEQ(a, b, op); }, m_boolT, istr_id, m_defaultFloatT);
+                    make_binary(builder, function, istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreateFCmpUEQ(a, b, op); }, m_boolT, istr_id, m_defaultFloatT);
                     break;
                 }
                 case INotEqual: {
-                    make_binary(function, istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateICmpNE(a, b, op); }, m_boolT, istr_id);
+                    make_binary(builder, function, istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreateICmpNE(a, b, op); }, m_boolT, istr_id);
                     break;
                 }
                 case FNotEqual: {
-                    make_binary(function, istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateFCmpUNE(a, b, op); }, m_boolT, istr_id, m_defaultFloatT);
+                    make_binary(builder, function, istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreateFCmpUNE(a, b, op); }, m_boolT, istr_id, m_defaultFloatT);
                     break;
                 }
                 case ILessThan: {
-                    make_binary(function, istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateICmpSLT(a, b, op); }, m_boolT, istr_id);
+                    make_binary(builder, function, istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreateICmpSLT(a, b, op); }, m_boolT, istr_id);
                     break;
                 }
                 case FLessThan: {
-                    make_binary(function, istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateFCmpULT(a, b, op); }, m_boolT, istr_id, m_defaultFloatT);
+                    make_binary(builder, function, istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreateFCmpULT(a, b, op); }, m_boolT, istr_id, m_defaultFloatT);
                     break;
                 }
                 case ILessThanEqual: {
-                    make_binary(function, istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateICmpSLE(a, b, op); }, m_boolT, istr_id);
+                    make_binary(builder, function, istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreateICmpSLE(a, b, op); }, m_boolT, istr_id);
                     break;
                 }
                 case FLessThanEqual: {
-                    make_binary(function, istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateFCmpULE(a, b, op); }, m_boolT, istr_id, m_defaultFloatT);
+                    make_binary(builder, function, istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreateFCmpULE(a, b, op); }, m_boolT, istr_id, m_defaultFloatT);
                     break;
                 }
                 case IGreaterThan: {
-                    make_binary(function, istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateICmpSGT(a, b, op); }, m_boolT, istr_id);
+                    make_binary(builder, function, istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreateICmpSGT(a, b, op); }, m_boolT, istr_id);
                     break;
                 }
                 case FGreaterThan: {
-                    make_binary(function, istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateFCmpUGT(a, b, op); }, m_boolT, istr_id, m_defaultFloatT);
+                    make_binary(builder, function, istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreateFCmpUGT(a, b, op); }, m_boolT, istr_id, m_defaultFloatT);
                     break;
                 }
                 case IGreaterThanEqual: {
-                    make_binary(function, istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateICmpSGE(a, b, op); }, m_boolT, istr_id);
+                    make_binary(builder, function, istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreateICmpSGE(a, b, op); }, m_boolT, istr_id);
                     break;
                 }
                 case FGreaterThanEqual: {
-                    make_binary(function, istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateFCmpUGE(a, b, op); }, m_boolT, istr_id, m_defaultFloatT);
+                    make_binary(builder, function, istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreateFCmpUGE(a, b, op); }, m_boolT, istr_id, m_defaultFloatT);
                     break;
                 }
                 case IMod: {
-                    make_binary(function, istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateSRem(a, b, op); }, m_defaultIntT, istr_id);
+                    make_binary(builder, function, istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreateSRem(a, b, op); }, m_defaultIntT, istr_id);
                     break;
                 }
                 case FMod: {
-                    make_binary(function, istr, [&](llvm::Value* a, llvm::Value* b) { return m_builder.CreateFRem(a, b, op); }, m_defaultFloatT, istr_id, m_defaultFloatT);
+                    make_binary(builder, function, istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreateFRem(a, b, op); }, m_defaultFloatT, istr_id, m_defaultFloatT);
                     break;
                 }
                 case IAbs: {
-                    make_unary(function, istr, [&](llvm::Value* a) { return m_builder.CreateIntrinsic(llvm::Intrinsic::abs, {a->getType()}, {a, m_builder.getFalse()}); }, m_defaultIntT, istr_id);
+                    make_unary(builder, function, istr, [&](llvm::Value* a) { return builder.CreateIntrinsic(llvm::Intrinsic::abs, {a->getType()}, {a, builder.getFalse()}); }, m_defaultIntT, istr_id);
                     break;
                 }
                 case FAbs: {
-                    make_unary(function, istr, [&](llvm::Value* a) { return m_builder.CreateUnaryIntrinsic(llvm::Intrinsic::fabs, a); }, m_defaultFloatT, istr_id, m_defaultFloatT);
+                    make_unary(builder, function, istr, [&](llvm::Value* a) { return builder.CreateUnaryIntrinsic(llvm::Intrinsic::fabs, a); }, m_defaultFloatT, istr_id, m_defaultFloatT);
                     break;
                 }
                 case AssertPointer: {
                     m_types[istr.destination] = m_defaultPointerT;
-                    llvm::Value* ptr = load_register(function, istr.destination, std::format("{}_ptr", istr_id));
-                    m_builder.CreateIsNotNull(ptr, op);
+                    llvm::Value* ptr = load_register(builder, function, istr.destination, std::format("{}_ptr", istr_id));
+                    builder.CreateIsNotNull(ptr, op);
                     break;
                 }
                 case LoadU16Imm: {
                     const u16 val = istr.operand1 | (istr.operand2 << 8);
                     m_types[istr.destination] = m_defaultIntT;
                     llvm::Constant* value = llvm::ConstantInt::get(m_defaultIntT, val, false);
-                    make_store(function, istr.destination, value);
+                    make_store(builder, function, istr.destination, value);
                     break;
                 }
                 case LoadStaticU8Imm: {
-                    make_symbol_table_load<u8>(function, istr, istr_id);
+                    make_symbol_table_load<u8>(builder, function, istr, istr_id);
                     break;
                 }
                 case LoadStaticU16Imm: {
-                    make_symbol_table_load<u16>(function, istr, istr_id);
+                    make_symbol_table_load<u16>(builder, function, istr, istr_id);
                     break;
                 }
                 case LoadStaticU32Imm: {
-                    make_symbol_table_load<u32>(function, istr, istr_id);
+                    make_symbol_table_load<u32>(builder, function, istr, istr_id);
                     break;
                 }
                 case LoadStaticU64Imm: {
-                    make_symbol_table_load<u64>(function, istr, istr_id);
+                    make_symbol_table_load<u64>(builder, function, istr, istr_id);
                     break;
                 }
                 case LoadStaticI8Imm: {
-                    make_symbol_table_load<i8>(function, istr, istr_id);
+                    make_symbol_table_load<i8>(builder, function, istr, istr_id);
                     break;
                 }
                 case LoadStaticI16Imm: {
-                    make_symbol_table_load<i16>(function, istr, istr_id);
+                    make_symbol_table_load<i16>(builder, function, istr, istr_id);
                     break;
                 }
                 case LoadStaticI32Imm: {
-                    make_symbol_table_load<i32>(function, istr, istr_id);
+                    make_symbol_table_load<i32>(builder, function, istr, istr_id);
                     break;
                 }
                 case LoadStaticI64Imm: {
-                    make_symbol_table_load<i64>(function, istr, istr_id);
+                    make_symbol_table_load<i64>(builder, function, istr, istr_id);
                     break;
                 }
                 case LoadStaticFloatImm: {
-                    make_symbol_table_load<f32>(function, istr, istr_id);
+                    make_symbol_table_load<f32>(builder, function, istr, istr_id);
                     break;
                 }
                 case LoadStaticInt: {
-                    llvm::Value* idx = load_register(function, istr.operand1, std::format("{}_idx", istr_id));
-                    llvm::Value* value = m_builder.CreateIntrinsic(llvm::Intrinsic::dcvm_load_static_int, {idx}, {}, std::format("{}static_int", istr_id));
-                    make_store(function, istr.destination, value, m_defaultIntT);
+                    llvm::Value* idx = load_register(builder, function, istr.operand1, std::format("{}_idx", istr_id));
+                    llvm::Value* value = builder.CreateIntrinsic(llvm::Intrinsic::dcvm_load_static_int, {idx}, {}, std::format("{}static_int", istr_id));
+                    make_store(builder, function, istr.destination, value, m_defaultIntT);
                     break;
                 }
                 case LoadStaticFloat: {
-                    llvm::Value* idx = load_register(function, istr.operand1, std::format("{}_idx", istr_id));
-                    llvm::Value* value = m_builder.CreateIntrinsic(llvm::Intrinsic::dcvm_load_static_float, {idx}, {}, std::format("{}static_float", istr_id));
-                    make_store(function, istr.destination, value, m_defaultFloatT);
+                    llvm::Value* idx = load_register(builder, function, istr.operand1, std::format("{}_idx", istr_id));
+                    llvm::Value* value = builder.CreateIntrinsic(llvm::Intrinsic::dcvm_load_static_float, {idx}, {}, std::format("{}static_float", istr_id));
+                    make_store(builder, function, istr.destination, value, m_defaultFloatT);
                     break;
                 }
                 case LoadStaticPointer: {
-                    llvm::Value* idx = load_register(function, istr.operand1, std::format("{}_idx", istr_id));
-                    llvm::Value* value = m_builder.CreateIntrinsic(llvm::Intrinsic::dcvm_load_static_pointer, {idx}, {}, std::format("{}static_pointer", istr_id));
-                    make_store(function, istr.destination, value, m_defaultPointerT);
+                    llvm::Value* idx = load_register(builder, function, istr.operand1, std::format("{}_idx", istr_id));
+                    llvm::Value* value = builder.CreateIntrinsic(llvm::Intrinsic::dcvm_load_static_pointer, {idx}, {}, std::format("{}static_pointer", istr_id));
+                    make_store(builder, function, istr.destination, value, m_defaultPointerT);
                     break;
                 }
                 case LoadU8: {
-                    make_mem_load<u8>(function, istr, istr_id);
+                    make_mem_load<u8>(builder, function, istr, istr_id);
                     break;
                 }
                 case LoadU16: {
-                    make_mem_load<u16>(function, istr, istr_id);
+                    make_mem_load<u16>(builder, function, istr, istr_id);
                     break;
                 }
                 case LoadU32: {
-                    make_mem_load<u32>(function, istr, istr_id);
+                    make_mem_load<u32>(builder, function, istr, istr_id);
                     break;
                 }
                 case LoadU64: {
-                    make_mem_load<u64>(function, istr, istr_id);
+                    make_mem_load<u64>(builder, function, istr, istr_id);
                     break;
                 }
                 case LoadI8: {
-                    make_mem_load<i8>(function, istr, istr_id);
+                    make_mem_load<i8>(builder, function, istr, istr_id);
                     break;
                 }
                 case LoadI16: {
-                    make_mem_load<i16>(function, istr, istr_id);
+                    make_mem_load<i16>(builder, function, istr, istr_id);
                     break;
                 }
                 case LoadI32: {
-                    make_mem_load<i32>(function, istr, istr_id);
+                    make_mem_load<i32>(builder, function, istr, istr_id);
                     break;
                 }
                 case LoadI64: {
-                    make_mem_load<i64>(function, istr, istr_id);
+                    make_mem_load<i64>(builder, function, istr, istr_id);
                     break;
                 }
                 case LoadFloat: {
-                    make_mem_load<f32>(function, istr, istr_id);
+                    make_mem_load<f32>(builder, function, istr, istr_id);
                     break;
                 }
                 case LoadPointer: {
-                    make_mem_load<void*>(function, istr, istr_id);
+                    make_mem_load<void*>(builder, function, istr, istr_id);
                     break;
                 }
                 case StoreI8: {
-                    make_mem_store<i8>(function, istr, istr_id);
+                    make_mem_store<i8>(builder, function, istr, istr_id);
                     break;
                 }
                 case StoreU8: {
-                    make_mem_store<u8>(function, istr, istr_id);
+                    make_mem_store<u8>(builder, function, istr, istr_id);
                     break;
                 }
                 case StoreI16: {
-                    make_mem_store<i16>(function, istr, istr_id);
+                    make_mem_store<i16>(builder, function, istr, istr_id);
                     break;
                 }
                 case StoreU16: {
-                    make_mem_store<u16>(function, istr, istr_id);
+                    make_mem_store<u16>(builder, function, istr, istr_id);
                     break;
                 }
                 case StoreI32: {
-                    make_mem_store<i32>(function, istr, istr_id);
+                    make_mem_store<i32>(builder, function, istr, istr_id);
                     break;
                 }
                 case StoreU32: {
-                    make_mem_store<u32>(function, istr, istr_id);
+                    make_mem_store<u32>(builder, function, istr, istr_id);
                     break;
                 }
                 case StoreI64: {
-                    make_mem_store<i64>(function, istr, istr_id);
+                    make_mem_store<i64>(builder, function, istr, istr_id);
                     break;
                 }
                 case StoreU64: {
-                    make_mem_store<u64>(function, istr, istr_id);
+                    make_mem_store<u64>(builder, function, istr, istr_id);
                     break;
                 }
                 case StoreFloat: {
-                    make_mem_store<f32>(function, istr, istr_id);
+                    make_mem_store<f32>(builder, function, istr, istr_id);
                     break;
                 }
                 case StorePointer: {
-                    make_mem_store<const void*>(function, istr, istr_id);
+                    make_mem_store<const void*>(builder, function, istr, istr_id);
                     break;
                 }
                 case CastInteger: {
-                    llvm::Value* current_float = load_register(function, istr.operand1, "cast_load", m_defaultFloatT);
+                    llvm::Value* current_float = load_register(builder, function, istr.operand1, "cast_load", m_defaultFloatT);
 
-                    llvm::Value* cast = m_builder.CreateFPToUI(current_float, m_defaultIntT);
+                    llvm::Value* cast = builder.CreateFPToUI(current_float, m_defaultIntT);
                     m_types[istr.destination] = m_defaultIntT;
-                    make_store(function, istr.destination, cast, m_defaultIntT);
+                    make_store(builder, function, istr.destination, cast, m_defaultIntT);
                     break;
                 }
                 case CastFloat: {
-                    llvm::Value* current_int = load_register(function, istr.operand1);
+                    llvm::Value* current_int = load_register(builder, function, istr.operand1);
 
                     assert(m_types[istr.operand1] == m_defaultIntT);
 
-                    llvm::Value* cast = m_builder.CreateUIToFP(current_int, m_defaultFloatT);
+                    llvm::Value* cast = builder.CreateUIToFP(current_int, m_defaultFloatT);
                     m_types[istr.destination] = m_defaultFloatT;
 
-                    make_store(function, istr.destination, cast, m_defaultIntT);
+                    make_store(builder, function, istr.destination, cast, m_defaultIntT);
                     break;
                 }
                 case LoadStaticPointerImm: {
@@ -925,12 +926,12 @@ namespace dconstruct::llvm_transpile {
                     const p64 mapped_string_offset = function.m_symbolTable->get<p64>(istr.operand1 * sizeof(u64));
                     const p64 binary_file_byte_start = p64(unit.m_binaryFile->m_bytes.get());
                     const p64 string_file_offset = mapped_string_offset - binary_file_byte_start;
-                    llvm::Value* string_pointer = m_builder.CreateIntrinsic(llvm::Intrinsic::dcvm_static_pointer, {m_builder.getInt64(string_file_offset)});
-                    make_store(function, istr.destination, string_pointer, m_defaultPointerT);
+                    llvm::Value* string_pointer = builder.CreateIntrinsic(llvm::Intrinsic::dcvm_static_pointer, {builder.getInt64(string_file_offset)});
+                    make_store(builder, function, istr.destination, string_pointer, m_defaultPointerT);
                     break;
                 }
                 case Move: {
-                    make_store(function, istr.destination, load_register(function, istr.operand1, std::format("{}_load_op1", istr_id)), m_types[istr.operand1]);
+                    make_store(builder, function, istr.destination, load_register(builder, function, istr.operand1, std::format("{}_load_op1", istr_id)), m_types[istr.operand1]);
                     break;
                 }
                 case LookupPointer: {
@@ -951,46 +952,46 @@ namespace dconstruct::llvm_transpile {
 
                         unit.m_calledGlobals.emplace_back(function_name);
 
-                        make_store(function, istr.destination, callee_function.getCallee(), function_type);
+                        make_store(builder, function, istr.destination, callee_function.getCallee(), function_type);
                     } else {
                         assert(std::holds_alternative<ast::primitive_type>(symbol_table_t));
                         const ast::primitive_type ast_sid_t = std::get<ast::primitive_type>(symbol_table_t);
                         assert(ast_sid_t.m_type == ast::primitive_kind::SID);
                         const sid64 sid_id = m_symbolTable->get<sid64>(istr.operand1 * sizeof(u64));
-                        make_symbol_table_load<sid64>(function, istr, istr_id);
-                        llvm::Value* sid = load_register(function, istr.destination, "", m_defaultIntT);
-                        llvm::CallInst* func_ptr = m_builder.CreateIntrinsic(llvm::Intrinsic::dcvm_lookup, {sid}, {}, std::format("{}_{}_lookup", istr_id, sid_id));
+                        make_symbol_table_load<sid64>(builder, function, istr, istr_id);
+                        llvm::Value* sid = load_register(builder, function, istr.destination, "", m_defaultIntT);
+                        llvm::CallInst* func_ptr = builder.CreateIntrinsic(llvm::Intrinsic::dcvm_lookup, {sid}, {}, std::format("{}_{}_lookup", istr_id, sid_id));
 
-                        make_store(function, istr.destination, func_ptr, m_defaultPointerT);
+                        make_store(builder, function, istr.destination, func_ptr, m_defaultPointerT);
                     }
                     break;
                 }
                 case CallFf:
                 case Call: {
                     llvm::FunctionType* func_type = llvm::cast<llvm::FunctionType>(m_types[istr.operand1]);
-                    llvm::Value* callee = load_register(function, istr.operand1, std::format("{}_callee", istr_id));
+                    llvm::Value* callee = load_register(builder, function, istr.operand1, std::format("{}_callee", istr_id));
                     std::vector<llvm::Value*> arg_values;
                     arg_values.reserve(istr.operand2);
                     for (u64 i = 0; i < istr.operand2; ++i) {
-                        arg_values.push_back(load_register(function, ARGUMENT_REGISTERS_IDX + i, std::format("{}_arg{}", istr_id, i), m_defaultIntT));
+                        arg_values.push_back(load_register(builder, function, ARGUMENT_REGISTERS_IDX + i, std::format("{}_arg{}", istr_id, i), m_defaultIntT));
                         if (i < func_type->getNumParams() && arg_values.back()->getType() != func_type->getParamType(i)) {
                             func_type = exchange_function_types(function, arg_values.back()->getType(), istr.operand1, i);
                         }
                     }
-                    llvm::CallInst* call = m_builder.CreateCall(func_type, callee, llvm::ArrayRef(arg_values.data(), arg_values.size()), std::format("{}_call", istr_id));
-                    make_store(function, istr.destination, call, func_type->getReturnType());
+                    llvm::CallInst* call = builder.CreateCall(func_type, callee, llvm::ArrayRef(arg_values.data(), arg_values.size()), std::format("{}_call", istr_id));
+                    make_store(builder, function, istr.destination, call, func_type->getReturnType());
                     break;
                 }
                 case Return: {
-                    llvm::Value* ret_value = m_builder.CreateLoad(m_defaultIntT, m_registerFrame[istr.destination], std::format("{}_retval", istr_id));
-                    m_builder.CreateRet(ret_value);
+                    llvm::Value* ret_value = builder.CreateLoad(m_defaultIntT, m_registerFrame[istr.destination], std::format("{}_retval", istr_id));
+                    builder.CreateRet(ret_value);
                     terminated = true;
                     break;
                 }
                 case Branch: {
                     istr_line target = current_node->m_lines.back().m_target;
-                    m_builder.CreateBr(m_blocks.at(target));
-                    m_builder.SetInsertPoint(m_blocks.at(l + 1));
+                    builder.CreateBr(m_blocks.at(target));
+                    builder.SetInsertPoint(m_blocks.at(l + 1));
                     current_node = m_graph->get_node_with_start_line(l + 1);
                     assert(current_node != nullptr);
                     terminated = true;
@@ -998,12 +999,12 @@ namespace dconstruct::llvm_transpile {
                 }
                 case BranchIf: {
                     const istr_line destination = current_node->m_lines.back().m_target;
-                    llvm::Value* condition_reg = m_builder.CreateLoad(m_defaultIntT, m_registerFrame[istr.operand1], std::format("{}_cond", istr_id));
-                    llvm::Value* bool_condition_reg = m_builder.CreateICmpNE(condition_reg, llvm::ConstantInt::get(condition_reg->getType(), 0), std::format("{}_bool", istr_id));
+                    llvm::Value* condition_reg = builder.CreateLoad(m_defaultIntT, m_registerFrame[istr.operand1], std::format("{}_cond", istr_id));
+                    llvm::Value* bool_condition_reg = builder.CreateICmpNE(condition_reg, llvm::ConstantInt::get(condition_reg->getType(), 0), std::format("{}_bool", istr_id));
                     llvm::BasicBlock* target_block = m_blocks.at(destination);
                     llvm::BasicBlock* fallthrough = m_blocks.at(l + 1);
-                    m_builder.CreateCondBr(bool_condition_reg, target_block, fallthrough);
-                    m_builder.SetInsertPoint(m_blocks.at(l + 1));
+                    builder.CreateCondBr(bool_condition_reg, target_block, fallthrough);
+                    builder.SetInsertPoint(m_blocks.at(l + 1));
                     current_node = m_graph->get_node_with_start_line(l + 1);
                     assert(current_node != nullptr);
                     terminated = true;
@@ -1011,12 +1012,12 @@ namespace dconstruct::llvm_transpile {
                 }
                 case BranchIfNot: {
                     const istr_line destination = current_node->m_lines.back().m_target;
-                    llvm::Value* condition_reg = m_builder.CreateLoad(m_defaultIntT, m_registerFrame[istr.operand1], std::format("{}_cond", istr_id));
-                    llvm::Value* bool_condition_reg = m_builder.CreateICmpNE(condition_reg, llvm::ConstantInt::get(condition_reg->getType(), 0), std::format("{}_bool", istr_id));
+                    llvm::Value* condition_reg = builder.CreateLoad(m_defaultIntT, m_registerFrame[istr.operand1], std::format("{}_cond", istr_id));
+                    llvm::Value* bool_condition_reg = builder.CreateICmpNE(condition_reg, llvm::ConstantInt::get(condition_reg->getType(), 0), std::format("{}_bool", istr_id));
                     llvm::BasicBlock* target_block = m_blocks.at(destination);
                     llvm::BasicBlock* fallthrough = m_blocks.at(l + 1);
-                    m_builder.CreateCondBr(bool_condition_reg, fallthrough, target_block);
-                    m_builder.SetInsertPoint(m_blocks.at(l + 1));
+                    builder.CreateCondBr(bool_condition_reg, fallthrough, target_block);
+                    builder.SetInsertPoint(m_blocks.at(l + 1));
                     current_node = m_graph->get_node_with_start_line(l + 1);
                     assert(current_node != nullptr);
                     terminated = true;
@@ -1027,8 +1028,8 @@ namespace dconstruct::llvm_transpile {
             }
 
             if (!terminated && l == current_node->m_endLine) {
-                m_builder.CreateBr(m_blocks.at(l + 1));
-                m_builder.SetInsertPoint(m_blocks.at(l + 1));
+                builder.CreateBr(m_blocks.at(l + 1));
+                builder.SetInsertPoint(m_blocks.at(l + 1));
                 current_node = m_graph->get_node_with_start_line(l + 1);
                 assert(current_node != nullptr);
             }
@@ -1273,85 +1274,86 @@ namespace dconstruct::llvm_transpile {
         return std::nullopt;
     }
 
-    llvm::Value* llvm_transpiler::coerce_to_storage(llvm::Value* value) {
+    llvm::Value* llvm_transpiler::coerce_to_storage(llvm::IRBuilder<>& builder, llvm::Value* value) const {
         llvm::Type* type = value->getType();
         if (type == m_defaultIntT) {
             return value;
         }
         if (type->isPointerTy()) {
-            return m_builder.CreatePtrToInt(value, m_defaultIntT);
+            return builder.CreatePtrToInt(value, m_defaultIntT);
         }
         if (type->isFloatingPointTy()) {
-            value = m_builder.CreateBitCast(value, llvm::IntegerType::get(m_ctx, type->getPrimitiveSizeInBits()));
+            value = builder.CreateBitCast(value, llvm::IntegerType::get(builder.getContext(), type->getPrimitiveSizeInBits()));
             type = value->getType();
         }
-        return type == m_defaultIntT ? value : m_builder.CreateZExt(value, m_defaultIntT);
+        return type == m_defaultIntT ? value : builder.CreateZExt(value, m_defaultIntT);
     }
 
-    llvm::Value* llvm_transpiler::coerce_from_storage(llvm::Value* raw, llvm::Type* logical) {
+    llvm::Value* llvm_transpiler::coerce_from_storage(llvm::IRBuilder<>& builder, llvm::Value* raw, llvm::Type* logical) const {
         if (logical == m_defaultIntT) {
             return raw;
         }
         if (logical->isFloatingPointTy()) {
-            llvm::Type* int_type = llvm::IntegerType::get(m_ctx, logical->getPrimitiveSizeInBits());
-            llvm::Value* bits = int_type == m_defaultIntT ? raw : m_builder.CreateTrunc(raw, int_type);
-            return m_builder.CreateBitCast(bits, logical);
+            llvm::Type* int_type = llvm::IntegerType::get(builder.getContext(), logical->getPrimitiveSizeInBits());
+            llvm::Value* bits = int_type == m_defaultIntT ? raw : builder.CreateTrunc(raw, int_type);
+            return builder.CreateBitCast(bits, logical);
         }
         if (logical->isIntegerTy()) {
-            return m_builder.CreateTrunc(raw, logical);
+            return builder.CreateTrunc(raw, logical);
         }
-        return m_builder.CreateIntToPtr(raw, m_defaultPointerT);
+        return builder.CreateIntToPtr(raw, m_defaultPointerT);
     }
 
-    llvm::Value* llvm_transpiler::load_register(prepared_function_ctx& function, const u8 index, std::string_view istr_name, llvm::Type* as_type) {
-        llvm::Value* raw = m_builder.CreateLoad(m_defaultIntT, function.m_registerFrame[index], istr_name);
-        return coerce_from_storage(raw, as_type ? as_type : function.m_types[index]);
+    llvm::Value* llvm_transpiler::load_register(llvm::IRBuilder<>& builder, prepared_function_ctx& function, const u8 index, std::string_view istr_name, llvm::Type* as_type) const {
+        llvm::Value* raw = builder.CreateLoad(m_defaultIntT, function.m_registerFrame[index], istr_name);
+        return coerce_from_storage(builder, raw, as_type ? as_type : function.m_types[index]);
     }
 
-    llvm::StoreInst* llvm_transpiler::make_store(prepared_function_ctx& function, const u8 index, llvm::Value* rhs, llvm::Type* type) {
+    llvm::StoreInst* llvm_transpiler::make_store(llvm::IRBuilder<>& builder, prepared_function_ctx& function, const u8 index, llvm::Value* rhs, llvm::Type* type) const {
         if (type) {
             function.m_types[index] = type;
         }
-        return m_builder.CreateStore(coerce_to_storage(rhs), function.m_registerFrame[index]);
+        return builder.CreateStore(coerce_to_storage(builder, rhs), function.m_registerFrame[index]);
     }
 
     llvm::StoreInst* llvm_transpiler::make_binary(
+        llvm::IRBuilder<>& builder,
         prepared_function_ctx& function,
         const Instruction& istr,
         std::function<llvm::Value*(llvm::Value*, llvm::Value*)> binary_op,
         llvm::Type* dest_type,
         std::string_view istr_id,
         llvm::Type* coerced_type
-    ) {
-        llvm::Value* lhs = load_register(function, istr.operand1, std::format("{}_load_lhs", istr_id), coerced_type);
-        llvm::Value* rhs = load_register(function, istr.operand2, std::format("{}_load_rhs", istr_id), coerced_type);
+    ) const {
+        llvm::Value* lhs = load_register(builder, function, istr.operand1, std::format("{}_load_lhs", istr_id), coerced_type);
+        llvm::Value* rhs = load_register(builder, function, istr.operand2, std::format("{}_load_rhs", istr_id), coerced_type);
         if (lhs->getType() != rhs->getType() && (lhs->getType() != m_defaultPointerT && rhs->getType() != m_defaultPointerT)) {
-            rhs = m_builder.CreateZExtOrTrunc(rhs, lhs->getType());
+            rhs = builder.CreateZExtOrTrunc(rhs, lhs->getType());
         }
 
         llvm::Value* res = binary_op(lhs, rhs);
         function.m_types[istr.destination] = dest_type;
-        return make_store(function, istr.destination, res);
+        return make_store(builder, function, istr.destination, res);
     }
 
     llvm::StoreInst* llvm_transpiler::make_binary_imm(
-        prepared_function_ctx& function, const Instruction& istr, std::function<llvm::Value*(llvm::Value*, llvm::Value*)> binary_op, llvm::Type* dest_type, std::string_view istr_id
-    ) {
-        llvm::Value* lhs = load_register(function, istr.operand1, std::format("{}_load_lhs", istr_id));
-        llvm::Type* imm_type = lhs->getType()->isPointerTy() ? m_builder.getInt8Ty() : lhs->getType();
+        llvm::IRBuilder<>& builder, prepared_function_ctx& function, const Instruction& istr, std::function<llvm::Value*(llvm::Value*, llvm::Value*)> binary_op, llvm::Type* dest_type, std::string_view istr_id
+    ) const {
+        llvm::Value* lhs = load_register(builder, function, istr.operand1, std::format("{}_load_lhs", istr_id));
+        llvm::Type* imm_type = lhs->getType()->isPointerTy() ? m_defaultIntT : lhs->getType();
         llvm::Value* imm = llvm::ConstantInt::get(imm_type, istr.operand2);
         llvm::Value* res = binary_op(lhs, imm);
         function.m_types[istr.destination] = dest_type;
-        return make_store(function, istr.destination, res);
+        return make_store(builder, function, istr.destination, res);
     }
 
     llvm::StoreInst* llvm_transpiler::make_unary(
-        prepared_function_ctx& function, const Instruction& istr, std::function<llvm::Value*(llvm::Value*)> unary_op, llvm::Type* dest_type, std::string_view istr_id, llvm::Type* coerced_type
-    ) {
-        llvm::Value* lhs = load_register(function, istr.operand1, std::format("{}_load_op1", istr_id), coerced_type);
+        llvm::IRBuilder<>& builder, prepared_function_ctx& function, const Instruction& istr, std::function<llvm::Value*(llvm::Value*)> unary_op, llvm::Type* dest_type, std::string_view istr_id, llvm::Type* coerced_type
+    ) const {
+        llvm::Value* lhs = load_register(builder, function, istr.operand1, std::format("{}_load_op1", istr_id), coerced_type);
         llvm::Value* res = unary_op(lhs);
         function.m_types[istr.destination] = dest_type;
-        return make_store(function, istr.destination, res);
+        return make_store(builder, function, istr.destination, res);
     }
 
     llvm::FunctionType* llvm_transpiler::exchange_function_types(prepared_function_ctx& function, llvm::Type* new_arg_type, const u8 type_location, const u8 arg_idx) const {
@@ -1706,6 +1708,7 @@ namespace dconstruct::llvm_transpile {
 
     void llvm_transpiler::init_runtime_module() {
         std::unique_ptr module = std::make_unique<llvm::Module>("__dcvm_runtime", m_ctx);
+        llvm::IRBuilder<> builder(m_ctx);
 
         auto add_runtime_function_overwrite = [&](std::string_view name, u64 num_args, u64 custom_return_val = 0) {
             std::vector<llvm::Type*> arg_types(num_args, m_defaultIntT);
@@ -1713,9 +1716,9 @@ namespace dconstruct::llvm_transpile {
             llvm::Function* func = llvm::Function::Create(func_t, llvm::GlobalValue::LinkageTypes::ExternalLinkage, 0, name, module.get());
             func->addFnAttr(llvm::Attribute::AlwaysInline);
             llvm::BasicBlock* block = llvm::BasicBlock::Create(m_ctx, "bb", func);
-            m_builder.SetInsertPoint(block, block->begin());
-            llvm::Value* ret_value = m_builder.getInt64(custom_return_val);
-            m_builder.CreateRet(ret_value);
+            builder.SetInsertPoint(block, block->begin());
+            llvm::Value* ret_value = builder.getInt64(custom_return_val);
+            builder.CreateRet(ret_value);
             m_funcLocations[name.data()] = func;
         };
 

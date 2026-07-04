@@ -26,6 +26,10 @@ namespace llvm {
 
         EVT getSetCCResultType(const DataLayout& DL, LLVMContext& Context, EVT VT) const override;
 
+        bool shouldAvoidTransformToShift(EVT VT, unsigned Amount) const override;
+
+        SDValue PerformDAGCombine(SDNode* N, DAGCombinerInfo& DCI) const override;
+
         SDValue LowerOperation(SDValue Op, SelectionDAG& DAG) const override;
 
         SDValue LowerSELECT(SDValue Op, SelectionDAG& DAG) const;

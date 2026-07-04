@@ -55,12 +55,60 @@ DCVMTargetLowering::DCVMTargetLowering(const TargetMachine& TM, const DCVMSubtar
         setTruncStoreAction(MVT::i64, MemVT, Legal);
     }
 
+    setTargetDAGCombine({ISD::AND, ISD::SIGN_EXTEND});
+
     computeRegisterProperties(Subtarget->getRegisterInfo());
 
 }
 
 EVT DCVMTargetLowering::getSetCCResultType(const DataLayout& DL, LLVMContext& Context, EVT VT) const {
     return MVT::i64;
+}
+
+bool DCVMTargetLowering::shouldAvoidTransformToShift(EVT VT, unsigned Amount) const {
+    return true;
+}
+
+SDValue DCVMTargetLowering::PerformDAGCombine(SDNode* N, DAGCombinerInfo& DCI) const {
+    SelectionDAG& DAG = DCI.DAG;
+    EVT VT = N->getValueType(0);
+    if (DCI.isAfterLegalizeDAG() || !VT.isInteger()) {
+        return SDValue();
+    }
+    SDLoc DL(N);
+    EVT CCVT = getSetCCResultType(DAG.getDataLayout(), *DAG.getContext(), VT);
+
+    if (N->getOpcode() == ISD::AND) {
+        SDValue Shift = N->getOperand(0);
+        auto* Mask = dyn_cast<ConstantSDNode>(N->getOperand(1));
+        if (!Mask || !Mask->isOne() || Shift.getOpcode() != ISD::SRL) {
+            return SDValue();
+        }
+        auto* Amount = dyn_cast<ConstantSDNode>(Shift.getOperand(1));
+        if (!Amount || Amount->getZExtValue() >= VT.getSizeInBits()) {
+            return SDValue();
+        }
+        const APInt Bit = APInt::getOneBitSet(VT.getSizeInBits(), Amount->getZExtValue());
+        SDValue Test = DAG.getNode(ISD::AND, DL, VT, Shift.getOperand(0), DAG.getConstant(Bit, DL, VT));
+        SDValue IsSet = DAG.getSetCC(DL, CCVT, Test, DAG.getConstant(0, DL, VT), ISD::SETNE);
+        return DAG.getZExtOrTrunc(IsSet, DL, VT);
+    }
+
+    if (N->getOpcode() == ISD::SIGN_EXTEND) {
+        SDValue Src = N->getOperand(0);
+        if (VT != MVT::i64 || Src.getValueType() != MVT::i32) {
+            return SDValue();
+        }
+        auto* Load = dyn_cast<LoadSDNode>(Src);
+        if (!Load || !ISD::isNormalLoad(Load) || !Load->isSimple()) {
+            return SDValue();
+        }
+        SDValue ExtLoad = DAG.getExtLoad(ISD::SEXTLOAD, DL, MVT::i64, Load->getChain(), Load->getBasePtr(), MVT::i32, Load->getMemOperand());
+        DCI.CombineTo(Load, DAG.getNode(ISD::TRUNCATE, DL, MVT::i32, ExtLoad), ExtLoad.getValue(1));
+        return ExtLoad;
+    }
+
+    return SDValue();
 }
 
 const char* DCVMTargetLowering::getTargetNodeName(unsigned Opcode) const {

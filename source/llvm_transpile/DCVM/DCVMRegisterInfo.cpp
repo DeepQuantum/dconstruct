@@ -18,10 +18,6 @@ const MCPhysReg* DCVMRegisterInfo::getCalleeSavedRegs(const MachineFunction* MF)
 }
 
 BitVector DCVMRegisterInfo::getReservedRegs(const MachineFunction& MF) const {
-    // General evaluation lives exclusively in the GPR class (r0-r48); the
-    // argument window r49-r65 only ever holds call arguments. Calls preserve
-    // every register except r0, so an argument value already in place may be
-    // reused by a later call.
     return BitVector(getNumRegs());
 }
 

@@ -8,7 +8,7 @@ endif()
 
 set(VERSION_NUMBER "2.2.0")
 
-set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD 23 CACHE STRING "C++ standard to conform to" FORCE)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/source")
@@ -436,6 +436,15 @@ target_compile_options(llvm_transpile_demo PRIVATE
 
 target_link_options(llvm_transpile_demo PRIVATE
     $<$<CONFIG:Release>:/LTCG>
+)
+
+add_custom_command(TARGET llvm_transpile_demo POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "${SOURCE_DIR}/llvm_transpile/recompile.txt" "$<TARGET_FILE_DIR:llvm_transpile_demo>/recompile.txt"
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "${SOURCE_DIR}/llvm_transpile/exclude.txt" "$<TARGET_FILE_DIR:llvm_transpile_demo>/excluded.txt"
+    COMMENT "Copying recompile.txt and excluded.txt next to llvm_transpile_demo"
+    VERBATIM
 )
 
 add_executable(llvm_transpile_test
