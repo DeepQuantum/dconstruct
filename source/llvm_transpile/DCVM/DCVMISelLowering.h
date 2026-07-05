@@ -10,6 +10,7 @@ namespace llvm {
         enum NodeType : unsigned {
             FIRST_NUMBER = ISD::BUILTIN_OP_END,
             RET,
+            RET_VOID,
             CALL,
             CALLFF,
             SELECT,
@@ -27,6 +28,8 @@ namespace llvm {
         EVT getSetCCResultType(const DataLayout& DL, LLVMContext& Context, EVT VT) const override;
 
         bool shouldAvoidTransformToShift(EVT VT, unsigned Amount) const override;
+
+        bool isIntDivCheap(EVT VT, AttributeList Attr) const override { return true; }
 
         SDValue PerformDAGCombine(SDNode* N, DAGCombinerInfo& DCI) const override;
 

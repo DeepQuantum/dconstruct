@@ -43,6 +43,8 @@ public:
     createMachineFunctionInfo(BumpPtrAllocator &Allocator, const Function &F,
                               const TargetSubtargetInfo *STI) const override;
 
+    TargetTransformInfo getTargetTransformInfo(const Function &F) const override;
+
     TargetLoweringObjectFile *getObjFileLowering() const override {
         return TLOF.get();
     }

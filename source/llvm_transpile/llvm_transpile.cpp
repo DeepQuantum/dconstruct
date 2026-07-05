@@ -19,7 +19,6 @@
 #include "llvm/IR/GlobalVariable.h"
 #include "llvm/IR/IRBuilder.h"
 #include "llvm/IR/Instruction.h"
-#include <cstdint>
 #include <initializer_list>
 #include <llvm/IR/Verifier.h>
 #include "llvm/IR/Instructions.h"
@@ -44,7 +43,9 @@
 #include "llvm/Target/TargetMachine.h"
 #include "llvm/Transforms/Scalar/GVN.h"
 #include "llvm/Transforms/Scalar/SimplifyCFG.h"
+#include "llvm/IR/ValueHandle.h"
 #include "llvm/Transforms/Utils/Cloning.h"
+#include "llvm/Transforms/Utils/Local.h"
 #include "llvm/Transforms/Utils/ModuleUtils.h"
 #include "llvm/TargetParser/Host.h"
 #include "llvm/TargetParser/Triple.h"
@@ -514,7 +515,8 @@ namespace dconstruct::llvm_transpile {
 
         std::vector<llvm::Type*> arg_types(disasm->m_stackFrame.m_registerArgs.size(), m_defaultIntT);
 
-        auto* func_type = llvm::FunctionType::get(llvm::Type::getInt64Ty(m_ctx), llvm::ArrayRef(arg_types.data(), arg_types.size()), false);
+        llvm::Type* return_type = disasm->m_isScriptFunction ? llvm::Type::getVoidTy(m_ctx) : llvm::Type::getInt64Ty(m_ctx);
+        auto* func_type = llvm::FunctionType::get(return_type, llvm::ArrayRef(arg_types.data(), arg_types.size()), false);
         llvm::Function* new_function = llvm::Function::Create(func_type, llvm::GlobalValue::LinkageTypes::ExternalLinkage, 0, disasm->get_id(), &module);
         to_lift.m_llvmFunc = new_function;
 
@@ -581,9 +583,9 @@ namespace dconstruct::llvm_transpile {
         for (u32 l = 0; l < m_disasm->m_lines.size(); ++l) {
             const function_disassembly_line& line = m_disasm->m_lines[l];
             Instruction istr = line.m_instruction;
-            std::string istr_id = std::format("__{}_{}__", istr.opcode_to_string(), l);
+            std::string istr_id = std::format("__{}_{}", istr.opcode_to_string(), l);
             bool terminated = false;
-            std::string op = std::format("{}op", istr_id);
+            std::string op = std::format("{}_op", istr_id);
 
             switch (line.m_instruction.opcode) {
                 using enum Opcode;
@@ -698,7 +700,7 @@ namespace dconstruct::llvm_transpile {
                     break;
                 }
                 case INotEqual: {
-                    make_binary(builder, function, istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreateICmpNE(a, b, op); }, m_boolT, istr_id);
+                    make_binary(builder, function, istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreateICmpNE(a, b, op); }, m_boolT, istr_id, m_defaultIntT);
                     break;
                 }
                 case FNotEqual: {
@@ -706,7 +708,7 @@ namespace dconstruct::llvm_transpile {
                     break;
                 }
                 case ILessThan: {
-                    make_binary(builder, function, istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreateICmpSLT(a, b, op); }, m_boolT, istr_id);
+                    make_binary(builder, function, istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreateICmpSLT(a, b, op); }, m_boolT, istr_id, m_defaultIntT);
                     break;
                 }
                 case FLessThan: {
@@ -714,7 +716,7 @@ namespace dconstruct::llvm_transpile {
                     break;
                 }
                 case ILessThanEqual: {
-                    make_binary(builder, function, istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreateICmpSLE(a, b, op); }, m_boolT, istr_id);
+                    make_binary(builder, function, istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreateICmpSLE(a, b, op); }, m_boolT, istr_id, m_defaultIntT);
                     break;
                 }
                 case FLessThanEqual: {
@@ -722,7 +724,7 @@ namespace dconstruct::llvm_transpile {
                     break;
                 }
                 case IGreaterThan: {
-                    make_binary(builder, function, istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreateICmpSGT(a, b, op); }, m_boolT, istr_id);
+                    make_binary(builder, function, istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreateICmpSGT(a, b, op); }, m_boolT, istr_id, m_defaultIntT);
                     break;
                 }
                 case FGreaterThan: {
@@ -730,7 +732,7 @@ namespace dconstruct::llvm_transpile {
                     break;
                 }
                 case IGreaterThanEqual: {
-                    make_binary(builder, function, istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreateICmpSGE(a, b, op); }, m_boolT, istr_id);
+                    make_binary(builder, function, istr, [&](llvm::Value* a, llvm::Value* b) { return builder.CreateICmpSGE(a, b, op); }, m_boolT, istr_id, m_defaultIntT);
                     break;
                 }
                 case FGreaterThanEqual: {
@@ -804,19 +806,19 @@ namespace dconstruct::llvm_transpile {
                 }
                 case LoadStaticInt: {
                     llvm::Value* idx = load_register(builder, function, istr.operand1, std::format("{}_idx", istr_id));
-                    llvm::Value* value = builder.CreateIntrinsic(llvm::Intrinsic::dcvm_load_static_int, {idx}, {}, std::format("{}static_int", istr_id));
+                    llvm::Value* value = builder.CreateIntrinsic(llvm::Intrinsic::dcvm_load_static_int, {idx}, {}, std::format("{}_static_int", istr_id));
                     make_store(builder, function, istr.destination, value, m_defaultIntT);
                     break;
                 }
                 case LoadStaticFloat: {
                     llvm::Value* idx = load_register(builder, function, istr.operand1, std::format("{}_idx", istr_id));
-                    llvm::Value* value = builder.CreateIntrinsic(llvm::Intrinsic::dcvm_load_static_float, {idx}, {}, std::format("{}static_float", istr_id));
+                    llvm::Value* value = builder.CreateIntrinsic(llvm::Intrinsic::dcvm_load_static_float, {idx}, {}, std::format("{}_static_float", istr_id));
                     make_store(builder, function, istr.destination, value, m_defaultFloatT);
                     break;
                 }
                 case LoadStaticPointer: {
                     llvm::Value* idx = load_register(builder, function, istr.operand1, std::format("{}_idx", istr_id));
-                    llvm::Value* value = builder.CreateIntrinsic(llvm::Intrinsic::dcvm_load_static_pointer, {idx}, {}, std::format("{}static_pointer", istr_id));
+                    llvm::Value* value = builder.CreateIntrinsic(llvm::Intrinsic::dcvm_load_static_pointer, {idx}, {}, std::format("{}_static_pointer", istr_id));
                     make_store(builder, function, istr.destination, value, m_defaultPointerT);
                     break;
                 }
@@ -983,8 +985,12 @@ namespace dconstruct::llvm_transpile {
                     break;
                 }
                 case Return: {
-                    llvm::Value* ret_value = builder.CreateLoad(m_defaultIntT, m_registerFrame[istr.destination], std::format("{}_retval", istr_id));
-                    builder.CreateRet(ret_value);
+                    if (function.m_disasm->m_isScriptFunction) {
+                        builder.CreateRetVoid();
+                    } else {
+                        llvm::Value* ret_value = builder.CreateLoad(m_defaultIntT, m_registerFrame[istr.destination], std::format("{}_retval", istr_id));
+                        builder.CreateRet(ret_value);
+                    }
                     terminated = true;
                     break;
                 }
@@ -1146,6 +1152,10 @@ namespace dconstruct::llvm_transpile {
                     llvm::ValueToValueMapTy vmap;
                     vmap[runtime_function] = dst_func;
                     map_referenced_globals_for_clone(unit.module(), *runtime_function, vmap);
+
+                    if (dst_func->arg_size() != runtime_function->arg_size()) {
+                        continue;
+                    }
 
                     auto dst_arg = dst_func->arg_begin();
                     for (const llvm::Argument& src_arg : runtime_function->args()) {
@@ -1486,9 +1496,106 @@ namespace dconstruct::llvm_transpile {
         return ir;
     }
 
+    static void normalize_sign_extensions(llvm::Function& function) {
+        std::vector<llvm::SExtInst*> worklist;
+        for (llvm::BasicBlock& block : function) {
+            for (llvm::Instruction& instruction : block) {
+                if (auto* sext = llvm::dyn_cast<llvm::SExtInst>(&instruction)) {
+                    llvm::Type* src_type = sext->getSrcTy();
+                    if (sext->getDestTy()->isIntegerTy(64) && (src_type->isIntegerTy(8) || src_type->isIntegerTy(16) || src_type->isIntegerTy(32))) {
+                        worklist.push_back(sext);
+                    }
+                }
+            }
+        }
+
+        std::unordered_map<llvm::PHINode*, llvm::PHINode*> promoted_phis;
+
+        while (!worklist.empty()) {
+            llvm::SExtInst* sext = worklist.back();
+            worklist.pop_back();
+            llvm::Value* src = sext->getOperand(0);
+            llvm::Type* wide_type = sext->getDestTy();
+
+            if (auto* load = llvm::dyn_cast<llvm::LoadInst>(src)) {
+                if (load->getParent() != sext->getParent()) {
+                    sext->moveAfter(load);
+                }
+            } else if (auto* phi = llvm::dyn_cast<llvm::PHINode>(src)) {
+                llvm::PHINode* wide_phi;
+                if (const auto cached = promoted_phis.find(phi); cached != promoted_phis.end()) {
+                    wide_phi = cached->second;
+                } else {
+                    wide_phi = llvm::PHINode::Create(wide_type, phi->getNumIncomingValues(), phi->getName() + ".wide", phi->getIterator());
+                    promoted_phis.emplace(phi, wide_phi);
+                    std::unordered_map<llvm::BasicBlock*, llvm::Value*> widened_incomings;
+                    for (unsigned i = 0; i < phi->getNumIncomingValues(); ++i) {
+                        llvm::BasicBlock* incoming_block = phi->getIncomingBlock(i);
+                        llvm::Value*& wide_incoming = widened_incomings[incoming_block];
+                        if (wide_incoming == nullptr) {
+                            llvm::Value* incoming = phi->getIncomingValue(i);
+                            auto* incoming_phi = llvm::dyn_cast<llvm::PHINode>(incoming);
+                            if (const auto incoming_cached = incoming_phi != nullptr ? promoted_phis.find(incoming_phi) : promoted_phis.end(); incoming_cached != promoted_phis.end()) {
+                                wide_incoming = incoming_cached->second;
+                            } else {
+                                llvm::IRBuilder<> builder(incoming_block->getTerminator());
+                                wide_incoming = builder.CreateSExt(incoming, wide_type);
+                                if (auto* incoming_sext = llvm::dyn_cast<llvm::SExtInst>(wide_incoming)) {
+                                    worklist.push_back(incoming_sext);
+                                }
+                            }
+                        }
+                        wide_phi->addIncoming(wide_incoming, incoming_block);
+                    }
+                }
+                sext->replaceAllUsesWith(wide_phi);
+                sext->eraseFromParent();
+            } else if (auto* freeze = llvm::dyn_cast<llvm::FreezeInst>(src)) {
+                llvm::IRBuilder<> builder(freeze->getNextNode());
+                llvm::Value* wide = builder.CreateSExt(freeze->getOperand(0), wide_type);
+                llvm::Value* frozen = builder.CreateFreeze(wide);
+                sext->replaceAllUsesWith(frozen);
+                sext->eraseFromParent();
+                if (auto* wide_sext = llvm::dyn_cast<llvm::SExtInst>(wide)) {
+                    worklist.push_back(wide_sext);
+                }
+                if (freeze->use_empty()) {
+                    freeze->eraseFromParent();
+                }
+            } else if (auto* select = llvm::dyn_cast<llvm::SelectInst>(src)) {
+                llvm::IRBuilder<> builder(select);
+                llvm::Value* wide_true = builder.CreateSExt(select->getTrueValue(), wide_type);
+                llvm::Value* wide_false = builder.CreateSExt(select->getFalseValue(), wide_type);
+                llvm::Value* wide_select = builder.CreateSelect(select->getCondition(), wide_true, wide_false);
+                sext->replaceAllUsesWith(wide_select);
+                sext->eraseFromParent();
+                if (auto* wide_sext = llvm::dyn_cast<llvm::SExtInst>(wide_true)) {
+                    worklist.push_back(wide_sext);
+                }
+                if (auto* wide_sext = llvm::dyn_cast<llvm::SExtInst>(wide_false)) {
+                    worklist.push_back(wide_sext);
+                }
+                if (select->use_empty()) {
+                    select->eraseFromParent();
+                }
+            }
+        }
+
+        std::vector<llvm::WeakTrackingVH> dead_candidates;
+        dead_candidates.reserve(promoted_phis.size());
+        for (const auto& [phi, wide_phi] : promoted_phis) {
+            dead_candidates.emplace_back(phi);
+        }
+        for (llvm::WeakTrackingVH& handle : dead_candidates) {
+            if (auto* phi = llvm::dyn_cast_or_null<llvm::PHINode>(handle)) {
+                llvm::RecursivelyDeleteDeadPHINode(phi);
+            }
+        }
+    }
+
     void optimize_module(llvm::Module& module, bool hoist_redundant_calls) {
         std::string error;
-        std::unique_ptr<llvm::TargetMachine> machine = create_c_target_machine(error);
+        std::unique_ptr<llvm::TargetMachine> machine = create_dcvm_target_machine(error);
         if (machine) {
             module.setTargetTriple(machine->getTargetTriple());
             module.setDataLayout(machine->createDataLayout());
@@ -1498,6 +1605,13 @@ namespace dconstruct::llvm_transpile {
         llvm::FunctionAnalysisManager FAM;
         llvm::CGSCCAnalysisManager CGAM;
         llvm::ModuleAnalysisManager MAM;
+
+        llvm::TargetLibraryInfoImpl TLII(module.getTargetTriple());
+        TLII.setUnavailable(llvm::LibFunc_memset);
+        TLII.setUnavailable(llvm::LibFunc_memset_pattern16);
+        TLII.setUnavailable(llvm::LibFunc_memcpy);
+        TLII.setUnavailable(llvm::LibFunc_memmove);
+        FAM.registerPass([&] { return llvm::TargetLibraryAnalysis(TLII); });
 
         llvm::PassBuilder PB(machine.get());
         PB.registerModuleAnalyses(MAM);
@@ -1519,6 +1633,12 @@ namespace dconstruct::llvm_transpile {
             MPM.addPass(llvm::createModuleToFunctionPassAdaptor(std::move(FPM)));
         }
         MPM.run(module, MAM);
+
+        for (llvm::Function& function : module) {
+            if (!function.isDeclaration()) {
+                normalize_sign_extensions(function);
+            }
+        }
     }
 
     const char* distance_metadata_name(const ast::function_type::DISTANCE distance) {
@@ -1589,9 +1709,53 @@ namespace dconstruct::llvm_transpile {
             llvm::Value* sid = builder.getInt64(SID(name.c_str()));
             builder.SetInsertPoint(call);
             llvm::CallInst* func_ptr = builder.CreateIntrinsic(llvm::Intrinsic::dcvm_lookup, {sid});
-            func_ptr->setName(std::format("__LookupPointer_{}_fptr", name));
+            func_ptr->setName(std::format("__LookupPointer_<{}>_fptr", name));
             call->setCalledOperand(func_ptr);
             call->setMetadata(llvm::LLVMContext::MD_callees, llvm::MDNode::get(module.getContext(), llvm::ValueAsMetadata::get(callee)));
+        }
+
+        for (llvm::Function& func : module) {
+            if (func.isIntrinsic()) {
+                continue;
+            }
+
+            std::vector<llvm::Constant*> constant_worklist{&func};
+            std::vector<llvm::Use*> instruction_uses;
+            for (size_t i = 0; i < constant_worklist.size(); ++i) {
+                for (llvm::Use& use : constant_worklist[i]->uses()) {
+                    llvm::User* user = use.getUser();
+                    if (auto* expr = llvm::dyn_cast<llvm::ConstantExpr>(user); expr != nullptr && (expr->getOpcode() == llvm::Instruction::PtrToInt || expr->getOpcode() == llvm::Instruction::BitCast)) {
+                        if (std::ranges::find(constant_worklist, expr) == constant_worklist.end()) {
+                            constant_worklist.push_back(expr);
+                        }
+                    } else if (llvm::isa<llvm::Instruction>(user)) {
+                        instruction_uses.push_back(&use);
+                    }
+                }
+            }
+            if (instruction_uses.empty()) {
+                continue;
+            }
+
+            const std::string name = func.getName().str();
+            llvm::Value* sid = builder.getInt64(SID(name.c_str()));
+            std::map<std::pair<llvm::Instruction*, llvm::Type*>, llvm::Value*> replacements;
+            for (llvm::Use* use : instruction_uses) {
+                auto* user = llvm::cast<llvm::Instruction>(use->getUser());
+                llvm::Instruction* insertion_point = user;
+                if (auto* phi = llvm::dyn_cast<llvm::PHINode>(user)) {
+                    insertion_point = phi->getIncomingBlock(*use)->getTerminator();
+                }
+                llvm::Type* wanted = use->get()->getType();
+                llvm::Value*& replacement = replacements[{insertion_point, wanted}];
+                if (replacement == nullptr) {
+                    builder.SetInsertPoint(insertion_point);
+                    llvm::CallInst* func_ptr = builder.CreateIntrinsic(llvm::Intrinsic::dcvm_lookup, {sid});
+                    func_ptr->setName(std::format("__LookupPointer_<{}>_value", name));
+                    replacement = wanted->isPointerTy() ? static_cast<llvm::Value*>(func_ptr) : builder.CreatePtrToInt(func_ptr, wanted);
+                }
+                use->set(replacement);
+            }
         }
     }
 

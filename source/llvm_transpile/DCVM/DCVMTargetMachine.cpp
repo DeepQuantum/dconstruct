@@ -2,6 +2,7 @@
 #include "DCVM.h"
 #include "DCVMMachineFunctionInfo.h"
 #include "DCVMTargetObjectFile.h"
+#include "DCVMTargetTransformInfo.h"
 #include "TargetInfo/DCVMTargetInfo.h"
 #include "llvm/ADT/MapVector.h"
 #include "llvm/ADT/SmallVector.h"
@@ -38,7 +39,7 @@ static CodeModel::Model getDCVMCodeModel(std::optional<CodeModel::Model> CM) {
 DCVMTargetMachine::DCVMTargetMachine(
     const Target& T, const Triple& TT, StringRef CPU, StringRef FS, const TargetOptions& Options, std::optional<Reloc::Model> RM, std::optional<CodeModel::Model> CM, CodeGenOptLevel OL, bool JIT
 )
-    : CodeGenTargetMachineImpl(T, TT.computeDataLayout(), TT, CPU, FS, Options, getEffectiveRelocModel(RM), getDCVMCodeModel(CM), OL), TLOF(std::make_unique<DCVMELFTargetObjectFile>()) {
+    : CodeGenTargetMachineImpl(T, "e-p:64:64-i64:64-n64", TT, CPU, FS, Options, getEffectiveRelocModel(RM), getDCVMCodeModel(CM), OL), TLOF(std::make_unique<DCVMELFTargetObjectFile>()) {
     initAsmInfo();
 }
 
@@ -53,6 +54,10 @@ const DCVMSubtarget* DCVMTargetMachine::getSubtargetImpl(const Function& F) cons
 
 MachineFunctionInfo* DCVMTargetMachine::createMachineFunctionInfo(BumpPtrAllocator& Allocator, const Function& F, const TargetSubtargetInfo* STI) const {
     return DCVMMachineFunctionInfo::create<DCVMMachineFunctionInfo>(Allocator, F, STI);
+}
+
+TargetTransformInfo DCVMTargetMachine::getTargetTransformInfo(const Function& F) const {
+    return TargetTransformInfo(std::make_unique<DCVMTTIImpl>(F.getDataLayout()));
 }
 
 extern "C" void DCVMSetBytecodeSink(TargetMachine* Machine, std::vector<char>* Sink) {

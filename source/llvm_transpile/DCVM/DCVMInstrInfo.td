@@ -184,6 +184,7 @@ class FloatStoreInst<bits<8> op, string mnemonic> : BasicInst<
 }
 
 def dcvm_ret : SDNode<"DCVMISD::RET", SDTypeProfile<0, 1, [SDTCisInt<0>]>, [SDNPHasChain, SDNPOptInGlue]>;
+def dcvm_ret_void : SDNode<"DCVMISD::RET_VOID", SDTNone, [SDNPHasChain, SDNPOptInGlue]>;
 
 def SDT_DCVMSelect : SDTypeProfile<1, 3, [SDTCisSameAs<0, 2>, SDTCisSameAs<0, 3>, SDTCisInt<1>]>;
 def dcvm_select : SDNode<"DCVMISD::SELECT", SDT_DCVMSelect>;
@@ -203,6 +204,18 @@ class SelectInst<ValueType vt> : DCVMInst<
 def SDT_DCVMCall : SDTypeProfile<0, 2, [SDTCisVT<0, i64>, SDTCisVT<1, i64>]>;
 def dcvm_call   : SDNode<"DCVMISD::CALL",   SDT_DCVMCall, [SDNPHasChain, SDNPOutGlue, SDNPOptInGlue, SDNPVariadic]>;
 def dcvm_callff : SDNode<"DCVMISD::CALLFF", SDT_DCVMCall, [SDNPHasChain, SDNPOutGlue, SDNPOptInGlue, SDNPVariadic]>;
+
+let isReturn = 1, isTerminator = 1, isBarrier = 1, hasSideEffects = 0, mayLoad = 0, mayStore = 0 in
+def RET_VOID : DCVMInst<
+    (outs),
+    (ins),
+    "Return",
+    [(dcvm_ret_void)]
+> {
+    let opcode = 0;
+    let Inst{15-8} = 0;
+    let Inst{23-16} = 0;
+}
 
 let isReturn = 1, isTerminator = 1, isBarrier = 1, hasSideEffects = 0, mayLoad = 0, mayStore = 0 in
 def RET : DCVMInst<

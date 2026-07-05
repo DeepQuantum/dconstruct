@@ -55,7 +55,7 @@ DCVMTargetLowering::DCVMTargetLowering(const TargetMachine& TM, const DCVMSubtar
         setTruncStoreAction(MVT::i64, MemVT, Legal);
     }
 
-    setTargetDAGCombine({ISD::AND, ISD::SIGN_EXTEND});
+    setTargetDAGCombine({ISD::AND, ISD::SRL, ISD::SIGN_EXTEND});
 
     computeRegisterProperties(Subtarget->getRegisterInfo());
 
@@ -72,13 +72,16 @@ bool DCVMTargetLowering::shouldAvoidTransformToShift(EVT VT, unsigned Amount) co
 SDValue DCVMTargetLowering::PerformDAGCombine(SDNode* N, DAGCombinerInfo& DCI) const {
     SelectionDAG& DAG = DCI.DAG;
     EVT VT = N->getValueType(0);
-    if (DCI.isAfterLegalizeDAG() || !VT.isInteger()) {
+    if (!VT.isInteger()) {
         return SDValue();
     }
     SDLoc DL(N);
-    EVT CCVT = getSetCCResultType(DAG.getDataLayout(), *DAG.getContext(), VT);
 
     if (N->getOpcode() == ISD::AND) {
+        if (DCI.isAfterLegalizeDAG()) {
+            return SDValue();
+        }
+        EVT CCVT = getSetCCResultType(DAG.getDataLayout(), *DAG.getContext(), VT);
         SDValue Shift = N->getOperand(0);
         auto* Mask = dyn_cast<ConstantSDNode>(N->getOperand(1));
         if (!Mask || !Mask->isOne() || Shift.getOpcode() != ISD::SRL) {
@@ -94,17 +97,43 @@ SDValue DCVMTargetLowering::PerformDAGCombine(SDNode* N, DAGCombinerInfo& DCI) c
         return DAG.getZExtOrTrunc(IsSet, DL, VT);
     }
 
+    if (N->getOpcode() == ISD::SRL) {
+        if (DCI.isAfterLegalizeDAG()) {
+            return SDValue();
+        }
+        SDValue Masked = N->getOperand(0);
+        auto* Amount = dyn_cast<ConstantSDNode>(N->getOperand(1));
+        if (!Amount || Masked.getOpcode() != ISD::AND || Amount->getZExtValue() >= VT.getSizeInBits()) {
+            return SDValue();
+        }
+
+        auto* Mask = dyn_cast<ConstantSDNode>(Masked.getOperand(1));
+        if (!Mask || !Mask->getAPIntValue().isPowerOf2() || Mask->getAPIntValue().countr_zero() != Amount->getZExtValue()) {
+            return SDValue();
+        }
+
+        EVT CCVT = getSetCCResultType(DAG.getDataLayout(), *DAG.getContext(), VT);
+        SDValue Test = DAG.getNode(ISD::AND, DL, VT, Masked.getOperand(0), Masked.getOperand(1));
+        SDValue IsSet = DAG.getSetCC(DL, CCVT, Test, DAG.getConstant(0, DL, VT), ISD::SETNE);
+        return DAG.getZExtOrTrunc(IsSet, DL, VT);
+    }
+
     if (N->getOpcode() == ISD::SIGN_EXTEND) {
         SDValue Src = N->getOperand(0);
         if (VT != MVT::i64 || Src.getValueType() != MVT::i32) {
             return SDValue();
         }
-        auto* Load = dyn_cast<LoadSDNode>(Src);
+        const bool Frozen = Src.getOpcode() == ISD::FREEZE;
+        SDValue LoadSrc = Frozen ? Src.getOperand(0) : Src;
+        auto* Load = dyn_cast<LoadSDNode>(LoadSrc);
         if (!Load || !ISD::isNormalLoad(Load) || !Load->isSimple()) {
             return SDValue();
         }
         SDValue ExtLoad = DAG.getExtLoad(ISD::SEXTLOAD, DL, MVT::i64, Load->getChain(), Load->getBasePtr(), MVT::i32, Load->getMemOperand());
         DCI.CombineTo(Load, DAG.getNode(ISD::TRUNCATE, DL, MVT::i32, ExtLoad), ExtLoad.getValue(1));
+        if (Frozen) {
+            return DAG.getFreeze(ExtLoad);
+        }
         return ExtLoad;
     }
 
@@ -115,6 +144,8 @@ const char* DCVMTargetLowering::getTargetNodeName(unsigned Opcode) const {
     switch (Opcode) {
         case DCVMISD::RET:
             return "DCVMISD::RET";
+        case DCVMISD::RET_VOID:
+            return "DCVMISD::RET_VOID";
         case DCVMISD::CALL:
             return "DCVMISD::CALL";
         case DCVMISD::CALLFF:
@@ -304,6 +335,9 @@ SDValue DCVMTargetLowering::LowerReturn(
     RetOps[0] = Chain;
     if (Glue.getNode())
         RetOps.push_back(Glue);
+
+    if (RVLocs.empty())
+        return DAG.getNode(DCVMISD::RET_VOID, DL, MVT::Other, RetOps);
 
     return DAG.getNode(DCVMISD::RET, DL, MVT::Other, RetOps);
 }
