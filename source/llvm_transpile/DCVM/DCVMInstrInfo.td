@@ -322,6 +322,7 @@ def : Pat<(i64 (setole (f32 GPR:$src0), (f32 GPR:$src1))), (i64 (FLErr GPR:$src0
 
 def IMODrr : RegInst<39, "IMod", 3, [(set (i64 GPR:$dst), (srem (i64 GPR:$src0), (i64 GPR:$src1)))]>;
 def : Pat<(i64 (urem GPR:$src0, GPR:$src1)), (IMODrr GPR:$src0, GPR:$src1)>;
+def : Pat<(i64 (udiv GPR:$src0, GPR:$src1)), (IDIVrr GPR:$src0, GPR:$src1)>;
 def FMODrr : RegInst<40, "FMod", 3, [(set (f32 GPR:$dst), (frem (f32 GPR:$src0), (f32 GPR:$src1)))]>;
 
 def IABSr : RegInst<41, "IAbs", 2, [(set (i64 GPR:$dst), (abs (i64 GPR:$src0)))]>;
@@ -390,6 +391,7 @@ def IADDIMMri : ArithmeticImmInst<59, "IAddImm", add>;
 def ISUBIMMri : ArithmeticImmInst<60, "ISubImm", sub>;
 def IMULIMMri : ArithmeticImmInst<61, "IMulImm", mul>;
 def IDIVIMMri : ArithmeticImmInst<62, "IDivImm", sdiv>;
+def : Pat<(i64 (udiv (i64 GPR:$src0), u8imm:$imm)), (IDIVIMMri GPR:$src0, imm:$imm)>;
 
 def LOADSTATICFLOATIMMri : DstIdxInst<64, "LoadStaticFloatImm">;
 
@@ -421,6 +423,8 @@ def INErr : RegInst<90, "INotEqual", 3, [(set (i64 GPR:$dst), (setne (i64 GPR:$s
 def FNErr : RegInst<91, "FNotEqual", 3, [(set (i64 GPR:$dst), (setune (f32 GPR:$src0), (f32 GPR:$src1)))]>;
 
 def : Pat<(i64 (setone (f32 GPR:$src0), (f32 GPR:$src1))), (i64 (FNErr GPR:$src0, GPR:$src1))>;
+def : Pat<(i64 (seto (f32 GPR:$src0), (f32 GPR:$src0))), (i64 (FEQrr GPR:$src0, GPR:$src0))>;
+def : Pat<(i64 (setuo (f32 GPR:$src0), (f32 GPR:$src0))), (i64 (FNErr GPR:$src0, GPR:$src0))>;
 
 def : Pat<(i64 (extloadi8  (i64 GPR:$addr))), (LOADU8  GPR:$addr)>;
 def : Pat<(i64 (extloadi16 (i64 GPR:$addr))), (LOADU16 GPR:$addr)>;
@@ -439,6 +443,10 @@ def : Pat<(i32 (add (i32 GPR:$src0), (i32 GPR:$src1))), (i32 (IADDrr GPR:$src0, 
 def : Pat<(i32 (and (i32 GPR:$src0), (i32 GPR:$src1))), (i32 (OPBITANDrr GPR:$src0, GPR:$src1))>;
 def : Pat<(i32 (or (i32 GPR:$src0), (i32 GPR:$src1))), (i32 (OPBITORrr GPR:$src0, GPR:$src1))>;
 def : Pat<(i32 (xor (i32 GPR:$src0), (i32 GPR:$src1))), (i32 (OPBITXORrr GPR:$src0, GPR:$src1))>;
+def : Pat<(i32 (sdiv (i32 GPR:$src0), (i32 GPR:$src1))), (i32 (IDIVrr GPR:$src0, GPR:$src1))>;
+def : Pat<(i32 (udiv (i32 GPR:$src0), (i32 GPR:$src1))), (i32 (IDIVrr GPR:$src0, GPR:$src1))>;
+def : Pat<(i32 (srem (i32 GPR:$src0), (i32 GPR:$src1))), (i32 (IMODrr GPR:$src0, GPR:$src1))>;
+def : Pat<(i32 (urem (i32 GPR:$src0), (i32 GPR:$src1))), (i32 (IMODrr GPR:$src0, GPR:$src1))>;
 def : Pat<(i64 (add (sra (mulhs GPR:$src, div10magic), shift2imm), (srl (mulhs GPR:$src, div10magic), shift63imm))), (IDIVIMMri GPR:$src, 10)>;
 def : Pat<(i64 (sra (mulhs GPR:$src, div10magic), shift2imm)), (IDIVIMMri GPR:$src, 10)>;
 def : Pat<(i64 (srl (mulhu GPR:$src, udiv5magic), shift2imm)), (IDIVIMMri GPR:$src, 5)>;

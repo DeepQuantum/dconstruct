@@ -41,6 +41,8 @@ namespace llvm {
 
         SDValue LowerSETCC(SDValue Op, SelectionDAG& DAG) const;
 
+        SDValue LowerSIGN_EXTEND_INREG(SDValue Op, SelectionDAG& DAG) const;
+
         MachineBasicBlock* EmitInstrWithCustomInserter(MachineInstr& MI, MachineBasicBlock* MBB) const override;
 
         SDValue LowerFormalArguments(

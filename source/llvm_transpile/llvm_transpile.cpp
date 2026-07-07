@@ -25,6 +25,7 @@
 #include "llvm/IR/LLVMContext.h"
 #include "llvm/IR/Metadata.h"
 #include "llvm/IR/LegacyPassManager.h"
+#include "llvm/IR/SystemLibraries.h"
 #include "llvm/IR/Type.h"
 #include "llvm/Analysis/TargetLibraryInfo.h"
 #include "llvm/Analysis/TargetTransformInfo.h"
@@ -108,6 +109,7 @@ namespace dconstruct::llvm_transpile {
     }
 
     void edit_unmapped_reloc_table(std::byte* bytes, const u64 text_size, const u64 file_offset, const bool value) {
+        assert(file_offset % sizeof(u64) == 0);
         u8* reloc_table = reinterpret_cast<u8*>(bytes + text_size + sizeof(u32));
         const u64 offset = file_offset / sizeof(u64);
         u8& reloc_byte = reloc_table[offset / 8];
@@ -281,7 +283,8 @@ namespace dconstruct::llvm_transpile {
             return std::format("instruction storage for {} is outside {}", old_func.get_id(), binfile.m_path.string());
         }
 
-        original_function.m_pSymbols = original_function.m_pInstruction + new_func.m_instructions.size();
+        const p64 symbol_start = (reinterpret_cast<p64>(original_function.m_pInstruction + new_func.m_instructions.size()) + 7) & ~p64{7};
+        original_function.m_pSymbols = reinterpret_cast<u64*>(symbol_start);
         if (!range_inside_file(binfile, original_function.m_pSymbols, symbol_bytes)) {
             return std::format("symbol storage for {} is outside {}", old_func.get_id(), binfile.m_path.string());
         }
@@ -343,7 +346,7 @@ namespace dconstruct::llvm_transpile {
             }
         }
 
-        u64 payload_cursor = old_strings_start;
+        u64 payload_cursor = (old_strings_start + 7) & ~u64{7};
         std::vector<scheduled_patch> scheduled;
         scheduled.reserve(large_patches.size());
 
@@ -1076,7 +1079,7 @@ namespace dconstruct::llvm_transpile {
             return result;
         });
 
-        std::transform(std::execution::par, serialized.begin(), serialized.end(), outputs.begin(), [this] (const serialized_module& input) {
+        std::transform(std::execution::seq, serialized.begin(), serialized.end(), outputs.begin(), [this] (const serialized_module& input) {
             generated_outputs unit_outputs;
             unit_outputs.m_moduleName = input.m_name;
 
@@ -1089,16 +1092,17 @@ namespace dconstruct::llvm_transpile {
             llvm::Module& module = **parsed;
             unit_outputs.m_llvmUnopt = emit_llvm_ir(module);
 
-            std::println("running first pass optimization for module {}", module.getName().str());
+            std::println("running optimization for module {}", module.getName().str());
             optimize_module(module);
             lower_calls_to_lookup(module);
-            std::println("running second pass optimization for module {}", module.getName().str());
             optimize_module(module, true);
             annotate_lookup_call_distances(module);
 
             unit_outputs.m_llvmOpt = emit_llvm_ir(module);
             unit_outputs.m_dcvmAsm = emit_dcvm_asm(module);
             unit_outputs.m_dcvmBytecode = emit_dcvm_bytecode(module);
+
+            parsed->reset();
 
             return unit_outputs;
         });
@@ -1126,14 +1130,14 @@ namespace dconstruct::llvm_transpile {
     void llvm_transpiler::link_module_optimization() {
         for (translation_unit& unit : m_translationUnits) {
             std::println("linking module {}", unit.m_module->getName().str());
-            for (const auto& global_name : unit.m_calledGlobals) {
-                llvm::Function* existing = unit.module().getFunction(global_name);
+            for (const auto& existing_name : unit.m_calledGlobals) {
+                llvm::Function* existing = unit.module().getFunction(existing_name);
 
                 if (!existing || !existing->isDeclaration()) {
                     continue;
                 }
 
-                auto it = m_funcLocations.find(global_name);
+                auto it = m_funcLocations.find(existing_name);
                 if (it == m_funcLocations.end()) {
                     continue;
                 }
@@ -1141,9 +1145,12 @@ namespace dconstruct::llvm_transpile {
 
                 assert(runtime_function->getParent() != &unit.module());
                 if (runtime_function->isDeclaration() || runtime_function->hasMetadata("NonInlineableAcrossModules")) {
-                    existing->setAttributes(runtime_function->getAttributes());
+                    llvm::Function* dst_func = unit.module().getFunction(existing_name);
+                    dst_func->copyAttributesFrom(runtime_function);
+                    dst_func->setCallingConv(runtime_function->getCallingConv());
+                    dst_func->setLinkage(llvm::GlobalValue::AvailableExternallyLinkage);
                 } else {
-                    llvm::Function* dst_func = unit.module().getFunction(global_name);
+                    llvm::Function* dst_func = unit.module().getFunction(existing_name);
                     assert(dst_func);
                     dst_func->copyAttributesFrom(runtime_function);
                     dst_func->setCallingConv(runtime_function->getCallingConv());
@@ -1261,9 +1268,15 @@ namespace dconstruct::llvm_transpile {
                 }
 
                 const recompiled_function_info& new_func = *recompiled_it->second;
-                const u64 new_func_size = new_func.m_instructions.size() * sizeof(Instruction) + new_func.m_symbols.size() * sizeof(u64);
-                const u64 old_func_size = old_func->m_lines.size() * sizeof(Instruction) + old_func->m_stackFrame.m_symbolTable.m_types.size() * sizeof(u64);
-                if (new_func_size > old_func_size) {
+                if (old_func->m_originalOffset + sizeof(ScriptLambda) > original.m_binfile->m_size) {
+                    return std::format("original lambda header for {} is outside {}", old_func->get_id(), original.m_binfile->m_path.string());
+                }
+                const ScriptLambda& original_function = *reinterpret_cast<const ScriptLambda*>(original.m_binfile->m_bytes.get() + old_func->m_originalOffset);
+                const p64 instruction_start = reinterpret_cast<p64>(original_function.m_pInstruction);
+                const p64 new_symbol_start = (instruction_start + new_func.m_instructions.size() * sizeof(Instruction) + 7) & ~p64{7};
+                const p64 new_func_end = new_symbol_start + new_func.m_symbols.size() * sizeof(u64);
+                const p64 old_func_end = old_func->m_stackFrame.m_symbolTable.m_location.num() + old_func->m_stackFrame.m_symbolTable.m_types.size() * sizeof(u64);
+                if (new_func_end > old_func_end) {
                     large_patches.push_back({old_func, &new_func});
                 } else {
                     small_patches.push_back({old_func, &new_func});
@@ -1873,6 +1886,8 @@ namespace dconstruct::llvm_transpile {
     void llvm_transpiler::init_runtime_module() {
         std::unique_ptr module = std::make_unique<llvm::Module>("__dcvm_runtime", m_ctx);
         llvm::IRBuilder<> builder(m_ctx);
+        llvm::SmallVector<llvm::GlobalValue*, 32> keep;
+
 
         auto add_runtime_function_overwrite = [&](std::string_view name, u64 num_args, u64 custom_return_val = 0) {
             std::vector<llvm::Type*> arg_types(num_args, m_defaultIntT);
@@ -1884,18 +1899,39 @@ namespace dconstruct::llvm_transpile {
             llvm::Value* ret_value = builder.getInt64(custom_return_val);
             builder.CreateRet(ret_value);
             m_funcLocations[name.data()] = func;
+            keep.push_back(func);
         };
 
-        auto add_runtime_function_declaration = [&](std::string_view name, u64 num_args, std::initializer_list<llvm::Attribute::AttrKind> attrs) {
+        auto add_runtime_function_declaration = [&](std::string_view name, u64 num_args, const std::initializer_list<llvm::Attribute::AttrKind>& attrs, const bool is_variadic = false) {
             std::vector<llvm::Type*> arg_types(num_args, m_defaultIntT);
-            llvm::FunctionType* func_t = llvm::FunctionType::get(m_defaultIntT, arg_types, false);
+            llvm::FunctionType* func_t = llvm::FunctionType::get(m_defaultIntT, arg_types, is_variadic);
             llvm::Function* func = llvm::Function::Create(func_t, llvm::GlobalValue::LinkageTypes::ExternalLinkage, 0, name, module.get());
             for (const auto& attr : attrs) {
                 func->addFnAttr(attr);
             }
             func->setMemoryEffects(llvm::MemoryEffects::none());
             m_funcLocations[name.data()] = func;
+            keep.push_back(func);
         };
+
+        auto map_func_to_llvm_intrinsic = [&](std::string_view name, llvm::Intrinsic::IndependentIntrinsics intrin) {
+            std::vector<llvm::Type*> arg_types(1, m_defaultIntT);
+            llvm::FunctionType* func_t = llvm::FunctionType::get(m_defaultIntT, arg_types, false);
+            llvm::Function* func = llvm::Function::Create(func_t, llvm::GlobalValue::LinkageTypes::ExternalLinkage, 0, name, module.get());
+            func->addFnAttr(llvm::Attribute::AlwaysInline);
+            llvm::BasicBlock* block = llvm::BasicBlock::Create(m_ctx, "bb", func);
+            builder.SetInsertPoint(block, block->begin());
+            auto* trunc = builder.CreateTrunc(func->getArg(0), builder.getInt32Ty());
+            auto* bitcast = builder.CreateBitCast(trunc, m_defaultFloatT);
+            auto* intrin_call = builder.CreateIntrinsic(intrin, m_defaultFloatT, bitcast);
+            auto* bitcast_back = builder.CreateBitCast(intrin_call, builder.getInt32Ty());
+            auto* zext_back = builder.CreateZExt(bitcast_back, m_defaultIntT);
+            builder.CreateRet(zext_back);
+            m_funcLocations[name.data()] = func;
+            keep.push_back(func);
+        };
+
+
 
         constexpr bool is_final_build_val = true;
         add_runtime_function_overwrite("is-final-build?", 0, is_final_build_val);
@@ -1911,6 +1947,8 @@ namespace dconstruct::llvm_transpile {
         add_runtime_function_overwrite("debug-draw-cross", 7);
         add_runtime_function_overwrite("debug-draw-box-2d", 8);
 
+        add_runtime_function_overwrite("debug-draw-ngon-2d", 10);
+
         const std::initializer_list optmized_attrs = {
             llvm::Attribute::Speculatable,
             llvm::Attribute::NoUnwind,
@@ -1918,7 +1956,31 @@ namespace dconstruct::llvm_transpile {
             llvm::Attribute::NoFree,
         };
 
-        // add_runtime_function_declaration("vector-dot", 2, optmized_attrs);
+        add_runtime_function_declaration("vector-dot", 2, optmized_attrs);
+        add_runtime_function_declaration("vector-add", 2, optmized_attrs);
+        add_runtime_function_declaration("vector-normalize", 2, optmized_attrs);
+        add_runtime_function_declaration("vector-magnitude", 1, optmized_attrs);
+        add_runtime_function_declaration("dc:format", 1, optmized_attrs, true);
+        add_runtime_function_declaration("display-error", 1, optmized_attrs);
+        add_runtime_function_declaration("string-length", 1, optmized_attrs);
+
+        // risky! fix first if crashing.
+        add_runtime_function_declaration("alloc-point", 4, optmized_attrs);
+        add_runtime_function_declaration("alloc-vector", 5, optmized_attrs);
+
+
+        add_runtime_function_declaration("sqrt", 1, optmized_attrs);
+        add_runtime_function_declaration("sin", 1, optmized_attrs);
+        add_runtime_function_declaration("cos", 1, optmized_attrs);
+        add_runtime_function_declaration("arccos", 1, optmized_attrs);
+
+        //map_func_to_llvm_intrinsic("sqrt", llvm::Intrinsic::sqrt);
+        //map_func_to_llvm_intrinsic("cos", llvm::Intrinsic::cos);
+        //map_func_to_llvm_intrinsic("sin", llvm::Intrinsic::sin);
+        //map_func_to_llvm_intrinsic("arccos", llvm::Intrinsic::acos);
+
+
+        llvm::appendToCompilerUsed(*module, keep);
 
         assert(!llvm::verifyModule(*module, &llvm::errs()));
 

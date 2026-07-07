@@ -10,6 +10,7 @@
 #include "llvm/IR/Function.h"
 #include "llvm/IR/InstrTypes.h"
 #include "llvm/IR/Metadata.h"
+#include "llvm/Support/KnownBits.h"
 
 using namespace llvm;
 
@@ -48,6 +49,8 @@ DCVMTargetLowering::DCVMTargetLowering(const TargetMachine& TM, const DCVMSubtar
     setOperationAction(ISD::SELECT_CC, MVT::i64, Custom);
     setOperationAction(ISD::SELECT_CC, MVT::f32, Custom);
 
+    setOperationAction(ISD::SIGN_EXTEND_INREG, MVT::i1, Custom);
+
     for (const MVT MemVT : {MVT::i8, MVT::i16, MVT::i32}) {
         setLoadExtAction(ISD::ZEXTLOAD, MVT::i64, MemVT, Legal);
         setLoadExtAction(ISD::SEXTLOAD, MVT::i64, MemVT, Legal);
@@ -55,7 +58,7 @@ DCVMTargetLowering::DCVMTargetLowering(const TargetMachine& TM, const DCVMSubtar
         setTruncStoreAction(MVT::i64, MemVT, Legal);
     }
 
-    setTargetDAGCombine({ISD::AND, ISD::SRL, ISD::SIGN_EXTEND});
+    setTargetDAGCombine({ISD::AND, ISD::SRL, ISD::SHL, ISD::SIGN_EXTEND});
 
     computeRegisterProperties(Subtarget->getRegisterInfo());
 
@@ -118,10 +121,27 @@ SDValue DCVMTargetLowering::PerformDAGCombine(SDNode* N, DAGCombinerInfo& DCI) c
         return DAG.getZExtOrTrunc(IsSet, DL, VT);
     }
 
+    if (N->getOpcode() == ISD::SHL) {
+        if (VT != MVT::i64 || isa<ConstantSDNode>(N->getOperand(1))) {
+            return SDValue();
+        }
+        SDValue Amount = N->getOperand(1);
+        if (DAG.computeKnownBits(Amount).countMaxActiveBits() > 1) {
+            return SDValue();
+        }
+        SDValue Factor = DAG.getNode(ISD::ADD, DL, VT, Amount, DAG.getConstant(1, DL, VT));
+        return DAG.getNode(ISD::MUL, DL, VT, N->getOperand(0), Factor);
+    }
+
     if (N->getOpcode() == ISD::SIGN_EXTEND) {
         SDValue Src = N->getOperand(0);
         if (VT != MVT::i64 || Src.getValueType() != MVT::i32) {
             return SDValue();
+        }
+        if (Src.getOpcode() == ISD::SDIV || Src.getOpcode() == ISD::SREM) {
+            SDValue Lhs = DAG.getSExtOrTrunc(Src.getOperand(0), DL, MVT::i64);
+            SDValue Rhs = DAG.getSExtOrTrunc(Src.getOperand(1), DL, MVT::i64);
+            return DAG.getNode(Src.getOpcode(), DL, MVT::i64, Lhs, Rhs);
         }
         const bool Frozen = Src.getOpcode() == ISD::FREEZE;
         SDValue LoadSrc = Frozen ? Src.getOperand(0) : Src;
@@ -165,6 +185,8 @@ SDValue DCVMTargetLowering::LowerOperation(SDValue Op, SelectionDAG& DAG) const 
             return LowerSELECT_CC(Op, DAG);
         case ISD::SETCC:
             return LowerSETCC(Op, DAG);
+        case ISD::SIGN_EXTEND_INREG:
+            return LowerSIGN_EXTEND_INREG(Op, DAG);
         default:
             llvm_unreachable("DCVMTargetLowering::LowerOperation unimplemented");
     }
@@ -176,6 +198,16 @@ static SDValue lowerSelectValues(SelectionDAG& DAG, const SDLoc& DL, EVT VT, SDV
     }
 
     return DAG.getNode(DCVMISD::SELECT, DL, VT, Cond, TrueV, FalseV);
+}
+
+SDValue DCVMTargetLowering::LowerSIGN_EXTEND_INREG(SDValue Op, SelectionDAG& DAG) const {
+    const SDLoc DL(Op);
+    EVT VT = Op.getValueType();
+    SDValue Src = Op.getOperand(0);
+    if (DAG.computeKnownBits(Src).countMaxActiveBits() > 1) {
+        Src = DAG.getNode(ISD::AND, DL, VT, Src, DAG.getConstant(1, DL, VT));
+    }
+    return DAG.getNegative(Src, DL, VT);
 }
 
 SDValue DCVMTargetLowering::LowerSELECT(SDValue Op, SelectionDAG& DAG) const {

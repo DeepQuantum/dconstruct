@@ -74,6 +74,7 @@ namespace dconstruct {
     }
 
     void BinaryFile::edit_reloc_table(const location loc, const bool value) {
+         assert(loc.is_aligned());
          p64 offset = (loc.num() - reinterpret_cast<p64>(m_bytes.get()));
          offset /= 8;
          u8* reloc_byte = const_cast<u8*>(m_relocTable.as<u8>(offset / 8));
