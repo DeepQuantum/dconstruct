@@ -452,6 +452,7 @@ namespace dconstruct {
         static constexpr std::string_view SEP = "@";
 
         [[nodiscard]] std::string to_string() const noexcept;
+        [[nodiscard]] std::string to_unique_string(u64 original_offset) const noexcept;
 
         ss_state m_state;
         ss_track m_track;
@@ -472,6 +473,7 @@ namespace dconstruct {
         function_disassembly(std::vector<function_disassembly_line> lines, StackFrame stack_frame, function_name_variant id, bool is_script_function) noexcept : m_lines(std::move(lines)), m_stackFrame(std::move(stack_frame)), m_id(std::move(id)), m_isScriptFunction(is_script_function) {};
 
         [[nodiscard]] const std::string& get_id() const noexcept;
+        [[nodiscard]] const std::string& get_unique_id() const noexcept;
 
         StackFrame m_stackFrame;
         function_name_variant m_id;
@@ -483,6 +485,7 @@ namespace dconstruct {
 
     private:
         mutable std::string m_stateScriptId;
+        mutable std::string m_uniqueStateScriptId;
     };
 
 }

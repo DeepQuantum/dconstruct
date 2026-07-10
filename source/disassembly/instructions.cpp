@@ -1,5 +1,6 @@
 #include "disassembly/instructions.h"
 #include "string.h"
+#include <format>
 #include <sstream>
 
 namespace dconstruct {
@@ -17,6 +18,13 @@ namespace dconstruct {
         result += m_track.m_name;
         result += SEP;
         result += idx_str;
+        return result;
+    }
+
+    [[nodiscard]] std::string state_script_function_id::to_unique_string(const u64 original_offset) const noexcept {
+        std::string result = to_string();
+        result += SEP;
+        result += std::format("{:#x}", original_offset);
         return result;
     }
 
@@ -92,6 +100,17 @@ namespace dconstruct {
                 m_stateScriptId = std::get<state_script_function_id>(m_id).to_string();
             }
             return m_stateScriptId;
+        }
+    }
+
+    [[nodiscard]] const std::string& function_disassembly::get_unique_id() const noexcept {
+        if (!m_isScriptFunction) {
+            return std::get<std::string>(m_id);
+        } else {
+            if (m_uniqueStateScriptId.empty()) {
+                m_uniqueStateScriptId = std::get<state_script_function_id>(m_id).to_unique_string(m_originalOffset);
+            }
+            return m_uniqueStateScriptId;
         }
     }
 }

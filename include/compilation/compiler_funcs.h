@@ -410,6 +410,36 @@ namespace dconstruct::compilation {
         std::vector<sid64> m_exports;
     };
 
+    [[nodiscard]] static resstr<std::unordered_set<sid64>> read_modules_entry_sids(const std::filesystem::path& modules) {
+        resstr<BinaryFile> file_res = BinaryFile::from_path(modules);
+        if (!file_res) {
+            return std::unexpected{file_res.error()};
+        }
+        const BinaryFile& file = *file_res;
+
+        constexpr sid64 module_info_array_sid = SID("module-info-array");
+        if (file.m_dcheader->m_numEntries != 1) {
+            return std::unexpected{"modules.bin is expected to contain exactly one entry"};
+        }
+
+        const Entry* file_entry = file.m_dcheader->m_pStartOfData;
+        if (file_entry == nullptr || file_entry->m_typeId != module_info_array_sid || file_entry->m_entryPtr == nullptr) {
+            return std::unexpected{"modules.bin does not contain a module-info-array entry"};
+        }
+
+        const auto* module_array = reinterpret_cast<const ModuleInfoArray*>(file_entry->m_entryPtr);
+        if (module_array->m_entries == nullptr) {
+            return std::unexpected{"modules.bin module-info-array does not point to a ModulesEntry array"};
+        }
+
+        std::unordered_set<sid64> sids;
+        sids.reserve(module_array->m_numEntries);
+        for (u32 i = 0; i < module_array->m_numEntries; ++i) {
+            sids.insert(module_array->m_entries[i].m_nameSid);
+        }
+        return sids;
+    }
+
     [[nodiscard]] static resstr<std::vector<modules_patch_summary>> patch_modules_sizes(
         const std::filesystem::path& modules,
         const std::vector<modules_patch_request>& requests

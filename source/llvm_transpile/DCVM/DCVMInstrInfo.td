@@ -308,17 +308,11 @@ def IGErr : RegInst<31, "IGreaterThanEqual", 3, [(set (i64 GPR:$dst), (setge (i6
 def ILTrr : RegInst<32, "ILessThan",         3, [(set (i64 GPR:$dst), (setlt (i64 GPR:$src0), (i64 GPR:$src1)))]>;
 def ILErr : RegInst<33, "ILessThanEqual",    3, [(set (i64 GPR:$dst), (setle (i64 GPR:$src0), (i64 GPR:$src1)))]>;
 
-def FEQrr : RegInst<34, "FEqual",            3, [(set (i64 GPR:$dst), (setueq (f32 GPR:$src0), (f32 GPR:$src1)))]>;
-def FGTrr : RegInst<35, "FGreaterThan",      3, [(set (i64 GPR:$dst), (setugt (f32 GPR:$src0), (f32 GPR:$src1)))]>;
-def FGErr : RegInst<36, "FGreaterThanEqual", 3, [(set (i64 GPR:$dst), (setuge (f32 GPR:$src0), (f32 GPR:$src1)))]>;
-def FLTrr : RegInst<37, "FLessThan",         3, [(set (i64 GPR:$dst), (setult (f32 GPR:$src0), (f32 GPR:$src1)))]>;
-def FLErr : RegInst<38, "FLessThanEqual",    3, [(set (i64 GPR:$dst), (setule (f32 GPR:$src0), (f32 GPR:$src1)))]>;
-
-def : Pat<(i64 (setoeq (f32 GPR:$src0), (f32 GPR:$src1))), (i64 (FEQrr GPR:$src0, GPR:$src1))>;
-def : Pat<(i64 (setogt (f32 GPR:$src0), (f32 GPR:$src1))), (i64 (FGTrr GPR:$src0, GPR:$src1))>;
-def : Pat<(i64 (setoge (f32 GPR:$src0), (f32 GPR:$src1))), (i64 (FGErr GPR:$src0, GPR:$src1))>;
-def : Pat<(i64 (setolt (f32 GPR:$src0), (f32 GPR:$src1))), (i64 (FLTrr GPR:$src0, GPR:$src1))>;
-def : Pat<(i64 (setole (f32 GPR:$src0), (f32 GPR:$src1))), (i64 (FLErr GPR:$src0, GPR:$src1))>;
+def FEQrr : RegInst<34, "FEqual",            3, [(set (i64 GPR:$dst), (setoeq (f32 GPR:$src0), (f32 GPR:$src1)))]>;
+def FGTrr : RegInst<35, "FGreaterThan",      3, [(set (i64 GPR:$dst), (setogt (f32 GPR:$src0), (f32 GPR:$src1)))]>;
+def FGErr : RegInst<36, "FGreaterThanEqual", 3, [(set (i64 GPR:$dst), (setoge (f32 GPR:$src0), (f32 GPR:$src1)))]>;
+def FLTrr : RegInst<37, "FLessThan",         3, [(set (i64 GPR:$dst), (setolt (f32 GPR:$src0), (f32 GPR:$src1)))]>;
+def FLErr : RegInst<38, "FLessThanEqual",    3, [(set (i64 GPR:$dst), (setole (f32 GPR:$src0), (f32 GPR:$src1)))]>;
 
 def IMODrr : RegInst<39, "IMod", 3, [(set (i64 GPR:$dst), (srem (i64 GPR:$src0), (i64 GPR:$src1)))]>;
 def : Pat<(i64 (urem GPR:$src0, GPR:$src1)), (IMODrr GPR:$src0, GPR:$src1)>;
@@ -422,9 +416,32 @@ def STOREFLOAT : FloatStoreInst<17, "StoreFloat">;
 def INErr : RegInst<90, "INotEqual", 3, [(set (i64 GPR:$dst), (setne (i64 GPR:$src0), (i64 GPR:$src1)))]>;
 def FNErr : RegInst<91, "FNotEqual", 3, [(set (i64 GPR:$dst), (setune (f32 GPR:$src0), (f32 GPR:$src1)))]>;
 
-def : Pat<(i64 (setone (f32 GPR:$src0), (f32 GPR:$src1))), (i64 (FNErr GPR:$src0, GPR:$src1))>;
+def : Pat<(i64 (setone (f32 GPR:$src0), (f32 GPR:$src1))),
+          (OPBITORrr (FLTrr GPR:$src0, GPR:$src1), (FGTrr GPR:$src0, GPR:$src1))>;
+def : Pat<(i64 (setueq (f32 GPR:$src0), (f32 GPR:$src1))),
+          (OPLOGNOTr (OPBITORrr (FLTrr GPR:$src0, GPR:$src1), (FGTrr GPR:$src0, GPR:$src1)))>;
+def : Pat<(i64 (setugt (f32 GPR:$src0), (f32 GPR:$src1))), (OPLOGNOTr (FLErr GPR:$src0, GPR:$src1))>;
+def : Pat<(i64 (setuge (f32 GPR:$src0), (f32 GPR:$src1))), (OPLOGNOTr (FLTrr GPR:$src0, GPR:$src1))>;
+def : Pat<(i64 (setult (f32 GPR:$src0), (f32 GPR:$src1))), (OPLOGNOTr (FGErr GPR:$src0, GPR:$src1))>;
+def : Pat<(i64 (setule (f32 GPR:$src0), (f32 GPR:$src1))), (OPLOGNOTr (FGTrr GPR:$src0, GPR:$src1))>;
+
 def : Pat<(i64 (seto (f32 GPR:$src0), (f32 GPR:$src0))), (i64 (FEQrr GPR:$src0, GPR:$src0))>;
 def : Pat<(i64 (setuo (f32 GPR:$src0), (f32 GPR:$src0))), (i64 (FNErr GPR:$src0, GPR:$src0))>;
+def : Pat<(i64 (seto (f32 GPR:$src0), (f32 GPR:$src1))),
+          (OPBITANDrr (FEQrr GPR:$src0, GPR:$src0), (FEQrr GPR:$src1, GPR:$src1))>;
+def : Pat<(i64 (setuo (f32 GPR:$src0), (f32 GPR:$src1))),
+          (OPBITORrr (FNErr GPR:$src0, GPR:$src0), (FNErr GPR:$src1, GPR:$src1))>;
+
+def : Pat<(brcond (i64 (setugt (f32 GPR:$src0), (f32 GPR:$src1))), bb:$target),
+          (BRANCHIFNOT bb:$target, (FLErr GPR:$src0, GPR:$src1))>;
+def : Pat<(brcond (i64 (setuge (f32 GPR:$src0), (f32 GPR:$src1))), bb:$target),
+          (BRANCHIFNOT bb:$target, (FLTrr GPR:$src0, GPR:$src1))>;
+def : Pat<(brcond (i64 (setult (f32 GPR:$src0), (f32 GPR:$src1))), bb:$target),
+          (BRANCHIFNOT bb:$target, (FGErr GPR:$src0, GPR:$src1))>;
+def : Pat<(brcond (i64 (setule (f32 GPR:$src0), (f32 GPR:$src1))), bb:$target),
+          (BRANCHIFNOT bb:$target, (FGTrr GPR:$src0, GPR:$src1))>;
+def : Pat<(brcond (i64 (setueq (f32 GPR:$src0), (f32 GPR:$src1))), bb:$target),
+          (BRANCHIFNOT bb:$target, (OPBITORrr (FLTrr GPR:$src0, GPR:$src1), (FGTrr GPR:$src0, GPR:$src1)))>;
 
 def : Pat<(i64 (extloadi8  (i64 GPR:$addr))), (LOADU8  GPR:$addr)>;
 def : Pat<(i64 (extloadi16 (i64 GPR:$addr))), (LOADU16 GPR:$addr)>;

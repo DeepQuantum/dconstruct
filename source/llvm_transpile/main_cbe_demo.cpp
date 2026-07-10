@@ -13,10 +13,11 @@
 #include "llvm/IR/IntrinsicsDCVM.h"
 #include "llvm/IR/Module.h"
 #include "llvm/Analysis/CFGPrinter.h"
+#include "llvm/MC/MCExpr.h"
 #include "llvm/Support/GraphWriter.h"
 #include "llvm/Support/raw_ostream.h"
 #include <algorithm>
-#include <array>
+#include <execution>
 #include <cstdlib>
 #include <expected>
 #include <format>
@@ -74,7 +75,7 @@ namespace {
                 continue;
             }
             const u64 last = line.find_last_not_of(" \t\r\n");
-            const std::filesystem::path resolved = resolve_recompile_input(std::filesystem::path(line.substr(first, last - first + 1)));
+            const std::filesystem::path resolved = resolve_recompile_input(std::filesystem::path(line.substr(first, last - first + 1))).lexically_normal();
 
             std::error_code ec;
             if (std::filesystem::is_directory(resolved, ec)) {
@@ -246,27 +247,54 @@ int main(int argc, char* argv[]) {
     original_binfiles.reserve(recompile_inputs.size());
     staged_outputs.reserve(recompile_inputs.size());
 
-    for (const auto& path: recompile_inputs) {
-        resstr<BinaryFile> binfile = BinaryFile::from_path(path);
-        if (!binfile) {
-            std::println(stderr, "failed to load binary file {}: {}", path.filename().string(), binfile.error());
-            return 1;
+    struct diassembled_binfile {
+        std::unique_ptr<BinaryFile> file;
+        std::unique_ptr<Disassembler> disasm;
+        std::filesystem::path output;
+    };
+
+    std::vector<diassembled_binfile> mapped;
+    mapped.resize(recompile_inputs.size());
+
+    std::transform(
+        std::execution::par,
+        recompile_inputs.begin(),
+        recompile_inputs.end(),
+        mapped.begin(),
+        [&] (const std::filesystem::path& path) -> diassembled_binfile {
+            resstr<BinaryFile> binfile = BinaryFile::from_path(path);
+            if (!binfile) {
+                std::println(stderr, "failed to load binary file {}: {}", path.filename().string(), binfile.error());
+                std::exit(1);
+            }
+
+            resstr<std::filesystem::path> output_path = staged_output_path(path);
+            if (!output_path) {
+                std::println(stderr, "failed to stage {}: {}", path.string(), output_path.error());
+                std::exit(1);
+            }
+
+            std::unique_ptr binfile_ptr = std::make_unique<BinaryFile>(std::move(*binfile));
+            std::unique_ptr disasm_ptr = std::make_unique<Disassembler>(binfile_ptr.get(), &sidbase);
+            disasm_ptr->disassemble();
+            std::vector<const function_disassembly*> functions = disasm_ptr->get_all_functions();
+
+            return {std::move(binfile_ptr), std::move(disasm_ptr), *output_path};
+        }
+    );
+
+    for (auto& [binfile, disasm, output_path] : mapped) {
+        const auto functions = disasm->get_all_functions();
+        if (functions.empty()) {
+            continue;
         }
 
-        resstr<std::filesystem::path> output_path = staged_output_path(path);
-        if (!output_path) {
-            std::println(stderr, "failed to stage {}: {}", path.string(), output_path.error());
-            return 1;
-        }
+        disassemblers.push_back(std::move(disasm));
 
-        binfiles.push_back(std::make_unique<BinaryFile>(std::move(*binfile)));
-        disassemblers.push_back(std::make_unique<Disassembler>(binfiles.back().get(), &sidbase));
-        disassemblers.back()->disassemble();
-
-        std::vector<const function_disassembly*> functions = disassemblers.back()->get_all_functions();
-        original_binfiles.push_back({path.filename().string(), binfiles.back().get(), functions});
-        staged_outputs.push_back(std::move(*output_path));
-        tp.add_module(path.filename().string(), binfiles.back().get(), functions);
+        original_binfiles.push_back({binfile->m_path.filename().string(), binfile.get(), functions});
+        staged_outputs.push_back(std::move(output_path));
+        tp.add_module(binfile->m_path.filename().string(), binfile.get(), functions);
+        binfiles.push_back(std::move(binfile));
     }
 
     tp.init_runtime_module();
@@ -287,12 +315,27 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
+    resstr<std::unordered_set<sid64>> existing_modules = compilation::read_modules_entry_sids(STAGED_MODULES);
+    if (!existing_modules) {
+        std::println(stderr, "failed to read modules.bin entries: {}", existing_modules.error());
+        return 1;
+    }
+
     std::vector<compilation::modules_patch_request> module_patches;
     module_patches.reserve(original_binfiles.size());
 
     for (u64 i = 0; i < original_binfiles.size(); ++i) {
         const llvm_transpile::original_binfile& original = original_binfiles[i];
         const std::filesystem::path& patched_path = staged_outputs[i];
+        resstr<std::string> target_name = compilation::module_target_name_from_output(patched_path);
+        if (!target_name) {
+            std::println(stderr, "failed to derive modules.bin target name for {}: {}", patched_path.string(), target_name.error());
+            return 1;
+        }
+        if (!existing_modules->contains(SID(target_name->c_str()))) {
+            std::println("skipped {} (no modules.bin entry)", *target_name);
+            continue;
+        }
         std::filesystem::create_directories(patched_path.parent_path());
         if (errmsg error = original.m_binfile->dump_to_file(patched_path)) {
             std::println(stderr, "failed to write patched binary {}: {}", patched_path.string(), *error);
