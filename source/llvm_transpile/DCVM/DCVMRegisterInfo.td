@@ -3,7 +3,7 @@ class DCVMReg<bits<16> enc, string n> : Register<n> {
     let Namespace = "DCVM";
 }
 
-foreach i = 0...MAX_REGISTER in
+foreach i = 0...ARG_REGISTER_END in
     def R#i : DCVMReg<i, "r"#i>;
 
 def GPR : RegisterClass<"DCVM", [i64, i32, f32], 64, (sequence "R%u", 0, GP_REGISTER_END)>;

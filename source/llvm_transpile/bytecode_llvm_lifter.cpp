@@ -557,7 +557,7 @@ namespace dconstruct::llvm_transpile {
         builder.CreateBr(blocks.at(0));
 
         if (!disasm->m_isScriptFunction) {
-            m_funcLocations[disasm->get_id()] = new_function;
+            m_funcLocations[disasm->get_unique_id()] = new_function;
         }
     }
 
@@ -964,10 +964,10 @@ namespace dconstruct::llvm_transpile {
                         assert(std::holds_alternative<ast::primitive_type>(symbol_table_t));
                         const ast::primitive_type ast_sid_t = std::get<ast::primitive_type>(symbol_table_t);
                         assert(ast_sid_t.m_type == ast::primitive_kind::SID);
-                        const sid64 sid_id = m_symbolTable->get<sid64>(istr.operand1 * sizeof(u64));
+                        const sid64 sid_hash = m_symbolTable->get<sid64>(istr.operand1 * sizeof(u64));
                         make_symbol_table_load<sid64>(builder, function, istr, istr_id);
                         llvm::Value* sid = load_register(builder, function, istr.destination, "", m_defaultIntT);
-                        llvm::CallInst* func_ptr = builder.CreateIntrinsic(llvm::Intrinsic::dcvm_lookup, {sid}, {}, std::format("{}_{}_lookup", istr_id, sid_id));
+                        llvm::CallInst* func_ptr = builder.CreateIntrinsic(llvm::Intrinsic::dcvm_lookup, {sid}, {}, std::format("{}_{}_lookup", istr_id, sid_hash));
 
                         make_store(builder, function, istr.destination, func_ptr, m_defaultPointerT);
                     }
@@ -985,7 +985,7 @@ namespace dconstruct::llvm_transpile {
                             func_type = exchange_function_types(function, arg_values.back()->getType(), istr.operand1, i);
                         }
                     }
-                    llvm::CallInst* call = builder.CreateCall(func_type, callee, llvm::ArrayRef(arg_values.data(), arg_values.size()), std::format("{}_call", istr_id));
+                    llvm::CallInst* call = builder.CreateCall(func_type, callee, arg_values, std::format("{}_call", istr_id));
                     make_store(builder, function, istr.destination, call, func_type->getReturnType());
                     break;
                 }
@@ -1069,8 +1069,7 @@ namespace dconstruct::llvm_transpile {
             }
             for (translation_unit& unit : m_translationUnits) {
                 std::erase_if(unit.m_preparedFunctions, [this](const prepared_function_ctx& function) {
-                    return m_exludedFunctions.contains(SID(function.m_disasm->get_id().c_str()))
-                        || m_exludedFunctions.contains(SID(function.m_disasm->get_unique_id().c_str()));
+                    return m_exludedFunctions.contains(SID(function.m_disasm->get_unique_id().c_str()));
                 });
             }
         }
@@ -1085,7 +1084,7 @@ namespace dconstruct::llvm_transpile {
         };
 
         std::vector<serialized_module> serialized(m_translationUnits.size());
-        std::transform(m_translationUnits.begin(), m_translationUnits.end(), serialized.begin(), [](const translation_unit& unit) {
+        std::transform(std::execution::par, m_translationUnits.begin(), m_translationUnits.end(), serialized.begin(), [](const translation_unit& unit) {
             serialized_module result{unit.module().getName().str(), {}};
             llvm::StripDebugInfo(unit.module());
             llvm::raw_string_ostream os(result.m_bitcode);
@@ -1911,7 +1910,7 @@ namespace dconstruct::llvm_transpile {
         llvm::SmallVector<llvm::GlobalValue*, 32> keep;
 
 
-        auto add_runtime_function_overwrite = [&](std::string_view name, u64 num_args, u64 custom_return_val = 0) {
+        auto add_runtime_function_override = [&](std::string_view name, u64 num_args, u64 custom_return_val = 0) {
             std::vector<llvm::Type*> arg_types(num_args, m_defaultIntT);
             llvm::FunctionType* func_t = llvm::FunctionType::get(m_defaultIntT, arg_types, false);
             llvm::Function* func = llvm::Function::Create(func_t, llvm::GlobalValue::LinkageTypes::ExternalLinkage, 0, name, module.get());
@@ -1956,22 +1955,22 @@ namespace dconstruct::llvm_transpile {
 
 
         constexpr bool is_final_build_val = true;
-        add_runtime_function_overwrite("is-final-build?", 0, is_final_build_val);
+        add_runtime_function_override("is-final-build?", 0, is_final_build_val);
 
-        add_runtime_function_overwrite("dc-assert-enabled?", 0, false);
+        add_runtime_function_override("dc-assert-enabled?", 0, false);
 
-        add_runtime_function_overwrite("debug-draw-line", 10);
-        add_runtime_function_overwrite("debug-draw-locator", 6);
-        add_runtime_function_overwrite("debug-draw-line-2d", 9);
-        add_runtime_function_overwrite("debug-draw-string", 8);
-        add_runtime_function_overwrite("debug-draw-string-2d", 9);
-        add_runtime_function_overwrite("debug-draw-sphere", 6);
-        add_runtime_function_overwrite("debug-draw-cross", 7);
-        add_runtime_function_overwrite("debug-draw-box-2d", 8);
-        add_runtime_function_overwrite("display-error", 8);
-        add_runtime_function_overwrite("string-debug", 8);
+        add_runtime_function_override("debug-draw-line", 10);
+        add_runtime_function_override("debug-draw-locator", 6);
+        add_runtime_function_override("debug-draw-line-2d", 9);
+        add_runtime_function_override("debug-draw-string", 8);
+        add_runtime_function_override("debug-draw-string-2d", 9);
+        add_runtime_function_override("debug-draw-sphere", 6);
+        add_runtime_function_override("debug-draw-cross", 7);
+        add_runtime_function_override("debug-draw-box-2d", 8);
+        add_runtime_function_override("display-error", 8);
+        add_runtime_function_override("string-debug", 8);
 
-        add_runtime_function_overwrite("debug-draw-ngon-2d", 10);
+        add_runtime_function_override("debug-draw-ngon-2d", 10);
 
         const std::initializer_list optmized_attrs = {
             llvm::Attribute::Speculatable,

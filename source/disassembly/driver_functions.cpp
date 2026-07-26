@@ -434,8 +434,6 @@ std::vector<std::string> edits_from_file(const std::filesystem::path& path) {
 
     std::string type_def_source = input.str();
 
-
-
     Lexer lexer{type_def_source};
     const auto& [tokens, lex_errors] = lexer.get_results();
 

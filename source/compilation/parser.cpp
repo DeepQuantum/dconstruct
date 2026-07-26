@@ -371,10 +371,20 @@ namespace dconstruct::compilation {
 
         while (!check(token_type::RIGHT_BRACE) && !is_at_end()) {
             std::unique_ptr<ast::variable_declaration> decl = make_var_declaration();
+            std::string comment_string = "";
             if (!decl) {
                 return std::nullopt;
             }
+            if (match(token_type::PIPE)) {
+                // got a comment
+                const token* comment_token = consume(token_type::STRING, "expected comment string after |");
+                if (!comment_token) {
+                    continue;
+                }
+                comment_string = std::get<std::string>(comment_token->m_literal);
+            }
             struct_t.m_members.emplace_back(std::move(decl->m_identifier), std::make_unique<ast::full_type>(std::move(decl->m_type)));
+            struct_t.m_memberComments.emplace_back(std::move(comment_string));
         }
 
         if (!consume(token_type::RIGHT_BRACE, "expected '}' after struct definition")) {

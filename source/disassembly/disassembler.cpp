@@ -251,7 +251,12 @@ namespace dconstruct {
                         return sizeof(sid64);
                     }
                     case ast::primitive_kind::STRING: {
-                        values.emplace_back(string_value{member.as<char>(), std::nullopt});
+                        if (m_currentFile->is_file_ptr(member)) {
+                            const location chars = location().from(member);
+                            values.emplace_back(string_value{chars.as<char>(), get_offset(member)});
+                        } else {
+                            values.emplace_back(string_value{member.as<char>(), std::nullopt});
+                        }
                         return sizeof(const char*);
                     }
                     case ast::primitive_kind::U8: {
@@ -265,6 +270,26 @@ namespace dconstruct {
                     case ast::primitive_kind::U32: {
                         values.emplace_back(member.as<u32>());
                         return sizeof(u32);
+                    }
+                    case ast::primitive_kind::I8: {
+                        values.emplace_back(member.as<i8>());
+                        return sizeof(i8);
+                    }
+                    case ast::primitive_kind::I16: {
+                        values.emplace_back(member.as<i16>());
+                        return sizeof(i16);
+                    }
+                    case ast::primitive_kind::I64: {
+                        values.emplace_back(member.as<i64>());
+                        return sizeof(i64);
+                    }
+                    case ast::primitive_kind::F32: {
+                        values.emplace_back(member.as<f32>());
+                        return sizeof(f32);
+                    }
+                    case ast::primitive_kind::F64: {
+                        values.emplace_back(member.as<f64>());
+                        return sizeof(f64);
                     }
                     default: {
                         values.emplace_back(member.as<i32>());
@@ -587,12 +612,20 @@ namespace dconstruct {
                     append_format("u8: %u\n", *entry);
                 } else if constexpr (std::is_same_v<T, const u16*>) {
                     append_format("u16: %u\n", *entry);
+                } else if constexpr (std::is_same_v<T, const i8*>) {
+                    append_format("i8: %d\n", *entry);
+                } else if constexpr (std::is_same_v<T, const i16*>) {
+                    append_format("i16: %d\n", *entry);
                 } else if constexpr (std::is_same_v<T, const i32*> || std::is_same_v<T, const u32*>) {
                     append_format("int: %d\n", *entry);
+                } else if constexpr (std::is_same_v<T, const i64*>) {
+                    append_format("int64: %lli\n", *entry);
                 } else if constexpr (std::is_same_v<T, const u64*>) {
                     append_format("sid: %s\n", m_sidbase->lookup(*entry, m_currentFile->m_sidCache));
                 } else if constexpr (std::is_same_v<T, const f32*>) {
                     append_format("float: %.2f\n", *entry);
+                } else if constexpr (std::is_same_v<T, const f64*>) {
+                    append_format("f64: %.2f\n", *entry);
                 } else if constexpr (std::is_same_v<T, string_value>) {
                     append_format("string: \"%s\"\n", entry.m_chars != nullptr ? entry.m_chars : "");
                 } else if constexpr (std::is_same_v<T, const structs::map*>) {
@@ -736,7 +769,7 @@ namespace dconstruct {
 
     [[nodiscard]] disassembled_values_t Disassembler::insert_mapped_struct(
         const location _struct,
-        const std::pair<sid64, ast::full_type>& mapped_type
+        const std::pair<const sid64, ast::full_type>& mapped_type
     ) {
         return std::visit([this, _struct, type_id = mapped_type.first](auto&& t) -> disassembled_values_t {
             using outer_type = std::decay_t<decltype(t)>;
@@ -744,9 +777,13 @@ namespace dconstruct {
             disassembled_values_t mapped_values{};
             if constexpr (std::is_same_v<outer_type, ast::struct_type>) {
                 location member_location = _struct;
-                for (const auto& [member_name, member_type] : t.m_members) {
+                for (u64 i = 0; i < t.m_members.size(); ++i) {
+                    const auto& [member_name, member_type] = t.m_members[i];
                     const auto inserted_size = insert_next_struct_member(member_location, *member_type, mapped_values);
-                    mapped_values.back() = mapped_value{member_name, std::make_unique<disassembled_value_content>(std::move(mapped_values.back()))};
+                    const std::string_view comment = i < t.m_memberComments.size()
+                        ? std::string_view{t.m_memberComments[i]}
+                        : std::string_view{};
+                    mapped_values.back() = mapped_value{member_name, std::make_unique<disassembled_value_content>(std::move(mapped_values.back())), comment};
                     member_location = member_location + inserted_size;
                 }
             }

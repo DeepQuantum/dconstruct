@@ -83,28 +83,28 @@ namespace dconstruct::ast {
             return std::unexpected{std::move(lvalue.error())};
         }
         const auto& [lvalue_reg, opcode] = *lvalue;
-        resstr<reg_idx> rvalue;
+        resstr<reg_idx> rvalue_reg;
 
         if (opcode == Opcode::Move) {
-            rvalue = m_rhs->emit_dc(fn, global, lvalue_reg);
+            rvalue_reg = m_rhs->emit_dc(fn, global, lvalue_reg);
         } else {
-            rvalue = m_rhs->emit_dc(fn, global);
+            rvalue_reg = m_rhs->emit_dc(fn, global);
         }
 
-        if (!rvalue) {
-            return rvalue;
+        if (!rvalue_reg) {
+            return rvalue_reg;
         }
-        if (*rvalue != lvalue_reg) {
+        if (*rvalue_reg != lvalue_reg) {
             if (is_store_opcode(opcode)) {
                 const resstr<reg_idx> throwaway = fn.get_next_unused_register();
                 if (!throwaway) {
                     return throwaway;
                 }
-                fn.emit_instruction(opcode, *throwaway, lvalue_reg, *rvalue);
+                fn.emit_instruction(opcode, *throwaway, lvalue_reg, *rvalue_reg);
                 fn.free_register(*throwaway);
             } else {
-                fn.emit_instruction(opcode, lvalue_reg, *rvalue);
-                fn.free_register(*rvalue);
+                fn.emit_instruction(opcode, lvalue_reg, *rvalue_reg);
+                fn.free_register(*rvalue_reg);
             }
         }
         return lvalue_reg;

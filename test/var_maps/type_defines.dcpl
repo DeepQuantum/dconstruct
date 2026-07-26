@@ -12,3 +12,18 @@ struct #gas-mask-setup {
     u32 unused2;
     symbol futz;
 }
+
+struct #weapon-damage-settings-entry {
+    i32 base_damage; | "test"
+    f32 head_multiplier__or__min_damage;
+    f32 neck_multiplier__or__max_damage;
+    i32 unk0;
+    i32 unk1;
+    i32 unk2;
+    i32 unk3;
+    i32 unk4;
+    i32 always_50;
+    i32 always_50_2;
+    f32 always_3_0;
+    i32 only_1_on_bow; | "toggling this to 1 makes it so that arrows can kill on 1 shot if enemies are wearing helmets"
+}

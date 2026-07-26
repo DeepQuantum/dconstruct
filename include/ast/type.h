@@ -71,6 +71,7 @@ namespace dconstruct::ast {
         std::optional<sid64> m_typeHash;
 
         std::vector<std::pair<std::string, ref_full_type>> m_members;
+        std::vector<std::string> m_memberComments;
         bool operator==(const struct_type&) const = default;
 
         [[nodiscard]] u64 get_members_size() const noexcept;

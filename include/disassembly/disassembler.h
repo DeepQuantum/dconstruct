@@ -6,6 +6,7 @@
 #include "custom_structs.h"
 #include "ast/state_script/state_script.h"
 #include <string>
+#include <string_view>
 #include <vector>
 #include <variant>
 #include <memory>
@@ -27,7 +28,7 @@ namespace dconstruct {
         std::optional<u64> m_pointerOffset;
     };
 
-    using disassembled_value_content = std::variant<disassembled_value, mapped_value, std::shared_ptr<function_disassembly>, const ast::state_script*, const u8*, const u16*, const u32*, const i32*, const u64*, const f32*, string_value, const structs::map*>;
+    using disassembled_value_content = std::variant<disassembled_value, mapped_value, std::shared_ptr<function_disassembly>, const ast::state_script*, const u8*, const u16*, const u32*, const i8*, const i16*, const i32*, const i64*, const u64*, const f32*, const f64*, string_value, const structs::map*>;
 
     using disassembled_values_t = std::vector<disassembled_value_content>;
 
@@ -41,6 +42,7 @@ namespace dconstruct {
     struct mapped_value {
         std::string m_name;
         std::unique_ptr<disassembled_value_content> m_value;
+        std::string_view m_comment;
     };
 
     struct disassembled_entry {
@@ -119,7 +121,7 @@ namespace dconstruct {
         void insert_anonymous_array(const location, disassembled_values_t&);
         [[nodiscard]] disassembled_value insert_array(const location, const u32, u32 struct_size = 0);
         [[nodiscard]] ast::state_script insert_state_script(const StateScript*);
-        [[nodiscard]] disassembled_values_t insert_mapped_struct(const location, const std::pair<sid64, ast::full_type>&);
+        [[nodiscard]] disassembled_values_t insert_mapped_struct(const location, const std::pair<const sid64, ast::full_type>&);
         void insert_unmapped_struct(const structs::unmapped*, disassembled_values_t&);
         u8 insert_next_struct_member(const location, disassembled_values_t&);
         [[nodiscard]] u8 insert_next_struct_member(const location, const ast::full_type&, disassembled_values_t& values);

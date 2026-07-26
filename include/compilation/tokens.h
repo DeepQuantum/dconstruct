@@ -13,6 +13,12 @@ namespace dconstruct::compilation {
 
     class source_file_table {
     public:
+        source_file_table() = default;
+        source_file_table(const source_file_table&) = delete;
+        source_file_table& operator=(const source_file_table&) = delete;
+        source_file_table(source_file_table&&) noexcept = default;
+        source_file_table& operator=(source_file_table&&) noexcept = default;
+
         [[nodiscard]] const std::filesystem::path* intern(std::filesystem::path path);
         void clear() noexcept;
 

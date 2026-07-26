@@ -2798,7 +2798,7 @@ namespace dconstruct::ui {
         return reinterpret_cast<const void*>((doc.m_idSeed ^ offset) | (std::uintptr_t{1} << 63));
     }
 
-    void dv_draw_member_name(const char* member_name) {
+    void dv_draw_member_name(const char* member_name, std::string_view comment = {}) {
         ImGui::SameLine(0.0F, 0.0F);
         ImFont* bold = qui::font_bold();
         if (bold != nullptr) {
@@ -2806,9 +2806,13 @@ namespace dconstruct::ui {
         }
         ImGui::PushStyleColor(ImGuiCol_Text, qui::color::active_palette().Text);
         ImGui::Text("%s: ", member_name);
+        const bool show_comment = !comment.empty() && ImGui::IsItemHovered();
         ImGui::PopStyleColor();
         if (bold != nullptr) {
             ImGui::PopFont();
+        }
+        if (show_comment) {
+            ImGui::SetTooltip("%.*s", static_cast<int>(comment.size()), comment.data());
         }
     }
 
@@ -2818,7 +2822,7 @@ namespace dconstruct::ui {
         return measure_text(qui::font_bold(), buffer);
     }
 
-    bool dv_node(value_view v, const void* id, const ImVec4& color, const char* label, const char* suffix, bool leaf, const char* member_name = nullptr, const char* index_prefix = nullptr, std::optional<u64> struct_ptr_offset = std::nullopt, sid64 struct_type_id = 0, std::optional<u64> string_ptr_offset = std::nullopt) {
+    bool dv_node(value_view v, const void* id, const ImVec4& color, const char* label, const char* suffix, bool leaf, const char* member_name = nullptr, std::string_view member_comment = {}, const char* index_prefix = nullptr, std::optional<u64> struct_ptr_offset = std::nullopt, sid64 struct_type_id = 0, std::optional<u64> string_ptr_offset = std::nullopt) {
         document* doc = v.doc;
         const ImGuiID node_im_id = ImGui::GetID(id);
         i32 node_depth = -1;
@@ -2873,7 +2877,7 @@ namespace dconstruct::ui {
             doc->m_stringMenuBuffer.clear();
         }
         if (use_name) {
-            dv_draw_member_name(member_name);
+            dv_draw_member_name(member_name, member_comment);
             if (value_text != nullptr && value_text[0] != '\0') {
                 ImGui::SameLine(0.0F, 0.0F);
                 ImGui::PushStyleColor(ImGuiCol_Text, color);
@@ -2912,7 +2916,7 @@ namespace dconstruct::ui {
     }
 
     void dv_draw_values(value_view v, const disassembled_values_t& values);
-    void dv_draw_value(value_view v, const disassembled_values_t::value_type& value, i32 index, const char* member_name = nullptr);
+    void dv_draw_value(value_view v, const disassembled_values_t::value_type& value, i32 index, const char* member_name = nullptr, std::string_view member_comment = {});
     void dv_draw_function(value_view v, const function_disassembly& func, i32 index);
     void dv_draw_function_body(value_view v, const function_disassembly& func);
     void append_debugger_span(ast::code_color_buffer& buffer, ast::AST_COLOR color, std::string text);
@@ -2937,7 +2941,7 @@ namespace dconstruct::ui {
         }
     }
 
-    void dv_draw_struct_like(value_view v, const disassembled_value& entry, const void* id, i32 index, const char* member_name = nullptr) {
+    void dv_draw_struct_like(value_view v, const disassembled_value& entry, const void* id, i32 index, const char* member_name = nullptr, std::string_view member_comment = {}) {
         char label[256];
         char suffix[128];
         char prefix[64];
@@ -2957,7 +2961,7 @@ namespace dconstruct::ui {
         if (entry.m_typeId == SID("array")) {
             std::snprintf(label, sizeof(label), "%sarray", prefix);
             std::snprintf(suffix, sizeof(suffix), "[0x%05X] {size: %zu}", static_cast<u32>(entry.m_offset), entry.m_values.size());
-            const bool open = dv_node(v, id, gcol::Array(), label, suffix, entry.m_values.empty(), member_name, prefix);
+            const bool open = dv_node(v, id, gcol::Array(), label, suffix, entry.m_values.empty(), member_name, member_comment, prefix);
             if (open && !entry.m_values.empty()) {
                 dv_draw_values(v, entry.m_values);
                 dv_tree_pop(v);
@@ -2980,7 +2984,7 @@ namespace dconstruct::ui {
 
         std::snprintf(label, sizeof(label), "%s%s", prefix, type_name);
         std::snprintf(suffix, sizeof(suffix), "[0x%05X]", static_cast<u32>(entry.m_offset));
-        const bool open = dv_node(v, id, color, label, suffix, entry.m_values.empty(), member_name, prefix, entry.m_pointerOffset, entry.m_typeId);
+        const bool open = dv_node(v, id, color, label, suffix, entry.m_values.empty(), member_name, member_comment, prefix, entry.m_pointerOffset, entry.m_typeId);
         if (open && !entry.m_values.empty()) {
             dv_draw_values(v, entry.m_values);
             dv_tree_pop(v);
@@ -3126,7 +3130,8 @@ namespace dconstruct::ui {
         const char* label,
         const char* suffix,
         const char* prefix,
-        const char* member_name = nullptr
+        const char* member_name = nullptr,
+        std::string_view member_comment = {}
     ) {
         document* doc = v.doc;
         const bool use_name = member_name != nullptr && member_name[0] != '\0';
@@ -3172,7 +3177,7 @@ namespace dconstruct::ui {
         ImGui::PopStyleColor();
         const bool double_clicked = ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left);
         if (use_name) {
-            dv_draw_member_name(member_name);
+            dv_draw_member_name(member_name, member_comment);
             if (value_text != nullptr && value_text[0] != '\0') {
                 ImGui::SameLine(0.0F, 0.0F);
                 ImGui::PushStyleColor(ImGuiCol_Text, color);
@@ -3199,7 +3204,7 @@ namespace dconstruct::ui {
         }
     }
 
-    void dv_draw_value(value_view v, const disassembled_values_t::value_type& value, i32 index, const char* member_name) {
+    void dv_draw_value(value_view v, const disassembled_values_t::value_type& value, i32 index, const char* member_name, std::string_view member_comment) {
         char label[512];
         char suffix[128];
         char prefix[64];
@@ -3207,35 +3212,47 @@ namespace dconstruct::ui {
         std::visit([&](auto&& entry) {
             using T = std::decay_t<decltype(entry)>;
             if constexpr (std::is_same_v<T, mapped_value>) {
-                dv_draw_value(v, *entry.m_value, index, entry.m_name.c_str());
+                dv_draw_value(v, *entry.m_value, index, entry.m_name.c_str(), entry.m_comment);
             } else if constexpr (std::is_same_v<T, disassembled_value>) {
-                dv_draw_struct_like(v, entry, &value, index, member_name);
+                dv_draw_struct_like(v, entry, &value, index, member_name, member_comment);
             } else if constexpr (std::is_same_v<T, std::shared_ptr<function_disassembly>>) {
                 dv_draw_function(v, *entry, index);
             } else if constexpr (std::is_same_v<T, const ast::state_script*>) {
                 dv_draw_state_script(v, *entry, index);
             } else if constexpr (std::is_same_v<T, const u8*>) {
                 std::snprintf(label, sizeof(label), "%s%u", prefix, *entry);
-                dv_node(v, entry, *entry == 0 ? gcol::IntZero() : gcol::Int(), label, ": u8", true, member_name, prefix);
+                dv_node(v, entry, *entry == 0 ? gcol::IntZero() : gcol::Int(), label, ": u8", true, member_name, member_comment, prefix);
             } else if constexpr (std::is_same_v<T, const u16*>) {
                 std::snprintf(label, sizeof(label), "%s%u", prefix, *entry);
-                dv_node(v, entry, *entry == 0 ? gcol::IntZero() : gcol::Int(), label, ": u16", true, member_name, prefix);
+                dv_node(v, entry, *entry == 0 ? gcol::IntZero() : gcol::Int(), label, ": u16", true, member_name, member_comment, prefix);
             } else if constexpr (std::is_same_v<T, const u32*>) {
                 std::snprintf(label, sizeof(label), "%s%u", prefix, *entry);
-                dv_node(v, entry, *entry == 0 ? gcol::IntZero() : gcol::Int(), label, ": u32", true, member_name, prefix);
+                dv_node(v, entry, *entry == 0 ? gcol::IntZero() : gcol::Int(), label, ": u32", true, member_name, member_comment, prefix);
+            } else if constexpr (std::is_same_v<T, const i8*>) {
+                std::snprintf(label, sizeof(label), "%s%d", prefix, *entry);
+                dv_node(v, entry, *entry == 0 ? gcol::IntZero() : gcol::Int(), label, ": i8", true, member_name, member_comment, prefix);
+            } else if constexpr (std::is_same_v<T, const i16*>) {
+                std::snprintf(label, sizeof(label), "%s%d", prefix, *entry);
+                dv_node(v, entry, *entry == 0 ? gcol::IntZero() : gcol::Int(), label, ": i16", true, member_name, member_comment, prefix);
             } else if constexpr (std::is_same_v<T, const i32*>) {
                 std::snprintf(label, sizeof(label), "%s%d", prefix, *entry);
-                dv_editable_leaf(v, entry, entry, edit_kind::Int, *entry == 0 ? gcol::IntZero() : gcol::Int(), label, ": int", prefix, member_name);
+                dv_editable_leaf(v, entry, entry, edit_kind::Int, *entry == 0 ? gcol::IntZero() : gcol::Int(), label, ": int", prefix, member_name, member_comment);
+            } else if constexpr (std::is_same_v<T, const i64*>) {
+                std::snprintf(label, sizeof(label), "%s%lld", prefix, static_cast<long long>(*entry));
+                dv_editable_leaf(v, entry, entry, edit_kind::Int64, *entry == 0 ? gcol::IntZero() : gcol::Int(), label, ": int64", prefix, member_name, member_comment);
+            } else if constexpr (std::is_same_v<T, const f64*>) {
+                std::snprintf(label, sizeof(label), "%s%.2f", prefix, *entry);
+                dv_node(v, entry, gcol::Float(), label, ": f64", true, member_name, member_comment, prefix);
             } else if constexpr (std::is_same_v<T, const u64*>) {
                 const std::string resolved = v.state->m_sidbase->lookup(*entry, v.doc->m_file->m_sidCache);
                 std::snprintf(label, sizeof(label), "%s%s", prefix, resolved.c_str());
-                dv_editable_leaf(v, entry, entry, edit_kind::Sid, gcol::Sid(), label, ": sid", prefix, member_name);
+                dv_editable_leaf(v, entry, entry, edit_kind::Sid, gcol::Sid(), label, ": sid", prefix, member_name, member_comment);
             } else if constexpr (std::is_same_v<T, const f32*>) {
                 std::snprintf(label, sizeof(label), "%s%.2f", prefix, *entry);
-                dv_editable_leaf(v, entry, entry, edit_kind::Float, gcol::Float(), label, ": float", prefix, member_name);
+                dv_editable_leaf(v, entry, entry, edit_kind::Float, gcol::Float(), label, ": float", prefix, member_name, member_comment);
             } else if constexpr (std::is_same_v<T, string_value>) {
                 std::snprintf(label, sizeof(label), "%s\"%s\"", prefix, entry.m_chars != nullptr ? entry.m_chars : "");
-                dv_node(v, entry.m_chars, gcol::String(), label, ": string", true, member_name, prefix, std::nullopt, 0, entry.m_pointerOffset);
+                dv_node(v, entry.m_chars, gcol::String(), label, ": string", true, member_name, member_comment, prefix, std::nullopt, 0, entry.m_pointerOffset);
             } else if constexpr (std::is_same_v<T, const structs::map*>) {
                 std::snprintf(label, sizeof(label), "%smap", prefix);
                 std::snprintf(
@@ -3245,7 +3262,7 @@ namespace dconstruct::ui {
                     file_offset(*v.doc, entry->keys.data),
                     file_offset(*v.doc, entry->values.data)
                 );
-                dv_node(v, entry, gcol::Map(), label, suffix, true, member_name, prefix);
+                dv_node(v, entry, gcol::Map(), label, suffix, true, member_name, member_comment, prefix);
             }
         },
                    value);
@@ -3295,11 +3312,19 @@ namespace dconstruct::ui {
                 result = std::format("{}", *entry);
             } else if constexpr (std::is_same_v<T, const u32*>) {
                 result = std::format("{}", *entry);
+            } else if constexpr (std::is_same_v<T, const i8*>) {
+                result = std::format("{}", *entry);
+            } else if constexpr (std::is_same_v<T, const i16*>) {
+                result = std::format("{}", *entry);
             } else if constexpr (std::is_same_v<T, const i32*>) {
+                result = std::format("{}", *entry);
+            } else if constexpr (std::is_same_v<T, const i64*>) {
                 result = std::format("{}", *entry);
             } else if constexpr (std::is_same_v<T, const u64*>) {
                 result = v.state->m_sidbase->lookup(*entry, v.doc->m_file->m_sidCache);
             } else if constexpr (std::is_same_v<T, const f32*>) {
+                result = std::format("{}", *entry);
+            } else if constexpr (std::is_same_v<T, const f64*>) {
                 result = std::format("{}", *entry);
             } else if constexpr (std::is_same_v<T, string_value>) {
                 result = entry.m_chars != nullptr ? entry.m_chars : "";
