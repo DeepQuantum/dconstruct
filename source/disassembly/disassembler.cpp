@@ -122,6 +122,11 @@ namespace dconstruct {
         constexpr u32 max_allowed_size_array_u32 = 100'000;
         constexpr u16 max_allowed_size_array_u16 = 1'000;
         constexpr u16 bit_mask_u16 = 0xFFFF;
+        const u32 size_array_front_second = array.get<u32>(-4);
+        if (size_array_front > 0 && size_array_front < max_allowed_size_array_u16 &&
+            size_array_front_second > 0 && size_array_front_second < max_allowed_size_array_u16) {
+            return size_array_front < size_array_front_second ? size_array_front : size_array_front_second;
+        }
         if (size_array_front > max_allowed_size_array_u32 || size_array_front == 0) {
             const u16 small_size_front = size_array_front & bit_mask_u16;
             if (small_size_front < max_allowed_size_array_u16 && size_array_front > 0) {

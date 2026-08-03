@@ -19,6 +19,7 @@
 #include <string>
 #include <string_view>
 #include <unordered_map>
+#include <unordered_set>
 #include <vector>
 
 #include "base.h"
@@ -66,6 +67,9 @@ namespace dconstruct::ui {
     constexpr i32 MAX_FORCE_OPEN_NODES = 10000;
     constexpr i32 EXPAND_SHALLOW_DEPTH = 2;
     constexpr i32 EXPAND_RECURSIVE_DEPTH = 1 << 30;
+    constexpr i32 REVEAL_MAX_FRAMES = 4;
+    constexpr f64 SEARCH_HIGHLIGHT_SECONDS = 1.5;
+    constexpr f32 SEARCH_MODE_COMBO_WIDTH = 200.0F;
     constexpr char DONATE_URL[] = "https://ko-fi.com/deepquantum";
     constexpr char GITHUB_URL[] = "https://github.com/DeepQuantum";
     constexpr wchar_t PREVIOUS_WNDPROC_PROP[] = L"dconstruct.previous_wndproc";
@@ -129,6 +133,63 @@ namespace dconstruct::ui {
         ImVec2 m_pos = ImVec2(0.0F, 0.0F);
     };
 
+    struct struct_reference {
+        sid64 m_refTypeId = 0;
+        u64 m_refOffset = 0;
+        i32 m_memberIndex = -1;
+        i32 m_entryIndex = -1;
+        std::vector<u64> m_revealPath;
+    };
+
+    struct reference_popup_state {
+        u64 m_targetOffset = 0;
+        sid64 m_targetTypeId = 0;
+        ImVec2 m_pos = ImVec2(0.0F, 0.0F);
+        std::vector<struct_reference> m_references;
+    };
+
+    enum class search_mode : i32 {
+        SubstringHash = 0,
+        U8,
+        U16,
+        U32,
+        U64,
+        I8,
+        I16,
+        I32,
+        I64,
+        Float
+    };
+
+    struct search_nav {
+        i32 m_entryIndex = -1;
+        i32 m_pathIndex = -1;
+        const void* m_targetId = nullptr;
+        u32 m_order = 0;
+    };
+
+    struct sid_search_record {
+        sid64 m_value = 0;
+        const char* m_resolved = nullptr;
+        search_nav m_nav;
+    };
+
+    struct string_search_record {
+        const char* m_text = nullptr;
+        search_nav m_nav;
+    };
+
+    struct number_search_record {
+        u64 m_bits = 0;
+        f32 m_float = 0.0F;
+        search_mode m_kind = search_mode::U8;
+        search_nav m_nav;
+    };
+
+    struct search_hit {
+        search_nav m_nav;
+    };
+
     enum class tree_op {
         none,
         expand,
@@ -188,6 +249,27 @@ namespace dconstruct::ui {
         ast::function_to_mapped_vars m_functionScopes;
         std::optional<local_var_type_edit> m_localVarTypeEdit;
         std::optional<struct_pointer_edit> m_structPointerEdit;
+        std::optional<reference_popup_state> m_referencePopup;
+        std::unordered_map<u64, std::vector<struct_reference>> m_referenceIndex;
+        bool m_referenceIndexBuilt = false;
+        std::vector<u64> m_revealPath;
+        std::size_t m_revealCursor = 0;
+        bool m_revealActive = false;
+        i32 m_revealFramesLeft = 0;
+        const void* m_revealTargetId = nullptr;
+        const void* m_highlightId = nullptr;
+        f64 m_highlightUntil = 0.0;
+        std::string m_searchQuery;
+        i32 m_searchMode = 0;
+        i32 m_searchIndex = -1;
+        i32 m_searchResultsEntry = -1;
+        std::shared_ptr<const std::vector<search_hit>> m_searchResults;
+        bool m_searchCorpusBuilt = false;
+        std::vector<sid_search_record> m_searchSids;
+        std::vector<string_search_record> m_searchStrings;
+        std::vector<number_search_record> m_searchNumbers;
+        std::vector<std::vector<u64>> m_searchPaths;
+        std::unordered_map<std::string, std::shared_ptr<const std::vector<search_hit>>> m_searchCache;
         std::unordered_map<const void*, i32> m_mapSortStates;
     };
 
@@ -532,6 +614,24 @@ namespace dconstruct::ui {
         doc.m_asmColored.clear();
         doc.m_decompErrors.clear();
         doc.m_lambdaViewDcpl.clear();
+        doc.m_referencePopup.reset();
+        doc.m_referenceIndex.clear();
+        doc.m_referenceIndexBuilt = false;
+        doc.m_revealPath.clear();
+        doc.m_revealCursor = 0;
+        doc.m_revealActive = false;
+        doc.m_revealFramesLeft = 0;
+        doc.m_revealTargetId = nullptr;
+        doc.m_highlightId = nullptr;
+        doc.m_searchCorpusBuilt = false;
+        doc.m_searchSids.clear();
+        doc.m_searchStrings.clear();
+        doc.m_searchNumbers.clear();
+        doc.m_searchPaths.clear();
+        doc.m_searchCache.clear();
+        doc.m_searchResults.reset();
+        doc.m_searchIndex = -1;
+        doc.m_searchResultsEntry = -1;
 
         if (state.m_sidbase == nullptr || doc.m_file == nullptr) {
             return;
@@ -1028,7 +1128,7 @@ namespace dconstruct::ui {
         ImGui::SetNextWindowPos(viewport->GetCenter(), ImGuiCond_Appearing, ImVec2(0.5F, 0.5F));
 
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(28.0F, 24.0F));
-        ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 8.0F);
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0F);
         ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(8.0F, 8.0F));
         ImGui::PushStyleColor(ImGuiCol_PopupBg, qui::color::active_palette().WindowBackground);
 
@@ -1148,7 +1248,7 @@ namespace dconstruct::ui {
         ImGui::SetNextWindowSizeConstraints(ImVec2(settings_width, 0.0F), ImVec2(settings_width, FLT_MAX));
 
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(28.0F, 24.0F));
-        ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 8.0F);
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0F);
         ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(8.0F, 8.0F));
         ImGui::PushStyleColor(ImGuiCol_PopupBg, qui::color::active_palette().WindowBackground);
 
@@ -2500,7 +2600,7 @@ namespace dconstruct::ui {
         ImGui::SetNextWindowPos(edit.m_pos, ImGuiCond_Appearing);
         ImGui::SetNextWindowSize(ImVec2(560.0F, 0.0F), ImGuiCond_Appearing);
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(12.0F, 10.0F));
-        ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 6.0F);
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0F);
         ImGui::PushStyleColor(ImGuiCol_WindowBg, qui::color::active_palette().PopupBackground);
         constexpr ImGuiWindowFlags flags =
             ImGuiWindowFlags_NoSavedSettings |
@@ -2662,7 +2762,7 @@ namespace dconstruct::ui {
         ImGui::SetNextWindowPos(edit.m_pos, ImGuiCond_Appearing);
         ImGui::SetNextWindowSize(ImVec2(440.0F, 0.0F), ImGuiCond_Appearing);
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(12.0F, 10.0F));
-        ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 6.0F);
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0F);
         ImGui::PushStyleColor(ImGuiCol_WindowBg, qui::color::active_palette().PopupBackground);
         constexpr ImGuiWindowFlags flags =
             ImGuiWindowFlags_NoSavedSettings |
@@ -2822,7 +2922,512 @@ namespace dconstruct::ui {
         return measure_text(qui::font_bold(), buffer);
     }
 
-    bool dv_node(value_view v, const void* id, const ImVec4& color, const char* label, const char* suffix, bool leaf, const char* member_name = nullptr, std::string_view member_comment = {}, const char* index_prefix = nullptr, std::optional<u64> struct_ptr_offset = std::nullopt, sid64 struct_type_id = 0, std::optional<u64> string_ptr_offset = std::nullopt) {
+    bool is_map_type(const sid64 type_id) {
+        return type_id == SID("map") || type_id == SID("map-32") || type_id == SID("render-settings-map") || type_id == SID("hash-table");
+    }
+
+    void collect_struct_references(document& doc, const disassembled_values_t& values, const sid64 parent_type_id, const u64 parent_offset, const i32 entry_index, std::vector<u64>& path) {
+        for (i32 i = 0; i < static_cast<i32>(values.size()); ++i) {
+            const disassembled_value_content* content = &values[static_cast<u32>(i)];
+            while (const auto* mapped = std::get_if<mapped_value>(content)) {
+                content = mapped->m_value.get();
+            }
+            const auto* nested = std::get_if<disassembled_value>(content);
+            if (nested == nullptr) {
+                continue;
+            }
+            if (is_map_type(parent_type_id) && nested->m_typeId == SID("array")) {
+                collect_struct_references(doc, nested->m_values, parent_type_id, parent_offset, entry_index, path);
+                continue;
+            }
+            if (nested->m_pointerOffset.has_value()) {
+                doc.m_referenceIndex[nested->m_offset].push_back({
+                    .m_refTypeId = parent_type_id,
+                    .m_refOffset = parent_offset,
+                    .m_memberIndex = i,
+                    .m_entryIndex = entry_index,
+                    .m_revealPath = path,
+                });
+            }
+            path.push_back(nested->m_offset);
+            collect_struct_references(doc, nested->m_values, nested->m_typeId, nested->m_offset, entry_index, path);
+            path.pop_back();
+        }
+    }
+
+    void build_reference_index(document& doc) {
+        doc.m_referenceIndex.clear();
+        doc.m_referenceIndexBuilt = true;
+        if (doc.m_entries == nullptr) {
+            return;
+        }
+        std::vector<u64> path;
+        for (i32 i = 0; i < static_cast<i32>(doc.m_entries->size()); ++i) {
+            const disassembled_entry& entry = (*doc.m_entries)[static_cast<u32>(i)];
+            collect_struct_references(doc, entry.m_values, entry.m_typeId, entry.m_offset, i, path);
+        }
+    }
+
+    void open_reference_popup(document& doc, const u64 target_offset, const sid64 target_type_id, const ImVec2 pos) {
+        if (!doc.m_referenceIndexBuilt) {
+            build_reference_index(doc);
+        }
+        reference_popup_state popup;
+        popup.m_targetOffset = target_offset;
+        popup.m_targetTypeId = target_type_id;
+        popup.m_pos = pos;
+        if (const auto it = doc.m_referenceIndex.find(target_offset); it != doc.m_referenceIndex.end()) {
+            std::unordered_set<u64> seen;
+            popup.m_references.reserve(it->second.size());
+            for (const struct_reference& ref : it->second) {
+                const u64 key = (static_cast<u64>(static_cast<u32>(ref.m_refOffset)) << 32) | static_cast<u32>(ref.m_memberIndex);
+                if (seen.insert(key).second) {
+                    popup.m_references.push_back(ref);
+                }
+            }
+        }
+        doc.m_referencePopup = std::move(popup);
+    }
+
+    void draw_reference_popup(app_state& state, document& doc) {
+        if (!doc.m_referencePopup || doc.m_file == nullptr || state.m_sidbase == nullptr) {
+            return;
+        }
+
+        reference_popup_state& popup = *doc.m_referencePopup;
+        const char* target_type = popup.m_targetTypeId != 0
+            ? state.m_sidbase->lookup(popup.m_targetTypeId, doc.m_file->m_sidCache)
+            : "anonymous struct";
+        const std::string visible_title = std::format("References to {} [0x{:05X}]", target_type, static_cast<u32>(popup.m_targetOffset));
+        const std::string title = visible_title + "###dv_references";
+
+        ImGui::SetNextWindowPos(popup.m_pos, ImGuiCond_Appearing);
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(12.0F, 10.0F));
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0F);
+        ImGui::PushStyleColor(ImGuiCol_WindowBg, qui::color::active_palette().PopupBackground);
+        constexpr ImGuiWindowFlags flags =
+            ImGuiWindowFlags_NoSavedSettings |
+            ImGuiWindowFlags_AlwaysAutoResize |
+            ImGuiWindowFlags_NoCollapse;
+
+        bool keep_open = true;
+        bool close = false;
+        if (ImGui::Begin(title.c_str(), &keep_open, flags)) {
+            if (popup.m_references.empty()) {
+                ImGui::PushStyleColor(ImGuiCol_Text, qui::color::active_palette().TextDisabled);
+                ImGui::TextUnformatted("No references found.");
+                ImGui::PopStyleColor();
+                ImGui::Dummy(ImVec2(ImGui::CalcTextSize(visible_title.c_str()).x + ImGui::GetFontSize() + ImGui::GetStyle().FramePadding.x * 4.0F, 0.0F));
+            } else {
+                ImGui::PushStyleColor(ImGuiCol_Text, qui::color::active_palette().TextDisabled);
+                ImGui::Text("%zu reference%s", popup.m_references.size(), popup.m_references.size() == 1 ? "" : "s");
+                ImGui::PopStyleColor();
+                ImGui::Dummy(ImVec2(0.0F, 2.0F));
+
+                const ImGuiStyle& style = ImGui::GetStyle();
+                char addr_text[32];
+                char member_text[192];
+                f32 row_width = 0.0F;
+                for (const struct_reference& ref : popup.m_references) {
+                    const char* ref_type = ref.m_refTypeId != 0
+                        ? state.m_sidbase->lookup(ref.m_refTypeId, doc.m_file->m_sidCache)
+                        : "anonymous struct";
+                    std::snprintf(addr_text, sizeof(addr_text), "[0x%05X]", static_cast<u32>(ref.m_refOffset));
+                    std::snprintf(member_text, sizeof(member_text), "[%d] %s", ref.m_memberIndex, target_type);
+                    const f32 width = ENTRY_CELL_LEFT_PADDING
+                        + ImGui::CalcTextSize(ref_type).x + style.ItemSpacing.x
+                        + ImGui::CalcTextSize(addr_text).x + style.ItemSpacing.x
+                        + ImGui::CalcTextSize(member_text).x;
+                    row_width = std::max(row_width, width);
+                }
+                const bool list_scrolls = popup.m_references.size() > 12;
+                const f32 title_width = ImGui::CalcTextSize(visible_title.c_str()).x + ImGui::GetFontSize() + style.FramePadding.x * 4.0F;
+                const f32 list_width = std::max({
+                    416.0F,
+                    row_width + (list_scrolls ? style.ScrollbarSize : 0.0F) + 8.0F,
+                    title_width
+                });
+                const f32 line_height = ImGui::GetTextLineHeightWithSpacing();
+                const f32 list_height = std::min(static_cast<f32>(popup.m_references.size()), 12.0F) * line_height + style.WindowPadding.y;
+                if (ImGui::BeginChild("##dv_reference_list", ImVec2(list_width, list_height))) {
+                    for (i32 i = 0; i < static_cast<i32>(popup.m_references.size()); ++i) {
+                        const struct_reference& ref = popup.m_references[static_cast<u32>(i)];
+                        ImGui::PushID(i);
+                        if (ImGui::Selectable("##dv_reference", false)) {
+                            doc.m_selectedEntry = ref.m_entryIndex;
+                            doc.m_revealPath = ref.m_revealPath;
+                            doc.m_revealCursor = 0;
+                            doc.m_revealActive = true;
+                            doc.m_revealFramesLeft = REVEAL_MAX_FRAMES;
+                            close = true;
+                        }
+                        const char* ref_type = ref.m_refTypeId != 0
+                            ? state.m_sidbase->lookup(ref.m_refTypeId, doc.m_file->m_sidCache)
+                            : "anonymous struct";
+                        ImGui::SameLine(ENTRY_CELL_LEFT_PADDING);
+                        ImGui::TextColored(gcol::Struct(), "%s", ref_type);
+                        ImGui::SameLine();
+                        ImGui::TextColored(qui::color::active_palette().TextDisabled, "[0x%05X]", static_cast<u32>(ref.m_refOffset));
+                        ImGui::SameLine();
+                        ImGui::TextColored(qui::color::active_palette().Text, "[%d] %s", ref.m_memberIndex, target_type);
+                        ImGui::PopID();
+                    }
+                }
+                ImGui::EndChild();
+            }
+            if (ImGui::IsKeyPressed(ImGuiKey_Escape)) {
+                close = true;
+            }
+        }
+        ImGui::End();
+        ImGui::PopStyleColor();
+        ImGui::PopStyleVar(2);
+
+        if (close || !keep_open) {
+            doc.m_referencePopup.reset();
+        }
+    }
+
+    i32 search_intern_path(document& doc, const std::vector<u64>& path, i32& cached) {
+        if (cached < 0) {
+            cached = static_cast<i32>(doc.m_searchPaths.size());
+            doc.m_searchPaths.push_back(path);
+        }
+        return cached;
+    }
+
+    void collect_symbol_table_records(
+        app_state& state,
+        document& doc,
+        const function_disassembly& func,
+        const i32 entry_index,
+        const i32 path_index,
+        const void* target_id,
+        u32& order
+    ) {
+        const SymbolTable& symbols = func.m_stackFrame.m_symbolTable;
+        if (symbols.m_location.m_ptr == nullptr) {
+            return;
+        }
+        for (u32 i = 0; i < static_cast<u32>(symbols.m_types.size()); ++i) {
+            const u64 raw = symbols.get<u64>(i);
+            const char* resolved = state.m_sidbase->search(raw);
+            const search_nav nav{entry_index, path_index, target_id, order++};
+            doc.m_searchSids.push_back({raw, resolved, nav});
+            doc.m_searchNumbers.push_back({raw, 0.0F, search_mode::U64, nav});
+            const auto* prim = std::get_if<ast::primitive_type>(&symbols.m_types[i]);
+            if (prim == nullptr) {
+                continue;
+            }
+            switch (prim->m_type) {
+                case ast::primitive_kind::STRING: {
+                    const char* chars = symbols.get<const char*>(i);
+                    if (chars != nullptr) {
+                        doc.m_searchStrings.push_back({chars, nav});
+                    }
+                    break;
+                }
+                case ast::primitive_kind::U8:
+                    doc.m_searchNumbers.push_back({symbols.get<u8>(i), 0.0F, search_mode::U8, nav});
+                    break;
+                case ast::primitive_kind::U16:
+                    doc.m_searchNumbers.push_back({symbols.get<u16>(i), 0.0F, search_mode::U16, nav});
+                    break;
+                case ast::primitive_kind::U32:
+                    doc.m_searchNumbers.push_back({symbols.get<u32>(i), 0.0F, search_mode::U32, nav});
+                    break;
+                case ast::primitive_kind::I8:
+                    doc.m_searchNumbers.push_back({static_cast<u64>(static_cast<i64>(symbols.get<i8>(i))), 0.0F, search_mode::I8, nav});
+                    break;
+                case ast::primitive_kind::I16:
+                    doc.m_searchNumbers.push_back({static_cast<u64>(static_cast<i64>(symbols.get<i16>(i))), 0.0F, search_mode::I16, nav});
+                    break;
+                case ast::primitive_kind::I32:
+                    doc.m_searchNumbers.push_back({static_cast<u64>(static_cast<i64>(symbols.get<i32>(i))), 0.0F, search_mode::I32, nav});
+                    break;
+                case ast::primitive_kind::I64:
+                    doc.m_searchNumbers.push_back({static_cast<u64>(symbols.get<i64>(i)), 0.0F, search_mode::I64, nav});
+                    break;
+                case ast::primitive_kind::F32:
+                    doc.m_searchNumbers.push_back({0, symbols.get<f32>(i), search_mode::Float, nav});
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    void collect_search_records(
+        app_state& state,
+        document& doc,
+        const disassembled_values_t& values,
+        const sid64 parent_type_id,
+        const u64 parent_offset,
+        const i32 entry_index,
+        std::vector<u64>& path,
+        i32& path_index,
+        u32& order
+    ) {
+        for (std::size_t i = 0; i < values.size(); ++i) {
+            const disassembled_value_content* content = &values[i];
+            while (const auto* mapped = std::get_if<mapped_value>(content)) {
+                content = mapped->m_value.get();
+            }
+            if (const auto* nested = std::get_if<disassembled_value>(content)) {
+                if (is_map_type(parent_type_id) && nested->m_typeId == SID("array")) {
+                    collect_search_records(state, doc, nested->m_values, parent_type_id, parent_offset, entry_index, path, path_index, order);
+                    continue;
+                }
+                path.push_back(nested->m_offset);
+                i32 nested_path_index = -1;
+                if (nested->m_typeId != 0) {
+                    doc.m_searchSids.push_back({
+                        nested->m_typeId,
+                        state.m_sidbase->lookup(nested->m_typeId, doc.m_file->m_sidCache),
+                        {entry_index, search_intern_path(doc, path, nested_path_index), stable_id(doc, nested->m_offset), order++}
+                    });
+                }
+                collect_search_records(state, doc, nested->m_values, nested->m_typeId, nested->m_offset, entry_index, path, nested_path_index, order);
+                path.pop_back();
+            } else if (const auto* sid_ptr = std::get_if<const u64*>(content)) {
+                const search_nav nav{entry_index, search_intern_path(doc, path, path_index), *sid_ptr, order++};
+                doc.m_searchSids.push_back({
+                    **sid_ptr,
+                    state.m_sidbase->lookup(**sid_ptr, doc.m_file->m_sidCache),
+                    nav
+                });
+                doc.m_searchNumbers.push_back({**sid_ptr, 0.0F, search_mode::U64, nav});
+            } else if (const auto* u8_ptr = std::get_if<const u8*>(content)) {
+                doc.m_searchNumbers.push_back({**u8_ptr, 0.0F, search_mode::U8, {entry_index, search_intern_path(doc, path, path_index), *u8_ptr, order++}});
+            } else if (const auto* u16_ptr = std::get_if<const u16*>(content)) {
+                doc.m_searchNumbers.push_back({**u16_ptr, 0.0F, search_mode::U16, {entry_index, search_intern_path(doc, path, path_index), *u16_ptr, order++}});
+            } else if (const auto* u32_ptr = std::get_if<const u32*>(content)) {
+                doc.m_searchNumbers.push_back({**u32_ptr, 0.0F, search_mode::U32, {entry_index, search_intern_path(doc, path, path_index), *u32_ptr, order++}});
+            } else if (const auto* i8_ptr = std::get_if<const i8*>(content)) {
+                doc.m_searchNumbers.push_back({static_cast<u64>(static_cast<i64>(**i8_ptr)), 0.0F, search_mode::I8, {entry_index, search_intern_path(doc, path, path_index), *i8_ptr, order++}});
+            } else if (const auto* i16_ptr = std::get_if<const i16*>(content)) {
+                doc.m_searchNumbers.push_back({static_cast<u64>(static_cast<i64>(**i16_ptr)), 0.0F, search_mode::I16, {entry_index, search_intern_path(doc, path, path_index), *i16_ptr, order++}});
+            } else if (const auto* i32_ptr = std::get_if<const i32*>(content)) {
+                doc.m_searchNumbers.push_back({static_cast<u64>(static_cast<i64>(**i32_ptr)), 0.0F, search_mode::I32, {entry_index, search_intern_path(doc, path, path_index), *i32_ptr, order++}});
+            } else if (const auto* i64_ptr = std::get_if<const i64*>(content)) {
+                doc.m_searchNumbers.push_back({static_cast<u64>(**i64_ptr), 0.0F, search_mode::I64, {entry_index, search_intern_path(doc, path, path_index), *i64_ptr, order++}});
+            } else if (const auto* f32_ptr = std::get_if<const f32*>(content)) {
+                doc.m_searchNumbers.push_back({0, **f32_ptr, search_mode::Float, {entry_index, search_intern_path(doc, path, path_index), *f32_ptr, order++}});
+            } else if (const auto* str = std::get_if<string_value>(content)) {
+                if (str->m_chars != nullptr) {
+                    doc.m_searchStrings.push_back({
+                        str->m_chars,
+                        {entry_index, search_intern_path(doc, path, path_index), str->m_chars, order++}
+                    });
+                }
+            } else if (const auto* func = std::get_if<std::shared_ptr<function_disassembly>>(content)) {
+                if (*func != nullptr) {
+                    const void* target = stable_id(doc, path.empty() ? parent_offset : path.back());
+                    collect_symbol_table_records(state, doc, **func, entry_index, search_intern_path(doc, path, path_index), target, order);
+                }
+            }
+        }
+    }
+
+    void build_search_corpus(app_state& state, document& doc) {
+        doc.m_searchSids.clear();
+        doc.m_searchStrings.clear();
+        doc.m_searchPaths.clear();
+        doc.m_searchCorpusBuilt = true;
+        if (doc.m_entries == nullptr || state.m_sidbase == nullptr || doc.m_file == nullptr) {
+            return;
+        }
+        std::vector<u64> path;
+        u32 order = 0;
+        for (i32 i = 0; i < static_cast<i32>(doc.m_entries->size()); ++i) {
+            const disassembled_entry& entry = (*doc.m_entries)[static_cast<u32>(i)];
+            i32 root_path_index = -1;
+            const void* entry_target = stable_id(doc, entry.m_offset);
+            doc.m_searchSids.push_back({
+                entry.m_nameId,
+                state.m_sidbase->lookup(entry.m_nameId, doc.m_file->m_sidCache),
+                {i, search_intern_path(doc, path, root_path_index), entry_target, order++}
+            });
+            if (entry.m_typeId != 0 && entry.m_typeId != entry.m_nameId) {
+                doc.m_searchSids.push_back({
+                    entry.m_typeId,
+                    state.m_sidbase->lookup(entry.m_typeId, doc.m_file->m_sidCache),
+                    {i, root_path_index, entry_target, order++}
+                });
+            }
+            collect_search_records(state, doc, entry.m_values, entry.m_typeId, entry.m_offset, i, path, root_path_index, order);
+        }
+    }
+
+    std::optional<u64> parse_unsigned_query(std::string_view text) {
+        bool hex = false;
+        if (text.size() > 2 && text[0] == '0' && (text[1] == 'x' || text[1] == 'X')) {
+            hex = true;
+            text.remove_prefix(2);
+        }
+        if (text.empty()) {
+            return std::nullopt;
+        }
+        if (!hex && text.find_first_not_of("0123456789") != std::string_view::npos) {
+            if (text.find_first_not_of("0123456789abcdefABCDEF") != std::string_view::npos) {
+                return std::nullopt;
+            }
+            hex = true;
+        }
+        try {
+            return std::stoull(std::string(text), nullptr, hex ? 16 : 10);
+        } catch (const std::exception&) {
+            return std::nullopt;
+        }
+    }
+
+    std::optional<i64> parse_signed_query(std::string_view text) {
+        bool negative = false;
+        if (!text.empty() && text.front() == '-') {
+            negative = true;
+            text.remove_prefix(1);
+        }
+        const std::optional<u64> value = parse_unsigned_query(text);
+        if (!value.has_value()) {
+            return std::nullopt;
+        }
+        const i64 signed_value = static_cast<i64>(*value);
+        return negative ? -signed_value : signed_value;
+    }
+
+    std::optional<f64> parse_float_query(const std::string& text) {
+        try {
+            std::size_t consumed = 0;
+            const f64 value = std::stod(text, &consumed);
+            if (consumed == text.size()) {
+                return value;
+            }
+        } catch (const std::exception&) {
+        }
+        return std::nullopt;
+    }
+
+    std::shared_ptr<const std::vector<search_hit>> run_search(app_state& state, document& doc) {
+        const std::string query = trim_copy(doc.m_searchQuery);
+        if (query.empty() || doc.m_selectedEntry < 0) {
+            return nullptr;
+        }
+        const auto mode = static_cast<search_mode>(doc.m_searchMode);
+        std::string normalized = query;
+        std::transform(normalized.begin(), normalized.end(), normalized.begin(), [](const unsigned char c) {
+            return static_cast<char>(std::tolower(c));
+        });
+        const std::string key = std::format("{}\x1F{}\x1F{}", doc.m_selectedEntry, doc.m_searchMode, normalized);
+        if (const auto it = doc.m_searchCache.find(key); it != doc.m_searchCache.end()) {
+            return it->second;
+        }
+        if (!doc.m_searchCorpusBuilt) {
+            build_search_corpus(state, doc);
+        }
+
+        auto results = std::make_shared<std::vector<search_hit>>();
+        if (mode == search_mode::SubstringHash) {
+            for (const string_search_record& record : doc.m_searchStrings) {
+                if (record.m_nav.m_entryIndex == doc.m_selectedEntry && contains_case_insensitive(record.m_text, query)) {
+                    results->push_back({record.m_nav});
+                }
+            }
+            for (const sid_search_record& record : doc.m_searchSids) {
+                if (record.m_nav.m_entryIndex == doc.m_selectedEntry && record.m_resolved != nullptr && contains_case_insensitive(record.m_resolved, query)) {
+                    results->push_back({record.m_nav});
+                }
+            }
+            std::sort(results->begin(), results->end(), [](const search_hit& lhs, const search_hit& rhs) {
+                return lhs.m_nav.m_order < rhs.m_nav.m_order;
+            });
+        } else {
+            const bool is_signed = mode >= search_mode::I8 && mode <= search_mode::I64;
+            std::optional<u64> bits;
+            std::optional<f64> value;
+            if (mode == search_mode::Float) {
+                value = parse_float_query(query);
+            } else if (is_signed) {
+                if (const std::optional<i64> parsed = parse_signed_query(query)) {
+                    bits = static_cast<u64>(*parsed);
+                }
+            } else {
+                bits = parse_unsigned_query(query);
+            }
+            if (bits.has_value() || value.has_value()) {
+                for (const number_search_record& record : doc.m_searchNumbers) {
+                    if (record.m_nav.m_entryIndex != doc.m_selectedEntry || record.m_kind != mode) {
+                        continue;
+                    }
+                    const bool match = mode == search_mode::Float
+                        ? record.m_float == static_cast<f32>(*value)
+                        : record.m_bits == *bits;
+                    if (match) {
+                        results->push_back({record.m_nav});
+                    }
+                }
+            }
+        }
+
+        std::shared_ptr<const std::vector<search_hit>> shared = std::move(results);
+        doc.m_searchCache.emplace(key, shared);
+        return shared;
+    }
+
+    void jump_to_search_hit(document& doc, const search_hit& hit) {
+        doc.m_selectedEntry = hit.m_nav.m_entryIndex;
+        if (hit.m_nav.m_pathIndex >= 0) {
+            doc.m_revealPath = doc.m_searchPaths[static_cast<u32>(hit.m_nav.m_pathIndex)];
+        } else {
+            doc.m_revealPath.clear();
+        }
+        doc.m_revealCursor = 0;
+        doc.m_revealActive = true;
+        doc.m_revealFramesLeft = REVEAL_MAX_FRAMES;
+        doc.m_revealTargetId = hit.m_nav.m_targetId;
+    }
+
+    bool dv_reveal_check(document& doc, const u64 struct_offset) {
+        if (!doc.m_revealActive || doc.m_revealCursor >= doc.m_revealPath.size() || doc.m_revealPath[doc.m_revealCursor] != struct_offset) {
+            return false;
+        }
+        ImGui::SetNextItemOpen(true, ImGuiCond_Always);
+        return true;
+    }
+
+    void dv_reveal_advance(document& doc) {
+        ++doc.m_revealCursor;
+        if (doc.m_revealCursor == doc.m_revealPath.size() && doc.m_revealTargetId == nullptr) {
+            ImGui::SetScrollHereY(0.25F);
+        }
+    }
+
+    void dv_target_and_highlight(document& doc, const void* id) {
+        if (doc.m_revealTargetId != nullptr && doc.m_revealTargetId == id) {
+            ImGui::SetScrollHereY(0.25F);
+            doc.m_highlightId = id;
+            doc.m_highlightUntil = ImGui::GetTime() + SEARCH_HIGHLIGHT_SECONDS;
+            if (doc.m_revealFramesLeft <= 1) {
+                doc.m_revealTargetId = nullptr;
+            }
+        }
+        if (doc.m_highlightId == id) {
+            const f32 remaining = static_cast<f32>(doc.m_highlightUntil - ImGui::GetTime());
+            if (remaining <= 0.0F) {
+                doc.m_highlightId = nullptr;
+            } else {
+                const ImVec4 accent = qui::color::active_palette().AccentBlue;
+                const f32 alpha = 0.25F * std::min(remaining / static_cast<f32>(SEARCH_HIGHLIGHT_SECONDS), 1.0F);
+                ImGui::GetWindowDrawList()->AddRectFilled(
+                    ImGui::GetItemRectMin(),
+                    ImGui::GetItemRectMax(),
+                    ImGui::ColorConvertFloat4ToU32(ImVec4(accent.x, accent.y, accent.z, alpha)),
+                    0.0F
+                );
+            }
+        }
+    }
+
+    bool dv_node(value_view v, const void* id, const ImVec4& color, const char* label, const char* suffix, bool leaf, const char* member_name = nullptr, std::string_view member_comment = {}, const char* index_prefix = nullptr, std::optional<u64> struct_ptr_offset = std::nullopt, sid64 struct_type_id = 0, std::optional<u64> string_ptr_offset = std::nullopt, std::optional<u64> xref_struct_offset = std::nullopt) {
         document* doc = v.doc;
         const ImGuiID node_im_id = ImGui::GetID(id);
         i32 node_depth = -1;
@@ -2865,6 +3470,7 @@ namespace dconstruct::ui {
         ImGui::PushStyleColor(ImGuiCol_Text, color);
         const bool open = ImGui::TreeNodeEx(id, flags, "%s", node_label);
         ImGui::PopStyleColor();
+        dv_target_and_highlight(*doc, id);
         if ((!leaf || string_ptr_offset.has_value()) && ImGui::IsItemClicked(ImGuiMouseButton_Right)) {
             doc->m_menuTarget = node_im_id;
             doc->m_openMenu = true;
@@ -2875,6 +3481,9 @@ namespace dconstruct::ui {
             doc->m_stringMenuAddingNew = false;
             doc->m_stringMenuFocusInput = false;
             doc->m_stringMenuBuffer.clear();
+        }
+        if (xref_struct_offset.has_value() && ImGui::IsItemHovered() && !ImGui::GetIO().WantTextInput && ImGui::IsKeyPressed(ImGuiKey_X, false)) {
+            open_reference_popup(*doc, *xref_struct_offset, struct_type_id, ImGui::GetMousePos());
         }
         if (use_name) {
             dv_draw_member_name(member_name, member_comment);
@@ -2925,6 +3534,7 @@ namespace dconstruct::ui {
     void dv_draw_state_script(value_view v, const ast::state_script& script, i32 index);
     void dv_draw_map(value_view v, const disassembled_value& entry, const void* id, i32 index);
     void dv_draw_script_lambda(value_view v, const disassembled_value& entry, const void* id, i32 index);
+    bool dv_draw_point_curve(value_view v, const disassembled_value& entry, const void* id, i32 index, const char* member_name, std::string_view member_comment);
 
     struct typed_value_text {
         std::string text;
@@ -2958,10 +3568,19 @@ namespace dconstruct::ui {
             return;
         }
 
+        if ((entry.m_typeId == SID("point-curve") || entry.m_typeId == SID("small-fast-point-curve")) &&
+            dv_draw_point_curve(v, entry, id, index, member_name, member_comment)) {
+            return;
+        }
+
         if (entry.m_typeId == SID("array")) {
             std::snprintf(label, sizeof(label), "%sarray", prefix);
             std::snprintf(suffix, sizeof(suffix), "[0x%05X] {size: %zu}", static_cast<u32>(entry.m_offset), entry.m_values.size());
-            const bool open = dv_node(v, id, gcol::Array(), label, suffix, entry.m_values.empty(), member_name, member_comment, prefix);
+            const bool reveal = dv_reveal_check(*v.doc, entry.m_offset);
+            const bool open = dv_node(v, id, gcol::Array(), label, suffix, entry.m_values.empty(), member_name, member_comment, prefix, std::nullopt, entry.m_typeId, std::nullopt, entry.m_offset);
+            if (reveal) {
+                dv_reveal_advance(*v.doc);
+            }
             if (open && !entry.m_values.empty()) {
                 dv_draw_values(v, entry.m_values);
                 dv_tree_pop(v);
@@ -2984,7 +3603,11 @@ namespace dconstruct::ui {
 
         std::snprintf(label, sizeof(label), "%s%s", prefix, type_name);
         std::snprintf(suffix, sizeof(suffix), "[0x%05X]", static_cast<u32>(entry.m_offset));
-        const bool open = dv_node(v, id, color, label, suffix, entry.m_values.empty(), member_name, member_comment, prefix, entry.m_pointerOffset, entry.m_typeId);
+        const bool reveal = dv_reveal_check(*v.doc, entry.m_offset);
+        const bool open = dv_node(v, id, color, label, suffix, entry.m_values.empty(), member_name, member_comment, prefix, entry.m_pointerOffset, entry.m_typeId, std::nullopt, entry.m_offset);
+        if (reveal) {
+            dv_reveal_advance(*v.doc);
+        }
         if (open && !entry.m_values.empty()) {
             dv_draw_values(v, entry.m_values);
             dv_tree_pop(v);
@@ -3175,6 +3798,7 @@ namespace dconstruct::ui {
         ImGui::PushStyleColor(ImGuiCol_Text, color);
         ImGui::TreeNodeEx(id, ImGuiTreeNodeFlags_FramePadding | ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen | ImGuiTreeNodeFlags_Bullet, "%s", node_label);
         ImGui::PopStyleColor();
+        dv_target_and_highlight(*doc, id);
         const bool double_clicked = ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left);
         if (use_name) {
             dv_draw_member_name(member_name, member_comment);
@@ -3421,13 +4045,301 @@ namespace dconstruct::ui {
         }
 
         const bool empty = keys == nullptr || vals == nullptr || keys->m_values.empty();
-        const bool open = dv_node(v, id, gcol::Map(), label, suffix, empty);
+        const bool reveal = dv_reveal_check(*v.doc, entry.m_offset);
+        const bool open = dv_node(v, id, gcol::Map(), label, suffix, empty, nullptr, {}, nullptr, std::nullopt, entry.m_typeId, std::nullopt, entry.m_offset);
+        if (reveal) {
+            dv_reveal_advance(*v.doc);
+        }
         if (!open || empty) {
             return;
         }
 
         dv_draw_map_table(v, *keys, *vals, id);
         dv_tree_pop(v);
+    }
+
+    struct point_curve_view {
+        const f32* m_keys = nullptr;
+        const f32* m_values = nullptr;
+        i32 m_count = 0;
+        i32 m_capacity = 0;
+    };
+
+    struct plot_range {
+        f32 m_min = 0.0F;
+        f32 m_max = 1.0F;
+    };
+
+    point_curve_view point_curve_extract(value_view v, const disassembled_value& entry) {
+        const BinaryFile* file = v.doc->m_file.get();
+        const i32 capacity = entry.m_typeId == SID("point-curve") ? 16 : 8;
+        const u64 struct_size = 4 + static_cast<u64>(capacity) * 8;
+        if (file == nullptr || file->m_dcheader == nullptr || entry.m_offset + struct_size > file->m_size) {
+            return {};
+        }
+        const auto* base = reinterpret_cast<const std::byte*>(file->m_dcheader) + entry.m_offset;
+        return {
+            .m_keys = reinterpret_cast<const f32*>(base + 4),
+            .m_values = reinterpret_cast<const f32*>(base + 4 + capacity * 4),
+            .m_count = std::clamp(*reinterpret_cast<const i32*>(base), 0, capacity),
+            .m_capacity = capacity,
+        };
+    }
+
+    plot_range plot_span(const f32 lo, const f32 hi) {
+        if (!std::isfinite(lo) || !std::isfinite(hi)) {
+            return {-1.0F, 1.0F};
+        }
+        if (hi - lo < 1e-6F) {
+            const f32 span = std::max(std::fabs(lo), 1.0F) * 0.5F;
+            return {lo - span, lo + span};
+        }
+        return {lo, hi};
+    }
+
+    f32 nice_step(const f32 span, const f32 divisions) {
+        const f32 raw = span / divisions;
+        if (!(raw > 0.0F) || !std::isfinite(raw)) {
+            return span;
+        }
+        const f32 magnitude = std::pow(10.0F, std::floor(std::log10(raw)));
+        const f32 normalized = raw / magnitude;
+        const f32 multiple = normalized < 1.5F ? 1.0F : (normalized < 3.5F ? 2.0F : (normalized < 7.5F ? 5.0F : 10.0F));
+        return multiple * magnitude;
+    }
+
+    void dv_point_curve_plot(value_view v, const point_curve_view& curve, const void* id) {
+        const i32 n = curve.m_count;
+        if (n <= 0) {
+            return;
+        }
+        ImGui::PushID(id);
+
+        ImGuiStorage* storage = ImGui::GetStateStorage();
+        const ImGuiID drag_key = ImGui::GetID("##drag");
+        const ImGuiID drag_x_key = ImGui::GetID("##dragx");
+        const ImGuiID drag_y_key = ImGui::GetID("##dragy");
+
+        const qui::color::palette& pal = qui::color::active_palette();
+        const ImVec2 canvas = ImGui::GetCursorScreenPos();
+        const ImVec2 size(std::max(ImGui::GetContentRegionAvail().x - 4.0F, 200.0F), ImGui::GetTextLineHeight() * 9.0F);
+        ImGui::InvisibleButton("##canvas", size);
+        if (!ImGui::IsItemVisible()) {
+            ImGui::PopID();
+            return;
+        }
+        const bool hovered = ImGui::IsItemHovered();
+        const bool activated = ImGui::IsItemActivated();
+        const bool active = ImGui::IsItemActive();
+
+        i32 drag = storage->GetInt(drag_key, -1);
+        f32 keys[16];
+        f32 values[16];
+        f32 k_lo = curve.m_keys[0];
+        f32 k_hi = k_lo;
+        f32 v_lo = curve.m_values[0];
+        f32 v_hi = v_lo;
+        for (i32 i = 0; i < n; ++i) {
+            keys[i] = curve.m_keys[i];
+            values[i] = curve.m_values[i];
+            k_lo = std::min(k_lo, keys[i]);
+            k_hi = std::max(k_hi, keys[i]);
+            v_lo = std::min(v_lo, values[i]);
+            v_hi = std::max(v_hi, values[i]);
+        }
+        if (drag >= 0 && drag < n) {
+            keys[drag] = storage->GetFloat(drag_x_key, keys[drag]);
+            values[drag] = storage->GetFloat(drag_y_key, values[drag]);
+        } else {
+            drag = -1;
+        }
+        const bool lock_x = drag >= 0 && ImGui::GetIO().KeyCtrl;
+
+        const plot_range xr = plot_span(std::min(k_lo, 0.0F), std::max(k_hi, 0.0F));
+        const plot_range yr = plot_span(std::min(v_lo, 0.0F), std::max(v_hi, 0.0F));
+
+        char first_text[48];
+        char last_text[48];
+        std::snprintf(first_text, sizeof(first_text), "(%.4g, %.4g)", curve.m_keys[0], curve.m_values[0]);
+        std::snprintf(last_text, sizeof(last_text), "(%.4g, %.4g)", curve.m_keys[n - 1], curve.m_values[n - 1]);
+        const f32 text_h = ImGui::GetTextLineHeight();
+        f32 first_w = ImGui::CalcTextSize(first_text).x;
+        f32 last_w = ImGui::CalcTextSize(last_text).x;
+        const f32 pad_x = std::max(first_w, last_w) * 0.5F + 8.0F;
+        const f32 pad_y = text_h + 10.0F;
+        if (drag == 0) {
+            std::snprintf(first_text, sizeof(first_text), "(%.4g, %.4g)", keys[0], values[0]);
+            first_w = ImGui::CalcTextSize(first_text).x;
+        }
+        if (drag == n - 1) {
+            std::snprintf(last_text, sizeof(last_text), "(%.4g, %.4g)", keys[n - 1], values[n - 1]);
+            last_w = ImGui::CalcTextSize(last_text).x;
+        }
+
+        const ImVec2 max(canvas.x + size.x, canvas.y + size.y);
+        const ImVec2 inner(canvas.x + pad_x, canvas.y + pad_y);
+        const f32 inner_w = std::max(size.x - pad_x * 2.0F, 1.0F);
+        const f32 inner_h = std::max(size.y - pad_y * 2.0F, 1.0F);
+        const f32 inner_bottom = inner.y + inner_h;
+        const f32 sx = inner_w / (xr.m_max - xr.m_min);
+        const f32 sy = inner_h / (yr.m_max - yr.m_min);
+
+        ImDrawList* dl = ImGui::GetWindowDrawList();
+        dl->AddRectFilled(canvas, max, ImGui::ColorConvertFloat4ToU32(pal.Panel), 0.0F);
+        dl->PushClipRect(canvas, max, true);
+
+        ImVec2 points[16];
+        for (i32 i = 0; i < n; ++i) {
+            points[i] = ImVec2(inner.x + (keys[i] - xr.m_min) * sx, inner_bottom - (values[i] - yr.m_min) * sy);
+        }
+
+        ImVec4 grid_col = pal.TableBorderLight;
+        grid_col.w = 0.35F;
+        const ImU32 grid = ImGui::ColorConvertFloat4ToU32(grid_col);
+        ImVec4 origin_col = pal.TableBorderStrong;
+        origin_col.w = 0.75F;
+        const ImU32 origin = ImGui::ColorConvertFloat4ToU32(origin_col);
+        const f32 origin_x = inner.x - xr.m_min * sx;
+        const f32 origin_y = inner_bottom + yr.m_min * sy;
+        const f32 step_x = nice_step(xr.m_max - xr.m_min, 4.0F) * sx;
+        const f32 step_y = nice_step(yr.m_max - yr.m_min, 3.0F) * sy;
+        if (step_x >= 4.0F) {
+            for (f32 x = origin_x + step_x; x < max.x; x += step_x) {
+                dl->AddLine(ImVec2(x, canvas.y), ImVec2(x, max.y), grid);
+            }
+            for (f32 x = origin_x - step_x; x > canvas.x; x -= step_x) {
+                dl->AddLine(ImVec2(x, canvas.y), ImVec2(x, max.y), grid);
+            }
+        }
+        if (step_y >= 4.0F) {
+            for (f32 y = origin_y + step_y; y < max.y; y += step_y) {
+                dl->AddLine(ImVec2(canvas.x, y), ImVec2(max.x, y), grid);
+            }
+            for (f32 y = origin_y - step_y; y > canvas.y; y -= step_y) {
+                dl->AddLine(ImVec2(canvas.x, y), ImVec2(max.x, y), grid);
+            }
+        }
+        dl->AddLine(ImVec2(origin_x, canvas.y), ImVec2(origin_x, max.y), origin);
+        dl->AddLine(ImVec2(canvas.x, origin_y), ImVec2(max.x, origin_y), origin);
+
+        const ImVec2 mouse = ImGui::GetMousePos();
+        const ImU32 line_col = ImGui::ColorConvertFloat4ToU32(pal.ButtonHovered);
+        const ImU32 hot_col = ImGui::ColorConvertFloat4ToU32(pal.AccentYellow);
+        i32 hover = -1;
+
+        if (n >= 2) {
+            const f32 base_y = std::clamp(origin_y, inner.y, inner_bottom);
+            ImVec4 fill_col = pal.ButtonHovered;
+            fill_col.w = 0.16F;
+            const ImU32 fill = ImGui::ColorConvertFloat4ToU32(fill_col);
+            const ImDrawListFlags saved_flags = dl->Flags;
+            dl->Flags &= ~ImDrawListFlags_AntiAliasedFill;
+            for (i32 i = 0; i + 1 < n; ++i) {
+                dl->AddQuadFilled(ImVec2(points[i].x, base_y), points[i], points[i + 1], ImVec2(points[i + 1].x, base_y), fill);
+            }
+            dl->Flags = saved_flags;
+
+            ImVec4 edge_col = pal.ButtonHovered;
+            edge_col.w = 0.5F;
+            const ImU32 edge = ImGui::ColorConvertFloat4ToU32(edge_col);
+            dl->AddLine(ImVec2(points[0].x, base_y), ImVec2(points[n - 1].x, base_y), edge);
+            dl->AddLine(points[0], ImVec2(points[0].x, base_y), edge);
+            dl->AddLine(points[n - 1], ImVec2(points[n - 1].x, base_y), edge);
+            dl->AddPolyline(points, n, line_col, 1.7F);
+        }
+        if (hovered || drag >= 0) {
+            f32 best = 144.0F;
+            for (i32 i = 0; i < n; ++i) {
+                const f32 dx = mouse.x - points[i].x;
+                const f32 dy = mouse.y - points[i].y;
+                const f32 dist = dx * dx + dy * dy;
+                if (dist < best) {
+                    best = dist;
+                    hover = i;
+                }
+            }
+        }
+        if (lock_x) {
+            ImVec4 lock_col = pal.AccentYellow;
+            lock_col.w = 0.45F;
+            dl->AddLine(ImVec2(points[drag].x, canvas.y), ImVec2(points[drag].x, max.y), ImGui::ColorConvertFloat4ToU32(lock_col));
+        }
+        for (i32 i = 0; i < n; ++i) {
+            const bool hot = i == hover || i == drag;
+            dl->AddCircleFilled(points[i], hot ? 5.0F : 3.0F, hot ? hot_col : line_col, 12);
+        }
+        dl->PopClipRect();
+
+        const ImU32 label_col = ImGui::ColorConvertFloat4ToU32(pal.TextDisabled);
+        const auto draw_point_label = [&](const char* text, const f32 width, const ImVec2& at) {
+            const f32 x = std::clamp(at.x - width * 0.5F, canvas.x + 3.0F, max.x - width - 3.0F);
+            const f32 y = std::clamp(at.y - text_h - 7.0F, canvas.y + 3.0F, max.y - text_h - 3.0F);
+            dl->AddText(ImVec2(x, y), label_col, text);
+        };
+        draw_point_label(first_text, first_w, points[0]);
+        if (n > 1) {
+            draw_point_label(last_text, last_w, points[n - 1]);
+        }
+        dl->AddRect(canvas, max, ImGui::ColorConvertFloat4ToU32(pal.Border), 0.0F);
+
+        if (hover >= 0) {
+            ImGui::SetTooltip("[%d]  %.4g \xE2\x86\x92 %.4g", hover, keys[hover], values[hover]);
+        }
+
+        if (drag < 0 && hover >= 0 && activated) {
+            drag = hover;
+            storage->SetInt(drag_key, drag);
+            storage->SetFloat(drag_x_key, keys[drag]);
+            storage->SetFloat(drag_y_key, values[drag]);
+        } else if (drag >= 0 && active) {
+            if (lock_x) {
+                storage->SetFloat(drag_x_key, curve.m_keys[drag]);
+            } else {
+                constexpr f32 unbounded = std::numeric_limits<f32>::max();
+                const f32 lo = drag > 0 ? curve.m_keys[drag - 1] : -unbounded;
+                const f32 hi = drag + 1 < n ? curve.m_keys[drag + 1] : unbounded;
+                storage->SetFloat(drag_x_key, std::min(std::max(xr.m_min + (mouse.x - inner.x) / sx, lo), hi));
+            }
+            storage->SetFloat(drag_y_key, yr.m_min + (inner_bottom - mouse.y) / sy);
+            ImGui::SetMouseCursor(lock_x ? ImGuiMouseCursor_ResizeNS : ImGuiMouseCursor_Hand);
+        } else if (drag >= 0) {
+            document* doc = v.doc;
+            if (ptr_in_file(*doc, curve.m_keys + drag)) {
+                if (keys[drag] != curve.m_keys[drag]) {
+                    doc->m_pendingEdits.emplace_back(file_offset(*doc, curve.m_keys + drag), edit_kind::Float, std::format("{}", keys[drag]));
+                }
+                if (values[drag] != curve.m_values[drag]) {
+                    doc->m_pendingEdits.emplace_back(file_offset(*doc, curve.m_values + drag), edit_kind::Float, std::format("{}", values[drag]));
+                }
+            }
+            storage->SetInt(drag_key, -1);
+        }
+        ImGui::PopID();
+    }
+
+    bool dv_draw_point_curve(value_view v, const disassembled_value& entry, const void* id, i32 index, const char* member_name, std::string_view member_comment) {
+        const point_curve_view curve = point_curve_extract(v, entry);
+        if (curve.m_capacity == 0) {
+            return false;
+        }
+        char label[96];
+        char suffix[96];
+        char prefix[24];
+        dv_index_prefix(prefix, sizeof(prefix), index);
+        std::snprintf(label, sizeof(label), "%s%s", prefix, curve.m_capacity == 16 ? "point-curve" : "small-fast-point-curve");
+        std::snprintf(suffix, sizeof(suffix), "[0x%05X] {%d / %d points}", static_cast<u32>(entry.m_offset), curve.m_count, curve.m_capacity);
+
+        const bool empty = curve.m_count == 0;
+        const bool reveal = dv_reveal_check(*v.doc, entry.m_offset);
+        const bool open = dv_node(v, id, gcol::Struct(), label, suffix, empty, member_name, member_comment, prefix, entry.m_pointerOffset, entry.m_typeId, std::nullopt, entry.m_offset);
+        if (reveal) {
+            dv_reveal_advance(*v.doc);
+        }
+        if (open && !empty) {
+            dv_point_curve_plot(v, curve, id);
+            dv_tree_pop(v);
+        }
+        return true;
     }
 
     typed_value_text symbol_table_value_text(value_view v, const SymbolTable& symbols, u32 index) {
@@ -3803,7 +4715,11 @@ namespace dconstruct::ui {
         if (func != nullptr) {
             ImGui::SetNextItemAllowOverlap();
         }
-        const bool open = dv_node(v, id, gcol::Function(), label, suffix, func == nullptr);
+        const bool reveal = dv_reveal_check(*v.doc, entry.m_offset);
+        const bool open = dv_node(v, id, gcol::Function(), label, suffix, func == nullptr, nullptr, {}, nullptr, std::nullopt, entry.m_typeId, std::nullopt, entry.m_offset);
+        if (reveal) {
+            dv_reveal_advance(*v.doc);
+        }
 
         if (func == nullptr) {
             return;
@@ -3984,12 +4900,20 @@ namespace dconstruct::ui {
         doc.m_depthStack.clear();
         doc.m_closeIds.clear();
 
+        if (doc.m_revealActive) {
+            doc.m_revealCursor = 0;
+        }
+
         value_view v{&state, &doc};
-        ImGui::SetNextItemOpen(true, ImGuiCond_Once);
+        ImGui::SetNextItemOpen(true, doc.m_revealActive ? ImGuiCond_Always : ImGuiCond_Once);
         ImGui::PushID(doc.m_selectedEntry);
         const bool entry_is_map = entry.m_typeId == SID("map") || entry.m_typeId == SID("map-32") || entry.m_typeId == SID("render-settings-map") || entry.m_typeId == SID("hash-table");
         const void* entry_id = stable_id(doc, entry.m_offset);
-        const bool open = dv_node(v, entry_id, gcol::EntryName(), name, suffix, entry.m_values.empty());
+        const bool open = dv_node(v, entry_id, gcol::EntryName(), name, suffix, entry.m_values.empty(), nullptr, {}, nullptr, std::nullopt, entry.m_typeId, std::nullopt, entry.m_offset);
+        if (doc.m_revealActive && doc.m_revealPath.empty() && doc.m_revealTargetId == nullptr) {
+            ImGui::SetScrollHereY(0.25F);
+            doc.m_revealActive = false;
+        }
         if (open && !entry.m_values.empty()) {
             if (entry_is_map) {
                 const structs::map* header = nullptr;
@@ -4005,6 +4929,14 @@ namespace dconstruct::ui {
             dv_tree_pop(v);
         }
         ImGui::PopID();
+
+        if (doc.m_revealFramesLeft > 0) {
+            --doc.m_revealFramesLeft;
+            if (doc.m_revealFramesLeft <= 0) {
+                doc.m_revealActive = false;
+                doc.m_revealTargetId = nullptr;
+            }
+        }
 
         if (doc.m_opMode == tree_op::close && !doc.m_closeIds.empty()) {
             ImGuiStorage* storage = ImGui::GetStateStorage();
@@ -4057,6 +4989,60 @@ namespace dconstruct::ui {
 
         draw_local_var_type_edit_popup(state, doc);
         draw_struct_pointer_edit_popup(state, doc);
+        draw_reference_popup(state, doc);
+    }
+
+    void draw_search_row(app_state& state, document& doc, const f32 width) {
+        const ImGuiStyle& style = ImGui::GetStyle();
+
+        char counter[48];
+        counter[0] = '\0';
+        f32 counter_width = 0.0F;
+        if (doc.m_searchResults != nullptr) {
+            if (doc.m_searchIndex >= 0) {
+                std::snprintf(counter, sizeof(counter), "%d/%zu", doc.m_searchIndex + 1, doc.m_searchResults->size());
+            } else {
+                std::snprintf(counter, sizeof(counter), "%zu", doc.m_searchResults->size());
+            }
+            counter_width = ImGui::CalcTextSize(counter).x + style.ItemSpacing.x;
+        }
+
+        ImGui::SetNextItemWidth(std::max(80.0F, width - SEARCH_MODE_COMBO_WIDTH - counter_width - style.ItemSpacing.x));
+        const bool entered = ImGui::InputTextWithHint(
+            "##dv_search", "Search disassembly", &doc.m_searchQuery, ImGuiInputTextFlags_EnterReturnsTrue);
+        const bool edited = ImGui::IsItemEdited();
+        if (entered) {
+            ImGui::SetKeyboardFocusHere(-1);
+        }
+
+        ImGui::SameLine();
+        ImGui::SetNextItemWidth(SEARCH_MODE_COMBO_WIDTH);
+        const bool mode_changed = ImGui::Combo("##dv_search_mode", &doc.m_searchMode, "Substring/Hash\0u8\0u16\0u32\0u64\0i8\0i16\0i32\0i64\0float\0");
+
+        const bool entry_changed = doc.m_searchResults != nullptr && doc.m_searchResultsEntry != doc.m_selectedEntry;
+        if (edited || mode_changed || entry_changed || (entered && doc.m_searchResults == nullptr)) {
+            doc.m_searchResults = run_search(state, doc);
+            doc.m_searchIndex = -1;
+            doc.m_searchResultsEntry = doc.m_selectedEntry;
+        }
+
+        if (entered && doc.m_searchResults != nullptr && !doc.m_searchResults->empty()) {
+            const i32 count = static_cast<i32>(doc.m_searchResults->size());
+            if (ImGui::GetIO().KeyShift) {
+                doc.m_searchIndex = (doc.m_searchIndex <= 0 ? count : doc.m_searchIndex) - 1;
+            } else {
+                doc.m_searchIndex = (doc.m_searchIndex + 1) % count;
+            }
+            jump_to_search_hit(doc, (*doc.m_searchResults)[static_cast<u32>(doc.m_searchIndex)]);
+        }
+
+        if (doc.m_searchResults != nullptr) {
+            ImGui::SameLine();
+            const bool empty = doc.m_searchResults->empty();
+            ImGui::TextColored(
+                empty ? qui::color::active_palette().AccentRed : qui::color::active_palette().TextDisabled,
+                "%s", counter);
+        }
     }
 
     void draw_document(app_state& state, document& doc) {
@@ -4092,8 +5078,11 @@ namespace dconstruct::ui {
         // ImGui::BeginChild("##dconstruct_entry_view", ImVec2(0.0F, 0.0F), ImGuiChildFlags_Borders);
         ImVec2 detail_size;
         if (begin_labeled_table_frame("Disassembly", detail_size)) {
-            ImGui::BeginChild("##dconstruct_entry_detail", detail_size);
+            ImGui::BeginChild("##dconstruct_detail_panel", detail_size);
+            draw_search_row(state, doc, ImGui::GetContentRegionAvail().x);
+            ImGui::BeginChild("##dconstruct_entry_detail", ImVec2(0.0F, 0.0F));
             draw_entry_detail(state, doc);
+            ImGui::EndChild();
             ImGui::EndChild();
         }
         // ImGui::EndChild();
@@ -4105,7 +5094,9 @@ namespace dconstruct::ui {
 
     void redisassemble_preserving(app_state& state, document& doc) {
         const i32 selected = doc.m_selectedEntry;
+        const f32 list_width = doc.m_listWidth;
         disassemble_document(state, doc);
+        doc.m_listWidth = list_width;
         if (doc.m_entries != nullptr && selected >= 0 && selected < static_cast<i32>(doc.m_entries->size())) {
             doc.m_selectedEntry = selected;
         }
@@ -4113,6 +5104,65 @@ namespace dconstruct::ui {
 
     u32 edit_value_size(edit_kind kind) {
         return kind == edit_kind::Sid || kind == edit_kind::Int64 ? 8U : 4U;
+    }
+
+    bool zero_bytes_at(const document& doc, const u32 offset, const u32 size) {
+        if (doc.m_file == nullptr || static_cast<u64>(offset) + size > doc.m_file->m_size) {
+            return false;
+        }
+        const std::byte* at = doc.m_file->m_bytes.get() + offset;
+        return std::all_of(at, at + size, [](const std::byte byte) { return byte == std::byte{0}; });
+    }
+
+    std::optional<edit_kind> retyped_edit_kind(const std::string& text) {
+        const std::string trimmed = trim_copy(text);
+        if (trimmed.empty()) {
+            return std::nullopt;
+        }
+        if (trimmed.front() == '#') {
+            return edit_kind::Sid;
+        }
+        std::size_t consumed = 0;
+        try {
+            const long long as_integer = std::stoll(trimmed, &consumed);
+            if (consumed == trimmed.size()) {
+                if (as_integer > std::numeric_limits<i32>::max() || as_integer < std::numeric_limits<i32>::min()) {
+                    return edit_kind::Int64;
+                }
+                return std::nullopt;
+            }
+        } catch (const std::exception&) {
+        }
+        try {
+            std::stof(trimmed, &consumed);
+            if (consumed == trimmed.size()) {
+                return edit_kind::Float;
+            }
+        } catch (const std::exception&) {
+        }
+        return edit_kind::Sid;
+    }
+
+    edit_kind effective_edit_kind(app_state& state, const document& doc, const pending_edit& edit, bool& refused) {
+        refused = false;
+        const u32 declared_size = edit_value_size(edit.m_kind);
+        if (!zero_bytes_at(doc, edit.m_offset, declared_size)) {
+            return edit.m_kind;
+        }
+        const std::optional<edit_kind> retyped = retyped_edit_kind(edit.m_text);
+        if (!retyped.has_value()) {
+            return edit.m_kind;
+        }
+        const u32 retyped_size = edit_value_size(*retyped);
+        if (retyped_size <= declared_size || (edit.m_offset % 8 == 0 && zero_bytes_at(doc, edit.m_offset, retyped_size))) {
+            return *retyped;
+        }
+        show_error_box(state, std::format(
+            "'{}' needs {} bytes at 0x{:05X}, but only the {} zero bytes of this field are free "
+            "(or the field is not 8-byte aligned).",
+            edit.m_text, retyped_size, edit.m_offset, declared_size));
+        refused = true;
+        return edit.m_kind;
     }
 
     std::string value_at_string(value_view v, u32 offset, edit_kind kind) {
@@ -4138,15 +5188,20 @@ namespace dconstruct::ui {
 
     bool apply_one_edit(app_state& state, document& doc, const pending_edit& edit) {
         const value_view v{&state, &doc};
-        const u32 size = edit_value_size(edit.m_kind);
+        bool refused = false;
+        const edit_kind kind = effective_edit_kind(state, doc, edit, refused);
+        if (refused) {
+            return false;
+        }
+        const u32 size = edit_value_size(kind);
         std::byte* value_ptr = doc.m_file->m_bytes.get() + edit.m_offset;
 
-        const std::string old_text = value_at_string(v, edit.m_offset, edit.m_kind);
+        const std::string old_text = value_at_string(v, edit.m_offset, kind);
         std::vector<std::byte> old_bytes(value_ptr, value_ptr + size);
 
         try {
             const BinaryFileEdit value = [&]() -> BinaryFileEdit {
-                switch (edit.m_kind) {
+                switch (kind) {
                     case edit_kind::Int:
                         return {.m_editType = EditType::INT32, .I32 = static_cast<i32>(std::stol(edit.m_text))};
                     case edit_kind::Int64:
@@ -4173,11 +5228,11 @@ namespace dconstruct::ui {
             return false;
         }
 
-        const std::string new_text = value_at_string(v, edit.m_offset, edit.m_kind);
+        const std::string new_text = value_at_string(v, edit.m_offset, kind);
         std::vector<std::byte> new_bytes(value_ptr, value_ptr + size);
 
         doc.m_redoStack.clear();
-        doc.m_undoStack.push_back({edit.m_offset, edit.m_kind, std::move(old_bytes), std::move(new_bytes), old_text, new_text});
+        doc.m_undoStack.push_back({edit.m_offset, kind, std::move(old_bytes), std::move(new_bytes), old_text, new_text});
         log_event("Edit applied [{}] 0x{:05X}: {} -> {}", doc.m_name, edit.m_offset, old_text, new_text);
         return true;
     }
@@ -5194,7 +6249,7 @@ namespace dconstruct::ui {
 
 }
 
-int main() {
+int main(int argc, char** argv) {
     glfwSetErrorCallback(dconstruct::ui::glfw_error_callback);
     if (glfwInit() == GLFW_FALSE) {
         return 1;
@@ -5206,7 +6261,7 @@ int main() {
     glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
     glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
 
-    GLFWwindow* window = glfwCreateWindow(1900, 1200, "dconstruct", nullptr, nullptr);
+    GLFWwindow* window = glfwCreateWindow(2000, 1200, "dconstruct", nullptr, nullptr);
     if (window == nullptr) {
         glfwTerminate();
         return 1;
@@ -5266,6 +6321,13 @@ int main() {
         dconstruct::ui::load_sidbase(state, sidbase_path.string());
     }
     dconstruct::ui::load_var_maps_directory(state);
+
+    for (int i = 1; i + 1 < argc; ++i) {
+        if (std::strcmp(argv[i], "--file") == 0) {
+            state.m_pendingDropPaths.emplace_back(argv[i + 1]);
+            ++i;
+        }
+    }
 
     while (glfwWindowShouldClose(window) == GLFW_FALSE) {
         glfwPollEvents();
