@@ -4994,9 +4994,15 @@ namespace dconstruct::ui {
 
     void draw_search_row(app_state& state, document& doc, const f32 width) {
         const ImGuiStyle& style = ImGui::GetStyle();
+        constexpr f32 COUNTER_FONT_SCALE = 1.3F;
+        const ImVec2 counter_padding(8.0F, 3.0F);
+
+        ImFont* counter_font = qui::font_bold() != nullptr ? qui::font_bold() : ImGui::GetFont();
+        const f32 counter_font_size = ImGui::GetFontSize() * COUNTER_FONT_SCALE;
 
         char counter[48];
         counter[0] = '\0';
+        ImVec2 counter_badge_size(0.0F, 0.0F);
         f32 counter_width = 0.0F;
         if (doc.m_searchResults != nullptr) {
             if (doc.m_searchIndex >= 0) {
@@ -5004,7 +5010,9 @@ namespace dconstruct::ui {
             } else {
                 std::snprintf(counter, sizeof(counter), "%zu", doc.m_searchResults->size());
             }
-            counter_width = ImGui::CalcTextSize(counter).x + style.ItemSpacing.x;
+            const ImVec2 text_size = counter_font->CalcTextSizeA(counter_font_size, FLT_MAX, 0.0F, counter);
+            counter_badge_size = ImVec2(text_size.x + counter_padding.x * 2.0F, text_size.y + counter_padding.y * 2.0F);
+            counter_width = counter_badge_size.x + style.ItemSpacing.x;
         }
 
         ImGui::SetNextItemWidth(std::max(80.0F, width - SEARCH_MODE_COMBO_WIDTH - counter_width - style.ItemSpacing.x));
@@ -5038,10 +5046,25 @@ namespace dconstruct::ui {
 
         if (doc.m_searchResults != nullptr) {
             ImGui::SameLine();
+            const qui::color::palette& pal = qui::color::active_palette();
+            const f32 frame_height = ImGui::GetFrameHeight();
+            if (counter_badge_size.y < frame_height) {
+                ImGui::SetCursorPosY(ImGui::GetCursorPosY() + (frame_height - counter_badge_size.y) * 0.5F);
+            }
+            const ImVec2 badge_min = ImGui::GetCursorScreenPos();
+            const ImVec2 badge_max(badge_min.x + counter_badge_size.x, badge_min.y + counter_badge_size.y);
+            ImDrawList* draw_list = ImGui::GetWindowDrawList();
+            draw_list->AddRectFilled(badge_min, badge_max, ImGui::ColorConvertFloat4ToU32(pal.Panel), 0.0F);
+            draw_list->AddRect(badge_min, badge_max, ImGui::ColorConvertFloat4ToU32(pal.Border), 0.0F);
             const bool empty = doc.m_searchResults->empty();
-            ImGui::TextColored(
-                empty ? qui::color::active_palette().AccentRed : qui::color::active_palette().TextDisabled,
-                "%s", counter);
+            draw_list->AddText(
+                counter_font,
+                counter_font_size,
+                ImVec2(badge_min.x + counter_padding.x, badge_min.y + counter_padding.y),
+                ImGui::ColorConvertFloat4ToU32(empty ? pal.AccentRed : pal.Text),
+                counter
+            );
+            ImGui::Dummy(counter_badge_size);
         }
     }
 
