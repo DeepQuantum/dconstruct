@@ -52,6 +52,10 @@ namespace dconstruct {
         disassembled_values_t m_values;
     };
 
+    [[nodiscard]] std::optional<u64> get_member_file_offset(const disassembled_value_content& value, const void* file_base) noexcept;
+
+    [[nodiscard]] u8 get_member_size(const disassembled_value_content& value) noexcept;
+
     class Disassembler {
     public:
         Disassembler(BinaryFile* file, const SIDBase* sidbase, const game_type game = game_type::T2R) noexcept

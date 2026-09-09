@@ -316,6 +316,8 @@ namespace dconstruct::ui {
         void render(const dconstruct::debugger::debugger_snapshot& snapshot);
     };
 
+    constexpr char DEFAULT_MEMBER_OFFSET_PATTERN[] = "[%u]";
+
     struct app_state {
         std::unique_ptr<SIDBase> m_sidbase;
         std::vector<document> m_documents;
@@ -343,8 +345,84 @@ namespace dconstruct::ui {
         std::unordered_map<std::string, ast::function_to_mapped_vars> m_pendingTypeMaps;
         std::string m_colorScheme = "qntm";
         std::string m_previewScheme;
+        std::string m_memberOffsetPattern = DEFAULT_MEMBER_OFFSET_PATTERN;
         debugger_state m_debugger;
     };
+
+    bool format_offset_into(std::string& out, const std::string_view pattern, const u64 offset) {
+        const auto is_one_of = [](const char* set, const char c) {
+            return c != '\0' && std::strchr(set, c) != nullptr;
+        };
+
+        char spec[32];
+        char chunk[256];
+        out.clear();
+        for (std::size_t i = 0; i < pattern.size(); ++i) {
+            if (pattern[i] != '%') {
+                out += pattern[i];
+                continue;
+            }
+            if (i + 1 < pattern.size() && pattern[i + 1] == '%') {
+                out += '%';
+                ++i;
+                continue;
+            }
+
+            std::size_t length = 0;
+            std::size_t j = i + 1;
+            spec[length++] = '%';
+            while (j < pattern.size() && (is_one_of("-+ 0#", pattern[j]) || is_one_of(".", pattern[j]) ||
+                   std::isdigit(static_cast<unsigned char>(pattern[j])) != 0)) {
+                if (length + 4 >= sizeof(spec)) {
+                    return false;
+                }
+                spec[length++] = pattern[j++];
+            }
+            while (j < pattern.size() && is_one_of("hljztL", pattern[j])) {
+                ++j;
+            }
+            if (j >= pattern.size() || !is_one_of("xXuoid", pattern[j])) {
+                return false;
+            }
+
+            const char conversion = pattern[j];
+            spec[length++] = 'l';
+            spec[length++] = 'l';
+            spec[length++] = conversion;
+            spec[length] = '\0';
+            const int written = conversion == 'i' || conversion == 'd'
+                ? std::snprintf(chunk, sizeof(chunk), spec, static_cast<long long>(offset))
+                : std::snprintf(chunk, sizeof(chunk), spec, static_cast<unsigned long long>(offset));
+            if (written < 0 || static_cast<std::size_t>(written) >= sizeof(chunk)) {
+                return false;
+            }
+            out += chunk;
+            i = j;
+        }
+        return true;
+    }
+
+    bool member_offset_pattern_is_valid(const std::string_view pattern) {
+        std::string probe;
+        return format_offset_into(probe, pattern, 0);
+    }
+
+    std::string& active_member_offset_pattern() {
+        static std::string pattern = DEFAULT_MEMBER_OFFSET_PATTERN;
+        return pattern;
+    }
+
+    void set_active_member_offset_pattern(const std::string& pattern) {
+        active_member_offset_pattern() = member_offset_pattern_is_valid(pattern) ? pattern : DEFAULT_MEMBER_OFFSET_PATTERN;
+    }
+
+    std::string member_offset_text(const u64 offset) {
+        std::string text;
+        if (!format_offset_into(text, active_member_offset_pattern(), offset)) {
+            format_offset_into(text, DEFAULT_MEMBER_OFFSET_PATTERN, offset);
+        }
+        return text;
+    }
 
     void glfw_error_callback(int error, const char* description) {
         std::fprintf(stderr, "GLFW error %d: %s\n", error, description);
@@ -1307,6 +1385,30 @@ namespace dconstruct::ui {
             ImGui::SetCursorPosX(ImGui::GetContentRegionMax().x - sw_size.x);
             if (draw_view_switch("##settings_default_view", &state.m_defaultViewDcpl, sw_size)) {
                 ImGui::MarkIniSettingsDirty();
+            }
+
+            ImGui::Dummy(ImVec2(0.0F, 14.0F));
+            section_header("Member offset pattern");
+
+            ImGui::SetNextItemWidth(-FLT_MIN);
+            if (ImGui::InputTextWithHint("##settings_member_offset_pattern", DEFAULT_MEMBER_OFFSET_PATTERN, &state.m_memberOffsetPattern)) {
+                ImGui::MarkIniSettingsDirty();
+            }
+            std::string pattern_example;
+            if (format_offset_into(pattern_example, state.m_memberOffsetPattern, 0x18)) {
+                draw_setting_description(std::format(
+                    "Printf pattern for the byte offset in front of every struct member in the value "
+                    "tree, e.g. \"{}\". Takes flags, a width and one integer conversion out of x, X, u, o, d.",
+                    pattern_example).c_str());
+            } else {
+                ImGui::PushStyleColor(ImGuiCol_Text, qui::color::active_palette().AccentRed);
+                ImGui::PushTextWrapPos(ImGui::GetContentRegionMax().x);
+                ImGui::TextUnformatted(std::format(
+                    "Unsupported pattern, member offsets keep using \"{}\". Takes flags, a width and "
+                    "one integer conversion out of x, X, u, o, d.",
+                    DEFAULT_MEMBER_OFFSET_PATTERN).c_str());
+                ImGui::PopTextWrapPos();
+                ImGui::PopStyleColor();
             }
 
             ImGui::Dummy(ImVec2(0.0F, 14.0F));
@@ -3524,17 +3626,22 @@ namespace dconstruct::ui {
         ImGui::TreePop();
     }
 
-    void dv_draw_values(value_view v, const disassembled_values_t& values);
-    void dv_draw_value(value_view v, const disassembled_values_t::value_type& value, i32 index, const char* member_name = nullptr, std::string_view member_comment = {});
-    void dv_draw_function(value_view v, const function_disassembly& func, i32 index);
+    struct member_label {
+        i64 value = -1;
+        bool isOffset = false;
+    };
+
+    void dv_draw_values(value_view v, const disassembled_values_t& values, std::optional<u64> struct_offset);
+    void dv_draw_value(value_view v, const disassembled_values_t::value_type& value, member_label member, const char* member_name = nullptr, std::string_view member_comment = {});
+    void dv_draw_function(value_view v, const function_disassembly& func, member_label member);
     void dv_draw_function_body(value_view v, const function_disassembly& func);
     void append_debugger_span(ast::code_color_buffer& buffer, ast::AST_COLOR color, std::string text);
     void append_debugger_instruction_text(ast::code_color_buffer& buffer, std::string_view text);
     void dv_function_switch_and_body(value_view v, const function_disassembly& func, const void* id, bool open);
-    void dv_draw_state_script(value_view v, const ast::state_script& script, i32 index);
-    void dv_draw_map(value_view v, const disassembled_value& entry, const void* id, i32 index);
-    void dv_draw_script_lambda(value_view v, const disassembled_value& entry, const void* id, i32 index);
-    bool dv_draw_point_curve(value_view v, const disassembled_value& entry, const void* id, i32 index, const char* member_name, std::string_view member_comment);
+    void dv_draw_state_script(value_view v, const ast::state_script& script, member_label member);
+    void dv_draw_map(value_view v, const disassembled_value& entry, const void* id, member_label member);
+    void dv_draw_script_lambda(value_view v, const disassembled_value& entry, const void* id, member_label member);
+    bool dv_draw_point_curve(value_view v, const disassembled_value& entry, const void* id, member_label member, const char* member_name, std::string_view member_comment);
 
     struct typed_value_text {
         std::string text;
@@ -3543,33 +3650,39 @@ namespace dconstruct::ui {
         bool isStringPointer = false;
     };
 
-    void dv_index_prefix(char* buffer, std::size_t size, i32 index) {
-        if (index >= 0) {
-            std::snprintf(buffer, size, "[%d] ", index);
-        } else if (size > 0) {
-            buffer[0] = '\0';
+    void dv_index_prefix(char* buffer, std::size_t size, member_label member) {
+        if (member.value < 0) {
+            if (size > 0) {
+                buffer[0] = '\0';
+            }
+            return;
+        }
+        if (member.isOffset) {
+            std::snprintf(buffer, size, "%s ", member_offset_text(static_cast<u64>(member.value)).c_str());
+        } else {
+            std::snprintf(buffer, size, "[%lld] ", static_cast<long long>(member.value));
         }
     }
 
-    void dv_draw_struct_like(value_view v, const disassembled_value& entry, const void* id, i32 index, const char* member_name = nullptr, std::string_view member_comment = {}) {
+    void dv_draw_struct_like(value_view v, const disassembled_value& entry, const void* id, member_label member, const char* member_name = nullptr, std::string_view member_comment = {}) {
         char label[256];
         char suffix[128];
         char prefix[64];
-        dv_index_prefix(prefix, sizeof(prefix), index);
+        dv_index_prefix(prefix, sizeof(prefix), member);
         id = stable_id(*v.doc, entry.m_offset);
 
         if (entry.m_typeId == SID("map") || entry.m_typeId == SID("map-32") || entry.m_typeId == SID("render-settings-map") || entry.m_typeId == SID("hash-table")) {
-            dv_draw_map(v, entry, id, index);
+            dv_draw_map(v, entry, id, member);
             return;
         }
 
         if (entry.m_typeId == SID("script-lambda")) {
-            dv_draw_script_lambda(v, entry, id, index);
+            dv_draw_script_lambda(v, entry, id, member);
             return;
         }
 
         if ((entry.m_typeId == SID("point-curve") || entry.m_typeId == SID("small-fast-point-curve")) &&
-            dv_draw_point_curve(v, entry, id, index, member_name, member_comment)) {
+            dv_draw_point_curve(v, entry, id, member, member_name, member_comment)) {
             return;
         }
 
@@ -3582,7 +3695,7 @@ namespace dconstruct::ui {
                 dv_reveal_advance(*v.doc);
             }
             if (open && !entry.m_values.empty()) {
-                dv_draw_values(v, entry.m_values);
+                dv_draw_values(v, entry.m_values, std::nullopt);
                 dv_tree_pop(v);
             }
             return;
@@ -3609,7 +3722,7 @@ namespace dconstruct::ui {
             dv_reveal_advance(*v.doc);
         }
         if (open && !entry.m_values.empty()) {
-            dv_draw_values(v, entry.m_values);
+            dv_draw_values(v, entry.m_values, entry.m_offset);
             dv_tree_pop(v);
         }
     }
@@ -3828,21 +3941,21 @@ namespace dconstruct::ui {
         }
     }
 
-    void dv_draw_value(value_view v, const disassembled_values_t::value_type& value, i32 index, const char* member_name, std::string_view member_comment) {
+    void dv_draw_value(value_view v, const disassembled_values_t::value_type& value, member_label member, const char* member_name, std::string_view member_comment) {
         char label[512];
         char suffix[128];
         char prefix[64];
-        dv_index_prefix(prefix, sizeof(prefix), index);
+        dv_index_prefix(prefix, sizeof(prefix), member);
         std::visit([&](auto&& entry) {
             using T = std::decay_t<decltype(entry)>;
             if constexpr (std::is_same_v<T, mapped_value>) {
-                dv_draw_value(v, *entry.m_value, index, entry.m_name.c_str(), entry.m_comment);
+                dv_draw_value(v, *entry.m_value, member, entry.m_name.c_str(), entry.m_comment);
             } else if constexpr (std::is_same_v<T, disassembled_value>) {
-                dv_draw_struct_like(v, entry, &value, index, member_name, member_comment);
+                dv_draw_struct_like(v, entry, &value, member, member_name, member_comment);
             } else if constexpr (std::is_same_v<T, std::shared_ptr<function_disassembly>>) {
-                dv_draw_function(v, *entry, index);
+                dv_draw_function(v, *entry, member);
             } else if constexpr (std::is_same_v<T, const ast::state_script*>) {
-                dv_draw_state_script(v, *entry, index);
+                dv_draw_state_script(v, *entry, member);
             } else if constexpr (std::is_same_v<T, const u8*>) {
                 std::snprintf(label, sizeof(label), "%s%u", prefix, *entry);
                 dv_node(v, entry, *entry == 0 ? gcol::IntZero() : gcol::Int(), label, ": u8", true, member_name, member_comment, prefix);
@@ -3892,10 +4005,21 @@ namespace dconstruct::ui {
                    value);
     }
 
-    void dv_draw_values(value_view v, const disassembled_values_t& values) {
+    void dv_draw_values(value_view v, const disassembled_values_t& values, const std::optional<u64> struct_offset) {
+        u64 member_offset = 0;
         for (i32 i = 0; i < static_cast<i32>(values.size()); ++i) {
+            const disassembled_value_content& value = values[static_cast<u32>(i)];
+            member_label member{i, false};
+            if (struct_offset.has_value()) {
+                const std::optional<u64> file_offset = get_member_file_offset(value, v.doc->m_file->m_dcheader);
+                if (file_offset.has_value() && *file_offset >= *struct_offset) {
+                    member_offset = *file_offset - *struct_offset;
+                }
+                member = member_label{static_cast<i64>(member_offset), true};
+                member_offset += get_member_size(value);
+            }
             ImGui::PushID(i);
-            dv_draw_value(v, values[static_cast<u32>(i)], i);
+            dv_draw_value(v, value, member);
             ImGui::PopID();
         }
     }
@@ -4006,11 +4130,11 @@ namespace dconstruct::ui {
                 ImGui::PushID(static_cast<i32>(i));
                 ImGui::TableSetColumnIndex(0);
                 ImGui::PushID(0);
-                dv_draw_value(v, keys.m_values[i], -1);
+                dv_draw_value(v, keys.m_values[i], member_label{});
                 ImGui::PopID();
                 ImGui::TableSetColumnIndex(1);
                 ImGui::PushID(1);
-                dv_draw_value(v, vals.m_values[i], -1);
+                dv_draw_value(v, vals.m_values[i], member_label{});
                 ImGui::PopID();
                 ImGui::PopID();
             }
@@ -4019,11 +4143,11 @@ namespace dconstruct::ui {
         ImGui::PopID();
     }
 
-    void dv_draw_map(value_view v, const disassembled_value& entry, const void* id, i32 index) {
+    void dv_draw_map(value_view v, const disassembled_value& entry, const void* id, member_label member) {
         char label[64];
         char suffix[160];
-        char prefix[24];
-        dv_index_prefix(prefix, sizeof(prefix), index);
+        char prefix[64];
+        dv_index_prefix(prefix, sizeof(prefix), member);
 
         const structs::map* header = nullptr;
         const disassembled_value* keys = nullptr;
@@ -4317,15 +4441,15 @@ namespace dconstruct::ui {
         ImGui::PopID();
     }
 
-    bool dv_draw_point_curve(value_view v, const disassembled_value& entry, const void* id, i32 index, const char* member_name, std::string_view member_comment) {
+    bool dv_draw_point_curve(value_view v, const disassembled_value& entry, const void* id, member_label member, const char* member_name, std::string_view member_comment) {
         const point_curve_view curve = point_curve_extract(v, entry);
         if (curve.m_capacity == 0) {
             return false;
         }
         char label[96];
         char suffix[96];
-        char prefix[24];
-        dv_index_prefix(prefix, sizeof(prefix), index);
+        char prefix[64];
+        dv_index_prefix(prefix, sizeof(prefix), member);
         std::snprintf(label, sizeof(label), "%s%s", prefix, curve.m_capacity == 16 ? "point-curve" : "small-fast-point-curve");
         std::snprintf(suffix, sizeof(suffix), "[0x%05X] {%d / %d points}", static_cast<u32>(entry.m_offset), curve.m_count, curve.m_capacity);
 
@@ -4475,9 +4599,11 @@ namespace dconstruct::ui {
         }
     }
 
-    void dv_draw_function(value_view v, const function_disassembly& func, i32 index) {
+    void dv_draw_function(value_view v, const function_disassembly& func, member_label member) {
         char label[256];
-        std::snprintf(label, sizeof(label), "[%d] function %s", index, func.get_id().c_str());
+        char prefix[64];
+        dv_index_prefix(prefix, sizeof(prefix), member);
+        std::snprintf(label, sizeof(label), "%sfunction %s", prefix, func.get_id().c_str());
         const void* fid = stable_id(*v.doc, func.m_originalOffset);
         ImGui::SetNextItemAllowOverlap();
         ImGui::SetNextItemOpen(true, ImGuiCond_Once);
@@ -4682,7 +4808,7 @@ namespace dconstruct::ui {
                 if (trigger_edit) {
                     open_local_var_type_edit(*v.state, *v.doc, func, it->second, hovered);
                 }
-            } else {
+            } else { 
                 ImGui::PushStyleColor(ImGuiCol_Text, qui::color::active_palette().TextDisabled);
                 qui::text_label("Decompilation unavailable for this function.");
                 ImGui::PopStyleColor();
@@ -4694,11 +4820,11 @@ namespace dconstruct::ui {
         dv_tree_pop(v);
     }
 
-    void dv_draw_script_lambda(value_view v, const disassembled_value& entry, const void* id, i32 index) {
+    void dv_draw_script_lambda(value_view v, const disassembled_value& entry, const void* id, member_label member) {
         char label[64];
         char suffix[64];
-        char prefix[24];
-        dv_index_prefix(prefix, sizeof(prefix), index);
+        char prefix[64];
+        dv_index_prefix(prefix, sizeof(prefix), member);
 
         const function_disassembly* func = nullptr;
         for (const auto& child : entry.m_values) {
@@ -4736,9 +4862,11 @@ namespace dconstruct::ui {
         dv_node(v, id, color, single_line.c_str(), nullptr, true);
     }
 
-    void dv_draw_state_script(value_view v, const ast::state_script& script, i32 index) {
+    void dv_draw_state_script(value_view v, const ast::state_script& script, member_label member) {
         char label[256];
-        std::snprintf(label, sizeof(label), "[%d] state-script %s", index, script.m_name.c_str());
+        char prefix[64];
+        dv_index_prefix(prefix, sizeof(prefix), member);
+        std::snprintf(label, sizeof(label), "%sstate-script %s", prefix, script.m_name.c_str());
         const bool open = dv_node(v, &script, gcol::StateScript(), label, nullptr, false);
         if (!open) {
             return;
@@ -4781,7 +4909,7 @@ namespace dconstruct::ui {
                                             using T = std::decay_t<decltype(fn)>;
                                             if constexpr (std::is_same_v<T, std::shared_ptr<function_disassembly>>) {
                                                 if (fn != nullptr) {
-                                                    dv_draw_function(v, *fn, lambda_index);
+                                                    dv_draw_function(v, *fn, member_label{lambda_index, false});
                                                 }
                                             } else {
                                                 dv_draw_text_leaf(v, &fn, gcol::Function(), fn.to_pseudo_c_string());
@@ -4924,7 +5052,7 @@ namespace dconstruct::ui {
                     dv_draw_map_table(v, *keys, *vals, entry_id);
                 }
             } else {
-                dv_draw_values(v, entry.m_values);
+                dv_draw_values(v, entry.m_values, entry.m_typeId == SID("array") ? std::nullopt : std::optional<u64>(entry.m_offset));
             }
             dv_tree_pop(v);
         }
@@ -6237,6 +6365,8 @@ namespace dconstruct::ui {
             state->m_secondVarOptimization = value != 0;
         } else if (std::sscanf(line, "MemberAccessOptimization=%d", &value) == 1) {
             state->m_memberAccessOptimization = value != 0;
+        } else if (const std::string_view text{line}; text.starts_with("MemberOffsetPattern=")) {
+            state->m_memberOffsetPattern = text.substr(std::strlen("MemberOffsetPattern="));
         } else {
             char scheme[64];
             if (std::sscanf(line, "ColorScheme=%63s", scheme) == 1) {
@@ -6256,6 +6386,7 @@ namespace dconstruct::ui {
         buf->appendf("MemberAccessOptimization=%d\n", state->m_memberAccessOptimization ? 1 : 0);
         buf->appendf("RegexOptimization=%d\n", state->m_regexOptimization ? 1 : 0);
         buf->appendf("ColorScheme=%s\n", state->m_colorScheme.c_str());
+        buf->appendf("MemberOffsetPattern=%s\n", state->m_memberOffsetPattern.c_str());
         buf->append("\n");
     }
 
@@ -6372,6 +6503,7 @@ int main(int argc, char** argv) {
         // just the content area drawn after the hover is detected.
         dconstruct::ui::set_active_scheme(state.m_previewScheme.empty() ? state.m_colorScheme : state.m_previewScheme);
         state.m_previewScheme.clear();
+        dconstruct::ui::set_active_member_offset_pattern(state.m_memberOffsetPattern);
 
         const f32 bar_height = dconstruct::ui::draw_title_menu_bar(state, window);
         dconstruct::ui::draw_content_area(bar_height, state);

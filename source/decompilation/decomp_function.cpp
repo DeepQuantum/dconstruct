@@ -1035,7 +1035,16 @@ namespace dconstruct::dcompiler {
             }
         }
 
+        std::array<expr_uptr, MAX_REGISTER> head_expressions;
+        for (u64 reg = 0; reg < m_transformableExpressions.size(); ++reg) {
+            if (m_transformableExpressions[reg]) {
+                head_expressions[reg] = m_transformableExpressions[reg]->clone();
+            }
+        }
+
         emit_branch(*then_block, proper_successor, idom, regs_to_emit, regs_to_type);
+
+        m_transformableExpressions = std::move(head_expressions);
 
         emit_branch(*else_block, proper_destination, idom, regs_to_emit, regs_to_type);
 
@@ -1074,7 +1083,13 @@ namespace dconstruct::dcompiler {
         std::unordered_map<reg_idx, ast::full_type>& regs_to_type
     ) {
         m_blockStack.push(else_block);
+        const bool target_already_emitted = target != idom && m_parsedNodes[target];
         emit_node(m_graph[target], idom);
+        if (target_already_emitted && else_block.m_statements.empty()) {
+            auto callee = std::make_unique<ast::identifier>(std::format("goto-shared-block-0x{:X}", m_graph[target].m_startLine));
+            callee->set_type(ast::function_type{});
+            append_to_current_block(std::make_unique<ast::call_expr>(compilation::token{compilation::token_type::_EOF, ""}, std::move(callee), std::vector<expr_uptr>{}));
+        }
         auto bits = regs_to_emit.to_ullong();
         while (bits != 0) {
             const reg_idx reg = std::countr_zero(bits);
@@ -1324,60 +1339,79 @@ namespace dconstruct::dcompiler {
         node_id& proper_successor,
         node_id& proper_destination
     ) {
-        const control_flow_node* current_node = &condition_start;
-        const control_flow_node* failure_exit = nullptr;
-        const control_flow_node* success_exit = nullptr;
-
         const node_id ipdom = condition_start.m_ipdom;
 
-        expr_uptr condition = get_expression_as_condition(current_node->m_lines.back().m_instruction.operand1);
-        proper_head = current_node->m_index;
-        proper_successor = current_node->m_followingNode;
-        proper_destination = current_node->m_targetNode;
+        const auto is_or_node = [](const control_flow_node& node) {
+            return node.m_lines.back().m_instruction.opcode == Opcode::BranchIf;
+        };
 
+        std::vector<const control_flow_node*> candidates;
+        const control_flow_node* current_node = &condition_start;
         while (true) {
-            const auto& last_line = current_node->m_lines.back();
-            const auto target = current_node->m_targetNode;
-
-            const bool is_and = last_line.m_instruction.opcode == Opcode::BranchIfNot;
-            const bool is_or = last_line.m_instruction.opcode == Opcode::BranchIf;
-
-            if (!is_and && !is_or || current_node->m_ipdom != ipdom)
+            const auto opcode = current_node->m_lines.back().m_instruction.opcode;
+            if (opcode != Opcode::BranchIf && opcode != Opcode::BranchIfNot) {
                 break;
-
-            auto& exit_node = is_and ? failure_exit : success_exit;
-            auto& alt_exit = is_and ? success_exit : failure_exit;
-            const auto& token = is_and ? and_token : or_token;
-
-            if (!exit_node) {
-                if (!alt_exit) {
-                    exit_node = &m_graph[target];
-                } else {
-                    parse_basic_block(*current_node);
-                    condition = std::make_unique<ast::logical_expr>(
-                        token,
-                        std::move(condition),
-                        get_expression_as_condition(last_line.m_instruction.operand1)
-                    );
-                    proper_head = current_node->m_index;
-                    proper_successor = current_node->m_followingNode;
-                    proper_destination = target;
-                }
-            } else if (exit_node->m_index != target) {
-                break;
-            } else {
-                parse_basic_block(*current_node);
-                condition = std::make_unique<ast::logical_expr>(
-                    token,
-                    std::move(condition),
-                    get_expression_as_condition(last_line.m_instruction.operand1)
-                );
-                proper_head = current_node->m_index;
-                proper_successor = current_node->m_followingNode;
-                proper_destination = target;
             }
-
+            if (current_node->m_ipdom != ipdom) {
+                break;
+            }
+            if (!candidates.empty() && current_node->m_predecessors.size() != 1) {
+                break;
+            }
+            candidates.push_back(current_node);
+            if (!current_node->has_following()) {
+                break;
+            }
             current_node = &m_graph[current_node->m_followingNode];
+        }
+
+        u64 chain_length = 1;
+        for (u64 k = candidates.size(); k > 1; --k) {
+            const node_id chain_follow = candidates[k - 1]->m_followingNode;
+            const bool suffix_is_or = is_or_node(*candidates[k - 1]);
+            const node_id suffix_target = candidates[k - 1]->m_targetNode;
+            bool valid = true;
+            for (u64 i = k - 1; i-- > 0;) {
+                const bool link_is_or = is_or_node(*candidates[i]);
+                const node_id link_target = candidates[i]->m_targetNode;
+                const bool continues_chain = link_is_or == suffix_is_or && link_target == suffix_target;
+                const bool flips_polarity = link_is_or != suffix_is_or && link_target == chain_follow;
+                if (!continues_chain && !flips_polarity) {
+                    valid = false;
+                    break;
+                }
+            }
+            if (valid) {
+                chain_length = k;
+                break;
+            }
+        }
+
+        std::vector<expr_uptr> link_conditions;
+        link_conditions.push_back(get_expression_as_condition(condition_start.m_lines.back().m_instruction.operand1));
+        for (u64 i = 1; i < chain_length; ++i) {
+            parse_basic_block(*candidates[i]);
+            link_conditions.push_back(get_expression_as_condition(candidates[i]->m_lines.back().m_instruction.operand1));
+        }
+
+        expr_uptr condition = std::move(link_conditions[chain_length - 1]);
+        for (u64 i = chain_length - 1; i-- > 0;) {
+            const auto& token = is_or_node(*candidates[i]) ? or_token : and_token;
+            const auto* rhs_logical = dynamic_cast<const ast::logical_expr*>(condition.get());
+            if (rhs_logical && rhs_logical->m_operator.m_lexeme != token.m_lexeme) {
+                condition = condition->get_grouped();
+            }
+            condition = std::make_unique<ast::logical_expr>(token, std::move(link_conditions[i]), std::move(condition));
+        }
+
+        const control_flow_node& last_node = *candidates[chain_length - 1];
+        proper_head = last_node.m_index;
+        if (is_or_node(last_node)) {
+            proper_successor = last_node.m_targetNode;
+            proper_destination = last_node.m_followingNode;
+        } else {
+            proper_successor = last_node.m_followingNode;
+            proper_destination = last_node.m_targetNode;
         }
 
         return condition;

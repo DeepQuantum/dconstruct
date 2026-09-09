@@ -1,0 +1,111 @@
+@game "C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II"
+@target "ss-rogue/ss-encounter-manager.bin"
+@mod "longer_runs"
+
+
+using #get-svar as near (u64) -> u64;
+using #set-svar as near (u64, u64) -> u64;
+using #get-int32 as far (u64, u64) -> u64;
+using #rogue-is-daily-run as near () -> bool;
+using #reset-tutorials-for-focus-test! as near () -> u64;
+using #fact-get-dictionary as far (u64) -> u64;
+using #fact-lookup-int as far (u64, u64, u64) -> u64;
+using #fact-set as far (u64, u64, u64) -> u64;
+using #fact-remove as far (u64, u64) -> u64;
+using #new-boxed-value as far (u64, u64) -> u64;
+using #rogue-force-remember-checkpoint as far () -> u64;
+using #task-play-rogue as near (u64, u64, u64, u64, f32) -> u64;
+using #rogue-get-hub-node as far () -> u64;
+using #rogue-get-hub-subnode as far () -> u64;
+using #encounter--player-in-hub? as near () -> bool;
+using #wait-one-frame as far () -> u64;
+using #broadcast-event as far (u64) -> u64;
+using #send-event as far (u64, u64) -> u64;
+using #dc:format as far (string, ...) -> string;
+
+u0 #encounter-success@start@main@13() {
+    u64 totalLaps = 2;
+    if (#get-svar(#encounter-depth) >= #get-int32(#run-length, #self)) {
+        u64 lapsNext = #fact-lookup-int(#fact-get-dictionary(#global), #nr-laps-done, 0) + 1;
+        if (#rogue-is-daily-run()) {
+            lapsNext = totalLaps;
+        }
+        if (lapsNext >= totalLaps) {
+            #reset-tutorials-for-focus-test!();
+            => #encounter-success-reset;
+        }
+    }
+}
+
+u0 #encounter-success@start@main@14() {
+    u64 totalLaps = 2;
+    if (#get-svar(#encounter-depth) < #get-int32(#run-length, #self)) {
+        => #encounter-success-continue;
+    } else {
+        u64 lapsNext = #fact-lookup-int(#fact-get-dictionary(#global), #nr-laps-done, 0) + 1;
+        if (#rogue-is-daily-run()) {
+            lapsNext = totalLaps;
+        }
+        if (lapsNext < totalLaps) {
+            => #encounter-success-continue;
+        }
+    }
+}
+
+u0 #wait-for-post-flow-encounter-complete@event_post-flow-complete@main@2() {
+}
+
+u0 #wait-for-post-flow-encounter-complete@event_post-flow-complete@main@3() {
+    u64 totalLaps = 2;
+    u64 lapsNext = #fact-lookup-int(#fact-get-dictionary(#global), #nr-laps-done, 0) + 1;
+    if (#rogue-is-daily-run()) {
+        lapsNext = totalLaps;
+    }
+    u64 startNewLap = 0;
+    if (#get-svar(#encounter-depth) >= #get-int32(#run-length, #self)) {
+        if (lapsNext < totalLaps) {
+            startNewLap = 1;
+        }
+    }
+    if (startNewLap == 1) {
+        #fact-set(#global, #nr-laps-done, #new-boxed-value(2, lapsNext));
+        #rogue-force-remember-checkpoint();
+        >> #dc:format("LONGER-RUNS: starting lap %i of %i", lapsNext + 1, totalLaps);
+    }
+    #task-play-rogue(#rogue-get-hub-node(), #rogue-get-hub-subnode(), 1, 0, 0.00);
+    if (startNewLap == 1) {
+        => #generate-run;
+    } else {
+        => #respite;
+    }
+}
+
+u0 #generate-run@start@main@0() {
+    if (#fact-lookup-int(#fact-get-dictionary(#global), #nr-laps-done, 0) > 0) {
+        while (!#encounter--player-in-hub?()) {
+            #wait-one-frame();
+        }
+    }
+}
+
+u0 #generate-run@start@main@8() {
+    #broadcast-event(#rogue-run-generated);
+    if (#fact-lookup-int(#fact-get-dictionary(#global), #nr-laps-done, 0) > 0) {
+        #send-event(#rogue-encounter-complete, #ss-vendor-manager-1);
+    }
+}
+
+u0 #encounter-success-reset@start@main@4() {
+    #set-svar(#num-runs-played-since-last-complete, 0);
+    #fact-remove(#global, #nr-laps-done);
+}
+
+u0 #encounter-fail@event_game-over-displayed@main@2() {
+    #set-svar(#num-runs-played-since-last-complete, 1 + #get-svar(#num-runs-played-since-last-complete));
+    #fact-remove(#global, #nr-laps-done);
+}
+
+u0 #back-to-character-select@start@main@6() {
+    #fact-remove(#global, #nr-laps-done);
+    => #generate-run;
+}

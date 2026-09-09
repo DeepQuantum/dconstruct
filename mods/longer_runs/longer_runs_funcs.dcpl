@@ -1,0 +1,16 @@
+@game "C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II"
+@target "ss-rogue/rogue-encounter-funcs.bin"
+@mod "longer_runs"
+
+
+using #get-svar as near (u64) -> u64;
+using #fact-get-dictionary as far (u64) -> u64;
+using #fact-lookup-int as far (u64, u64, u64) -> u64;
+
+bool #encounter--player-started-new-run?() {
+    return #get-svar(#encounter-depth) == 0 && #fact-lookup-int(#fact-get-dictionary(#global), #nr-laps-done, 0) == 0;
+}
+
+u64 #encounter--get-total-encounters-completed() {
+    return #get-svar(#encounter-depth) + #fact-lookup-int(#fact-get-dictionary(#global), #nr-laps-done, 0) * 6;
+}

@@ -9,6 +9,60 @@
 
 namespace dconstruct {
 
+    [[nodiscard]] std::optional<u64> get_member_file_offset(const disassembled_value_content& value, const void* file_base) noexcept {
+        const auto offset_of = [file_base](const void* ptr) -> std::optional<u64> {
+            if (ptr == nullptr) {
+                return std::nullopt;
+            }
+            return reinterpret_cast<p64>(ptr) - reinterpret_cast<p64>(file_base);
+        };
+
+        return std::visit([&](auto&& entry) -> std::optional<u64> {
+            using T = std::decay_t<decltype(entry)>;
+
+            if constexpr (std::is_same_v<T, mapped_value>) {
+                if (entry.m_value == nullptr) {
+                    return std::nullopt;
+                }
+                return get_member_file_offset(*entry.m_value, file_base);
+            } else if constexpr (std::is_same_v<T, disassembled_value>) {
+                if (entry.m_pointerOffset.has_value()) {
+                    return *entry.m_pointerOffset;
+                }
+                return entry.m_typeId == SID("array") ? std::nullopt : std::optional<u64>(entry.m_offset);
+            } else if constexpr (std::is_same_v<T, std::shared_ptr<function_disassembly>>) {
+                if (entry == nullptr) {
+                    return std::nullopt;
+                }
+                return entry->m_stateScriptLambdaPointerOffset.value_or(entry->m_originalOffset);
+            } else if constexpr (std::is_same_v<T, const ast::state_script*>) {
+                return entry != nullptr ? offset_of(entry->m_rawStateScript) : std::nullopt;
+            } else if constexpr (std::is_same_v<T, string_value>) {
+                return entry.m_pointerOffset.has_value() ? std::optional<u64>(*entry.m_pointerOffset) : offset_of(entry.m_chars);
+            } else {
+                return offset_of(entry);
+            }
+        }, value);
+    }
+
+    [[nodiscard]] u8 get_member_size(const disassembled_value_content& value) noexcept {
+        return std::visit([](auto&& entry) -> u8 {
+            using T = std::decay_t<decltype(entry)>;
+
+            if constexpr (std::is_same_v<T, mapped_value>) {
+                return entry.m_value != nullptr ? get_member_size(*entry.m_value) : sizeof(p64);
+            } else if constexpr (std::is_same_v<T, const u8*> || std::is_same_v<T, const i8*>) {
+                return sizeof(u8);
+            } else if constexpr (std::is_same_v<T, const u16*> || std::is_same_v<T, const i16*>) {
+                return sizeof(u16);
+            } else if constexpr (std::is_same_v<T, const u32*> || std::is_same_v<T, const i32*> || std::is_same_v<T, const f32*>) {
+                return sizeof(u32);
+            } else {
+                return sizeof(p64);
+            }
+        }, value);
+    }
+
     [[nodiscard]] const std::vector<const function_disassembly*> Disassembler::get_all_functions() noexcept {
         std::vector<const function_disassembly*> funcs;
         for (auto& func : m_functions) {
@@ -523,16 +577,21 @@ namespace dconstruct {
             out += "}\n";
         };
 
-        std::function<void(const disassembled_values_t&, u32)> append_values;
+        std::function<void(const disassembled_values_t&, u32, p64)> append_values;
         std::function<void(const disassembled_values_t::value_type&, u32)> append_value;
         std::function<void(sid64, p64, const disassembled_values_t&, u32)> append_struct_like;
 
-        append_values = [&](const disassembled_values_t& values, const u32 indent) {
-            u32 member_count = 0;
+        append_values = [&](const disassembled_values_t& values, const u32 indent, const p64 struct_offset) {
+            u64 member_offset = 0;
             for (const auto& value : values) {
+                const std::optional<u64> file_offset = get_member_file_offset(value, m_currentFile->m_dcheader);
+                if (file_offset.has_value() && *file_offset >= struct_offset) {
+                    member_offset = *file_offset - struct_offset;
+                }
                 out.append(indent, ' ');
-                append_format("[%u] ", member_count++);
+                append_format("[0x%03llX] ", static_cast<unsigned long long>(member_offset));
                 append_value(value, indent);
+                member_offset += get_member_size(value);
             }
         };
 
@@ -543,7 +602,7 @@ namespace dconstruct {
                     out.append(indent + indent_per_level, ' ');
                     if (const auto* entry = std::get_if<disassembled_value>(&values[i]); entry != nullptr && entry->m_typeId == 0) {
                         append_format("[%u] anonymous struct [0x%x] {\n", i, entry->m_offset);
-                        append_values(entry->m_values, indent + indent_per_level * 2);
+                        append_values(entry->m_values, indent + indent_per_level * 2, entry->m_offset);
                         out.append(indent + indent_per_level, ' ');
                         out += "}\n";
                     } else {
@@ -588,7 +647,7 @@ namespace dconstruct {
                     }
                 }
             } else {
-                append_values(values, indent + indent_per_level);
+                append_values(values, indent + indent_per_level, offset);
             }
 
             out.append(indent, ' ');
